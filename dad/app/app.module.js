@@ -13,14 +13,15 @@ var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var dashboard_component_1 = require('./dashboard.component');
 var chart_component_1 = require("./chart.component");
+var app_component_1 = require('./app.component');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, forms_1.FormsModule],
-            declarations: [dashboard_component_1.DadComponent, chart_component_1.DadChartComponent],
-            bootstrap: [dashboard_component_1.DadComponent]
+            declarations: [app_component_1.DadAppComponent, dashboard_component_1.DadComponent, chart_component_1.DadChartComponent],
+            bootstrap: [app_component_1.DadAppComponent]
         }), 
         __metadata('design:paramtypes', [])
     ], AppModule);
