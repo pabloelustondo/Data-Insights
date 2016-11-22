@@ -11,9 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /**
  * Created by pabloelustondo on 2016-11-19.
  */
-var core_1 = require("@angular/core");
+var core_1 = require('@angular/core');
+var chart_service_1 = require('./chart.service');
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(dadChartConfigsService) {
+        this.dadChartConfigsService = dadChartConfigsService;
         this.title = 'DAD 0.0';
     }
     AppComponent.prototype.onSelect = function (chart) {
@@ -23,21 +25,17 @@ var AppComponent = (function () {
     AppComponent.prototype.ngOnInit = function () {
         this.title = "DAD 0.0 - Angular 2.2 +  NVD3";
         console.log("APP  starts drawing all charts in dashboard:");
-        var CHARTS = [
-            { id: "chart1", name: 'Number of Devices by Range Pie Chart 1' },
-            { id: "chart2", name: 'Number of Devices by Range Pie Chart 2' },
-            { id: "chart3", name: 'Number of Devices by Range Pie Chart 3' }
-        ];
-        this.charts = CHARTS;
+        this.charts = this.dadChartConfigsService.getChartConfigs();
     };
+    AppComponent = __decorate([
+        core_1.Component({
+            selector: 'my-app',
+            providers: [chart_service_1.DadChartConfigsService],
+            template: "\n\n    <h1>{{title}}</h1>\n       <!--  this is just for debugging to show the configuration of a specific chart. -->\n    <div *ngIf=\"selectedChart\">\n     <div>Configuration Details for <b>{{selectedChart.name}}</b>  </div>\n     <table>\n     <tr>\n     <td>id:</td>\n     <td>name:</td></tr>\n     <tr>\n     <td>{{selectedChart.id}}</td>\n     <td>{{selectedChart.name}}</td></tr>\n     </table>\n    </div>\n    \n\n    <h2>Charts</h2>\n    <div class=\"chart\" *ngFor=\"let chart of charts\">\n    <dadchart [chart]=\"chart\"></dadchart>\n    </div>\n\n    "
+        }), 
+        __metadata('design:paramtypes', [chart_service_1.DadChartConfigsService])
+    ], AppComponent);
     return AppComponent;
 }());
-AppComponent = __decorate([
-    core_1.Component({
-        selector: 'my-app',
-        template: "\n\n    <h1>{{title}}</h1>\n       <!--  this is just for debugging to show the configuration of a specific chart. -->\n    <div *ngIf=\"selectedChart\">\n     <div>Configuration Details for <b>{{selectedChart.name}}</b>  </div>\n     <table>\n     <tr>\n     <td>id:</td>\n     <td>name:</td></tr>\n     <tr>\n     <td>{{selectedChart.id}}</td>\n     <td>{{selectedChart.name}}</td></tr>\n     </table>\n    </div>\n    \n   <!--  BEGIN SHOWING THE CHARTS IN THE MOC DASHBOARD-->\n   <h2>Charts</h2>\n    <div class=\"chart\" *ngFor=\"let chart of charts\">\n   \n    <!--  BEGIN CHART COMPONENT \n    <table style=\"border:solid\"><tr><td>\n    <div (click)=\"onSelect(chart)\">{{chart.name}}</div>\n    </td></tr>\n    <tr><td>\n    <div style=\"height: 300px  \"><svg [id]=\"chart.id\"></svg></div>\n    </td><td>\n    <div>Raw Data: \n        <div *ngFor =\"let d of data.result\">\n        {{d.Rng}} -- {{d.NumberOfDevices}}\n        </div>\n    </div></td></tr>\n    </table>\n    <br/>\n    <br/>\n    DEBUG AREA:    <br/>\n    <input style=\"width: 300px;\" [(ngModel)]=\"chart.name\" placeholder=\"name\">\n\n    END CHART COMPONENT -->\n    \n     \n    <dadchart [chart]=\"chart\"></dadchart>\n   \n\n    </div>\n      <!--  BEGIN SHOWING THE CHARTS IN THE MOC DASHBOARD-->\n\n\n    "
-    }),
-    __metadata("design:paramtypes", [])
-], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map
