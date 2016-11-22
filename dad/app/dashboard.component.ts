@@ -8,7 +8,7 @@ import { DadChartConfigsService } from './chart.service';
 declare var d3, nv: any;
 
 @Component({
-    selector: 'my-app',
+    selector: 'dad',
     providers: [DadChartConfigsService],
     template: `
 
@@ -35,7 +35,7 @@ declare var d3, nv: any;
     `
 })
 
-export class AppComponent implements  OnInit{
+export class DadComponent implements  OnInit{
     public title = 'DAD 0.0';
     public charts: DadChart[];
     public selectedChart:DadChart;
