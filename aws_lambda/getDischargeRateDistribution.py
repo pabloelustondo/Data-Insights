@@ -9,12 +9,12 @@ print('Loading function')
 def lambda_handler(event, context):
     res = []
     try:
-        dateFrom = event['params']['querystring']['dateFrom']
-        dateTo = event['params']['querystring']['dateTo']
+        dateFrom = event['dateFrom']
+        dateTo = event['dateTo']
     except Exception as e:
         dateFrom = ''
         dateTo = ''
-	qry = """ select DischargeRate, count(*) as NumberOfDevices from (
+    qry = """ select DischargeRate, count(*) as NumberOfDevices from (
 select devid, avg((cur_value-next_value)*60/nullif(datediff(minute, time_stamp, next_time), 0)) as DischargeRate from (
 SELECT * FROM 
 (
@@ -27,7 +27,7 @@ SELECT
                             LEAD(time_stamp,1) OVER (PARTITION BY devid ORDER BY time_stamp) next_time,                               
                             LEAD(time_stamp,2) OVER (PARTITION BY devid ORDER BY time_stamp) next2_time                        
                             FROM devstatint D """
-	if (dateFrom != '') & (dateTo != ''):
+    if (dateFrom != '') & (dateTo != ''):
         qry = qry + " where time_stamp between '" + dateFrom + "' and dateadd(s, -1, dateadd(d, 1, '" + dateTo + "'))"
     qry = qry + """ )t
 WHERE 
