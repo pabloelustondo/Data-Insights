@@ -1,0 +1,6 @@
+{
+  "deployment_type":"dev",
+  "port": 5494,
+  "oda_dev_url" : "http://localhost:3002/awstest",
+  "oda_prod_url" : ""
+}
