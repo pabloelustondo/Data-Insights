@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { DATA } from './mock.data';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { config } from "./appconfig";
 
 
 @Injectable()
@@ -12,29 +13,14 @@ export class DadChartDataService {
 
     constructor(private http: Http) { }
 
-    /*
-     getChartData(): any {
-     return DATA;
-     }
-     return this.http.get(this.heroesUrl)
-     .toPromise()
-     .then(response => response.json().data as Hero[])
-     .catch(this.handleError);
-
-
-     */
-
     getChartData(): Promise<any> {
-
-        return this.http.get("http://localhost:3002/awstest").toPromise().then(
+        console.log("we got " + config["oda_dev_url"]);
+        return this.http.get("http://34.192.3.52:5495/awstest").toPromise().then(
             response => JSON.parse(response['_body'])
         ).catch(
             err =>{
                 console.log("we got " + err.json());
             }
         );
-
-     //   return Promise.resolve(DATA);
     }
-
 }
