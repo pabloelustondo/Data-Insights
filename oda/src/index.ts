@@ -1,13 +1,14 @@
 /** Created by pabloelustondo on 2016-11-16. */
 import * as http from 'http';
 import * as debug from 'debug';
+var config = require('../appconfig.json');
 
 import App from './app';
 
 debug('ts-express:server');
 
 //const port = normalizePort(process.env.PORT || 3002);
-const port = normalizePort(3002);
+const port = normalizePort(config.port);
 
 App.set('port', port);
 

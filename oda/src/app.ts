@@ -6,6 +6,7 @@ import * as express from 'express';
 import * as https from 'https';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
+var config = require('../appconfig.json');
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -47,11 +48,11 @@ class App {
             //draft test to see if we can call AWS properly... this code will evolve into serious code later
 
             const options = {
-                hostname: '2vf2f8xp27.execute-api.us-east-1.amazonaws.com',
-                path: '/test/function_one',
+                hostname: config["aws-hostname"],
+                path: config["aws-path"],
                 method: 'GET',
                 headers: {
-                    "x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
+                    "x-api-key": config["aws-x-api-key"],
                     "dateFrom": "2016-08-20",
                     "dateTo": "2016-08-25"
                 }

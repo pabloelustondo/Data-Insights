@@ -29,3 +29,6 @@ Note: We recommend using WebStorm as IDE but this is not necessary.
 
 If using WebStorm, after npm install is done, our suggestion is to rigth click on the package.json and execute the 'start' task from there.
 In the case of DAD the start takes care of everything (builds and runs). In case of ODa you need to build.
+
+Warning: If using webstorm,  please remove indexing from 'dist' folders as well as node_modules,as this is going to be slow.
+(Settings/Directories   exclude button)
