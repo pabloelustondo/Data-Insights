@@ -15,7 +15,7 @@ cd CustomerBI
 cd oda
 npm install
 npm start  
-check out data adapter (ODA) at http://localhost:3002/
+check out data adapter (ODA) at http://localhost:5495/
 
 open another command prompt
 cd CustomerBI
