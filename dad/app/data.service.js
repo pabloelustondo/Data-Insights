@@ -19,9 +19,18 @@ var DadChartDataService = (function () {
     function DadChartDataService(http) {
         this.http = http;
     }
-    DadChartDataService.prototype.getChartData = function () {
+    DadChartDataService.prototype.getChartData = function (chart) {
         console.log("we got " + appconfig_1.config["oda_dev_url"]);
-        return this.http.get("http://34.192.3.52:5495/awstest").toPromise().then(function (response) { return JSON.parse(response['_body']); }).catch(function (err) {
+        var params = new http_1.URLSearchParams();
+        for (var _i = 0, _a = chart.parameters; _i < _a.length; _i++) {
+            var chartparam = _a[_i];
+            if (chartparam.parameterType = "DateRange") {
+                console.log("Chart:" + chart.id + " Got DateRange:" + chartparam.dateFrom + ":" + chartparam.dateTo);
+                params.set('dateFrom', chartparam.dateFrom);
+                params.set('dateTo', chartparam.dateTo);
+            }
+        }
+        return this.http.get(appconfig_1.config.oda_dev_url, { search: params }).toPromise().then(function (response) { return JSON.parse(response['_body']); }).catch(function (err) {
             console.log("we got " + err.json());
         });
     };

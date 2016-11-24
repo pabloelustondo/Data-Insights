@@ -18,7 +18,7 @@ export class DadChart {
     template: ` <!--  BEGIN CHART COMPONENT -->
  
     <table style="border:solid">
-    <tr><td> <div (click)="onSelect(chart)">{{chart.name}}</div> </td></tr>
+    <tr><td> <div (click)="onSelect(chart)">{{chart.name}} </div> </td></tr>
     <tr *ngIf="chart.parameters"><td> <span *ngFor="let p of chart.parameters"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>
     <tr>
         <td> <div style="height: 300px  "><svg [id]="chart.id"></svg></div> </td>

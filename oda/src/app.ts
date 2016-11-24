@@ -46,6 +46,8 @@ class App {
             res.sendFile(path.join(__dirname + '/odahome.html'));
         });
 
+        router.use(express.static('public'));
+
         router.get('/awstest', (req, res, next) => {
             const options = {
                 hostname: config["aws-hostname"],

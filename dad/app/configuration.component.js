@@ -25,7 +25,7 @@ var DadConfigComponent = (function () {
         core_1.Component({
             selector: 'dadconfig',
             providers: [chart_service_1.DadChartConfigsService],
-            template: "\n\n    <h2>Chart Configurations</h2>\n        <div *ngFor=\"let chart of charts\">         \n         <b> {{ chart.name }} </b><br/>\n         id:   {{ chart.id }}<br/><br/>\n        </div>\n\n    "
+            template: "\n\n    <h2>Chart Configurations</h2>\n        <div *ngFor=\"let chart of charts\">  \n        <table>\n\n         <tr><td> Chartid: </td><td>  {{ chart.id }}</td></tr>\n         <tr><td>  Name: </td><td>{{ chart.name }} </td></tr>\n         <span *ngFor=\"let param of chart.parameters\">        \n               <tr><td> Parameter Type: </td><td>  {{param.parameterType}} </td></tr>\n               <tr><td> dateFrom: </td><td>  {{param.dateFrom}} </td></tr>\n               <tr><td> dateTo: </td><td>  {{param.dateTo}} </td></tr>            \n        </span>   \n        </table>\n\n    "
         }), 
         __metadata('design:paramtypes', [chart_service_1.DadChartConfigsService])
     ], DadConfigComponent);

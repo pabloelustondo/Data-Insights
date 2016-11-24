@@ -1,0 +1,23 @@
+#logo{
+    height: 40px;
+}
+
+#awstest {
+    color:blue;
+}
+
+#home_link {
+    color:blue;
+}
+
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #000000;
+}
+
