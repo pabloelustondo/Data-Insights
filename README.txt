@@ -7,7 +7,10 @@ To get and run this project
 
 install git (I have version 2.9 ) 
 install node.js (version 7)
-This project will run on ports 3000/3001/3002. Make sure those are not used or go to the code and change them.
+
+Disregard this line: This project will run on ports 3000/3001/3002. Make sure those are not used or go to the code and change them.
+
+Stop all the MobiControl services (MS, DS, Elastic Search Proxy Server(if you have it))
 
 open a commend prompt
 git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
