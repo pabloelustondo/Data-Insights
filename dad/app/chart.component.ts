@@ -17,28 +17,27 @@ export class DadChart {
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
  
-    <table style="border:solid"><tr><td>
-    <div (click)="onSelect(chart)">{{chart.name}}</div>
-    </td></tr>
-    <tr><td>
-    <div style="height: 300px  "><svg [id]="chart.id"></svg></div>
-    </td><td>
-    <div>Raw Data: 
-      <div *ngIf="data">
-        <div *ngFor ="let d of data.result">
-        {{d.Rng}} -- {{d.NumberOfDevices}}
-        </div>
-      </div>
-      <div *ngIf="!data">
-        Not Available
-      </div>
-    </div></td></tr>
+    <table style="border:solid">
+    <tr><td> <div (click)="onSelect(chart)">{{chart.name}}</div> </td></tr>
+    <tr *ngIf="chart.parameters"><td> <span *ngFor="let p of chart.parameters"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>
+    <tr>
+        <td> <div style="height: 300px  "><svg [id]="chart.id"></svg></div> </td>
+        <td>
+            <div>Raw Data: 
+              <div *ngIf="data">
+                <div *ngFor ="let d of data.result">
+                {{d.Rng}} -- {{d.NumberOfDevices}}
+                </div>
+              </div>
+              <div *ngIf="!data">
+                Data Not Available
+              </div>
+            </div>
+        </td>
+    </tr>     
     </table>
     <br/>
     <br/>
-    DEBUG AREA:    <br/>
-    <input style="width: 300px;" [(ngModel)]="chart.name" placeholder="name">
-
     <!--  END CHART COMPONENT -->`
 })
 export class DadChartComponent implements OnInit {
