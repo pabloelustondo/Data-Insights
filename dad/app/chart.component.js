@@ -60,7 +60,7 @@ var DadChartComponent = (function () {
     DadChartComponent.prototype.ngOnInit = function () {
         var _this = this;
         console.log("CHART starts drawing :" + this.chart.id);
-        this.dadChartDataService.getChartData().then(function (data) {
+        this.dadChartDataService.getChartData(this.chart).then(function (data) {
             _this.data = data;
             _this.drawChart(_this.chart, _this.data);
         }).catch(function (err) { return console.log(err.toString()); });

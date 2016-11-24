@@ -7,6 +7,8 @@ import * as https from 'https';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 var config = require('../appconfig.json');
+import * as querystring from 'querystring';
+
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -45,16 +47,12 @@ class App {
         });
 
         router.get('/awstest', (req, res, next) => {
-            //draft test to see if we can call AWS properly... this code will evolve into serious code later
-
             const options = {
                 hostname: config["aws-hostname"],
-                path: config["aws-path"],
+                path: config["aws-path"]+"?"+querystring.stringify(req.query),
                 method: 'GET',
                 headers: {
-                    "x-api-key": config["aws-x-api-key"],
-                    "dateFrom": "2016-08-20",
-                    "dateTo": "2016-08-25"
+                    "x-api-key": config["aws-x-api-key"]
                 }
             };
 

@@ -9,6 +9,7 @@ declare var d3, nv: any;
 export class DadChart {
     id: string;
     name: string;
+    parameters: any[];
 }
 
 @Component({
@@ -90,7 +91,7 @@ export class DadChartComponent implements OnInit {
     ngOnInit() {
         console.log("CHART starts drawing :" + this.chart.id);
 
-        this.dadChartDataService.getChartData().then(
+        this.dadChartDataService.getChartData(this.chart).then(
             data => {
                 this.data = data;
                 this.drawChart(this.chart,this.data);
