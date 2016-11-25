@@ -48,7 +48,15 @@ export class DadChartComponent implements OnInit {
 
     constructor(private dadChartDataService: DadChartDataService) { }
 
-    drawChartBar(chartConfig:DadChart, data){
+    drawChart(chartConfig:DadChart, data) {
+
+        if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
+        if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
+        if (chartConfig.type === 'dogaBar') this.drawChartDogaBar(chartConfig, data);
+
+    }
+
+    drawChartDogaBar(chartConfig:DadChart, data){
 
         if (!data) return;
         var testdata = [];
@@ -84,14 +92,6 @@ export class DadChartComponent implements OnInit {
         });
 
     }
-
-    drawChart(chartConfig:DadChart, data) {
-
-        if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
-        if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
-
-    }
-
     drawChartPie(chartConfig:DadChart, data) {
             if (!data) return;
             var testdata = [];
@@ -131,6 +131,42 @@ export class DadChartComponent implements OnInit {
 
             });
         };
+    drawChartBar(chartConfig:DadChart, data){
+
+        if (!data) return;
+        var testdata = [];
+
+        for(let r of data.result){
+            testdata.push({"label":r.Rng,"value":r.NumberOfDevices});
+        }
+
+        const historicalBarChart = [
+            {
+                key: "Cumulative Return",
+                values: testdata} ];
+
+        var width = 300;
+        var height = 300;
+
+        nv.addGraph(function() {
+            var chart = nv.models.discreteBarChart()
+                    .x(function(d) { return d.label })
+                    .y(function(d) { return d.value })
+                    .staggerLabels(true)
+                    //.staggerLabels(historicalBarChart[0].values.length > 8)
+                    .showValues(true)
+                    .duration(250)
+                ;
+
+            d3.select("#" + chartConfig.id)
+                .datum(historicalBarChart)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+            return chart;
+        });
+
+    }
 
     ngOnInit() {
         console.log("CHART starts drawing :" + this.chart.id);

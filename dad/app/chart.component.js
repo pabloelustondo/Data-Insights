@@ -23,7 +23,15 @@ var DadChartComponent = (function () {
     function DadChartComponent(dadChartDataService) {
         this.dadChartDataService = dadChartDataService;
     }
-    DadChartComponent.prototype.drawChartBar = function (chartConfig, data) {
+    DadChartComponent.prototype.drawChart = function (chartConfig, data) {
+        if (chartConfig.type === 'pie')
+            this.drawChartPie(chartConfig, data);
+        if (chartConfig.type === 'bar')
+            this.drawChartBar(chartConfig, data);
+        if (chartConfig.type === 'dogaBar')
+            this.drawChartDogaBar(chartConfig, data);
+    };
+    DadChartComponent.prototype.drawChartDogaBar = function (chartConfig, data) {
         if (!data)
             return;
         var testdata = [];
@@ -50,12 +58,6 @@ var DadChartComponent = (function () {
             nv.utils.windowResize(chart.update);
             return chart;
         });
-    };
-    DadChartComponent.prototype.drawChart = function (chartConfig, data) {
-        if (chartConfig.type === 'pie')
-            this.drawChartPie(chartConfig, data);
-        if (chartConfig.type === 'bar')
-            this.drawChartBar(chartConfig, data);
     };
     DadChartComponent.prototype.drawChartPie = function (chartConfig, data) {
         if (!data)
@@ -91,6 +93,34 @@ var DadChartComponent = (function () {
         });
     };
     ;
+    DadChartComponent.prototype.drawChartBar = function (chartConfig, data) {
+        if (!data)
+            return;
+        var testdata = [];
+        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
+            var r = _a[_i];
+            testdata.push({ "label": r.Rng, "value": r.NumberOfDevices });
+        }
+        var historicalBarChart = [
+            {
+                key: "Cumulative Return",
+                values: testdata }];
+        var width = 300;
+        var height = 300;
+        nv.addGraph(function () {
+            var chart = nv.models.discreteBarChart()
+                .x(function (d) { return d.label; })
+                .y(function (d) { return d.value; })
+                .staggerLabels(true)
+                .showValues(true)
+                .duration(250);
+            d3.select("#" + chartConfig.id)
+                .datum(historicalBarChart)
+                .call(chart);
+            nv.utils.windowResize(chart.update);
+            return chart;
+        });
+    };
     DadChartComponent.prototype.ngOnInit = function () {
         var _this = this;
         console.log("CHART starts drawing :" + this.chart.id);
