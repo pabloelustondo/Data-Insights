@@ -48,6 +48,45 @@ export class DadChartComponent implements OnInit {
 
     constructor(private dadChartDataService: DadChartDataService) { }
 
+
+    drawChartDogaBar(chartConfig:DadChart, data){
+
+        if (!data) return;
+        var testdata = [];
+
+        for(let r of data.result){
+            testdata.push({"label":r.Rng,"value":r.NumberOfDevices});
+        }
+
+        const historicalBarChart = [
+            {
+                key: "Cumulative Return",
+                values: testdata} ];
+
+        var width = 300;
+        var height = 300;
+
+        nv.addGraph(function() {
+            var chart = nv.models.discreteBarChart()
+                    .x(function(d) { return d.label })
+                    .y(function(d) { return d.value })
+                    .staggerLabels(true)
+                    //.staggerLabels(historicalBarChart[0].values.length > 8)
+                    .showValues(true)
+                    .duration(250)
+                ;
+
+            d3.select("#" + chartConfig.id)
+                .datum(historicalBarChart)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+            return chart;
+        });
+
+    }
+
+
     drawChartBar(chartConfig:DadChart, data){
 
         if (!data) return;
@@ -89,6 +128,7 @@ export class DadChartComponent implements OnInit {
 
         if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
         if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
+        if (chartConfig.type === 'bar') this.drawChartDogaBar(chartConfig, data);
 
     }
 
