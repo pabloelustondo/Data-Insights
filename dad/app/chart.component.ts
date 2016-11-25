@@ -9,6 +9,7 @@ declare var d3, nv: any;
 export class DadChart {
     id: string;
     name: string;
+    type: string; //this needs to be enum i think
     parameters: any[];
 }
 
@@ -47,7 +48,51 @@ export class DadChartComponent implements OnInit {
 
     constructor(private dadChartDataService: DadChartDataService) { }
 
-    drawChart(chartConfig, data) {
+    drawChartBar(chartConfig:DadChart, data){
+
+        if (!data) return;
+        var testdata = [];
+
+        for(let r of data.result){
+            testdata.push({"label":r.Rng,"value":r.NumberOfDevices});
+        }
+
+        const historicalBarChart = [
+            {
+                key: "Cumulative Return",
+                values: testdata} ];
+
+        var width = 300;
+        var height = 300;
+
+        nv.addGraph(function() {
+            var chart = nv.models.discreteBarChart()
+                    .x(function(d) { return d.label })
+                    .y(function(d) { return d.value })
+                    .staggerLabels(true)
+                    //.staggerLabels(historicalBarChart[0].values.length > 8)
+                    .showValues(true)
+                    .duration(250)
+                ;
+
+            d3.select("#" + chartConfig.id)
+                .datum(historicalBarChart)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+            return chart;
+        });
+
+    }
+
+    drawChart(chartConfig:DadChart, data) {
+
+        if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
+        if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
+
+    }
+
+    drawChartPie(chartConfig:DadChart, data) {
             if (!data) return;
             var testdata = [];
 
