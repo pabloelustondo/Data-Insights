@@ -124,11 +124,16 @@ export class DadChartComponent implements OnInit {
 
     }
 
+
+
+
     drawChart(chartConfig:DadChart, data) {
 
         if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
         if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
-        if (chartConfig.type === 'bar') this.drawChartDogaBar(chartConfig, data);
+        if (chartConfig.type === 'bar2') this.drawChartDogaBar(chartConfig, data);
+        if (chartConfig.type === 'pie2') this.drawDogaChartPie(chartConfig, data);
+
 
     }
 
@@ -171,6 +176,47 @@ export class DadChartComponent implements OnInit {
 
             });
         };
+
+    drawDogaChartPie(chartConfig:DadChart, data) {
+        if (!data) return;
+        var testdata = [];
+
+        for(let r of data.result){
+            testdata.push({"key":r.Rng,"y":r.NumberOfDevices});
+        }
+
+        var width = 300;
+        var height = 300;
+
+        nv.addGraph(function () {
+
+            var d3Chart = nv.models.pie()
+                    .x(function (d) {
+                        return d.key;
+                    })
+                    .y(function (d) {
+                        return d.y;
+                    })
+                    .width(width)
+                    .height(height)
+                    .labelType(function (d, i, values) {
+                        return values.key + ':' + values.value;
+                    })
+                ;
+
+            console.log("CHART is actually drawing:" + "#" + chartConfig.id);
+            d3.select("#" + chartConfig.id)
+                .datum([testdata])
+                .transition().duration(1200)
+                .attr('width', width)
+                .attr('height', height)
+                .call(d3Chart);
+
+            return d3Chart;
+
+        });
+    };
+
 
     ngOnInit() {
         console.log("CHART starts drawing :" + this.chart.id);
