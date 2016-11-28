@@ -7,7 +7,7 @@
 
 tfsRegex="^CB(MR)?-[0-9]+: .*"
 msgContents=`cat $1`
-
+echo "Hello"
 if [[ ! $msgContents =~ $tfsRegex ]] ; then
     echo "MISSING JIRA ID IN MESSAGE"
     echo "COMMIT MESSAGE MUST BEGIN WITH JIRA ID AND COLON, SEE BELOW"
