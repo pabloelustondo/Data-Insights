@@ -2,10 +2,11 @@
 /** Created by pabloelustondo on 2016-11-16. */
 const http = require('http');
 const debug = require('debug');
+var config = require('../appconfig.json');
 const app_1 = require('./app');
 debug('ts-express:server');
 //const port = normalizePort(process.env.PORT || 3002);
-const port = normalizePort(3002);
+const port = normalizePort(config.port);
 app_1.default.set('port', port);
 const server = http.createServer(app_1.default);
 server.listen(port);

@@ -1,79 +1,76 @@
-/**
- * Created by pabloelustondo on 2016-11-21.
- */
-import { DadChart } from './chart.component';
-
-export const CHARTS: DadChart[] = [
-    {   id: "chart1",
+"use strict";
+exports.CHARTS = [
+    { id: "chart1",
         name: 'Number of Devices by Range Pie Chart 1',
         type: "pie",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-16",
                 dateTo: "2016-08-18"
             }]
     },
-    {   id: "chart2",
+    { id: "chart2",
         name: 'Number of Devices by Range Pie Chart 2',
         type: "pie",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-19",
                 dateTo: "2016-08-22"
             }]
     },
-    {   id: "chart3",
+    { id: "chart3",
         name: 'Number of Devices by Range Pie Chart 3',
         type: "pie",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
                 dateTo: "2016-08-25"
             }]
     },
-    {   id: "chart4",
+    { id: "chart4",
         name: 'Number of Devices by Range Pie Chart 4',
         type: "bar",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-16",
                 dateTo: "2016-08-18"
             }]
     },
-    {   id: "chart5",
+    { id: "chart5",
         name: 'Number of Devices by Range Pie Chart 5',
         type: "bar",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-19",
                 dateTo: "2016-08-22"
             }]
     },
-    {   id: "chart6",
+    { id: "chart6",
         name: 'Number of Devices by Range Pie Chart 6',
         type: "bar",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
                 dateTo: "2016-08-25"
             }]
     },
-    {   id: "chart7",
+    { id: "chart7",
         name: 'Number of Devices by Range Pie Chart 7',
         type: "bar2",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
                 dateTo: "2016-08-25"
             }]
     },
-    {   id: "chart8",
+    { id: "chart8",
         name: 'Number of Devices by Range Pie Chart 8',
         type: "pie2",
         parameters: [
-            {   parameterType:"DateRange",
+            { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
                 dateTo: "2016-08-25"
             }]
     }
 ];
+//# sourceMappingURL=mock.charts.js.map

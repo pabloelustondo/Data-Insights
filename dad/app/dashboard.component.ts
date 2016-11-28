@@ -11,8 +11,6 @@ declare var d3, nv: any;
     selector: 'dad',
     providers: [DadChartConfigsService],
     template: `
-
-    <h1>{{title}}</h1>
        <!--  this is just for debugging to show the configuration of a specific chart. -->
     <div *ngIf="selectedChart">
      <div>Configuration Details for <b>{{selectedChart.name}}</b>  </div>
@@ -26,8 +24,6 @@ declare var d3, nv: any;
      </table>
     </div>
     
-
-    <h2>Charts</h2>
     <div class="chart" *ngFor="let chart of charts">
     <dadchart [chart]="chart"></dadchart>
     </div>
@@ -50,10 +46,7 @@ export class DadComponent implements  OnInit{
  //   constructor(private _heroService: HeroService, private _router: Router) { }
 
     ngOnInit() {
-
-        this.title = "DAD 0.0 - Angular 2.2 +  NVD3";
         console.log("APP  starts drawing all charts in dashboard:");
-
         this.charts = this.dadChartConfigsService.getChartConfigs();
     }
 

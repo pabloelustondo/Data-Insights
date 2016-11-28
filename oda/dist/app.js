@@ -7,6 +7,8 @@ const express = require('express');
 const https = require('https');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+var config = require('../appconfig.json');
+const querystring = require('querystring');
 // Creates and configures an ExpressJS web server.
 class App {
     //Run configuration methods on the Express instance.
@@ -20,6 +22,11 @@ class App {
         this.express.use(logger('dev'));
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
+        this.express.use(function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
     }
     // Configure API endpoints.
     routes() {
@@ -31,16 +38,14 @@ class App {
         router.get('/', (req, res, next) => {
             res.sendFile(path.join(__dirname + '/odahome.html'));
         });
+        router.use(express.static('public'));
         router.get('/awstest', (req, res, next) => {
-            //draft test to see if we can call AWS properly... this code will evolve into serious code later
             const options = {
-                hostname: '2vf2f8xp27.execute-api.us-east-1.amazonaws.com',
-                path: '/test/function_one',
+                hostname: config["aws-hostname"],
+                path: config["aws-path"] + "?" + querystring.stringify(req.query),
                 method: 'GET',
                 headers: {
-                    "x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
-                    "dateFrom": "2016-08-20",
-                    "dateTo": "2016-08-25"
+                    "x-api-key": config["aws-x-api-key"]
                 }
             };
             const awsreq = https.request(options, (awsres) => {

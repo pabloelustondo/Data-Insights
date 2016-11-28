@@ -6,9 +6,6 @@ import * as express from 'express';
 import * as https from 'https';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
-var config = require('../appconfig.json');
-import * as querystring from 'querystring';
-
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -41,20 +38,24 @@ class App {
          * working so far. This function will change when we start to add more
          * API endpoints */
         let router = express.Router();
+
+        router.use(express.static('dist/dad'))
         // placeholder route handler
         router.get('/', (req, res, next) => {
-            res.sendFile(path.join(__dirname + '/odahome.html'));
+            res.sendFile(path.join(__dirname + '/dad/index.html'));
         });
 
-        router.use(express.static('public'));
-
         router.get('/awstest', (req, res, next) => {
+            //draft test to see if we can call AWS properly... this code will evolve into serious code later
+
             const options = {
-                hostname: config["aws-hostname"],
-                path: config["aws-path"]+"?"+querystring.stringify(req.query),
+                hostname: '2vf2f8xp27.execute-api.us-east-1.amazonaws.com',
+                path: '/test/function_one',
                 method: 'GET',
                 headers: {
-                    "x-api-key": config["aws-x-api-key"]
+                    "x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
+                    "dateFrom": "2016-08-20",
+                    "dateTo": "2016-08-25"
                 }
             };
 
