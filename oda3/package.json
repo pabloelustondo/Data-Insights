@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "This service provides and API to query SOTI data analytics service",
   "scripts": {
-    "start": "npm run build && node $NODE_DEBUG_OPTION ./dist/server.js",
+    "start": "npm run build && node ./dist/server.js",
     "build": "npm run clean && npm run lint && npm run swagger-gen && npm run routes-gen && tsc && npm run copy-swagger-ui",
     "lint": "tslint ./src/**/*.ts",
     "clean": "rimraf dist",
@@ -16,10 +16,13 @@
   "license": "MIT",
   "dependencies": {
     "@types/request": "0.0.36",
+    "@types/request-promise": "^4.1.33",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "method-override": "^2.3.6",
     "querystring": "^0.2.0",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
     "tsoa": "^1.0.0"
   },
   "devDependencies": {
