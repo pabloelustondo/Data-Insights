@@ -7,8 +7,7 @@ import App from './app';
 
 debug('ts-express:server');
 
-//const port = normalizePort(process.env.PORT || 3002);
-const port = normalizePort(config.port);
+const port = config.port;
 
 App.set('port', port);
 
@@ -16,13 +15,6 @@ const server = http.createServer(App);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-function normalizePort(val: number|string): number|string|boolean {
-    let port: number = (typeof val === 'string') ? parseInt(val, 10) : val;
-    if (isNaN(port)) return val;
-    else if (port >= 0) return port;
-    else return false;
-}
 
 function onError(error: NodeJS.ErrnoException): void {
     if (error.syscall !== 'listen') throw error;
@@ -45,8 +37,5 @@ function onListening(): void {
     let addr = server.address();
     let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
     debug(`Listening on ${bind}`);
+    console.log("ODA started (http://localhost:" +  port.toString() +"/) ");
 }
-
-
-
-console.log("ODA has started (http://localhost:" +  port.toString() +"/) ");
