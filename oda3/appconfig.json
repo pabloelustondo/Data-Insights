@@ -1,0 +1,7 @@
+{
+  "deployment_type":"dev",
+  "port": 5495,
+  "aws-hostname" : "2vf2f8xp27.execute-api.us-east-1.amazonaws.com",
+  "aws-x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
+  "aws-path":  "/test/function_one"
+}
