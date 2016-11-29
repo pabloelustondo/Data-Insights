@@ -28,7 +28,7 @@ exports.CHARTS = [
             }]
     },
     { id: "chart4",
-        name: 'Number of Devices by Range Bar Chart 4',
+        name: 'Number of Devices by Range Pie Chart 1',
         type: "bar",
         parameters: [
             { parameterType: "DateRange",
@@ -37,7 +37,7 @@ exports.CHARTS = [
             }]
     },
     { id: "chart5",
-        name: 'Number of Devices by Range Bar Chart 5',
+        name: 'Number of Devices by Range Pie Chart 2',
         type: "bar",
         parameters: [
             { parameterType: "DateRange",
@@ -46,17 +46,8 @@ exports.CHARTS = [
             }]
     },
     { id: "chart6",
-        name: 'Number of Devices by Range Bar Chart 6',
+        name: 'Number of Devices by Range Pie Chart 3',
         type: "bar",
-        parameters: [
-            { parameterType: "DateRange",
-                dateFrom: "2016-08-23",
-                dateTo: "2016-08-25"
-            }]
-    },
-    { id: "chart7",
-        name: 'Number of Devices by Range Doga Chart 7',
-        type: "dogaBar",
         parameters: [
             { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
