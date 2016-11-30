@@ -1,4 +1,5 @@
 import './controllers/usersController';
+import './controllers/dischargeRateController';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as methodOverride from 'method-override';

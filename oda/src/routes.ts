@@ -5,6 +5,7 @@
 /* tslint:disable */
 import { ValidateParam } from 'tsoa';
 import { SDSController } from './controllers/usersController';
+import { DischargeRateController } from './controllers/dischargeRateController';
 
 const models: any = {
     'SDS': {
@@ -29,6 +30,22 @@ export function RegisterRoutes(app: any) {
         }
 
         const controller = new SDSController();
+        promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
+    });
+    app.get('/Devices/Battery/Summary/DischargeRate', function(req: any, res: any, next: any) {
+        const params = {
+            'dateFrom': { typeName: 'string', required: true },
+            'dateTo': { typeName: 'string', required: true },
+        };
+
+        let validatedParams: any[] = [];
+        try {
+            validatedParams = getValidatedParams(params, req, '');
+        } catch (err) {
+            return next(err);
+        }
+
+        const controller = new DischargeRateController();
         promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
     });
 

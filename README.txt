@@ -9,6 +9,7 @@ install git (I have version 2.9 )
 install node.js (version 7)
 
 Stop all the MobiControl services (MS, DS, Elastic Search Proxy Server(if you have it))
+Ensure Port in TSOA.json and Appconfig.json match
 
 open a commend prompt
 git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
@@ -16,7 +17,7 @@ cd CustomerBI
 cd oda
 npm install
 npm start  
-check out data adapter (ODA) at http://localhost:5495/
+check out data adapter (ODA) at http://localhost:3001/
 
 open another command prompt
 cd CustomerBI
