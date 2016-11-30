@@ -23,7 +23,7 @@ export class DadChart {
     <tr><td> <div (click)="onSelect(chart)">{{chart.name}} </div> </td></tr>
     <tr *ngIf="chart.parameters"><td> <span *ngFor="let p of chart.parameters"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>
     <tr>
-        <td> <div style="height: 300px  "><svg [id]="chart.id"></svg></div> </td>
+        <td> <div style="height:600px; width:600px;"><svg [id]="chart.id"></svg></div> </td>
         <td>
             <div>Raw Data: 
               <div *ngIf="data">
@@ -50,9 +50,6 @@ export class DadChartComponent implements OnInit {
     constructor(private dadChartDataService: DadChartDataService) { }
 
     drawChartDogaBar(chartConfig:DadChart, data){
-        /**
-         * Created by dister on 11/29/2016.
-         */
         const jsonData = [
             {"team" : "BI", "number_of_members" : 5},
             {"team" :"IT", "number_of_members" : 12},
@@ -73,6 +70,10 @@ export class DadChartComponent implements OnInit {
         })
 
         let chart = c3.generate({
+            size: {
+              height: 200,
+                width: 200
+            },
             bindto: '#' + chartConfig.id,
             data: {
                 json: [ dataDoga ],

@@ -24,9 +24,6 @@ var DadChartComponent = (function () {
         this.dadChartDataService = dadChartDataService;
     }
     DadChartComponent.prototype.drawChartDogaBar = function (chartConfig, data) {
-        /**
-         * Created by dister on 11/29/2016.
-         */
         var jsonData = [
             { "team": "BI", "number_of_members": 5 },
             { "team": "IT", "number_of_members": 12 },
@@ -45,6 +42,10 @@ var DadChartComponent = (function () {
             dataDoga[e.team] = e.number_of_members;
         });
         var chart = c3.generate({
+            size: {
+                height: 200,
+                width: 200
+            },
             bindto: '#' + chartConfig.id,
             data: {
                 json: [dataDoga],
@@ -103,7 +104,7 @@ var DadChartComponent = (function () {
         core_1.Component({
             selector: 'dadchart',
             providers: [data_service_1.DadChartDataService],
-            template: " <!--  BEGIN CHART COMPONENT -->\n \n    <table style=\"border:solid\">\n    <tr><td> <div (click)=\"onSelect(chart)\">{{chart.name}} </div> </td></tr>\n    <tr *ngIf=\"chart.parameters\"><td> <span *ngFor=\"let p of chart.parameters\"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>\n    <tr>\n        <td> <div style=\"height: 300px  \"><svg [id]=\"chart.id\"></svg></div> </td>\n        <td>\n            <div>Raw Data: \n              <div *ngIf=\"data\">\n                <div *ngFor =\"let d of data\">\n                {{d.Rng}} -- {{d.NumberOfDevices}}\n                </div>\n              </div>\n              <div *ngIf=\"!data\">\n                Data Not Available\n              </div>\n            </div>\n        </td>\n    </tr>     \n    </table>\n    <br/>\n    <br/>\n    <!--  END CHART COMPONENT -->"
+            template: " <!--  BEGIN CHART COMPONENT -->\n \n    <table style=\"border:solid\">\n    <tr><td> <div (click)=\"onSelect(chart)\">{{chart.name}} </div> </td></tr>\n    <tr *ngIf=\"chart.parameters\"><td> <span *ngFor=\"let p of chart.parameters\"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>\n    <tr>\n        <td> <div style=\"height:600px; width:600px;\"><svg [id]=\"chart.id\"></svg></div> </td>\n        <td>\n            <div>Raw Data: \n              <div *ngIf=\"data\">\n                <div *ngFor =\"let d of data\">\n                {{d.Rng}} -- {{d.NumberOfDevices}}\n                </div>\n              </div>\n              <div *ngIf=\"!data\">\n                Data Not Available\n              </div>\n            </div>\n        </td>\n    </tr>     \n    </table>\n    <br/>\n    <br/>\n    <!--  END CHART COMPONENT -->"
         }), 
         __metadata('design:paramtypes', [data_service_1.DadChartDataService])
     ], DadChartComponent);
