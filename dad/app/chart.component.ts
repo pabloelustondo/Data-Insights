@@ -4,7 +4,8 @@
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
 
-declare var d3, nv: any;
+
+declare var d3, c3: any;
 
 export class DadChart {
     id: string;
@@ -48,175 +49,66 @@ export class DadChartComponent implements OnInit {
 
     constructor(private dadChartDataService: DadChartDataService) { }
 
-
     drawChartDogaBar(chartConfig:DadChart, data){
+        /**
+         * Created by dister on 11/29/2016.
+         */
+        const jsonData = [
+            {"team" : "BI", "number_of_members" : 5},
+            {"team" :"IT", "number_of_members" : 12},
+            {"team" :"AfW", "number_of_members" : 5},
+            {"team" :"QA", "number_of_members" : 100},
+            {"team" :"iOS", "number_of_members" : 11},
+            {"team" :"Windows Modern", "number_of_members" : 10},
+            {"team" :"DB", "number_of_members" : 3},
+            {"team" :"GCC", "number_of_members" : 7},
+            {"team" :"NGUI", "number_of_members" : 15}
+        ]
 
-        if (!data) return;
-        var testdata = [];
+        var dataDoga = {};
+        var team = [];
+        jsonData.forEach(function(e) {
+            team.push(e.team);
+            dataDoga[e.team] = e.number_of_members;
+        })
 
-        for(let r of data){
-            testdata.push({"label":r.Rng,"value":r.NumberOfDevices});
-        }
-
-        const historicalBarChart = [
-            {
-                key: "Cumulative Return",
-                values: testdata} ];
-
-        var width = 300;
-        var height = 300;
-
-        nv.addGraph(function() {
-            var chart = nv.models.discreteBarChart()
-                    .x(function(d) { return d.label })
-                    .y(function(d) { return d.value })
-                    .staggerLabels(true)
-                    //.staggerLabels(historicalBarChart[0].values.length > 8)
-                    .showValues(true)
-                    .duration(250)
-                ;
-
-            d3.select("#" + chartConfig.id)
-                .datum(historicalBarChart)
-                .call(chart);
-
-            nv.utils.windowResize(chart.update);
-            return chart;
+        let chart = c3.generate({
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [ dataDoga ],
+                keys: {
+                    value: team
+                },
+                type:'bar',
+            },
+            tooltip: {
+                format: {
+                    title: function(value) {return ('Teams');}
+                }
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: 'Teams',
+                        position: 'outer-right'
+                    }
+                },
+                y: {
+                    label: {
+                        text: 'Number of Members',
+                        position: 'outer-top'
+                    }
+                }
+            }
         });
-
     }
-
-
-    drawChartBar(chartConfig:DadChart, data){
-
-        if (!data) return;
-        var testdata = [];
-
-        for(let r of data){
-            testdata.push({"label":r.Rng,"value":r.NumberOfDevices});
-        }
-
-        const historicalBarChart = [
-            {
-                key: "Cumulative Return",
-                values: testdata} ];
-
-        var width = 300;
-        var height = 300;
-
-        nv.addGraph(function() {
-            var chart = nv.models.discreteBarChart()
-                    .x(function(d) { return d.label })
-                    .y(function(d) { return d.value })
-                    .staggerLabels(true)
-                    //.staggerLabels(historicalBarChart[0].values.length > 8)
-                    .showValues(true)
-                    .duration(250)
-                ;
-
-            d3.select("#" + chartConfig.id)
-                .datum(historicalBarChart)
-                .call(chart);
-
-            nv.utils.windowResize(chart.update);
-            return chart;
-        });
-
-    }
-
-
-
 
     drawChart(chartConfig:DadChart, data) {
-
-        if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
-        if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
         if (chartConfig.type === 'bar2') this.drawChartDogaBar(chartConfig, data);
         if (chartConfig.type === 'pie2') this.drawDogaChartPie(chartConfig, data);
-
-
     }
 
-    drawChartPie(chartConfig:DadChart, data) {
-            if (!data) return;
-            var testdata = [];
-
-            for(let r of data){
-                testdata.push({"key":r.Rng,"y":r.NumberOfDevices});
-            }
-
-            var width = 300;
-            var height = 300;
-
-            nv.addGraph(function () {
-
-                var d3Chart = nv.models.pie()
-                        .x(function (d) {
-                            return d.key;
-                        })
-                        .y(function (d) {
-                            return d.y;
-                        })
-                        .width(width)
-                        .height(height)
-                        .labelType(function (d, i, values) {
-                            return values.key + ':' + values.value;
-                        })
-                    ;
-
-                console.log("CHART is actually drawing:" + "#" + chartConfig.id);
-                d3.select("#" + chartConfig.id)
-                    .datum([testdata])
-                    .transition().duration(1200)
-                    .attr('width', width)
-                    .attr('height', height)
-                    .call(d3Chart);
-
-                return d3Chart;
-
-            });
-        };
-
-    drawDogaChartPie(chartConfig:DadChart, data) {
-        if (!data) return;
-        var testdata = [];
-
-        for(let r of data){
-            testdata.push({"key":r.Rng,"y":r.NumberOfDevices});
-        }
-
-        var width = 300;
-        var height = 300;
-
-        nv.addGraph(function () {
-
-            var d3Chart = nv.models.pie()
-                    .x(function (d) {
-                        return d.key;
-                    })
-                    .y(function (d) {
-                        return d.y;
-                    })
-                    .width(width)
-                    .height(height)
-                    .labelType(function (d, i, values) {
-                        return values.key + ':' + values.value;
-                    })
-                ;
-
-            console.log("CHART is actually drawing:" + "#" + chartConfig.id);
-            d3.select("#" + chartConfig.id)
-                .datum([testdata])
-                .transition().duration(1200)
-                .attr('width', width)
-                .attr('height', height)
-                .call(d3Chart);
-
-            return d3Chart;
-
-        });
-    };
-
+    drawDogaChartPie(chartConfig:DadChart, data) {};
 
     ngOnInit() {
         console.log("CHART starts drawing :" + this.chart.id);
