@@ -3,6 +3,6 @@
  */
 "use strict";
 exports.config = {
-    "oda_dev_url": "http://34.192.3.52:5495/awstest"
+    "oda_dev_url": "http://localhost:3001/Devices/Battery/Summary/InitialChargeLevels"
 };
 //# sourceMappingURL=appconfig.js.map
