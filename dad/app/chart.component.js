@@ -27,8 +27,8 @@ var DadChartComponent = (function () {
         if (!data)
             return;
         var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
+        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+            var r = data_1[_i];
             testdata.push({ "label": r.Rng, "value": r.NumberOfDevices });
         }
         var historicalBarChart = [
@@ -55,8 +55,8 @@ var DadChartComponent = (function () {
         if (!data)
             return;
         var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
+        for (var _i = 0, data_2 = data; _i < data_2.length; _i++) {
+            var r = data_2[_i];
             testdata.push({ "label": r.Rng, "value": r.NumberOfDevices });
         }
         var historicalBarChart = [
@@ -93,8 +93,8 @@ var DadChartComponent = (function () {
         if (!data)
             return;
         var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
+        for (var _i = 0, data_3 = data; _i < data_3.length; _i++) {
+            var r = data_3[_i];
             testdata.push({ "key": r.Rng, "y": r.NumberOfDevices });
         }
         var width = 300;
@@ -127,8 +127,8 @@ var DadChartComponent = (function () {
         if (!data)
             return;
         var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
+        for (var _i = 0, data_4 = data; _i < data_4.length; _i++) {
+            var r = data_4[_i];
             testdata.push({ "key": r.Rng, "y": r.NumberOfDevices });
         }
         var width = 300;
@@ -161,7 +161,7 @@ var DadChartComponent = (function () {
         var _this = this;
         console.log("CHART starts drawing :" + this.chart.id);
         this.dadChartDataService.getChartData(this.chart).then(function (data) {
-            _this.data = data;
+            _this.data = data.data;
             _this.drawChart(_this.chart, _this.data);
         }).catch(function (err) { return console.log(err.toString()); });
         /*
@@ -178,7 +178,7 @@ var DadChartComponent = (function () {
         core_1.Component({
             selector: 'dadchart',
             providers: [data_service_1.DadChartDataService],
-            template: " <!--  BEGIN CHART COMPONENT -->\n \n    <table style=\"border:solid\">\n    <tr><td> <div (click)=\"onSelect(chart)\">{{chart.name}} </div> </td></tr>\n    <tr *ngIf=\"chart.parameters\"><td> <span *ngFor=\"let p of chart.parameters\"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>\n    <tr>\n        <td> <div style=\"height: 300px  \"><svg [id]=\"chart.id\"></svg></div> </td>\n        <td>\n            <div>Raw Data: \n              <div *ngIf=\"data\">\n                <div *ngFor =\"let d of data.result\">\n                {{d.Rng}} -- {{d.NumberOfDevices}}\n                </div>\n              </div>\n              <div *ngIf=\"!data\">\n                Data Not Available\n              </div>\n            </div>\n        </td>\n    </tr>     \n    </table>\n    <br/>\n    <br/>\n    <!--  END CHART COMPONENT -->"
+            template: " <!--  BEGIN CHART COMPONENT -->\n \n    <table style=\"border:solid\">\n    <tr><td> <div (click)=\"onSelect(chart)\">{{chart.name}} </div> </td></tr>\n    <tr *ngIf=\"chart.parameters\"><td> <span *ngFor=\"let p of chart.parameters\"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>\n    <tr>\n        <td> <div style=\"height: 300px  \"><svg [id]=\"chart.id\"></svg></div> </td>\n        <td>\n            <div>Raw Data: \n              <div *ngIf=\"data\">\n                <div *ngFor =\"let d of data\">\n                {{d.Rng}} -- {{d.NumberOfDevices}}\n                </div>\n              </div>\n              <div *ngIf=\"!data\">\n                Data Not Available\n              </div>\n            </div>\n        </td>\n    </tr>     \n    </table>\n    <br/>\n    <br/>\n    <!--  END CHART COMPONENT -->"
         }), 
         __metadata('design:paramtypes', [data_service_1.DadChartDataService])
     ], DadChartComponent);

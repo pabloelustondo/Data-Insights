@@ -26,7 +26,7 @@ export class DadChart {
         <td>
             <div>Raw Data: 
               <div *ngIf="data">
-                <div *ngFor ="let d of data.result">
+                <div *ngFor ="let d of data">
                 {{d.Rng}} -- {{d.NumberOfDevices}}
                 </div>
               </div>
@@ -54,7 +54,7 @@ export class DadChartComponent implements OnInit {
         if (!data) return;
         var testdata = [];
 
-        for(let r of data.result){
+        for(let r of data){
             testdata.push({"label":r.Rng,"value":r.NumberOfDevices});
         }
 
@@ -92,7 +92,7 @@ export class DadChartComponent implements OnInit {
         if (!data) return;
         var testdata = [];
 
-        for(let r of data.result){
+        for(let r of data){
             testdata.push({"label":r.Rng,"value":r.NumberOfDevices});
         }
 
@@ -141,7 +141,7 @@ export class DadChartComponent implements OnInit {
             if (!data) return;
             var testdata = [];
 
-            for(let r of data.result){
+            for(let r of data){
                 testdata.push({"key":r.Rng,"y":r.NumberOfDevices});
             }
 
@@ -181,7 +181,7 @@ export class DadChartComponent implements OnInit {
         if (!data) return;
         var testdata = [];
 
-        for(let r of data.result){
+        for(let r of data){
             testdata.push({"key":r.Rng,"y":r.NumberOfDevices});
         }
 
@@ -223,7 +223,7 @@ export class DadChartComponent implements OnInit {
 
         this.dadChartDataService.getChartData(this.chart).then(
             data => {
-                this.data = data;
+                this.data = data.data;
                 this.drawChart(this.chart,this.data);
             }
         ).catch(err => console.log(err.toString()));
