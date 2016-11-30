@@ -13,7 +13,7 @@ export class DischargeRateController {
     /**
      * A DischargeRate represents how quickly the battery is losing the charge per hour.
      * This data is retrieved every hour for a given day.
-     * A date range is required to get the information.
+     * A date range  is required to get the information.
      */
 
     @Get('Battery/Summary/DischargeRate')
