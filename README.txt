@@ -9,7 +9,7 @@ install git (I have version 2.9 )
 install node.js (version 7)
 
 Stop all the MobiControl services (MS, DS, Elastic Search Proxy Server(if you have it))
-Ensure Port in TSOA.json and Appconfig.json match
+Ensure Port in TSOA.json and Appconfig.json match.
 
 open a commend prompt
 git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
