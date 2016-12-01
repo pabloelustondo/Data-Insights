@@ -33,7 +33,7 @@ var DadChartComponent = (function () {
         c3.generate({
             size: {
                 height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -74,7 +74,7 @@ var DadChartComponent = (function () {
         c3.generate({
             size: {
                 height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -97,7 +97,7 @@ var DadChartComponent = (function () {
         c3.generate({
             size: {
                 height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -141,7 +141,7 @@ var DadChartComponent = (function () {
         c3.generate({
             size: {
                 height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -187,7 +187,7 @@ var DadChartComponent = (function () {
         core_1.Component({
             selector: 'dadchart',
             providers: [data_service_1.DadChartDataService],
-            template: " <!--  BEGIN CHART COMPONENT -->\n \n    <div style=\"height:700px;  width:700px\" [id]=\"chart.id\"></div> \n\n    <!--  END CHART COMPONENT -->"
+            template: " <!--  BEGIN CHART COMPONENT -->\n     <table style=\"border:solid; color:darkgray\">\n        <tr>\n            <td><div style= \"text-align:center; height:700px;  width:700px\" [id]=\"chart.id\"></div></td>\n        </tr>\n    </table>\n    <br/><br/><br/>\n\n    <!--  END CHART COMPONENT -->"
         }), 
         __metadata('design:paramtypes', [data_service_1.DadChartDataService])
     ], DadChartComponent);

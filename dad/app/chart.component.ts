@@ -18,8 +18,12 @@ export class DadChart {
     selector: 'dadchart',
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
- 
-    <div style="height:700px;  width:700px" [id]="chart.id"></div> 
+     <table style="border:solid; color:darkgray">
+        <tr>
+            <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
+        </tr>
+    </table>
+    <br/><br/><br/>
 
     <!--  END CHART COMPONENT -->`
 })
@@ -40,7 +44,7 @@ export class DadChartComponent implements OnInit {
         c3.generate({
             size: {
               height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -83,7 +87,7 @@ export class DadChartComponent implements OnInit {
         c3.generate({
             size: {
                 height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -107,7 +111,7 @@ export class DadChartComponent implements OnInit {
         c3.generate({
             size: {
                 height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -151,7 +155,7 @@ export class DadChartComponent implements OnInit {
         c3.generate({
             size: {
                 height: 400,
-                width: 400
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
