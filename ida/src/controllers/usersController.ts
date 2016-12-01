@@ -3,7 +3,6 @@ import {SDS} from '../models/user';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
 import * as querystring from 'querystring';
-
 import * as rp from 'request-promise';
 @Route('Data')
 export class SDSController {
@@ -14,7 +13,7 @@ export class SDSController {
 
     @Post()
     @Example<any>({
-    metadata: 'here is where metadata explanining the data should go',
+    metadata: 'here is where metadata explaining the data should go',
     createdAt: '2016-08-08',
     data: ['aaa', 'bbb', 'ccc']
     })
