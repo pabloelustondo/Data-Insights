@@ -35,6 +35,15 @@ exports.CHARTS = [
                 dateFrom: "2016-08-23",
                 dateTo: "2016-08-25"
             }]
+    },
+    { id: "chartdonut",
+        name: 'Donut Chart',
+        type: "donut",
+        parameters: [
+            { parameterType: "DateRange",
+                dateFrom: "2016-08-20",
+                dateTo: "2016-08-25"
+            }]
     }
 ];
 //# sourceMappingURL=mock.charts.js.map

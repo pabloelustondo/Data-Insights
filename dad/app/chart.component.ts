@@ -171,11 +171,36 @@ export class DadChartComponent implements OnInit {
         });
     }
 
+    drawChartDonut(chartConfig:DadChart, data) {
+        var pieData = {};
+        var brand = [];
+        data.forEach(function(e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        })
+
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [ pieData ],
+                keys: {
+                    value: brand
+                },
+                type:'donut',
+            },
+        });
+    };
+
     drawChart(chartConfig:DadChart, data) {
         if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
         if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
         if (chartConfig.type === 'dot') this.drawChartDot(chartConfig, data);
         if (chartConfig.type === 'spline') this.drawChartSpline(chartConfig, data);
+        if (chartConfig.type === 'donut') this.drawChartDonut(chartConfig, data);
     }
 
     ngOnInit() {

@@ -156,6 +156,29 @@ var DadChartComponent = (function () {
             },
         });
     };
+    DadChartComponent.prototype.drawChartDonut = function (chartConfig, data) {
+        var pieData = {};
+        var brand = [];
+        data.forEach(function (e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [pieData],
+                keys: {
+                    value: brand
+                },
+                type: 'donut',
+            },
+        });
+    };
+    ;
     DadChartComponent.prototype.drawChart = function (chartConfig, data) {
         if (chartConfig.type === 'bar')
             this.drawChartBar(chartConfig, data);
@@ -165,6 +188,8 @@ var DadChartComponent = (function () {
             this.drawChartDot(chartConfig, data);
         if (chartConfig.type === 'spline')
             this.drawChartSpline(chartConfig, data);
+        if (chartConfig.type === 'donut')
+            this.drawChartDonut(chartConfig, data);
     };
     DadChartComponent.prototype.ngOnInit = function () {
         var _this = this;
