@@ -3,6 +3,6 @@
  */
 "use strict";
 exports.config = {
-    "oda_dev_url": "http://localhost:3001/Devices/Battery/Summary/InitialChargeLevels"
+    "oda_dev_url": "http://localhost:3002/Devices/Battery/Summary/InitialChargeLevels"
 };
 //# sourceMappingURL=appconfig.js.map
