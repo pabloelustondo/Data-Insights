@@ -2,7 +2,7 @@
     "swagger": {
         "outputDirectory": "./dist",
         "entryFile": "./src/server.ts",
-        "host": "localhost:5495",
+        "host": "localhost:3003",
         "basePath": "/"
     },
     "routes": {

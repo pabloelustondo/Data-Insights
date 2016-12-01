@@ -15,21 +15,21 @@ const models: any = {
 };
 
 export function RegisterRoutes(app: any) {
-    app.get('/Devices/Battery/Summary/InitialChargeLevels', function(req: any, res: any, next: any) {
+    app.post('/Data', function(req: any, res: any, next: any) {
         const params = {
-            'dateFrom': { typeName: 'string', required: true },
-            'dateTo': { typeName: 'string', required: true },
+            'request': { typeName: 'SDS', required: true },
+            'optionalString': { typeName: 'string', required: false },
         };
 
         let validatedParams: any[] = [];
         try {
-            validatedParams = getValidatedParams(params, req, '');
+            validatedParams = getValidatedParams(params, req, 'request');
         } catch (err) {
             return next(err);
         }
 
         const controller = new SDSController();
-        promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
+        promiseHandler(controller.Create.apply(controller, validatedParams), res, next);
     });
 
     function promiseHandler(promise: any, response: any, next: any) {
