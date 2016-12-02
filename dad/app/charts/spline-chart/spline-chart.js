@@ -1,42 +1,23 @@
 /**
- * Created by dister on 11/30/2016.
+ * Created by dister on 12/1/2016.
  */
-/**
- * Created by dister on 11/30/2016.
- */
-
 var data = {};
-var device_owner = [];
+var brand = [];
 jsonData.forEach(function(e) {
-    device_owner.push(e.device_owner);
-    data[e.device_owner] = e.battery;
+    brand.push(e.brand);
+    data[e.brand] = e.number;
 })
 
 chart = c3.generate({
     data: {
         json: [ data ],
+        columns:[
+            ['data']
+        ],
         keys: {
-            value: device_owner
+            value: brand
         },
         type:'spline',
+
     },
-    tooltip: {
-        format: {
-            title: function() {return ('Device Owner');},
-        }
-    },
-    axis: {
-        x: {
-            label: {
-                text: 'Device Owners',
-                position: 'outer-right'
-            }
-        },
-        y: {
-            label: {
-                text: 'Battery %',
-                position: 'outer-top'
-            }
-        }
-    }
 });

@@ -18,28 +18,13 @@ export class DadChart {
     selector: 'dadchart',
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
- 
-    <table style="border:solid">
-    <tr><td> <div (click)="onSelect(chart)">{{chart.name}} </div> </td></tr>
-    <tr *ngIf="chart.parameters"><td> <span *ngFor="let p of chart.parameters"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>
-    <tr>
-        <td> <div style="height:600px; width:600px;"><svg [id]="chart.id"></svg></div> </td>
-        <td>
-            <div>Raw Data: 
-              <div *ngIf="data">
-                <div *ngFor ="let d of data">
-                {{d.Rng}} -- {{d.NumberOfDevices}}
-                </div>
-              </div>
-              <div *ngIf="!data">
-                Data Not Available
-              </div>
-            </div>
-        </td>
-    </tr>     
+     <table style="border:solid; color:darkgray">
+        <tr>
+            <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
+        </tr>
     </table>
-    <br/>
-    <br/>
+    <br/><br/><br/>
+
     <!--  END CHART COMPONENT -->`
 })
 export class DadChartComponent implements OnInit {
@@ -48,35 +33,22 @@ export class DadChartComponent implements OnInit {
     data;
 
     constructor(private dadChartDataService: DadChartDataService) { }
-
-    drawChartDogaBar(chartConfig:DadChart, data){
-        const jsonData = [
-            {"team" : "BI", "number_of_members" : 5},
-            {"team" :"IT", "number_of_members" : 12},
-            {"team" :"AfW", "number_of_members" : 5},
-            {"team" :"QA", "number_of_members" : 100},
-            {"team" :"iOS", "number_of_members" : 11},
-            {"team" :"Windows Modern", "number_of_members" : 10},
-            {"team" :"DB", "number_of_members" : 3},
-            {"team" :"GCC", "number_of_members" : 7},
-            {"team" :"NGUI", "number_of_members" : 15}
-        ]
-
-        var dataDoga = {};
+    drawChartBar(chartConfig:DadChart, data){
+        var barData = {};
         var team = [];
-        jsonData.forEach(function(e) {
-            team.push(e.team);
-            dataDoga[e.team] = e.number_of_members;
+        data.forEach(function(e) {
+            team.push(e.Rng);
+            barData[e.Rng] = e.NumberOfDevices;
         })
 
-        let chart = c3.generate({
+        c3.generate({
             size: {
-              height: 200,
-                width: 200
+              height: 400,
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
-                json: [ dataDoga ],
+                json: [ barData ],
                 keys: {
                     value: team
                 },
@@ -84,19 +56,19 @@ export class DadChartComponent implements OnInit {
             },
             tooltip: {
                 format: {
-                    title: function(value) {return ('Teams');}
+                    title: function(value) {return ('Range of Battery Levels');}
                 }
             },
             axis: {
                 x: {
                     label: {
-                        text: 'Teams',
+                        text: 'Range of Battery Levels',
                         position: 'outer-right'
                     }
                 },
                 y: {
                     label: {
-                        text: 'Number of Members',
+                        text: 'Number of Devices',
                         position: 'outer-top'
                     }
                 }
@@ -104,12 +76,132 @@ export class DadChartComponent implements OnInit {
         });
     }
 
-    drawChart(chartConfig:DadChart, data) {
-        if (chartConfig.type === 'bar2') this.drawChartDogaBar(chartConfig, data);
-        if (chartConfig.type === 'pie2') this.drawDogaChartPie(chartConfig, data);
+    drawChartPie(chartConfig:DadChart, data) {
+        var pieData = {};
+        var brand = [];
+        data.forEach(function(e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        })
+
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [ pieData ],
+                keys: {
+                    value: brand
+                },
+                type:'pie',
+            },
+        });
+    };
+
+    drawChartDot(chartConfig:DadChart, data) {
+        var dotData = {};
+        var device_owner = [];
+        data.forEach(function (e) {
+            device_owner.push(e.Rng);
+            dotData[e.Rng] = e.NumberOfDevices;
+        })
+
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [dotData],
+                keys: {
+                    value: device_owner
+                },
+                type: 'spline',
+            },
+            tooltip: {
+                format: {
+                    title: function () {
+                        return ('Range of Battery Levels');
+                    },
+                }
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: 'Range of Battery Levels',
+                        position: 'outer-right'
+                    }
+                },
+                y: {
+                    label: {
+                        text: 'Number of Devices',
+                        position: 'outer-top'
+                    }
+                }
+            },
+        });
+    };
+
+    drawChartSpline(chartConfig:DadChart, data){
+        var data1 = {};
+        var brand = [];
+        data.forEach(function(e) {
+            brand.push(e.Rng);
+            data1[e.Rng] = e.NumberOfDevices;
+        })
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                columns:[
+                   ['Number of Devices',30,40,500,0],
+                    ['Range', 1, 10, 90, 70, 85, 5, 100]
+                ],
+                keys: {
+                    value: brand
+                },
+                type: 'spline',
+            },
+        });
     }
 
-    drawDogaChartPie(chartConfig:DadChart, data) {};
+    drawChartDonut(chartConfig:DadChart, data) {
+        var pieData = {};
+        var brand = [];
+        data.forEach(function(e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        })
+
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [ pieData ],
+                keys: {
+                    value: brand
+                },
+                type:'donut',
+            },
+        });
+    };
+
+    drawChart(chartConfig:DadChart, data) {
+        if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
+        if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
+        if (chartConfig.type === 'dot') this.drawChartDot(chartConfig, data);
+        if (chartConfig.type === 'spline') this.drawChartSpline(chartConfig, data);
+        if (chartConfig.type === 'donut') this.drawChartDonut(chartConfig, data);
+    }
 
     ngOnInit() {
         console.log("CHART starts drawing :" + this.chart.id);

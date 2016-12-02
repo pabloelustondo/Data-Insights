@@ -23,32 +23,21 @@ var DadChartComponent = (function () {
     function DadChartComponent(dadChartDataService) {
         this.dadChartDataService = dadChartDataService;
     }
-    DadChartComponent.prototype.drawChartDogaBar = function (chartConfig, data) {
-        var jsonData = [
-            { "team": "BI", "number_of_members": 5 },
-            { "team": "IT", "number_of_members": 12 },
-            { "team": "AfW", "number_of_members": 5 },
-            { "team": "QA", "number_of_members": 100 },
-            { "team": "iOS", "number_of_members": 11 },
-            { "team": "Windows Modern", "number_of_members": 10 },
-            { "team": "DB", "number_of_members": 3 },
-            { "team": "GCC", "number_of_members": 7 },
-            { "team": "NGUI", "number_of_members": 15 }
-        ];
-        var dataDoga = {};
+    DadChartComponent.prototype.drawChartBar = function (chartConfig, data) {
+        var barData = {};
         var team = [];
-        jsonData.forEach(function (e) {
-            team.push(e.team);
-            dataDoga[e.team] = e.number_of_members;
+        data.forEach(function (e) {
+            team.push(e.Rng);
+            barData[e.Rng] = e.NumberOfDevices;
         });
-        var chart = c3.generate({
+        c3.generate({
             size: {
-                height: 200,
-                width: 200
+                height: 400,
+                width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
-                json: [dataDoga],
+                json: [barData],
                 keys: {
                     value: team
                 },
@@ -56,33 +45,152 @@ var DadChartComponent = (function () {
             },
             tooltip: {
                 format: {
-                    title: function (value) { return ('Teams'); }
+                    title: function (value) { return ('Range of Battery Levels'); }
                 }
             },
             axis: {
                 x: {
                     label: {
-                        text: 'Teams',
+                        text: 'Range of Battery Levels',
                         position: 'outer-right'
                     }
                 },
                 y: {
                     label: {
-                        text: 'Number of Members',
+                        text: 'Number of Devices',
                         position: 'outer-top'
                     }
                 }
             }
         });
     };
-    DadChartComponent.prototype.drawChart = function (chartConfig, data) {
-        if (chartConfig.type === 'bar2')
-            this.drawChartDogaBar(chartConfig, data);
-        if (chartConfig.type === 'pie2')
-            this.drawDogaChartPie(chartConfig, data);
+    DadChartComponent.prototype.drawChartPie = function (chartConfig, data) {
+        var pieData = {};
+        var brand = [];
+        data.forEach(function (e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [pieData],
+                keys: {
+                    value: brand
+                },
+                type: 'pie',
+            },
+        });
     };
-    DadChartComponent.prototype.drawDogaChartPie = function (chartConfig, data) { };
     ;
+    DadChartComponent.prototype.drawChartDot = function (chartConfig, data) {
+        var dotData = {};
+        var device_owner = [];
+        data.forEach(function (e) {
+            device_owner.push(e.Rng);
+            dotData[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [dotData],
+                keys: {
+                    value: device_owner
+                },
+                type: 'spline',
+            },
+            tooltip: {
+                format: {
+                    title: function () {
+                        return ('Range of Battery Levels');
+                    },
+                }
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: 'Range of Battery Levels',
+                        position: 'outer-right'
+                    }
+                },
+                y: {
+                    label: {
+                        text: 'Number of Devices',
+                        position: 'outer-top'
+                    }
+                }
+            },
+        });
+    };
+    ;
+    DadChartComponent.prototype.drawChartSpline = function (chartConfig, data) {
+        var data1 = {};
+        var brand = [];
+        data.forEach(function (e) {
+            brand.push(e.Rng);
+            data1[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                columns: [
+                    ['Number of Devices', 30, 40, 500, 0],
+                    ['Range', 1, 10, 90, 70, 85, 5, 100]
+                ],
+                keys: {
+                    value: brand
+                },
+                type: 'spline',
+            },
+        });
+    };
+    DadChartComponent.prototype.drawChartDonut = function (chartConfig, data) {
+        var pieData = {};
+        var brand = [];
+        data.forEach(function (e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [pieData],
+                keys: {
+                    value: brand
+                },
+                type: 'donut',
+            },
+        });
+    };
+    ;
+    DadChartComponent.prototype.drawChart = function (chartConfig, data) {
+        if (chartConfig.type === 'bar')
+            this.drawChartBar(chartConfig, data);
+        if (chartConfig.type === 'pie')
+            this.drawChartPie(chartConfig, data);
+        if (chartConfig.type === 'dot')
+            this.drawChartDot(chartConfig, data);
+        if (chartConfig.type === 'spline')
+            this.drawChartSpline(chartConfig, data);
+        if (chartConfig.type === 'donut')
+            this.drawChartDonut(chartConfig, data);
+    };
     DadChartComponent.prototype.ngOnInit = function () {
         var _this = this;
         console.log("CHART starts drawing :" + this.chart.id);
@@ -104,7 +212,7 @@ var DadChartComponent = (function () {
         core_1.Component({
             selector: 'dadchart',
             providers: [data_service_1.DadChartDataService],
-            template: " <!--  BEGIN CHART COMPONENT -->\n \n    <table style=\"border:solid\">\n    <tr><td> <div (click)=\"onSelect(chart)\">{{chart.name}} </div> </td></tr>\n    <tr *ngIf=\"chart.parameters\"><td> <span *ngFor=\"let p of chart.parameters\"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>\n    <tr>\n        <td> <div style=\"height:600px; width:600px;\"><svg [id]=\"chart.id\"></svg></div> </td>\n        <td>\n            <div>Raw Data: \n              <div *ngIf=\"data\">\n                <div *ngFor =\"let d of data\">\n                {{d.Rng}} -- {{d.NumberOfDevices}}\n                </div>\n              </div>\n              <div *ngIf=\"!data\">\n                Data Not Available\n              </div>\n            </div>\n        </td>\n    </tr>     \n    </table>\n    <br/>\n    <br/>\n    <!--  END CHART COMPONENT -->"
+            template: " <!--  BEGIN CHART COMPONENT -->\n     <table style=\"border:solid; color:darkgray\">\n        <tr>\n            <td><div style= \"text-align:center; height:700px;  width:700px\" [id]=\"chart.id\"></div></td>\n        </tr>\n    </table>\n    <br/><br/><br/>\n\n    <!--  END CHART COMPONENT -->"
         }), 
         __metadata('design:paramtypes', [data_service_1.DadChartDataService])
     ], DadChartComponent);

@@ -1,20 +1,47 @@
 "use strict";
 exports.CHARTS = [
-    { id: "chart7",
-        name: 'Number of Devices by Range Pie Chart 7',
-        type: "bar2",
+    { id: "chartbar",
+        name: 'Bar Chart',
+        type: "bar",
         parameters: [
             { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
                 dateTo: "2016-08-25"
             }]
     },
-    { id: "chart8",
-        name: 'Number of Devices by Range Pie Chart 8',
-        type: "pie2",
+    { id: "chartpie",
+        name: 'Pie Chart',
+        type: "pie",
         parameters: [
             { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
+                dateTo: "2016-08-25"
+            }]
+    },
+    { id: "chartdot",
+        name: 'Dot Chart',
+        type: "dot",
+        parameters: [
+            { parameterType: "DateRange",
+                dateFrom: "2016-08-23",
+                dateTo: "2016-08-25"
+            }]
+    },
+    { id: "chartspline",
+        name: 'Spline Chart',
+        type: "spline",
+        parameters: [
+            { parameterType: "DateRange",
+                dateFrom: "2016-08-23",
+                dateTo: "2016-08-25"
+            }]
+    },
+    { id: "chartdonut",
+        name: 'Donut Chart',
+        type: "donut",
+        parameters: [
+            { parameterType: "DateRange",
+                dateFrom: "2016-08-20",
                 dateTo: "2016-08-25"
             }]
     }
