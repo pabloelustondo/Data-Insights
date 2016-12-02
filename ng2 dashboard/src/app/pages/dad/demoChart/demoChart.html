@@ -1,0 +1,43 @@
+<h1>{{title}}</h1>
+<!--  this is just for debugging to show the configuration of a specific chart. -->
+<div *ngIf="selectedChart">
+  <div>Configuration Details for <b>{{selectedChart.name}}</b>  </div>
+  <table>
+    <tr>
+      <td>id:</td>
+      <td>name:</td></tr>
+    <tr>
+      <td>{{selectedChart.id}}</td>
+      <td>{{selectedChart.name}}</td></tr>
+  </table>
+</div>
+
+<!--  BEGIN SHOWING THE CHARTS IN THE MOC DASHBOARD-->
+<h2>Charts</h2>
+<div *ngFor="let dadchart of dadcharts">
+
+  <!--  BEGIN CHART COMPONENT
+  <table style="border:solid"><tr><td>
+  <div (click)="onSelect(chart)">{{chart.name}}</div>
+  </td></tr>
+  <tr><td>
+  <div style="height: 300px  "><svg [id]="chart.id"></svg></div>
+  </td><td>
+  <div>Raw Data:
+      <div *ngFor ="let d of data.result">
+      {{d.Rng}} -- {{d.NumberOfDevices}}
+      </div>
+  </div></td></tr>
+  </table>
+  <br/>
+  <br/>
+  DEBUG AREA:    <br/>
+  <input style="width: 300px;" [(ngModel)]="chart.name" placeholder="name">
+
+  END CHART COMPONENT -->
+
+
+  <dad-chart [dadchart]="dadchart" ></dad-chart>
+</div>
+<!--  BEGIN SHOWING THE CHARTS IN THE MOC DASHBOARD-->
+

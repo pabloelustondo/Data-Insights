@@ -1,0 +1,1 @@
+export * from './iChart.component';
