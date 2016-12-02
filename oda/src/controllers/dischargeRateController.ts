@@ -97,7 +97,7 @@ export class DischargeRateController {
             url: xurl
         };
 
-        let p = await rp(options); //request library used
+        let p = await rp(options); // request library used
 
         const user: SDS = {
             createdAt: new Date(),
