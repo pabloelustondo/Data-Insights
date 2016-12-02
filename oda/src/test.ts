@@ -100,6 +100,30 @@ let expect = chai.expect;
         chai.request(server.app).get('/Devices/Battery/Summary/DischargeRate')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(400);
+                done(new Error('Input parameters not defined'));
+            });
+    }
+
+    @test('should fail getNumberOfDevices method')
+    public assert_fail_getNumberOfDevices(done: Function ){
+        chai.use(chaiHttp);
+
+        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels')
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(400);
+                done(new Error('No date provided test case failed'));
+            });
+    }
+
+    @test('should pass getNumberOfDevices method without dates')
+    public assert_pass_getNumberOfDevices(done: Function ){
+        chai.use(chaiHttp);
+
+        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels?dateFrom=2016-08-15&dateTo=2016-08-25')
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(200);
+                expect(res).to.be.json;
+                expect(err).to.be.null;
                 done();
             });
     }
