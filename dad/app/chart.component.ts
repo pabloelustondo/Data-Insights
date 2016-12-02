@@ -54,6 +54,9 @@ export class DadChartComponent implements OnInit {
                 },
                 type:'bar',
             },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
             tooltip: {
                 format: {
                     title: function(value) {return ('Range of Battery Levels');}
@@ -97,6 +100,9 @@ export class DadChartComponent implements OnInit {
                 },
                 type:'pie',
             },
+            color: {
+              pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
         });
     };
 
@@ -120,6 +126,9 @@ export class DadChartComponent implements OnInit {
                     value: device_owner
                 },
                 type: 'spline',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
             },
             tooltip: {
                 format: {
@@ -168,6 +177,9 @@ export class DadChartComponent implements OnInit {
                 },
                 type: 'spline',
             },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
         });
     }
 
@@ -191,6 +203,9 @@ export class DadChartComponent implements OnInit {
                     value: brand
                 },
                 type:'donut',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
             },
         });
     };

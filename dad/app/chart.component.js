@@ -43,6 +43,9 @@ var DadChartComponent = (function () {
                 },
                 type: 'bar',
             },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
             tooltip: {
                 format: {
                     title: function (value) { return ('Range of Battery Levels'); }
@@ -84,6 +87,9 @@ var DadChartComponent = (function () {
                 },
                 type: 'pie',
             },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
         });
     };
     ;
@@ -106,6 +112,9 @@ var DadChartComponent = (function () {
                     value: device_owner
                 },
                 type: 'spline',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
             },
             tooltip: {
                 format: {
@@ -154,6 +163,9 @@ var DadChartComponent = (function () {
                 },
                 type: 'spline',
             },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
         });
     };
     DadChartComponent.prototype.drawChartDonut = function (chartConfig, data) {
@@ -175,6 +187,9 @@ var DadChartComponent = (function () {
                     value: brand
                 },
                 type: 'donut',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
             },
         });
     };
