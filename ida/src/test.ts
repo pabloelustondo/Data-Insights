@@ -4,13 +4,59 @@
 import { suite, test, slow, timeout, skip, only } from 'mocha-typescript';
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from './models/user';
+const config = require('../appconfig.json');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('./server');
 let should = chai.should();
 let expect = chai.expect;
-@suite class Hello {
 
+const testData =  {
+    'createdAt': '2016-12-02T17:28:44.996Z',
+    'metadata': 'To Be Defined',
+    'data': [{
+        'NumberOfDevices': '8',
+        'DischargeRate': 3
+    }, {
+        'NumberOfDevices': '30',
+        'DischargeRate': 4
+    }, {
+        'NumberOfDevices': '71',
+        'DischargeRate': 5
+    }, {
+        'NumberOfDevices': '62',
+        'DischargeRate': 6
+    }, {
+        'NumberOfDevices': '31',
+        'DischargeRate': 7
+    }, {
+        'NumberOfDevices': '15',
+        'DischargeRate': 8
+    }, {
+        'NumberOfDevices': '2',
+        'DischargeRate': 9
+    }, {
+        'NumberOfDevices': '2',
+        'DischargeRate': 10
+    }, {
+        'NumberOfDevices': '4',
+        'DischargeRate': 11
+    }, {
+        'NumberOfDevices': '2',
+        'DischargeRate': 12
+    }, {
+        'NumberOfDevices': '1',
+        'DischargeRate': 14
+    }, {
+        'NumberOfDevices': '1',
+        'DischargeRate': 17
+    }, {
+        'NumberOfDevices': '1',
+        'DischargeRate': 19
+    }]
+};
+
+@suite class Hello {
 
     @test('should pass async tests')
     public assert_pass_async(done: Function) {
@@ -22,104 +68,25 @@ let expect = chai.expect;
         setTimeout(() => done(new Error('Oops...')), 1);
     }
 
-    @test('should pass getBatteryDischarge code')
-    public assert_pass_getBatteryDischarge(done: Function ) {
-        chai.use(chaiHttp);
-        chai.request(server.app).get('/Devices/Battery/Summary/DischargeRate?dateFrom=2016-08-15&dateTo=2016-08-25')
-            .end((err: any, res: any) => {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-            });
-    }
+    @test('should pass put data to /DATA api')
+    public assert_pass_putSampleData(done: Function ) {
 
-    @test('should pass getBatteryDischarge code')
-    public assert_pass_getBatteryDischarge_data(done: Function ) {
-
-        const testData =  {
-            'createdAt': '2016-12-02T17:28:44.996Z',
-            'metadata': 'To Be Defined',
-            'data': [{
-                'NumberOfDevices': '8',
-                'DischargeRate': 3
-            }, {
-                'NumberOfDevices': '30',
-                'DischargeRate': 4
-            }, {
-                'NumberOfDevices': '71',
-                'DischargeRate': 5
-            }, {
-                'NumberOfDevices': '62',
-                'DischargeRate': 6
-            }, {
-                'NumberOfDevices': '31',
-                'DischargeRate': 7
-            }, {
-                'NumberOfDevices': '15',
-                'DischargeRate': 8
-            }, {
-                'NumberOfDevices': '2',
-                'DischargeRate': 9
-            }, {
-                'NumberOfDevices': '2',
-                'DischargeRate': 10
-            }, {
-                'NumberOfDevices': '4',
-                'DischargeRate': 11
-            }, {
-                'NumberOfDevices': '2',
-                'DischargeRate': 12
-            }, {
-                'NumberOfDevices': '1',
-                'DischargeRate': 14
-            }, {
-                'NumberOfDevices': '1',
-                'DischargeRate': 17
-            }, {
-                'NumberOfDevices': '1',
-                'DischargeRate': 19
-            }]
+        const testPutData = {
+            'metadata': 'here is where metadata explaining the data should go',
+                'createdAt': '2016-08-08',
+                'data': [
+                    'aaa',
+                    'bbb',
+                    'ccc'
+                ]
         };
-
-
         chai.use(chaiHttp);
-        chai.request(server.app).get('/Devices/Battery/Summary/DischargeRate?dateFrom=2016-08-15&dateTo=2016-08-25')
-            .end((err: any, res: any) => {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                expect(res).to.be.json;
-                done();
-            });
-    }
-
-    @test('should fail getBatteryDischarge code')
-    public assert_fail_getBatteryDischarge(done: Function ) {
-        chai.use(chaiHttp);
-
-
-        chai.request(server.app).get('/Devices/Battery/Summary/DischargeRate')
-            .end((err: any, res: any) => {
-                expect(res).to.have.status(400);
-                done(new Error('Input parameters not defined'));
-            });
-    }
-
-    @test('should fail getNumberOfDevices method')
-    public assert_fail_getNumberOfDevices(done: Function ) {
-        chai.use(chaiHttp);
-
-        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels')
-            .end((err: any, res: any) => {
-                expect(res).to.have.status(400);
-                done(new Error('No date provided test case failed'));
-            });
-    }
-
-    @test('should pass getNumberOfDevices method without dates')
-    public assert_pass_getNumberOfDevices(done: Function ) {
-        chai.use(chaiHttp);
-
-        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels?dateFrom=2016-08-15&dateTo=2016-08-25')
+        chai.request(server.app)
+            .post('/Data')
+            .set('X-API-key', config['aws-x-api-key'])
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .send(testPutData)
             .end((err: any, res: any) => {
                 expect(res).to.have.status(200);
                 expect(res).to.be.json;
@@ -127,6 +94,57 @@ let expect = chai.expect;
                 done();
             });
     }
+
+    @test('should fail put data to /DATA api due to malformed input - typo in metadata')
+    public assert_fail_putSampleData(done: Function ) {
+
+        const testPutData = {
+            'metadaata': 'here is where metadata explaining the data should go',
+            'createdAt': '2016-08-08',
+            'data': [
+                'aaa',
+                'bbb',
+                'ccc'
+            ]
+        };
+        chai.use(chaiHttp);
+        chai.request(server.app)
+            .post('/Data')
+            .set('X-API-key', config['aws-x-api-key'])
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .send(testPutData)
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(400);
+                done();
+            });
+    }
+
+    @test('should fail put data to /DATA api due to wrong api key ')
+    public assert_fail_missingApiKey(done: Function ) {
+
+        const testPutData = {
+            'metadata': 'here is where metadata explaining the data should go',
+            'createdAt': '2016-08-08',
+            'data': [
+                'aaa',
+                'bbb',
+                'ccc'
+            ]
+        };
+        chai.use(chaiHttp);
+        chai.request(server.app)
+            .post('/Data')
+            .set('X-API-key', 'aaaa')
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .send(testPutData)
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(400);
+                done();
+            });
+    }
+
 
 }
 /**
