@@ -26,6 +26,15 @@ npm install
 npm start  
 check Data Analytics Dashboard(DAD) at http://localhost:3000/
 
+open a commend prompt
+git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
+cd CustomerBI
+cd ida
+npm install
+npm start
+check out input data adapter (IDA) at http://localhost:3003/
+
+
 Note: Data Analytics Dashboard(DAD) is only the client side for now, server side coming soon
 Note: We recommend using WebStorm as IDE but this is not necessary.
 
@@ -44,3 +53,4 @@ Glossary:
     Components:
     1) DAD - Data Analytics Dashboard
     2) ODA - Checkout Data Adapter
+    3) IDA - Input data Adapter
