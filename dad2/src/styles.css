@@ -2,3 +2,9 @@
   position:relative;
   float:left;
 }
+
+#chartName{
+  position: absolute;
+  color: black;
+  font-weight: 600;
+}

@@ -1,5 +1,5 @@
 /**
- * Created by pelustondo on 11/21/2016.
+ * Created by dister on 11/28/2016.
  */
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
@@ -10,7 +10,7 @@ declare var d3, c3: any;
 export class DadChart {
     id: string;
     name: string;
-    type: string; //this needs to be enum i think
+    type: string;
     parameters: any[];
 }
 
@@ -19,7 +19,8 @@ export class DadChart {
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
      <table style="border:solid; color:darkgray">
-        <tr>
+     <th><div id="chartName">{{chart.name}}</div></th>
+        <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
         </tr>
     </table>
@@ -56,10 +57,10 @@ export class DadChartComponent implements OnInit {
             },
             color: {
               pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
-            },
+              },
             tooltip: {
                 format: {
-                    title: function(value) {return ('Range of Battery Levels');}
+                    title: function() {return ('Range of Battery Levels');}
                 }
             },
             axis: {
