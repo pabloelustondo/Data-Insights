@@ -8,10 +8,11 @@ import { Router }   from '@angular/router';
   selector: 'dadapp',
   template: `
     <div>
-    <h1>{{title}}</h1> 
-    
     <a  style="  color:blue" *ngIf="this.router.url !== '/config'"  routerLink="/config">Configuration</a>
     <a  style="  color:blue" *ngIf="this.router.url !== '/'"  routerLink="/">Dashboard</a>
+    
+    <h1 id="title" >{{title}}</h1> 
+
     </div>
     <router-outlet></router-outlet>
   `

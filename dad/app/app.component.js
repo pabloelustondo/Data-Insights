@@ -22,7 +22,7 @@ var DadAppComponent = (function () {
     DadAppComponent = __decorate([
         core_1.Component({
             selector: 'dadapp',
-            template: "\n    <div>\n    <h1>{{title}}</h1> \n    \n    <a *ngIf=\"this.router.url !== '/config'\"  routerLink=\"/config\">Configuration</a>\n    <a *ngIf=\"this.router.url !== '/'\"  routerLink=\"/\">Dashboard</a>\n    </div>\n    <router-outlet></router-outlet>\n  "
+            template: "\n    <div>\n    <h1>{{title}}</h1> \n    \n    <a *ngIf=\"this.router.url !== '/config'\"  routerLink=\"/config\">Configuration</a>\n    <a style=\"text-align:center;\" *ngIf=\"this.router.url !== '/'\"  routerLink=\"/\">Dashboard</a>\n    </div>\n    <router-outlet></router-outlet>\n  "
         }), 
         __metadata('design:paramtypes', [router_1.Router])
     ], DadAppComponent);

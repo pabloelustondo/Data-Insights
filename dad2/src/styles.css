@@ -1,6 +1,7 @@
 .chart {
   position:relative;
   float:left;
+  width:50%;
 }
 
 #chartName{
@@ -8,3 +9,15 @@
   color: black;
   font-weight: 600;
 }
+
+#dashboardTable{
+  border:solid;
+  color:darkgray;
+  text-align:center;
+  margin: auto;
+}
+
+#title{
+  text-align: center;
+}
+
