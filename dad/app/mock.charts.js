@@ -1,52 +1,7 @@
 "use strict";
 exports.CHARTS = [
-    { id: "chart1",
-        name: 'Number of Devices by Range Pie Chart 1',
-        type: "pie",
-        parameters: [
-            { parameterType: "DateRange",
-                dateFrom: "2016-08-16",
-                dateTo: "2016-08-18"
-            }]
-    },
-    { id: "chart2",
-        name: 'Number of Devices by Range Pie Chart 2',
-        type: "pie",
-        parameters: [
-            { parameterType: "DateRange",
-                dateFrom: "2016-08-19",
-                dateTo: "2016-08-22"
-            }]
-    },
-    { id: "chart3",
-        name: 'Number of Devices by Range Pie Chart 3',
-        type: "pie",
-        parameters: [
-            { parameterType: "DateRange",
-                dateFrom: "2016-08-23",
-                dateTo: "2016-08-25"
-            }]
-    },
-    { id: "chart4",
-        name: 'Number of Devices by Range Pie Chart 4',
-        type: "bar",
-        parameters: [
-            { parameterType: "DateRange",
-                dateFrom: "2016-08-16",
-                dateTo: "2016-08-18"
-            }]
-    },
-    { id: "chart5",
-        name: 'Number of Devices by Range Pie Chart 5',
-        type: "bar",
-        parameters: [
-            { parameterType: "DateRange",
-                dateFrom: "2016-08-19",
-                dateTo: "2016-08-22"
-            }]
-    },
-    { id: "chart6",
-        name: 'Number of Devices by Range Pie Chart 6',
+    { id: "chartbar",
+        name: 'Bar Chart',
         type: "bar",
         parameters: [
             { parameterType: "DateRange",
@@ -54,21 +9,39 @@ exports.CHARTS = [
                 dateTo: "2016-08-25"
             }]
     },
-    { id: "chart7",
-        name: 'Number of Devices by Range Pie Chart 7',
-        type: "bar2",
+    { id: "chartpie",
+        name: 'Pie Chart',
+        type: "pie",
         parameters: [
             { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
                 dateTo: "2016-08-25"
             }]
     },
-    { id: "chart8",
-        name: 'Number of Devices by Range Pie Chart 8',
-        type: "pie2",
+    { id: "chartdot",
+        name: 'Dot Chart',
+        type: "dot",
         parameters: [
             { parameterType: "DateRange",
                 dateFrom: "2016-08-23",
+                dateTo: "2016-08-25"
+            }]
+    },
+    { id: "chartspline",
+        name: 'Spline Chart',
+        type: "spline",
+        parameters: [
+            { parameterType: "DateRange",
+                dateFrom: "2016-08-23",
+                dateTo: "2016-08-25"
+            }]
+    },
+    { id: "chartdonut",
+        name: 'Donut Chart',
+        type: "donut",
+        parameters: [
+            { parameterType: "DateRange",
+                dateFrom: "2016-08-20",
                 dateTo: "2016-08-25"
             }]
     }

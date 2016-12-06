@@ -1,0 +1,26 @@
+.chart {
+  position:relative;
+  float:left;
+  width:50%;
+}
+
+#chartName{
+  position: absolute;
+  color: black;
+  font-weight: 600;
+}
+
+#dashboardTable{
+  border:solid;
+  color:darkgray;
+  text-align:center;
+  margin: auto;
+}
+
+#title{
+  text-align: center;
+}
+
+body{
+  background-image: url(/assets/images/background-image.jpg);
+}

@@ -1,0 +1,52 @@
+{
+  "name": "IDA",
+  "version": "0.0.1",
+  "description": "This service provides and API to post data to SOTI cloud data analytics service",
+  "scripts": {
+    "start": "npm run build && node ./dist/server.js",
+    "startdebug": "npm run build && node $NODE_DEBUG_OPTION ./dist/server.js",
+    "build": "npm run clean && npm run lint && npm run swagger-gen && npm run routes-gen && tsc && npm run copy-swagger-ui",
+    "lint": "tslint ./src/**/*.ts",
+    "clean": "rimraf dist",
+    "swagger-gen": "tsoa swagger",
+    "routes-gen": "tsoa routes",
+    "copy-swagger-ui": "ncp ./src/swagger-ui ./dist/swagger-ui",
+    "tsoa": "tsoa",
+    "dev-test-watch": "mocha-typescript-watch",
+    "test": "tsc -p . "
+  },
+  "author": "pablo.elustondo@soti.net",
+  "license": "MIT",
+  "dependencies": {
+    "@types/request": "0.0.36",
+    "@types/request-promise": "^4.1.33",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "method-override": "^2.3.6",
+    "querystring": "^0.2.0",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
+    "tsoa": "^1.0.0",
+    "chai": "^3.5.0",
+    "mocha-typescript": "1.0.11",
+    "winser": "1.0.2"
+  },
+  "devDependencies": {
+    "@types/body-parser": "0.0.30",
+    "@types/express": "^4.0.30",
+    "@types/method-override": "0.0.27",
+    "@types/node": "^6.0.33",
+    "ncp": "^2.0.0",
+    "rimraf": "^2.5.2",
+    "tslint": "^3.11.0",
+    "typescript": "2.0.0",
+    "mocha": "^3.2.0",
+    "describe": "^1.2.0",
+    "mocha-typescript": "1.0.11",
+    "chai-http": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://taipan:8080/tfs/SOTITFS/_git/CustomerBI"
+  }
+}

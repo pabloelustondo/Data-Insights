@@ -23,145 +23,194 @@ var DadChartComponent = (function () {
     function DadChartComponent(dadChartDataService) {
         this.dadChartDataService = dadChartDataService;
     }
-    DadChartComponent.prototype.drawChartDogaBar = function (chartConfig, data) {
-        if (!data)
-            return;
-        var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
-            testdata.push({ "label": r.Rng, "value": r.NumberOfDevices });
-        }
-        var historicalBarChart = [
-            {
-                key: "Cumulative Return",
-                values: testdata }];
-        var width = 300;
-        var height = 300;
-        nv.addGraph(function () {
-            var chart = nv.models.discreteBarChart()
-                .x(function (d) { return d.label; })
-                .y(function (d) { return d.value; })
-                .staggerLabels(true)
-                .showValues(true)
-                .duration(250);
-            d3.select("#" + chartConfig.id)
-                .datum(historicalBarChart)
-                .call(chart);
-            nv.utils.windowResize(chart.update);
-            return chart;
-        });
-    };
     DadChartComponent.prototype.drawChartBar = function (chartConfig, data) {
-        if (!data)
-            return;
-        var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
-            testdata.push({ "label": r.Rng, "value": r.NumberOfDevices });
-        }
-        var historicalBarChart = [
-            {
-                key: "Cumulative Return",
-                values: testdata }];
-        var width = 300;
-        var height = 300;
-        nv.addGraph(function () {
-            var chart = nv.models.discreteBarChart()
-                .x(function (d) { return d.label; })
-                .y(function (d) { return d.value; })
-                .staggerLabels(true)
-                .showValues(true)
-                .duration(250);
-            d3.select("#" + chartConfig.id)
-                .datum(historicalBarChart)
-                .call(chart);
-            nv.utils.windowResize(chart.update);
-            return chart;
+        var barData = {};
+        var team = [];
+        data.forEach(function (e) {
+            team.push(e.Rng);
+            barData[e.Rng] = e.NumberOfDevices;
         });
-    };
-    DadChartComponent.prototype.drawChart = function (chartConfig, data) {
-        if (chartConfig.type === 'pie')
-            this.drawChartPie(chartConfig, data);
-        if (chartConfig.type === 'bar')
-            this.drawChartBar(chartConfig, data);
-        if (chartConfig.type === 'bar2')
-            this.drawChartDogaBar(chartConfig, data);
-        if (chartConfig.type === 'pie2')
-            this.drawDogaChartPie(chartConfig, data);
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [barData],
+                keys: {
+                    value: team
+                },
+                type: 'bar',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
+            tooltip: {
+                format: {
+                    title: function (value) { return ('Range of Battery Levels'); }
+                }
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: 'Range of Battery Levels',
+                        position: 'outer-right'
+                    }
+                },
+                y: {
+                    label: {
+                        text: 'Number of Devices',
+                        position: 'outer-top'
+                    }
+                }
+            }
+        });
     };
     DadChartComponent.prototype.drawChartPie = function (chartConfig, data) {
-        if (!data)
-            return;
-        var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
-            testdata.push({ "key": r.Rng, "y": r.NumberOfDevices });
-        }
-        var width = 300;
-        var height = 300;
-        nv.addGraph(function () {
-            var d3Chart = nv.models.pie()
-                .x(function (d) {
-                return d.key;
-            })
-                .y(function (d) {
-                return d.y;
-            })
-                .width(width)
-                .height(height)
-                .labelType(function (d, i, values) {
-                return values.key + ':' + values.value;
-            });
-            console.log("CHART is actually drawing:" + "#" + chartConfig.id);
-            d3.select("#" + chartConfig.id)
-                .datum([testdata])
-                .transition().duration(1200)
-                .attr('width', width)
-                .attr('height', height)
-                .call(d3Chart);
-            return d3Chart;
+        var pieData = {};
+        var brand = [];
+        data.forEach(function (e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [pieData],
+                keys: {
+                    value: brand
+                },
+                type: 'pie',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
         });
     };
     ;
-    DadChartComponent.prototype.drawDogaChartPie = function (chartConfig, data) {
-        if (!data)
-            return;
-        var testdata = [];
-        for (var _i = 0, _a = data.result; _i < _a.length; _i++) {
-            var r = _a[_i];
-            testdata.push({ "key": r.Rng, "y": r.NumberOfDevices });
-        }
-        var width = 300;
-        var height = 300;
-        nv.addGraph(function () {
-            var d3Chart = nv.models.pie()
-                .x(function (d) {
-                return d.key;
-            })
-                .y(function (d) {
-                return d.y;
-            })
-                .width(width)
-                .height(height)
-                .labelType(function (d, i, values) {
-                return values.key + ':' + values.value;
-            });
-            console.log("CHART is actually drawing:" + "#" + chartConfig.id);
-            d3.select("#" + chartConfig.id)
-                .datum([testdata])
-                .transition().duration(1200)
-                .attr('width', width)
-                .attr('height', height)
-                .call(d3Chart);
-            return d3Chart;
+    DadChartComponent.prototype.drawChartDot = function (chartConfig, data) {
+        var dotData = {};
+        var device_owner = [];
+        data.forEach(function (e) {
+            device_owner.push(e.Rng);
+            dotData[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [dotData],
+                keys: {
+                    value: device_owner
+                },
+                type: 'spline',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
+            tooltip: {
+                format: {
+                    title: function () {
+                        return ('Range of Battery Levels');
+                    },
+                }
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: 'Range of Battery Levels',
+                        position: 'outer-right'
+                    }
+                },
+                y: {
+                    label: {
+                        text: 'Number of Devices',
+                        position: 'outer-top'
+                    }
+                }
+            },
         });
     };
     ;
+    DadChartComponent.prototype.drawChartSpline = function (chartConfig, data) {
+        var data1 = {};
+        var brand = [];
+        data.forEach(function (e) {
+            brand.push(e.Rng);
+            data1[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                columns: [
+                    ['Number of Devices', 30, 40, 500, 0],
+                    ['Range', 1, 10, 90, 70, 85, 5, 100]
+                ],
+                keys: {
+                    value: brand
+                },
+                type: 'spline',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
+        });
+    };
+    DadChartComponent.prototype.drawChartDonut = function (chartConfig, data) {
+        var pieData = {};
+        var brand = [];
+        data.forEach(function (e) {
+            brand.push(e.Rng);
+            pieData[e.Rng] = e.NumberOfDevices;
+        });
+        c3.generate({
+            size: {
+                height: 400,
+                width: 475
+            },
+            bindto: '#' + chartConfig.id,
+            data: {
+                json: [pieData],
+                keys: {
+                    value: brand
+                },
+                type: 'donut',
+            },
+            color: {
+                pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            },
+        });
+    };
+    ;
+    DadChartComponent.prototype.drawChart = function (chartConfig, data) {
+        if (chartConfig.type === 'bar')
+            this.drawChartBar(chartConfig, data);
+        if (chartConfig.type === 'pie')
+            this.drawChartPie(chartConfig, data);
+        if (chartConfig.type === 'dot')
+            this.drawChartDot(chartConfig, data);
+        if (chartConfig.type === 'spline')
+            this.drawChartSpline(chartConfig, data);
+        if (chartConfig.type === 'donut')
+            this.drawChartDonut(chartConfig, data);
+    };
     DadChartComponent.prototype.ngOnInit = function () {
         var _this = this;
         console.log("CHART starts drawing :" + this.chart.id);
         this.dadChartDataService.getChartData(this.chart).then(function (data) {
-            _this.data = data;
+            _this.data = data.data;
             _this.drawChart(_this.chart, _this.data);
         }).catch(function (err) { return console.log(err.toString()); });
         /*
@@ -178,7 +227,7 @@ var DadChartComponent = (function () {
         core_1.Component({
             selector: 'dadchart',
             providers: [data_service_1.DadChartDataService],
-            template: " <!--  BEGIN CHART COMPONENT -->\n \n    <table style=\"border:solid\">\n    <tr><td> <div (click)=\"onSelect(chart)\">{{chart.name}} </div> </td></tr>\n    <tr *ngIf=\"chart.parameters\"><td> <span *ngFor=\"let p of chart.parameters\"> {{p.parameterType}} - {{p.dateFrom}} - {{p.dateTo}}</span></td></tr>\n    <tr>\n        <td> <div style=\"height: 300px  \"><svg [id]=\"chart.id\"></svg></div> </td>\n        <td>\n            <div>Raw Data: \n              <div *ngIf=\"data\">\n                <div *ngFor =\"let d of data.result\">\n                {{d.Rng}} -- {{d.NumberOfDevices}}\n                </div>\n              </div>\n              <div *ngIf=\"!data\">\n                Data Not Available\n              </div>\n            </div>\n        </td>\n    </tr>     \n    </table>\n    <br/>\n    <br/>\n    <!--  END CHART COMPONENT -->"
+            template: " <!--  BEGIN CHART COMPONENT -->\n     <table style=\"border:solid; color:darkgray\">\n        <tr>\n            <td><div style= \"text-align:center; height:700px;  width:700px\" [id]=\"chart.id\"></div></td>\n        </tr>\n    </table>\n    <br/><br/><br/>\n\n    <!--  END CHART COMPONENT -->"
         }), 
         __metadata('design:paramtypes', [data_service_1.DadChartDataService])
     ], DadChartComponent);

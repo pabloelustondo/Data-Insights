@@ -1,0 +1,16 @@
+<table style="border:solid"><tr><td>
+  <div (click)="onSelect(dadchart)">{{dadchart.name}}</div>
+</td></tr>
+  <tr><td>
+    <div style="height: 300px  "><svg [id]="dadchart.id"></svg></div>
+  </td><td>
+    <div>Raw Data:
+      <div *ngFor ="let d of daddata.result">
+        {{d.Rng}} -- {{d.NumberOfDevices}}
+      </div>
+    </div></td></tr>
+</table>
+<br/>
+<br/>
+DEBUG AREA:    <br/>
+<input style="width: 300px;" [(ngModel)]="dadchart.name" placeholder="name">
