@@ -18,10 +18,22 @@ export class SDSController {
     data: ['aaa', 'bbb', 'ccc']
     })
     public async Create(request: SDS, optionalString?: string): Promise<SDS> {
+
+        this.amazonCall(request, optionalString);
         return  {
             metadata: 'Thanks a lot',
             createdAt: new Date()
         };
     }
+
+    private async amazonCall (request: SDS, optionString?: string): Promise<SDS> {
+        return  {
+            metadata: 'Thanks a lot',
+            createdAt: new Date()
+        };
+    }
+    // Build the post string from an object
+
+
 
 }

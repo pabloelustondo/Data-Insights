@@ -1,4 +1,5 @@
 import './controllers/usersController';
+import './controllers/multiplePosts';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as methodOverride from 'method-override';

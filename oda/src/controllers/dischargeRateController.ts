@@ -98,10 +98,11 @@ export class DischargeRateController {
         };
 
         let p = await rp(options); // request library used
+        let mData = ['Description of discharge rate', 'NumberOfDevices', 'DischargeRate'];
 
         const user: SDS = {
             createdAt: new Date(),
-            metadata: 'To Be Defined',
+            metadata: mData,
             data: p
         };
 

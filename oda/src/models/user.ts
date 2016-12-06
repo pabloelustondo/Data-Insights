@@ -1,5 +1,5 @@
 export interface SDS {
-    metadata: string;
+    metadata: string[];
     createdAt: Date;
     data?: string[];
 }
