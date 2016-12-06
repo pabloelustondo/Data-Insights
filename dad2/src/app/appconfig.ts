@@ -3,5 +3,6 @@
  */
 
 export const config = {
-    "oda_dev_url":"http://localhost:3002/Devices/Battery/Summary/InitialChargeLevels"
+    "InitialChargeLevels":"http://localhost:3002/Devices/Battery/Summary/InitialChargeLevels",
+    "DischargeRate":"http://localhost:3002/Devices/Battery/Summary/DischargeRate"
 }

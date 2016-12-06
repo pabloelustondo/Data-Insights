@@ -1,5 +1,5 @@
 /**
- * Created by dister on 11/28/2016.
+ * Created by dister on 12/05/2016.
  */
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
@@ -12,6 +12,9 @@ export class DadChart {
     name: string;
     type: string;
     parameters: any[];
+    endpoint:string;
+    a : string;
+    b : string;
 }
 
 @Component({
@@ -36,11 +39,11 @@ export class DadChartComponent implements OnInit {
     constructor(private dadChartDataService: DadChartDataService) { }
     drawChartBar(chartConfig:DadChart, data){
         var barData = {};
-        var team = [];
+        var battery = [];
         data.forEach(function(e) {
-            team.push(e.Rng);
-            barData[e.Rng] = e.NumberOfDevices;
-        })
+          battery.push(e[chartConfig.a]);
+          barData[e[chartConfig.a]] = e[chartConfig.b];
+        });
 
         c3.generate({
           size: {
@@ -51,7 +54,7 @@ export class DadChartComponent implements OnInit {
           data: {
             json: [barData],
             keys: {
-              value: team
+              value: battery
             },
             type: 'bar',
           },
@@ -69,13 +72,13 @@ export class DadChartComponent implements OnInit {
           axis: {
             x: {
               label: {
-                text: 'Range of Battery Levels',
+                text: [chartConfig.b],
                 position: 'outer-right'
               }
             },
             y: {
               label: {
-                text: 'Number of Devices',
+                text: [chartConfig.a],
                 position: 'outer-top'
               }
             }
@@ -92,11 +95,11 @@ export class DadChartComponent implements OnInit {
 
     drawChartPie(chartConfig:DadChart, data) {
         var pieData = {};
-        var brand = [];
+        var battery = [];
         data.forEach(function(e) {
-            brand.push(e.Rng);
-            pieData[e.Rng] = e.NumberOfDevices;
-        })
+          battery.push(e[chartConfig.a]);
+          pieData[e[chartConfig.a]] = e[chartConfig.b];
+        });
 
         c3.generate({
             size: {
@@ -107,7 +110,7 @@ export class DadChartComponent implements OnInit {
             data: {
                 json: [ pieData ],
                 keys: {
-                    value: brand
+                    value: battery
                 },
                 type:'pie',
             },
@@ -119,11 +122,11 @@ export class DadChartComponent implements OnInit {
 
     drawChartDot(chartConfig:DadChart, data) {
         var dotData = {};
-        var device_owner = [];
+        var battery = [];
         data.forEach(function (e) {
-            device_owner.push(e.Rng);
-            dotData[e.Rng] = e.NumberOfDevices;
-        })
+          battery.push(e[chartConfig.a]);
+          dotData[e[chartConfig.a]] = e[chartConfig.b];
+        });
 
         c3.generate({
             size: {
@@ -134,7 +137,7 @@ export class DadChartComponent implements OnInit {
             data: {
                 json: [dotData],
                 keys: {
-                    value: device_owner
+                    value: battery
                 },
                 type: 'spline',
             },
@@ -160,13 +163,13 @@ export class DadChartComponent implements OnInit {
             axis: {
                 x: {
                     label: {
-                        text: 'Range of Battery Levels',
+                        text: [chartConfig.b],
                         position: 'outer-right'
                     }
                 },
                 y: {
                     label: {
-                        text: 'Number of Devices',
+                        text: [chartConfig.a],
                         position: 'outer-top'
                     }
                 }
@@ -176,11 +179,12 @@ export class DadChartComponent implements OnInit {
 
     drawChartSpline(chartConfig:DadChart, data){
         var data1 = {};
-        var brand = [];
+        var battery = [];
         data.forEach(function(e) {
-            brand.push(e.Rng);
-            data1[e.Rng] = e.NumberOfDevices;
-        })
+          battery.push(e[chartConfig.a]);
+          data1[e[chartConfig.a]] = e[chartConfig.b];
+        });
+
         c3.generate({
             size: {
                 height: 400,
@@ -193,7 +197,7 @@ export class DadChartComponent implements OnInit {
                    ['Range of Devices', 1, 10, 90, 70, 85, 5, 100]
                 ],
                 keys: {
-                    value: brand
+                    value: battery
                 },
                 type: 'spline',
             },
@@ -208,15 +212,29 @@ export class DadChartComponent implements OnInit {
             color: {
               pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
             },
+            axis: {
+              x: {
+                label: {
+                  text: [chartConfig.b],
+                  position: 'outer-right'
+                }
+              },
+              y: {
+                label: {
+                  text: [chartConfig.a],
+                  position: 'outer-top'
+                }
+              }
+            },
         });
     }
 
     drawChartDonut(chartConfig:DadChart, data) {
-        var pieData = {};
-        var brand = [];
+        var donutData = {};
+        var battery = [];
         data.forEach(function(e) {
-            brand.push(e.Rng);
-            pieData[e.Rng] = e.NumberOfDevices;
+          battery.push(e[chartConfig.a]);
+          donutData[e[chartConfig.a]] = e[chartConfig.b];
         })
 
         c3.generate({
@@ -226,9 +244,9 @@ export class DadChartComponent implements OnInit {
             },
             bindto: '#' + chartConfig.id,
             data: {
-                json: [ pieData ],
+                json: [ donutData ],
                 keys: {
-                    value: brand
+                    value: battery
                 },
                 type:'donut',
             },

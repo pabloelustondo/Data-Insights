@@ -23,8 +23,8 @@ export class DadChartDataService {
             params.set('dateFrom', chartparam.dateFrom);
             params.set('dateTo', chartparam.dateTo);}
         }
-
-        return this.http.get(config.oda_dev_url, {search:params} ).toPromise().then(
+// config[chart.endpoint]
+        return this.http.get(config[chart.endpoint], {search:params} ).toPromise().then(
             response => JSON.parse(response['_body'])
         ).catch(
             err =>{
