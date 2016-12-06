@@ -5,7 +5,7 @@ const config = require('../../appconfig.json');
 import * as querystring from 'querystring';
 import * as rp from 'request-promise';
 @Route('Data')
-export class SDSController {
+export class MultiplePostsController {
 
     /**
      * Post a unit of data to be stored in the cloud analytics database
@@ -13,9 +13,9 @@ export class SDSController {
 
     @Post()
     @Example<any>({
-    metadata: 'here is where metadata explaining the data should go',
-    createdAt: '2016-08-08',
-    data: ['aaa', 'bbb', 'ccc']
+        metadata: 'here is where metadata explaining the data should go',
+        createdAt: '2016-08-08',
+        data: ['aaa', 'bbb', 'ccc']
     })
     public async Create(request: SDS, optionalString?: string): Promise<SDS> {
 
@@ -37,3 +37,6 @@ export class SDSController {
 
 
 }
+/**
+ * Created by vdave on 12/6/2016.
+ */

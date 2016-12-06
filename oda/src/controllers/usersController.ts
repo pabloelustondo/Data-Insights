@@ -86,10 +86,12 @@ export class SDSController {
         };
 
         let p = await rp(options);
+        let mData = ['Description of discharge rate', 'NumberOfDevices', 'Rng', 'Percentage'];
+
 
         const user: SDS = {
             createdAt: new Date(),
-            metadata: 'To Be Defined',
+            metadata: mData,
             data: p
         };
 

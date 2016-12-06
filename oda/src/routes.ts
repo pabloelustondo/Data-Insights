@@ -9,7 +9,7 @@ import { DischargeRateController } from './controllers/dischargeRateController';
 
 const models: any = {
     'SDS': {
-        'metadata': { typeName: 'string', required: true },
+        'metadata': { typeName: 'array', required: true, arrayType: 'string' },
         'createdAt': { typeName: 'datetime', required: true },
         'data': { typeName: 'array', required: false, arrayType: 'string' },
     },
