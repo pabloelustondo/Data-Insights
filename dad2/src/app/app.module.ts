@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 import { DadAppComponent } from './app.component';
 
-
 import { DadComponent }   from './dashboard.component';
 import { DadChartComponent} from "./chart.component";
 import { DadConfigComponent }   from './configuration.component';
