@@ -1,3 +1,7 @@
+#logo{
+  height: 40px;
+}
+
 .chart {
   position:relative;
   float:left;
@@ -28,4 +32,15 @@
 
 body{
   background-image: url(/assets/images/background-image.jpg);
+}
+
+.footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0px;
+  text-align: center;
+  color: #FFFFFF;
+  background-color: #000000;
 }
