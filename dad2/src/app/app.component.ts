@@ -11,6 +11,16 @@ import { Router }   from '@angular/router';
     <a  style="  color:blue" *ngIf="this.router.url !== '/config'"  routerLink="/config">See the configuration</a>
     <a  style="  color:blue" *ngIf="this.router.url !== '/'"  routerLink="/">See the dashboard</a>
     
+    <!--
+    <div ng-controller="AppCtrl" ng-cloak="" class="navBar" ng-app="DataAnalytics">
+      <md-content class="md-padding">
+        <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+          <md-nav-item md-nav-click="goto('config')" name="Dashboard">Configuration</md-nav-item>
+          <md-nav-item md-nav-click="goto('')" name="page2">Dashboard</md-nav-item>
+        </md-nav-bar>
+      </md-content>
+    </div> -->
+    
     <h1 id="title" >{{title}}</h1> 
 
     </div>
