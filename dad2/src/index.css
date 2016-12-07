@@ -44,3 +44,54 @@ body{
   color: #FFFFFF;
   background-color: #000000;
 }
+
+@media only screen and (max-width: 768px) {
+  #logo{
+    height: 40px;
+  }
+
+  .chart {
+    position:relative;
+    float:left;
+    width:100%;
+  }
+
+  #chartName{
+    position: absolute;
+    color: black;
+    font-weight: 600;
+    font-size: 25px;
+    text-align:center;
+    width: 200%;
+  }
+
+  #dashboardTable{
+    border:solid;
+    color:darkgray;
+    text-align:center;
+    margin: auto;
+    width: 100%;
+  }
+
+  #title{
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    width: 200%;
+  }
+
+  body{
+    background-image: url(/assets/images/background-image.jpg);
+  }
+
+  .footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0px;
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #000000;
+  }
+}
