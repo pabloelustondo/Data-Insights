@@ -8,7 +8,9 @@
   position: absolute;
   color: black;
   font-weight: 600;
-  width: 11%;
+  font-size: 25px;
+  text-align:center;
+  width: 75%;
 }
 
 #dashboardTable{
@@ -20,6 +22,8 @@
 
 #title{
   text-align: center;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 body{

@@ -3,6 +3,7 @@
  */
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
+import {Mapper} from "./mapper";
 
 
 declare var d3, c3: any;
@@ -22,7 +23,7 @@ export class DadChart {
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
      <table id="dashboardTable">
-     <th><div id="chartName">{{chart.name}}</div></th>
+     <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
         <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
         </tr>
@@ -35,15 +36,15 @@ export class DadChartComponent implements OnInit {
     @Input()
     chart: DadChart
     data;
+    mapper: Mapper = new Mapper();
 
     constructor(private dadChartDataService: DadChartDataService) { }
     drawChartBar(chartConfig:DadChart, data){
-        var barData = {};
-        var battery = [];
-        data.forEach(function(e) {
-          battery.push(e[chartConfig.a]);
-          barData[e[chartConfig.a]] = e[chartConfig.b];
-        });
+        let chartData = this.mapper.map(chartConfig, data);
+
+        d3.selectAll(".c3-axis-x .tick").filter(function(d) {
+          return d === 0;
+        }).remove();
 
         c3.generate({
           size: {
@@ -52,9 +53,9 @@ export class DadChartComponent implements OnInit {
           },
           bindto: '#' + chartConfig.id,
           data: {
-            json: [barData],
+            json: [chartData.Dimension],
             keys: {
-              value: battery
+              value: chartData.Metric
             },
             type: 'bar',
           },
@@ -65,7 +66,7 @@ export class DadChartComponent implements OnInit {
             grouped: false,
             format: {
               title: function () {
-                return ('Range of Battery Levels');
+                return ([chartConfig.a]);
               },
             }
           },
@@ -91,42 +92,46 @@ export class DadChartComponent implements OnInit {
               show: true
             }
           },
+          zoom: {
+            enabled: true
+          },
+          subchart: {
+            show: true
+          }
     })}
 
     drawChartPie(chartConfig:DadChart, data) {
-        var pieData = {};
-        var battery = [];
-        data.forEach(function(e) {
-          battery.push(e[chartConfig.a]);
-          pieData[e[chartConfig.a]] = e[chartConfig.b];
-        });
+      let chartData = this.mapper.map(chartConfig, data);
 
-        c3.generate({
+      c3.generate({
             size: {
                 height: 400,
                 width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
-                json: [ pieData ],
+                json: [ chartData.Dimension ],
                 keys: {
-                    value: battery
+                    value: chartData.Metric
                 },
                 type:'pie',
             },
             color: {
               pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
             },
+            zoom: {
+              enabled: true
+            }
         });
     };
 
     drawChartDot(chartConfig:DadChart, data) {
-        var dotData = {};
-        var battery = [];
-        data.forEach(function (e) {
-          battery.push(e[chartConfig.a]);
-          dotData[e[chartConfig.a]] = e[chartConfig.b];
-        });
+      let chartData = this.mapper.map(chartConfig, data);
+
+
+      d3.selectAll(".c3-axis-x .tick").filter(function(d) {
+          return d === 0;
+        }).remove();
 
         c3.generate({
             size: {
@@ -135,9 +140,9 @@ export class DadChartComponent implements OnInit {
             },
             bindto: '#' + chartConfig.id,
             data: {
-                json: [dotData],
+                json: [chartData.Dimension],
                 keys: {
-                    value: battery
+                    value: chartData.Metric
                 },
                 type: 'spline',
             },
@@ -156,7 +161,7 @@ export class DadChartComponent implements OnInit {
               grouped: false,
               format: {
                     title: function () {
-                        return ('Range of Battery Levels');
+                        return ([chartConfig.b]);
                     },
                 }
             },
@@ -174,16 +179,21 @@ export class DadChartComponent implements OnInit {
                     }
                 }
             },
+            zoom: {
+              enabled: true
+            },
+            subchart: {
+              show: true
+            }
         });
     };
 
     drawChartSpline(chartConfig:DadChart, data){
-        var data1 = {};
-        var battery = [];
-        data.forEach(function(e) {
-          battery.push(e[chartConfig.a]);
-          data1[e[chartConfig.a]] = e[chartConfig.b];
-        });
+      let chartData = this.mapper.map(chartConfig, data);
+
+      d3.selectAll(".c3-axis-x .tick").filter(function(d) {
+          return d === 0;
+        }).remove();
 
         c3.generate({
             size: {
@@ -197,7 +207,7 @@ export class DadChartComponent implements OnInit {
                    ['Range of Devices', 1, 10, 90, 70, 85, 5, 100]
                 ],
                 keys: {
-                    value: battery
+                    value: chartData.Metric
                 },
                 type: 'spline',
             },
@@ -226,27 +236,28 @@ export class DadChartComponent implements OnInit {
                 }
               }
             },
+            zoom: {
+              enabled: true
+            },
+            subchart: {
+              show: true
+            }
         });
     }
 
     drawChartDonut(chartConfig:DadChart, data) {
-        var donutData = {};
-        var battery = [];
-        data.forEach(function(e) {
-          battery.push(e[chartConfig.a]);
-          donutData[e[chartConfig.a]] = e[chartConfig.b];
-        })
+      let chartData = this.mapper.map(chartConfig, data);
 
-        c3.generate({
+      c3.generate({
             size: {
                 height: 400,
                 width: 475
             },
             bindto: '#' + chartConfig.id,
             data: {
-                json: [ donutData ],
+                json: [ chartData.Dimension ],
                 keys: {
-                    value: battery
+                    value: chartData.Metric
                 },
                 type:'donut',
             },
