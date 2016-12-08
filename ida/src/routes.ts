@@ -8,6 +8,13 @@ import { SDSController } from './controllers/usersController';
 import { MultiplePostsController } from './controllers/multiplePosts';
 
 const models: any = {
+    'SDSBattery': {
+        'dev_id': { typeName: 'string', required: true },
+        'server_time_stamp': { typeName: 'datetime', required: true },
+        'int_value': { typeName: 'number', required: true },
+        'stat_type': { typeName: 'number', required: true },
+        'time_stamp': { typeName: 'datetime', required: true },
+    },
     'SDS': {
         'metadata': { typeName: 'string', required: true },
         'createdAt': { typeName: 'datetime', required: true },
@@ -18,7 +25,7 @@ const models: any = {
 export function RegisterRoutes(app: any) {
     app.post('/Data', function(req: any, res: any, next: any) {
         const params = {
-            'request': { typeName: 'SDS', required: true },
+            'request': { typeName: 'SDSBattery', required: true },
             'optionalString': { typeName: 'string', required: false },
         };
 
