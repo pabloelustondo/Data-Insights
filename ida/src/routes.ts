@@ -5,6 +5,7 @@
 /* tslint:disable */
 import { ValidateParam } from 'tsoa';
 import { SDSController } from './controllers/usersController';
+import { MultiplePostsController } from './controllers/multiplePosts';
 
 const models: any = {
     'SDS': {
@@ -29,6 +30,22 @@ export function RegisterRoutes(app: any) {
         }
 
         const controller = new SDSController();
+        promiseHandler(controller.Create.apply(controller, validatedParams), res, next);
+    });
+    app.post('/Data', function(req: any, res: any, next: any) {
+        const params = {
+            'request': { typeName: 'SDS', required: true },
+            'optionalString': { typeName: 'string', required: false },
+        };
+
+        let validatedParams: any[] = [];
+        try {
+            validatedParams = getValidatedParams(params, req, 'request');
+        } catch (err) {
+            return next(err);
+        }
+
+        const controller = new MultiplePostsController();
         promiseHandler(controller.Create.apply(controller, validatedParams), res, next);
     });
 
