@@ -5,7 +5,7 @@ Key technologies are: Node.js (7), Angular.js 2, Typescript 2 and nv23.js / D3.j
 
 To get and run this project 
 
-install git (I have version 2.9 ) 
+install git (I have version st2.9 )
 install node.js (version 7)
 
 Stop all the MobiControl services (MS, DS, Elastic Search Proxy Server(if you have it))
@@ -43,6 +43,24 @@ In the case of DAD the start takes care of everything (builds and runs). In case
 
 Warning: If using WebStorm,  please remove indexing from 'dist' folders as well as node_modules,as this is going to be slow.
 (Settings/Directories   exclude button)
+
+===== Prod server ====
+
+Port assignment on prod server
+5494 : Dad2
+5495 : ODA
+5496 : IDA
+
+==== Installation of Dad2 on Prod ====
+open dad2 folder
+open dad2\src\app\appconfig
+Ensure each endpoint points to http://34.192.3.52:5495/...
+navigate back to dad2 root folder
+open package file
+add the following line in scripts folder: "startprod": "ng serve --host 10.0.2.76 --port 5494",
+npm install
+npm run-script startprod
+
 
 Glossary:
 
