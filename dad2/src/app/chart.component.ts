@@ -4,7 +4,7 @@
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
 import {Mapper} from "./mapper";
-
+import transform = d3.transform;
 
 declare var d3, c3: any;
 
@@ -16,6 +16,7 @@ export class DadChart {
     endpoint:string;
     a : string;
     b : string;
+
 }
 
 @Component({
@@ -26,6 +27,7 @@ export class DadChart {
      <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
         <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
+            <td><button (click)="changeConfig($event)">Change Data Range</button></td>
         </tr>
     </table>
     <br/><br/><br/>
@@ -37,8 +39,22 @@ export class DadChartComponent implements OnInit {
     chart: DadChart
     data;
     mapper: Mapper = new Mapper();
+    c3chart: any;
 
     constructor(private dadChartDataService: DadChartDataService) { }
+
+    changeConfig(event){
+      this.chart.parameters[0].dateFrom = "2016-08-20";
+      this.chart.name =  " (dateFrom: 2016-08-20 ) ";
+      this.dadChartDataService.getChartData(this.chart).then(
+        data => {
+          this.data = data.data;
+          //let chartData = this.mapper.map(this.chart, this.data);
+          this.c3chart.load(data);
+        }
+      )
+    }
+
     drawChartBar(chartConfig:DadChart, data){
         let chartData = this.mapper.map(chartConfig, data);
 
@@ -46,7 +62,7 @@ export class DadChartComponent implements OnInit {
           return d === 0;
         }).remove();
 
-        c3.generate({
+        this.c3chart = c3.generate({
           size: {
             height: 400,
             width: 475
