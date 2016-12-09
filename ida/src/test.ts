@@ -72,14 +72,12 @@ const testData =  {
     public assert_pass_putSampleData(done: Function ) {
 
         const testPutData = {
-            'metadata': 'here is where metadata explaining the data should go',
-                'createdAt': '2016-08-08',
-                'data': [
-                    'aaa',
-                    'bbb',
-                    'ccc'
-                ]
-        };
+            'dev_id': '12345678901234567890123456789012345678901234567890123456789012345678901234567890',
+            'server_time_stamp':  new Date(),
+            'int_value': 191231231319,
+            'stat_type': 12345,
+            'time_stamp': new Date()
+        }
         chai.use(chaiHttp);
         chai.request(server.app)
             .post('/Data')
@@ -120,7 +118,7 @@ const testData =  {
             });
     }
 
-    @test('should fail put data to /DATA api due to wrong api key ')
+    @test('should fail put data to /DATA api due to wrong data type')
     public assert_fail_missingApiKey(done: Function ) {
 
         const testPutData = {
