@@ -4,7 +4,6 @@
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
 import {Mapper} from "./mapper";
-import transform = d3.transform;
 
 declare var d3, c3: any;
 
