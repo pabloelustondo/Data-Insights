@@ -1,7 +1,7 @@
 {
-  "name": "IDA",
+  "name": "PDIC",
   "version": "0.0.1",
-  "description": "This service provides and API to post data to SOTI cloud data analytics service",
+  "description": "This service Posts data to AWS 5 times a minute.",
   "scripts": {
     "start": "npm run build && node ./dist/server.js",
     "startdebug": "npm run build && node $NODE_DEBUG_OPTION ./dist/server.js",
@@ -12,10 +12,12 @@
     "routes-gen": "tsoa routes",
     "copy-swagger-ui": "ncp ./src/swagger-ui ./dist/swagger-ui",
     "tsoa": "tsoa",
+    "install-windows-service": "winser -i",
+    "uninstall-windows-service": "winser -r",
     "dev-test-watch": "mocha-typescript-watch",
     "test": "tsc -p . "
   },
-  "author": "pablo.elustondo@soti.net",
+  "author": "varun.dave@soti.net",
   "license": "MIT",
   "dependencies": {
     "@types/request": "0.0.36",
@@ -30,7 +32,7 @@
     "chai": "^3.5.0",
     "mocha-typescript": "1.0.11",
     "winser": "1.0.2",
-	"aws-iot-device-sdk": "1.0.13",
+    "aws-iot-device-sdk": "1.0.13",
     "aws-sdk": "2.7.11"
   },
   "devDependencies": {
@@ -44,7 +46,6 @@
     "typescript": "2.0.0",
     "mocha": "^3.2.0",
     "describe": "^1.2.0",
-    "mocha-typescript": "1.0.11",
     "chai-http": "^3.0.0"
   },
   "repository": {
