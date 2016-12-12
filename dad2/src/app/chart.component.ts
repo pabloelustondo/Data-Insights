@@ -15,9 +15,9 @@ export class DadChart {
     endpoint:string;
     a : string;
     b : string;
-
+    colorPalette: any;
 }
-
+this.colorPalette = [];
 @Component({
     selector: 'dadchart',
     providers:[DadChartDataService],
@@ -26,7 +26,26 @@ export class DadChart {
      <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
         <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
-            <td><button (click)="changeConfig($event)">Change Data Range</button></td>
+            <!-- Date From input -->
+            <div>
+                <td>
+                    <label style="color: #0A0A0A">Date from: </label>
+                    <input [(ngModel)]="this.chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd"> <!--[(ngModel)]= will it be needed?-->
+                </td>
+            </div>
+            <!-- Date To input -->
+            <div>
+                <td>
+                  <label style="color: #0A0A0A">Date To: </label>
+                  <input [(ngModel)]="this.chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">
+                </td>
+            </div>
+            <!-- refresh button -->
+            <div>
+                <td>
+                    <button (click)="changeConfig($event)">Refresh</button>
+                </td>
+            </div>
         </tr>
     </table>
     <br/><br/><br/>
@@ -38,18 +57,24 @@ export class DadChartComponent implements OnInit {
     chart: DadChart
     data;
     mapper: Mapper = new Mapper();
+
     c3chart: any;
 
     constructor(private dadChartDataService: DadChartDataService) { }
 
     changeConfig(event){
-      this.chart.parameters[0].dateFrom = "2016-08-20";
-      this.chart.name =  " (dateFrom: 2016-08-20 ) ";
       this.dadChartDataService.getChartData(this.chart).then(
         data => {
           this.data = data.data;
-          //let chartData = this.mapper.map(this.chart, this.data);
-          this.c3chart.load(data);
+          let chartData = this.mapper.map(this.chart, this.data);
+          this.c3chart.load(
+            {
+              json: [chartData.Dimension],
+              keys: {
+                value: chartData.Metric
+              },
+              unload: true,
+            });
         }
       )
     }
@@ -118,7 +143,7 @@ export class DadChartComponent implements OnInit {
     drawChartPie(chartConfig:DadChart, data) {
       let chartData = this.mapper.map(chartConfig, data);
 
-      c3.generate({
+      this.c3chart = c3.generate({
             size: {
                 height: 400,
                 width: 475
@@ -292,7 +317,6 @@ export class DadChartComponent implements OnInit {
 
     ngOnInit() {
         console.log("CHART starts drawing :" + this.chart.id);
-
         this.dadChartDataService.getChartData(this.chart).then(
             data => {
                 this.data = data.data;

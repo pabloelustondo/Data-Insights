@@ -16,9 +16,6 @@ let LocalStorageServiceConfig = {
 };
 
 @NgModule({
-  declarations: [
-    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent
-  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -33,6 +30,9 @@ let LocalStorageServiceConfig = {
         component: DadConfigComponent
       }
     ])
+  ],
+  declarations: [
+    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent
   ],
   providers: [
     LocalStorageService,
