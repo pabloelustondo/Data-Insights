@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 import { DadAppComponent } from './app.component';
-import { LocalStorageService, LOCAL_STORAGE_SERVICE_CONFIG } from 'angular-2-local-storage';
 import { DadComponent }   from './dashboard.component';
 import { DadChartComponent} from "./chart.component";
 import { DadConfigComponent }   from './configuration.component';
@@ -34,12 +33,7 @@ let LocalStorageServiceConfig = {
   declarations: [
     DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent
   ],
-  providers: [
-    LocalStorageService,
-    {
-      provide: LOCAL_STORAGE_SERVICE_CONFIG, useValue: LocalStorageServiceConfig
-    }
-  ],
+  providers: [],
   bootstrap: [DadAppComponent]
 })
 export class AppModule { }
