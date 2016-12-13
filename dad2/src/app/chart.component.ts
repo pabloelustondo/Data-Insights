@@ -28,23 +28,18 @@ this.colorPalette = [];
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
             <!-- Date From input -->
             <div>
-                <td>
-                    <label style="color: #0A0A0A">Date from: </label>
-                    <input [(ngModel)]="this.chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd"> <!--[(ngModel)]= will it be needed?-->
-                </td>
+              <label style="color: #0A0A0A">Date from: </label>
+              <input [(ngModel)]="this.chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd"> 
             </div>
             <!-- Date To input -->
             <div>
-                <td>
-                  <label style="color: #0A0A0A">Date To: </label>
-                  <input [(ngModel)]="this.chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">
-                </td>
+              <label style="color: #0A0A0A">Date To: </label>
+              <input [(ngModel)]="this.chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">
             </div>
             <!-- refresh button -->
+            <br/>
             <div>
-                <td>
-                    <button (click)="changeConfig($event)">Refresh</button>
-                </td>
+                <button (click)="changeConfig($event)">Refresh</button>
             </div>
         </tr>
     </table>

@@ -23,14 +23,14 @@ import { TodoService } from './todo/todo.service';
 import { TrafficChartService } from './trafficChart/trafficChart.service';
 import { UsersMapService } from './usersMap/usersMap.service';
 
-import { NgGridModule } from 'angular2-grid';
+//import { NgGridModule } from 'angular2-grid';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     NgaModule,
-    NgGridModule,
+    //NgGridModule,
     routing
   ],
   declarations: [

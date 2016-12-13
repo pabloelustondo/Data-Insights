@@ -3,7 +3,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { DadChart } from '../iChart/iChart.component';
-import { NgGrid, NgGridItem } from 'angular2-grid';
+//import { NgGrid, NgGridItem } from 'angular2-grid';
 
 declare var d3, nv: any;
 
