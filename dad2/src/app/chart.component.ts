@@ -89,6 +89,9 @@ export class DadChartComponent implements OnInit {
             keys: {
               value: chartData.Metric
             },
+            selection:{
+              enabled:true
+            },
             type: 'bar',
           },
           color: {
@@ -176,8 +179,12 @@ export class DadChartComponent implements OnInit {
                 keys: {
                     value: chartData.Metric
                 },
+                selection:{
+                  enabled:true
+                },
                 type: 'spline',
             },
+
             color: {
               pattern: this.colorPalette,
             },
@@ -240,6 +247,9 @@ export class DadChartComponent implements OnInit {
                 ],
                 keys: {
                     value: chartData.Metric
+                },
+                selection:{
+                  enabled:true
                 },
                 type: 'spline',
             },
