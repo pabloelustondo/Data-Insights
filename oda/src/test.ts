@@ -92,7 +92,7 @@ let expect = chai.expect;
             });
     }
 
-    @test('should fail getBatteryDischarge code')
+    @test('should fail getBatteryDischarge code - no date provided.')
     public assert_fail_getBatteryDischarge(done: Function ) {
         chai.use(chaiHttp);
 
@@ -104,7 +104,7 @@ let expect = chai.expect;
             });
     }
 
-    @test('should fail getNumberOfDevices method')
+    @test('should fail getNumberOfDevices method - no dates provided')
     public assert_fail_getNumberOfDevices(done: Function ) {
         chai.use(chaiHttp);
 
@@ -115,11 +115,12 @@ let expect = chai.expect;
             });
     }
 
-    @test('should pass getNumberOfDevices method without dates')
+
+    @test('should pass getNumberOfDevices method with out of range date values')
     public assert_pass_getNumberOfDevices(done: Function ) {
         chai.use(chaiHttp);
 
-        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels?dateFrom=2016-08-15&dateTo=2016-08-25')
+        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels?dateFrom=2019-08-15&dateTo=2019-08-25')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(200);
                 expect(res).to.be.json;

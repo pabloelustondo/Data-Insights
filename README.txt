@@ -61,6 +61,17 @@ add the following line in scripts folder: "startprod": "ng serve --host 10.0.2.7
 npm install
 npm run-script startprod
 
+==== To install as a service ===
+1) Get NSSM - the Non-Sucking Service Manager from http://nssm.cc/download
+2) Open terminal as windows administrator
+3) Register IDA as a service with the following command
+nssm.exe install IDA "C:\Program Files\nodejs\node.exe" C:\Users\vdave\WebstormProjects\current_head\CustomerBI\ida\dist\server.js
+4) Register ODA as a service with the following command
+nssm.exe install ODA "C:\Program Files\nodejs\node.exe" C:\Users\vdave\WebstormProjects\current_head\CustomerBI\oda\dist\server.js
+5) Build IDA
+6) Build ODA
+7) To start/stop IDA application nssm start/stop IDA
+8) To start/stop ODA application nssm start/stop ODA
 
 Glossary:
 
