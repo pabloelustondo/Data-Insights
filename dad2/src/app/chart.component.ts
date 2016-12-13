@@ -168,7 +168,7 @@ export class DadChartComponent implements OnInit {
           return d === 0;
         }).remove();
 
-        c3.generate({
+      this.c3chart = c3.generate({
             size: {
                 height: 400,
                 width: 475
@@ -230,7 +230,7 @@ export class DadChartComponent implements OnInit {
           return d === 0;
         }).remove();
 
-        c3.generate({
+      this.c3chart = c3.generate({
             size: {
                 height: 400,
                 width: 475
@@ -283,7 +283,7 @@ export class DadChartComponent implements OnInit {
     drawChartDonut(chartConfig:DadChart, data) {
       let chartData = this.mapper.map(chartConfig, data);
 
-      c3.generate({
+      this.c3chart = c3.generate({
             size: {
                 height: 400,
                 width: 475
