@@ -10,6 +10,7 @@ import {FormGroup, AbstractControl, FormBuilder, Validators} from '@angular/form
 export class Login {
 
   public form:FormGroup;
+  public companyName: string;
   public email:AbstractControl;
   public password:AbstractControl;
   public submitted:boolean = false;
