@@ -15,7 +15,6 @@ export class DadChart {
     endpoint:string;
     a : string;
     b : string;
-    colorPalette: any;
 }
 this.colorPalette = [];
 @Component({
