@@ -16,7 +16,6 @@ export class DadChart {
     a : string;
     b : string;
 }
-this.colorPalette = [];
 @Component({
     selector: 'dadchart',
     providers:[DadChartDataService],
@@ -51,11 +50,10 @@ export class DadChartComponent implements OnInit {
     chart: DadChart
     data;
     mapper: Mapper = new Mapper();
-
+    colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
     c3chart: any;
 
     constructor(private dadChartDataService: DadChartDataService) { }
-
     changeConfig(event){
       this.dadChartDataService.getChartData(this.chart).then(
         data => {
@@ -94,7 +92,7 @@ export class DadChartComponent implements OnInit {
             type: 'bar',
           },
           color: {
-            pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+            pattern: this.colorPalette,
           },
           tooltip: {
             grouped: false,
@@ -151,7 +149,7 @@ export class DadChartComponent implements OnInit {
                 type:'pie',
             },
             color: {
-              pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+              pattern: this.colorPalette,
             },
             zoom: {
               enabled: true
@@ -181,7 +179,7 @@ export class DadChartComponent implements OnInit {
                 type: 'spline',
             },
             color: {
-              pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+              pattern: this.colorPalette,
             },
             grid: {
               x: {
@@ -254,7 +252,7 @@ export class DadChartComponent implements OnInit {
               }
             },
             color: {
-              pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+              pattern: this.colorPalette,
             },
             axis: {
               x: {
@@ -296,7 +294,7 @@ export class DadChartComponent implements OnInit {
                 type:'donut',
             },
             color: {
-              pattern: ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e']
+              pattern: this.colorPalette,
             },
         });
     };
@@ -327,4 +325,5 @@ export class DadChartComponent implements OnInit {
 
     }
 }
+
 
