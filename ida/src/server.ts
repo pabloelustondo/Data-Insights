@@ -6,13 +6,15 @@ import * as methodOverride from 'method-override';
 import {RegisterRoutes} from './routes';
 let config = require('../appconfig.json');
 const app = express();
+const swaggerPath =  __dirname + '/swagger.json';
+
 
 exports.app = app;
 
 app.use('/docs', express.static(__dirname + '/swagger-ui'));
 app.use('/', express.static(__dirname + '/swagger-ui'));
 app.use('/swagger.json', (req, res) => {
-    res.sendfile('./dist/swagger.json');
+    res.sendfile(swaggerPath);
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
