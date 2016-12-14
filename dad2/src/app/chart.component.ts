@@ -13,30 +13,33 @@ export class DadChart {
     type: string;
     parameters: any[];
     endpoint:string;
-    a : string;
-    b : string;
+    a: string;
+    b: string;
+    width: number;
+    height: number;
+    mini?: boolean = false;
 }
 @Component({
     selector: 'dadchart',
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
      <table id="dashboardTable">
-     <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
+     <th><div *ngIf="!chart.mini" id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
         <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
             <!-- Date From input -->
-            <div>
+            <div *ngIf="!chart.mini">
               <label style="color: #0A0A0A">Date from: </label>
               <input [(ngModel)]="this.chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd"> 
             </div>
             <!-- Date To input -->
-            <div>
+            <div *ngIf="!chart.mini">
               <label style="color: #0A0A0A">Date To: </label>
               <input [(ngModel)]="this.chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">
             </div>
             <!-- refresh button -->
             <br/>
-            <div>
+            <div *ngIf="!chart.mini">
                 <button (click)="changeConfig($event)">Refresh</button>
             </div>
         </tr>
@@ -80,8 +83,8 @@ export class DadChartComponent implements OnInit {
 
         this.c3chart = c3.generate({
           size: {
-            height: 400,
-            width: 475
+            height: chartConfig.height,
+            width: chartConfig.width
           },
           bindto: '#' + chartConfig.id,
           data: {
@@ -143,8 +146,8 @@ export class DadChartComponent implements OnInit {
 
       this.c3chart = c3.generate({
             size: {
-                height: 400,
-                width: 475
+                height: chartConfig.height,
+                width: chartConfig.width
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -173,8 +176,8 @@ export class DadChartComponent implements OnInit {
 
       this.c3chart = c3.generate({
             size: {
-                height: 400,
-                width: 475
+              height: chartConfig.height,
+              width: chartConfig.width
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -239,8 +242,8 @@ export class DadChartComponent implements OnInit {
 
       this.c3chart = c3.generate({
             size: {
-                height: 400,
-                width: 475
+              height: chartConfig.height,
+              width: chartConfig.width
             },
             bindto: '#' + chartConfig.id,
             data: {
@@ -295,8 +298,8 @@ export class DadChartComponent implements OnInit {
 
       this.c3chart = c3.generate({
             size: {
-                height: 400,
-                width: 475
+              height: chartConfig.height,
+              width: chartConfig.width
             },
             bindto: '#' + chartConfig.id,
             data: {

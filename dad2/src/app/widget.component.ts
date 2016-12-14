@@ -1,34 +1,43 @@
-import {Mapper} from "./mapper";
-import {DadChart} from "./chart.component";
-import {DadChartDataService} from "./data.service";
-import { Component, Input, OnInit  } from '@angular/core';
 /**
  * Created by dister on 12/14/2016.
  */
+import { Component, Input, OnInit  } from '@angular/core';
+import {DadChart} from "./chart.component";
+import {DadWidgetDataService} from "./data.service";
+import {Mapper} from "./mapper";
 
-export class DadWidget extends DadChart{
+export class DadWidget {
+  id: string;
   name: string;
+  parameters: any[];
+  endpoint :string;
+  a: string;
+  b: string;
+  chart?: DadChart;
 }
 
 @Component({
   selector: 'dadwidget',
-  providers:[DadChartDataService],
+  providers:[DadWidgetDataService],
   template: ` <!--  BEGIN CHART COMPONENT -->
     {{widget.name}}
+
+  <dadchart [chart]="widget.chart"></dadchart>
 
     <!--  END CHART COMPONENT -->`
 })
 export class DadWidgetComponent implements OnInit {
   @Input()
-  widget: DadWidget
+  widget: DadWidget;
+  chart: DadChart;
   data;
   mapper: Mapper = new Mapper();
 
-  constructor(private dadChartDataService: DadChartDataService) { }
+  constructor(private dadWidgetDataService: DadWidgetDataService) { }
 
   ngOnInit() {
-    console.log("WIDGET starts drawing :" + this.widget.id);
-    this.dadChartDataService.getChartData(this.widget).then(
+    console.log("Widgets are loading... :" + this.widget.id);
+    this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
         this.data = data.data;
       }
