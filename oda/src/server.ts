@@ -1,5 +1,7 @@
 import './controllers/usersController';
 import './controllers/dischargeRateController';
+import './controllers/devicesDidNotSurviveShift';
+
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as methodOverride from 'method-override';
@@ -7,6 +9,7 @@ import {RegisterRoutes} from './routes';
 let config = require('../appconfig.json');
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
+
 exports.app = app;
 
 app.use('/docs', express.static(__dirname + '/swagger-ui'));
