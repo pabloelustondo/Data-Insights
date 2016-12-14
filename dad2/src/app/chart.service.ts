@@ -4,6 +4,8 @@
 import { Injectable } from '@angular/core';
 import { CHARTS } from './mock.charts';
 import { DadChart } from './chart.component';
+import {DadWidget} from "./widget.component";
+import {WIDGETS} from "./mock.widgets";
 
 @Injectable()
 export class DadChartConfigsService {
@@ -23,4 +25,24 @@ export class DadChartConfigsService {
         return CHARTS;
       }
     }
+}
+
+@Injectable()
+export class DadWidgetConfigsService {
+
+  public getWidgetConfigs(): DadWidget[] {
+
+    let widget_string = localStorage.getItem("data");
+
+    if (widget_string != null){
+      let widget_obj = JSON.parse(widget_string);
+      let DATA = widget_obj as DadWidget[];
+      return DATA;
+    }
+    else {
+      let widget_string = JSON.stringify(WIDGETS);
+      localStorage.setItem("data",widget_string);
+      return WIDGETS;
+    }
+  }
 }

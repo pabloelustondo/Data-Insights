@@ -6,7 +6,8 @@ import { RouterModule }   from '@angular/router';
 import { DadAppComponent } from './app.component';
 import { DadComponent }   from './dashboard.component';
 import { DadChartComponent} from "./chart.component";
-import { DadConfigComponent }   from './configuration.component';
+import { DadWidgetComponent} from "./widget.component";
+import {DadConfigComponent}   from './configuration.component';
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -27,11 +28,16 @@ let LocalStorageServiceConfig = {
       {
         path:'config',
         component: DadConfigComponent
+      },
+      {
+        path:'table',
+        component: DadWidgetComponent
       }
     ])
   ],
   declarations: [
-    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent
+    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent, DadWidgetComponent
+
   ],
   providers: [],
   bootstrap: [DadAppComponent]

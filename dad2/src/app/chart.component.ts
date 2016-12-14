@@ -125,6 +125,9 @@ export class DadChartComponent implements OnInit {
             },
             y: {
               show: true
+            },
+            focus: {
+              show: false
             }
           },
           zoom: {

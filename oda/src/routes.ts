@@ -6,6 +6,7 @@
 import { ValidateParam } from 'tsoa';
 import { SDSController } from './controllers/usersController';
 import { DischargeRateController } from './controllers/dischargeRateController';
+import { CountDevicesNotSurvivedShiftController } from './controllers/devicesDidNotSurviveShift';
 
 const models: any = {
     'SDS': {
@@ -46,6 +47,23 @@ export function RegisterRoutes(app: any) {
         }
 
         const controller = new DischargeRateController();
+        promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
+    });
+    app.get('/Devices/Battery/Summary/DevicesNotSurvivedShift', function(req: any, res: any, next: any) {
+        const params = {
+            'startTime': { typeName: 'string', required: true },
+            'duration': { typeName: 'string', required: true },
+            'date': { typeName: 'string', required: true },
+        };
+
+        let validatedParams: any[] = [];
+        try {
+            validatedParams = getValidatedParams(params, req, '');
+        } catch (err) {
+            return next(err);
+        }
+
+        const controller = new CountDevicesNotSurvivedShiftController();
         promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
     });
 

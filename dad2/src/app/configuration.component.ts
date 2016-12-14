@@ -3,9 +3,9 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { DadChart } from './chart.component';
-import { DadChartConfigsService } from './chart.service';
+import {DadChartConfigsService} from './chart.service';
 
-declare var d3, nv: any;
+declare var d3, c3: any;
 
 @Component({
     selector: 'dadconfig',
@@ -20,8 +20,8 @@ declare var d3, nv: any;
          <tr><td>  Name: </td><td>{{ chart.name }} </td></tr>
          <span *ngFor="let param of chart.parameters">        
                <tr><td> Parameter Type: </td><td>  {{param.parameterType}} </td></tr>
-               <tr><td> dateFrom: </td><td>  {{param.dateFrom}} </td></tr>
-               <tr><td> dateTo: </td><td>  {{param.dateTo}} </td></tr>            
+                <tr><td> dateFrom: </td><td>  {{param.dateFrom}} </td></tr>
+               <tr><td> dateTo: </td><td>  {{param.dateTo}} </td></tr>           
         </span>   
         </table>
 
@@ -39,4 +39,3 @@ export class DadConfigComponent implements  OnInit{
     }
 
 }
-
