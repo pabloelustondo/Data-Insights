@@ -1,0 +1,11 @@
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Release\MCDP.exe.config
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Release\MCDP.exe
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Release\MCDP.pdb
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Release\Newtonsoft.Json.dll
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Release\Newtonsoft.Json.xml
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Release\MCDP.csprojResolveAssemblyReference.cache
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Release\MCDP.Data4Ida.resources
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Release\MCDP.ProjectInstaller.resources
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Release\MCDP.csproj.GenerateResource.Cache
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Release\MCDP.exe
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Release\MCDP.pdb

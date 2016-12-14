@@ -63,8 +63,11 @@ namespace MCDP
 
         int maxNumberOfConsecutiveDBFailures = Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveDBFailures"]);
         int maxNumberOfConsecutiveIDAFailures = Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveIDAFailures"]);
-        int dBRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
-        int idaRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
+        int maxDBRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
+        int maxIdaRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
+
+        int datdatabasetimeout = Convert.ToInt16(ConfigurationManager.AppSettings["waitDatabaseTimeout"]);
+        int servicesReceiveTimeout = Convert.ToInt16(ConfigurationManager.AppSettings["servicesReceiveTimeout"]);
 
         int numberOfConsecutiveDBFailures = 0;
         int numberOfConsecutiveIDAFailures = 0;
@@ -116,6 +119,7 @@ namespace MCDP
             sqlCommand.CommandType = CommandType.StoredProcedure;
             sqlCommand.CommandText = "BI.BI_DeviceStatInt_GetAll";
             sqlCommand.Connection = sqlConnection;
+            sqlCommand.CommandTimeout = this.datdatabasetimeout;
 
             DataSet ds = new DataSet();
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
@@ -138,6 +142,7 @@ namespace MCDP
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
             sqlCommand.CommandText = "BI.BI_DeviceSyncStatus_Update";
+            sqlCommand.CommandTimeout = this.datdatabasetimeout;
             sqlCommand.Connection = sqlConnection;
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
@@ -274,7 +279,7 @@ namespace MCDP
             else {
                 //if we are here the number of failures have reached a maximun. so now we need to wait a number of cycles as defined in the delay
                 //we are gong to wait until both 
-                if (dBSkippedAfterFailure < dBRetryAfterFailureDelay || idaSkippedAfterFailure < idaRetryAfterFailureDelay)
+                if (dBSkippedAfterFailure < this.maxDBRetryAfterFailureDelay || idaSkippedAfterFailure < this.maxIdaRetryAfterFailureDelay)
                 {
                     //we need to wait still. We increse both as same time becuase both are waiting at the same time.
                     dBSkippedAfterFailure += 1;
@@ -285,7 +290,12 @@ namespace MCDP
                     //this is the last skipped cycle. We have waited for probably both cases so we clear the number of retrials for the new cycle to kick in again
                     numberOfConsecutiveDBFailures = 0;
                     numberOfConsecutiveIDAFailures = 0;
+                    dBSkippedAfterFailure = 0;
+                    idaSkippedAfterFailure = 0;
+
                 }
+
+                Log("Skipping Cycling due to reach maximum retry and failure count.");
 
             }
             processing = false; //this will enable other attempts to process to go ahead.

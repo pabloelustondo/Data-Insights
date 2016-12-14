@@ -10,3 +10,6 @@ C:\Source\Git\MCDataProducer\MCDataProducer\bin\Debug\AWSSDK.IoT.xml
 C:\Source\Git\MCDataProducer\MCDataProducer\obj\Debug\MCDataProducer.csprojResolveAssemblyReference.cache
 C:\Source\Git\MCDataProducer\MCDataProducer\obj\Debug\MCDataProducer.exe
 C:\Source\Git\MCDataProducer\MCDataProducer\obj\Debug\MCDataProducer.pdb
+D:\CustomBI\BI_NEW\MCDataProducer\MCDataProducer\bin\Debug\MCDataProducer.exe.config
+D:\CustomBI\BI_NEW\MCDataProducer\MCDataProducer\obj\Debug\MCDataProducer.exe
+D:\CustomBI\BI_NEW\MCDataProducer\MCDataProducer\obj\Debug\MCDataProducer.pdb

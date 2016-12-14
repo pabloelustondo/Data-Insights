@@ -53,7 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="McdpService.cs" />
+    <Compile Include="McdpService.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="McdpService.Designer.cs">
       <DependentUpon>McdpService.cs</DependentUpon>
     </Compile>
