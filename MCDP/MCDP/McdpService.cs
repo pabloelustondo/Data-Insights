@@ -117,7 +117,7 @@ namespace MCDP
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "BI.BI_DeviceStatInt_GetAll";
+            sqlCommand.CommandText = "MCDA.DeviceStatInt_GetAll";
             sqlCommand.Connection = sqlConnection;
             sqlCommand.CommandTimeout = this.datdatabasetimeout;
 
@@ -141,7 +141,7 @@ namespace MCDP
             sqlConnection.Open();
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "BI.BI_DeviceSyncStatus_Update";
+            sqlCommand.CommandText = "MCDA.DeviceSyncStatus_Update";
             sqlCommand.CommandTimeout = this.datdatabasetimeout;
             sqlCommand.Connection = sqlConnection;
             sqlCommand.ExecuteNonQuery();
@@ -182,7 +182,7 @@ namespace MCDP
 
                     idaData = new Data4Ida();
                     idaData.createdAt = DateTime.Now.ToString();
-                    idaData.metadata = "data from BI.BI_DeviceStatInt_GetAll....";
+                    idaData.metadata = "data from MCDA.DeviceStatInt_GetAll....";
                     idaData.data = new List<DataRow4Ida>();
 
                     foreach (DataRow dr in ds.Tables[0].Rows)
