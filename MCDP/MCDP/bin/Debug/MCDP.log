@@ -31,3 +31,12 @@ Error reading database: System.Data.SqlClient.SqlException (0x80131904): Procedu
    at MCDP.MCDP.mcdpTimerProcess(Object sender, ElapsedEventArgs e) in d:\CustomBI\BI_NEW\MCDP\MCDP\McdpService.cs:line 266
 ClientConnectionId:a77c7ccf-b345-46ed-925d-d38f746c61aa
 Error Number:201,State:4,Class:16
+Error reading database: System.OverflowException: Value was either too large or too small for an Int16.
+   at System.Convert.ToInt16(Int64 value)
+   at MCDP.MCDP.map2Ida(DataSet ds) in d:\CustomBI\BI_NEW\MCDP\MCDP\McdpService.cs:line 211
+   at MCDP.MCDP.getBIData() in d:\CustomBI\BI_NEW\MCDP\MCDP\McdpService.cs:line 167
+   at MCDP.MCDP.mcdpTimerProcess(Object sender, ElapsedEventArgs e) in d:\CustomBI\BI_NEW\MCDP\MCDP\McdpService.cs:line 236
+2016-12-15 4:35:13 PM  =>  
+2016-12-15 4:35:23 PM  =>  
+2016-12-15 4:35:33 PM  =>  
+2016-12-15 4:35:43 PM  =>  
