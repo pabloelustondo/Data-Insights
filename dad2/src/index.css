@@ -49,6 +49,32 @@
   font-weight: bold;
 }
 
+#widgetName{
+  font-weight: 600;
+  color: black;
+  position: relative;
+  width: 100%;
+  padding-left: 10px;
+}
+
+#values{
+  font-size: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#widgetDate{
+  float:left;
+}
+
+#widgetStartTime{
+  float:left;
+}
+
+#widgetDuration{
+  float:left;
+}
+
 body{
   background-image: url(/assets/images/background-image.jpg);
 }

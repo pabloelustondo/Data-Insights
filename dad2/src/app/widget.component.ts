@@ -22,17 +22,23 @@ export class DadWidget {
   template: ` <!--  BEGIN CHART COMPONENT -->
     <div class="widget1">
     <table id="widgetTable">
-    <th id="widgetName">{{widget.name}}</th>
+    <th><div id="widgetName">{{widget.name}}</div></th>
         <tr>
-            <td> <div style="font-size: 30px" *ngIf="data">{{data.Metric[0]}}</div></td>
-            <td><div *ngIf="data">{{data.Dimension[data.Metric[0]]}}</div></td>
-            <div>
+            <div id="values" *ngIf="data"><a href="/table">{{data.Metric[0]}}</a>{{"/"}}{{data.Dimension[data.Metric[0]]}}</div>
+            
+            <div id="widgetDate">
             <label>Date: </label>
-            <input [(ngModel)]="widget.parameters[0].date" placeholder=" yyyy-mm-dd"> <br/>
-            <label>Start Time: </label>{{widget.parameters[0].startTime}} <br/>
-            <!--<input [(ngModel)]="this.widget.parameters[0].startTime" placeholder="hh:mm am"> <br/> -->
-            <label>Duration: </label>{{widget.parameters[0].duration}}
-            <!--<input [(ngModel)]="this.widget.parameters[0].duration" placeholder="8h">-->
+            <input [(ngModel)]="widget.parameters[0].date" placeholder=" yyyy-mm-dd"> 
+            </div>
+            
+            <div id="widgetStartTime">
+            <label>Start Time: </label>
+            <input [(ngModel)]="this.widget.parameters[0].startTime" placeholder="hh:mm am">
+            </div>
+            
+            <div id="widgetDuration">
+            <label>Duration: </label>
+            <input [(ngModel)]="this.widget.parameters[0].duration" placeholder="8h">
             </div>
         </tr>
     </table>
