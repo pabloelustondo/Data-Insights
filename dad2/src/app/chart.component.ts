@@ -55,6 +55,8 @@ export class DadChartComponent implements OnInit {
     mapper: Mapper = new Mapper();
     colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
     c3chart: any;
+    miniChartWidth: number = 275;
+    miniChartHeight: number = 200;
 
     constructor(private dadChartDataService: DadChartDataService) { }
     changeConfig(event){
@@ -73,246 +75,309 @@ export class DadChartComponent implements OnInit {
         }
       )
     }
-
+    //mini applied
     drawChartBar(chartConfig:DadChart, data){
         let chartData = this.mapper.map(chartConfig, data);
 
         d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
         }).remove();
-
-        this.c3chart = c3.generate({
-          size: {
-            height: chartConfig.height,
-            width: chartConfig.width
+        let c3Config = {
+        size: {
+          height: chartConfig.height,
+          width: chartConfig.width
+        },
+        bindto: '#' + chartConfig.id,
+        data: {
+          json: [chartData.Dimension],
+          keys: {
+            value: chartData.Metric
           },
-          bindto: '#' + chartConfig.id,
-          data: {
-            json: [chartData.Dimension],
-            keys: {
-              value: chartData.Metric
-            },
-            selection:{
-              enabled:true
-            },
-            type: 'bar',
+          selection:{
+            enabled:true
           },
-          color: {
-            pattern: this.colorPalette,
-          },
-          tooltip: {
-            grouped: false,
+          type: 'bar',
+        },
+        color: {
+          pattern: this.colorPalette,
+        },
+        tooltip: {
+          grouped: false,
             format: {
               title: function () {
                 return ([chartConfig.a]);
-              },
+              }
             }
-          },
-          axis: {
-            x: {
-              label: {
-                text: [chartConfig.b],
+        },
+        axis: {
+          show : true,
+          x: {
+            label: {
+              text: [chartConfig.b],
                 position: 'outer-right'
-              }
-            },
-            y: {
-              label: {
-                text: [chartConfig.a],
+            }
+          },
+          y: {
+            label: {
+              text: [chartConfig.a],
                 position: 'outer-top'
-              }
             }
-          },
-          grid: {
-            x: {
-              show: false
-            },
-            y: {
-              show: true
-            },
-            focus: {
-              show: false
-            }
-          },
-          zoom: {
-            enabled: true
-          },
-          subchart: {
-            show: true
           }
-    })}
-
+        },
+        grid: {
+          x: {
+            show: false
+          },
+          y: {
+            show: true
+          },
+          focus: {
+            show: false
+          }
+        },
+        zoom: {
+          enabled: true
+        },
+        subchart: {
+          show: true
+        },
+        legend: {
+          show: true
+        }
+      };
+      if(chartConfig.mini){
+        c3Config.size.width = this.miniChartWidth;
+        c3Config.size.height = this.miniChartHeight;
+        c3Config.legend.show = false;
+        c3Config.axis.show = false;
+        c3Config.subchart.show = false;
+        c3Config.zoom.enabled = false;
+        c3Config.grid.y.show = false;
+      };
+      this.c3chart = c3.generate(c3Config);
+    };
+    //mini applied
     drawChartPie(chartConfig:DadChart, data) {
       let chartData = this.mapper.map(chartConfig, data);
-
-      this.c3chart = c3.generate({
-            size: {
-                height: chartConfig.height,
-                width: chartConfig.width
-            },
-            bindto: '#' + chartConfig.id,
-            data: {
-                json: [ chartData.Dimension ],
-                keys: {
-                    value: chartData.Metric
-                },
-                type:'pie',
-            },
-            color: {
-              pattern: this.colorPalette,
-            },
-            zoom: {
-              enabled: true
-            }
-        });
+      let c3Config = {
+        size: {
+          height: chartConfig.height,
+          width: chartConfig.width
+        },
+        bindto: '#' + chartConfig.id,
+        data: {
+          json: [ chartData.Dimension ],
+          keys: {
+            value: chartData.Metric
+          },
+          type:'pie',
+        },
+        color: {
+          pattern: this.colorPalette,
+        },
+        zoom: {
+          enabled: true
+        },
+        legend: {
+          show : true
+        }
+      };
+      if(chartConfig.mini){
+        c3Config.size.width = this.miniChartWidth;
+        c3Config.size.height = this.miniChartHeight;
+        c3Config.legend.show = false;
+      };
+      this.c3chart = c3.generate(c3Config);
     };
-
+    //mini applied
     drawChartDot(chartConfig:DadChart, data) {
       let chartData = this.mapper.map(chartConfig, data);
-
 
       d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
         }).remove();
+      let c3Config = {
+        size: {
+          height: chartConfig.height,
+          width: chartConfig.width
+        },
+        bindto: '#' + chartConfig.id,
+        data: {
+          json: [chartData.Dimension],
+          keys: {
+            value: chartData.Metric
+          },
+          selection:{
+            enabled:true
+          },
+          type: 'spline',
+        },
 
-      this.c3chart = c3.generate({
-            size: {
-              height: chartConfig.height,
-              width: chartConfig.width
+        color: {
+          pattern: this.colorPalette,
+        },
+        grid: {
+          focus: {
+            show:true
+          },
+          x: {
+            show: true
+          },
+          y: {
+            show: true
+          }
+        },
+        tooltip: {
+          grouped: false,
+          format: {
+            title: function () {
+              return ([chartConfig.b]);
             },
-            bindto: '#' + chartConfig.id,
-            data: {
-                json: [chartData.Dimension],
-                keys: {
-                    value: chartData.Metric
-                },
-                selection:{
-                  enabled:true
-                },
-                type: 'spline',
-            },
-
-            color: {
-              pattern: this.colorPalette,
-            },
-            grid: {
-              x: {
-                show: true
-              },
-              y: {
-                show: true
-              }
-            },
-            tooltip: {
-              grouped: false,
-              format: {
-                    title: function () {
-                        return ([chartConfig.b]);
-                    },
-                }
-            },
-            axis: {
-                x: {
-                    label: {
-                        text: [chartConfig.b],
-                        position: 'outer-right'
-                    }
-                },
-                y: {
-                    label: {
-                        text: [chartConfig.a],
-                        position: 'outer-top'
-                    }
-                }
-            },
-            zoom: {
-              enabled: true
-            },
-            subchart: {
-              show: true
+          }
+        },
+        axis: {
+          show: true,
+          x: {
+            label: {
+              text: [chartConfig.b],
+              position: 'outer-right'
             }
-        });
+          },
+          y: {
+            label: {
+              text: [chartConfig.a],
+              position: 'outer-top'
+            }
+          }
+        },
+        zoom: {
+          enabled: true
+        },
+        subchart: {
+          show: true
+        },
+        legend: {
+          show: true
+        }
+      };
+      if(chartConfig.mini){
+        c3Config.size.width = this.miniChartWidth;
+        c3Config.size.height = this.miniChartHeight;
+        c3Config.legend.show = false;
+        c3Config.axis.show = false;
+        c3Config.subchart.show = false;
+        c3Config.zoom.enabled = false;
+        c3Config.grid.y.show = false;
+        c3Config.grid.focus.show = false;
+      };
+      this.c3chart = c3.generate(c3Config);
     };
-
+    //mini applied
     drawChartSpline(chartConfig:DadChart, data){
       let chartData = this.mapper.map(chartConfig, data);
 
       d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
         }).remove();
-
-      this.c3chart = c3.generate({
-            size: {
-              height: chartConfig.height,
-              width: chartConfig.width
-            },
-            bindto: '#' + chartConfig.id,
-            data: {
-                columns:[
-                   ['Number of Devices',30,40,500,0],
-                   ['Range of Devices', 1, 10, 90, 70, 85, 5, 100]
-                ],
-                keys: {
-                    value: chartData.Metric
-                },
-                selection:{
-                  enabled:true
-                },
-                type: 'spline',
-            },
-            grid: {
-              x: {
-                show: true
-              },
-              y: {
-                show: true
-              }
-            },
-            color: {
-              pattern: this.colorPalette,
-            },
-            axis: {
-              x: {
-                label: {
-                  text: [chartConfig.b],
-                  position: 'outer-right'
-                }
-              },
-              y: {
-                label: {
-                  text: [chartConfig.a],
-                  position: 'outer-top'
-                }
-              }
-            },
-            zoom: {
-              enabled: true
-            },
-            subchart: {
-              show: true
+      let c3Config = {
+        size: {
+          height: chartConfig.height,
+          width: chartConfig.width
+        },
+        bindto: '#' + chartConfig.id,
+        data: {
+          columns:[
+            ['Number of Devices',30,40,500,0],
+            ['Range of Devices', 1, 10, 90, 70, 85, 5, 100]
+          ],
+          keys: {
+            value: chartData.Metric
+          },
+          selection:{
+            enabled:true
+          },
+          type: 'spline',
+        },
+        grid: {
+          x: {
+            show: true
+          },
+          y: {
+            show: true
+          },
+          focus: {
+            show: true
+          }
+        },
+        color: {
+          pattern: this.colorPalette,
+        },
+        axis: {
+          show: true,
+          x: {
+            label: {
+              text: [chartConfig.b],
+              position: 'outer-right'
             }
-        });
+          },
+          y: {
+            label: {
+              text: [chartConfig.a],
+              position: 'outer-top'
+            }
+          }
+        },
+        zoom: {
+          enabled: true
+        },
+        subchart: {
+          show: true
+        },
+        legend: {
+          show: true
+        }
+      };
+      if(chartConfig.mini){
+        c3Config.size.width = this.miniChartWidth;
+        c3Config.size.height = this.miniChartHeight;
+        c3Config.legend.show = false;
+        c3Config.axis.show = false;
+        c3Config.subchart.show = false;
+        c3Config.zoom.enabled = false;
+        c3Config.grid.y.show = false;
+        c3Config.grid.focus.show = false;
+      };
+      this.c3chart = c3.generate(c3Config);
     }
-
+    //mini applied
     drawChartDonut(chartConfig:DadChart, data) {
       let chartData = this.mapper.map(chartConfig, data);
-
-      this.c3chart = c3.generate({
-            size: {
-              height: chartConfig.height,
-              width: chartConfig.width
-            },
-            bindto: '#' + chartConfig.id,
-            data: {
-                json: [ chartData.Dimension ],
-                keys: {
-                    value: chartData.Metric
-                },
-                type:'donut',
-            },
-            color: {
-              pattern: this.colorPalette,
-            },
-        });
+      let c3Config = {
+        size: {
+          height: chartConfig.height,
+          width: chartConfig.width
+        },
+        bindto: '#' + chartConfig.id,
+        data: {
+          json: [ chartData.Dimension ],
+          keys: {
+            value: chartData.Metric
+          },
+          type:'donut',
+        },
+        color: {
+          pattern: this.colorPalette,
+        },
+        legend: {
+          show: true
+        }
+      };
+      if(chartConfig.mini){
+        c3Config.size.width = this.miniChartWidth;
+        c3Config.size.height = this.miniChartHeight;
+        c3Config.legend.show = false;
+      };
+      this.c3chart = c3.generate(c3Config);
     };
 
     drawChart(chartConfig:DadChart, data) {
@@ -331,14 +396,6 @@ export class DadChartComponent implements OnInit {
                 this.drawChart(this.chart,this.data);
             }
         ).catch(err => console.log(err.toString()));
-
-
-        /*
-        this.dadChartDataService.getChartData().then(data => {
-            this.dadDrawChart(this.chart,data);
-        });
-    */
-
     }
 }
 

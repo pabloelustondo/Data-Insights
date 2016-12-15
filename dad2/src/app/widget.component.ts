@@ -21,8 +21,8 @@ export class DadWidget {
   providers:[DadWidgetDataService],
   template: ` <!--  BEGIN CHART COMPONENT -->
     {{widget.name}}
-
-  <dadchart [chart]="widget.chart"></dadchart>
+  <!-- to show chart in widgets, use the line below-->
+  <!--<dadchart [chart]="widget.chart"></dadchart>-->
 
     <!--  END CHART COMPONENT -->`
 })
