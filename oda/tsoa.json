@@ -8,6 +8,8 @@
     "routes": {
         "basePath": "/",
         "entryFile": "./src/server.ts",
-        "routesDir": "./src"
+        "routesDir": "./src",
+        "middleware": "express"
+
     }
 }
