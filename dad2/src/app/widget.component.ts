@@ -24,7 +24,7 @@ export class DadWidget {
     <table id="widgetTable">
     <th><div id="widgetName">{{widget.name}}</div></th>
         <tr>
-            <div id="values" *ngIf="data"><a href="/table">{{data.Metric[0]}}</a>{{"/"}}{{data.Dimension[data.Metric[0]]}}</div>
+            <div id="values" *ngIf="data"><a style="color:blue;" href="/table">{{data.Metric[0]}}</a>{{"/"}}{{data.Dimension[data.Metric[0]]}}</div>
             
             <div id="widgetDate">
             <label>Date: </label>
