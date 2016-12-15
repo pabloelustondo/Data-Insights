@@ -11,9 +11,9 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class CountDevicesNotSurvivedShiftController {
     /**
-     * Number of devices that did not last the full shift for a given date, shift time, and shift duration. \n
-     * If no dateAndShift field is provided, the default date of previous day with a shift starting at 8:00 am \n
-     * is used as data and shift time. \n
+     * Number of devices that did not last the full shift for a given date, shift time, and shift duration.
+     * If no dateAndShift field is provided, the default date of previous day with a shift starting at 00:00 UTC
+     * is used as data and shift time.
      *
      *     The duration is a number representing the length of the shift in hours.
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
@@ -43,11 +43,17 @@ export class CountDevicesNotSurvivedShiftController {
     public async Get(duration: number, dateAndShift?: Date): Promise<SDS> {
 
         if (!dateAndShift) {
-            console.log( 'no date and time provided' );
 
+            console.log( 'no date and time provided' );
+            let todayDate = new Date();
+            todayDate.setHours(todayDate.getHours() - todayDate.getHours() , 0 , 0 , 0);
+            todayDate.setDate(todayDate.getDate() - 1);
+            console.log(todayDate.toUTCString());
+            dateAndShift = todayDate;
         }
 
         const xqs = {duration: duration, date : dateAndShift};
+        console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 
         const options: rp.OptionsWithUrl = {
