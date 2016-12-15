@@ -11,7 +11,7 @@ export class MultiplePostsController {
      * Post a unit of data to be stored in the cloud analytics database
      */
 
-    @Post()
+    @Post('/MultiplePosts')
     @Example<any>({
         metadata: 'here is where metadata explaining the data should go',
         createdAt: '2016-08-08',

@@ -77,7 +77,7 @@ const testData =  {
             'int_value': 191231231319,
             'stat_type': 12345,
             'time_stamp': new Date()
-        }
+        };
         chai.use(chaiHttp);
         chai.request(server.app)
             .post('/Data')
