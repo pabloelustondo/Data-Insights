@@ -25,14 +25,17 @@ declare var d3, c3: any;
      </table>
     </div>
     
-    <div class="widget" *ngFor="let widget of widgets">
-    <dadwidget [widget]="widget"></dadwidget>
+    <div class="widgetcontainer">
+      <div *ngFor="let widget of widgets">
+      <dadwidget [widget]="widget"></dadwidget>
+      </div>
     </div>
     
+    <div style="clear: both;">
     <div class="chart" *ngFor="let chart of charts">
     <dadchart [chart]="chart"></dadchart>
     </div>
-
+    </div>
     `
 })
 

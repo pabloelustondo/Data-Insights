@@ -2,14 +2,23 @@
   height: 40px;
 }
 
-.widget{
+.widget1{
   margin: auto;
-  position:relative;
-  width:250px;
-  min-height:125px;
+  text-align: center;
+  width:350px;
+  height: 150px;
   border-top:1px solid rgba(255,255,255,1);
   border-radius:4px;
-  box-shadow:0 6px 10px rgba(0,0,0,0.6);
+  box-shadow:0 6px 10px rgba(0,0,0,0.1);
+}
+
+#widget_content{
+  text-align: left;
+}
+
+.widgetcontainer{
+  border-top: solid;
+  border-color: darkgrey;
 }
 
 .chart {

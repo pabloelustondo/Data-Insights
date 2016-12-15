@@ -5,13 +5,13 @@ import { DadWidget } from './widget.component';
 
 export const WIDGETS: DadWidget[] = [
   {id: 'widget1',
-    name:'Not Lasted Shift',
+    name:'Number of Devices that Did Not Last the Shift',
     endpoint:'DevicesNotSurvivedShift',
     a : 'CountDevicesNotLastedShift',
     b : 'TotalActiveDevices',
     parameters: [
       {
-        startTime: "9",
+        startTime: "9am",
         duration: "30",
         date: "2016-08-25"
       }]}
