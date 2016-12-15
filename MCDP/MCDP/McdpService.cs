@@ -15,10 +15,6 @@ using System.Net;
 
 namespace MCDP
 {
-
-
-
-
     /// <summary>
     /// This class represents a new set of records that is going to be sent to the input data adapter
     /// </summary>
