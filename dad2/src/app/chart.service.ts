@@ -12,7 +12,7 @@ export class DadChartConfigsService {
 
     public getChartConfigs(): DadChart[] {
 
-      let charts_string = localStorage.getItem("data");
+      let charts_string = localStorage.getItem("chartdata");
 
       if (charts_string != null){
         let charts_obj = JSON.parse(charts_string);
@@ -21,7 +21,7 @@ export class DadChartConfigsService {
       }
       else {
         let charts_string = JSON.stringify(CHARTS);
-        localStorage.setItem("data",charts_string);
+  //      localStorage.setItem("chartdata",charts_string);
         return CHARTS;
       }
     }
@@ -32,7 +32,7 @@ export class DadWidgetConfigsService {
 
   public getWidgetConfigs(): DadWidget[] {
 
-    let widget_string = localStorage.getItem("data");
+    let widget_string = localStorage.getItem("widgetdata");
 
     if (widget_string != null){
       let widget_obj = JSON.parse(widget_string);
@@ -41,7 +41,7 @@ export class DadWidgetConfigsService {
     }
     else {
       let widget_string = JSON.stringify(WIDGETS);
-      localStorage.setItem("data",widget_string);
+    //  localStorage.setItem("widgetdata",widget_string);
       return WIDGETS;
     }
   }

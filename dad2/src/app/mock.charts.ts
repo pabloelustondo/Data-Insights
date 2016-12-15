@@ -4,6 +4,22 @@
 import { DadChart } from './chart.component';
 
 export const CHARTS: DadChart[] = [
+  //mini chart
+  {id: "chartbarmini",
+    name: 'Range of Battery vs. Number of Devices',
+    type: "bar",
+    endpoint: "InitialChargeLevels",
+    a : 'Rng',
+    b : 'NumberOfDevices',
+    width: 200,
+    height: 200,
+    mini:true,
+    parameters: [
+      {parameterType:"DateRange",
+        dateFrom: "2016-08-23",
+        dateTo: "2016-08-25"
+      }]
+  },
     //first endpoint
     {id: "chartbar1",
     name: 'Range of Battery vs. Number of Devices',
@@ -11,6 +27,8 @@ export const CHARTS: DadChart[] = [
     endpoint: "InitialChargeLevels",
     a : 'Rng',
     b : 'NumberOfDevices',
+    width: 475,
+    height: 400,
     parameters: [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
@@ -24,6 +42,8 @@ export const CHARTS: DadChart[] = [
     endpoint: "DischargeRate",
     a : 'NumberOfDevices',
     b : 'DischargeRate',
+    width: 475,
+    height: 400,
     parameters: [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
@@ -37,6 +57,8 @@ export const CHARTS: DadChart[] = [
     endpoint: "InitialChargeLevels",
     a : 'Rng',
     b : 'NumberOfDevices',
+    width: 475,
+    height: 400,
     parameters: [
       {parameterType:"DateRange",
        dateFrom: "2016-08-20",
@@ -50,6 +72,8 @@ export const CHARTS: DadChart[] = [
     endpoint: "DischargeRate",
     a : 'NumberOfDevices',
     b : 'DischargeRate',
+    width: 475,
+    height: 400,
     parameters: [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
@@ -63,6 +87,8 @@ export const CHARTS: DadChart[] = [
     a : 'Rng',
     b : 'NumberOfDevices',
     type: "dot",
+    width: 475,
+    height: 400,
     parameters: [
       {parameterType:"DateRange",
        dateFrom: "2016-08-15",
@@ -76,6 +102,8 @@ export const CHARTS: DadChart[] = [
     a : 'NumberOfDevices',
     b : 'DischargeRate',
     type: "dot",
+    width: 475,
+    height: 400,
     parameters: [
       {parameterType:"DateRange",
        dateFrom: "2016-08-15",
@@ -89,6 +117,8 @@ export const CHARTS: DadChart[] = [
     endpoint: "InitialChargeLevels",
     a : 'Rng',
     b : 'NumberOfDevices',
+    width: 475,
+    height: 400,
     parameters: [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
@@ -102,6 +132,8 @@ export const CHARTS: DadChart[] = [
      endpoint: "DischargeRate",
      a : 'NumberOfDevices',
      b : 'DischargeRate',
+    width: 475,
+    height: 400,
      parameters: [
        {parameterType:"DateRange",
         dateFrom: "2016-08-23",
@@ -115,6 +147,8 @@ export const CHARTS: DadChart[] = [
      endpoint: "InitialChargeLevels",
      a : 'Rng',
      b : 'NumberOfDevices',
+    width: 475,
+    height: 400,
      parameters: [
        {parameterType:"DateRange",
         dateFrom: "2016-08-18",
@@ -128,6 +162,8 @@ export const CHARTS: DadChart[] = [
      endpoint: "DischargeRate",
      a : 'NumberOfDevices',
      b : 'DischargeRate',
+    width: 475,
+    height: 400,
      parameters: [
        {parameterType:"DateRange",
        dateFrom: "2016-08-18",
