@@ -51,17 +51,33 @@ BEGIN
 				BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
-					SELECT A.DeviceId, A.[TimeStamp], StatType, IntValue
-					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
-					WHERE [timestamp] > @PreviousTime and [timestamp] <= @lastTime
+					SELECT d.DevId as DeviceId
+						  ,A.[TimeStamp]
+						  ,A.[StatType]
+						  ,A.[Latitude]
+						  ,A.[Longitude]
+						  ,A.[Altitude]
+						  ,A.[Heading]
+						  ,A.[Speed]
+						FROM dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+						INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+						WHERE [timestamp] > @PreviousTime and [timestamp] <= @lastTime
 				END
 				ELSE
 				BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
-					SELECT A.DeviceId, A.[TimeStamp], StatType, IntValue
-					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
-					WHERE [timestamp] <= @lastTime
+						SELECT d.DevId as DeviceId
+						  ,A.[TimeStamp]
+						  ,A.[StatType]
+						  ,A.[Latitude]
+						  ,A.[Longitude]
+						  ,A.[Altitude]
+						  ,A.[Heading]
+						  ,A.[Speed]
+						FROM dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+						INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+						WHERE [timestamp] <= @lastTime
 				END
 				
 			END
@@ -76,8 +92,16 @@ BEGIN
 		BEGIN
 			EXEC [MCDA].[DeviceSyncStatus_Insert] @Name = @tablename, @status = 1, @LastSyncTime = @lastTime
 
-			SELECT A.DeviceId, A.[TimeStamp], StatType, IntValue
-				FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
+			SELECT d.DevId as DeviceId
+				  ,A.[TimeStamp]
+				  ,A.[StatType]
+				  ,A.[Latitude]
+				  ,A.[Longitude]
+				  ,A.[Altitude]
+				  ,A.[Heading]
+				  ,A.[Speed]
+				FROM dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+				INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 				WHERE [timestamp] <= @lastTime
 		END
 	END
