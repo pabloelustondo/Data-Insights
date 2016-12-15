@@ -51,9 +51,8 @@ export function RegisterRoutes(app: any) {
     });
     app.get('/Devices/Battery/Summary/DevicesNotSurvivedShift', function(req: any, res: any, next: any) {
         const params = {
-            'startTime': { typeName: 'string', required: true },
-            'duration': { typeName: 'string', required: true },
-            'date': { typeName: 'string', required: true },
+            'duration': { typeName: 'number', required: true },
+            'dateAndShift': { typeName: 'datetime', required: false },
         };
 
         let validatedParams: any[] = [];
