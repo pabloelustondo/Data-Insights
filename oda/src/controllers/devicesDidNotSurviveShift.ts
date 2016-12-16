@@ -40,19 +40,16 @@ export class CountDevicesNotSurvivedShiftController {
             }
         ]
     })
-    public async Get(duration: number, shiftStartTime?: Date): Promise<SDS> {
+    public async Get(duration: number, shiftStartTime: Date): Promise<SDS> {
 
-        if (!shiftStartTime) {
 
-            console.log( 'no date and time provided' );
-            let todayDate = new Date();
-            todayDate.setHours(todayDate.getHours() - todayDate.getHours() , 0 , 0 , 0);
-            todayDate.setDate(todayDate.getDate() - 1);
-            console.log(todayDate.toUTCString());
-            shiftStartTime = todayDate;
-        }
+       // let date = shiftStartTime.getFullYear().toString() + '-' + shiftStartTime.getMonth().toString() + '-' + shiftStartTime.getDate().toString();
+      //  let time = shiftStartTime.getHours().toString() + ':' + shiftStartTime.getMinutes().toString() + ':00';
 
-        const xqs = {duration: duration, date : shiftStartTime};
+        let shiftDateTimeString = shiftStartTime.toISOString().substr(0, 19);
+
+
+        const xqs = {shiftDuration: duration, shiftStartTime : shiftDateTimeString};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 
