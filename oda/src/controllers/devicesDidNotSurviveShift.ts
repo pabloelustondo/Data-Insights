@@ -19,7 +19,7 @@ export class CountDevicesNotSurvivedShiftController {
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
      *     A shift of 7.5 hours can be represented as 7.5
      *
-     *     The dataAndShift field must be in date format YYYY-MM-DDTHH:MM:SS
+     *     The shiftStartTime field must be in date format YYYY-MM-DDTHH:MM:SS
      *     where YYYY-MM-DD = Year in 4 digits, followed by month, followed by day of the month
      *     T - A static string value
      *     HH:MM:SS - Hour, minute and seconds.
@@ -40,19 +40,19 @@ export class CountDevicesNotSurvivedShiftController {
             }
         ]
     })
-    public async Get(duration: number, dateAndShift?: Date): Promise<SDS> {
+    public async Get(duration: number, shiftStartTime?: Date): Promise<SDS> {
 
-        if (!dateAndShift) {
+        if (!shiftStartTime) {
 
             console.log( 'no date and time provided' );
             let todayDate = new Date();
             todayDate.setHours(todayDate.getHours() - todayDate.getHours() , 0 , 0 , 0);
             todayDate.setDate(todayDate.getDate() - 1);
             console.log(todayDate.toUTCString());
-            dateAndShift = todayDate;
+            shiftStartTime = todayDate;
         }
 
-        const xqs = {duration: duration, date : dateAndShift};
+        const xqs = {duration: duration, date : shiftStartTime};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 

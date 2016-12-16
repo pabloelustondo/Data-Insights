@@ -11,17 +11,6 @@ let should = chai.should();
 let expect = chai.expect;
 @suite class Hello {
 
-
-    @test('should pass async tests')
-    public assert_pass_async(done: Function) {
-        setTimeout(() => done(), 1);
-    }
-
-    @test('should fail async when given error')
-    public assert_fail_async(done: Function) {
-        setTimeout(() => done(new Error('Oops...')), 1);
-    }
-
     @test('should pass getBatteryDischarge code')
     public assert_pass_getBatteryDischarge(done: Function ) {
         chai.use(chaiHttp);
@@ -128,5 +117,57 @@ let expect = chai.expect;
                 done();
             });
     }
+
+
+    @test('Should pass devicesDidNotSurviveShift call status 200 - with shift duration as double')
+    public assert_fail_getDevicesNotLastedShift_status_double(done: Function ) {
+        chai.use(chaiHttp);
+        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.5')
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(400);
+
+                done();
+            });
+    }
+
+    @test('Should pass devicesDidNotSurviveShift call status 200 - with shift duration as double')
+    public assert_fail_getDevicesNotLastedShift_status_int(done: Function ) {
+        chai.use(chaiHttp);
+
+        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.5')
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(400);
+                done();
+            });
+    }
+
+    @test('Should pass devicesDidNotSurviveShift call status 200 - with both parameters provided')
+    public assert_pass_getDevicesNotLastedShift_status_dateTime(done: Function ) {
+        chai.use(chaiHttp);
+
+        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.2&shiftStartTime=2016-08-24T08%3A00%3A00.000Z')
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(200);
+                expect(err).to.be.null;
+                done();
+            });
+    }
+
+    @test('Should pass devicesDidNotSurviveShift call status 200 - with both parameters provided')
+    public assert_pass_getDevicesNotLastedShift_content_dateTime(done: Function ) {
+
+        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.2&shiftStartTime=2016-08-24T08%3A00%3A00.000Z')
+            .end((err: any, res: any) => {
+                expect(res).to.be.json;
+                let jsonResponse = res.body;
+                let responseText = jsonResponse['data'];
+                let expectedJSONString  = '[{"CountDevicesNotLastedShift":"62","TotalActiveDevices":"219"}]';
+                expect(JSON.stringify(responseText)).to.equal(expectedJSONString);
+                expect(err).to.be.null;
+                done();
+            });
+    }
+
+
 
 }
