@@ -26,7 +26,7 @@ export class CountDevicesNotSurvivedShiftController {
      *
      */
 
-    @Get('Battery/Summary/countOfDevicesDidNotSuriveShift')
+    @Get('Battery/Summary/countOfDevicesDidNotSurviveShift')
     @Example<any>({
         'createdAt': '2016-11-29T20:30:21.385Z',
         'metadata': [
