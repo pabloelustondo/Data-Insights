@@ -10,10 +10,10 @@ print('Loading function')
 def lambda_handler(event, context):
     res = []
     try:
-        shiftStartTime = event['shiftStartTime']
+        shiftStartDateTime = event['shiftStartDateTime']
         shiftDuration = event['shiftDuration']
 
-        datetime.datetime.strptime(shiftStartTime, '%Y-%m-%dT%H:%M:%S')
+        datetime.datetime.strptime(shiftStartDateTime, '%Y-%m-%dT%H:%M:%S')
 
         qry = """ 
         CREATE temporary TABLE tbl1
@@ -32,7 +32,7 @@ def lambda_handler(event, context):
         (
             with variables as (    
                 SELECT
-                '""" + shiftStartTime + """'::timestamp as shiftStartTime
+                '""" + shiftStartDateTime + """'::timestamp as shiftStartTime
                 )
             select 
                 devid, 

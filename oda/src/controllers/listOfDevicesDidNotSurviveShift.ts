@@ -60,9 +60,9 @@ export class ListDevicesNotSurvivedShiftController {
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-        const xqs = {duration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
+        const xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
         console.log(xqs);
-        const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
+        const xurl = 'https://' + config['aws-hostname'] + config['aws-listDeviceNotLasted'];
 
         const options: rp.OptionsWithUrl = {
             headers: {
@@ -74,35 +74,7 @@ export class ListDevicesNotSurvivedShiftController {
             url: xurl
         };
 
-        // let p = await rp(options); // request library used
-        let x = {
-            data: [
-                {
-                    'DeviceId': 1,
-                    'DeviceName': 'Samsung',
-                    'BatteryChargeLevel': '[100,90,80,70,60,50,40,30,20,10,0,0,10,20,30,20]'
-                },
-                {
-                    'DeviceId': 2,
-                    'DeviceName': 'Samsung',
-                    'BatteryChargeLevel': '[100, 100, 100, 90, 90, 90, 90, 30, 0, 0, 0, 0, 10, 70, 30, 20]'
-                },
-                {
-                    'DeviceId': 3,
-                    'DeviceName': 'Samsung',
-                    'BatteryChargeLevel': '[100,90,80,70,60,50,40,30,20,10,0,0, 0, 0, 0, 0]'
-                },
-                {
-                    'DeviceId': 4,
-                    'DeviceName': 'Samsung',
-                    'BatteryChargeLevel': '[100, 70, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0]'
-                }
-            ]
-        };
-
-        let p: string[] = ['{"DeviceId": 1,"DeviceName": "Samsung","BatteryChargeLevel": "[100,90,80,70,60,50,40,30,20,10,0,0,10,20,30,20]}"'];
-
-
+        let p = await rp(options); // request library used
 
         let mData = ['CountDevicesNotLastedShift: Count of devices that did not last full shift', 'TotalActiveDevices: Total devices active per day'];
 
