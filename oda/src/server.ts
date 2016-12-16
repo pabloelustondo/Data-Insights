@@ -2,6 +2,7 @@
 import './controllers/usersController';
 import './controllers/dischargeRateController';
 import './controllers/devicesDidNotSurviveShift';
+import './controllers/listOfDevicesDidNotSurviveShift';
 
 import * as bodyParser from 'body-parser';
 import * as express from 'express';

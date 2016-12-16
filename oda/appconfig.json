@@ -5,5 +5,6 @@
   "aws-x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
   "aws-path":  "/test/function_one",
   "aws-discharge" : "/test/dischargeratedistribution",
-  "aws-deviceNotLasted" : "/test/devicesnotlastedshift"
+  "aws-deviceNotLasted" : "/test/countOfDevicesDidNotSurviveShift",
+  "aws-listDeviceNotLasted" : "/test/listOfDevicesDidNotSurviveShift"
 }

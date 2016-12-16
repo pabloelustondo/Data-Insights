@@ -9,7 +9,7 @@ import * as querystring from 'querystring';
 
 import * as rp from 'request-promise';
 @Route('Devices')
-export class CountDevicesNotSurvivedShiftController {
+export class ListDevicesNotSurvivedShiftController {
     /**
      * Number of devices that did not last the full shift for a given date, shift time, and shift duration.
      * If no dateAndShift field is provided, the default date of previous day with a shift starting at 00:00 UTC
@@ -26,7 +26,7 @@ export class CountDevicesNotSurvivedShiftController {
      *
      */
 
-    @Get('Battery/Summary/ListOfDevicesNotSurvivedShift')
+    @Get('Battery/Summary/listOfDevicesDidNotSurviveShift')
     @Example<any>({
         'createdAt': '2016-11-29T20:30:21.385Z',
         'metadata': [
@@ -36,34 +36,33 @@ export class CountDevicesNotSurvivedShiftController {
         'data': [
             {
                 'DeviceId': 1,
+                'DeviceName': 'Samsung',
                 'BatteryChargeLevel': '[100,90,80,70,60,50,40,30,20,10,0,0,10,20,30,20]'
             },
             {
                 'DeviceId': 2,
+                'DeviceName': 'Samsung',
                 'BatteryChargeLevel': '[100, 100, 100, 90, 90, 90, 90, 30, 0, 0, 0, 0, 10, 70, 30, 20]'
             },
             {
                 'DeviceId': 3,
+                'DeviceName': 'Samsung',
                 'BatteryChargeLevel': '[100,90,80,70,60,50,40,30,20,10,0,0, 0, 0, 0, 0]'
             },
             {
                 'DeviceId': 4,
+                'DeviceName': 'Samsung',
                 'BatteryChargeLevel': '[100, 70, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0]'
             },
         ]
     })
-    public async Get(duration: number, rowsSkip: number, rowsTake: number, shiftStartTime?: Date, ): Promise<SDS> {
+    public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date ): Promise<SDS> {
 
-        if (!shiftStartTime) {
-            let todayDate = new Date();
-            todayDate.setHours(todayDate.getHours() - todayDate.getHours() , 0 , 0 , 0);
-            todayDate.setDate(todayDate.getDate() - 1);
-            shiftStartTime = todayDate;
-        }
+        let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-        const xqs = {duration: duration, date : shiftStartTime};
+        const xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
         console.log(xqs);
-        const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
+        const xurl = 'https://' + config['aws-hostname'] + config['aws-listDeviceNotLasted'];
 
         const options: rp.OptionsWithUrl = {
             headers: {
@@ -76,6 +75,7 @@ export class CountDevicesNotSurvivedShiftController {
         };
 
         let p = await rp(options); // request library used
+
         let mData = ['CountDevicesNotLastedShift: Count of devices that did not last full shift', 'TotalActiveDevices: Total devices active per day'];
 
         const user: SDS = {
