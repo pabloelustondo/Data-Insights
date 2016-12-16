@@ -10,6 +10,15 @@ import {WIDGETS} from "./mock.widgets";
 @Injectable()
 export class DadChartConfigsService {
 
+    public clearLocalCopy(){
+      localStorage.removeItem("chartdata");
+    }
+
+  public save(charts:DadChart[] ){
+    let charts_string = JSON.stringify(charts);
+    localStorage.setItem("chartdata",charts_string);
+  }
+
     public getChartConfigs(): DadChart[] {
 
       let charts_string = localStorage.getItem("chartdata");
@@ -20,8 +29,7 @@ export class DadChartConfigsService {
         return DATA;
       }
       else {
-        let charts_string = JSON.stringify(CHARTS);
-  //      localStorage.setItem("chartdata",charts_string);
+        this.save(CHARTS);
         return CHARTS;
       }
     }
@@ -41,7 +49,7 @@ export class DadWidgetConfigsService {
     }
     else {
       let widget_string = JSON.stringify(WIDGETS);
-    //  localStorage.setItem("widgetdata",widget_string);
+      localStorage.setItem("widgetdata",widget_string);
       return WIDGETS;
     }
   }

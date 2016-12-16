@@ -4,7 +4,11 @@ import {SDS} from '../models/user';
 const config = require('../../appconfig.json');
 import * as querystring from 'querystring';
 import * as rp from 'request-promise';
-@Route('Data')
+
+import {SDSBattery} from '../models/batteryData';
+
+
+@Route('Devices/MultipleStats')
 export class MultiplePostsController {
 
     /**
@@ -13,7 +17,7 @@ export class MultiplePostsController {
 
     @Post('/MultiplePosts')
     @Example<any>({
-        metadata: 'here is where metadata explaining the data should go',
+        metadata: 'tbd',
         createdAt: '2016-08-08',
         data: ['aaa', 'bbb', 'ccc']
     })
@@ -33,6 +37,31 @@ export class MultiplePostsController {
         };
     }
     // Build the post string from an object
+
+    @Post()
+    @Example<any>({
+        headers: {
+            'X-API-key': 'Future Private Access Key',
+            'Accept': 'application/json'
+        },
+        json: true,
+        url: 'http://localhost:3003/data',
+        data: {
+            dev_id: '12345678901234567890123456789012345678901234567890123456789012345678901234567890',
+            server_time_stamp: '2016-12-08T19:12:15.235Z',
+            int_value: 123456789123,
+            stat_type: 1234,
+            time_stamp: '2016-12-08T19:13:15.235Z'
+        }
+    })
+    public async Create2(request: SDSBattery): Promise<SDS> {
+
+        // awsPush.putRecord(request);
+        return  {
+            metadata: 'Thanks a lot',
+            createdAt: new Date()
+        };
+    }
 
 
 
