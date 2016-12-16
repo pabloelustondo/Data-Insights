@@ -26,7 +26,7 @@ export class CountDevicesNotSurvivedShiftController {
      *
      */
 
-    @Get('Battery/Summary/DevicesNotSurvivedShift')
+    @Get('Battery/Summary/countOfDevicesDidNotSuriveShift')
     @Example<any>({
         'createdAt': '2016-11-29T20:30:21.385Z',
         'metadata': [
@@ -40,13 +40,13 @@ export class CountDevicesNotSurvivedShiftController {
             }
         ]
     })
-    public async Get(duration: number, shiftStartTime: Date): Promise<SDS> {
+    public async Get(duration: number, shiftStartDateTime: Date): Promise<SDS> {
 
 
        // let date = shiftStartTime.getFullYear().toString() + '-' + shiftStartTime.getMonth().toString() + '-' + shiftStartTime.getDate().toString();
       //  let time = shiftStartTime.getHours().toString() + ':' + shiftStartTime.getMinutes().toString() + ':00';
 
-        let shiftDateTimeString = shiftStartTime.toISOString().substr(0, 19);
+        let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
 
         const xqs = {shiftDuration: duration, shiftStartTime : shiftDateTimeString};
