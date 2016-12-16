@@ -40,7 +40,7 @@ export class CountDevicesNotSurvivedShiftController {
             }
         ]
     })
-    public async Get(duration: number, shiftStartDateTime: Date): Promise<SDS> {
+    public async Get(shiftDuration: number, shiftStartDateTime: Date): Promise<SDS> {
 
 
        // let date = shiftStartTime.getFullYear().toString() + '-' + shiftStartTime.getMonth().toString() + '-' + shiftStartTime.getDate().toString();
@@ -49,7 +49,7 @@ export class CountDevicesNotSurvivedShiftController {
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
 
-        const xqs = {shiftDuration: duration, shiftStartDateTime : shiftDateTimeString};
+        const xqs = {shiftDuration: shiftDuration, shiftStartDateTime : shiftDateTimeString};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 
