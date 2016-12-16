@@ -25,20 +25,20 @@ export class DadWidget {
     <th><div id="widgetName">{{widget.name}}</div></th>
         <tr>
             <div id="values" *ngIf="data"><a style="color:blue;" href="/table">{{data.Metric[0]}}</a>{{"/"}}{{data.Dimension[data.Metric[0]]}}</div>
-            
+            <!--
             <div id="widgetDate">
             <label>Date: </label>
             <input [(ngModel)]="widget.parameters[0].date" placeholder=" yyyy-mm-dd"> 
-            </div>
+            </div>-->
             
             <div id="widgetStartTime">
-            <label>Start Time: </label>
-            <input [(ngModel)]="this.widget.parameters[0].startTime" placeholder="hh:mm am">
+            <label>Start Date & Time: </label>
+            <input [(ngModel)]="this.widget.parameters[0].shiftStartDateTime" placeholder="hh:mm am">
             </div>
-            
+           
             <div id="widgetDuration">
             <label>Duration: </label>
-            <input [(ngModel)]="this.widget.parameters[0].duration" placeholder="8h">
+            <input [(ngModel)]="this.widget.parameters[0].shiftDuration" placeholder="8h">
             </div>
         </tr>
     </table>

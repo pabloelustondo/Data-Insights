@@ -57,6 +57,7 @@ export class DadChartComponent implements OnInit {
     c3chart: any;
     miniChartWidth: number = 275;
     miniChartHeight: number = 200;
+    miniChartColor: any[] = ['#33526e'];
 
     constructor(private dadChartDataService: DadChartDataService) { }
     changeConfig(event){
@@ -110,14 +111,15 @@ export class DadChartComponent implements OnInit {
             }
         },
         axis: {
-          show : true,
           x: {
+            show : true,
             label: {
               text: [chartConfig.b],
                 position: 'outer-right'
             }
           },
           y: {
+            show : true,
             label: {
               text: [chartConfig.a],
                 position: 'outer-top'
@@ -149,10 +151,12 @@ export class DadChartComponent implements OnInit {
         c3Config.size.width = this.miniChartWidth;
         c3Config.size.height = this.miniChartHeight;
         c3Config.legend.show = false;
-        c3Config.axis.show = false;
+        c3Config.axis.x.show = false;
+        c3Config.axis.y.show = false;
         c3Config.subchart.show = false;
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;
+        c3Config.color.pattern = this.miniChartColor;
       };
       this.c3chart = c3.generate(c3Config);
     };
@@ -236,14 +240,15 @@ export class DadChartComponent implements OnInit {
           }
         },
         axis: {
-          show: true,
           x: {
+            show: true,
             label: {
               text: [chartConfig.b],
               position: 'outer-right'
             }
           },
           y: {
+            show: true,
             label: {
               text: [chartConfig.a],
               position: 'outer-top'
@@ -264,7 +269,8 @@ export class DadChartComponent implements OnInit {
         c3Config.size.width = this.miniChartWidth;
         c3Config.size.height = this.miniChartHeight;
         c3Config.legend.show = false;
-        c3Config.axis.show = false;
+        c3Config.axis.x.show = false;
+        c3Config.axis.y.show = false;
         c3Config.subchart.show = false;
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;
@@ -313,14 +319,15 @@ export class DadChartComponent implements OnInit {
           pattern: this.colorPalette,
         },
         axis: {
-          show: true,
           x: {
+            show: true,
             label: {
               text: [chartConfig.b],
               position: 'outer-right'
             }
           },
           y: {
+            show: true,
             label: {
               text: [chartConfig.a],
               position: 'outer-top'
@@ -341,7 +348,8 @@ export class DadChartComponent implements OnInit {
         c3Config.size.width = this.miniChartWidth;
         c3Config.size.height = this.miniChartHeight;
         c3Config.legend.show = false;
-        c3Config.axis.show = false;
+        c3Config.axis.x.show = false;
+        c3Config.axis.y.show = false;
         c3Config.subchart.show = false;
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;

@@ -11,8 +11,7 @@ export const WIDGETS: DadWidget[] = [
     b : 'TotalActiveDevices',
     parameters: [
       {
-        startTime: "9am",
-        duration: "30",
-        date: "2016-08-25"
+        shiftStartDateTime:"2016-08-25T09:00",
+        shiftDuration: "12.5"
       }]}
 ];
