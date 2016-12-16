@@ -56,13 +56,11 @@ export class ListDevicesNotSurvivedShiftController {
             },
         ]
     })
-    public async Get(duration: number, rowsSkip: number, rowsTake: number, shiftStartTime: Date ): Promise<SDS> {
+    public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date ): Promise<SDS> {
 
-        let shiftDateTimeString = shiftStartTime.toISOString().substr(0, 19);
+        let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-
-
-        const xqs = {duration: duration, date : shiftStartTime};
+        const xqs = {duration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 

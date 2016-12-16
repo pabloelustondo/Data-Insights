@@ -49,7 +49,7 @@ export class CountDevicesNotSurvivedShiftController {
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
 
-        const xqs = {shiftDuration: duration, shiftStartTime : shiftDateTimeString};
+        const xqs = {shiftDuration: duration, shiftStartDateTime : shiftDateTimeString};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 
