@@ -5,9 +5,10 @@ import { HttpModule } from '@angular/http';
 import { RouterModule }   from '@angular/router';
 import { DadAppComponent } from './app.component';
 import { DadComponent }   from './dashboard.component';
-import { DadChartComponent} from "./chart.component";
-import { DadWidgetComponent} from "./widget.component";
-import {DadConfigComponent}   from './configuration.component';
+import { DadChartComponent } from "./chart.component";
+import { DadWidgetComponent } from "./widget.component";
+import { DadConfigComponent }   from './configuration.component';
+import { DadTableComponent }   from './table.component';
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -36,7 +37,7 @@ let LocalStorageServiceConfig = {
     ])
   ],
   declarations: [
-    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent, DadWidgetComponent
+    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent, DadWidgetComponent, DadTableComponent
 
   ],
   providers: [],

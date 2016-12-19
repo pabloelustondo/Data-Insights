@@ -8,6 +8,7 @@ import 'rxjs/add/operator/toPromise';
 import { config } from "./appconfig";
 import { DadChart } from './chart.component';
 import { DadWidget } from './widget.component';
+import { DadTable } from './table.component';
 
 
 @Injectable()
@@ -45,13 +46,10 @@ export class DadWidgetDataService {
     console.log("we got " + config["oda_dev_url"]);
 
     let params: URLSearchParams = new URLSearchParams();
-    for (let widgetparam of widget.parameters){
-      if (widgetparam.parameterType = "Parameters"){
-        console.log("Widget:" + widget.id + " Got Parameters:" + widgetparam.startTime + ":" + widgetparam.duration + widgetparam.date + ":");
-        params.set('startTime', widgetparam.startTime);
-        params.set('duration', widgetparam.duration);
-        params.set('date', widgetparam.date);
-      }
+    let tableparameters = widget.parameters[0];
+    for (let tableparam in tableparameters){
+      console.log("Table:" + widget.id + "Mapping Parameter:" + tableparam);
+      params.set(tableparam, tableparameters[tableparam]);
     }
 // config[chart.endpoint]
     return this.http.get(config[widget.endpoint], {search:params} ).toPromise().then(
@@ -59,6 +57,30 @@ export class DadWidgetDataService {
     ).catch(
       err =>{
         console.log("we got " + err.json());
+      }
+    );
+  }
+}
+
+@Injectable()
+export class DadTableDataService {
+
+  constructor(private http: Http) { }
+
+  getTableData(table:DadTable): Promise<any> {
+
+    let params: URLSearchParams = new URLSearchParams();
+    let tableparameters = table.parameters[0];
+    for (let tableparam in tableparameters){
+        console.log("Table:" + table.id + "Mapping Parameter:" + tableparam);
+        params.set(tableparam, tableparameters[tableparam]);
+    }
+
+    return this.http.get(config[table.endpoint], {search:params} ).toPromise().then(
+      response => JSON.parse(response['_body'])
+    ).catch(
+      err =>{
+        console.log("error " + err.json());
       }
     );
   }

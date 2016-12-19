@@ -5,11 +5,14 @@ import { Component, Input, OnInit  } from '@angular/core';
 import {DadChart} from "./chart.component";
 import {DadWidgetDataService} from "./data.service";
 import {Mapper} from "./mapper";
+import {DadDateRange} from "./dadmodels"
 
 export class DadWidget {
   id: string;
   name: string;
-  parameters: any[];
+  type?:string;
+  dateRange?: DadDateRange;
+  parameters: any[];  //we are going to change this!
   endpoint :string;
   a: string;
   b: string;

@@ -3,14 +3,15 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { DadChart } from './chart.component';
-import {DadChartConfigsService, DadWidgetConfigsService} from './chart.service';
+import {DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService} from './chart.service';
 import {DadWidget} from "./widget.component";
+import {DadTable} from "./table.component";
 
 declare var d3, c3: any;
 
 @Component({
     selector: 'dad',
-    providers: [DadChartConfigsService, DadWidgetConfigsService],
+    providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
     template: `
        <!--  this is just for debugging to show the configuration of a specific chart. -->
     <div *ngIf="selectedChart">
@@ -31,6 +32,12 @@ declare var d3, c3: any;
       </div>
     </div>
     
+    <div class="tablecontainer">
+      <div *ngFor="let table of tables">
+      <dadtable [table]="table"></dadtable>
+      </div>
+    </div>
+    
     <div style="clear: both;">
     <div class="chart" *ngFor="let chart of charts">
     <dadchart [chart]="chart"></dadchart>
@@ -43,10 +50,14 @@ export class DadComponent implements  OnInit{
     public title = 'DAD 0.0';
     public charts: DadChart[];
     public widgets: DadWidget[];
+    public tables: DadTable[];
     public selectedChart:DadChart;
     public data;
 
-    constructor(private dadChartConfigsService: DadChartConfigsService, private dadWidgetConfigsService: DadWidgetConfigsService) { }
+    constructor(private dadChartConfigsService: DadChartConfigsService,
+                private dadWidgetConfigsService: DadWidgetConfigsService,
+                private dadTableConfigsService: DadTableConfigsService
+    ) { }
 
     onSelect(chart:DadChart):void {
         this.selectedChart = chart;
@@ -56,6 +67,7 @@ export class DadComponent implements  OnInit{
         console.log("APP  starts drawing all charts in dashboard:");
         this.charts = this.dadChartConfigsService.getChartConfigs();
         this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
+        this.tables = this.dadTableConfigsService.getTableConfigs();
     }
 }
 
