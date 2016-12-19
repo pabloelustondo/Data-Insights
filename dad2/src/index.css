@@ -7,9 +7,8 @@
   text-align: center;
   width:350px;
   height: 150px;
-  border-top:1px solid rgba(255,255,255,1);
-  border-radius:4px;
-  box-shadow:0 6px 10px rgba(0,0,0,0.1);
+  border-right: solid darkgrey;
+  border-left: solid darkgrey;
 }
 
 #widget_content{
@@ -76,7 +75,7 @@
 }
 
 body{
-  background-image: url(/assets/images/background-image.jpg);
+
 }
 
 
@@ -92,7 +91,7 @@ body{
   background-color: #000000;
 }
 
-@media (min-width: 300px) and (max-width: 1024px) {
+@media screen and (min-width: 300px) and (max-width: 1800px) {
   #logo{
     height: 40px;
   }
@@ -113,8 +112,7 @@ body{
   }
 
   #dashboardTable{
-    border:solid;
-    color:darkgray;
+    border:solid darkgray;
     text-align:center;
     margin: auto;
     width: 100%;
@@ -130,7 +128,6 @@ body{
   }
 
   body{
-    background-image: url(/assets/images/background-image.jpg);
   }
 
   .footer {
