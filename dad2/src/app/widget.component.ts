@@ -24,23 +24,27 @@ export class DadWidget {
     <table id="widgetTable">
     <th><div id="widgetName">{{widget.name}}</div></th>
         <tr>
-            <div id="values" *ngIf="data"><a style="color:blue;" href="/table">{{data.Metric[0]}}</a>{{"/"}}{{data.Dimension[data.Metric[0]]}}</div>
-            
+            <div id="values" *ngIf="data"><a style="color:blue;" href="/table">{{data.Metric[0]}}</a>{{"/"}}{{data.Dimension[data.Metric[0]]}}</div>            
+            <!--
             <div id="widgetDate">
             <label>Date: </label>
             <input [(ngModel)]="widget.parameters[0].date" placeholder=" yyyy-mm-dd"> 
-            </div>
+            </div>-->
             
             <div id="widgetStartTime">
-            <label>Start Time: </label>
-            <input [(ngModel)]="this.widget.parameters[0].startTime" placeholder="hh:mm am">
+            <label>Start Date & Time: </label>
+            <!--<ng2-datepicker [(ngModel)]="firstDate"></ng2-datepicker>-->
+            <input [(ngModel)]="this.widget.parameters[0].shiftStartDateTime" placeholder="hh:mm am">
             </div>
-            
+           
             <div id="widgetDuration">
             <label>Duration: </label>
-            <input [(ngModel)]="this.widget.parameters[0].duration" placeholder="8h">
+            <input [(ngModel)]="this.widget.parameters[0].shiftDuration" placeholder="8">
             </div>
         </tr>
+        <div>
+            <button (click)="changeData($event)">Refresh</button>
+        </div>
     </table>
     </div>
   <!-- to show chart in widgets, use the line below-->
@@ -53,8 +57,16 @@ export class DadWidgetComponent implements OnInit {
   widget: DadWidget;
   data;
   mapper: Mapper = new Mapper();
+  firstDate: any;
 
   constructor(private dadWidgetDataService: DadWidgetDataService) { }
+  changeData(event){
+    this.dadWidgetDataService.getWidgetData(this.widget).then(
+      data => {
+        this.data = this.mapper.map(this.widget, data.data);
+      }
+    );
+  }
 
   ngOnInit() {
     console.log("Widgets are loading... :" + this.widget.id);

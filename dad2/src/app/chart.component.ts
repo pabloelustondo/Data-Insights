@@ -30,12 +30,15 @@ export class DadChart {
             <!-- Date From input -->
             <div *ngIf="!chart.mini">
               <label style="color: #0A0A0A">Date from: </label>
-              <input [(ngModel)]="this.chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd"> 
+             <ng2-datepicker style="color: black" [(ngModel)]="firstDate"></ng2-datepicker>
+             <!--<input [(ngModel)]="chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd">-->
+
             </div>
             <!-- Date To input -->
             <div *ngIf="!chart.mini">
               <label style="color: #0A0A0A">Date To: </label>
-              <input [(ngModel)]="this.chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">
+              <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
+              <ng2-datepicker style="color: black" [(ngModel)]="secondDate"></ng2-datepicker>
             </div>
             <!-- refresh button -->
             <br/>
@@ -57,9 +60,17 @@ export class DadChartComponent implements OnInit {
     c3chart: any;
     miniChartWidth: number = 275;
     miniChartHeight: number = 200;
+    miniChartColor: any[] = ['#33526e'];
+    firstDate: any;
+    secondDate: any;
 
     constructor(private dadChartDataService: DadChartDataService) { }
+    onDateChanged(event:any) {
+      console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
+    }
     changeConfig(event){
+      this.chart.parameters[0].dateFrom = this.firstDate.formatted;
+      this.chart.parameters[0].dateTo = this.secondDate.formatted;
       this.dadChartDataService.getChartData(this.chart).then(
         data => {
           this.data = data.data;
@@ -110,14 +121,15 @@ export class DadChartComponent implements OnInit {
             }
         },
         axis: {
-          show : true,
           x: {
+            show : true,
             label: {
               text: [chartConfig.b],
                 position: 'outer-right'
             }
           },
           y: {
+            show : true,
             label: {
               text: [chartConfig.a],
                 position: 'outer-top'
@@ -149,10 +161,12 @@ export class DadChartComponent implements OnInit {
         c3Config.size.width = this.miniChartWidth;
         c3Config.size.height = this.miniChartHeight;
         c3Config.legend.show = false;
-        c3Config.axis.show = false;
+        c3Config.axis.x.show = false;
+        c3Config.axis.y.show = false;
         c3Config.subchart.show = false;
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;
+        c3Config.color.pattern = this.miniChartColor;
       };
       this.c3chart = c3.generate(c3Config);
     };
@@ -236,14 +250,15 @@ export class DadChartComponent implements OnInit {
           }
         },
         axis: {
-          show: true,
           x: {
+            show: true,
             label: {
               text: [chartConfig.b],
               position: 'outer-right'
             }
           },
           y: {
+            show: true,
             label: {
               text: [chartConfig.a],
               position: 'outer-top'
@@ -264,7 +279,8 @@ export class DadChartComponent implements OnInit {
         c3Config.size.width = this.miniChartWidth;
         c3Config.size.height = this.miniChartHeight;
         c3Config.legend.show = false;
-        c3Config.axis.show = false;
+        c3Config.axis.x.show = false;
+        c3Config.axis.y.show = false;
         c3Config.subchart.show = false;
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;
@@ -313,14 +329,15 @@ export class DadChartComponent implements OnInit {
           pattern: this.colorPalette,
         },
         axis: {
-          show: true,
           x: {
+            show: true,
             label: {
               text: [chartConfig.b],
               position: 'outer-right'
             }
           },
           y: {
+            show: true,
             label: {
               text: [chartConfig.a],
               position: 'outer-top'
@@ -341,7 +358,8 @@ export class DadChartComponent implements OnInit {
         c3Config.size.width = this.miniChartWidth;
         c3Config.size.height = this.miniChartHeight;
         c3Config.legend.show = false;
-        c3Config.axis.show = false;
+        c3Config.axis.x.show = false;
+        c3Config.axis.y.show = false;
         c3Config.subchart.show = false;
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;

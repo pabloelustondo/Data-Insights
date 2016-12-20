@@ -47,10 +47,9 @@ export class DadWidgetDataService {
     let params: URLSearchParams = new URLSearchParams();
     for (let widgetparam of widget.parameters){
       if (widgetparam.parameterType = "Parameters"){
-        console.log("Widget:" + widget.id + " Got Parameters:" + widgetparam.startTime + ":" + widgetparam.duration + widgetparam.date + ":");
-        params.set('startTime', widgetparam.startTime);
-        params.set('duration', widgetparam.duration);
-        params.set('date', widgetparam.date);
+        console.log("Widget:" + widget.id + " Got Parameters:" + widgetparam.shiftStartDateTime + ":" + widgetparam.shiftDuration);
+        params.set('shiftStartDateTime', widgetparam.shiftStartDateTime);
+        params.set('shiftDuration', widgetparam.shiftDuration);
       }
     }
 // config[chart.endpoint]
