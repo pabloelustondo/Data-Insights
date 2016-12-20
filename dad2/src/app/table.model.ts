@@ -3,6 +3,7 @@
  */
 
 import {DadTable} from "./table.component";
+import {DadChart} from "./chart.component";
 
 
 export enum DadTableColumnType {
@@ -12,5 +13,6 @@ export enum DadTableColumnType {
 export interface DadTableColumn{
   Type: DadTableColumnType,
   Name: string,
-  DataSource: string
+  DataSource: string,
+  MiniChart: DadChart
 }

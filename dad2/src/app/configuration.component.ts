@@ -13,6 +13,22 @@ declare var d3, c3: any;
     selector: 'dadconfig',
     providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
     template: `
+
+    <div *ngIf="showTable" style="width:100%; display:inline-block;  vertical-align:top; border: solid;" > 
+    <h2>{{showTable.name}}</h2>  
+        <dadtable [table]="showTable"></dadtable>
+    </div>
+    
+    <div *ngIf="showWidget" style="width:100%; display:inline-block;  vertical-align:top; border: solid;" > 
+    <h2>{{showWidget.name}}</h2>  
+        <dadwidget [widget]="showWidget"></dadwidget>
+    </div>
+    
+    <div *ngIf="showChart" style="width:100%; display:inline-block;  vertical-align:top; border: solid;" > 
+    <h2>{{showChart.name}}</h2>  
+        <dadchart [chart]="showChart"></dadchart>
+    </div>
+
      <div style="width:30%; display:inline-block;  vertical-align:top;"> 
      <button *ngIf="dirty"(click)="saveConfiguration()">Save Changes</button> <button (click)="resetConfiguration()">Reset to Factory Settings</button>
      <div>
@@ -99,21 +115,6 @@ declare var d3, c3: any;
        <div><img (click)="deleteWidget()" width="20px" heigth="20px" src="/assets/images/delete.jpeg"></div>   
     </div>
     
-    <div *ngIf="showTable" style="width:60%; display:inline-block;  vertical-align:top; border: solid;" > 
-    <h2>{{showTable.name}}</h2>  
-        <dadtable [table]="showTable"></dadtable>
-    </div>
-    
-    <div *ngIf="showWidget" style="width:60%; display:inline-block;  vertical-align:top; border: solid;" > 
-    <h2>{{showWidget.name}}</h2>  
-        <dadwidget [widget]="showWidget"></dadwidget>
-    </div>
-    
-    <div *ngIf="showChart" style="width:60%; display:inline-block;  vertical-align:top; border: solid;" > 
-    <h2>{{showChart.name}}</h2>  
-        <dadchart [chart]="showChart"></dadchart>
-    </div>
-    
     `
 })
 
@@ -158,18 +159,21 @@ export class DadConfigComponent implements  OnInit{
   }
 
   showThisTable(table:DadTable){
+    var show = this.showTable;
     this.unselect();
-    this.showTable = table;
+    if (!show) this.showTable = table;
   }
 
   showThisChart(chart:DadChart){
+    var show = this.showChart;
     this.unselect();
-    this.showChart = chart;
+    if (!show ) this.showChart = chart;
   }
 
   showThisWidget(widget:DadWidget){
+    var show = this.showWidget;
     this.unselect();
-    this.showWidget = widget;
+    if (!show) this.showWidget = widget;
   }
 
   selectTable(table:DadTable){

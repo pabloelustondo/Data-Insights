@@ -32,12 +32,6 @@ declare var d3, c3: any;
       </div>
     </div>
     
-    <div class="tablecontainer">
-      <div *ngFor="let table of tables">
-      <dadtable [table]="table"></dadtable>
-      </div>
-    </div>
-    
     <div style="clear: both;">
     <div class="chart" *ngFor="let chart of charts">
     <dadchart [chart]="chart"></dadchart>

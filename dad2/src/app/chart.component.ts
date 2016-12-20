@@ -1,7 +1,7 @@
 /**
  * Created by dister on 12/05/2016.
  */
-import { Component, Input, OnInit  } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
 import {Mapper} from "./mapper";
 
@@ -408,19 +408,26 @@ export class DadChartComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log("CHART starts drawing :" + this.chart.id);
-        if (!this.chart.data){
-        this.dadChartDataService.getChartData(this.chart).then(
+        this.miniChartWidth = this.chart.width;
+        this.miniChartHeight = this.chart.height;
+        console.log("CHART starts drawing ON INIT:" + this.chart.id);
+        if (!this.chart.data) {
+          this.dadChartDataService.getChartData(this.chart).then(
             data => {
-                this.data = data.data;
-                this.drawChart(this.chart,this.data);
+              this.data = data.data;
+              this.drawChart(this.chart, this.data);
             }
-        ).catch(err => console.log(err.toString()));
-        } else {
-          this.data = this.chart.data;
-          this.drawChart(this.chart,this.data);
+          ).catch(err => console.log(err.toString()));
         }
     }
+
+  ngAfterViewInit() {
+    console.log("CHART starts drawing AFTER VIEW INIT :" + this.chart.id);
+    if (this.chart.data){
+      this.data = this.chart.data;
+      this.drawChart(this.chart,this.data);
+    }
+  }
 }
 
 
