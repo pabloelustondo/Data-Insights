@@ -7,7 +7,7 @@ import * as methodOverride from 'method-override';
 
 // import * as https from 'https';
 const config = require('../../appconfig.json');
-// const awsPush = require('../awsPush');
+ const awsPush = require('../awsPush');
 
 
 import * as querystring from 'querystring';
@@ -39,7 +39,7 @@ export class SDSController {
     })
     public async Create(request: SDSBattery): Promise<SDS> {
 
-     // awsPush.putRecord(request);
+      awsPush.putRecord(request);
         return  {
             metadata: 'Thanks a lot',
             createdAt: new Date()

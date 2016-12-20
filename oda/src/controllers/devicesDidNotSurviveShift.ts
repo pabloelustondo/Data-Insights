@@ -11,48 +11,47 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class CountDevicesNotSurvivedShiftController {
     /**
-     * Number of devices that did not last the full shift for a given date, shift time, and shift duration.
-     * If no dateAndShift field is provided, the default date of previous day with a shift starting at 00:00 UTC
-     * is used as data and shift time.
+     * This API returns Number of devices that did not last the full shift for a given date and time, and the shift duration.
+     * The required fields are shiftStartDateTime and shiftDuration field. It also returns the total number of devices that were
+     * active in the shift.
      *
-     *     The duration is a number representing the length of the shift in hours.
+     * A device is added to the count if it has been charged during the shift.
+     *
+     *     shiftDuration: a number representing the length of the shift in hours.
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
      *     A shift of 7.5 hours can be represented as 7.5
      *
-     *     The dataAndShift field must be in date format YYYY-MM-DDTHH:MM:SS
+     *     shiftStartTime: a date time must be in date format YYYY-MM-DDTHH:MM:SS
      *     where YYYY-MM-DD = Year in 4 digits, followed by month, followed by day of the month
      *     T - A static string value
      *     HH:MM:SS - Hour, minute and seconds.
      *
      */
 
-    @Get('Battery/Summary/DevicesNotSurvivedShift')
+    @Get('Battery/Summary/countOfDevicesDidNotSurviveShift')
     @Example<any>({
         'createdAt': '2016-11-29T20:30:21.385Z',
         'metadata': [
-            'CountDevicesNotLastedShift: Count of devices that did not last full shift',
-            'TotalActiveDevices: Total devices active per day'
+            'CountDevicesNotLastedShift: int',
+            'TotalActiveDevices: int'
         ],
         'data': [
             {
-                'CountDevicesNotLastedShift': 25,
-                'TotalActiveDevices': 100
+                'CountDevicesNotLastedShift': '25',
+                'TotalActiveDevices': '100'
             }
         ]
     })
-    public async Get(duration: number, dateAndShift?: Date): Promise<SDS> {
+    public async Get(shiftDuration: number, shiftStartDateTime: Date): Promise<SDS> {
 
-        if (!dateAndShift) {
 
-            console.log( 'no date and time provided' );
-            let todayDate = new Date();
-            todayDate.setHours(todayDate.getHours() - todayDate.getHours() , 0 , 0 , 0);
-            todayDate.setDate(todayDate.getDate() - 1);
-            console.log(todayDate.toUTCString());
-            dateAndShift = todayDate;
-        }
+       // let date = shiftStartTime.getFullYear().toString() + '-' + shiftStartTime.getMonth().toString() + '-' + shiftStartTime.getDate().toString();
+      //  let time = shiftStartTime.getHours().toString() + ':' + shiftStartTime.getMinutes().toString() + ':00';
 
-        const xqs = {duration: duration, date : dateAndShift};
+        let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
+
+
+        const xqs = {shiftDuration: shiftDuration, shiftStartDateTime : shiftDateTimeString};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 

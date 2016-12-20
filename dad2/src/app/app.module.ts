@@ -9,6 +9,7 @@ import { DadChartComponent } from "./chart.component";
 import { DadWidgetComponent } from "./widget.component";
 import { DadConfigComponent }   from './configuration.component';
 import { DadTableComponent }   from './table.component';
+import { DatePickerModule } from 'ng2-datepicker';
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -21,6 +22,7 @@ let LocalStorageServiceConfig = {
     BrowserModule,
     FormsModule,
     HttpModule,
+    DatePickerModule,
     RouterModule.forRoot([
       {
         path:'',
