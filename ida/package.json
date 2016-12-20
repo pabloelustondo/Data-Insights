@@ -4,7 +4,7 @@
   "description": "This service provides and API to post data to SOTI cloud data analytics service",
   "scripts": {
     "start": "npm run build && node ./dist/server.js",
-    "startdebug": "npm run build && node $NODE_DEBUG_OPTION ./dist/server.js",
+    "startdebug": "npm run build && node %NODE_DEBUG_OPTION% ./dist/server.js",
     "build": "npm run clean && npm run lint && npm run swagger-gen && npm run routes-gen && tsc && npm run copy-swagger-ui",
     "lint": "tslint ./src/**/*.ts",
     "clean": "rimraf dist",
