@@ -8,6 +8,7 @@ import { Mapper, ChartData } from "./mapper";
 import { DadDateRange } from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
 import { DadChartComponent } from "./chart.component"
+import { DadTableConfigsService } from './chart.service';
 
 export class DadTable {
   id: string;
@@ -21,7 +22,7 @@ export class DadTable {
 
 @Component({
   selector: 'dadtable',
-  providers:[DadTableDataService],
+  providers:[DadTableDataService,DadTableConfigsService],
   template: `     
     <div *ngIf="data">
 
@@ -53,7 +54,8 @@ export class DadTableComponent implements OnInit {
   table: DadTable;
   data: any;
 
-  constructor(private dadTableDataService: DadTableDataService) { }
+  constructor(private dadTableDataService: DadTableDataService,
+              private dadTableConfigsService: DadTableConfigsService) { }
 
   isMiniChart(col:DadTableColumn){
     return col.Type == DadTableColumnType.MiniChart;
@@ -65,6 +67,11 @@ export class DadTableComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (!this.table){
+      let tables = this.dadTableConfigsService.getTableConfigs();
+      this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
+    }
     console.log("Tables are loading... :" + this.table.id);
     this.dadTableDataService.getTableData(this.table).then(
       data => {
