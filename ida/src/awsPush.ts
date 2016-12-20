@@ -27,16 +27,15 @@ function createRecordParam(data: any) {
     return recordParams;
 }
 
- function putRecord(data: any) {
+
+  function putRecord(data: any) {
+
     let recordInput = createRecordParam(data);
 
     firehose.putRecord(recordInput, function (err: any , data1: any ) {
         if (err) {
             console.log(err, err.stack); // an error occurred
-        } else {
-          //  console.log('testttt');
         }
-      //  console.log(data1);           // successful response
     });
 }
 
