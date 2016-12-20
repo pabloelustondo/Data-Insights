@@ -3,5 +3,7 @@
 */node_modules/*
 */node_modules/.staging
 */dist
+*/ida/src/routes.ts
+*/oda/src/routes.ts
 npm-debug.log
 
