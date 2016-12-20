@@ -4,33 +4,36 @@
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadTableDataService } from "./data.service";
-import {Mapper, ChartData} from "./mapper";
-import { DadDateRange } from "./dadmodels"
+import { Mapper, ChartData } from "./mapper";
+import { DadDateRange } from "./dadmodels";
+import { DadTableColumn } from "./table.model"
 
 export class DadTable {
   id: string;
   name: string;
   type?:string;
-  dateRange?: DadDateRange;
   parameters: any[];  //we are going to change this!
   endpoint :string;
-  a: string;
-  b: string;
+  columns: DadTableColumn[];
   chart?: DadChart;
 }
 
 @Component({
   selector: 'dadtable',
   providers:[DadTableDataService],
-  template: ` 
-    <table *ngIf="data">
-        <tr>
-            <td *ngFor="let col of keys" >col</td>
-        </tr>
-        <tr *ngFor="let row of data.Metric">
-            <td >row</td>
-        </tr>
-    </table>
+  template: `     
+    <div *ngIf="data">
+
+      <table style="border:solid">
+          <tr style="border:solid">
+          <td style="border:solid" *ngFor="let col of table.columns" >{{col.Name}}</td>
+          </tr>
+          <tr *ngFor="let row of data" style="border:solid">
+          <td style="border:solid" *ngFor="let col of table.columns" >{{row[col.DataSource]}}</td>
+          </tr>
+      </table>
+
+    </div>
   <!-- to show chart in widgets, use the line below-->
   <!--<dadchart [chart]="widget.chart"></dadchart>-->
 
@@ -39,9 +42,7 @@ export class DadTable {
 export class DadTableComponent implements OnInit {
   @Input()
   table: DadTable;
-  data: ChartData;
-  keys: string[];
-  mapper: Mapper = new Mapper();
+  data: any;
 
   constructor(private dadTableDataService: DadTableDataService) { }
 
@@ -49,8 +50,7 @@ export class DadTableComponent implements OnInit {
     console.log("Tables are loading... :" + this.table.id);
     this.dadTableDataService.getTableData(this.table).then(
       data => {
-        this.data = this.mapper.map(this.table, data.data);
-        this.keys = Object.keys(this.data);
+        this.data = data.data;
       }
     ).catch(err => console.log(err.toString()));
   }
