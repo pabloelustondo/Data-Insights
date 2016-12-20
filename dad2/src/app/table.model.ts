@@ -14,5 +14,5 @@ export interface DadTableColumn{
   Type: DadTableColumnType,
   Name: string,
   DataSource: string,
-  MiniChart: DadChart
+  MiniChart?: DadChart
 }
