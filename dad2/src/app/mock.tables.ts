@@ -36,8 +36,8 @@ export const TABLES: DadTable[] = [
                     endpoint: "InitialChargeLevels",
                     a : 'Rng',
                     b : 'NumberOfDevices',
-                    width: 475,
-                    height: 400,
+                    width: 800,
+                    height: 30,
                     parameters: [
                       {parameterType:"DateRange",
                         dateFrom: "2016-08-23",

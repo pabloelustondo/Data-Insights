@@ -6,7 +6,8 @@ import { DadChart } from "./chart.component";
 import { DadTableDataService } from "./data.service";
 import { Mapper, ChartData } from "./mapper";
 import { DadDateRange } from "./dadmodels";
-import { DadTableColumn } from "./table.model"
+import { DadTableColumn, DadTableColumnType } from "./table.model"
+import { DadChartComponent } from "./chart.component"
 
 export class DadTable {
   id: string;
@@ -26,10 +27,18 @@ export class DadTable {
 
       <table style="border:solid">
           <tr style="border:solid">
-          <td style="border:solid" *ngFor="let col of table.columns" >{{col.Name}}</td>
+          <td style="border:solid" *ngFor="let col of table.columns" ><h2>{{col.Name}}</h2></td>
           </tr>
-          <tr *ngFor="let row of data" style="border:solid">
-          <td style="border:solid" *ngFor="let col of table.columns" >{{row[col.DataSource]}}</td>
+          <tr *ngFor="let row of data; let rowindex = index" style="border:solid">
+          <td style="border:solid" *ngFor="let col of table.columns" >
+          
+          <span *ngIf="!isMiniChart(col)"> 
+          {{row[col.DataSource]}}
+          </span>
+          <span *ngIf="isMiniChart(col)"> 
+          <dadchart [chart]="miniChart(col,rowindex)"></dadchart>
+          </span>        
+          </td>
           </tr>
       </table>
 
@@ -45,6 +54,16 @@ export class DadTableComponent implements OnInit {
   data: any;
 
   constructor(private dadTableDataService: DadTableDataService) { }
+
+  isMiniChart(col:DadTableColumn){
+    return col.Type == DadTableColumnType.MiniChart;
+  }
+
+  miniChart(col:DadTableColumn, rowindex:number){
+    let miniChartConfig = JSON.parse(JSON.stringify(col.MiniChart));   //dirty way to clone object
+    miniChartConfig.id += rowindex;
+    return miniChartConfig;
+  }
 
   ngOnInit() {
     console.log("Tables are loading... :" + this.table.id);

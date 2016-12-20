@@ -24,31 +24,33 @@ export class DadChart {
     selector: 'dadchart',
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
-     <table id="dashboardTable">
-     <th><div *ngIf="!chart.mini" id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
+     <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
+     <table *ngIf="!chart.mini" id="dashboardTable">
+     <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
         <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
             <!-- Date From input -->
-            <div *ngIf="!chart.mini">
+            <div>
               <label style="color: #0A0A0A">Date from: </label>
              <ng2-datepicker style="color: black" [(ngModel)]="firstDate"></ng2-datepicker>
              <!--<input [(ngModel)]="chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd">-->
 
             </div>
             <!-- Date To input -->
-            <div *ngIf="!chart.mini">
+            <div>
               <label style="color: #0A0A0A">Date To: </label>
               <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
               <ng2-datepicker style="color: black" [(ngModel)]="secondDate"></ng2-datepicker>
             </div>
             <!-- refresh button -->
             <br/>
-            <div *ngIf="!chart.mini">
+            <div>
                 <button (click)="changeConfig($event)">Refresh</button>
             </div>
         </tr>
+        <br/><br/><br/>
     </table>
-    <br/><br/><br/>
+
 
     <!--  END CHART COMPONENT -->`
 })
