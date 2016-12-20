@@ -36,7 +36,7 @@ let LocalStorageServiceConfig = {
       },
       {
         path:'table',
-        component: DadWidgetComponent
+        component: DadTableComponent
       }
     ])
   ],
