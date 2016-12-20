@@ -60,9 +60,8 @@ export class DadTableComponent implements OnInit {
   }
 
   miniChart(col:DadTableColumn, rowindex:number){
-    let miniChartConfig = JSON.parse(JSON.stringify(col.MiniChart));   //dirty way to clone object
-    miniChartConfig.id += rowindex;
-    return miniChartConfig;
+    col.MiniChart.id += rowindex;
+    return col.MiniChart;
   }
 
   ngOnInit() {
