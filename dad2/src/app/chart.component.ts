@@ -18,6 +18,7 @@ export class DadChart {
     width: number;
     height: number;
     mini?: boolean = false;
+    data?:any;
 }
 @Component({
     selector: 'dadchart',
@@ -390,12 +391,17 @@ export class DadChartComponent implements OnInit {
 
     ngOnInit() {
         console.log("CHART starts drawing :" + this.chart.id);
+        if (!this.chart.data){
         this.dadChartDataService.getChartData(this.chart).then(
             data => {
                 this.data = data.data;
                 this.drawChart(this.chart,this.data);
             }
         ).catch(err => console.log(err.toString()));
+        } else {
+          this.data = this.chart.data;
+          this.drawChart(this.chart,this.data);
+        }
     }
 }
 

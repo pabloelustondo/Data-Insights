@@ -6,7 +6,7 @@ import { DadChart } from './chart.component';
 export const CHARTS: DadChart[] = [
     //first endpoint
     {id: "chartbar1",
-    name: 'Range of Battery vs. Number of Devices',
+    name: 'Range of Battery with data',
     type: "bar",
     endpoint: "InitialChargeLevels",
     a : 'Rng',
@@ -17,7 +17,14 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
        dateTo: "2016-08-25"
-      }]
+      }],
+    data:[{
+      Rng:'r1',
+      NumberOfDevices:10
+    },{
+      Rng:'r2',
+      NumberOfDevices:20
+    }]
     },
     //second endpoint
     {id: "chartbar2",
