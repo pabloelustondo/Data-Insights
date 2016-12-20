@@ -70,10 +70,8 @@ export class ListDevicesNotSurvivedShiftController {
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-        if (rowsTake < 0) {
+        if (rowsTake < 0 || rowsSkip < 0) {
             rowsTake = null;
-        }
-        if (rowsSkip < 0) {
             rowsSkip = null;
         }
 
