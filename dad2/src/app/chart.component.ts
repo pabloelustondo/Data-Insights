@@ -1,7 +1,7 @@
 /**
  * Created by dister on 12/05/2016.
  */
-import { Component, Input, OnInit  } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
 import {Mapper} from "./mapper";
 
@@ -18,36 +18,39 @@ export class DadChart {
     width: number;
     height: number;
     mini?: boolean = false;
+    data?:any;
 }
 @Component({
     selector: 'dadchart',
     providers:[DadChartDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
-     <table id="dashboardTable">
-     <th><div *ngIf="!chart.mini" id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
+     <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
+     <table *ngIf="!chart.mini" id="dashboardTable">
+     <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
         <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
             <!-- Date From input -->
-            <div *ngIf="!chart.mini">
+            <div>
               <label style="color: #0A0A0A">Date from: </label>
              <ng2-datepicker style="color: black" [(ngModel)]="firstDate"></ng2-datepicker>
              <!--<input [(ngModel)]="chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd">-->
 
             </div>
             <!-- Date To input -->
-            <div *ngIf="!chart.mini">
+            <div>
               <label style="color: #0A0A0A">Date To: </label>
               <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
               <ng2-datepicker style="color: black" [(ngModel)]="secondDate"></ng2-datepicker>
             </div>
             <!-- refresh button -->
             <br/>
-            <div *ngIf="!chart.mini">
+            <div>
                 <button (click)="changeConfig($event)">Refresh</button>
             </div>
         </tr>
+        <br/><br/><br/>
     </table>
-    <br/><br/><br/>
+
 
     <!--  END CHART COMPONENT -->`
 })
@@ -407,14 +410,26 @@ export class DadChartComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log("CHART starts drawing :" + this.chart.id);
-        this.dadChartDataService.getChartData(this.chart).then(
+        this.miniChartWidth = this.chart.width;
+        this.miniChartHeight = this.chart.height;
+        console.log("CHART starts drawing ON INIT:" + this.chart.id);
+        if (!this.chart.data) {
+          this.dadChartDataService.getChartData(this.chart).then(
             data => {
-                this.data = data.data;
-                this.drawChart(this.chart,this.data);
+              this.data = data.data;
+              this.drawChart(this.chart, this.data);
             }
-        ).catch(err => console.log(err.toString()));
+          ).catch(err => console.log(err.toString()));
+        }
     }
+
+  ngAfterViewInit() {
+    console.log("CHART starts drawing AFTER VIEW INIT :" + this.chart.id);
+    if (this.chart.data){
+      this.data = this.chart.data;
+      this.drawChart(this.chart,this.data);
+    }
+  }
 }
 
 

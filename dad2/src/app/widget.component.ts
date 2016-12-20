@@ -11,6 +11,7 @@ export class DadWidget {
   name: string;
   parameters: any[];
   endpoint: string;
+  type?:string;
   a: string;
   b: string;
   chart?: DadChart;
