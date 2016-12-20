@@ -40,7 +40,7 @@ export class ListDevicesNotSurvivedShiftController {
         'createdAt': '2016-11-29T20:30:21.385Z',
         'metadata': [
             'DeviceId: string',
-            'DeviceName: string',
+            'LastBatteryStatus: string',
             'BatteryChargeLevel: int[]'
         ],
         'data': [
