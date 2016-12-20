@@ -16,8 +16,10 @@
 }
 
 .widgetcontainer{
-  border-top: solid;
-  border-color: darkgrey;
+  border-top: solid darkgrey;
+  border-bottom: solid darkgrey;
+  border-right:solid darkgrey;
+  border-left:solid darkgrey;
 }
 
 .chart {
@@ -67,6 +69,10 @@
 }
 
 #widgetStartTime{
+  float:left;
+}
+
+#widgetStartDate{
   float:left;
 }
 

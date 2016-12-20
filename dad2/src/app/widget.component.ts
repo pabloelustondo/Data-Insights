@@ -1,7 +1,7 @@
 /**
  * Created by dister on 12/14/2016.
  */
-import { Component, Input, OnInit  } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import {DadChart} from "./chart.component";
 import {DadWidgetDataService} from "./data.service";
 import {Mapper} from "./mapper";
@@ -10,7 +10,7 @@ export class DadWidget {
   id: string;
   name: string;
   parameters: any[];
-  endpoint :string;
+  endpoint: string;
   a: string;
   b: string;
   chart?: DadChart;
@@ -31,12 +31,24 @@ export class DadWidget {
             <input [(ngModel)]="widget.parameters[0].date" placeholder=" yyyy-mm-dd"> 
             </div>-->
             
-            <div id="widgetStartTime">
-            <label>Start Date & Time: </label>
+            <div id="widgetStartDate">
+            <label>Start Date: </label>
             <!--<ng2-datepicker [(ngModel)]="firstDate"></ng2-datepicker>-->
-            <input [(ngModel)]="this.widget.parameters[0].shiftStartDateTime" placeholder="hh:mm am">
-            </div>
+            <!--<input [(ngModel)]="this.widget.parameters[0].shiftStartDateTime" placeholder="hh:mm am">-->
+            <input [ngModel]="date" (focus)="toggleDatePicker(true)" readonly />
+            <date-picker *ngIf="showDatePicker" [initDate]="date"
+           (onDatePickerCancel)="toggleDatePicker($event)"
+           (onSelectDate)="setDate($event)"></date-picker>
+           </div>
            
+           <div id="widgetStartTime">
+           <label>Start Time: </label>
+           <input [ngModel]="time" (focus)="toggleTimePicker(true)" readonly />
+           <time-picker *ngIf="showTimePicker" [initTime]="time"
+           (onTimePickerCancel)="toggleTimePicker($event)"
+           (onSelectTime)="setTime($event)"></time-picker>
+            </div>
+
             <div id="widgetDuration">
             <label>Duration: </label>
             <input [(ngModel)]="this.widget.parameters[0].shiftDuration" placeholder="8">
@@ -59,8 +71,30 @@ export class DadWidgetComponent implements OnInit {
   mapper: Mapper = new Mapper();
   firstDate: any;
 
-  constructor(private dadWidgetDataService: DadWidgetDataService) { }
-  changeData(event){
+  constructor(private dadWidgetDataService: DadWidgetDataService) {
+
+  }
+  //date
+  private date: any;
+  private showDatePicker: boolean;
+  toggleDatePicker(status: boolean): void  {
+    this.showDatePicker = status;
+  }
+  setDate(date: any): void {
+    this.date = date;
+  }
+  //time
+  private time: any;
+  private showTimePicker: boolean;
+  toggleTimePicker(status: boolean): void  {
+    this.showTimePicker = status;
+  }
+  setTime(time: any): void {
+    this.time = time;
+  }
+
+  changeData(event) {
+    this.widget.parameters[0].shiftStartDateTime = this.firstDate.formatted;
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
         this.data = this.mapper.map(this.widget, data.data);
