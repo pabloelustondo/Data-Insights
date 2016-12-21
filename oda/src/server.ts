@@ -3,6 +3,7 @@ import './controllers/intialChargeLevelController';
 import './controllers/dischargeRateController';
 import './controllers/devicesDidNotSurviveShift';
 import './controllers/listOfDevicesDidNotSurviveShift';
+import './controllers/deviceList';
 
 import * as bodyParser from 'body-parser';
 import * as express from 'express';

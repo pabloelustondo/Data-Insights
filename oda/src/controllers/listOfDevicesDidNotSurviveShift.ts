@@ -91,7 +91,7 @@ export class ListDevicesNotSurvivedShiftController {
 
         let responseData = await rp(options); // request library used
 
-        let mData = ['CountDevicesNotLastedShift: Count of devices that did not last full shift', 'TotalActiveDevices: Total devices active per day'];
+        let mData = ['CountDevicesNotLastedShift: int', 'TotalActiveDevices: int'];
 
         const user: SDS = {
             createdAt: new Date(),
