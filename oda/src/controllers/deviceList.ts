@@ -7,8 +7,16 @@ import {DeviceModel} from '../models/deviceModel';
 const config = require('../../appconfig.json');
 
 @Route('Devices')
-export class ListOfDevices {
-    @Post('getList')
+export class DeviceInformation {
+    /**
+     * This API provides information related to a device. The consumer of the API must provide a list of attributes
+     * related to the device. The API returns values of the attributes requested.
+     *
+     * @param request
+     * @returns {{deviceId: string, deviceProperties: string[]}}
+     * @constructor
+     */
+    @Post('getDeviceInformation')
     @Example<DeviceModel>({
        deviceId: '1234avcde',
        deviceProperties: ['deviceName', 'deviceManufacturer', 'deviceOwner', 'deviceDriver']
