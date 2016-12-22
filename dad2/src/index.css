@@ -16,6 +16,7 @@
 }
 
 .widgetcontainer{
+  margin: 0 auto;
   border-top: solid 5px darkgrey;
   border-bottom: solid darkgrey;
   border-right:solid darkgrey;
@@ -129,7 +130,7 @@ body{
     border:solid darkgray;
     text-align:center;
     margin: auto;
-    width: 100%;
+    width: 50%;
   }
 
   #title{
@@ -139,6 +140,13 @@ body{
     font-size: 30px;
     text-align:center;
     width: 100%;
+  }
+
+  .widgetcontainer{
+    border:solid darkgray;
+    text-align:center;
+    margin: auto;
+    width: 51%;
   }
 
   body{
