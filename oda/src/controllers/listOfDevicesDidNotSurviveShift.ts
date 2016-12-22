@@ -70,13 +70,16 @@ export class ListDevicesNotSurvivedShiftController {
     public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date ): Promise<SDS> {
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
-
+        let xqs = {};
         if (rowsTake < 0 || rowsSkip < 0) {
             rowsTake = null;
             rowsSkip = null;
+            xqs = {shiftDuration: shiftDuration, rowsSkip: 'null', rowsTake: 'null', shiftStartDateTime : shiftDateTimeString};
+        } else {
+            xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
         }
 
-        const xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
+
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-listDeviceNotLasted'];
 
