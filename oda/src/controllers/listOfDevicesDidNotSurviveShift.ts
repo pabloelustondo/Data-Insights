@@ -16,7 +16,9 @@ export class ListDevicesNotSurvivedShiftController {
      * The user can request a complete list by assigning the value -1 to rowsSkip and rowsTake or get a partial list
      * by assigning an appropriate number to the rowsSkip and rowsTake fields.
      *
-     * A device is added to the list if it's battery was charged during the shift or if it drained to 0% at any time.
+     * A device is added to the list if:
+     * - it's battery was charged or an attempt to charge the device was detected during the shift
+     * - if the battery status is reported as 0 at the end of the shift.
      *
      * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, and rowsTake.
      *
@@ -24,10 +26,8 @@ export class ListDevicesNotSurvivedShiftController {
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
      *     A shift of 7.5 hours can be represented as 7.5
      *
-     *     shiftStartTime: a date time must be in date format YYYY-MM-DDTHH:MM:SS
-     *     where YYYY-MM-DD = Year in 4 digits, followed by month, followed by day of the month
-     *     T - A static string value
-     *     HH:MM:SS - Hour, minute and seconds.
+     *     shiftStartTime: a date time must be in date format specified by ISO-8601 format (YYYY-MM-DDTHH:MM:SS).
+     *     The time is in UTC time format.
      *
      *     rowsSkip: a number corresponding to the number of records to skip. Acceptable values are
      *     all numbers greater than or equal to -1.
