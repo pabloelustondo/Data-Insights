@@ -41,7 +41,7 @@ BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=0, @LastSyncTime=@lastTimeTmp, @PreviousSyncTime=@lastTime
 				END
 
-				SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue]
+				SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
 					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
 					INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 					WHERE [timestamp] > @lastTime and [timestamp] <= @lastTimeTmp
@@ -52,7 +52,7 @@ BEGIN
 				BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
-					SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue]
+					SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
 					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
 					INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 					WHERE [timestamp] > @PreviousTime and [timestamp] <= @lastTime
@@ -61,7 +61,7 @@ BEGIN
 				BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
-					SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue]
+					SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
 					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
 					INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 					WHERE A.[timestamp] <= @lastTime
@@ -79,7 +79,7 @@ BEGIN
 		BEGIN
 			EXEC [MCDA].[DeviceSyncStatus_Insert] @Name = @tablename, @status = 1, @LastSyncTime = @lastTime
 
-			SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue]
+			SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
 				FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
 				INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 				WHERE A.[timestamp] <= @lastTime

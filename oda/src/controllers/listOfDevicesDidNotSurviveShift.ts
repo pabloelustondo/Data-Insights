@@ -11,13 +11,14 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class ListDevicesNotSurvivedShiftController {
     /**
-     * List of all devices that did not last the full shift for a given date, shift time, and shift duration.
-     * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, and rowsTake.
+     * List of all devices that may have not lasted the full shift for a given date, shift time, and shift duration.
      *
      * The user can request a complete list by assigning the value -1 to rowsSkip and rowsTake or get a partial list
      * by assigning an appropriate number to the rowsSkip and rowsTake fields.
      *
-     * A device is added to the list if it has been charged during the shift.
+     * A device is added to the list if it's battery was charged during the shift or if it drained to 0% at any time.
+     *
+     * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, and rowsTake.
      *
      *     shiftDuration: a number representing the length of the shift in hours.
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
@@ -104,7 +105,4 @@ export class ListDevicesNotSurvivedShiftController {
 }
 /**
  * Created by vdave on 12/14/2016.
- */
-/**
- * Created by vdave on 12/16/2016.
  */

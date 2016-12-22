@@ -11,20 +11,22 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class CountDevicesNotSurvivedShiftController {
     /**
-     * This API returns Number of devices that did not last the full shift for a given date and time, and the shift duration.
-     * The required fields are shiftStartDateTime and shiftDuration field. It also returns the total number of devices that were
-     * active in the shift.
+     * This API returns the number of devices that may not have lasted the full shift for a given date, time, and the shift duration.
+     * It also returns the total number of devices that were active in the shift. An active device is any device whose
+     * battery drained during the shift duration. If the device was off, on charger, or did not report battery status
+     * it is not included in the data returned.
      *
-     * A device is added to the count if it has been charged during the shift.
+     * A device is added to the count if it has been charged during the shift or if it's battery drained to 0% at any point
+     * during the shift.
+     *
+     * The required fields are shiftStartDateTime and shiftDuration field.
      *
      *     shiftDuration: a number representing the length of the shift in hours.
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
      *     A shift of 7.5 hours can be represented as 7.5
      *
-     *     shiftStartTime: a date time must be in date format YYYY-MM-DDTHH:MM:SS
-     *     where YYYY-MM-DD = Year in 4 digits, followed by month, followed by day of the month
-     *     T - A static string value
-     *     HH:MM:SS - Hour, minute and seconds.
+     *     shiftStartTime: a date time must be in date format specified by ISO-8601 format (YYYY-MM-DDTHH:MM:SS).
+     *     The time is in UTC time format.
      *
      */
 
@@ -43,13 +45,7 @@ export class CountDevicesNotSurvivedShiftController {
         ]
     })
     public async Get(shiftDuration: number, shiftStartDateTime: Date): Promise<SDS> {
-
-
-       // let date = shiftStartTime.getFullYear().toString() + '-' + shiftStartTime.getMonth().toString() + '-' + shiftStartTime.getDate().toString();
-      //  let time = shiftStartTime.getHours().toString() + ':' + shiftStartTime.getMinutes().toString() + ':00';
-
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
-
 
         const xqs = {shiftDuration: shiftDuration, shiftStartDateTime : shiftDateTimeString};
         console.log(xqs);
@@ -66,7 +62,7 @@ export class CountDevicesNotSurvivedShiftController {
         };
 
         let p = await rp(options); // request library used
-        let mData = ['CountDevicesNotLastedShift: Count of devices that did not last full shift', 'TotalActiveDevices: Total devices active per day'];
+        let mData = ['CountDevicesNotLastedShift: int', 'TotalActiveDevices: int'];
 
         const user: SDS = {
             createdAt: new Date(),

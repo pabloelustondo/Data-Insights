@@ -1,0 +1,10 @@
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Debug\MCDP.exe.config
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Debug\MCDP.exe
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Debug\MCDP.pdb
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Debug\Newtonsoft.Json.dll
+D:\CustomBI\BI_NEW\MCDP\MCDP\bin\Debug\Newtonsoft.Json.xml
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Debug\SOTI.MCDP.MCDP.resources
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Debug\SOTI.MCDP.ProjectInstaller.resources
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Debug\SOTI.MCDP.csproj.GenerateResource.Cache
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Debug\MCDP.exe
+D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Debug\MCDP.pdb
