@@ -37,7 +37,8 @@ export class DadTable {
           {{row[col.DataSource]}}
           </span>
           <span *ngIf="isMiniChart(col)"> 
-          <dadchart [chart]="miniChart(col,rowindex)"></dadchart>
+          <dadchart [chart]="miniChart(col,rowindex)"
+          [data]="chartData(row,col)"></dadchart>
           </span>        
           </td>
           </tr>
@@ -53,6 +54,35 @@ export class DadTableComponent implements OnInit {
   @Input()
   table: DadTable;
   data: any;
+  chartData(row,col){
+    return JSON.parse(row[col.DataSource]);
+  }
+
+  miniChartData(){
+    return [
+      {NumberOfDevices: "2",
+        Percentage: "0.00236127508854781",
+        Rng: "11-20"},
+      {NumberOfDevices:"5",
+        Percentage: "0.00590318772136953",
+        Rng: "21-30"},
+      {NumberOfDevices:"20",
+        Percentage: "0.00590318772136953",
+        Rng: "31-40"},
+      {NumberOfDevices:"10",
+        Percentage: "0.00590318772136953",
+        Rng: "41-50"},
+      {NumberOfDevices:"34",
+        Percentage: "0.00590318772136953",
+        Rng: "51-60"},
+      {NumberOfDevices:"67",
+        Percentage: "0.00590318772136953",
+        Rng: "61-70"},
+      {NumberOfDevices:"147",
+        Percentage: "0.00590318772136953",
+        Rng: "71-80"}
+    ];
+  }
 
   constructor(private dadTableDataService: DadTableDataService,
               private dadTableConfigsService: DadTableConfigsService) { }
@@ -62,8 +92,9 @@ export class DadTableComponent implements OnInit {
   }
 
   miniChart(col:DadTableColumn, rowindex:number){
-    col.MiniChart.id += rowindex;
-    return col.MiniChart;
+    let chartConfig = JSON.parse(JSON.stringify(col.MiniChart)); //to clone object
+    chartConfig.id += rowindex;
+    return chartConfig;
   }
 
   ngOnInit() {
