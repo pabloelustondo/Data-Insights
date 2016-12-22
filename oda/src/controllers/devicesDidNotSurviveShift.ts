@@ -12,12 +12,13 @@ import * as rp from 'request-promise';
 export class CountDevicesNotSurvivedShiftController {
     /**
      * This API returns the number of devices that may not have lasted the full shift for a given date, time, and the shift duration.
-     * It also returns the total number of devices that were active in the shift. An active device is any device whose
-     * battery drained during the shift duration. If the device was off, on charger, or did not report battery status
+     * It also returns the total number of devices that were active in the shift. An active device is any device that
+     * reported a battery status for the defined shift duration. If the device was off or did not report battery status
      * it is not included in the data returned.
      *
-     * A device is added to the count if it has been charged during the shift or if it's battery drained to 0% at any point
-     * during the shift.
+     * A device is added to the CountDevicesNotLastedShift if:
+     * - it has been charged or an attempt to charge the device has been detected during the shift
+     * - if it's battery drained to 0% at the end of the shift.
      *
      * The required fields are shiftStartDateTime and shiftDuration field.
      *
