@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MCDP.model
+namespace Soti.MCDP.Database.Model
 {
     /// <summary>
     /// Used in the previous type, this class represents a specific row of the  records that are going to be sent to the input data adapter
@@ -9,7 +9,7 @@ namespace MCDP.model
     {
         public string dev_id;
 
-        public int int_value;
+        public string int_value;
 
         public DateTime server_time_stamp;
 

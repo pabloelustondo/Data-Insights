@@ -29,7 +29,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <TargetFrameworkProfile />
     <Recovery>SIMPLE</Recovery>
-    <DefaultSchema>BI</DefaultSchema>
+    <DefaultSchema>MCDA</DefaultSchema>
     <IncludeSchemaNameInFileName>True</IncludeSchemaNameInFileName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -93,7 +93,7 @@
     <Build Include="MCDA\User Defined Types\MCDA.GEN_UDTTable_DeviceSyncStatus.sql" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /f /g /h /r /y "$(TargetDir)\MobiControlDB_Archive.dacpac" "$(ProjectDir)..\..\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /f /g /h /r /y "$(TargetDir)\MobiControlDataAnalyticDB.dacpac" "$(ProjectDir)..\..\"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

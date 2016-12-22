@@ -1,4 +1,4 @@
-﻿namespace MCDP
+﻿namespace Soti.MCDP
 {
     partial class ProjectInstaller
     {

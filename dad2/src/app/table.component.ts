@@ -26,7 +26,7 @@ export class DadTable {
   template: `     
     <div *ngIf="data">
 
-      <table style="border:solid">
+      <table align="center" style="border:solid">
           <tr style="border:solid">
           <td style="border:solid" *ngFor="let col of table.columns" ><h2>{{col.Name}}</h2></td>
           </tr>

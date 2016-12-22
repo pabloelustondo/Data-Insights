@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MCDP.model
+namespace Soti.MCDP.Database.Model
 {
     /// <summary>
     /// This class represents a new set of records that is going to be sent to the input data adapter
