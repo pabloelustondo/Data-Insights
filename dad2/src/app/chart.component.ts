@@ -31,7 +31,7 @@ export class DadChart {
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
             <!-- Date From input -->
             <div>
-              <label style="color: #0A0A0A">Date from: </label>
+              <label style="color: #0A0A0A">Date From: </label>
              <ng2-datepicker style="color: black" [(ngModel)]="firstDate"></ng2-datepicker>
              <!--<input [(ngModel)]="chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd">-->
 
@@ -40,7 +40,7 @@ export class DadChart {
             <div>
               <label style="color: #0A0A0A">Date To: </label>
               <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
-              <ng2-datepicker style="color: black" [(ngModel)]="secondDate"></ng2-datepicker>
+              <ng2-datepicker style="color: black;" [(ngModel)]="secondDate"></ng2-datepicker>
             </div>
             <!-- refresh button -->
             <br/>
