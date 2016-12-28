@@ -1,83 +1,53 @@
-from __future__ import print_function
+from datetime import datetime
+import json, boto3
 
-import json
-import psycopg2
-import datetime
-
-print('Loading function')
-
+s3 = boto3.resource('s3')
+connFunc = boto3.client('lambda')
 
 def lambda_handler(event, context):
     res = []
-    try:
-        shiftStartDateTime = event['shiftStartDateTime']
-        shiftDuration = event['shiftDuration']
-        rowsSkip = event['rowsSkip']
+    result = []
+    
+    queryText = s3.Object('da-s3-bucket', 'queries/ListOfDevicesNotSurvivedShiftKPI.sql')
+    qry = queryText.get()['Body'].read()
+    
+    if (event['rowsSkip']==""):
+        rowsSkip = 0
+    else:
+		rowsSkip = event['rowsSkip']
+		
+    if (event['rowsTake']==""):
+        rowsTake = 0
+    else:
         rowsTake = event['rowsTake']
+	
+    qry = qry.replace('$[shiftStartDateTime]', event['shiftStartDateTime'])
+    qry = qry.replace('$[shiftDuration]', event['shiftDuration'])
+    qry = qry.replace('$[rowsSkip]', rowsSkip)
+    qry = qry.replace('$[rowsTake]', rowsTake)
+    
+    qry = qry.replace(chr(10), '').replace(chr(13), '\\n').replace(chr(9), '\\t')
 
-        datetime.datetime.strptime(shiftStartDateTime, '%Y-%m-%dT%H:%M:%S')
-#        datetime.datetime.strptime(dateTo, '%Y-%m-%d')
+    param = b"""{
+    "_dbname": "dataanalyticsdb",
+    "_host": "dataanalytics.cxvwwvumct05.us-east-1.redshift.amazonaws.com",
+    "_port": "5494",
+    "_user": "dauser",
+    "_password": "Arrow$Wild*Fore$t4",
+    "_query" : " """ + qry + """ "
+    }"""
 
-        qry = """
-        CREATE temporary TABLE tbl1
-                (
-                	devid VARCHAR(80) NOT NULL ENCODE lzo DISTKEY,
-                	time_stamp timestamp,
-                	occ INTEGER NOT NULL ENCODE delta,
-                	intvalue int,
-	                LastValue int
-                )
-            SORTKEY
-                (
-                	devid,
-                	time_stamp
-                );
-        insert into tbl1 
-        (
-            with variables as (    
-                SELECT
-                '""" + shiftStartDateTime + """'::timestamp as shiftStartTime
-                )
-            select devid, time_stamp, 
-case 
-	when intvalue-lead(intvalue, 1) over (
-				partition by devid 
-					order by time_stamp)<0 then 1 -- device has begun charging
-	else 0 -- device is discharging
-end occ, intvalue
-, last_value(intvalue) over (partition by DevId order by time_stamp rows between unbounded preceding and unbounded following) LastValue
-from devstatint d, variables
-where time_stamp
-between shiftStartTime 
-and dateadd(hour, """ + shiftDuration + """, shiftStartTime)
-                and stattype=-1)
-;
-
-select a.DevId, LastValue as LastBatteryStatus, '[' + listagg(t.intvalue, ', ') within group (order by time_stamp) + ']' BatteryChargeHistory
-from (
-select devid
-from tbl1
-group by devid
-having sum(occ)<>0
-) a
-inner join tbl1 t on t.DevId = a.DevId
-group by a.DevId, LastValue
-order by a.DevId """
-        if (rowsSkip == "") | (rowsTake == ""): 
-            qry = qry
-        if (rowsTake == "0"):
-            return;
-        else:
-            qry = qry + """ limit """ + rowsTake + """ offset """ + rowsSkip
-            
-        con=psycopg2.connect(dbname= 'dataanalyticsdb', host='dataanalytics.cxvwwvumct05.us-east-1.redshift.amazonaws.com', port= '5494', user= 'dauser', password= 'Arrow$Wild*Fore$t4')
-        cur = con.cursor()
-        cur.execute(qry)
-        data = cur.fetchall()
-        for row in data:
-            res.append({'DevId': str(row[0]), 'LastBatteryStatus': str(row[1]), 'BatteryChargeHistory': str(row[2])})
-        cur.close()
-        con.close()
+    try:
+        conn = connFunc.invoke(
+        FunctionName = 'arn:aws:lambda:us-east-1:984500282156:function:executeQuery',
+        Payload = param)
+    
+        res = json.loads(conn['Payload'].read())
+    
+        for r in res:
+            result.append({'DevId': str(r[0]), 'LastBatteryStatus' : str(r[1]), 'BatteryChargeHistory': str(r[2])})
+    
+        return result
     except Exception as e:
         res.append({'Error': e.args})
-    return (res)
+        return (res)
