@@ -1,0 +1,9 @@
+D:\CustomBI\BI_NEW\MCDP\Database\bin\Debug\Database.dll
+D:\CustomBI\BI_NEW\MCDP\Database\bin\Debug\Database.pdb
+D:\CustomBI\BI_NEW\MCDP\Database\obj\Debug\Database.dll
+D:\CustomBI\BI_NEW\MCDP\Database\obj\Debug\Database.pdb
+D:\CustomBI\BI\MCDP\Database\bin\Debug\Database.dll
+D:\CustomBI\BI\MCDP\Database\bin\Debug\Database.pdb
+D:\CustomBI\BI\MCDP\Database\obj\Debug\Database.dll
+D:\CustomBI\BI\MCDP\Database\obj\Debug\Database.pdb
+D:\CustomBI\BI\MCDP\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache

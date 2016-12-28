@@ -16,7 +16,8 @@
 }
 
 .widgetcontainer{
-  border-top: solid darkgrey;
+  margin: 0 auto;
+  border-top: solid 5px darkgrey;
   border-bottom: solid darkgrey;
   border-right:solid darkgrey;
   border-left:solid darkgrey;
@@ -55,11 +56,18 @@
   color: black;
   position: relative;
   width: 100%;
-  padding-left: 10px;
+  padding-left: 5px;
+}
+
+#dropdown{
+  width: 150px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  float: right;
 }
 
 #values{
-  font-size: 30px;
+  font-size: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -77,6 +85,7 @@
 }
 
 #widgetDuration{
+  padding-top: 5px;
   float:left;
 }
 
@@ -121,7 +130,7 @@ body{
     border:solid darkgray;
     text-align:center;
     margin: auto;
-    width: 100%;
+    width: 50%;
   }
 
   #title{
@@ -131,6 +140,13 @@ body{
     font-size: 30px;
     text-align:center;
     width: 100%;
+  }
+
+  .widgetcontainer{
+    border:solid darkgray;
+    text-align:center;
+    margin: auto;
+    width: 51%;
   }
 
   body{

@@ -1,4 +1,4 @@
-﻿namespace MCDP.model
+﻿namespace Soti.MCDP.Database.Model
 {
     /// <summary>
     /// Used in the get DeviceSyncStatus

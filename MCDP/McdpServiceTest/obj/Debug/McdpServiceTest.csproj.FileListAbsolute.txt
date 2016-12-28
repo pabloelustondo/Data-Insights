@@ -1,0 +1,16 @@
+D:\CustomBI\BI_NEW\MCDP\McdpServiceTest\obj\Debug\McdpServiceTest.csprojResolveAssemblyReference.cache
+D:\CustomBI\BI\MCDP\McdpServiceTest\obj\Debug\McdpServiceTest.csprojResolveAssemblyReference.cache
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\McdpServiceTest.dll
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\McdpServiceTest.pdb
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\Castle.Core.dll
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\Database.dll
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\Moq.dll
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\nunit.framework.dll
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\TestHelper.dll
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\Database.pdb
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\TestHelper.pdb
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\Castle.Core.xml
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\Moq.xml
+D:\CustomBI\BI\MCDP\McdpServiceTest\bin\Debug\nunit.framework.xml
+D:\CustomBI\BI\MCDP\McdpServiceTest\obj\Debug\McdpServiceTest.dll
+D:\CustomBI\BI\MCDP\McdpServiceTest\obj\Debug\McdpServiceTest.pdb

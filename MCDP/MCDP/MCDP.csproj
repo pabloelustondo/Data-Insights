@@ -36,10 +36,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -56,15 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings\IServiceTimeoutSettings.cs" />
+    <Compile Include="Settings\TimeoutSettings.cs" />
+    <Compile Include="Settings\IDatabaseTimeoutSettings.cs" />
     <Compile Include="McdpService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="McdpService.Designer.cs">
       <DependentUpon>McdpService.cs</DependentUpon>
     </Compile>
-    <Compile Include="model\Data4Ida.cs" />
-    <Compile Include="model\DataRow4Ida.cs" />
-    <Compile Include="model\DeviceSyncStatus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -73,6 +69,7 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\TimeConfigurationSection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -87,6 +84,12 @@
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataProcess\DataProcess.csproj">
+      <Project>{105a2bbf-f50b-4d34-aef9-f76ff7e723fc}</Project>
+      <Name>DataProcess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

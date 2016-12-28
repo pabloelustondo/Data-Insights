@@ -11,22 +11,23 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class ListDevicesNotSurvivedShiftController {
     /**
-     * List of all devices that did not last the full shift for a given date, shift time, and shift duration.
-     * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, and rowsTake.
+     * List of all devices that may have not lasted the full shift for a given date, shift time, and shift duration.
      *
      * The user can request a complete list by assigning the value -1 to rowsSkip and rowsTake or get a partial list
      * by assigning an appropriate number to the rowsSkip and rowsTake fields.
      *
-     * A device is added to the list if it has been charged during the shift.
+     * A device is added to the list if:
+     * - it's battery was charged or an attempt to charge the device was detected during the shift
+     * - if the battery status is reported as 0 at the end of the shift.
+     *
+     * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, and rowsTake.
      *
      *     shiftDuration: a number representing the length of the shift in hours.
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
      *     A shift of 7.5 hours can be represented as 7.5
      *
-     *     shiftStartTime: a date time must be in date format YYYY-MM-DDTHH:MM:SS
-     *     where YYYY-MM-DD = Year in 4 digits, followed by month, followed by day of the month
-     *     T - A static string value
-     *     HH:MM:SS - Hour, minute and seconds.
+     *     shiftStartTime: a date time must be in date format specified by ISO-8601 format (YYYY-MM-DDTHH:MM:SS).
+     *     The time is in UTC time format.
      *
      *     rowsSkip: a number corresponding to the number of records to skip. Acceptable values are
      *     all numbers greater than or equal to -1.
@@ -69,13 +70,16 @@ export class ListDevicesNotSurvivedShiftController {
     public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date ): Promise<SDS> {
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
-
+        let xqs = {};
         if (rowsTake < 0 || rowsSkip < 0) {
             rowsTake = null;
             rowsSkip = null;
+            xqs = {shiftDuration: shiftDuration, rowsSkip: 'null', rowsTake: 'null', shiftStartDateTime : shiftDateTimeString};
+        } else {
+            xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
         }
 
-        const xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
+
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-listDeviceNotLasted'];
 
@@ -104,7 +108,4 @@ export class ListDevicesNotSurvivedShiftController {
 }
 /**
  * Created by vdave on 12/14/2016.
- */
-/**
- * Created by vdave on 12/16/2016.
  */

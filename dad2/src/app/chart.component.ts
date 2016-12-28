@@ -9,12 +9,12 @@ declare var d3, c3: any;
 
 export class DadChart {
     id: string;
-    name: string;
+    name?: string;
     type: string;
-    parameters: any[];
-    endpoint:string;
-    a: string;
-    b: string;
+    parameters?: any[];
+    endpoint?:string;
+    a?: string;
+    b?: string;
     width: number;
     height: number;
     mini?: boolean = false;
@@ -31,7 +31,7 @@ export class DadChart {
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
             <!-- Date From input -->
             <div>
-              <label style="color: #0A0A0A">Date from: </label>
+              <label style="color: #0A0A0A">Date From: </label>
              <ng2-datepicker style="color: black" [(ngModel)]="firstDate"></ng2-datepicker>
              <!--<input [(ngModel)]="chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd">-->
 
@@ -40,7 +40,7 @@ export class DadChart {
             <div>
               <label style="color: #0A0A0A">Date To: </label>
               <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
-              <ng2-datepicker style="color: black" [(ngModel)]="secondDate"></ng2-datepicker>
+              <ng2-datepicker style="color: black;" [(ngModel)]="secondDate"></ng2-datepicker>
             </div>
             <!-- refresh button -->
             <br/>
@@ -57,6 +57,7 @@ export class DadChart {
 export class DadChartComponent implements OnInit {
     @Input()
     chart: DadChart
+    @Input()
     data;
     mapper: Mapper = new Mapper();
     colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
@@ -71,9 +72,42 @@ export class DadChartComponent implements OnInit {
     onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     }
+
+  ngOnInit() {
+
+    this.miniChartWidth = this.chart.width;
+    this.miniChartHeight = this.chart.height;
+    console.log("CHART starts drawing ON INIT:" + this.chart.id);
+  }
+
+  ngAfterViewInit() {
+    console.log("CHART starts drawing AFTER VIEW INIT :" + this.chart.id);
+
+    if (!this.data && this.chart.data){
+      this.data = this.chart.data;
+    }
+
+    if (this.data){
+      this.drawChart(this.chart,this.data);
+    }
+    else
+    { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
+      this.dadChartDataService.getChartData(this.chart).then(
+        data => {
+          this.data = data.data;
+          this.drawChart(this.chart, this.data);
+        }
+      ).catch(err => console.log(err.toString()));
+    }
+
+  }
+
     changeConfig(event){
+      //please remove this code from here
       this.chart.parameters[0].dateFrom = this.firstDate.formatted;
       this.chart.parameters[0].dateTo = this.secondDate.formatted;
+
+
       this.dadChartDataService.getChartData(this.chart).then(
         data => {
           this.data = data.data;
@@ -408,28 +442,6 @@ export class DadChartComponent implements OnInit {
         if (chartConfig.type === 'spline') this.drawChartSpline(chartConfig, data);
         if (chartConfig.type === 'donut') this.drawChartDonut(chartConfig, data);
     }
-
-    ngOnInit() {
-        this.miniChartWidth = this.chart.width;
-        this.miniChartHeight = this.chart.height;
-        console.log("CHART starts drawing ON INIT:" + this.chart.id);
-        if (!this.chart.data) {
-          this.dadChartDataService.getChartData(this.chart).then(
-            data => {
-              this.data = data.data;
-              this.drawChart(this.chart, this.data);
-            }
-          ).catch(err => console.log(err.toString()));
-        }
-    }
-
-  ngAfterViewInit() {
-    console.log("CHART starts drawing AFTER VIEW INIT :" + this.chart.id);
-    if (this.chart.data){
-      this.data = this.chart.data;
-      this.drawChart(this.chart,this.data);
-    }
-  }
 }
 
 
