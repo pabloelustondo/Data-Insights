@@ -32,13 +32,18 @@ function createRecordParam(data: any) {
 
 function createBatchRecordParam(data: any[]) {
 
-    let dataArray = string[];
+    let dataMapping: any[] = [];
+    let dataLength: number = data.length;
+    let index: number;
+    for (index = 0; index < dataLength; index++) {
+        let awsStat = { Data: JSON.stringify(data[index])};
+        dataMapping.push(awsStat);
+    }
+
 
 
     const recordParams = {
-        Records: [{
-            Data: JSON.stringify(data)
-        }],
+        Records: dataMapping,
         DeliveryStreamName: dStreamName
     };
     return recordParams;
