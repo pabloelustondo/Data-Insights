@@ -7,13 +7,10 @@ import { Router }   from '@angular/router';
 @Component({
   selector: 'dadapp',
   template: `
-    <div>
-    <a  style="  color:blue" *ngIf="router.url !== '/config'"  routerLink="/config"><button>See the configuration</button></a>
-    <a  style="  color:blue" *ngIf="router.url !== '/'"  routerLink="/"><button>See the dashboard</button></a>
-    
-    <h1 id="title" >{{title}}</h1> 
-
-    </div>
+    <div><b >SOTI Data Analytics Dashboard</b></div>
+    <a  style="  color:blue; float:left" *ngIf="router.url !== '/config'"  routerLink="/config"><img width="30px" heigth="30px" src="/assets/images/settings.jpg"></a>
+    <a  style="  color:blue; float:left" *ngIf="router.url !== '/'"  routerLink=""><img width="30px" heigth="30px" src="/assets/images/dash.png"></a>
+    <br/>   <br/>
     <router-outlet></router-outlet>
   `
 })

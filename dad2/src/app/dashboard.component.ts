@@ -3,29 +3,16 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { DadChart } from './chart.component';
-import {DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService} from './chart.service';
-import {DadWidget} from "./widget.component";
-import {DadTable} from "./table.component";
+import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService } from './chart.service';
+import { DadWidget } from "./widget.component";
+import { DadTable } from "./table.component";
 
 declare var d3, c3: any;
 
 @Component({
     selector: 'dad',
     providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
-    template: `
-       <!--  this is just for debugging to show the configuration of a specific chart. -->
-    <div *ngIf="selectedChart">
-     <div>Configuration Details for <b>{{selectedChart.name}}</b>  </div>
-     <table>
-     <tr>
-     <td>id:</td>
-     <td>name:</td></tr>
-     <tr>
-     <td>{{selectedChart.id}}</td>
-     <td>{{selectedChart.name}}</td></tr>
-     </table>
-    </div>
-    
+    template: `   
     <div class="widgetcontainer">
       <div *ngFor="let widget of widgets">
       <dadwidget [widget]="widget"></dadwidget>
@@ -58,7 +45,6 @@ export class DadComponent implements  OnInit{
     }
 
     ngOnInit() {
-        console.log("APP  starts drawing all charts in dashboard:");
         this.charts = this.dadChartConfigsService.getChartConfigs();
         this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
         this.tables = this.dadTableConfigsService.getTableConfigs();
