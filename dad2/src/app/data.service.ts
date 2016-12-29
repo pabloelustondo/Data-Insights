@@ -72,7 +72,6 @@ export class DadTableDataService {
     let params: URLSearchParams = new URLSearchParams();
     let tableparameters = table.parameters[0];
     for (let tableparam in tableparameters){
-        console.log("Table:" + table.id + "Mapping Parameter:" + tableparam);
         params.set(tableparam, tableparameters[tableparam]);
     }
 
