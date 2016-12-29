@@ -14,17 +14,20 @@ def lambda_handler(event, context):
     if (event['rowsSkip']==""):
         rowsSkip = 0
     else:
-		rowsSkip = event['rowsSkip']
-		
-    if (event['rowsTake']==""):
-        rowsTake = 0
+        rowsSkip = event['rowsSkip']
+        
+    if (event['rowsTake']==''):
+        rowsTake = 2000000000 # null means everything, there is no limitation
+    elif (event['rowsTake'] == '0'):
+        return
     else:
         rowsTake = event['rowsTake']
-	
+
     qry = qry.replace('$[shiftStartDateTime]', event['shiftStartDateTime'])
     qry = qry.replace('$[shiftDuration]', event['shiftDuration'])
     qry = qry.replace('$[rowsSkip]', rowsSkip)
     qry = qry.replace('$[rowsTake]', rowsTake)
+    qry = qry.replace('$[minimumBatteryPercentageThreshold]', event['minimumBatteryPercentageThreshold'])
     
     qry = qry.replace(chr(10), '').replace(chr(13), '\\n').replace(chr(9), '\\t')
 
@@ -38,6 +41,8 @@ def lambda_handler(event, context):
     }"""
 
     try:
+        if (event['minimumBatteryPercentageThreshold'] == ''):
+            raise ValueError('Error: Please specify minimumBatteryPercentageThreshold parameter')
         conn = connFunc.invoke(
         FunctionName = 'arn:aws:lambda:us-east-1:984500282156:function:executeQuery',
         Payload = param)

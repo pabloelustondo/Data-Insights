@@ -1,15 +1,15 @@
 CREATE temporary TABLE tbl1
                 (
-                	devid VARCHAR(80) NOT NULL ENCODE lzo DISTKEY,
-                	time_stamp timestamp,
-                	occ INTEGER NOT NULL ENCODE delta,
-                	intvalue int,
-	                LastValue int
+                devid VARCHAR(80) NOT NULL ENCODE lzo DISTKEY,
+                time_stamp timestamp,
+                occ INTEGER NOT NULL ENCODE delta,
+                intvalue int,
+                LastValue int
                 )
             SORTKEY
                 (
-                	devid,
-                	time_stamp
+                devid,
+                time_stamp
                 );
         insert into tbl1 
         (
@@ -19,10 +19,9 @@ CREATE temporary TABLE tbl1
                 )
             select devid, time_stamp, 
 case 
-	when intvalue-lead(intvalue, 1) over (
-				partition by devid 
-					order by time_stamp)<0 then 1 -- device has begun charging
-	else 0 -- device is discharging
+    when intvalue-lead(intvalue, 1) over (partition by devid order by time_stamp)<0 
+            OR (intvalue < $[minimumBatteryPercentageThreshold]) then 1 -- device got charged
+    else 0 -- device is discharging or on charger
 end occ, intvalue
 , last_value(intvalue) over (partition by DevId order by time_stamp rows between unbounded preceding and unbounded following) LastValue
 from devstatint d, variables
