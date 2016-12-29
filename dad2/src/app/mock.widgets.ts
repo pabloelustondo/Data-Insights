@@ -1,5 +1,5 @@
 /**
- * Created by dister on 12/14/2016.
+ * Created by 6pablo elustondo cd 201
  */
 import { DadWidget } from './widget.component';
 
