@@ -4,6 +4,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Net;
+using System.Text;
 
 
 namespace Soti.MCDP.DataProcess
@@ -168,22 +169,26 @@ namespace Soti.MCDP.DataProcess
         private void SendData2Ida(Data4Ida ida4Data)
         {
             //// TODO: is too bad that here we will send the post one by one... we need to send a chunk..and we are sending one by one
-            foreach (var data in ida4Data.data)
+            //foreach (var data in ida4Data.data)
+            //{
+            string result = string.Empty;
+            StringBuilder json = new StringBuilder();
+            json.Append("{\"stats\":");
+            json.Append(Newtonsoft.Json.JsonConvert.SerializeObject(ida4Data.data));
+            json.Append("}");
+
+            string url = this.idaUrl;
+            using (var client = new WebClient())
             {
-                string result = string.Empty;
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
-                string url = this.idaUrl;
-                using (var client = new WebClient())
-                {
-                    client.Headers["x-api-key"] = "blah";
-                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                client.Headers["x-api-key"] = "blah";
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
 
-                    Log("http request to send            url: " + url + "           data: " + json);
-                    result = client.UploadString(url, "POST", json);
+                Log("http request to send            url: " + url + "           data: " + json);
+                result = client.UploadString(url, "POST", json.ToString());
 
-                    // client.UploadString will rise a web exception is communication did not go well (sure?)
-                }
+                // client.UploadString will rise a web exception is communication did not go well (sure?)
             }
+            //}
         }
     }
 }
