@@ -1,5 +1,5 @@
 /**
- * Created by dister on 2016-12-06.
+ * Created by pablo elustondo on 2016-12-06.
  */
 import { DadChart } from './chart.component';
 

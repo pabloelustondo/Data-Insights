@@ -1,5 +1,5 @@
 /**
- * Created by dister on 12/14/2016.
+ * Created by pablo elustodo on 12/14/2016.
  */
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChart } from "./chart.component";

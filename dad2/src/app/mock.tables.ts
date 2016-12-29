@@ -1,5 +1,5 @@
 /**
- * Created by dister on 12/14/2016.
+ * Created by pablo elustondo on 12/14/2016.
  */
 import { DadTable } from './table.component';
 import { DadTableColumn, DadTableColumnType  } from "./table.model"

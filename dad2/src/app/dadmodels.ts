@@ -1,5 +1,5 @@
 /**
- * Created by dister on 12/7/2016.
+ * Created by pablo elustondo on 12/7/2016.
  */
 import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
