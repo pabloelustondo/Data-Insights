@@ -67,16 +67,16 @@ export class ListDevicesNotSurvivedShiftController {
             },
         ]
     })
-    public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date ): Promise<SDS> {
+    public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date,  minimumBatteryPercentageThreshold: number ): Promise<SDS> {
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
         let xqs = {};
         if (rowsTake < 0 || rowsSkip < 0) {
             rowsTake = null;
             rowsSkip = null;
-            xqs = {shiftDuration: shiftDuration, rowsSkip: 'null', rowsTake: 'null', shiftStartDateTime : shiftDateTimeString};
+            xqs = {shiftDuration: shiftDuration, rowsSkip: 'null', rowsTake: 'null', shiftStartDateTime : shiftDateTimeString, minimumBatteryPercentageThreshold:  minimumBatteryPercentageThreshold};
         } else {
-            xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString};
+            xqs = {shiftDuration: shiftDuration, rowsSkip: rowsSkip, rowsTake: rowsTake, shiftStartDateTime : shiftDateTimeString, minimumBatteryPercentageThreshold:  minimumBatteryPercentageThreshold};
         }
 
 

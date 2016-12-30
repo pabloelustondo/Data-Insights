@@ -1,5 +1,5 @@
 /**
- * Created by dister on 12/14/2016.
+ * Created by pablo elustodo on 12/14/2016.
  */
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChart } from "./chart.component";
@@ -56,32 +56,6 @@ export class DadTableComponent implements OnInit {
   data: any;
   chartData(row,col){
     return JSON.parse(row[col.DataSource]);
-  }
-
-  miniChartData(){
-    return [
-      {NumberOfDevices: "2",
-        Percentage: "0.00236127508854781",
-        Rng: "11-20"},
-      {NumberOfDevices:"5",
-        Percentage: "0.00590318772136953",
-        Rng: "21-30"},
-      {NumberOfDevices:"20",
-        Percentage: "0.00590318772136953",
-        Rng: "31-40"},
-      {NumberOfDevices:"10",
-        Percentage: "0.00590318772136953",
-        Rng: "41-50"},
-      {NumberOfDevices:"34",
-        Percentage: "0.00590318772136953",
-        Rng: "51-60"},
-      {NumberOfDevices:"67",
-        Percentage: "0.00590318772136953",
-        Rng: "61-70"},
-      {NumberOfDevices:"147",
-        Percentage: "0.00590318772136953",
-        Rng: "71-80"}
-    ];
   }
 
   constructor(private dadTableDataService: DadTableDataService,

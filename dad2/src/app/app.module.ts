@@ -9,10 +9,6 @@ import { DadChartComponent } from "./chart.component";
 import { DadWidgetComponent } from "./widget.component";
 import { DadConfigComponent }   from './configuration.component';
 import { DadTableComponent }   from './table.component';
-import { DatePickerModule } from 'ng2-datepicker';
-import { DateTimePickerModule } from 'ng2-date-time-picker';
-import {DropDown} from "./NumberDropDown";
-import {SelectModule} from "angular2-select";
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -25,9 +21,6 @@ let LocalStorageServiceConfig = {
     BrowserModule,
     FormsModule,
     HttpModule,
-    DateTimePickerModule,
-    DatePickerModule,
-    SelectModule,
     RouterModule.forRoot([
       {
         path:'',
@@ -44,8 +37,8 @@ let LocalStorageServiceConfig = {
     ])
   ],
   declarations: [
-    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent, DadWidgetComponent, DadTableComponent, DropDown
-
+    DadAppComponent, DadComponent, DadChartComponent, DadConfigComponent,
+    DadWidgetComponent, DadTableComponent
   ],
   providers: [],
   bootstrap: [DadAppComponent]

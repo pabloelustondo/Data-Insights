@@ -16,7 +16,7 @@ export class MultiplePostsController {
      * Post a unit of data to be stored in the cloud analytics database
      */
 
-    @Post('/MultiplePosts')
+    @Post('MultiplePosts')
     @Example<any>({
         headers: {
             'X-API-key': 'Future Private Access Key',
@@ -34,9 +34,15 @@ export class MultiplePostsController {
     })
     public async Create(request: ListBatteryStats): Promise<SDS> {
 
+        if (request.stats.length > 500) {
+            throw new Error('Maximum Record input Length Exceeded: ' + request.stats.length);
+        }
+        if (request.stats.length < 1) {
+            throw new Error('Minimum Record input Length of 1 not met: ' + request.stats.length);
+        }
         awsPush.putRecordBatch(request);
         return  {
-            metadata: 'Thanks a lot',
+            metadata: 'Thanks a lot: records that will be sent = ' + request.stats.length,
             createdAt: new Date()
         };
     }

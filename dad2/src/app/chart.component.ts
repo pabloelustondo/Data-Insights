@@ -1,9 +1,9 @@
 /**
- * Created by dister on 12/05/2016.
+ * Created by pablo elustondo Nov 2016
  */
 import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
 import { DadChartDataService } from './data.service'
-import {Mapper} from "./mapper";
+import { Mapper } from "./mapper";
 
 declare var d3, c3: any;
 
@@ -32,7 +32,7 @@ export class DadChart {
             <!-- Date From input -->
             <div>
               <label style="color: #0A0A0A">Date From: </label>
-             <ng2-datepicker style="color: black" [(ngModel)]="firstDate"></ng2-datepicker>
+             <input type="date" style="color: black" [(ngModel)]="chart.parameters[0].dateFrom"/>
              <!--<input [(ngModel)]="chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd">-->
 
             </div>
@@ -40,7 +40,7 @@ export class DadChart {
             <div>
               <label style="color: #0A0A0A">Date To: </label>
               <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
-              <ng2-datepicker style="color: black;" [(ngModel)]="secondDate"></ng2-datepicker>
+              <input type="date" style="color: black;" [(ngModel)]="chart.parameters[0].dateTo"/>
             </div>
             <!-- refresh button -->
             <br/>
@@ -103,11 +103,6 @@ export class DadChartComponent implements OnInit {
   }
 
     changeConfig(event){
-      //please remove this code from here
-      this.chart.parameters[0].dateFrom = this.firstDate.formatted;
-      this.chart.parameters[0].dateTo = this.secondDate.formatted;
-
-
       this.dadChartDataService.getChartData(this.chart).then(
         data => {
           this.data = data.data;

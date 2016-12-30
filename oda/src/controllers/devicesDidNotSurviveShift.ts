@@ -40,15 +40,18 @@ export class CountDevicesNotSurvivedShiftController {
         ],
         'data': [
             {
-                'CountDevicesNotLastedShift': '25',
-                'TotalActiveDevices': '100'
+                'CountDevicesLastedShift': '106',
+                'CountDevicesNotLastedShift': '33',
+                'CountDevicesChargingEntireShift': '76',
+                'CounTotalActiveDevices': '215'
             }
         ]
     })
-    public async Get(shiftDuration: number, shiftStartDateTime: Date): Promise<SDS> {
+    public async Get(shiftDuration: number, shiftStartDateTime: Date, minimumBatteryPercentageThreshold: number): Promise<SDS> {
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-        const xqs = {shiftDuration: shiftDuration, shiftStartDateTime : shiftDateTimeString};
+        const xqs = {shiftDuration: shiftDuration, shiftStartDateTime : shiftDateTimeString,
+            minimumBatteryPercentageThreshold : minimumBatteryPercentageThreshold};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-deviceNotLasted'];
 
@@ -63,7 +66,8 @@ export class CountDevicesNotSurvivedShiftController {
         };
 
         let p = await rp(options); // request library used
-        let mData = ['CountDevicesNotLastedShift: int', 'TotalActiveDevices: int'];
+        let mData = ['CountDevicesLastedShift: int', 'CountDevicesNotLastedShift: int',
+            'CountDevicesChargingEntireShift: int', 'TotalActiveDevices: int'];
 
         const user: SDS = {
             createdAt: new Date(),
