@@ -133,7 +133,7 @@ export class DadChartComponent implements OnInit {
         let c3Config = {
         size: {
           height: chartConfig.height,
-          width: chartConfig.width
+          width: chartConfig.width,
         },
         bindto: '#' + chartConfig.id,
         data: {
@@ -192,6 +192,9 @@ export class DadChartComponent implements OnInit {
         },
         legend: {
           show: true
+        },
+        interaction: {
+          enabled: true
         }
       };
       if(chartConfig.mini){
@@ -204,6 +207,7 @@ export class DadChartComponent implements OnInit {
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;
         c3Config.color.pattern = this.miniChartColor;
+        c3Config.interaction.enabled = false;
       };
       this.c3chart = c3.generate(c3Config);
     };
