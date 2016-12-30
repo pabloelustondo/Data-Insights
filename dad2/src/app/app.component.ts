@@ -7,11 +7,16 @@ import { Router }   from '@angular/router';
 @Component({
   selector: 'dadapp',
   template: `
-    <div><b >SOTI Data Analytics Dashboard</b></div>
+<main>
+    <header>    
+    <nav>
     <a  style="  color:blue; float:left" *ngIf="router.url !== '/config'"  routerLink="/config"><img width="30px" heigth="30px" src="/assets/images/settings.jpg"></a>
     <a  style="  color:blue; float:left" *ngIf="router.url !== '/'"  routerLink=""><img width="30px" heigth="30px" src="/assets/images/dash.png"></a>
-    <br/>   <br/>
+    </nav>
+    <h3>{{title}}</h3>
+    </header>
     <router-outlet></router-outlet>
+</main>
   `
 })
 export class DadAppComponent {
@@ -20,5 +25,5 @@ export class DadAppComponent {
   }
 
   router: Router;
-  title = 'Data Analytics Dashboard';
+  title = 'SOTI Data Analytics Dashboard';
 }
