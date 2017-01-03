@@ -5,6 +5,7 @@ import './controllers/devicesDidNotSurviveShift';
 import './controllers/listOfDevicesDidNotSurviveShift';
 import './controllers/deviceList';
 
+import * as logger from 'winston';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as methodOverride from 'method-override';

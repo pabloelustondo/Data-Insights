@@ -11,7 +11,8 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class ListDevicesNotSurvivedShiftController {
     /**
-     * List of all devices that may have not lasted the full shift for a given date, shift time, and shift duration.
+     * List of all devices that may have not lasted the full shift for a given shift date-time, shift duration, and the
+     * threshold the battery must fall under.
      *
      * The user can request a complete list by assigning the value -1 to rowsSkip and rowsTake or get a partial list
      * by assigning an appropriate number to the rowsSkip and rowsTake fields.
@@ -20,7 +21,7 @@ export class ListDevicesNotSurvivedShiftController {
      * - it's battery was charged or an attempt to charge the device was detected during the shift
      * - if the battery status is reported as 0 at the end of the shift.
      *
-     * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, and rowsTake.
+     * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, rowsTake, and minimumBatteryPercentageThreshold.
      *
      *     shiftDuration: a number representing the length of the shift in hours.
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
@@ -34,6 +35,9 @@ export class ListDevicesNotSurvivedShiftController {
      *
      *     rowsTake; a number corresponding the the number of records to take. Acceptable values are
      *     all numbers greater than or equal to -1.
+     *
+     *     minimumBatteryPercentageThreshold: the minimum battery percentage the device has to fall below in
+     *     order to be included in the listOfDevicesDidNotSurviveShift
      */
 
     @Get('Battery/Summary/listOfDevicesDidNotSurviveShift')
@@ -56,7 +60,7 @@ export class ListDevicesNotSurvivedShiftController {
                 'BatteryChargeLevel': '[100, 100, 100, 90, 90, 90, 90, 30, 0, 0, 0, 0, 10, 70, 30, 20]'
             },
             {
-                'DeviceId': 3,
+                'DeviceId': 'nopqrs',
                 'DeviceName': 'Samsung S3',
                 'BatteryChargeLevel': '[100,90,80,70,60,50,40,30,20,10,0,0, 0, 0, 0, 0]'
             },

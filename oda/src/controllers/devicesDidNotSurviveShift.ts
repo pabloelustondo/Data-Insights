@@ -5,16 +5,22 @@ import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from '../models/user';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
+
 import * as querystring from 'querystring';
 
 import * as rp from 'request-promise';
 @Route('Devices')
 export class CountDevicesNotSurvivedShiftController {
     /**
-     * This API returns the number of devices that may not have lasted the full shift for a given date, time, and the shift duration.
-     * It also returns the total number of devices that were active in the shift. An active device is any device that
-     * reported a battery status for the defined shift duration. If the device was off or did not report battery status
-     * it is not included in the data returned.
+     * This API returns:
+     *  1) CountDevicesLastedShift - the number of devices which lasted the full shift.
+     *  2) CountDevicesNotLastedShift - the number of devices that may not have lasted the full shift
+     *  3) CountDevicesChargingEntireShift - The number of devices that were reported as constantly charging during the
+     *     entire shift.
+     *  4) CountTotalActiveDevices: The sum of all devices presented in the first three returned values.
+     *
+     * An active device is any device that reported a battery status for the defined shift duration.
+     * If the device was off or did not report battery status it is not included in the data returned.
      *
      * A device is added to the CountDevicesNotLastedShift if:
      * - it has been charged or an attempt to charge the device has been detected during the shift
@@ -29,24 +35,27 @@ export class CountDevicesNotSurvivedShiftController {
      *     shiftStartTime: a date time must be in date format specified by ISO-8601 format (YYYY-MM-DDTHH:MM:SS).
      *     The time is in UTC time format.
      *
+     *     minimumBatteryPercentageThreshold: the minimum battery percentage the device has to fall below in
+     *     order to be included in the CountDevicesNotLastedShift
+     *
      */
 
     @Get('Battery/Summary/countOfDevicesDidNotSurviveShift')
     @Example<any>({
-        'createdAt': '2016-11-29T20:30:21.385Z',
-        'metadata': [
+        createdAt: '2016-11-29T20:30:21.385Z',
+        metadata: [
+            'CountDevicesLastedShift: int',
             'CountDevicesNotLastedShift: int',
-            'TotalActiveDevices: int'
+            'CountDevicesChargingEntireShift: int',
+            'CountTotalActiveDevices: int'
         ],
-        'data': [
-            {
+        data: [ {
                 'CountDevicesLastedShift': '106',
                 'CountDevicesNotLastedShift': '33',
                 'CountDevicesChargingEntireShift': '76',
-                'CounTotalActiveDevices': '215'
-            }
-        ]
-    })
+                'CountTotalActiveDevices': '215'
+            }]
+        })
     public async Get(shiftDuration: number, shiftStartDateTime: Date, minimumBatteryPercentageThreshold: number): Promise<SDS> {
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
