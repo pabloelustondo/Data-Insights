@@ -4,6 +4,7 @@ import { Routes,
 
 import { DadComponent }   from './dashboard.component';
 import { DadConfigComponent }   from './configuration.component';
+import { DadTableComponent }   from './table.component';
 
 const routes: Routes = [
     {
@@ -25,7 +26,15 @@ const routes: Routes = [
                 data: {
                     title: 'Configuration'
                 }
-            }]
+            },
+            {
+                path: 'table/:id',
+                component: DadTableComponent,
+                data: {
+                    title: 'TableView'
+                }
+            }
+        ]
     }
 ];
 
