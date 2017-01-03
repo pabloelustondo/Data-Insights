@@ -11,6 +11,9 @@ import { DadComponent }       from './dashboard.component';
 import { DadRoutingModule }   from './dad-routing.module';
 import { CommonModule } from '@angular/common'; //<-- This one
 import { DropdownModule } from 'ng2-bootstrap';
+import { DatepickerModule } from 'ng2-bootstrap/components/datepicker';
+import { TimepickerModule }         from 'ng2-bootstrap/components/timepicker';
+
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -25,7 +28,9 @@ let LocalStorageServiceConfig = {
         CommonModule,
         FormsModule,
         HttpModule,
-        DropdownModule
+        DropdownModule,
+        DatepickerModule,
+        TimepickerModule
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
         DadWidgetComponent, DadTableComponent ]

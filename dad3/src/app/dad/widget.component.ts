@@ -51,9 +51,16 @@ export class DadWidget {
                      
             <div *ngFor="let uiparam of widget.uiparameters">
                <div><label>{{uiparam.Name}}</label></div>
-               <div *ngIf="uiparam.Type == dadParameterType.DateTime"><input type="date" [(ngModel)]="uiparam.ValueD"/><input type="time" [(ngModel)]="uiparam.ValueT"/></div>
-               <div *ngIf="uiparam.Type == dadParameterType.Duration"><input type="number" [(ngModel)]="uiparam.Value"/></div>
-               <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" [(ngModel)]="uiparam.Value"/></div>   
+               <div *ngIf="uiparam.Type == dadParameterType.DateTime">
+               <!--<input type="date" [(ngModel)]="uiparam.ValueD"/><input type="time" [(ngModel)]="uiparam.ValueT"/>-->
+               <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"></datepicker>
+               </div>
+
+               <div *ngIf="uiparam.Type == dadParameterType.Duration">
+               <!--<input type="number" [(ngModel)]="uiparam.Value"/>-->
+               <timepicker [(ngModel)]="mytime" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>
+               </div>
+               <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>   
             </div>
                 <i class="glyphicons glyphicons-remove x1" style="float:right"></i>
             </div>     
