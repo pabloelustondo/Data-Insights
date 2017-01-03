@@ -40,11 +40,13 @@ export class DadWidget {
                             <button class="dropdown-item"> <div (click)="onRefresh('lalal')">Refresh</div></button>
                         </div>
                     </div>
+                           <h4 *ngIf="data" class="mb-0">{{data[widget.metrics[0].DataSource]}} of {{data[widget.metrics[1].DataSource]}}</h4>
+                           <p>{{widget.metrics[0].Name}}</p>
                      <div>        
-          <div *ngIf="data">
-               <div *ngFor="let metric of widget.metrics"><a style="color:blue;" href="/table"> 
-               <h4>{{metric.Name}}: {{ data[metric.DataSource] }}</h4></a></div>                     
-          </div>
+                <div *ngIf="data">
+                <h4 *ngIf="widget.metrics.length>2">{{widget.metrics[2].Name}}: {{  data[widget.metrics[2].DataSource] }}</h4>                  
+                </div>
+                
           <div *ngIf="editMode">  
                      
             <div *ngFor="let uiparam of widget.uiparameters">
