@@ -1,7 +1,3 @@
-
-/**
- * THIS IS GENERATED CODE - DO NOT EDIT
- */
 /* tslint:disable */
 import { ValidateParam } from 'tsoa';
 import { SDSController } from './controllers/intialChargeLevelController';
@@ -59,6 +55,7 @@ export function RegisterRoutes(app: any) {
         const params = {
             'shiftDuration': { typeName: 'number', required: true },
             'shiftStartDateTime': { typeName: 'datetime', required: true },
+            'minimumBatteryPercentageThreshold': { typeName: 'number', required: true },
         };
 
         let validatedParams: any[] = [];
@@ -77,6 +74,7 @@ export function RegisterRoutes(app: any) {
             'rowsSkip': { typeName: 'number', required: true },
             'rowsTake': { typeName: 'number', required: true },
             'shiftStartDateTime': { typeName: 'datetime', required: true },
+            'minimumBatteryPercentageThreshold': { typeName: 'number', required: true },
         };
 
         let validatedParams: any[] = [];
