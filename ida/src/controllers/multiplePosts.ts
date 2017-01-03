@@ -40,7 +40,10 @@ export class MultiplePostsController {
         if (request.stats.length < 1) {
             throw new Error('Minimum Record input Length of 1 not met: ' + request.stats.length);
         }
+
+        console.time('awsPutRecord');
         awsPush.putRecordBatch(request);
+        console.timeEnd('awsPutRecord');
         return  {
             metadata: 'Thanks a lot: records that will be sent = ' + request.stats.length,
             createdAt: new Date()
