@@ -53,7 +53,7 @@ export const WIDGETS: DadWidget[] = [
     parameters: [
   {
     shiftStartDateTime:"2016-08-25T09:00",
-    shiftDuration: "12.5",
+    shiftDuration: "8",
     minimumBatteryPercentageThreshold: 40
   }],
   uiparameters: [
