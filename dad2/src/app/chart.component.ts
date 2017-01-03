@@ -125,21 +125,22 @@ export class DadChartComponent implements OnInit {
         d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
         }).remove();
-        let c3Config = {
+      let c3Config = {
         size: {
           height: chartConfig.height,
-          width: chartConfig.width,
+          width: chartConfig.width
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [chartData.Dimension],
+          json: [chartData.Metric],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           selection:{
+            grouped: false,
             enabled:true
           },
-          type: 'bar',
+          type: 'bar'
         },
         color: {
           pattern: this.colorPalette,
@@ -216,9 +217,9 @@ export class DadChartComponent implements OnInit {
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [ chartData.Dimension ],
+          json: [ chartData.Metric ],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           type:'pie',
         },
@@ -253,9 +254,9 @@ export class DadChartComponent implements OnInit {
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [chartData.Dimension],
+          json: [chartData.Metric],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           selection:{
             enabled:true
@@ -343,7 +344,7 @@ export class DadChartComponent implements OnInit {
             ['Range of Devices', 1, 10, 90, 70, 85, 5, 100]
           ],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           selection:{
             enabled:true
@@ -413,9 +414,9 @@ export class DadChartComponent implements OnInit {
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [ chartData.Dimension ],
+          json: [ chartData.Metric ],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           type:'donut',
         },

@@ -59,6 +59,7 @@ export function RegisterRoutes(app: any) {
         const params = {
             'shiftDuration': { typeName: 'number', required: true },
             'shiftStartDateTime': { typeName: 'datetime', required: true },
+            'minimumBatteryPercentageThreshold': { typeName: 'number', required: true },
         };
 
         let validatedParams: any[] = [];
@@ -77,6 +78,7 @@ export function RegisterRoutes(app: any) {
             'rowsSkip': { typeName: 'number', required: true },
             'rowsTake': { typeName: 'number', required: true },
             'shiftStartDateTime': { typeName: 'datetime', required: true },
+            'minimumBatteryPercentageThreshold': { typeName: 'number', required: true },
         };
 
         let validatedParams: any[] = [];
