@@ -13,20 +13,22 @@ import * as rp from 'request-promise';
 export class CountDevicesNotSurvivedShiftController {
     /**
      * This API returns:
-     *  1) CountDevicesLastedShift - the number of devices which lasted the full shift.
-     *  2) CountDevicesNotLastedShift - the number of devices that may not have lasted the full shift
-     *  3) CountDevicesChargingEntireShift - The number of devices that were reported as constantly charging during the
+     *  1. CountDevicesLastedShift - the number of devices which lasted the full shift. A device is considered to be have
+     *     survived the shift if:
+     *     - it was not charged during the shift and
+     *     - it's battery did not go below the minimum threshold battery level.
+     *  2. CountDevicesNotLastedShift - the number of devices that may not have lasted the full shift. A device is added to the
+     *      CountDevicesNotLastedShift if:
+     *     - it has been charged or an attempt to charge the device has been detected during the shift or
+     *     - if the devices' battery charge was reported below the minimum threshold
+     *  3. CountDevicesChargingEntireShift - The number of devices that were reported as constantly charging during the
      *     entire shift.
-     *  4) CountTotalActiveDevices: The sum of all devices presented in the first three returned values.
+     *  4. CountTotalActiveDevices: The sum of all devices presented in the first three returned values.
      *
      * An active device is any device that reported a battery status for the defined shift duration.
      * If the device was off or did not report battery status it is not included in the data returned.
      *
-     * A device is added to the CountDevicesNotLastedShift if:
-     * - it has been charged or an attempt to charge the device has been detected during the shift
-     * - if it's battery drained to 0% at the end of the shift.
-     *
-     * The required fields are shiftStartDateTime and shiftDuration field.
+     * The required fields are shiftStartDateTime, shiftDuration, and minimumBatteryThreshold field.
      *
      *     shiftDuration: a number representing the length of the shift in hours.
      *     Eg. A shift of 8 hours can be represented as 8, 8.0
@@ -75,8 +77,10 @@ export class CountDevicesNotSurvivedShiftController {
         };
 
         let p = await rp(options); // request library used
-        let mData = ['CountDevicesLastedShift: int', 'CountDevicesNotLastedShift: int',
-            'CountDevicesChargingEntireShift: int', 'TotalActiveDevices: int'];
+        let mData = ['CountDevicesLastedShift: int',
+            'CountDevicesNotLastedShift: int',
+            'CountDevicesChargingEntireShift: int',
+            'TotalActiveDevices: int'];
 
         const user: SDS = {
             createdAt: new Date(),

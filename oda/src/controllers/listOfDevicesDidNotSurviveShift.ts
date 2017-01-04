@@ -12,14 +12,14 @@ import * as rp from 'request-promise';
 export class ListDevicesNotSurvivedShiftController {
     /**
      * List of all devices that may have not lasted the full shift for a given shift date-time, shift duration, and the
-     * threshold the battery must fall under.
+     * battery level the device must fall under.
      *
      * The user can request a complete list by assigning the value -1 to rowsSkip and rowsTake or get a partial list
      * by assigning an appropriate number to the rowsSkip and rowsTake fields.
      *
      * A device is added to the list if:
-     * - it's battery was charged or an attempt to charge the device was detected during the shift
-     * - if the battery status is reported as 0 at the end of the shift.
+     * - it's battery was charged or an attempt to charge the device was detected during the shift or
+     * - if the battery charge is reported below the minimum threshold.
      *
      * Required fields are: shiftDuration, shiftStartDateTime, rowsSkip, rowsTake, and minimumBatteryPercentageThreshold.
      *
@@ -75,7 +75,13 @@ export class ListDevicesNotSurvivedShiftController {
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
         let xqs = {};
-        if (rowsTake < 0 || rowsSkip < 0) {
+
+        if (rowsTake < -1 || rowsSkip < -1) {
+            throw new Error('invalid row skip and rows take');
+        }
+
+
+        if (rowsTake === -1 || rowsSkip === -1) {
             rowsTake = null;
             rowsSkip = null;
             xqs = {shiftDuration: shiftDuration, rowsSkip: 'null', rowsTake: 'null', shiftStartDateTime : shiftDateTimeString, minimumBatteryPercentageThreshold:  minimumBatteryPercentageThreshold};

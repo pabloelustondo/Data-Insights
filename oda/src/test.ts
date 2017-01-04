@@ -14,7 +14,7 @@ let expect = chai.expect;
     @test('should pass getBatteryDischarge code')
     public assert_pass_getBatteryDischarge(done: Function ) {
         chai.use(chaiHttp);
-        chai.request(server.app).get('/Devices/Battery/Summary/DischargeRate?dateFrom=2016-08-15&dateTo=2016-08-25')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/DischargeRate?dateFrom=2016-08-15&dateTo=2016-08-25')
             .end((err: any, res: any) => {
                 expect(err).to.be.null;
                 expect(res).to.have.status(200);
@@ -72,7 +72,7 @@ let expect = chai.expect;
 
 
         chai.use(chaiHttp);
-        chai.request(server.app).get('/Devices/Battery/Summary/DischargeRate?dateFrom=2016-08-15&dateTo=2016-08-25')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/DischargeRate?dateFrom=2016-08-15&dateTo=2016-08-25')
             .end((err: any, res: any) => {
                 expect(err).to.be.null;
                 expect(res).to.have.status(200);
@@ -86,7 +86,7 @@ let expect = chai.expect;
         chai.use(chaiHttp);
 
 
-        chai.request(server.app).get('/Devices/Battery/Summary/DischargeRate')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/DischargeRate')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(400);
                 done(new Error('Input parameters not defined'));
@@ -97,7 +97,7 @@ let expect = chai.expect;
     public assert_fail_getNumberOfDevices(done: Function ) {
         chai.use(chaiHttp);
 
-        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/InitialChargeLevels')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(400);
                 done(new Error('No date provided test case failed'));
@@ -109,7 +109,7 @@ let expect = chai.expect;
     public assert_pass_getNumberOfDevices(done: Function ) {
         chai.use(chaiHttp);
 
-        chai.request(server.app).get('/Devices/Battery/Summary/InitialChargeLevels?dateFrom=2019-08-15&dateTo=2019-08-25')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/InitialChargeLevels?dateFrom=2019-08-15&dateTo=2019-08-25')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(200);
                 expect(res).to.be.json;
@@ -122,7 +122,7 @@ let expect = chai.expect;
     @test('Should pass devicesDidNotSurviveShift call status 200 - with shift duration as double')
     public assert_fail_getDevicesNotLastedShift_status_double(done: Function ) {
         chai.use(chaiHttp);
-        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.5')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.5')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(400);
 
@@ -134,18 +134,18 @@ let expect = chai.expect;
     public assert_fail_getDevicesNotLastedShift_status_int(done: Function ) {
         chai.use(chaiHttp);
 
-        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.5')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.5')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(400);
                 done();
             });
     }
 
-    @test('Should pass devicesDidNotSurviveShift call status 200 - with both parameters provided')
+    @test('Should pass devicesDidNotSurviveShift call status 200 - with all parameters')
     public assert_pass_getDevicesNotLastedShift_status_dateTime(done: Function ) {
         chai.use(chaiHttp);
 
-        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.2&shiftStartTime=2016-08-24T08%3A00%3A00.000Z')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.2&shiftStartTime=2016-08-24T08%3A00%3A00.000Z')
             .end((err: any, res: any) => {
                 expect(res).to.have.status(200);
                 expect(err).to.be.null;
@@ -153,15 +153,15 @@ let expect = chai.expect;
             });
     }
 
-    @test('Should pass devicesDidNotSurviveShift call status 200 - with both parameters provided')
+    @test('Should pass devicesDidNotSurviveShift call status 200 - with all param and validate data')
     public assert_pass_getDevicesNotLastedShift_content_dateTime(done: Function ) {
 
-        chai.request(server.app).get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.2&shiftStartTime=2016-08-24T08%3A00%3A00.000Z')
+        chai.request('http://localhost:3002').get('/Devices/Battery/Summary/DevicesNotSurvivedShift?duration=12.2&shiftStartTime=2016-08-24T08%3A00%3A00.000Z')
             .end((err: any, res: any) => {
                 expect(res).to.be.json;
                 let jsonResponse = res.body;
                 let responseText = jsonResponse['data'];
-                let expectedJSONString  = '[{"CountDevicesNotLastedShift":"62","TotalActiveDevices":"219"}]';
+                let expectedJSONString  = '[{"CountDevicesLastedShift":"107","CountDevicesNotLastedShift":"93","CountTotalActiveDevices":"221","CountDevicesChargingEntireShift":"21"}]';
                 expect(JSON.stringify(responseText)).to.equal(expectedJSONString);
                 expect(err).to.be.null;
                 done();
