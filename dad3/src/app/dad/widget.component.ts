@@ -40,7 +40,11 @@ export class DadWidget {
                             <button class="dropdown-item"> <div (click)="onRefresh('lalal')">Refresh</div></button>
                         </div>
                     </div>
-                           <h4 *ngIf="data" class="mb-0">{{data[widget.metrics[0].DataSource]}} of {{data[widget.metrics[1].DataSource]}}</h4>
+                           <h4 *ngIf="data" class="mb-0">
+                           <a href="#/dad/table/1">
+                           <span style="color:white; text-decoration: underline; ">{{data[widget.metrics[0].DataSource]}} </span>
+                           </a>
+                           of {{data[widget.metrics[1].DataSource]}}</h4>
                            <p>{{widget.metrics[0].Name}}</p>
                      <div>        
                 <div *ngIf="data">
@@ -50,18 +54,14 @@ export class DadWidget {
           <div *ngIf="editMode">  
                      
             <div *ngFor="let uiparam of widget.uiparameters">
-               <div><label>{{uiparam.Name}}</label></div>
+               <div><label>{{uiparam.Name}}  V:{{uiparam.Value}} VT:{{uiparam.Value['T']}} VD:{{uiparam.Value['D']}}</label></div>
                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
-               <input type="date" [(ngModel)]="uiparam.ValueD"/>
-               <!--<datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"></datepicker>-->
-                 
-               <timepicker [(ngModel)]="mytime" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>
-               <!--<input type="time" [(ngModel)]="uiparam.ValueT"/>-->
+               <input type="date" [(ngModel)]="uiparam.Value['D']"/>                     
+               <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>       
                </div>
-             
+
                <div *ngIf="uiparam.Type == dadParameterType.Duration">
-               <!--<input type="number" [(ngModel)]="uiparam.Value"/>-->
-               <timepicker [(ngModel)]="mytime" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>
+               <timepicker [(ngModel)]="uiparam.Value" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>
                </div>
                <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>   
             </div>
@@ -69,7 +69,6 @@ export class DadWidget {
             <br/><br/>
             <div class="col-md-4 text-center">
             <button style="border-color:white; color:white; margin-left:-15px" type="button" class="btn btn-outline-primary">Refresh</button>
-            </div>
             </div>     
 
     </div>
@@ -139,15 +138,51 @@ export class DadWidgetComponent implements OnInit {
     );
   }
 
-  mapDuration(durationString:string):number{
+    mapParameters2model():void{
+        //this action will map UI parameters into model parameters
 
-    let durationLong: number = +durationString.split(":")[0];
-    durationLong += +durationString.split(":")[1]/60;
-    return durationLong;
-  }
+
+    }
+
+    mapParameters2ui():void{
+        //this action will map model parameters into UI parameters
+        let parameters = this.widget.parameters[0];   //maybe we need to stop having a list?
+        for (let uiparam of this.widget.uiparameters) {
+            if (uiparam.Type === this.dadParameterType.DateTime) {
+                let d = new Date(parameters[uiparam.DataSource]);
+                let yyyy = d.getFullYear();
+                let m = d.getMonth()+1;
+                let day = d.getDate();
+                let mm = (m <10 )? "0" + m : "" + m;
+                let dd = (day <10 )? "0" + day : "" + day;
+                uiparam.Value = {};
+                uiparam.Value['D'] = yyyy + "-" + mm + "-" + dd;
+                uiparam.Value['T'] = d;
+            }
+            if (uiparam.Type === this.dadParameterType.Number) {
+                uiparam.Value = parameters[uiparam.DataSource];
+            }
+            if (uiparam.Type === this.dadParameterType.Duration) {
+                let Iduration: number = parameters[uiparam.DataSource];
+                let Tduration = this.mapLongDuration2Date(Iduration);
+                uiparam.Value = Tduration;
+            }
+        }
+    }
+
+    mapLongDuration2Date ( duration:number): Date {
+
+      let hrs = Math.floor(duration);
+      let mins = (duration - hrs) * 60;
+      let time = new Date();
+      time.setHours(hrs,mins);
+      return time;
+    }
 
   ngOnInit() {
     console.log("Widgets are loading... :" + this.widget.id);
+    this.mapParameters2ui();
+     // this.mapParameters2ui();
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
         this.data = data.data[0];
