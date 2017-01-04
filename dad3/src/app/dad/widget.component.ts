@@ -54,7 +54,7 @@ export class DadWidget {
           <div *ngIf="editMode">  
                      
             <div *ngFor="let uiparam of widget.uiparameters">
-               <div><label>{{uiparam.Name}}  V:{{uiparam.Value}} VT:{{uiparam.Value['T']}} VD:{{uiparam.Value['D']}}</label></div>
+               <div><label>{{uiparam.Name}}</label></div>
                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
                <input type="date" [(ngModel)]="uiparam.Value['D']"/>                     
                <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>       
@@ -139,8 +139,19 @@ export class DadWidgetComponent implements OnInit {
   }
 
     mapParameters2model():void{
-        //this action will map UI parameters into model parameters
+        //this action will map UI parameters into model parameters back
+        let parameters = this.widget.parameters[0];   //maybe we need to stop having a list?
+        for (let uiparam of this.widget.uiparameters) {
+            if (uiparam.Type === this.dadParameterType.DateTime) {
 
+            }
+            if (uiparam.Type === this.dadParameterType.Number) {
+
+            }
+            if (uiparam.Type === this.dadParameterType.Duration) {
+
+            }
+        }
 
     }
 
@@ -149,7 +160,20 @@ export class DadWidgetComponent implements OnInit {
         let parameters = this.widget.parameters[0];   //maybe we need to stop having a list?
         for (let uiparam of this.widget.uiparameters) {
             if (uiparam.Type === this.dadParameterType.DateTime) {
-                let d = new Date(parameters[uiparam.DataSource]);
+
+
+                let d: Date;
+                if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
+                     let dold = new Date(parameters[uiparam.DataSource]);
+                     let hrs = dold.getHours();
+                     let mins = dold.getMinutes();
+                     let secs  = dold.getSeconds();
+                     d = new Date();
+                     d.setDate(d.getDate() - 1);
+                     d.setHours(hrs,mins,secs);
+                }else{ // we assume that we have a valid date
+                     d = new Date(parameters[uiparam.DataSource]);
+                }
                 let yyyy = d.getFullYear();
                 let m = d.getMonth()+1;
                 let day = d.getDate();
