@@ -149,9 +149,15 @@ export class DadWidgetComponent implements OnInit {
         let parameters = this.widget.parameters[0];   //maybe we need to stop having a list?
         for (let uiparam of this.widget.uiparameters) {
             if (uiparam.Type === this.dadParameterType.DateTime) {
+                let d = new Date(parameters[uiparam.DataSource]);
+                let yyyy = d.getFullYear();
+                let m = d.getMonth()+1;
+                let day = d.getDate();
+                let mm = (m <10 )? "0" + m : "" + m;
+                let dd = (day <10 )? "0" + day : "" + day;
                 uiparam.Value = {};
-                uiparam.Value['D'] = new Date(parameters[uiparam.DataSource]).getDate();
-                uiparam.Value['T'] = new Date(parameters[uiparam.DataSource]).getTime();
+                uiparam.Value['D'] = yyyy + "-" + mm + "-" + dd;
+                uiparam.Value['T'] = d;
             }
             if (uiparam.Type === this.dadParameterType.Number) {
                 uiparam.Value = parameters[uiparam.DataSource];
