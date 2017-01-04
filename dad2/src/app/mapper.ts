@@ -5,8 +5,8 @@ import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 
 export class ChartData{
-  Dimension = {};
-  Metric = [];
+  Metric = {};
+  Dimension = [];
 }
 
 export class Mapper{
@@ -18,13 +18,13 @@ export class Mapper{
     //need to review this idea.. works for now b==metric a=dimension
 
     if (!config.a && !config.b){
-      chartData.Metric.push("#"+index);
-      chartData.Dimension["#"+index] = e;}
+      chartData.Dimension.push("#" + index);
+      chartData.Metric["#" + index] = e;}
 
     if (config.a && config.b){
-    chartData.Metric.push(e[config.a]);
-    chartData.Dimension[e[config.a]] = e[config.b];}
-    index++;
+      chartData.Dimension.push(e[config.a]);
+      chartData.Metric[e[config.a]] = e[config.b];}
+      index++;
   });
     return chartData;
   }

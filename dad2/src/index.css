@@ -1,35 +1,3 @@
-
-.matt-todo-list {}
-.matt-todo-list-item {}
-.matt-todo-list-item-block{
-  height: 30pt;
-  width: 30pt;
-  background-color: #ba9d37;
-}
-.matt-todo-list-item-name{
-  height: 30pt;
-  width: 140pt;
-  background-color: #1F811F;
-}
-.matt-todo-list-item-description{
-  height: 30pt;
-  width: 206pt;
-  background-color: #6fa5d2;
-}
-.matt-todo-list-item-notes{
-  height: 30pt;
-  width: 206pt;
-  background-color: #999999;
-}
-
-
-
-
-
-
-
-
-
 #logo{
   height: 40px;
 }
@@ -128,7 +96,7 @@ body{
 
 
 .footer {
-  position: fixed;
+  height: 40px;
   right: 0;
   bottom: 0;
   left: 0;
@@ -185,7 +153,7 @@ body{
   }
 
   .footer {
-    position: fixed;
+    height: 40px;
     right: 0;
     bottom: 0;
     left: 0;

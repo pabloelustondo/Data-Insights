@@ -109,9 +109,9 @@ export class DadChartComponent implements OnInit {
           let chartData = this.mapper.map(this.chart, this.data);
           this.c3chart.load(
             {
-              json: [chartData.Dimension],
+              json: [chartData.Metric],
               keys: {
-                value: chartData.Metric
+                value: chartData.Dimension
               },
               unload: true,
             });
@@ -125,21 +125,27 @@ export class DadChartComponent implements OnInit {
         d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
         }).remove();
-        let c3Config = {
+      let c3Config = {
         size: {
           height: chartConfig.height,
           width: chartConfig.width
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [chartData.Dimension],
+          json: [chartData.Metric],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           selection:{
+            grouped: false,
             enabled:true
           },
-          type: 'bar',
+          type: 'bar'
+        },
+        bar: {
+          width: {
+            ratio: 0.4
+          },
         },
         color: {
           pattern: this.colorPalette,
@@ -187,6 +193,9 @@ export class DadChartComponent implements OnInit {
         },
         legend: {
           show: true
+        },
+        interaction: {
+          enabled: true
         }
       };
       if(chartConfig.mini){
@@ -199,6 +208,7 @@ export class DadChartComponent implements OnInit {
         c3Config.zoom.enabled = false;
         c3Config.grid.y.show = false;
         c3Config.color.pattern = this.miniChartColor;
+        c3Config.interaction.enabled = false;
       };
       this.c3chart = c3.generate(c3Config);
     };
@@ -212,9 +222,9 @@ export class DadChartComponent implements OnInit {
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [ chartData.Dimension ],
+          json: [ chartData.Metric ],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           type:'pie',
         },
@@ -249,9 +259,9 @@ export class DadChartComponent implements OnInit {
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [chartData.Dimension],
+          json: [chartData.Metric],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           selection:{
             enabled:true
@@ -339,7 +349,7 @@ export class DadChartComponent implements OnInit {
             ['Range of Devices', 1, 10, 90, 70, 85, 5, 100]
           ],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           selection:{
             enabled:true
@@ -409,9 +419,9 @@ export class DadChartComponent implements OnInit {
         },
         bindto: '#' + chartConfig.id,
         data: {
-          json: [ chartData.Dimension ],
+          json: [ chartData.Metric ],
           keys: {
-            value: chartData.Metric
+            value: chartData.Dimension
           },
           type:'donut',
         },

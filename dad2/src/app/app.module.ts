@@ -9,7 +9,6 @@ import { DadChartComponent } from "./chart.component";
 import { DadWidgetComponent } from "./widget.component";
 import { DadConfigComponent }   from './configuration.component';
 import { DadTableComponent }   from './table.component';
-import { SelectModule } from "angular2-select";
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -22,7 +21,6 @@ let LocalStorageServiceConfig = {
     BrowserModule,
     FormsModule,
     HttpModule,
-    SelectModule,
     RouterModule.forRoot([
       {
         path:'',

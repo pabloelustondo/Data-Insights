@@ -2,19 +2,24 @@
  * Created by pablo elustondo on 12/14/2016.
  */
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
-import {DadChart} from "./chart.component";
-import {DadWidgetDataService} from "./data.service";
-import {Mapper} from "./mapper";
+import { DadChart } from "./chart.component";
+import { DadWidgetDataService } from "./data.service";
+import { Mapper } from "./mapper";
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
 
 export class DadWidget {
   id: string;
   name: string;
   parameters: any[];
+  uiparameters?: DadParameter[];
+  a?:string;
+  b?:string;
+  parameterMappers?:any[];
   endpoint: string;
   type?:string;
-  a: string;
-  b: string;
   chart?: DadChart;
+  metrics?: DadMetric[];
+  dimensions?: DadDimension[];
 }
 
 @Component({
@@ -22,27 +27,20 @@ export class DadWidget {
   providers:[DadWidgetDataService],
   template: ` 
     <div class="widget1">
-    <table id="widgetTable">
-    <th><div id="widgetName">{{widget.name}}</div></th>
-        <tr>
-            <div id="values" *ngIf="data"><a style="color:blue;" href="/table">{{data.Metric[0]}}</a>{{" out of "}}{{data.Dimension[data.Metric[0]]}}</div>                        
-            <div id="widgetStartDate">
-            <label>Start Date: </label>
-            <input type="date" style="color: black" [(ngModel)]="startDate"/>
-           </div>
-           <div id="widgetStartDate">
-            <label>Start Time: </label>
-            <input type="time" style="color: black" [(ngModel)]="startTime"/>
-           </div>
-            <div id="widgetDuration">
-            <label>Duration: </label>
-             <input type="time" style="color: black" [(ngModel)]="duration"/>
-            </div>
-        </tr>
+    <div id="widgetName">{{widget.name}}</div>
+           
+          <div id="values" *ngIf="data">
+               <div *ngFor="let metric of widget.metrics"><a style="color:blue;" href="/table"> {{metric.Name}}: {{ data[metric.DataSource] }}</a></div>                     
+          </div>
+          <table>       
+            <tr *ngFor="let uiparam of widget.uiparameters">
+               <td><label>uiparam.Name</label></td>
+               <td><input type="date" style="color: black" [(ngModel)]="uiparam.Value"/></td>
+            </tr>
+          </table>
         <div>
             <button (click)="changeData($event)">Refresh</button>
         </div>
-    </table>
     </div>
     `
 })
@@ -51,19 +49,14 @@ export class DadWidgetComponent implements OnInit {
   widget: DadWidget;
   data;
   mapper: Mapper = new Mapper();
-  startDate: string = "2016-08-15";
-  startTime: string = "08:00:00";
-  duration: string = "08:00:00";
 
   constructor(private dadWidgetDataService: DadWidgetDataService) {}
 
   changeData(event) {
 
-    this.widget.parameters[0].shiftStartDateTime = this.startDate +"T" + this.startTime;
-    this.widget.parameters[0].shiftDuration  = this.mapDuration(this.duration);
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
-        this.data = this.mapper.map(this.widget, data.data);
+        this.data = data.data[0];
       }
     );
   }
@@ -79,7 +72,7 @@ export class DadWidgetComponent implements OnInit {
     console.log("Widgets are loading... :" + this.widget.id);
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
-        this.data = this.mapper.map(this.widget, data.data);
+        this.data = data.data[0];
       }
     ).catch(err => console.log(err.toString()));
   }
