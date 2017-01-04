@@ -51,18 +51,17 @@ export class DadTable {
                     </table>
                 
                 <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a>
+                        <li class="page-item"><a class="page-link" (click)=refresh()>Prev</a>
                         </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
+                        <li class="page-item"><a class="page-link" (click)=refresh()>1</a>
                         </li>
-                        <li (click)="refresh()" class="page-item"><a class="page-link" href="#">2</a>
+                        <li class="page-item"><a class="page-link" (click)=refresh()>2</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a>
+                        <li class="page-item"><a class="page-link" (click)=refresh()>3</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">4</a>
+                        <li class="page-item"><a class="page-link" (click)=refresh()>4</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a>
+                        <li class="page-item"><a class="page-link" (click)=refresh()>Next</a>
                         </li>
                     </ul>
                 </div>
@@ -71,7 +70,7 @@ export class DadTable {
   <!-- to show chart in widgets, use the line below-->
   <!--<dadchart [chart]="widget.chart"></dadchart>-->
 
-    <!--  END CHART COMPONENT -->`
+    <!--  END CHART COMPONENT --></div>`
 })
 export class DadTableComponent implements OnInit {
   @Input()
@@ -96,7 +95,7 @@ export class DadTableComponent implements OnInit {
 
   refresh(){
 
-    this.table.parameters[0].rowsSkip = 100;
+    this.table.parameters[0].rowsSkip = 75;
     this.dadTableDataService.getTableData(this.table).then(
         data => {
           this.data = data.data;
