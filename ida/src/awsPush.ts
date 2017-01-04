@@ -67,7 +67,7 @@ function createBatchRecordParam(data: any[]) {
       console.time('putRecordBatch: aws call');
       firehose.putRecordBatch(recordInput, function (err: any , data1: any ) {
           if (err) {
-              console.log(err, err.stack); // an error occurred
+              console.log(err, err.message); // an error occurred
           }
       });
       console.timeEnd('putRecordBatch: aws call');
