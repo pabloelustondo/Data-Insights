@@ -9,7 +9,7 @@ import { SimpleLayoutComponent }    from './layouts/simple-layout.component';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'dad',
         pathMatch: 'full',
     },
     {
