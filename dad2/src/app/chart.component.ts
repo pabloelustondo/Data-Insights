@@ -109,9 +109,9 @@ export class DadChartComponent implements OnInit {
           let chartData = this.mapper.map(this.chart, this.data);
           this.c3chart.load(
             {
-              json: [chartData.Dimension],
+              json: [chartData.Metric],
               keys: {
-                value: chartData.Metric
+                value: chartData.Dimension
               },
               unload: true,
             });
@@ -141,6 +141,11 @@ export class DadChartComponent implements OnInit {
             enabled:true
           },
           type: 'bar'
+        },
+        bar: {
+          width: {
+            ratio: 0.4
+          },
         },
         color: {
           pattern: this.colorPalette,
