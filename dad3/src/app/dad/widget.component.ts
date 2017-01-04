@@ -52,17 +52,24 @@ export class DadWidget {
             <div *ngFor="let uiparam of widget.uiparameters">
                <div><label>{{uiparam.Name}}</label></div>
                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
-               <!--<input type="date" [(ngModel)]="uiparam.ValueD"/><input type="time" [(ngModel)]="uiparam.ValueT"/>-->
-               <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"></datepicker>
+               <input type="date" [(ngModel)]="uiparam.ValueD"/>
+               <!--<datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true"></datepicker>-->
+                 
+               <timepicker [(ngModel)]="mytime" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>
+               <!--<input type="time" [(ngModel)]="uiparam.ValueT"/>-->
                </div>
-
+             
                <div *ngIf="uiparam.Type == dadParameterType.Duration">
                <!--<input type="number" [(ngModel)]="uiparam.Value"/>-->
                <timepicker [(ngModel)]="mytime" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>
                </div>
                <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>   
             </div>
-                <i class="glyphicons glyphicons-remove x1" style="float:right"></i>
+            <!--refresh button here-->
+            <br/><br/>
+            <div class="col-md-4 text-center">
+            <button style="border-color:white; color:white; margin-left:-15px" type="button" class="btn btn-outline-primary">Refresh</button>
+            </div>
             </div>     
 
     </div>

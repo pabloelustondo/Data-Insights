@@ -18,13 +18,13 @@ export class Mapper{
     //need to review this idea.. works for now b==metric a=dimension
 
     if (!config.a && !config.b){
-      chartData.Dimension.push("#"+index);
-      chartData.Metric["#"+index] = e;}
+      chartData.Dimension.push("#" + index);
+      chartData.Metric["#" + index] = e;}
 
     if (config.a && config.b){
-    chartData.Dimension.push(e[config.a]);
-    chartData.Metric[e[config.a]] = e[config.b];}
-    index++;
+      chartData.Dimension.push(e[config.a]);
+      chartData.Metric[e[config.a]] = e[config.b];}
+      index++;
   });
     return chartData;
   }
