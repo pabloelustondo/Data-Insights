@@ -26,7 +26,8 @@ export const WIDGETS: DadWidget[] = [
     ],
     parameters: [
   {
-    shiftStartDateTime:"2016-08-25T09:00",
+    shiftStartDateTimeAuto:"yesterday",
+    shiftStartDateTime:"2016-08-25T09:00:00",
     shiftDuration: "12.5",
     minimumBatteryPercentageThreshold: 20
   }],
