@@ -6,7 +6,7 @@ import { DadTableColumn, DadTableColumnType  } from "./table.model"
 
 export const TABLES: DadTable[] = [
   { id: 'table1',
-    name:'List of Devices that did not last a shift',
+    name:'List of Devices That Did Not Last a Shift',
     endpoint:'ListOfDevicesNotSurvivedShift',
     parameters: [
       {
@@ -33,7 +33,7 @@ export const TABLES: DadTable[] = [
         DataSource: "BatteryChargeHistory",
         MiniChart: {id: "charttable1",
                     type: "bar",
-                    width: 800,
+                    width: 150,
                     height: 30,
                     mini:true
                   }

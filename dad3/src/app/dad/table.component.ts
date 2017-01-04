@@ -25,26 +25,49 @@ export class DadTable {
   providers:[DadTableDataService,DadTableConfigsService],
   template: `     
     <div *ngIf="data">
-
-      <table align="center" style="border:solid">
-          <tr style="border:solid">
-          <td style="border:solid; text-align: center;" *ngFor="let col of table.columns" ><h2>{{col.Name}}</h2></td>
-          </tr>
-          <tr *ngFor="let row of data; let rowindex = index" style="border:solid">
-          <td style="border:solid" *ngFor="let col of table.columns" >
-          
-          <span *ngIf="!isMiniChart(col)"> 
-          {{row[col.DataSource]}}
-          </span>
-          <span *ngIf="isMiniChart(col)"> 
-          <dadchart [chart]="miniChart(col,rowindex)"
-          [data]="chartData(row,col)"></dadchart>
-          </span>        
-          </td>
-          </tr>
-      </table>
-
-    </div>
+        
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> {{table.name}}
+                </div>
+                <div class="card-block">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;" *ngFor="let col of table.columns" >{{col.Name}}</th>
+                            </tr>  
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of data; let rowindex = index">
+                                <td style="align-content: center;" *ngFor="let col of table.columns">
+                                    <span *ngIf="!isMiniChart(col)"> {{row[col.DataSource]}} </span>
+                                    <span *ngIf="isMiniChart(col)"> 
+                                        <dadchart [chart]="miniChart(col,rowindex)" [data]="chartData(row,col)"></dadchart>
+                                    </span>        
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                
+                <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Prev</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li (click)="refresh()" class="page-item"><a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
   <!-- to show chart in widgets, use the line below-->
   <!--<dadchart [chart]="widget.chart"></dadchart>-->
 
@@ -69,6 +92,16 @@ export class DadTableComponent implements OnInit {
     let chartConfig = JSON.parse(JSON.stringify(col.MiniChart)); //to clone object
     chartConfig.id += rowindex;
     return chartConfig;
+  }
+
+  refresh(){
+
+    this.table.parameters[0].rowsSkip = 100;
+    this.dadTableDataService.getTableData(this.table).then(
+        data => {
+          this.data = data.data;
+        }
+    ).catch(err => console.log(err.toString()));
   }
 
   ngOnInit() {
