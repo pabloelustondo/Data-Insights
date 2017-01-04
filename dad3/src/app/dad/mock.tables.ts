@@ -12,7 +12,7 @@ export const TABLES: DadTable[] = [
       {
         shiftDuration:8,
         rowsSkip:0,
-        rowsTake:100,
+        rowsTake:10,
         shiftStartDateTime:"2016-08-25",
         minimumBatteryPercentageThreshold:20
       }],

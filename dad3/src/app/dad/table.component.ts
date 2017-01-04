@@ -9,6 +9,8 @@ import { DadDateRange } from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
 import { DadChartComponent } from "./chart.component"
 import { DadTableConfigsService } from './chart.service';
+import { Router, ActivatedRoute} from '@angular/router';
+import {Subscription } from 'rxjs';
 
 export class DadTable {
   id: string;
@@ -51,17 +53,7 @@ export class DadTable {
                     </table>
                 
                 <ul class="pagination">
-                        <li class="page-item"><a class="page-link" (click)=refresh()>Prev</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" (click)=refresh()>1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" (click)=refresh()>2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" (click)=refresh()>3</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" (click)=refresh()>4</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" (click)=refresh()>Next</a>
+                        <li *ngFor="let page of pages" class="page-item"><a class="page-link" (click)=refresh(page)>{{page}}</a>
                         </li>
                     </ul>
                 </div>
@@ -79,9 +71,14 @@ export class DadTableComponent implements OnInit {
   chartData(row,col){
     return JSON.parse(row[col.DataSource]);
   }
+  count:number;
+  private subscription: Subscription;
+  pages:number[];
 
   constructor(private dadTableDataService: DadTableDataService,
-              private dadTableConfigsService: DadTableConfigsService) { }
+              private dadTableConfigsService: DadTableConfigsService,
+              private activatedRoute: ActivatedRoute
+  ) { }
 
   isMiniChart(col:DadTableColumn){
     return col.Type == DadTableColumnType.MiniChart;
@@ -93,9 +90,9 @@ export class DadTableComponent implements OnInit {
     return chartConfig;
   }
 
-  refresh(){
+  refresh(page:number){
 
-    this.table.parameters[0].rowsSkip = 75;
+    this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
     this.dadTableDataService.getTableData(this.table).then(
         data => {
           this.data = data.data;
@@ -103,7 +100,22 @@ export class DadTableComponent implements OnInit {
     ).catch(err => console.log(err.toString()));
   }
 
+
+
+  ngAfterViewInit(){
+
+    this.subscription = this.activatedRoute.params.subscribe(
+        (param: any) => {
+          this.count = Number(param['id']);
+          console.log(this.count);
+          let numberOfPages = this.count/this.table.parameters[0].rowsTake;
+          this.pages = [];
+          for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
+        });
+  }
+
   ngOnInit() {
+
 
     if (!this.table){
       let tables = this.dadTableConfigsService.getTableConfigs();

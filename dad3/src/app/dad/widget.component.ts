@@ -41,7 +41,7 @@ export class DadWidget {
                         </div>
                     </div>
                            <h4 *ngIf="data" class="mb-0">
-                           <a href="#/dad/table/1">
+                           <a  [routerLink]="['table', data[widget.metrics[0].DataSource]]">
                            <span style="color:white; text-decoration: underline; ">{{data[widget.metrics[0].DataSource]}} </span>
                            </a>
                            of {{data[widget.metrics[1].DataSource]}}</h4>
