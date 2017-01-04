@@ -21,6 +21,18 @@ export const WIDGETS: DadWidget[] = [
         Type: DadParameterType.Number,
         Name: "Total Active",
         DataSource: "CountTotalActiveDevices",
+        Value: null
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Device Lasted Shift",
+        DataSource: "CountDevicesLastedShift",
+        Value:null
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Device Charging Entire Shift",
+        DataSource: "CountDevicesChargingEntireShift",
         Value:null
       }
     ],

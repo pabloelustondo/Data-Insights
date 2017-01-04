@@ -47,8 +47,13 @@ export class DadWidget {
                            of {{data[widget.metrics[1].DataSource]}}</h4>
                            <p>{{widget.metrics[0].Name}}</p>
                      <div>        
-                <div *ngIf="data">
-                <h4 *ngIf="widget.metrics.length>2">{{widget.metrics[2].Name}}: {{  data[widget.metrics[2].DataSource] }}</h4>                  
+                <div *ngIf="data && widget.metrics.length>2">
+                <h4 >{{  data[widget.metrics[2].DataSource] }}</h4>   
+                <p>{{widget.metrics[2].Name}}</p>
+                </div>
+                <div *ngIf="data && widget.metrics.length>3">
+                <h4 >{{  data[widget.metrics[3].DataSource] }}</h4>   
+                <p>{{widget.metrics[3].Name}}</p>
                 </div>
                 
           <div *ngIf="editMode">  
@@ -68,7 +73,8 @@ export class DadWidget {
             <!--refresh button here-->
             <br/><br/>
             <div class="col-md-4 text-center">
-            <button style="border-color:white; color:white; margin-left:-15px" type="button" class="btn btn-outline-primary">Refresh</button>
+            <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Refresh</button>
+            <button (click)="onEdit()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Close</button>
             </div>     
 
     </div>
