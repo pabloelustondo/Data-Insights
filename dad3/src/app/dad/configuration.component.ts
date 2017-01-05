@@ -36,8 +36,8 @@ declare var d3, c3: any;
         <table>
         <tr *ngFor="let widget of widgets">  
          <td> {{ widget.name }} </td>
-         <td><img (click)="selectWidget(widget)" width="20px" heigth="20px" src="/assets/images/edit.png"></td>  
-         <td><img (click)="showThisWidget(widget)" width="20px" heigth="20px" src="/assets/images/show.jpeg"></td>  
+          <a (click)="selectWidget(widget)" class="btn btn-sm glyphicons glyphicons-pencil x1"></a>
+          <a (click)="showThisWidget(widget)" class="btn btn-sm glyphicons glyphicons-eye-open x1"></a>
         </tr>
         </table>
     </div>
@@ -46,18 +46,18 @@ declare var d3, c3: any;
         <table>
         <tr *ngFor="let chart of charts">  
          <td> {{ chart.name }} </td>
-         <td><img (click)="selectChart(chart)" width="20px" heigth="20px" src="/assets/images/edit.png"></td> 
-         <td><img (click)="showThisChart(chart)" width="20px" heigth="20px" src="/assets/images/show.jpeg"></td> 
+          <a (click)="selectChart(chart)" class="btn btn-sm glyphicons glyphicons-pencil x1"></a>
+          <a (click)="showThisChart(chart)" class="btn btn-sm glyphicons glyphicons-eye-open x1"></a>
         </tr>
         </table>
     </div>
         <div>
         <h2>Tables Configuration </h2>
         <table>
-        <tr *ngFor="let table of tables">  
+        <tr *ngFor="let table of tables"> 
          <td> {{ table.name }} </td>
-         <td><img (click)="selectTable(table)" width="20px" heigth="20px" src="/assets/images/edit.png"></td>  
-         <td><img (click)="showThisTable(table)" width="20px" heigth="20px" src="/assets/images/show.jpeg"></td> 
+          <a (click)="selectTable(table)" class="btn btn-sm glyphicons glyphicons-pencil x1"></a>
+          <a (click)="showThisTable(table)" class="btn btn-sm glyphicons glyphicons-eye-open x1"></a>
         </tr>
         </table>
     </div>
@@ -70,13 +70,27 @@ declare var d3, c3: any;
        <tr><td><label>id: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.id" placeholder="id"></td></tr>
        <tr><td><label>type: </label></td><td><input style="width:300px"[(ngModel)]="selectedWidget.type" placeholder="type"></td></tr>
        <tr><td><label>endpoint: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.endpoint" placeholder="endpoint"></td></tr>
-       <tr><td><label>dimension: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.a" placeholder="dimension"></td></tr>
-       <tr><td><label>measure: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.b" placeholder="measure"></td></tr>
-       <tr><td><label>startTime: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].startTime" placeholder="startTime"></td></tr>
-       <tr><td><label>duration: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].duration" placeholder="duration"></td></tr>
-       <tr><td><label>date: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].date" placeholder="date"></td></tr>
+       <tr><td><label>shiftStartDateTime: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].shiftStartDateTime" placeholder="shiftStartDateTime"></td></tr>
+       <tr><td><label>shiftDuration: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].shiftDuration" placeholder="shiftDuration"></td></tr>
+       <tr><td><label>minimumBatteryPercentageThreshold: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].minimumBatteryPercentageThreshold" placeholder="minimumBatteryPercentageThreshold"></td></tr>
+    
+       <tr *ngIf="selectedWidget.uiparameters.length>0"><td><label>Parameter 0</label></td><td></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>0"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[0].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>0"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[0].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>0"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[0].DataSource" placeholder="DataSource"></td></tr>
+    
+       <tr *ngIf="selectedWidget.uiparameters.length>1"><td><label>Parameter 1</label></td><td></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>1"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[1].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>1"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[1].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>1"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[1].DataSource" placeholder="DataSource"></td></tr>
+         
+       <tr *ngIf="selectedWidget.uiparameters.length>2"><td><label>Parameter 2</label></td><td></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>2"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[2].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>2"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[2].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedWidget.uiparameters.length>2"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[2].DataSource" placeholder="DataSource"></td></tr>  
+    
      </table> 
-       <div><img (click)="deleteWidget()" width="20px" heigth="20px" src="/assets/images/delete.jpeg"></div>   
+      <br><a (click)="deleteChart()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>
     </div>
     
     
@@ -96,7 +110,7 @@ declare var d3, c3: any;
        <tr><td><label>dateTo: </label></td><td><input style="width:300px" [(ngModel)]="selectedChart.parameters[0].dateTo" placeholder="dateTo"></td></tr>
        <tr><td><label>is Mini?: </label></td><td><input type="checkbox" [(ngModel)]="selectedChart.mini"/></td></tr>
      </table> 
-       <div><img (click)="deleteChart()" width="20px" heigth="20px" src="/assets/images/delete.jpeg"></div>   
+       <br><a (click)="deleteWidget()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>   
     </div>
     
         <div *ngIf="selectedTable" style="width:60%; display:inline-block;  vertical-align:top; border: solid;" > 
@@ -106,13 +120,44 @@ declare var d3, c3: any;
        <tr><td><label>id: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.id" placeholder="id"></td></tr>
        <tr><td><label>type: </label></td><td><input style="width:300px"[(ngModel)]="selectedTable.type" placeholder="type"></td></tr>
        <tr><td><label>endpoint: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.endpoint" placeholder="endpoint"></td></tr>
-       <tr><td><label>dimension: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.a" placeholder="dimension"></td></tr>
-       <tr><td><label>measure: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.b" placeholder="measure"></td></tr>
-       <tr><td><label>startTime: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].startTime" placeholder="startTime"></td></tr>
-       <tr><td><label>duration: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].duration" placeholder="duration"></td></tr>
-       <tr><td><label>date: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].date" placeholder="date"></td></tr>
+       <tr><td><label>shiftDuration: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].shiftDuration" placeholder="shiftDuration"></td></tr>
+       <tr><td><label>rowsSkip: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].rowsSkip" placeholder="rowsSkip"></td></tr>
+       <tr><td><label>rowsTake: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].rowsTake" placeholder="rowsTake"></td></tr>
+       <tr><td><label>shiftStartDateTime: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].shiftStartDateTime" placeholder="shiftStartDateTime"></td></tr>
+       <tr><td><label>minimumBatteryPercentageThreshold: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.parameters[0].minimumBatteryPercentageThreshold" placeholder="minimumBatteryPercentageThreshold"></td></tr>
+
+       <tr *ngIf="selectedTable.columns.length>0"><td><label>Column 0</label></td><td></td></tr>
+       <tr *ngIf="selectedTable.columns.length>0"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[0].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>0"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[0].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>0"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[0].DataSource" placeholder="DataSource"></td></tr>
+       
+       <tr *ngIf="selectedTable.columns.length>1"><td><label>Column 1</label></td><td></td></tr>
+       <tr *ngIf="selectedTable.columns.length>1"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[1].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>1"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[1].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>1"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[1].DataSource" placeholder="DataSource"></td></tr>
+       
+       <tr *ngIf="selectedTable.columns.length>2"><td><label>Column 2</label></td><td></td></tr>
+       <tr *ngIf="selectedTable.columns.length>2"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[2].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>2"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[2].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>2"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[2].DataSource" placeholder="DataSource"></td></tr>
+       
+       <tr *ngIf="selectedTable.columns.length>3"><td><label>Column 3</label></td><td></td></tr>
+       <tr *ngIf="selectedTable.columns.length>3"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[3].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>3"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[3].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>3"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[3].DataSource" placeholder="DataSource"></td></tr>
+       
+       <tr *ngIf="selectedTable.columns.length>4"><td><label>Column 4</label></td><td></td></tr>
+       <tr *ngIf="selectedTable.columns.length>4"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[4].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>4"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[4].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>4"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[4].DataSource" placeholder="DataSource"></td></tr>
+       
+       <tr *ngIf="selectedTable.columns.length>5"><td><label>Column 5</label></td><td></td></tr>
+       <tr *ngIf="selectedTable.columns.length>5"><td><label>Type: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[5].Type" placeholder="Type"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>5"><td><label>Name: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[5].Name" placeholder="Name"></td></tr>
+       <tr *ngIf="selectedTable.columns.length>5"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[5].DataSource" placeholder="DataSource"></td></tr>
+      
      </table> 
-       <div><img (click)="deleteWidget()" width="20px" heigth="20px" src="/assets/images/delete.jpeg"></div>   
+       <br><a (click)="deleteTable()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
     </div>
     
     `
@@ -185,6 +230,7 @@ export class DadConfigComponent implements  OnInit{
     saveConfiguration(){
       this.dadChartConfigsService.save(this.charts);
       this.dadWidgetConfigsService.save(this.widgets);
+      this.dadTableConfigsService.save(this.tables);
       this.dirty=false; //mh... do it better
     }
 
