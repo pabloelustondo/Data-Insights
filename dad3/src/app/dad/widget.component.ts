@@ -105,13 +105,13 @@ export class DadWidget {
                       <div *ngIf="!editMode">          
                         <div *ngFor="let uiparam of widget.uiparameters">
                            <div><label style="text-decoration: underline">{{uiparam.Name}} :</label></div>
-                           <div *ngIf="uiparam.Type == dadParameterType.DateTime">{{uiparam.Value['D']}} {{uiparam.Value['T'].getHours()}} : {{uiparam.Value['T'].getMinutes()}}</div>
-                           <div *ngIf="uiparam.Type == dadParameterType.Duration">{{uiparam.Value.getHours()}} : {{uiparam.Value.getMinutes()}}</div>
+                           <div *ngIf="uiparam.Type == dadParameterType.DateTime">{{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}</div>
+                           <div *ngIf="uiparam.Type == dadParameterType.Duration">{{addingZero(uiparam.Value.getHours())}}:{{addingZero(uiparam.Value.getMinutes())}}</div>
                            <div *ngIf="uiparam.Type == dadParameterType.Number">{{uiparam.Value}}</div>   
                         </div>    
                       </div>
                   </div>
-                  
+                 
                 </div>       
      </div>
     
@@ -137,6 +137,10 @@ export class DadWidgetComponent implements OnInit {
               this.data = data.data[0];
           }
       ).catch(err => console.log(err.toString()));
+  }
+
+  addingZero(x:number):string{
+      return (x <10 )? "0" + x : "" + x;
   }
 
   onEdit(message:string):void{
