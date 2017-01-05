@@ -40,50 +40,80 @@ export class DadWidget {
                             <button class="dropdown-item"> <div (click)="onRefresh('lalal')">Refresh</div></button>
                         </div>
                     </div>
-                           <h4 *ngIf="data" class="mb-0">
-                           <a  [routerLink]="['table', data[widget.metrics[0].DataSource]]">
-                           <span style="color:white; text-decoration: underline; ">{{data[widget.metrics[0].DataSource]}} </span>
-                           </a>
-                           of {{data[widget.metrics[1].DataSource]}}</h4>
-                           <p>{{widget.metrics[0].Name}}</p>
-                     <div>        
-                <div *ngIf="data && widget.metrics.length>2">
-                <h4 >{{  data[widget.metrics[2].DataSource] }}</h4>   
-                <p>{{widget.metrics[2].Name}}</p>
-                </div>
-                <div *ngIf="data && widget.metrics.length>3">
-                <h4 >{{  data[widget.metrics[3].DataSource] }}</h4>   
-                <p>{{widget.metrics[3].Name}}</p>
-                </div>
-                
-          <div *ngIf="editMode">  
-                     
-            <div *ngFor="let uiparam of widget.uiparameters">
-               <div><label>{{uiparam.Name}}</label></div>
-               <div *ngIf="uiparam.Type == dadParameterType.DateTime">
-               <input type="date" [(ngModel)]="uiparam.Value['D']"/>                     
-               <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>       
-               </div>
-
-               <div *ngIf="uiparam.Type == dadParameterType.Duration">
-               <timepicker [(ngModel)]="uiparam.Value" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>
-               </div>
-               <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>   
-            </div>
-            <!--refresh button here-->
-            <br/><br/>
-            <div class="col-md-4 text-center">
-            <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Refresh</button>
-            <button (click)="onEdit()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Close</button>
-            </div>     
-
-    </div>
-            </div>
-                <div class="chart-wrapper px-1" style="height:70px;">
-                    <canvas baseChart class="chart" [datasets]="lineChart1Data" [labels]="lineChart1Labels" [options]="lineChart1Options" [colors]="lineChart1Colours" [legend]="lineChart1Legend" [chartType]="lineChart1Type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
-                </div>
-            </div>       
-    </div>
+                    <h4 *ngIf="data" class="mb-0">
+                    <a [routerLink]="['table', data[widget.metrics[0].DataSource]]">
+                    <span style="color:white; text-decoration: underline; ">{{data[widget.metrics[0].DataSource]}} </span>
+                    </a>
+                    of {{data[widget.metrics[1].DataSource]}}</h4><br/>
+                    <div class="col-sm-6">
+                       <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[0].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
+                    </div><br/>
+                    <div>
+                    <p>{{widget.metrics[0].Name}}</p>
+                    </div>
+                    <br/>
+                    <div *ngIf="data && widget.metrics.length>2">
+                    <h6>{{  data[widget.metrics[2].DataSource] }}</h6>   
+                    <div class="col-sm-3">
+                           <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
+                    </div><br/>
+                    <p style="font-size:12px;">{{widget.metrics[2].Name}}</p>
+                    </div>
+                    
+                    <div *ngIf="data && widget.metrics.length>3">
+                    <h6>{{  data[widget.metrics[3].DataSource] }}</h6> 
+                    <div class="col-sm-3">
+                        <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
+                    </div><br/>
+                    <p style="font-size:12px;">{{widget.metrics[3].Name}}</p>
+                    </div>
+                   
+                    
+                  <div class="row">
+                      <div *ngIf="editMode">          
+                        <div *ngFor="let uiparam of widget.uiparameters">
+                           <div><label>{{uiparam.Name}}</label></div>
+                           <div *ngIf="uiparam.Type == dadParameterType.DateTime">
+                           <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
+                           <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>       
+                           </div>
+            
+                           <div *ngIf="uiparam.Type == dadParameterType.Duration">
+                           <timepicker [(ngModel)]="uiparam.Value" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>
+                           </div>
+                           <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>   
+                        </div>
+                        <!--refresh button here-->
+                        <br/>
+                        <div class="col-md-4 text-center">
+                        <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Refresh</button>
+                        <br/><br/>
+                        </div>
+                        <div>
+                        <button (click)="onEdit()" style="color:white;" type="button" class="btn btn-outline-primary pull-right">
+                            <span class="glyphicons glyphicons-remove"></span>
+                        </button>
+                        </div>     
+                      </div>
+                  </div>
+                  
+                  <div class="chart-wrapper px-1" style="height:70px;">
+                      <canvas baseChart class="chart" [datasets]="lineChart1Data" [labels]="lineChart1Labels" [options]="lineChart1Options" [colors]="lineChart1Colours" [legend]="lineChart1Legend" [chartType]="lineChart1Type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+                  </div>
+ 
+                  <div class="row">
+                      <div *ngIf="!editMode">          
+                        <div *ngFor="let uiparam of widget.uiparameters">
+                           <div><label style="text-decoration: underline">{{uiparam.Name}} :</label></div>
+                           <div *ngIf="uiparam.Type == dadParameterType.DateTime">{{uiparam.Value['D']}} {{uiparam.Value['T'].getHours()}} : {{uiparam.Value['T'].getMinutes()}}</div>
+                           <div *ngIf="uiparam.Type == dadParameterType.Duration">{{uiparam.Value.getHours()}} : {{uiparam.Value.getMinutes()}}</div>
+                           <div *ngIf="uiparam.Type == dadParameterType.Number">{{uiparam.Value}}</div>   
+                        </div>    
+                      </div>
+                  </div>
+                  
+                </div>       
+     </div>
     
     
     
@@ -110,9 +140,7 @@ export class DadWidget {
                 </div>
             </div>
         </div>
-    
-    
-    
+  </div>
     `
 })
 export class DadWidgetComponent implements OnInit {

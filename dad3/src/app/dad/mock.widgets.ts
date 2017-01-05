@@ -46,7 +46,7 @@ export const WIDGETS: DadWidget[] = [
   uiparameters: [
   {
     Type: DadParameterType.DateTime,
-    Name: "Shift Start",
+    Name: "Shift Start Date & Time",
     DataSource: "shiftStartDateTime",
     Value:"2000-08-25T01:01"
   },
