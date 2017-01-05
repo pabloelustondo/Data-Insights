@@ -38,7 +38,6 @@ export const WIDGETS: DadWidget[] = [
     ],
     parameters: [
   {
-    shiftStartDateTimeAuto:"yesterday",
     shiftStartDateTime:"2016-08-25T09:00:00",
     shiftDuration: "12.5",
     minimumBatteryPercentageThreshold: 20
@@ -64,10 +63,9 @@ export const WIDGETS: DadWidget[] = [
     }
   ]
   },
-
   {id: 'widget2',
-    name:'Widget Example',
-    type: DadWidgetType.Example,
+    name:'Device battery during shift',
+    type: DadWidgetType.OneNumber,
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -80,36 +78,50 @@ export const WIDGETS: DadWidget[] = [
         Type: DadParameterType.Number,
         Name: "Total Active",
         DataSource: "CountTotalActiveDevices",
+        Value: null
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Device Lasted Shift",
+        DataSource: "CountDevicesLastedShift",
+        Value:null
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Device Charging Entire Shift",
+        DataSource: "CountDevicesChargingEntireShift",
         Value:null
       }
     ],
     parameters: [
       {
-        shiftStartDateTime:"2016-08-25T09:00",
+        shiftStartDateTimeAuto:"yesterday",
+        shiftStartDateTime:"2016-08-25T09:00:00",
         shiftDuration: "12.5",
-        minimumBatteryPercentageThreshold: 40
+        minimumBatteryPercentageThreshold: 20
       }],
     uiparameters: [
       {
         Type: DadParameterType.DateTime,
         Name: "Shift Start",
         DataSource: "shiftStartDateTime",
-        Value:"2016-08-25T09:00"
+        Value:"2000-08-25T01:01"
       },
       {
         Type: DadParameterType.Duration,
         Name: "Shift Duration",
         DataSource: "shiftDuration",
-        Value:"12:30"
+        Value:"01:01"
       },
       {
         Type: DadParameterType.Number,
         Name: "Min Battery",
-        DataSource: " minimumBatteryPercentageThreshold",
-        Value:40
+        DataSource: "minimumBatteryPercentageThreshold",
+        Value:25
       }
     ]
   }
+
 
 
 ];

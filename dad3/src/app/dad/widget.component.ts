@@ -116,31 +116,7 @@ export class DadWidget {
      </div>
     
     
-    
-    
-    
-    <!--their code-->
-    <div  *ngIf="widget.type==dadWidgetType.Example"  class="col-sm-6 col-lg-3">
-            <div class="card card-inverse card-primary">
-                <div class="card-block pb-0">
-                    <div class="btn-group float-xs-right" dropdown>
-                        <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
-                            <i class="icon-settings"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-                            <button class="dropdown-item"> <div (click)="onEdit('lalal')">Edit</div></button>
-                            <button class="dropdown-item"> <div (click)="onRefresh('lalal')">Refresh</div></button>
-                        </div>
-                    </div>
-                    <h4 class="mb-0">9.823</h4>
-                    <p>Members online</p>
-                </div>
-                <div class="chart-wrapper px-1" style="height:70px;">
-                    <canvas baseChart class="chart" [datasets]="lineChart1Data" [labels]="lineChart1Labels" [options]="lineChart1Options" [colors]="lineChart1Colours" [legend]="lineChart1Legend" [chartType]="lineChart1Type" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
-                </div>
-            </div>
-        </div>
-  </div>
+    </div>
     `
 })
 export class DadWidgetComponent implements OnInit {
@@ -155,7 +131,12 @@ export class DadWidgetComponent implements OnInit {
   constructor(private dadWidgetDataService: DadWidgetDataService) {}
 
   onRefresh(message:string):void{
-    alert("Going to Refresh:" + message);
+      this.mapParameters2model();
+      this.dadWidgetDataService.getWidgetData(this.widget).then(
+          data => {
+              this.data = data.data[0];
+          }
+      ).catch(err => console.log(err.toString()));
   }
 
   onEdit(message:string):void{
@@ -178,12 +159,17 @@ export class DadWidgetComponent implements OnInit {
         for (let uiparam of this.widget.uiparameters) {
             if (uiparam.Type === this.dadParameterType.DateTime) {
 
+                let datetime = new Date(uiparam.Value['D']);
+                let time = uiparam.Value['T'];
+                datetime.setHours(time.getHours(),time.getMinutes(), time.getSeconds());
+                parameters[uiparam.DataSource] = datetime.toISOString();
+
             }
             if (uiparam.Type === this.dadParameterType.Number) {
-
+                parameters[uiparam.DataSource] = uiparam.Value;
             }
             if (uiparam.Type === this.dadParameterType.Duration) {
-
+                parameters[uiparam.DataSource] = this.mapDate2LongDuration(uiparam.Value);
             }
         }
 
@@ -194,8 +180,6 @@ export class DadWidgetComponent implements OnInit {
         let parameters = this.widget.parameters[0];   //maybe we need to stop having a list?
         for (let uiparam of this.widget.uiparameters) {
             if (uiparam.Type === this.dadParameterType.DateTime) {
-
-
                 let d: Date;
                 if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
                      let dold = new Date(parameters[uiparam.DataSource]);
@@ -235,6 +219,14 @@ export class DadWidgetComponent implements OnInit {
       let time = new Date();
       time.setHours(hrs,mins);
       return time;
+    }
+
+    mapDate2LongDuration ( duration:Date): number {
+
+        let hrs = duration.getHours();
+        let mins = duration.getMinutes();
+        let durationLong:number = hrs + mins/60;
+        return durationLong;
     }
 
   ngOnInit() {
