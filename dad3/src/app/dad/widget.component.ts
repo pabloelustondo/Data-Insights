@@ -41,20 +41,25 @@ export class DadWidget {
                         </div>
                     </div>
                            <h4 *ngIf="data" class="mb-0">
-                           <a href="#/dad/table/1">
+                           <a  [routerLink]="['table', data[widget.metrics[0].DataSource]]">
                            <span style="color:white; text-decoration: underline; ">{{data[widget.metrics[0].DataSource]}} </span>
                            </a>
                            of {{data[widget.metrics[1].DataSource]}}</h4>
                            <p>{{widget.metrics[0].Name}}</p>
                      <div>        
-                <div *ngIf="data">
-                <h4 *ngIf="widget.metrics.length>2">{{widget.metrics[2].Name}}: {{  data[widget.metrics[2].DataSource] }}</h4>                  
+                <div *ngIf="data && widget.metrics.length>2">
+                <h4 >{{  data[widget.metrics[2].DataSource] }}</h4>   
+                <p>{{widget.metrics[2].Name}}</p>
+                </div>
+                <div *ngIf="data && widget.metrics.length>3">
+                <h4 >{{  data[widget.metrics[3].DataSource] }}</h4>   
+                <p>{{widget.metrics[3].Name}}</p>
                 </div>
                 
           <div *ngIf="editMode">  
                      
             <div *ngFor="let uiparam of widget.uiparameters">
-               <div><label>{{uiparam.Name}}  V:{{uiparam.Value}} VT:{{uiparam.Value['T']}} VD:{{uiparam.Value['D']}}</label></div>
+               <div><label>{{uiparam.Name}}</label></div>
                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
                <input type="date" [(ngModel)]="uiparam.Value['D']"/>                     
                <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="!isEnabled"></timepicker>       
@@ -68,7 +73,8 @@ export class DadWidget {
             <!--refresh button here-->
             <br/><br/>
             <div class="col-md-4 text-center">
-            <button style="border-color:white; color:white; margin-left:-15px" type="button" class="btn btn-outline-primary">Refresh</button>
+            <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Refresh</button>
+            <button (click)="onEdit()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Close</button>
             </div>     
 
     </div>
@@ -139,8 +145,19 @@ export class DadWidgetComponent implements OnInit {
   }
 
     mapParameters2model():void{
-        //this action will map UI parameters into model parameters
+        //this action will map UI parameters into model parameters back
+        let parameters = this.widget.parameters[0];   //maybe we need to stop having a list?
+        for (let uiparam of this.widget.uiparameters) {
+            if (uiparam.Type === this.dadParameterType.DateTime) {
 
+            }
+            if (uiparam.Type === this.dadParameterType.Number) {
+
+            }
+            if (uiparam.Type === this.dadParameterType.Duration) {
+
+            }
+        }
 
     }
 
@@ -149,9 +166,28 @@ export class DadWidgetComponent implements OnInit {
         let parameters = this.widget.parameters[0];   //maybe we need to stop having a list?
         for (let uiparam of this.widget.uiparameters) {
             if (uiparam.Type === this.dadParameterType.DateTime) {
+
+
+                let d: Date;
+                if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
+                     let dold = new Date(parameters[uiparam.DataSource]);
+                     let hrs = dold.getHours();
+                     let mins = dold.getMinutes();
+                     let secs  = dold.getSeconds();
+                     d = new Date();
+                     d.setDate(d.getDate() - 1);
+                     d.setHours(hrs,mins,secs);
+                }else{ // we assume that we have a valid date
+                     d = new Date(parameters[uiparam.DataSource]);
+                }
+                let yyyy = d.getFullYear();
+                let m = d.getMonth()+1;
+                let day = d.getDate();
+                let mm = (m <10 )? "0" + m : "" + m;
+                let dd = (day <10 )? "0" + day : "" + day;
                 uiparam.Value = {};
-                uiparam.Value['D'] = new Date(parameters[uiparam.DataSource]).getDate();
-                uiparam.Value['T'] = new Date(parameters[uiparam.DataSource]).getTime();
+                uiparam.Value['D'] = yyyy + "-" + mm + "-" + dd;
+                uiparam.Value['T'] = d;
             }
             if (uiparam.Type === this.dadParameterType.Number) {
                 uiparam.Value = parameters[uiparam.DataSource];

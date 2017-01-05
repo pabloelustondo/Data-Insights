@@ -21,12 +21,25 @@ export const WIDGETS: DadWidget[] = [
         Type: DadParameterType.Number,
         Name: "Total Active",
         DataSource: "CountTotalActiveDevices",
+        Value: null
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Device Lasted Shift",
+        DataSource: "CountDevicesLastedShift",
+        Value:null
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Device Charging Entire Shift",
+        DataSource: "CountDevicesChargingEntireShift",
         Value:null
       }
     ],
     parameters: [
   {
-    shiftStartDateTime:"2016-08-25T09:00",
+    shiftStartDateTimeAuto:"yesterday",
+    shiftStartDateTime:"2016-08-25T09:00:00",
     shiftDuration: "12.5",
     minimumBatteryPercentageThreshold: 20
   }],

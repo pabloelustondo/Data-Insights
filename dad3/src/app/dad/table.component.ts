@@ -9,6 +9,8 @@ import { DadDateRange } from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
 import { DadChartComponent } from "./chart.component"
 import { DadTableConfigsService } from './chart.service';
+import { Router, ActivatedRoute} from '@angular/router';
+import {Subscription } from 'rxjs';
 
 export class DadTable {
   id: string;
@@ -25,30 +27,42 @@ export class DadTable {
   providers:[DadTableDataService,DadTableConfigsService],
   template: `     
     <div *ngIf="data">
-
-      <table align="center" style="border:solid">
-          <tr style="border:solid">
-          <td style="border:solid; text-align: center;" *ngFor="let col of table.columns" ><h2>{{col.Name}}</h2></td>
-          </tr>
-          <tr *ngFor="let row of data; let rowindex = index" style="border:solid">
-          <td style="border:solid" *ngFor="let col of table.columns" >
-          
-          <span *ngIf="!isMiniChart(col)"> 
-          {{row[col.DataSource]}}
-          </span>
-          <span *ngIf="isMiniChart(col)"> 
-          <dadchart [chart]="miniChart(col,rowindex)"
-          [data]="chartData(row,col)"></dadchart>
-          </span>        
-          </td>
-          </tr>
-      </table>
-
-    </div>
+        
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> {{table.name}}
+                </div>
+                <div class="card-block">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;" *ngFor="let col of table.columns" >{{col.Name}}</th>
+                            </tr>  
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of data; let rowindex = index">
+                                <td style="align-content: center;" *ngFor="let col of table.columns">
+                                    <span *ngIf="!isMiniChart(col)"> {{row[col.DataSource]}} </span>
+                                    <span *ngIf="isMiniChart(col)"> 
+                                        <dadchart [chart]="miniChart(col,rowindex)" [data]="chartData(row,col)"></dadchart>
+                                    </span>        
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                
+                <ul class="pagination">
+                        <li *ngFor="let page of pages" class="page-item"><a class="page-link" (click)=refresh(page)>{{page}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
   <!-- to show chart in widgets, use the line below-->
   <!--<dadchart [chart]="widget.chart"></dadchart>-->
 
-    <!--  END CHART COMPONENT -->`
+    <!--  END CHART COMPONENT --></div>`
 })
 export class DadTableComponent implements OnInit {
   @Input()
@@ -57,9 +71,14 @@ export class DadTableComponent implements OnInit {
   chartData(row,col){
     return JSON.parse(row[col.DataSource]);
   }
+  count:number;
+  private subscription: Subscription;
+  pages:number[];
 
   constructor(private dadTableDataService: DadTableDataService,
-              private dadTableConfigsService: DadTableConfigsService) { }
+              private dadTableConfigsService: DadTableConfigsService,
+              private activatedRoute: ActivatedRoute
+  ) { }
 
   isMiniChart(col:DadTableColumn){
     return col.Type == DadTableColumnType.MiniChart;
@@ -71,7 +90,32 @@ export class DadTableComponent implements OnInit {
     return chartConfig;
   }
 
+  refresh(page:number){
+
+    this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
+    this.dadTableDataService.getTableData(this.table).then(
+        data => {
+          this.data = data.data;
+        }
+    ).catch(err => console.log(err.toString()));
+  }
+
+
+
+  ngAfterViewInit(){
+
+    this.subscription = this.activatedRoute.params.subscribe(
+        (param: any) => {
+          this.count = Number(param['id']);
+          console.log(this.count);
+          let numberOfPages = this.count/this.table.parameters[0].rowsTake;
+          this.pages = [];
+          for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
+        });
+  }
+
   ngOnInit() {
+
 
     if (!this.table){
       let tables = this.dadTableConfigsService.getTableConfigs();
