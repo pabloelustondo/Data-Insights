@@ -60,7 +60,7 @@ app.use(logger);
 // }));
 
 RegisterRoutes(app);
-
+app.use(logger);
 // app.use(expressWinston.errorLogger({
 //     transports: [
 //         new winston.transports.Console({
