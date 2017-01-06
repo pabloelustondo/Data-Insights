@@ -58,7 +58,7 @@ export class DadTable {
                     </table>
                 
                 <ul class="pagination">
-                        <li *ngFor="let page of pages" class="page-item"><a class="page-link" (click)=refresh(page)>{{page}}</a>
+                        <li *ngFor="let page of pages" class="page-item"><a class="page-link" (click)=refresh(page)>{{page+1}}</a>
                         </li>
                     </ul>
                 </div>
