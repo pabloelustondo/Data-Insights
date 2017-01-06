@@ -4,6 +4,7 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadWidgetDataService } from "./data.service";
+import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
 
@@ -26,9 +27,9 @@ export class DadWidget {
 
 @Component({
   selector: 'dadwidget',
-  providers:[DadWidgetDataService],
+  providers:[DadWidgetDataService, DadWidgetConfigsService],
   template: ` 
-  <div *ngIf="widget.type==dadWidgetType.OneNumber"  class="col-sm-6 col-lg-3">          
+  <div *ngIf="widget.type==0"  class="col-sm-6 col-lg-3">          
      <div class="card card-inverse card-primary">
                 <div class="card-block pb-0">
                     <div class="btn-group float-xs-right" dropdown>
@@ -81,7 +82,9 @@ export class DadWidget {
                            <div *ngIf="uiparam.Type == dadParameterType.Duration">
                            <timepicker [(ngModel)]="uiparam.Value" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>
                            </div>
-                           <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>   
+                           <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>  
+                           <div *ngIf="uiparam.Type == dadParameterType.String"><input type="text" [(ngModel)]="uiparam.Value" /></div>   
+                 
                         </div>
                         <!--refresh button here-->
                         <br/>
@@ -103,12 +106,15 @@ export class DadWidget {
  
                   <div class="row">
                       <div *ngIf="!editMode">          
-                        <div *ngFor="let uiparam of widget.uiparameters">
-                           <div><label style="text-decoration: underline">{{uiparam.Name}} :</label></div>
-                           <div *ngIf="uiparam.Type == dadParameterType.DateTime">{{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}</div>
-                           <div *ngIf="uiparam.Type == dadParameterType.Duration">{{addingZero(uiparam.Value.getHours())}}:{{addingZero(uiparam.Value.getMinutes())}}</div>
-                           <div *ngIf="uiparam.Type == dadParameterType.Number">{{uiparam.Value}}</div>   
-                        </div>    
+                        <span *ngFor="let uiparam of widget.uiparameters">
+                   <!--  <div><label style="text-decoration: underline">{{uiparam.Name}} :</label></div> -->
+                           <span *ngIf="uiparam.Type == dadParameterType.DateTime">
+                           {{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}                        
+                           </span>
+                   <!--        <div *ngIf="uiparam.Type == dadParameterType.Duration">{{addingZero(uiparam.Value.getHours())}}:{{addingZero(uiparam.Value.getMinutes())}}</div>
+                           <div *ngIf="uiparam.Type == dadParameterType.Number">{{uiparam.Value}}</div>   -->
+                            <span *ngIf="uiparam.Type == dadParameterType.String && uiparam.Value!='custom'">({{uiparam.Value}})</span> 
+                        </span>    
                       </div>
                   </div>
                  
@@ -125,16 +131,18 @@ export class DadWidgetComponent implements OnInit {
   data;
   mapper: Mapper = new Mapper();
   dadParameterType = DadParameterType;
-  dadWidgetType = DadWidgetType;
   editMode:boolean = false;
 
-  constructor(private dadWidgetDataService: DadWidgetDataService) {}
+  constructor(private dadWidgetDataService: DadWidgetDataService,
+              private dadWidgetConfigsService: DadWidgetConfigsService) {}
 
   onRefresh(message:string):void{
       this.mapParameters2model();
+      this.dadWidgetConfigsService.saveOne(this.widget);
       this.dadWidgetDataService.getWidgetData(this.widget).then(
           data => {
               this.data = data.data[0];
+              this.fixDataNulls();
           }
       ).catch(err => console.log(err.toString()));
   }
@@ -153,6 +161,7 @@ export class DadWidgetComponent implements OnInit {
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
         this.data = data.data[0];
+          this.fixDataNulls();
       }
     );
   }
@@ -163,13 +172,16 @@ export class DadWidgetComponent implements OnInit {
         for (let uiparam of this.widget.uiparameters) {
             if (uiparam.Type === this.dadParameterType.DateTime) {
 
-                let datetime = new Date(uiparam.Value['D']);
-                let time = uiparam.Value['T'];
-                datetime.setHours(time.getHours(),time.getMinutes(), time.getSeconds());
+                let datetime:Date = new Date(uiparam.Value['D']);
+                let time:Date = uiparam.Value['T'];
+                datetime.setUTCHours(time.getUTCHours(), time.getUTCMinutes());
                 parameters[uiparam.DataSource] = datetime.toISOString();
 
             }
             if (uiparam.Type === this.dadParameterType.Number) {
+                parameters[uiparam.DataSource] = uiparam.Value;
+            }
+            if (uiparam.Type === this.dadParameterType.String) {
                 parameters[uiparam.DataSource] = uiparam.Value;
             }
             if (uiparam.Type === this.dadParameterType.Duration) {
@@ -208,6 +220,9 @@ export class DadWidgetComponent implements OnInit {
             if (uiparam.Type === this.dadParameterType.Number) {
                 uiparam.Value = parameters[uiparam.DataSource];
             }
+            if (uiparam.Type === this.dadParameterType.String) {
+                uiparam.Value = parameters[uiparam.DataSource];
+            }
             if (uiparam.Type === this.dadParameterType.Duration) {
                 let Iduration: number = parameters[uiparam.DataSource];
                 let Tduration = this.mapLongDuration2Date(Iduration);
@@ -233,6 +248,13 @@ export class DadWidgetComponent implements OnInit {
         return durationLong;
     }
 
+    fixDataNulls(){
+        if (this.data[this.widget.metrics[0].DataSource] === null) this.data[this.widget.metrics[0].DataSource] = 0;
+        if (this.data[this.widget.metrics[1].DataSource] === null) this.data[this.widget.metrics[1].DataSource] = 0;
+        if (this.data[this.widget.metrics[2].DataSource] === null) this.data[this.widget.metrics[2].DataSource] = 0;
+        if (this.data[this.widget.metrics[3].DataSource] === null) this.data[this.widget.metrics[3].DataSource] = 0;
+    }
+
   ngOnInit() {
     console.log("Widgets are loading... :" + this.widget.id);
     this.mapParameters2ui();
@@ -240,6 +262,7 @@ export class DadWidgetComponent implements OnInit {
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
         this.data = data.data[0];
+        this.fixDataNulls();
       }
     ).catch(err => console.log(err.toString()));
   }

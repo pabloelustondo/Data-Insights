@@ -71,6 +71,7 @@ declare var d3, c3: any;
        <tr><td><label>type: </label></td><td><input style="width:300px"[(ngModel)]="selectedWidget.type" placeholder="type"></td></tr>
        <tr><td><label>endpoint: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.endpoint" placeholder="endpoint"></td></tr>
        <tr><td><label>shiftStartDateTime: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].shiftStartDateTime" placeholder="shiftStartDateTime"></td></tr>
+       <tr><td><label>shiftStartDateTimeAuto: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].shiftStartDateTimeAuto" placeholder="shiftStartDateTimeAuto"></td></tr>
        <tr><td><label>shiftDuration: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].shiftDuration" placeholder="shiftDuration"></td></tr>
        <tr><td><label>minimumBatteryPercentageThreshold: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.parameters[0].minimumBatteryPercentageThreshold" placeholder="minimumBatteryPercentageThreshold"></td></tr>
     
@@ -90,7 +91,7 @@ declare var d3, c3: any;
        <tr *ngIf="selectedWidget.uiparameters.length>2"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[2].DataSource" placeholder="DataSource"></td></tr>  
     
      </table> 
-      <br><a (click)="deleteChart()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>
+      <br><a (click)="deleteWidget()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>
     </div>
     
     
@@ -110,7 +111,7 @@ declare var d3, c3: any;
        <tr><td><label>dateTo: </label></td><td><input style="width:300px" [(ngModel)]="selectedChart.parameters[0].dateTo" placeholder="dateTo"></td></tr>
        <tr><td><label>is Mini?: </label></td><td><input type="checkbox" [(ngModel)]="selectedChart.mini"/></td></tr>
      </table> 
-       <br><a (click)="deleteWidget()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>   
+       <br><a (click)="deleteChart()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>   
     </div>
     
         <div *ngIf="selectedTable" style="width:60%; display:inline-block;  vertical-align:top; border: solid;" > 
@@ -254,6 +255,13 @@ export class DadConfigComponent implements  OnInit{
     this.dirty=true; //mh... do it better
     this.selectedWidget = null;
   }
+
+    deleteTable(table:DadTable){
+        this.tables = this.tables.filter(value => value.id!=this.selectedTable.id);
+        this.dirty=true; //mh... do it better
+        this.selectedTable = null;
+    }
+
     ngOnInit() {
         this.charts = this.dadChartConfigsService.getChartConfigs();
         this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
