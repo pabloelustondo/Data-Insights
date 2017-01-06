@@ -9,8 +9,10 @@ import { DadDateRange } from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
 import { DadChartComponent } from "./chart.component"
 import { DadTableConfigsService } from './chart.service';
+import { DadWidgetConfigsService } from './chart.service';
 import { Router, ActivatedRoute} from '@angular/router';
 import {Subscription } from 'rxjs';
+import {DadWidget} from "./widget.component";
 
 export class DadTable {
   id: string;
@@ -24,14 +26,17 @@ export class DadTable {
 
 @Component({
   selector: 'dadtable',
-  providers:[DadTableDataService,DadTableConfigsService],
-  template: `     
+  providers:[DadTableDataService,DadTableConfigsService,DadWidgetConfigsService],
+  template: ` 
     <div *ngIf="data">
-        
         <div class="col-lg-10">
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> {{table.name}}
+                    <h4>{{table.name}}</h4>
+                       Number of Rows:{{count}}
+                    <span *ngFor="let key of tableParameterKeys()"> 
+                       {{key}}:{{tableParameterValue(key)}}
+                    </span>
                 </div>
                 <div class="card-block">
                     <table class="table table-striped">
@@ -71,12 +76,15 @@ export class DadTableComponent implements OnInit {
   chartData(row,col){
     return JSON.parse(row[col.DataSource]);
   }
-  count:number;
+  count:number = 0;
   private subscription: Subscription;
   pages:number[];
+  callerId:string = "n/a";
+  callerWidget: DadWidget;
 
   constructor(private dadTableDataService: DadTableDataService,
               private dadTableConfigsService: DadTableConfigsService,
+              private dadWidgetConfigsService: DadWidgetConfigsService,
               private activatedRoute: ActivatedRoute
   ) { }
 
@@ -100,32 +108,56 @@ export class DadTableComponent implements OnInit {
     ).catch(err => console.log(err.toString()));
   }
 
+  tableParameterKeys(){
+    let keys = Object.keys(this.table.parameters[0]);
+    return keys;
 
+}
+    tableParameterValue(key:string){
+        let parameters  = this.table.parameters[0];
+        return parameters[key];
+    }
 
   ngAfterViewInit(){
 
     this.subscription = this.activatedRoute.params.subscribe(
         (param: any) => {
-          this.count = Number(param['id']);
+          this.count = Number(param['count']);
           console.log(this.count);
           let numberOfPages = this.count/this.table.parameters[0].rowsTake;
           this.pages = [];
           for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
+
+          this.callerId = param['id'];
+
+
+          this.callerWidget = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
+
+          let widgetParameters = this.callerWidget.parameters[0];
+          let tableParameters = this.table.parameters[0];
+
+          for (let param of Object.keys(widgetParameters)){
+
+              tableParameters[param] = widgetParameters[param];
+          }
+
+          console.log("Tables are loading... :" + this.table.id);
+          this.dadTableDataService.getTableData(this.table).then(
+              data => {
+                this.data = data.data;
+              }
+          ).catch(err => console.log(err.toString()));
+
+
+
         });
   }
 
   ngOnInit() {
 
-
     if (!this.table){
       let tables = this.dadTableConfigsService.getTableConfigs();
       this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
     }
-    console.log("Tables are loading... :" + this.table.id);
-    this.dadTableDataService.getTableData(this.table).then(
-      data => {
-        this.data = data.data;
-      }
-    ).catch(err => console.log(err.toString()));
   }
 }

@@ -28,7 +28,7 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'table/:id',
+                path: 'table/:count/:id',
                 component: DadTableComponent,
                 data: {
                     title: 'TableView'

@@ -57,6 +57,11 @@ public save(widgets:DadWidget[] ){
   localStorage.setItem("widgetdata",widgets_string);
 }
 
+public getWidgetConfig(id:string): DadWidget {
+    let widgets = this.getWidgetConfigs();
+    let widgetIndex = _.findIndex(widgets, function(w) { return w.id == id; });
+    return widgets[widgetIndex];
+}
 
 public getWidgetConfigs(): DadWidget[] {
 
