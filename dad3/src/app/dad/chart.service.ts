@@ -8,6 +8,7 @@ import { DadWidget } from "./widget.component";
 import { DadTable } from "./table.component";
 import { WIDGETS } from "./mock.widgets";
 import { TABLES } from "./mock.tables";
+import * as _ from "lodash";
 
 @Injectable()
 export class DadChartConfigsService {
@@ -44,11 +45,23 @@ export class DadWidgetConfigsService {
     localStorage.removeItem("widgetdata");
 }
 
+  public saveOne(widget:DadWidget ){
+    let widgets:DadWidget[] = this.getWidgetConfigs();
+    let widgetIndex = _.findIndex(widgets, function(w) { return w.id == widget.id; });
+    widgets.splice(widgetIndex, 1, widget);
+    this.save(widgets);
+  }
+
 public save(widgets:DadWidget[] ){
   let widgets_string = JSON.stringify(widgets);
   localStorage.setItem("widgetdata",widgets_string);
 }
 
+public getWidgetConfig(id:string): DadWidget {
+    let widgets = this.getWidgetConfigs();
+    let widgetIndex = _.findIndex(widgets, function(w) { return w.id == id; });
+    return widgets[widgetIndex];
+}
 
 public getWidgetConfigs(): DadWidget[] {
 
