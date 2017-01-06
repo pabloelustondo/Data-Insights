@@ -23,7 +23,7 @@ export class CountDevicesNotSurvivedShiftController {
      *     - if the devices' battery charge was reported below the minimum threshold
      *  3. CountDevicesChargingEntireShift - The number of devices that were reported as constantly charging during the
      *     entire shift.
-     *  4. CountTotalActiveDevices: The sum of all devices presented in the first three returned values.
+     *  4. CountTotalActiveDevices - The sum of all devices presented in the first three returned values.
      *
      * An active device is any device that reported a battery status for the defined shift duration.
      * If the device was off or did not report battery status it is not included in the data returned.
@@ -75,8 +75,9 @@ export class CountDevicesNotSurvivedShiftController {
             qs: xqs,
             url: xurl
         };
-
+        console.time('deviceNotSurviveShift: aws call');
         let p = await rp(options); // request library used
+        console.timeEnd('deviceNotSurviveShift: aws call');
         let mData = ['CountDevicesLastedShift: int',
             'CountDevicesNotLastedShift: int',
             'CountDevicesChargingEntireShift: int',
