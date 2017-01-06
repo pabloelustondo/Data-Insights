@@ -258,6 +258,7 @@ export class DadWidgetComponent implements OnInit {
   ngOnInit() {
     console.log("Widgets are loading... :" + this.widget.id);
     this.mapParameters2ui();
+    this.mapParameters2model();
      // this.mapParameters2ui();
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
