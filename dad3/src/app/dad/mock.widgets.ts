@@ -35,7 +35,7 @@ export const WIDGETS: DadWidget[] = [
   {
     shiftStartDateTimeAuto:"custom",
     shiftStartDateTime:"2016-08-15T13:00:00.000Z",
-    shiftDuration: "12.5",
+    shiftDuration: "8",
     minimumBatteryPercentageThreshold: 20
   }],
   uiparameters: [
@@ -91,7 +91,7 @@ export const WIDGETS: DadWidget[] = [
       {
         shiftStartDateTimeAuto:"yesterday",
         shiftStartDateTime:"2016-08-25T13:00:00.000Z",
-        shiftDuration: "12.5",
+        shiftDuration: "8",
         minimumBatteryPercentageThreshold: 20
       }],
     uiparameters: [
@@ -147,7 +147,7 @@ export const WIDGETS: DadWidget[] = [
       {
         shiftStartDateTimeAuto:"custom",
         shiftStartDateTime:"2016-08-25T13:00:00.000Z",
-        shiftDuration: "12.5",
+        shiftDuration: "8",
         minimumBatteryPercentageThreshold: 20
       }],
     uiparameters: [
