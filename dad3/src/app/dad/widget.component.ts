@@ -37,8 +37,8 @@ export class DadWidget {
                             <i class="icon-settings"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-                            <button class="dropdown-item"> <div (click)="onEdit('lalal')">Edit</div></button>
-                            <button class="dropdown-item"> <div (click)="onRefresh('lalal')">Refresh</div></button>
+                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh('lalal')">Refresh</div></button>
                         </div>
                     </div>
                     <h4 *ngIf="data" class="mb-0">
@@ -157,7 +157,6 @@ export class DadWidgetComponent implements OnInit {
   }
 
   changeData(event) {
-
     this.dadWidgetDataService.getWidgetData(this.widget).then(
       data => {
         this.data = data.data[0];
