@@ -56,10 +56,11 @@ export class DadTable {
                             </tr>
                         </tbody>
                     </table>
-                
-                <ul class="pagination">
-                        <li *ngFor="let page of pages" class="page-item"><a class="page-link" (click)=refresh(page)>{{page+1}}</a>
-                        </li>
+                    <ul class="pagination" style="cursor:pointer;">
+                        <span *ngFor="let page of pages">               
+                            <li  *ngIf="page == currentPage" class="page-item active" ><a class="page-link" (click)=refresh(page) >{{page+1}}</a></li>
+                            <li  *ngIf="page != currentPage" class="page-item" ><a class="page-link" (click)=refresh(page) >{{page+1}} </a></li>
+                        </span>
                     </ul>
                 </div>
             </div>
@@ -79,6 +80,7 @@ export class DadTableComponent implements OnInit {
   count:number = 0;
   private subscription: Subscription;
   pages:number[];
+  currentPage:number=0;
   callerId:string = "n/a";
   callerWidget: DadWidget;
 
@@ -100,6 +102,7 @@ export class DadTableComponent implements OnInit {
 
   refresh(page:number){
 
+    this.currentPage = page;
     this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
     this.dadTableDataService.getTableData(this.table).then(
         data => {
