@@ -14,8 +14,15 @@ export class ListDevicesNotSurvivedShiftController {
      * List of all devices that may have not lasted the full shift for a given shift date-time, shift duration, and the
      * battery level the device must fall under.
      *
-     * The user can request a complete list by assigning the value -1 to rowsSkip and rowsTake or get a partial list
-     * by assigning an appropriate number to the rowsSkip and rowsTake fields.
+     * The API returns a list of devices specified using the rowsSkip and rowsTake parameters. The complete list
+     * can be retrieved by assigning the value -1 to rowsSkip and rowsTake. Each device in the contains the following
+     * information:
+     * - Device ID
+     * - Last reported status
+     * - List of battery values reported during the shift.
+     *
+     * Note: The device information returned in the list is subject to change in the future version. User will be able
+     * to determine the desired device metric(s).
      *
      * A device is added to the list if:
      * - it's battery was charged or an attempt to charge the device was detected during the shift or
