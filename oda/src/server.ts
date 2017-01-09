@@ -4,6 +4,7 @@ import './controllers/dischargeRateController';
 import './controllers/devicesDidNotSurviveShift';
 import './controllers/listOfDevicesDidNotSurviveShift';
 import './controllers/deviceList';
+import './controllers/retrieveReasonData';
 
 import * as winston from 'winston';
 
