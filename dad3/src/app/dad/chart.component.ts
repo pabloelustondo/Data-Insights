@@ -122,6 +122,17 @@ export class DadChartComponent implements OnInit {
     drawChartBar(chartConfig:DadChart, data){
         let chartData = this.mapper.map(chartConfig, data);
 
+        let bardata = {
+        columns: [chartData.Dimension],
+            keys: {
+          value: chartData.Metric
+        },
+        selection:{
+          enabled:true
+        },
+        type: 'bar',
+      };
+
         d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
         }).remove();
@@ -131,16 +142,7 @@ export class DadChartComponent implements OnInit {
           width: chartConfig.width,
         },
         bindto: '#' + chartConfig.id,
-        data: {
-          json: [chartData.Dimension],
-          keys: {
-            value: chartData.Metric
-          },
-          selection:{
-            enabled:true
-          },
-          type: 'bar',
-        },
+        data: bardata,
         color: {
           pattern: this.colorPalette,
         },
@@ -148,22 +150,24 @@ export class DadChartComponent implements OnInit {
           grouped: false,
             format: {
               title: function () {
-                return ([chartConfig.a]);
+                return ([chartConfig.b])
               }
             }
         },
         axis: {
           x: {
+            type: 'category',
+            categories: chartData.x,
             show : true,
             label: {
-              text: [chartConfig.b],
+              text: [chartConfig.a],
                 position: 'outer-right'
             }
           },
           y: {
             show : true,
             label: {
-              text: [chartConfig.a],
+              text: [chartConfig.b],
                 position: 'outer-top'
             }
           }
@@ -190,7 +194,12 @@ export class DadChartComponent implements OnInit {
         },
         interaction: {
           enabled: true
-        }
+        },
+          bar:{
+            width: {
+              ratio: 0.7
+            }
+          },
       };
       if(chartConfig.mini){
         c3Config.size.width = this.miniChartWidth;
@@ -328,6 +337,18 @@ export class DadChartComponent implements OnInit {
     drawChartSpline(chartConfig:DadChart, data){
       let chartData = this.mapper.map(chartConfig, data);
 
+      let splinedata = {
+        columns: [chartData.Dimension],
+        keys: {
+          value: chartData.Metric
+        },
+        selection:{
+          enabled:true
+        },
+        type: 'spline',
+      };
+
+
       d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
         }).remove();
@@ -337,19 +358,7 @@ export class DadChartComponent implements OnInit {
           width: chartConfig.width
         },
         bindto: '#' + chartConfig.id,
-        data: {
-          columns:[
-            ['Number of Devices',30,40,500,0],
-            ['Range of Devices', 1, 10, 90, 70, 85, 5, 100]
-          ],
-          keys: {
-            value: chartData.Metric
-          },
-          selection:{
-            enabled:true
-          },
-          type: 'spline',
-        },
+        data: splinedata,
         grid: {
           x: {
             show: true
@@ -366,16 +375,18 @@ export class DadChartComponent implements OnInit {
         },
         axis: {
           x: {
+            type: 'category',
+            categories: chartData.x,
             show: true,
             label: {
-              text: [chartConfig.b],
+              text: [chartConfig.a],
               position: 'outer-right'
             }
           },
           y: {
             show: true,
             label: {
-              text: [chartConfig.a],
+              text: [chartConfig.b],
               position: 'outer-top'
             }
           }
