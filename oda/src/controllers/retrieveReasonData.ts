@@ -17,7 +17,11 @@ export class MultiplePostsController {
      * Provide the reasonId and the associated parameters with it.
      *
      * Supported reasons:
-     * batteryNotFully Charged
+     * batteryNotFullyCharged
+     *  - shiftDuration: int
+     *  - shiftStartTime: int
+     *  - minimumBatteryPercentageThreshold: int
+     *
      */
 
     @Post('possibleReasons')
