@@ -102,8 +102,8 @@ export class AverageDischargeRateController {
             createdAt: new Date(),
             metadata: mData,
             data: [
-             'hello'
-        ]
+                'hello'
+            ]
         };
 
         return user;
