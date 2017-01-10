@@ -172,8 +172,36 @@ export const WIDGETS: DadWidget[] = [
         DataSource: "minimumBatteryPercentageThreshold"
       }
     ]
+  },
+  {id: 'widget4',
+    name:'Device battery is not fully charged',
+    type: 0,
+    endpoint:'batteryNotFullyCharged',
+    metrics:[
+      {
+        Type: DadParameterType.String,
+        Name: "Device Not Fully Charged",
+        DataSource: "countDeviceNotFullyChargedBeforeShift"
+      }
+    ],
+    parameters: [
+      {
+        //shiftStartDateTime:"2016-08-25T13:00:00.000Z",
+        countDeviceNotFullyChargedBeforeShift: "398",
+        totalActiveDevices: "2122"
+      }],
+    uiparameters: [
+      {
+        Type: DadParameterType.String,
+        Name: "Device Not Fully Charged",
+        DataSource: "countDeviceNotFullyChargedBeforeShift"
+      },
+      {
+        Type: DadParameterType.String,
+        Name: "Total Active Devices",
+        DataSource: "totalActiveDevices"
+      }
+    ]
   }
-
-
 
 ];

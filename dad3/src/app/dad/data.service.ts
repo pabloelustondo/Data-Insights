@@ -85,3 +85,29 @@ export class DadTableDataService {
   }
 }
 
+@Injectable()
+export class DadWidgetPostDataService {
+
+    constructor(private http: Http) { }
+
+    postWidgetData(widget:DadWidget): Promise<any> {
+        console.log("we got " + config["oda_dev_url"]);
+
+        let params: URLSearchParams = new URLSearchParams();
+        let tableparameters = widget.parameters[0];
+        for (let tableparam in tableparameters){
+            console.log("Table:" + widget.id + "Mapping Parameter:" + tableparam);
+            params.set(tableparam, tableparameters[tableparam]);
+        }
+// config[chart.endpoint]
+        return this.http.post(config[widget.endpoint], {search:params} )
+            .toPromise().then(
+            response => JSON.parse(response['_body'])
+        ).catch(
+            err =>{
+                console.log("we got " + err.json());
+            }
+        );
+    }
+}
+
