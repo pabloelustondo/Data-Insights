@@ -1,7 +1,7 @@
 /**
- * Created by vdave on 11/30/2016.
+ * Created by vdave on 1/10/2017.
  */
-import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
+import {Route, Get, Example} from 'tsoa';
 import {SDS} from '../models/user';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
@@ -9,80 +9,78 @@ import * as querystring from 'querystring';
 
 import * as rp from 'request-promise';
 @Route('Devices')
-export class DischargeRateController {
+export class AverageDischargeRateController {
     /**
-     * A DischargeRate represents how quickly the battery is losing the charge per hour.
+     * DO NOT USE THIS: WORK IN PROGRESS
+     * The AverageDischargeRate represents how quickly the battery is losing the charge per hour over the specified
+     * number of days.
      * This data is retrieved every hour for a given day.
      * A date range is required to get the information.
      */
 
-    @Get('Battery/Summary/DischargeRate')
+    @Get('Battery/Summary/AverageDischargeRate')
     @Example<any>({
         'createdAt': '2016-11-29T20:30:21.385Z',
         'data': [
             {
-                'NumberOfDevices': '4',
-                'DischargeRate': 2
+                'Percentage': 1,
+                'Count': 30
             },
             {
-                'NumberOfDevices': '6',
-                'DischargeRate': 3
+                'Percentage': 2,
+                'Count': 40
             },
             {
-                'NumberOfDevices': '24',
-                'DischargeRate': 4
+                'Percentage': 4,
+                'Count': 25
             },
             {
-                'NumberOfDevices': '58',
-                'DischargeRate': 5
+                'Percentage': 7,
+                'Count': 67
             },
             {
-                'NumberOfDevices': '53',
-                'DischargeRate': 6
+                'Percentage': 8,
+                'Count': 87
             },
             {
-                'NumberOfDevices': '27',
-                'DischargeRate': 7
+                'Percentage': 10,
+                'Count': 30
             },
             {
-                'NumberOfDevices': '18',
-                'DischargeRate': 8
+                'Percentage': 15,
+                'Count': 10
             },
             {
-                'NumberOfDevices': '3',
-                'DischargeRate': 9
+                'Percentage': 25,
+                'Count': 15
             },
             {
-                'NumberOfDevices': '3',
-                'DischargeRate': 10
+                'Percentage': 30,
+                'Count': 11
             },
             {
-                'NumberOfDevices': '1',
-                'DischargeRate': 12
+                'Percentage': 50,
+                'Count': 2
             },
             {
-                'NumberOfDevices': '1',
-                'DischargeRate': 14
+                'Percentage': 55,
+                'Count': 8
             },
             {
-                'NumberOfDevices': '4',
-                'Percentage': 16
+                'Percentage': 57,
+                'Count': 9
             },
             {
-                'NumberOfDevices': '14',
-                'DischargeRate': 17
+                'Percentage': 67,
+                'Count': 3
             },
             {
-                'NumberOfDevices': '1',
-                'DischargeRate': 22
-            },
-            {
-                'NumberOfDevices': '1',
-                'DischargeRate': 45
+                'Percentage': 100,
+                'Count': 1
             }
         ]
     })
-    public async Get(dateFrom: string, dateTo: string): Promise<SDS> {
+    public async Get(dateFrom: string, dateTo: string, shiftStartTime: string, shiftDuration: string): Promise<SDS> {
 
         const xqs = {dateFrom: dateFrom, dateTo: dateTo };
         const xurl = 'https://' + config['aws-hostname'] + config['aws-discharge'];
@@ -103,7 +101,9 @@ export class DischargeRateController {
         const user: SDS = {
             createdAt: new Date(),
             metadata: mData,
-            data: p
+            data: [
+             'hello'
+        ]
         };
 
         return user;

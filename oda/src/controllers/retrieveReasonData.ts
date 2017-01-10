@@ -55,17 +55,18 @@ export class MultiplePostsController {
 
 
         console.time('awsPutRecord');
-        console.timeEnd('awsPutRecord');
-        let mData = ['CountDevicesLastedShift: int',
-            'CountDevicesNotLastedShift: int',
-            'CountDevicesChargingEntireShift: int',
-            'TotalActiveDevices: int'];
 
+        let mData = ['countDeviceNotFullyChargedBeforeShift: int',
+            'totalActiveDevices'];
+
+        let max = Math.floor(Math.random() * (5347 - 23)) + 23;
         const user: SDS = {
             createdAt: new Date(),
             metadata: mData,
-            data: ['hello']
+            data: ['countDeviceNotFullyChargedBeforeShift: ' + (Math.floor(Math.random() * (max - 0)) + 0),
+                    'totalActiveDevices: ' + max]
         };
+        console.timeEnd('awsPutRecord');
         return user;
     }
 
