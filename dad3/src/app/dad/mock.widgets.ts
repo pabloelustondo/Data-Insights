@@ -184,22 +184,23 @@ export const WIDGETS: DadWidget[] = [
         DataSource: "countDeviceNotFullyChargedBeforeShift"
       }
     ],
+    reasonId: "string",
     parameters: [
       {
         //shiftStartDateTime:"2016-08-25T13:00:00.000Z",
-        countDeviceNotFullyChargedBeforeShift: "398",
-        totalActiveDevices: "2122"
+        name: "string",
+        value:"string"
       }],
     uiparameters: [
       {
         Type: DadParameterType.String,
         Name: "Device Not Fully Charged",
-        DataSource: "countDeviceNotFullyChargedBeforeShift"
+        DataSource: "name"
       },
       {
         Type: DadParameterType.String,
         Name: "Total Active Devices",
-        DataSource: "totalActiveDevices"
+        DataSource: "value"
       }
     ]
   }

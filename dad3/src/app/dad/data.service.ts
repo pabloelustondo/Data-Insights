@@ -52,14 +52,28 @@ export class DadWidgetDataService {
       params.set(tableparam, tableparameters[tableparam]);
     }
 // config[chart.endpoint]
-    return this.http.get(config[widget.endpoint], {search:params} ).toPromise().then(
+      let endpoint0 = config[widget.endpoint];
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+      let data = {reasonId:"string", parameters:widget.parameters};
+      if(endpoint0.method === "post"){
+          return this.http.post(endpoint0.url, data, headers).toPromise().then(
+              response => JSON.parse(response['_body'])
+          ).catch(
+              err =>{
+                  console.log("we got " + err.json());
+              }
+          );
+
+      }
+      else{
+      return this.http.get(config[widget.endpoint], {search:params} ).toPromise().then(
       response => JSON.parse(response['_body'])
     ).catch(
       err =>{
         console.log("we got " + err.json());
       }
     );
-  }
+  }}
 }
 
 @Injectable()
@@ -85,29 +99,5 @@ export class DadTableDataService {
   }
 }
 
-@Injectable()
-export class DadWidgetPostDataService {
 
-    constructor(private http: Http) { }
-
-    postWidgetData(widget:DadWidget): Promise<any> {
-        console.log("we got " + config["oda_dev_url"]);
-
-        let params: URLSearchParams = new URLSearchParams();
-        let tableparameters = widget.parameters[0];
-        for (let tableparam in tableparameters){
-            console.log("Table:" + widget.id + "Mapping Parameter:" + tableparam);
-            params.set(tableparam, tableparameters[tableparam]);
-        }
-// config[chart.endpoint]
-        return this.http.post(config[widget.endpoint], {search:params} )
-            .toPromise().then(
-            response => JSON.parse(response['_body'])
-        ).catch(
-            err =>{
-                console.log("we got " + err.json());
-            }
-        );
-    }
-}
 

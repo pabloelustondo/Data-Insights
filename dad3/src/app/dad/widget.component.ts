@@ -14,6 +14,7 @@ export class DadWidget {
   id: string;
   name: string;
   type: DadWidgetType;
+  reasonId: string;
   parameters: any[];
   uiparameters?: DadParameter[];
   a?:string;
