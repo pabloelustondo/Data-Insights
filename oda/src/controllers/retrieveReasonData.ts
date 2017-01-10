@@ -64,11 +64,17 @@ export class MultiplePostsController {
             'totalActiveDevices'];
 
         let max = Math.floor(Math.random() * (5347 - 23)) + 23;
-        const user: SDS = {
+
+
+        let returnData = [{
+            countDeviceNotFullyChargedBeforeShift: Math.floor(Math.random() * (max - 0)) + 0,
+            totalActiveDevices: max
+        }];
+
+        const user: any = {
             createdAt: new Date(),
             metadata: mData,
-            data: ['countDeviceNotFullyChargedBeforeShift: ' + (Math.floor(Math.random() * (max - 0)) + 0),
-                    'totalActiveDevices: ' + max]
+            data: returnData
         };
         console.timeEnd('awsPutRecord');
         return user;
