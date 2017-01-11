@@ -11,10 +11,9 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class AverageDischargeRateController {
     /**
-     * DO NOT USE THIS: WORK IN PROGRESS
      * The AverageDischargeRate represents how quickly the battery is losing the charge per hour over the specified
      * number of days.
-     * This data is retrieved every hour for a given day.
+     *
      * A date range is required to get the information.
      */
 
@@ -80,7 +79,8 @@ export class AverageDischargeRateController {
             }
         ]
     })
-    public async Get(dateFrom: string, dateTo: string, shiftStartTime: string, shiftDuration: string): Promise<SDS> {
+    public async Get(dateFrom: Date, dateTo: Date, shiftStartTime: Date, shiftDuration: number): Promise<SDS> {
+
 
         const xqs = {dateFrom: dateFrom, dateTo: dateTo };
         const xurl = 'https://' + config['aws-hostname'] + config['aws-discharge'];
@@ -95,15 +95,48 @@ export class AverageDischargeRateController {
             url: xurl
         };
 
-        let p = await rp(options); // request library used
-        let mData = ['Description of discharge rate', 'NumberOfDevices', 'DischargeRate'];
+        // let p = await rp(options); // request library used
+        let mData = [''];
 
-        const user: SDS = {
+        let returnData = [
+            {
+                percentage: 5,
+                countOfDevices: 1874
+            },
+            {
+                percentage: 10,
+                countOfDevices: 6520
+            },
+            {
+                percentage: 15,
+                countOfDevices: 172
+            },
+            {
+                percentage: 20,
+                countOfDevices: 21
+            },
+            {
+                percentage: 25,
+                countOfDevices: 10
+            },
+            {
+                percentage: 40,
+                countOfDevices: 3
+            },
+            {
+                percentage: 50,
+                countOfDevices: 1
+            },
+            {
+                percentage: 70,
+                countOfDevices: 3
+            }
+        ];
+
+        const user: any = {
             createdAt: new Date(),
             metadata: mData,
-            data: [
-                'hello'
-            ]
+            data: returnData
         };
 
         return user;

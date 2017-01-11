@@ -18,7 +18,7 @@ export class MultiplePostsController {
      * Provide the reasonId and the associated parameters with it.
      *
      * Supported reasons:
-     * batteryNotFullyCharged
+     * batteryNotFullyChargedBeforeShift
      *  - shiftDuration: int
      *  - shiftStartTime: int
      *  - minimumBatteryPercentageThreshold: int
@@ -67,10 +67,16 @@ export class MultiplePostsController {
         let max = Math.floor(Math.random() * (5347 - 23)) + 23;
 
 
-        let returnData = [{
-            countDeviceNotFullyChargedBeforeShift: Math.floor(Math.random() * (max - 0)) + 0,
-            totalActiveDevices: max
-        }];
+        let returnData = [
+            {
+                countDeviceNotFullyChargedBeforeShift: Math.floor(Math.random() * (max - 0)) + 0,
+                totalActiveDevices: max
+            },
+            {
+                countDeviceNotFullyChargedBeforeShift: Math.floor(Math.random() * (max - 0)) + 0,
+                totalActiveDevices: max
+            }
+        ];
 
         const user: any = {
             createdAt: new Date(),
