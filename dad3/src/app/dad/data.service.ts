@@ -54,7 +54,8 @@ export class DadWidgetDataService {
 // config[chart.endpoint]
       let endpoint0 = config[widget.endpoint];
       let headers = new Headers({ 'Content-Type': 'application/json' });
-      let data = {reasonId:"string", parameters:widget.parameters};
+      let data = {metricName:widget.metricName, predicates:widget.predicates, parameters:widget.parameters};
+
       if(endpoint0.method === "post"){
           return this.http.post(endpoint0.url, data, headers).toPromise().then(
               response => JSON.parse(response['_body'])

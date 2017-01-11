@@ -8,5 +8,5 @@ export const config = {
     "DischargeRate":"http://localhost:3002/Devices/Battery/Summary/DischargeRate",
     "DevicesNotSurvivedShift": "http://localhost:3002/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
     "ListOfDevicesNotSurvivedShift": "http://localhost:3002/Devices/Battery/Summary/listOfDevicesDidNotSurviveShift",
-    "batteryNotFullyCharged": {url:"http://localhost:3002/Battery/Summary/possibleReasons",method:"post"}
+    "BatteryMetrics": {url:"http://localhost:3002/Devices/Battery/getMetrics", method:"post"}
 }

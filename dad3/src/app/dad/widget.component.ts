@@ -14,8 +14,9 @@ export class DadWidget {
   id: string;
   name: string;
   type: DadWidgetType;
-  reasonId: string;
   parameters: any[];
+  metricName?: string;
+  predicates?: string;
   uiparameters?: DadParameter[];
   a?:string;
   b?:string;
@@ -42,14 +43,16 @@ export class DadWidget {
                             <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh('lalal')">Refresh</div></button>
                         </div>
                     </div>
-                    <h4 *ngIf="data" class="mb-0">
+                    <h3 *ngIf="data" class="mb-0">
                     <a [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
-                    <span style="color:white; text-decoration: underline; ">{{data[widget.metrics[0].DataSource]}} </span>
+                    <span style="font-size: 50px;color:white; text-decoration:underline; ">{{data[widget.metrics[0].DataSource]}} </span>
                     </a>
-                    of {{data[widget.metrics[1].DataSource]}}</h4><br/>
-                    <div class="col-sm-6">
-                       <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[0].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
-                    </div><br/>
+                    <br/>out of {{data[widget.metrics[1].DataSource]}} </h3><br/>
+                    <div *ngIf="data" class="col-sm-6">
+                       <progress style=" display:inline-block; margin-left:-15px;" class="progress progress-xs progress-danger" value="{{data[widget.metrics[0].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>                                                          
+                    </div>
+                    <div *ngIf="data">{{percentageOfTotal()}}%</div>     
+                    <br/>
                     <div>
                     <p>{{widget.metrics[0].Name}}</p>
                     </div>
@@ -246,6 +249,16 @@ export class DadWidgetComponent implements OnInit {
         let mins = duration.getMinutes();
         let durationLong:number = hrs + mins/60;
         return durationLong;
+    }
+
+    percentageOfTotal(){
+      if(this.data[this.widget.metrics[0].DataSource] == 0){
+          return 0;
+      }
+      else {
+          let percentage = this.data[this.widget.metrics[0].DataSource] / this.data[this.widget.metrics[1].DataSource];
+          return Math.floor(percentage * 100);
+      }
     }
 
     fixDataNulls(){
