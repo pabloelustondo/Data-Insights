@@ -1,5 +1,5 @@
 /**
- * Created by pablo elustondo on 12/14/2016.
+ * Created by doga ister on 12/14/2016.
  */
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { DadChart } from "./chart.component";
@@ -14,6 +14,7 @@ export class DadWidget {
   id: string;
   name: string;
   type: DadWidgetType;
+  reasonId: string;
   parameters: any[];
   uiparameters?: DadParameter[];
   a?:string;
