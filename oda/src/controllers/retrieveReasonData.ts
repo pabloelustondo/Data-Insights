@@ -27,8 +27,8 @@ export class MultiplePostsController {
 
     @Post('Battery/getMetrics')
     @Example<any>({
-        metricName: 'numberOfDevices',
-        predicate: 'batteryNotFullyChargedBeforeShift',
+        metricName: 'DevicesDidNotLastShift',
+        predicates: 'batteryNotFullyChargedBeforeShift',
         parameters: [
             {
                 parameterName: 'date',
@@ -52,7 +52,7 @@ export class MultiplePostsController {
     public async Create(request: ReasonModel): Promise<SDS> {
 
 
-        if (request.metricName.toString()  !== 'countOfDevices') {
+        if (request.metricName.toString()  !== 'DevicesDidNotLastShift') {
             throw new Error('Metric name not valid');
         }
         if (request.predicates.toString() !== 'batteryNotFullyChargedBeforeShift') {

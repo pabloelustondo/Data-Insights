@@ -1,1 +1,1 @@
-export type Metrics = 'countOfDevices' | 'countCustomers';
+export type Metrics = 'DevicesDidNotLastShift'| 'TotalActiveDevices' | 'DevicesConstantlyCharging';

@@ -7,7 +7,7 @@ export interface ReasonModel {
 
     metricName: Metrics;
     predicates: Predicates;
-    generateDataByParameters: Parameter[];
+    parameters: Parameter[];
 }
 
 /**
