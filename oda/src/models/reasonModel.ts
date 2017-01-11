@@ -6,7 +6,7 @@ import {Metrics} from './metrics';
 export interface ReasonModel {
 
     metricName: Metrics;
-    predicates: Predicates;
+    predicates: Predicates[];
     parameters: Parameter[];
 }
 
