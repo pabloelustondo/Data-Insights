@@ -4,6 +4,22 @@
 import { DadChart } from './chart.component';
 
 export const CHARTS: DadChart[] = [
+    {id: "chartbar",
+        name: 'Average Battery Discharge Rate',
+        type: "bar",
+        endpoint: "AverageDischargeRate",
+        a : 'percentage',
+        b : 'countOfDevices',
+        width: 475,
+        height: 400,
+        parameters: [
+            {
+                dateFrom: "2016-11-29T20:30:21-23",
+                dateTo: "2016-11-30T20:30:21-25",
+                shiftStartDateTime: "2016-11-29T20:30:21-23",
+                shiftDuration: 8
+            }]
+    },
     //first endpoint
   {id: "chartbar0",
     name: 'Range of Battery vs. Number of Devices',

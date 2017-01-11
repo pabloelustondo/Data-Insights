@@ -20,20 +20,35 @@ export class DadChartDataService {
         console.log("we got " + config["oda_dev_url"]);
 
         let params: URLSearchParams = new URLSearchParams();
-        for (let chartparam of chart.parameters){
-            if (chartparam.parameterType = "DateRange"){
-                console.log("Chart:" + chart.id + " Got DateRange:" + chartparam.dateFrom + ":" + chartparam.dateTo);
-            params.set('dateFrom', chartparam.dateFrom);
-            params.set('dateTo', chartparam.dateTo);}
+        let tableparameters = chart.parameters[0];
+        for (let tableparam in tableparameters){
+            console.log("Table:" + chart.id + "Mapping Parameter:" + tableparam);
+            params.set(tableparam, tableparameters[tableparam]);
         }
 // config[chart.endpoint]
-        return this.http.get(config[chart.endpoint], {search:params} ).toPromise().then(
-            response => JSON.parse(response['_body'])
-        ).catch(
-            err =>{
-                console.log("we got " + err.json());
-            }
-        );
+        let endpoint0 = config[chart.endpoint];
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let data = {parameters:chart.parameters};
+
+        if(endpoint0.method === "post"){
+            return this.http.post(endpoint0.url, data, headers).toPromise().then(
+                response => JSON.parse(response['_body'])
+            ).catch(
+                err =>{
+                    console.log("we got " + err.json());
+                }
+            );
+
+        }
+        else{
+            return this.http.get(config[chart.endpoint], {search:params} ).toPromise().then(
+                response => JSON.parse(response['_body'])
+            ).catch(
+                err =>{
+                    console.log("we got " + err.json());
+                }
+            );
+        }
     }
 }
 
