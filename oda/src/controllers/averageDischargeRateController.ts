@@ -79,8 +79,12 @@ export class AverageDischargeRateController {
             }
         ]
     })
-    public async Get(dateFrom: Date, dateTo: Date, shiftStartTime: Date, shiftDuration: number): Promise<SDS> {
+    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number): Promise<SDS> {
 
+
+        if (dateFrom.getDate() !== shiftStartDateTime.getDate()) {
+            throw new Error('shift start data time != to dateFrom');
+        }
 
         const xqs = {dateFrom: dateFrom, dateTo: dateTo };
         const xurl = 'https://' + config['aws-hostname'] + config['aws-discharge'];
