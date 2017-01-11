@@ -4,11 +4,12 @@
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from '../models/user';
 import {ReasonModel} from '../models/reasonModel';
+import {Metrics} from '../models/Metrics';
 
 // import * as https from 'https';
 const config = require('../../appconfig.json');
 
-@Route('Battery/Summary')
+@Route('Devices')
 export class MultiplePostsController {
 
     /**
@@ -24,39 +25,39 @@ export class MultiplePostsController {
      *
      */
 
-    @Post('possibleReasons')
+    @Post('Battery/getMetrics')
     @Example<any>({
-        headers: {
-            'X-API-key': 'Future Private Access Key',
-            'Accept': 'application/json'
-        },
-        json: true,
-        url: 'http://localhost:3003/data',
-        data:  {
-            reasonId: 'deviceNotFullyCharged',
-            parameters: [
-                {
-                    name: 'date',
-                    value: '2016-08-25'
-                },
-                {
-                    name: 'shiftStartTime',
-                    value: '09:00:00'
-                },
-                {
-                    name: 'shiftDuration',
-                    value: '8'
-                },
-                {
-                    name: 'minimumThresholdValue',
-                    value: '5'
-                }
-            ]
-        }
+        metricName: 'numberOfDevices',
+        predicate: 'batteryNotFullyChargedBeforeShift',
+        parameters: [
+            {
+                parameterName: 'date',
+                parameterValue: '2016-08-25'
+            },
+            {
+                parameterName: 'shiftStartTime',
+                parameterValue: '09:00:00'
+            },
+            {
+                parameterName: 'shiftDuration',
+                parameterValue: '8'
+            },
+            {
+                parameterName: 'minimumThresholdValue',
+                parameterValue: '5'
+            }
+        ]
+
     })
     public async Create(request: ReasonModel): Promise<SDS> {
 
 
+        if (request.metricName.toString()  !== 'countOfDevices') {
+            throw new Error('Metric name not valid');
+        }
+        if (request.predicates.toString() !== 'batteryNotFullyChargedBeforeShift') {
+            throw new Error('batteryNotFullyChargedBeforeShift name not valid');
+        }
 
         console.time('awsPutRecord');
 

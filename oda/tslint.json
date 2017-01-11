@@ -102,7 +102,6 @@
     "use-isnan": true,
     "variable-name": [
       true,
-      "check-format",
       "ban-keywords"
     ],
     "whitespace": [
