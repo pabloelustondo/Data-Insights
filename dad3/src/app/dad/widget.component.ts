@@ -16,7 +16,7 @@ export class DadWidget {
   type: DadWidgetType;
   parameters: any[];
   metricName?: string;
-  predicates?: string;
+  predicates?: string[];
   uiparameters?: DadParameter[];
   a?:string;
   b?:string;

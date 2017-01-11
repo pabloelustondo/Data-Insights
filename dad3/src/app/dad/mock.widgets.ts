@@ -190,7 +190,7 @@ export const WIDGETS: DadWidget[] = [
       }
     ],
     metricName: "DevicesDidNotLastShift",
-    predicates: "batteryNotFullyChargedBeforeShift",
+    predicates: ["batteryNotFullyChargedBeforeShift"],
     parameters: [
       {
         parameterName: "string",
