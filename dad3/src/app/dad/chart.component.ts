@@ -2,28 +2,39 @@
  * Created by pablo elustondo Nov 2016
  */
 import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
-import { DadChartDataService } from './data.service'
+import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
+import { DadElement } from "./dadmodels";
 
 declare var d3, c3: any;
 
-export class DadChart {
-    id: string;
-    name?: string;
+export class DadChart extends DadElement{
     type: string;
-    parameters?: any[];
-    endpoint?:string;
-    a?: string;
-    b?: string;
     width: number;
     height: number;
     mini?: boolean = false;
-    data?:any;
+    data?: any;
 }
 @Component({
     selector: 'dadchart',
-    providers:[DadChartDataService],
+    providers:[DadElementDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
+   <div class="col-sm-9 col-lg-9">          
+     <div class="card card-inverse card-primary">
+                <div class="card-block pb-0">
+     <div class="btn-group float-xs-right" dropdown>
+        <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+            <i class="icon-settings"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
+            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh('lalal')">Refresh</div></button>
+        </div>
+    </div>
+    </div>
+
+ 
+ 
      <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
      <table *ngIf="!chart.mini" id="dashboardTable">
      <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
@@ -38,19 +49,23 @@ export class DadChart {
             </div>
             <!-- Date To input -->
             <div>
-              <label style="color: #0A0A0A">Date To: </label>
+              <label style="color: #0A0A0A;">Date To: </label>
               <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
-              <input type="date" style="color: black;" [(ngModel)]="chart.parameters[0].dateTo"/>
+              <input type="date" style="color: black; margin-left:18px;" [(ngModel)]="chart.parameters[0].dateTo"/>
             </div>
+            
+            <dadparameters [element]="chart" [editMode]="true"  ></dadparameters>
+            
+            
             <!-- refresh button -->
-            <br/>
             <div>
-                <button (click)="changeConfig($event)">Refresh</button>
+                <button style="margin-left: 120px;" (click)="changeConfig($event)">Refresh</button>
             </div>
         </tr>
         <br/><br/><br/>
     </table>
-
+    </div>
+    </div>
 
     <!--  END CHART COMPONENT -->`
 })
@@ -68,7 +83,7 @@ export class DadChartComponent implements OnInit {
     firstDate: any;
     secondDate: any;
 
-    constructor(private dadChartDataService: DadChartDataService) { }
+    constructor(private dadChartDataService: DadElementDataService) { }
     onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     }
@@ -92,7 +107,7 @@ export class DadChartComponent implements OnInit {
     }
     else
     { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
-      this.dadChartDataService.getChartData(this.chart).then(
+      this.dadChartDataService.getElementData(this.chart).then(
         data => {
           this.data = data.data;
           this.drawChart(this.chart, this.data);
@@ -103,7 +118,7 @@ export class DadChartComponent implements OnInit {
   }
 
     changeConfig(event){
-      this.dadChartDataService.getChartData(this.chart).then(
+      this.dadChartDataService.getElementData(this.chart).then(
         data => {
           this.data = data.data;
           let chartData = this.mapper.map(this.chart, this.data);
@@ -195,11 +210,11 @@ export class DadChartComponent implements OnInit {
         interaction: {
           enabled: true
         },
-          bar:{
-            width: {
-              ratio: 0.7
-            }
-          },
+        bar:{
+          width: {
+            ratio: 0.7
+          }
+        }
       };
       if(chartConfig.mini){
         c3Config.size.width = this.miniChartWidth;

@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common'; //<-- This one
 import { DropdownModule } from 'ng2-bootstrap';
 import { DatepickerModule } from 'ng2-bootstrap/components/datepicker';
 import { TimepickerModule }         from 'ng2-bootstrap/components/timepicker';
-
+import { DadParametersComponent } from "./parameters.component";
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -33,6 +33,6 @@ let LocalStorageServiceConfig = {
         TimepickerModule
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
-        DadWidgetComponent, DadTableComponent ]
+        DadWidgetComponent, DadTableComponent, DadParametersComponent ]
 })
 export class DadModule { }

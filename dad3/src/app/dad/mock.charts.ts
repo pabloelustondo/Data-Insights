@@ -2,6 +2,7 @@
  * Created by pablo elustondo on 2016-12-06.
  */
 import { DadChart } from './chart.component';
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
 
 export const CHARTS: DadChart[] = [
     {id: "chartbar",
@@ -14,11 +15,22 @@ export const CHARTS: DadChart[] = [
         height: 400,
         parameters: [
             {
-                dateFrom: "2016-11-29T20:30:21-23",
-                dateTo: "2016-11-30T20:30:21-25",
-                shiftStartDateTime: "2016-11-29T20:30:21-23",
+                dateFrom: "2016-11-29T20:30:21",
+                dateTo: "2016-11-30T20:30:21",
+                shiftStartDateTime: "2016-11-29T20:30:21",
                 shiftDuration: 8
-            }]
+            }],
+        uiparameters: [
+            {
+                Type: DadParameterType.String,
+                Name: "Device Not Fully Charged",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.String,
+                Name: "Total Active Devices",
+                DataSource: "dateTo"
+            }],
     },
     //first endpoint
   {id: "chartbar0",
@@ -33,7 +45,18 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
         dateFrom: "2016-08-23",
         dateTo: "2016-08-25"
-      }]
+      }],
+      uiparameters: [
+          {
+              Type: DadParameterType.String,
+              Name: "Device Not Fully Charged",
+              DataSource: "dateFrom"
+          },
+          {
+              Type: DadParameterType.String,
+              Name: "Total Active Devices",
+              DataSource: "dateTo"
+          }],
   },
     //second endpoint
     {id: "chartbar2",
