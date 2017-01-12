@@ -30,24 +30,11 @@ export class MultiplePostsController {
     @Example<any>({
         metricName: 'DevicesDidNotLastShift',
         predicates: 'batteryNotFullyChargedBeforeShift',
-        parameters: [
-            {
-                parameterName: 'date',
-                parameterValue: '2016-08-25'
-            },
-            {
-                parameterName: 'shiftStartTime',
-                parameterValue: '09:00:00'
-            },
-            {
-                parameterName: 'shiftDuration',
-                parameterValue: '8'
-            },
-            {
-                parameterName: 'minimumThresholdValue',
-                parameterValue: '5'
-            }
-        ]
+        params: {
+            shiftStartDateTime : '2017-01-01T08:00',
+            endDate: '2017-01-12',
+            shiftDuration: 8
+        }
 
     })
     public async Create(request: CalculatePredicates): Promise<SDS> {
@@ -63,7 +50,7 @@ export class MultiplePostsController {
         console.time('awsPutRecord');
 
         let mData = ['countDeviceNotFullyChargedBeforeShift: int',
-            'totalActiveDevices'];
+            'totalActiveDevices: int'];
 
         let max = Math.floor(Math.random() * (5347 - 23)) + 23;
 
