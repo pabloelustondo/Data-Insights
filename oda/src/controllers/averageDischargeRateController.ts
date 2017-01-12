@@ -3,6 +3,8 @@
  */
 import {Route, Get, Example} from 'tsoa';
 import {SDS} from '../models/user';
+
+
 // import * as https from 'https';
 const config = require('../../appconfig.json');
 import * as querystring from 'querystring';
@@ -80,6 +82,7 @@ export class AverageDischargeRateController {
         ]
     })
     public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number): Promise<SDS> {
+
 
 
         if (dateFrom.getDate() !== shiftStartDateTime.getDate()) {

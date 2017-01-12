@@ -1,13 +1,14 @@
 import {Parameter} from './parameterModel';
 import {Predicates} from './Predicates';
 import {Metrics} from './metrics';
+import {BatteryNotFullyChargedBeforeShiftParam} from './kpi/batteryNotFullyChargedBeforeShift';
+import {SampleAPI} from './kpi/PlaceHolderKPI';
 
 
-export interface ReasonModel {
-
+export interface CalculatePredicates {
     metricName: Metrics;
     predicates: Predicates[];
-    parameters: Parameter[];
+    params: BatteryNotFullyChargedBeforeShiftParam ;
 }
 
 /**

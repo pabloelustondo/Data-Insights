@@ -3,8 +3,9 @@
  */
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from '../models/user';
-import {ReasonModel} from '../models/reasonModel';
+import {CalculatePredicates} from '../models/reasonModel';
 import {Metrics} from '../models/Metrics';
+
 
 // import * as https from 'https';
 const config = require('../../appconfig.json');
@@ -49,7 +50,7 @@ export class MultiplePostsController {
         ]
 
     })
-    public async Create(request: ReasonModel): Promise<SDS> {
+    public async Create(request: CalculatePredicates): Promise<SDS> {
 
 
         if (request.metricName.toString()  !== 'DevicesDidNotLastShift') {
