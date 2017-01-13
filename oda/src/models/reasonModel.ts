@@ -8,7 +8,7 @@ import {SampleAPI} from './kpi/PlaceHolderKPI';
 export interface CalculatePredicates {
     metricName: Metrics;
     predicates: Predicates[];
-    params: BatteryNotFullyChargedBeforeShiftParam ;
+    parameters: BatteryNotFullyChargedBeforeShiftParam ;
 }
 
 /**
