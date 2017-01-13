@@ -4,6 +4,24 @@
 import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 
+
+
+export class DadElement {
+  id: string;
+  name: string;
+  parameters: any[];
+  metricName?: string;
+  predicates?: string[];
+  uiparameters?: DadParameter[];
+  a?:string;
+  b?:string;
+  parameterMappers?:any[];
+  endpoint: string;
+  metrics?: DadMetric[];
+  dimensions?: DadDimension[];
+}
+
+
 export class DadDateRange{
   dateFrom: string;
   dateTo:string;

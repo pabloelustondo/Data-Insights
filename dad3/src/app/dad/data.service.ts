@@ -9,67 +9,26 @@ import { config } from "./appconfig";
 import { DadChart } from './chart.component';
 import { DadWidget } from './widget.component';
 import { DadTable } from './table.component';
-
-
-@Injectable()
-export class DadChartDataService {
-
-    constructor(private http: Http) { }
-
-    getChartData(chart:DadChart): Promise<any> {
-        console.log("we got " + config["oda_dev_url"]);
-
-        let params: URLSearchParams = new URLSearchParams();
-        let tableparameters = chart.parameters[0];
-        for (let tableparam in tableparameters){
-            console.log("Table:" + chart.id + "Mapping Parameter:" + tableparam);
-            params.set(tableparam, tableparameters[tableparam]);
-        }
-// config[chart.endpoint]
-        let endpoint0 = config[chart.endpoint];
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let data = {parameters:chart.parameters};
-
-        if(endpoint0.method === "post"){
-            return this.http.post(endpoint0.url, data, headers).toPromise().then(
-                response => JSON.parse(response['_body'])
-            ).catch(
-                err =>{
-                    console.log("we got " + err.json());
-                }
-            );
-
-        }
-        else{
-            return this.http.get(config[chart.endpoint], {search:params} ).toPromise().then(
-                response => JSON.parse(response['_body'])
-            ).catch(
-                err =>{
-                    console.log("we got " + err.json());
-                }
-            );
-        }
-    }
-}
+import { DadElement } from "./dadmodels";
 
 @Injectable()
-export class DadWidgetDataService {
+export class DadElementDataService {
 
   constructor(private http: Http) { }
 
-  getWidgetData(widget:DadWidget): Promise<any> {
+  getElementData(element:DadElement): Promise<any> {
     console.log("we got " + config["oda_dev_url"]);
 
     let params: URLSearchParams = new URLSearchParams();
-    let tableparameters = widget.parameters[0];
-    for (let tableparam in tableparameters){
-      console.log("Table:" + widget.id + "Mapping Parameter:" + tableparam);
-      params.set(tableparam, tableparameters[tableparam]);
+    let parameters = element.parameters[0];
+    for (let param in parameters){
+      console.log("Table:" + element.id + "Mapping Parameter:" + param);
+      params.set(param, parameters[param]);
     }
 // config[chart.endpoint]
-      let endpoint0 = config[widget.endpoint];
+      let endpoint0 = config[element.endpoint];
       let headers = new Headers({ 'Content-Type': 'application/json' });
-      let data = {metricName:widget.metricName, predicates:widget.predicates, parameters:widget.parameters};
+      let data = {metricName:element.metricName, predicates:element.predicates, parameters:element.parameters};
 
       if(endpoint0.method === "post"){
           return this.http.post(endpoint0.url, data, headers).toPromise().then(
@@ -79,10 +38,8 @@ export class DadWidgetDataService {
                   console.log("we got " + err.json());
               }
           );
-
-      }
-      else{
-      return this.http.get(config[widget.endpoint], {search:params} ).toPromise().then(
+      } else{
+      return this.http.get(config[element.endpoint], {search:params} ).toPromise().then(
       response => JSON.parse(response['_body'])
     ).catch(
       err =>{

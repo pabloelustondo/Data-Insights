@@ -3,33 +3,21 @@
  */
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { DadChart } from "./chart.component";
-import { DadWidgetDataService } from "./data.service";
+import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
-import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
 
 export enum DadWidgetType { OneNumber, Example};
 
-export class DadWidget {
-  id: string;
-  name: string;
+export class DadWidget extends DadElement{
   type: DadWidgetType;
-  parameters: any[];
-  metricName?: string;
-  predicates?: string[];
-  uiparameters?: DadParameter[];
-  a?:string;
-  b?:string;
-  parameterMappers?:any[];
-  endpoint: string;
   chart?: DadChart;
-  metrics?: DadMetric[];
-  dimensions?: DadDimension[];
 }
 
 @Component({
   selector: 'dadwidget',
-  providers:[DadWidgetDataService, DadWidgetConfigsService],
+  providers:[DadElementDataService, DadWidgetConfigsService],
   template: ` 
   <div *ngIf="widget.type==0"  class="col-sm-6 col-lg-3">          
      <div class="card card-inverse card-primary">
@@ -137,13 +125,13 @@ export class DadWidgetComponent implements OnInit {
   dadParameterType = DadParameterType;
   editMode:boolean = false;
 
-  constructor(private dadWidgetDataService: DadWidgetDataService,
+  constructor(private dadWidgetDataService: DadElementDataService,
               private dadWidgetConfigsService: DadWidgetConfigsService) {}
 
   onRefresh(message:string):void{
       this.mapParameters2model();
       this.dadWidgetConfigsService.saveOne(this.widget);
-      this.dadWidgetDataService.getWidgetData(this.widget).then(
+      this.dadWidgetDataService.getElementData(this.widget).then(
           data => {
               this.data = data.data[0];
               this.fixDataNulls();
@@ -161,7 +149,7 @@ export class DadWidgetComponent implements OnInit {
   }
 
   changeData(event) {
-    this.dadWidgetDataService.getWidgetData(this.widget).then(
+    this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
         this.data = data.data[0];
           this.fixDataNulls();
@@ -273,7 +261,7 @@ export class DadWidgetComponent implements OnInit {
     this.mapParameters2ui();
     this.mapParameters2model();
      // this.mapParameters2ui();
-    this.dadWidgetDataService.getWidgetData(this.widget).then(
+    this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
         this.data = data.data[0];
         this.fixDataNulls();
