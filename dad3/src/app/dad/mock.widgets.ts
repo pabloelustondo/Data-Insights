@@ -191,21 +191,27 @@ export const WIDGETS: DadWidget[] = [
     ],
     metricName: "DevicesDidNotLastShift",
     predicates: ["batteryNotFullyChargedBeforeShift"],
-    parameters: [
+    parameters:[
       {
-        parameterName: "string",
-        parameterValue:"string"
+        shiftStartDateTime: "2017-01-13T19:19:26.581Z",
+        endDate: "2017-01-13T19:19:26.581",
+        shiftDuration: 8
       }],
     uiparameters: [
       {
-        Type: DadParameterType.String,
-        Name: "Device Not Fully Charged",
-        DataSource: "parameterName"
+        Type: DadParameterType.DateTime,
+        Name: "Shift Start Date & Time",
+        DataSource: "shiftStartDateTime"
       },
       {
-        Type: DadParameterType.String,
-        Name: "Total Active Devices",
-        DataSource: "parameterValue"
+        Type: DadParameterType.Date,
+        Name: "End Date",
+        DataSource: "endDate"
+      },
+      {
+        Type: DadParameterType.Duration,
+        Name: "Shift Duration",
+        DataSource: "shiftDuration"
       }
     ]
   }

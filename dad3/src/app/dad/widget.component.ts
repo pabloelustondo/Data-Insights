@@ -129,24 +129,24 @@ export class DadWidgetComponent implements OnInit {
               private dadWidgetConfigsService: DadWidgetConfigsService) {}
 
   onRefresh(message:string):void{
-      this.mapParameters2model();
-      this.dadWidgetConfigsService.saveOne(this.widget);
-      this.dadWidgetDataService.getElementData(this.widget).then(
-          data => {
-              this.data = data.data[0];
-              this.fixDataNulls();
-          }
-      ).catch(err => console.log(err.toString()));
-  }
+    this.mapParameters2model();
+    this.dadWidgetConfigsService.saveOne(this.widget);
+    this.dadWidgetDataService.getElementData(this.widget).then(
+        data => {
+            this.data = data.data[0];
+            this.fixDataNulls();
+        }
+    ).catch(err => console.log(err.toString()));
+}
 
-  addingZero(x:number):string{
-      return (x <10 )? "0" + x : "" + x;
-  }
+    addingZero(x:number):string{
+        return (x <10 )? "0" + x : "" + x;
+    }
 
-  onEdit(message:string):void{
-    if (!this.editMode) this.editMode = true
-    else this.editMode = false;
-  }
+    onEdit(message:string):void{
+        if (!this.editMode) this.editMode = true;
+        else this.editMode = false;
+    }
 
   changeData(event) {
     this.dadWidgetDataService.getElementData(this.widget).then(

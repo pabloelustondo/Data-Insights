@@ -17,6 +17,11 @@ import {DadWidget} from "./widget.component";
           <div *ngIf="editMode">          
             <div *ngFor="let uiparam of element.uiparameters">
                <div><label>{{uiparam.Name}}</label></div>
+               
+               <div *ngIf="uiparam.Type == dadParameterType.Date">
+               <input type="date" [(ngModel)]="uiparam.Value"/>       
+               </div>
+               
                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
                <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
                <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>       
@@ -27,16 +32,18 @@ import {DadWidget} from "./widget.component";
                </div>
                <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>  
                <div *ngIf="uiparam.Type == dadParameterType.String"><input type="text" [(ngModel)]="uiparam.Value" /></div>   
-     
             </div>
             <!--refresh button here-->
             <br/>
             <div class="col-md-4 text-center">
-            <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Refresh</button>
+            <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-secondary-active">
+                <span class="glyphicons glyphicons-refresh"></span>
+            </button>
             <br/><br/>
             </div>
             <div>
-            <button (click)="onEdit()" style="color:white;" type="button" class="btn btn-outline-primary pull-right">
+            <!--This is actually close button-->
+            <button (click)="onEdit()" style="color:white;" type="button" class="btn btn-secondary-active pull-right">
                 <span class="glyphicons glyphicons-remove"></span>
             </button>
             </div>     
@@ -100,6 +107,12 @@ export class DadParametersComponent implements OnInit {
             return;
         }
         for (let uiparam of this.element.uiparameters) {
+
+            if (uiparam.Type === this.dadParameterType.Date) {
+                let date:Date = new Date(uiparam.Value);
+                parameters[uiparam.DataSource] = date.toISOString();
+            }
+
             if (uiparam.Type === this.dadParameterType.DateTime) {
 
                 let datetime:Date = new Date(uiparam.Value['D']);
@@ -149,6 +162,25 @@ export class DadParametersComponent implements OnInit {
                 uiparam.Value['D'] = yyyy + "-" + mm + "-" + dd;
                 uiparam.Value['T'] = d;
             }
+
+            if (uiparam.Type === this.dadParameterType.Date) {
+                let d: Date;
+                if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
+                    d = new Date();
+                    d.setDate(d.getDate() - 1);
+                }else{ // we assume that we have a valid date
+                    d = new Date(parameters[uiparam.DataSource]);
+                }
+                let yyyy = d.getFullYear();
+                let m = d.getMonth()+1;
+                let day = d.getDate();
+                let mm = (m <10 )? "0" + m : "" + m;
+                let dd = (day <10 )? "0" + day : "" + day;
+                uiparam.Value = {};
+                uiparam.Value = yyyy + "-" + mm + "-" + dd;
+                uiparam.Value = d;
+            }
+
             if (uiparam.Type === this.dadParameterType.Number) {
                 uiparam.Value = parameters[uiparam.DataSource];
             }
