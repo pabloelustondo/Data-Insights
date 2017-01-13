@@ -1,18 +1,17 @@
 /**
- * Created by vdave on 11/30/2016.
+ * Created by vdave on 1/13/2017.
  */
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from '../models/user';
-// import * as https from 'https';
-const config = require('../../appconfig.json');
-import * as querystring from 'querystring';
 
+const config = require('../../appconfig.json');
 import * as rp from 'request-promise';
+
 @Route('Devices')
-export class ListDevicesNotSurvivedShiftController {
+export class ListDevicesNotFullyChargedAndNotSurvivedShiftController {
     /**
-     * List of all devices that may have not lasted the full shift for a given shift date-time, shift duration, and the
-     * battery level the device must fall under.
+     * List of all devices that were not fully charged and may have not lasted the full shift for a given shift
+     * date-time, shift duration, and the battery level the device must fall under.
      *
      * The API returns a list of devices specified using the rowsSkip and rowsTake parameters. The complete list
      * can be retrieved by assigning the value -1 to rowsSkip and rowsTake. Each device in the contains the following
@@ -47,7 +46,7 @@ export class ListDevicesNotSurvivedShiftController {
      *     order to be included in the listOfDevicesDidNotSurviveShift
      */
 
-    @Get('Battery/List/DevicesDidNotSurviveShift')
+    @Get('Battery/List/DidNotSurviveShift/DevicesNotFullyCharged')
     @Example<any>({
         'createdAt': '2016-11-29T20:30:21.385Z',
         'metadata': [

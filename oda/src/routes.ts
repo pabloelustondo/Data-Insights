@@ -7,6 +7,7 @@ import { ListDevicesNotSurvivedShiftController } from './controllers/listOfDevic
 import { DeviceInformation } from './controllers/deviceList';
 import { MultiplePostsController } from './controllers/retrieveReasonData';
 import { AverageDischargeRateController } from './controllers/averageDischargeRateController';
+import { ListDevicesNotFullyChargedAndNotSurvivedShiftController } from './controllers/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
 
 const models: any = {
     'SDS': {
@@ -85,7 +86,7 @@ export function RegisterRoutes(app: any) {
         const controller = new CountDevicesNotSurvivedShiftController();
         promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
     });
-    app.get('/Devices/Battery/Summary/listOfDevicesDidNotSurviveShift', function(req: any, res: any, next: any) {
+    app.get('/Devices/Battery/List/DevicesDidNotSurviveShift', function(req: any, res: any, next: any) {
         const params = {
             'shiftDuration': { typeName: 'number', required: true },
             'rowsSkip': { typeName: 'number', required: true },
@@ -150,6 +151,25 @@ export function RegisterRoutes(app: any) {
         }
 
         const controller = new AverageDischargeRateController();
+        promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
+    });
+    app.get('/Devices/Battery/List/DidNotSurviveShift/DevicesNotFullyCharged', function(req: any, res: any, next: any) {
+        const params = {
+            'shiftDuration': { typeName: 'number', required: true },
+            'rowsSkip': { typeName: 'number', required: true },
+            'rowsTake': { typeName: 'number', required: true },
+            'shiftStartDateTime': { typeName: 'datetime', required: true },
+            'minimumBatteryPercentageThreshold': { typeName: 'number', required: true },
+        };
+
+        let validatedParams: any[] = [];
+        try {
+            validatedParams = getValidatedParams(params, req, '');
+        } catch (err) {
+            return next(err);
+        }
+
+        const controller = new ListDevicesNotFullyChargedAndNotSurvivedShiftController();
         promiseHandler(controller.Get.apply(controller, validatedParams), res, next);
     });
 
