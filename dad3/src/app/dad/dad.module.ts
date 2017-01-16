@@ -11,8 +11,8 @@ import { DadComponent }       from './dashboard.component';
 import { DadRoutingModule }   from './dad-routing.module';
 import { CommonModule } from '@angular/common'; //<-- This one
 import { DropdownModule } from 'ng2-bootstrap';
-import { DatepickerModule } from 'ng2-bootstrap/components/datepicker';
-import { TimepickerModule }         from 'ng2-bootstrap/components/timepicker';
+import { DatepickerModule } from 'ng2-bootstrap/datepicker';
+import { TimepickerModule }         from 'ng2-bootstrap/timepicker';
 import { DadParametersComponent } from "./parameters.component";
 
 //Local Storage

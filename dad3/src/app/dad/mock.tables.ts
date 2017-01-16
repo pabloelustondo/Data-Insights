@@ -32,6 +32,7 @@ export const TABLES: DadTable[] = [
         Name: "Battery Charge History",
         DataSource: "BatteryChargeHistory",
         MiniChart: {id: "charttable1",
+                    name:"",
                     type: "bar",
                     width: 150,
                     height: 30,
