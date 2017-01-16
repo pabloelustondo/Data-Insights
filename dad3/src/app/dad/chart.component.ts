@@ -21,7 +21,7 @@ export class DadChart extends DadElement{
     template: ` <!--  BEGIN CHART COMPONENT -->
    <div class="col-sm-9 col-lg-9">          
                 <div class="card-block pb-0">
-     <div class="btn-group float-xs-right" dropdown>
+     <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
         <button type="button" class="btn btn-secondary-active dropdown-toggle p-0" dropdownToggle>
             <i class="icon-settings"></i>
         </button>
@@ -67,8 +67,6 @@ export class DadChartComponent implements OnInit {
     secondDate: any;
     editMode:boolean = false;
     refreshMode:boolean = false;
-
-
 
   constructor(private dadChartDataService: DadElementDataService) { }
     onDateChanged(event:any) {
