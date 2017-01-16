@@ -8,7 +8,7 @@ import { SwitchesComponent }        from './switches.component';
 import { TablesComponent }          from './tables.component';
 
 // Tabs Component
-import { TabsModule }               from 'ng2-bootstrap/components/tabs';
+import { TabsModule }               from 'ng2-bootstrap/tabs';
 import { TabsComponent }            from './tabs.component';
 
 // Components Routing

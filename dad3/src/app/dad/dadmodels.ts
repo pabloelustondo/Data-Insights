@@ -9,14 +9,14 @@ import {DadWidget} from "./widget.component";
 export class DadElement {
   id: string;
   name: string;
-  parameters: any[];
+  parameters?: any[];
   metricName?: string;
   predicates?: string[];
   uiparameters?: DadParameter[];
   a?:string;
   b?:string;
   parameterMappers?:any[];
-  endpoint: string;
+  endpoint?: string;
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
 }
