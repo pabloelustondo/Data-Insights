@@ -36,7 +36,7 @@ import {DadWidget} from "./widget.component";
             <!--refresh button here-->
             <br/>
             <div class="col-md-4 text-center">
-            <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-secondary-active">
+            <button (click)="onRefreshButton()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-secondary-active">
                 <span class="glyphicons glyphicons-refresh"></span>
             </button>
             <br/><br/>
@@ -74,8 +74,8 @@ export class DadParametersComponent implements OnInit {
     dadParameterType = DadParameterType;
     @Input()
     editMode:boolean = false;
+    refreshMode:boolean = false;
 
-    private _onRefresh:boolean = false;
     @Input()
     set onRefresh(value:boolean){
         if(this.element.uiparameters[0].Value ) {
@@ -101,18 +101,11 @@ export class DadParametersComponent implements OnInit {
         else this.editMode = false;
     }
 
-    /*
-    onRefresh(message:string):void{
-        this.mapParameters2model();
-        this.dadWidgetConfigsService.saveOne(this.element);
-        this.dadElementDataService.getElementData(this.element).then(
-            data => {
-                this.data = data.data[0];
-                this.fixDataNulls();
-            }
-        ).catch(err => console.log(err.toString()));
+
+    onRefreshButton(){
+        this.onRefresh = true;
     }
-*/
+
     mapParameters2model():void{
         //this action will map UI parameters into model parameters back
         let parameters = this.element.parameters[0];   //maybe we need to stop having a list?

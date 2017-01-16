@@ -111,6 +111,7 @@ export class DadChartComponent implements OnInit {
   }
 
     changeConfig(){
+    alert("chart component going to reload data");
       this.dadChartDataService.getElementData(this.chart).then(
         data => {
           this.data = data.data;
