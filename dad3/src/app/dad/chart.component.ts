@@ -27,7 +27,7 @@ export class DadChart extends DadElement{
         </button>
         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
             <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
-            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="changeConfig($event)">Refresh</div></button>
+            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
         </div>
     </div>
     </div>
@@ -39,7 +39,7 @@ export class DadChart extends DadElement{
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
 
             
-            <dadparameters [element]="chart" [editMode]=editMode></dadparameters>  
+            <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
             
             <!-- refresh button
             <div>
@@ -66,12 +66,20 @@ export class DadChartComponent implements OnInit {
     firstDate: any;
     secondDate: any;
     editMode:boolean = false;
+    refreshMode:boolean = false;
+
 
 
   constructor(private dadChartDataService: DadElementDataService) { }
     onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     }
+
+  onRefresh():void{
+    if (!this.refreshMode) this.refreshMode = true;
+    else this.refreshMode = false;
+
+  }
 
   ngOnInit() {
 
@@ -102,14 +110,14 @@ export class DadChartComponent implements OnInit {
 
   }
 
-    changeConfig(event){
+    changeConfig(){
       this.dadChartDataService.getElementData(this.chart).then(
         data => {
           this.data = data.data;
           let chartData = this.mapper.map(this.chart, this.data);
           this.c3chart.load(
             {
-              json: [chartData.Dimension],
+              columns: [chartData.Dimension],
               keys: {
                 value: chartData.Metric
               },

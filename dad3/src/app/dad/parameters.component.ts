@@ -1,7 +1,7 @@
 /**
  * Created by dister on 1/12/2017.
  */
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { DadChart } from "./chart.component";
 import {DadElementDataService } from "./data.service";
 import {DadWidgetConfigsService, DadChartConfigsService} from './chart.service';
@@ -75,7 +75,19 @@ export class DadParametersComponent implements OnInit {
     @Input()
     editMode:boolean = false;
 
-    constructor(private dadElementDataService: DadElementDataService,
+    private _onRefresh:boolean = false;
+    @Input()
+    set onRefresh(value:boolean){
+        if(this.element.uiparameters[0].Value ) {
+            this.mapParameters2model();
+            this.mapParameters2ui();
+            this.parametersChanged.emit(true);
+        }
+    };
+
+    @Output() parametersChanged = new EventEmitter();
+
+        constructor(private dadElementDataService: DadElementDataService,
                 private dadWidgetConfigsService: DadWidgetConfigsService) {}
 
     ngOnInit() {
@@ -88,7 +100,8 @@ export class DadParametersComponent implements OnInit {
         if (!this.editMode) this.editMode = true
         else this.editMode = false;
     }
-/*
+
+    /*
     onRefresh(message:string):void{
         this.mapParameters2model();
         this.dadWidgetConfigsService.saveOne(this.element);
