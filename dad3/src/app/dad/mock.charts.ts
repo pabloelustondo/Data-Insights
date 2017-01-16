@@ -22,15 +22,26 @@ export const CHARTS: DadChart[] = [
             }],
         uiparameters: [
             {
-                Type: DadParameterType.String,
-                Name: "Device Not Fully Charged",
+                Type: DadParameterType.Date,
+                Name: "Date From",
                 DataSource: "dateFrom"
             },
             {
-                Type: DadParameterType.String,
-                Name: "Total Active Devices",
+                Type: DadParameterType.Date,
+                Name: "Date To",
                 DataSource: "dateTo"
-            }],
+            },
+            {
+                Type: DadParameterType.DateTime,
+                Name: "Shift Start Data & Time",
+                DataSource: "shiftStartDateTime"
+            },
+            {
+                Type: DadParameterType.Duration,
+                Name: "Shift Duration",
+                DataSource: "shiftDuration"
+            },
+            ],
     },
     //first endpoint
   {id: "chartbar0",
@@ -48,13 +59,13 @@ export const CHARTS: DadChart[] = [
       }],
       uiparameters: [
           {
-              Type: DadParameterType.String,
-              Name: "Device Not Fully Charged",
+              Type: DadParameterType.Date,
+              Name: "Date From",
               DataSource: "dateFrom"
           },
           {
-              Type: DadParameterType.String,
-              Name: "Total Active Devices",
+              Type: DadParameterType.Date,
+              Name: "Date To",
               DataSource: "dateTo"
           }],
   },
@@ -71,7 +82,18 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
        dateTo: "2016-08-25"
-      }]
+      }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //first endpoint
     {id: "chartpie1",
@@ -86,7 +108,18 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
        dateFrom: "2016-08-20",
        dateTo: "2016-08-25"
-      }]
+      }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //second endpoint
     {id: "chartpie2",
@@ -101,7 +134,18 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
        dateTo: "2016-08-25"
-      }]
+      }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //first endpoint
     {id: "chartdot1",
@@ -116,7 +160,18 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
        dateFrom: "2016-08-15",
        dateTo: "2016-08-24"
-      }]
+      }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //second endpoint
     {id: "chartdot2",
@@ -131,7 +186,18 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
        dateFrom: "2016-08-15",
        dateTo: "2016-08-24"
-      }]
+      }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //first endpoint
     {id: "chartspline1",
@@ -146,7 +212,18 @@ export const CHARTS: DadChart[] = [
       {parameterType:"DateRange",
        dateFrom: "2016-08-23",
        dateTo: "2016-08-24"
-      }]
+      }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //second endpoint
     {id: "chartspline2",
@@ -161,7 +238,18 @@ export const CHARTS: DadChart[] = [
        {parameterType:"DateRange",
         dateFrom: "2016-08-23",
         dateTo: "2016-08-24"
-       }]
+       }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //first endpoint
     {id: "chartdonut1",
@@ -176,7 +264,18 @@ export const CHARTS: DadChart[] = [
        {parameterType:"DateRange",
         dateFrom: "2016-08-18",
         dateTo: "2016-08-25"
-       }]
+       }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     },
     //second endpoint
     {id: "chartdonut2",
@@ -191,7 +290,18 @@ export const CHARTS: DadChart[] = [
        {parameterType:"DateRange",
        dateFrom: "2016-08-18",
        dateTo: "2016-08-25"
-       }]
+       }],
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            }],
     }
 ];
 

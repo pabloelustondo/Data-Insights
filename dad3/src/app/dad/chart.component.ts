@@ -20,51 +20,34 @@ export class DadChart extends DadElement{
     providers:[DadElementDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
    <div class="col-sm-9 col-lg-9">          
-     <div class="card card-inverse card-primary">
                 <div class="card-block pb-0">
      <div class="btn-group float-xs-right" dropdown>
-        <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+        <button type="button" class="btn btn-secondary-active dropdown-toggle p-0" dropdownToggle>
             <i class="icon-settings"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
             <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
-            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh('lalal')">Refresh</div></button>
+            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="changeConfig($event)">Refresh</div></button>
         </div>
     </div>
     </div>
-
- 
  
      <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
      <table *ngIf="!chart.mini" id="dashboardTable">
      <th><div id="chartName">{{chart.name}}</div> <br/><br/><br/></th>
         <tr> 
             <td><div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div></td>
-            <!-- Date From input -->
-            <div>
-              <label style="color: #0A0A0A">Date From: </label>
-             <input type="date" style="color: black" [(ngModel)]="chart.parameters[0].dateFrom"/>
-             <!--<input [(ngModel)]="chart.parameters[0].dateFrom" placeholder=" yyyy-mm-dd">-->
 
-            </div>
-            <!-- Date To input -->
-            <div>
-              <label style="color: #0A0A0A;">Date To: </label>
-              <!--<input [(ngModel)]="chart.parameters[0].dateTo" placeholder=" yyyy-mm-dd">-->
-              <input type="date" style="color: black; margin-left:18px;" [(ngModel)]="chart.parameters[0].dateTo"/>
-            </div>
             
-            <dadparameters [element]="chart" [editMode]="true"  ></dadparameters>
+            <dadparameters [element]="chart" [editMode]=editMode></dadparameters>  
             
-            
-            <!-- refresh button -->
+            <!-- refresh button
             <div>
                 <button style="margin-left: 120px;" (click)="changeConfig($event)">Refresh</button>
-            </div>
+            </div>--> 
         </tr>
         <br/><br/><br/>
     </table>
-    </div>
     </div>
 
     <!--  END CHART COMPONENT -->`
@@ -82,8 +65,10 @@ export class DadChartComponent implements OnInit {
     miniChartColor: any[] = ['#33526e'];
     firstDate: any;
     secondDate: any;
+    editMode:boolean = false;
 
-    constructor(private dadChartDataService: DadElementDataService) { }
+
+  constructor(private dadChartDataService: DadElementDataService) { }
     onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     }
@@ -132,6 +117,11 @@ export class DadChartComponent implements OnInit {
             });
         }
       )
+    }
+
+    onEdit(message:string):void{
+      if (!this.editMode) this.editMode = true;
+      else this.editMode = false;
     }
     //mini applied
     drawChartBar(chartConfig:DadChart, data){

@@ -6,7 +6,7 @@ import './controllers/listOfDevicesDidNotSurviveShift';
 import './controllers/deviceList';
 import './controllers/retrieveReasonData';
 import './controllers/averageDischargeRateController';
-
+import './controllers/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
 
 import * as winston from 'winston';
 
