@@ -13,6 +13,7 @@ export class ChartData{
 export class Mapper{
   map(config:DadChart|DadWidget, data){
   var chartData = new ChartData();
+  var dataForChart:any;
   var index=0;
 
   if ( config.type !== 'bar' && config.type !== 'spline') {
@@ -32,6 +33,17 @@ export class Mapper{
       index++;
     });
 
+      dataForChart = {
+        json: [chartData.Dimension],
+        keys: {
+          value: chartData.Metric
+        },
+        selection:{
+          enabled:true
+        },
+        type:  config.type
+      };
+
   } else {
 
     let configa:string;
@@ -46,6 +58,7 @@ export class Mapper{
       data.forEach(function (e) {
         chartData.Dimension.push(e);
       });
+
     } else {
       configa = config.a;
       configb = config.b;
@@ -57,10 +70,21 @@ export class Mapper{
         chartData.Dimension.push(e[configb]);
         chartData.x.push(e[configa]);
       });
+
     }
 
+    dataForChart = {
+      columns: [chartData.Dimension],
+      keys: {
+        value: chartData.Metric
+      },
+      selection:{
+        enabled:true
+      },
+      type:  config.type
+    }
 
   }
-    return chartData;
+    return dataForChart;
   }
 }

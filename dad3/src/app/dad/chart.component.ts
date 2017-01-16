@@ -115,14 +115,7 @@ export class DadChartComponent implements OnInit {
         data => {
           this.data = data.data;
           let chartData = this.mapper.map(this.chart, this.data);
-          this.c3chart.load(
-            {
-              columns: [chartData.Dimension],
-              keys: {
-                value: chartData.Metric
-              },
-              unload: true,
-            });
+          this.c3chart.load(chartData);
         }
       )
     }
@@ -135,15 +128,10 @@ export class DadChartComponent implements OnInit {
     drawChartBar(chartConfig:DadChart, data){
         let chartData = this.mapper.map(chartConfig, data);
 
-        let bardata = {
-        columns: [chartData.Dimension],
-            keys: {
-          value: chartData.Metric
-        },
-        selection:{
-          enabled:true
-        },
-        type: 'bar',
+        let bardata = chartData;
+
+      bardata.selection ={
+        enabled:true
       };
 
         d3.selectAll(".c3-axis-x .tick").filter(function(d) {
@@ -237,13 +225,7 @@ export class DadChartComponent implements OnInit {
           width: chartConfig.width
         },
         bindto: '#' + chartConfig.id,
-        data: {
-          json: [ chartData.Dimension ],
-          keys: {
-            value: chartData.Metric
-          },
-          type:'pie',
-        },
+        data: chartData,
         color: {
           pattern: this.colorPalette,
         },
@@ -274,17 +256,7 @@ export class DadChartComponent implements OnInit {
           width: chartConfig.width
         },
         bindto: '#' + chartConfig.id,
-        data: {
-          json: [chartData.Dimension],
-          keys: {
-            value: chartData.Metric
-          },
-          selection:{
-            enabled:true
-          },
-          type: 'spline',
-        },
-
+        data: chartData,
         color: {
           pattern: this.colorPalette,
         },
@@ -350,17 +322,10 @@ export class DadChartComponent implements OnInit {
     drawChartSpline(chartConfig:DadChart, data){
       let chartData = this.mapper.map(chartConfig, data);
 
-      let splinedata = {
-        columns: [chartData.Dimension],
-        keys: {
-          value: chartData.Metric
-        },
-        selection:{
-          enabled:true
-        },
-        type: 'spline',
+      let splinedata = chartData;
+      splinedata.selection={
+        enabled:true
       };
-
 
       d3.selectAll(".c3-axis-x .tick").filter(function(d) {
           return d === 0;
@@ -436,13 +401,7 @@ export class DadChartComponent implements OnInit {
           width: chartConfig.width
         },
         bindto: '#' + chartConfig.id,
-        data: {
-          json: [ chartData.Dimension ],
-          keys: {
-            value: chartData.Metric
-          },
-          type:'donut',
-        },
+        data: chartData,
         color: {
           pattern: this.colorPalette,
         },
