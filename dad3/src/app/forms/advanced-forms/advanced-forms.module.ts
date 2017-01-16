@@ -2,10 +2,10 @@ import { NgModule }                 from '@angular/core';
 import { CommonModule }             from '@angular/common';
 
 // Timepicker
-import { TimepickerModule }         from 'ng2-bootstrap/timepicker';
+import { TimepickerModule }         from 'ng2-bootstrap/components/timepicker';
 
 // Datepicker
-import { DatepickerModule }         from 'ng2-bootstrap/datepicker';
+import { DatepickerModule }         from 'ng2-bootstrap/components/datepicker';
 
 // Datepicker
 import { SelectModule }                 from 'ng2-select';
