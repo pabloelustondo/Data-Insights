@@ -76,7 +76,6 @@ export class DadChartComponent implements OnInit {
   onRefresh():void{
     if (!this.refreshMode) this.refreshMode = true;
     else this.refreshMode = false;
-
   }
 
   ngOnInit() {

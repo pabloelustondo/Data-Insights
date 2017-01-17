@@ -19,7 +19,7 @@ import {DadWidget} from "./widget.component";
                <div><label>{{uiparam.Name}}</label></div>
                
                <div *ngIf="uiparam.Type == dadParameterType.Date">
-               <input type="date" [(ngModel)]="uiparam.Value"/>       
+               <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
                </div>
                
                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
@@ -101,7 +101,6 @@ export class DadParametersComponent implements OnInit {
         else this.editMode = false;
     }
 
-
     onRefreshButton(){
         this.onRefresh = true;
     }
@@ -114,12 +113,7 @@ export class DadParametersComponent implements OnInit {
         }
         for (let uiparam of this.element.uiparameters) {
 
-            if (uiparam.Type === this.dadParameterType.Date) {
-                let date:Date = new Date(uiparam.Value);
-                parameters[uiparam.DataSource] = date.toISOString();
-            }
-
-            if (uiparam.Type === this.dadParameterType.DateTime) {
+            if (uiparam.Type === this.dadParameterType.DateTime || uiparam.Type === this.dadParameterType.Date) {
 
                 let datetime:Date = new Date(uiparam.Value['D']);
                 let time:Date = uiparam.Value['T'];
@@ -146,7 +140,7 @@ export class DadParametersComponent implements OnInit {
             return;
         }
         for (let uiparam of this.element.uiparameters) {
-            if (uiparam.Type === this.dadParameterType.DateTime) {
+            if (uiparam.Type === this.dadParameterType.DateTime || uiparam.Type === this.dadParameterType.Date) {
                 let d: Date;
                 if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
                     let dold = new Date(parameters[uiparam.DataSource]);
@@ -167,24 +161,6 @@ export class DadParametersComponent implements OnInit {
                 uiparam.Value = {};
                 uiparam.Value['D'] = yyyy + "-" + mm + "-" + dd;
                 uiparam.Value['T'] = d;
-            }
-
-            if (uiparam.Type === this.dadParameterType.Date) {
-                let d: Date;
-                if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
-                    d = new Date();
-                    d.setDate(d.getDate() - 1);
-                }else{ // we assume that we have a valid date
-                    d = new Date(parameters[uiparam.DataSource]);
-                }
-                let yyyy = d.getFullYear();
-                let m = d.getMonth()+1;
-                let day = d.getDate();
-                let mm = (m <10 )? "0" + m : "" + m;
-                let dd = (day <10 )? "0" + day : "" + day;
-                uiparam.Value = {};
-                uiparam.Value = yyyy + "-" + mm + "-" + dd;
-                uiparam.Value = d;
             }
 
             if (uiparam.Type === this.dadParameterType.Number) {
