@@ -7,7 +7,6 @@ import {DadWidget} from "./widget.component";
 export class ChartData{
   Dimension = [];
   Metric = [];
-  x = [];
 }
 
 export class Mapper{
@@ -57,6 +56,7 @@ export class Mapper{
 
       data.forEach(function (e) {
         chartData.Dimension.push(e);
+        chartData.Metric.push(e);
       });
 
     } else {
@@ -68,22 +68,19 @@ export class Mapper{
 
       data.forEach(function (e) {
         chartData.Dimension.push(e[configb]);
-        chartData.x.push(e[configa]);
+        chartData.Metric.push(e[configa]);
       });
 
     }
 
     dataForChart = {
-      columns: [chartData.Dimension],
-      keys: {
-        value: chartData.Metric
-      },
+      x: config.b,
+      columns: [chartData.Dimension, chartData.Metric],
       selection:{
         enabled:true
       },
       type:  config.type
     }
-
   }
     return dataForChart;
   }

@@ -125,7 +125,6 @@ export class DadChartComponent implements OnInit {
     //mini applied
     drawChartBar(chartConfig:DadChart, data){
         let chartData = this.mapper.map(chartConfig, data);
-
         let bardata = chartData;
 
       bardata.selection ={
@@ -156,7 +155,6 @@ export class DadChartComponent implements OnInit {
         axis: {
           x: {
             type: 'category',
-            categories: chartData.x,
             show : true,
             label: {
               text: [chartConfig.a],

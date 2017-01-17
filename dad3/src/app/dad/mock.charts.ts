@@ -9,8 +9,8 @@ export const CHARTS: DadChart[] = [
         name: 'Average Battery Discharge Rate',
         type: "bar",
         endpoint: "AverageDischargeRate",
-        a : 'percentage',
-        b : 'countOfDevices',
+        a : 'countOfDevices',
+        b : 'percentage',
         width: 475,
         height: 400,
         parameters: [
@@ -43,6 +43,7 @@ export const CHARTS: DadChart[] = [
             },
             ],
     },
+    /*
     //first endpoint
   {id: "chartbar0",
     name: 'Range of Battery vs. Number of Devices',
@@ -303,5 +304,6 @@ export const CHARTS: DadChart[] = [
                 DataSource: "dateTo"
             }],
     }
+*/
 ];
 
