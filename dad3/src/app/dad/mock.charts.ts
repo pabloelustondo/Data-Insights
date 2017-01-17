@@ -13,6 +13,7 @@ export const CHARTS: DadChart[] = [
         b : 'percentage',
         width: 475,
         height: 400,
+        regionM: 30,
         parameters: [
             {
                 dateFrom: "2016-11-29T20:30:21",

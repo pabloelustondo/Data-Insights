@@ -76,9 +76,6 @@ export class Mapper{
     dataForChart = {
       x: config.b,
       columns: [chartData.Dimension, chartData.Metric],
-      selection:{
-        enabled:true
-      },
       type:  config.type
     }
   }

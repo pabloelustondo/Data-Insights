@@ -34,7 +34,7 @@ export class DadWidget extends DadElement{
                     <p>{{widget.metrics[0].Name}}</p>
                     <h3 *ngIf="data" class="mb-0">
                     <a [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
-                    <span style="font-size: 140px; color:white; margin-right: -50px;">{{data[widget.metrics[0].DataSource]}} </span>
+                    <span style="font-size: 140px; color:white;">{{data[widget.metrics[0].DataSource]}} </span>
                     </a>
                     <br/>out of {{data[widget.metrics[1].DataSource]}} </h3><br/>
                     <div *ngIf="data" class="col-sm-6">
