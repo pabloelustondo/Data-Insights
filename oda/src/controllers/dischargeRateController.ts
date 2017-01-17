@@ -97,8 +97,12 @@ export class DischargeRateController {
             url: xurl
         };
 
+<<<<<<< HEAD
+        let p = await rp(options);
+=======
         let p = await rp(options); // request library used
         let mData = ['Description of discharge rate', 'NumberOfDevices', 'DischargeRate'];
+>>>>>>> 817f193166ac2ec08942e6e517a2f075a4b79c1c
 
         const user: SDS = {
             createdAt: new Date(),
@@ -108,6 +112,4 @@ export class DischargeRateController {
 
         return user;
     }
-
-
 }
