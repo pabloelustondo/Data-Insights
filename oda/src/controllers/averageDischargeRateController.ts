@@ -81,7 +81,7 @@ export class AverageDischargeRateController {
             }
         ]
     })
-    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number): Promise<SDS> {
+    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold: number): Promise<SDS> {
 
 
 
@@ -105,7 +105,7 @@ export class AverageDischargeRateController {
         // let p = await rp(options); // request library used
         let mData = [''];
 
-        let returnData = [
+        let returnData1 = [
             {
                 percentage: 5,
                 countOfDevices: 1874
@@ -140,6 +140,48 @@ export class AverageDischargeRateController {
             }
         ];
 
+
+
+        let returnData2 = [
+            {
+                percentage: 5,
+                countOfDevices: 187
+            },
+            {
+                percentage: 10,
+                countOfDevices: 975
+            },
+            {
+                percentage: 15,
+                countOfDevices: 872
+            },
+            {
+                percentage: 20,
+                countOfDevices: 21
+            },
+            {
+                percentage: 25,
+                countOfDevices: 10
+            },
+            {
+                percentage: 40,
+                countOfDevices: 3
+            },
+            {
+                percentage: 50,
+                countOfDevices: 153
+            },
+            {
+                percentage: 70,
+                countOfDevices: 350
+            }
+        ];
+        let returnData = returnData1;
+
+        let x1 = dateFrom.getMonth();
+        if (dateFrom.getMonth() === 7) {
+            returnData = returnData2;
+        }
         const user: any = {
             createdAt: new Date(),
             metadata: mData,
