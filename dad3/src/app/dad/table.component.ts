@@ -148,6 +148,9 @@ export class DadTableComponent implements OnInit {
           this.dadTableDataService.getTableData(this.table).then(
               data => {
                 this.data = data.data;
+                if(this.data.errorMessage != null){
+                    alert (this.data.errorMessage);
+                }
               }
           ).catch(err => console.log(err.toString()));
 
