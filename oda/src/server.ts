@@ -1,18 +1,33 @@
-import './controllers/usersController';
+
+import './controllers/intialChargeLevelController';
 import './controllers/dischargeRateController';
+import './controllers/devicesDidNotSurviveShift';
+import './controllers/retrieveReasonData';
+import './controllers/averageDischargeRateController';
+import './controllers/Lists/listOfDevicesDidNotSurviveShift';
+import './controllers/Lists/deviceList';
+import './controllers/Lists/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
+import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
+
+
+import * as winston from 'winston';
+
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as methodOverride from 'method-override';
 import {RegisterRoutes} from './routes';
+const expressWinston = require('express-winston');
+
 let config = require('../appconfig.json');
 const app = express();
+const swaggerPath =  __dirname + '/swagger.json';
 
 exports.app = app;
 
 app.use('/docs', express.static(__dirname + '/swagger-ui'));
 app.use('/', express.static(__dirname + '/swagger-ui'));
 app.use('/swagger.json', (req, res) => {
-    res.sendfile('./dist/swagger.json');
+    res.sendfile(swaggerPath);
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,8 +40,50 @@ app.use(function(req, res, next) {
     next();
 });
 
+const logger = expressWinston.logger({
+     transports: [
+         new winston.transports.File({
+             filename: './all-logs.log',
+             json: true,
+             colorize: true,
+             maxsize: 5242880,
+             maxFiles: 5
+         })
+     ],
+     exitOnError: false
+ });
+
+app.use(logger);
+
+// app.use(expressWinston.logger({
+//    transports: [
+//        new winston.transports.Console({
+//            json: true,
+//            colorize: true
+//        })
+//    ]
+// }));
+
 RegisterRoutes(app);
+app.use(logger);
+// app.use(expressWinston.errorLogger({
+//     transports: [
+//         new winston.transports.Console({
+//             json: true,
+//             colorize: true,
+//             handleExceptions: true,
+//             level: 'debug'
+//         })
+//     ]
+// }));
 
 /* tslint:disable-next-line */
 console.log('Starting server.. http://localhost:' + config.port + '/docs');
 app.listen(config.port);
+
+module.exports = logger;
+module.exports.stream = {
+    write: function(message: any, encoding: any){
+        logger.info(message);
+    }
+};

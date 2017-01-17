@@ -6,4 +6,5 @@ export interface BatteryNotFullyChargedBeforeShiftParam {
     shiftStartDateTime: Date;
     endDate: Date;
     shiftDuration: number;
+    minimumBatteryPercentageThreshold: number;
 }

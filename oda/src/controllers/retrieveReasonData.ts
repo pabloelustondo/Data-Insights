@@ -5,8 +5,7 @@ import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from '../models/user';
 import {CalculatePredicates} from '../models/reasonModel';
 import {Metrics} from '../models/Metrics';
-
-
+import * as rp from 'request-promise';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
 
@@ -47,31 +46,42 @@ export class MultiplePostsController {
             throw new Error('batteryNotFullyChargedBeforeShift name not valid');
         }
 
-        console.time('awsPutRecord');
+
+        const xurl = 'https://' + config['aws-hostname'] + config['aws-batteryNotFullyCharged'];
+
+        const options: rp.OptionsWithUrl = {
+            headers: {
+                'x-api-key': config['aws-x-api-key']
+            },
+            json: true,
+            method: 'POST',
+            body: {
+              predicates: request.predicates,
+
+                metricName: request.metricName,
+                parameters: {
+                    'shiftStartDateTime': request.parameters.shiftStartDateTime.toISOString().substring(0, 19),
+                    'endDate': request.parameters.endDate.getDate(),
+                    'shiftDuration': request.parameters.shiftDuration.toString(),
+                    'minimumBatteryPercentageThreshold': request.parameters.minimumBatteryPercentageThreshold.toString()
+                }
+            },
+            url: xurl
+        };
+        console.time('deviceNotSurviveShift: aws call');
+
+        let p = await rp(options); // request library used
+        console.timeEnd('deviceNotSurviveShift: aws call');
 
         let mData = ['countDeviceNotFullyChargedBeforeShift: int',
             'totalActiveDevices: int'];
 
-        let max = Math.floor(Math.random() * (5347 - 23)) + 23;
-
-
-        let returnData = [
-            {
-                countDeviceNotFullyChargedBeforeShift: Math.floor(Math.random() * (max - 0)) + 0,
-                totalActiveDevices: max
-            },
-            {
-                countDeviceNotFullyChargedBeforeShift: Math.floor(Math.random() * (max - 0)) + 0,
-                totalActiveDevices: max
-            }
-        ];
-
         const user: any = {
             createdAt: new Date(),
             metadata: mData,
-            data: returnData
+            data: p
         };
-        console.timeEnd('awsPutRecord');
+
         return user;
     }
 
