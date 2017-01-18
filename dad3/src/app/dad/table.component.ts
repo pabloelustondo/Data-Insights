@@ -131,17 +131,19 @@ export class DadTableComponent implements OnInit {
           this.pages = [];
           for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
 
-          this.callerId = param['id'];
+          if (param['id'] !== undefined) {
+              this.callerId = param['id'];
 
 
-          this.callerWidget = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
+              this.callerWidget = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
 
-          let widgetParameters = this.callerWidget.parameters[0];
-          let tableParameters = this.table.parameters[0];
+              let widgetParameters = this.callerWidget.parameters[0];
+              let tableParameters = this.table.parameters[0];
 
-          for (let param of Object.keys(widgetParameters)){
+              for (let param of Object.keys(widgetParameters)) {
 
-              tableParameters[param] = widgetParameters[param];
+                  tableParameters[param] = widgetParameters[param];
+              }
           }
 
           console.log("Tables are loading... :" + this.table.id);

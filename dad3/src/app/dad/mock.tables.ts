@@ -40,5 +40,30 @@ export const TABLES: DadTable[] = [
                   }
       }
     ]
+  },
+
+  { id: 'BatteryNotFulylChargedAndNotLastedShift',
+    name:'List of Devices That Did Not Last a Shift and Battery Not Fully Charged',
+    endpoint:'ListOfDevicesNotSurvivedShift',
+    parameters: [
+      {
+        shiftDuration:10,
+        rowsSkip:0,
+        rowsTake:10,
+        shiftStartDateTime:"2016-08-26",
+        minimumBatteryPercentageThreshold:30
+      }],
+    columns: [
+      {
+        Type: DadTableColumnType.Number,
+        Name: "Device Id",
+        DataSource: "DevId"
+      },
+      {
+        Type: DadTableColumnType.String,
+        Name: "Last Known Battery Status",
+        DataSource: "LastBatteryStatus"
+      }
+    ]
   }
 ];
