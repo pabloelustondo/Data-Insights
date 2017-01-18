@@ -198,8 +198,8 @@ export const WIDGETS: DadWidget[] = [
     predicates: ["batteryNotFullyChargedBeforeShift"],
     parameters:[
       {
-        shiftStartDateTime: "2017-01-13T19:19:26.581Z",
-        endDate: "2017-01-13T19:19:26.581",
+        shiftStartDateTime: "2016-08-25T08:00:00.581Z",
+        endDate: "2016-08-25T08:00:00.581",
         shiftDuration: 8,
         minimumBatteryPercentageThreshold: 20
 

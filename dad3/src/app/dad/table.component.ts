@@ -179,19 +179,7 @@ export class DadTableComponent implements OnInit {
 
       let tables = this.dadTableConfigsService.getTableConfigs();
 
-
-      this.subscription = this.activatedRoute.params.subscribe(
-          (param: any) => {
-              let callerId = param['id'];
-              let callerTableId = param['id'];
-              if (callerId === 'chartTypeOfSomething'){
-                  this.table = tables[1]; //This table is without minichart
-              }
-              else {
-                  this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
-              }
-        });
-       //this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
+      this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
     }
   }
 }
