@@ -6,5 +6,6 @@
   "aws-path":  "/test/function_one",
   "aws-discharge" : "/test/dischargeratedistribution",
   "aws-deviceNotLasted" : "/test/countOfDevicesDidNotSurviveShift",
-  "aws-listDeviceNotLasted" : "/test/listOfDevicesDidNotSurviveShift"
+  "aws-listDeviceNotLasted" : "/test/listOfDevicesDidNotSurviveShift",
+  "aws-batteryNotFullyCharged" : "/test/countOfDevicesDidNotSurviveShift/BatteryNotFullyCharged"
 }
