@@ -6,6 +6,7 @@ import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 
+
 declare var d3, c3: any;
 
 export class DadChart extends DadElement{
@@ -15,6 +16,8 @@ export class DadChart extends DadElement{
     mini?: boolean = false;
     data?: any;
     regionM?:number;
+    aname: String;
+    bname: String;
 }
 @Component({
     selector: 'dadchart',
@@ -34,10 +37,13 @@ export class DadChart extends DadElement{
         </div>
     </div>
     </div>
- 
+    
+        <a [routerLink]="['table', 100, chart.id]">
+        <span style="color:black;">Drill down </span>
+        </a>
      <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
      <div *ngIf="!chart.mini">
-       <div style="margin-left: 15px; color:black;">{{chart.name}}</div> <br/><br/><br/>        
+       <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
        <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
        <div style="margin-left: 15px; color:black;">
        <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
@@ -63,6 +69,7 @@ export class DadChartComponent implements OnInit {
     secondDate: any;
     editMode:boolean = false;
     refreshMode:boolean = false;
+
 
   constructor(private dadChartDataService: DadElementDataService) { }
     onDateChanged(event:any) {
@@ -136,9 +143,13 @@ export class DadChartComponent implements OnInit {
       let bardata = chartData;
 
     bardata.selection ={
-      enabled:true
+      enabled:true,
     };
-    d3.select('.c3-region').style('fill', 'red');
+/*
+    bardata.onclick = function (d) {
+      alert('hello from chart');
+    };
+*/
     d3.selectAll(".c3-axis-x .tick").filter(function(d) {
         return d === 0;
       }).remove();
@@ -152,27 +163,23 @@ export class DadChartComponent implements OnInit {
       color: {
         pattern: this.colorPalette,
       },
-      tooltip: {
-        grouped: false,
-          format: {
-            title: function () {
-              return ([chartConfig.b])
-            }
-          }
-      },
       axis: {
         x: {
           type: 'category',
           show : true,
           label: {
-            text: [chartConfig.b],
+            text: [chartConfig.bname],
               position: 'outer-right'
+          },
+          tick:{
+            rotate:0,
+            multiline:false
           }
         },
         y: {
           show : true,
           label: {
-            text: [chartConfig.a],
+            text: [chartConfig.aname],
               position: 'outer-top'
           }
         }
@@ -189,14 +196,14 @@ export class DadChartComponent implements OnInit {
         }
       },
       regions: [
-        {start: this.indexOfRegions(chartData)}
+        {start: this.indexOfRegions(chartData)},
       ],
       zoom: {
         enabled: true
       },
-      subchart: {
+      /*subchart: {
         show: true
-      },
+      },*/
       legend: {
         show: true
       },
@@ -215,11 +222,12 @@ export class DadChartComponent implements OnInit {
       c3Config.legend.show = false;
       c3Config.axis.x.show = false;
       c3Config.axis.y.show = false;
-      c3Config.subchart.show = false;
+      //c3Config.subchart.show = false;
       c3Config.zoom.enabled = false;
       c3Config.grid.y.show = false;
       c3Config.color.pattern = this.miniChartColor;
       c3Config.interaction.enabled = false;
+     // c3Config.regions = false;
     };
     this.c3chart = c3.generate(c3Config);
   };

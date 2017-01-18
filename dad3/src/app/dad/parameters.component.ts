@@ -43,9 +43,11 @@ import {DadWidget} from "./widget.component";
             </div>
             <div>
             <!--This is actually close button-->
-            <button (click)="onEdit()" style="color:white;" type="button" class="btn btn-secondary-active pull-right">
+            <div class="col-md-4 text-center">
+            <button (click)="onEdit()" style="color:white; border-color:white;" type="button" class="btn btn-secondary-active">
                 <span class="glyphicons glyphicons-remove"></span>
             </button>
+            </div>
             </div>     
           </div>
     </div>      

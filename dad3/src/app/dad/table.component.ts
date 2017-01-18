@@ -172,7 +172,7 @@ export class DadTableComponent implements OnInit {
           (param: any) => {
               let callerId = param['id'];
 
-              if (callerId === 'chartTypeOfSomething'){
+              if (callerId === 'chartbar'){
                   this.table = tables[1]; //This table is without minichart
               }
               else {

@@ -11,6 +11,8 @@ export const CHARTS: DadChart[] = [
         endpoint: "AverageDischargeRate",
         a : 'countOfDevices',
         b : 'percentage',
+        aname : 'Count Of Devices',
+        bname : 'Percentage',
         width: 475,
         height: 400,
         regionM: 30,
