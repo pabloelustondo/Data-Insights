@@ -21,7 +21,7 @@ export class DadElement {
   endpoint?: string;
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
-  table?: string;
+  tableId?: string;
 }
 
 

@@ -9,7 +9,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget1',
     name:'Device battery during shift',
     type: 0,
-    table: 'table1',
+    tableId: 'table1',
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -66,7 +66,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget2',
     name:'Device battery during shift',
     type: 0,
-    table: "table1",
+    tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -123,7 +123,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget3',
     name:'Device battery during shift',
     type: 0,
-    table: "table1",
+    tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -180,7 +180,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget4',
     name:'Battery Metrics',
     type: 0,
-    table: 'table2',
+    tableId: 'table2',
     endpoint:'BatteryMetrics',
     metrics:[
       {

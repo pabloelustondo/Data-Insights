@@ -121,6 +121,17 @@ export class DadTableComponent implements OnInit {
         return parameters[key];
     }
 
+    findTables(tableId: string) {
+        let tables = this.dadTableConfigsService.getTableConfigs();
+
+        for (var i=0; i< tables.length; i++){
+            if (tables[i].id === tableId){
+                return tables[i];
+            }
+        }
+        return null;
+    }
+
   ngAfterViewInit(){
 
     this.subscription = this.activatedRoute.params.subscribe(
@@ -136,7 +147,8 @@ export class DadTableComponent implements OnInit {
 
 
               this.callerWidget = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
-
+              let widgetTableId = this.callerWidget.tableId;
+              this.table  = this.findTables(widgetTableId);
               let widgetParameters = this.callerWidget.parameters[0];
               let tableParameters = this.table.parameters[0];
 
@@ -171,8 +183,8 @@ export class DadTableComponent implements OnInit {
       this.subscription = this.activatedRoute.params.subscribe(
           (param: any) => {
               let callerId = param['id'];
-
-              if (callerId === 'chartbar'){
+              let callerTableId = param['id'];
+              if (callerId === 'chartTypeOfSomething'){
                   this.table = tables[1]; //This table is without minichart
               }
               else {
