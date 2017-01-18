@@ -127,16 +127,64 @@ export class AverageDischargeRateController {
                 countOfDevices: 10
             },
             {
-                percentage: 40,
-                countOfDevices: 3
+                percentage: 30,
+                countOfDevices: 0
+            },
+            {
+                percentage: 35,
+                countOfDevices: 0
+            },
+            {
+                percentage: 45,
+                countOfDevices: 172
+            },
+            {
+                percentage: 45,
+                countOfDevices: 21
             },
             {
                 percentage: 50,
-                countOfDevices: 1
+                countOfDevices: 10
+            },
+            {
+                percentage: 55,
+                countOfDevices: 0
+            },
+            {
+                percentage: 60,
+                countOfDevices: 0
+            },
+            {
+                percentage: 65,
+                countOfDevices: 0
             },
             {
                 percentage: 70,
-                countOfDevices: 3
+                countOfDevices: 21
+            },
+            {
+                percentage: 75,
+                countOfDevices: 0
+            },
+            {
+                percentage: 80,
+                countOfDevices: 0
+            },
+            {
+                percentage: 85,
+                countOfDevices: 0
+            },
+            {
+                percentage: 90,
+                countOfDevices: 0
+            },
+            {
+                percentage: 95,
+                countOfDevices: 0
+            },
+            {
+                percentage: 100,
+                countOfDevices: 0
             }
         ];
 
@@ -149,31 +197,79 @@ export class AverageDischargeRateController {
             },
             {
                 percentage: 10,
-                countOfDevices: 975
+                countOfDevices: 650
             },
             {
                 percentage: 15,
-                countOfDevices: 872
+                countOfDevices: 172
             },
             {
                 percentage: 20,
-                countOfDevices: 21
+                countOfDevices: 925
             },
             {
                 percentage: 25,
                 countOfDevices: 10
             },
             {
-                percentage: 40,
-                countOfDevices: 3
+                percentage: 30,
+                countOfDevices: 0
+            },
+            {
+                percentage: 35,
+                countOfDevices: 0
+            },
+            {
+                percentage: 45,
+                countOfDevices: 172
+            },
+            {
+                percentage: 45,
+                countOfDevices: 21
             },
             {
                 percentage: 50,
-                countOfDevices: 153
+                countOfDevices: 107
+            },
+            {
+                percentage: 55,
+                countOfDevices: 0
+            },
+            {
+                percentage: 60,
+                countOfDevices: 85
+            },
+            {
+                percentage: 65,
+                countOfDevices: 0
             },
             {
                 percentage: 70,
-                countOfDevices: 350
+                countOfDevices: 21
+            },
+            {
+                percentage: 75,
+                countOfDevices: 0
+            },
+            {
+                percentage: 80,
+                countOfDevices: 2
+            },
+            {
+                percentage: 85,
+                countOfDevices: 0
+            },
+            {
+                percentage: 90,
+                countOfDevices: 0
+            },
+            {
+                percentage: 95,
+                countOfDevices: 0
+            },
+            {
+                percentage: 100,
+                countOfDevices: 0
             }
         ];
         let returnData = returnData1;
