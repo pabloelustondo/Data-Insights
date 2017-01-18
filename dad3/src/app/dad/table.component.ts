@@ -172,8 +172,8 @@ export class DadTableComponent implements OnInit {
           (param: any) => {
               let callerId = param['id'];
 
-              if (callerId === 'widget4'){
-                  this.table = tables[1];
+              if (callerId === 'chartTypeOfSomething'){
+                  this.table = tables[1]; //This table is without minichart
               }
               else {
                   this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
