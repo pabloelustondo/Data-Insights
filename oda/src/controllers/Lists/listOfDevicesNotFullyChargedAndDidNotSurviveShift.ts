@@ -74,7 +74,7 @@ export class ListDevicesNotFullyChargedAndNotSurvivedShiftController {
                 'DeviceId': 'ijklm',
                 'DeviceName': 'Samsung S2',
                 'BatteryChargeLevel': '[100, 70, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0]'
-            },
+            }
         ]
     })
     public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date,  minimumBatteryPercentageThreshold: number ): Promise<SDS> {

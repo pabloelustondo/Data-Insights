@@ -81,7 +81,7 @@ export class AverageDischargeRateController {
             }
         ]
     })
-    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold: number): Promise<SDS> {
+    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number): Promise<SDS> {
 
 
 

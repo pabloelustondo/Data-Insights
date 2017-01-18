@@ -75,7 +75,7 @@ export class ListOfDevicesWithHighAverageDischargeRatePerShift {
         },
     ]
 })
-public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date,  minimumThresholdDischargeRate: number ): Promise<SDS> {
+public async Get(shiftDuration: number, rowsSkip: number, rowsTake: number, shiftStartDateTime: Date, endDate: Date, minimumThresholdDischargeRate: number ): Promise<SDS> {
 
     let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 let xqs = {};
