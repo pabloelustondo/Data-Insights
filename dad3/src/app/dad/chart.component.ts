@@ -150,9 +150,15 @@ export class DadChartComponent implements OnInit {
       alert('hello from chart');
     };
 */
+
+
+
+
     d3.selectAll(".c3-axis-x .tick").filter(function(d) {
         return d === 0;
       }).remove();
+
+
       let c3Config = {
       size: {
         height: chartConfig.height,
@@ -230,6 +236,12 @@ export class DadChartComponent implements OnInit {
       //c3Config.regions = false;
     };
     this.c3chart = c3.generate(c3Config);
+
+      d3.selectAll(".c3-event-rect").on('click', function (id) {
+          alert('fgafgr');
+      });
+
+
   };
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
