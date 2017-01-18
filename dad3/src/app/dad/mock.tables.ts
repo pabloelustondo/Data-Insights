@@ -42,7 +42,7 @@ export const TABLES: DadTable[] = [
     ]
   },
 
-  { id: 'BatteryNotFulylChargedAndNotLastedShift',
+  { id: 'table2',
     name:'List of Devices That Did Not Last a Shift and Battery Not Fully Charged',
     endpoint:'ListOfDevicesNotSurvivedShift',
     parameters: [

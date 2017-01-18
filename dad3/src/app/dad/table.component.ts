@@ -164,8 +164,22 @@ export class DadTableComponent implements OnInit {
   ngOnInit() {
 
     if (!this.table){
+
       let tables = this.dadTableConfigsService.getTableConfigs();
-      this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
+
+
+      this.subscription = this.activatedRoute.params.subscribe(
+          (param: any) => {
+              let callerId = param['id'];
+
+              if (callerId === 'widget4'){
+                  this.table = tables[1];
+              }
+              else {
+                  this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
+              }
+        });
+       //this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
     }
   }
 }

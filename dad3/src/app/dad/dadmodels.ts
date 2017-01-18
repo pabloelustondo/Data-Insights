@@ -3,6 +3,8 @@
  */
 import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
+import {DadTable} from "./table.component";
+
 
 
 
@@ -19,6 +21,7 @@ export class DadElement {
   endpoint?: string;
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
+  table?: string;
 }
 
 

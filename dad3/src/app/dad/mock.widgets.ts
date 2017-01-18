@@ -3,11 +3,13 @@
  */
 import { DadWidget, DadWidgetType} from './widget.component';
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
+import {TABLES} from './mock.tables'
 
 export const WIDGETS: DadWidget[] = [
   {id: 'widget1',
     name:'Device battery during shift',
     type: 0,
+    table: 'table1',
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -64,6 +66,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget2',
     name:'Device battery during shift',
     type: 0,
+    table: "table1",
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -120,6 +123,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget3',
     name:'Device battery during shift',
     type: 0,
+    table: "table1",
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -176,6 +180,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget4',
     name:'Battery Metrics',
     type: 0,
+    table: 'table2',
     endpoint:'BatteryMetrics',
     metrics:[
       {
