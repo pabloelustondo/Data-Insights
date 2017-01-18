@@ -135,6 +135,10 @@ export class AverageDischargeRateController {
                 countOfDevices: 0
             },
             {
+                percentage: 40,
+                countOfDevices: 0
+            },
+            {
                 percentage: 45,
                 countOfDevices: 172
             },
@@ -217,6 +221,10 @@ export class AverageDischargeRateController {
             },
             {
                 percentage: 35,
+                countOfDevices: 0
+            },
+            {
+                percentage: 40,
                 countOfDevices: 0
             },
             {
