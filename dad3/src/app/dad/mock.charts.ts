@@ -14,6 +14,7 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         regionM: 30,
+        tableId: 'table2',
         parameters: [
             {
                 dateFrom: "2016-11-29T20:30:21",
