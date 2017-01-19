@@ -5,10 +5,10 @@ import { Component, Input, OnInit  } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadTableDataService } from "./data.service";
 import { Mapper, ChartData } from "./mapper";
-import { DadDateRange } from "./dadmodels";
+import {DadDateRange, DadElement} from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
 import { DadChartComponent } from "./chart.component"
-import { DadTableConfigsService } from './chart.service';
+import {DadTableConfigsService, DadChartConfigsService} from './chart.service';
 import { DadWidgetConfigsService } from './chart.service';
 import { Router, ActivatedRoute} from '@angular/router';
 import {Subscription } from 'rxjs';
@@ -26,7 +26,7 @@ export class DadTable {
 
 @Component({
   selector: 'dadtable',
-  providers:[DadTableDataService,DadTableConfigsService,DadWidgetConfigsService],
+  providers:[DadTableDataService,DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService],
   template: ` 
     <div *ngIf="data">
         <div class="col-lg-10">
@@ -81,13 +81,14 @@ export class DadTableComponent implements OnInit {
   private subscription: Subscription;
   pages:number[];
   currentPage:number=0;
-  callerId:string = "n/a";
-  callerWidget: DadWidget;
+  callerId:string;
+  callerElement: DadElement;
 
   constructor(private dadTableDataService: DadTableDataService,
               private dadTableConfigsService: DadTableConfigsService,
               private dadWidgetConfigsService: DadWidgetConfigsService,
-              private activatedRoute: ActivatedRoute
+              private activatedRoute: ActivatedRoute,
+              private dadChartConfigsService: DadChartConfigsService
   ) { }
 
   isMiniChart(col:DadTableColumn){
@@ -146,15 +147,23 @@ export class DadTableComponent implements OnInit {
               this.callerId = param['id'];
 
 
-              this.callerWidget = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
-              let widgetTableId = this.callerWidget.tableId;
-              this.table  = this.findTables(widgetTableId);
-              let widgetParameters = this.callerWidget.parameters[0];
+              this.callerElement  = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
+              if (!this.callerElement){
+                  this.callerElement  = this.dadChartConfigsService.getChartConfig(this.callerId);
+              }
+
+
+
+              let tableId = this.callerElement.tableId;
+
+
+              this.table  = this.findTables(tableId);
+              let elementParameters = this.callerElement.parameters[0];
               let tableParameters = this.table.parameters[0];
 
-              for (let param of Object.keys(widgetParameters)) {
+              for (let param of Object.keys(elementParameters)) {
 
-                  tableParameters[param] = widgetParameters[param];
+                  tableParameters[param] = elementParameters[param];
               }
           }
 
@@ -179,7 +188,19 @@ export class DadTableComponent implements OnInit {
 
       let tables = this.dadTableConfigsService.getTableConfigs();
 
-      this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
+
+      this.subscription = this.activatedRoute.params.subscribe(
+          (param: any) => {
+              let callerId = param['id'];
+              let callerTableId = param['id'];
+              if (callerId === 'chartbar'){
+                  this.table = tables[1]; //This table is without minichart
+              }
+              else {
+                  this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
+              }
+        });
+       //this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
     }
   }
 }

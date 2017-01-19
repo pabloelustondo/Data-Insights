@@ -36,7 +36,15 @@ export class DadChartConfigsService {
         return CHARTS;
       }
     }
+
+  public getChartConfig(id:string): DadChart {
+    let charts = this.getChartConfigs();
+    let chartIndex = _.findIndex(charts, function(w) { return w.id == id; });
+    return charts[chartIndex];
+  }
+
 }
+
 
 @Injectable()
 export class DadWidgetConfigsService {

@@ -16,8 +16,8 @@ export class DadChart extends DadElement{
     mini?: boolean = false;
     data?: any;
     regionM?:number;
-    aname: String;
-    bname: String;
+    aname?: String;
+    bname?: String;
 }
 @Component({
     selector: 'dadchart',
@@ -37,12 +37,12 @@ export class DadChart extends DadElement{
         </div>
     </div>
     </div>
-    
-        <a [routerLink]="['table', 100, chart.id]">
-        <span style="color:black;">Drill down </span>
-        </a>
+
      <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
      <div *ngIf="!chart.mini">
+             <a [routerLink]="['table', 100, chart.id]">
+        <span style="color:black;">Drill down </span>
+        </a>
        <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
        <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
        <div style="margin-left: 15px; color:black;">
@@ -227,7 +227,7 @@ export class DadChartComponent implements OnInit {
       c3Config.grid.y.show = false;
       c3Config.color.pattern = this.miniChartColor;
       c3Config.interaction.enabled = false;
-     // c3Config.regions = false;
+      //c3Config.regions = false;
     };
     this.c3chart = c3.generate(c3Config);
   };

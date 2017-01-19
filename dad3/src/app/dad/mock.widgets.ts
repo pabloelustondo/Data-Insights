@@ -180,7 +180,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget4',
     name:'Battery Metrics',
     type: 0,
-    tableId: 'table2',
+    tableId: 'table1',
     endpoint:'BatteryMetrics',
     metrics:[
       {
@@ -198,8 +198,8 @@ export const WIDGETS: DadWidget[] = [
     predicates: ["batteryNotFullyChargedBeforeShift"],
     parameters:[
       {
-        shiftStartDateTime: "2016-08-25T08:00:00.581Z",
-        endDate: "2016-08-25T08:00:00.581",
+        shiftStartDateTime: "2016-08-24T19:19:26.581Z",
+        endDate: "2016-08-25T19:19:26.581",
         shiftDuration: 8,
         minimumBatteryPercentageThreshold: 20
 
