@@ -141,7 +141,7 @@ export class DadChartComponent implements OnInit {
   }
 
   goToTable(){
-    this.router.navigate(['table', 100, this.chart.id],  { relativeTo: this.route });
+    this.router.navigate(['table', 100, this.chart.id]);
   };
 
   //mini applied
