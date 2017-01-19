@@ -16,8 +16,7 @@ export class ListOfDevicesWithHighAverageDischargeRatePerShift {
  * can be retrieved by assigning the value -1 to rowsSkip and rowsTake. Each device in the contains the following
  * information:
  * - Device ID
- * - Last reported status
- * - List of battery values reported during the shift.
+ * - Last reported battery status
  *
  * Note: The device information returned in the list is subject to change in the future version. User will be able
  * to determine the desired device metric(s).
@@ -95,7 +94,7 @@ if (rowsTake === -1 || rowsSkip === -1) {
 
 
 console.log(xqs);
-const xurl = 'https://' + config['aws-hostname'] + config['aws-listDeviceNotLasted'];
+const xurl = 'https://' + config['aws-hostname'] + config['aws-listHighAverageDischargeRate'];
 
 const options: rp.OptionsWithUrl = {
     headers: {
