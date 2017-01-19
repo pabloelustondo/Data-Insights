@@ -51,15 +51,12 @@ export class DadWidget extends DadElement{
                     </div><br/>
                     </div>
                                        
-
-                    <!--<p style="font-size:12px;">{{widget.metrics[3].Name}}</p>-->
                     <div *ngIf="data && widget.metrics.length>3">
-                    <h6>{{  data[widget.metrics[3].DataSource] }}</h6> 
+                    <div style="font-size:15px;">{{widget.metrics[3].Name}} : {{  data[widget.metrics[3].DataSource] }}</div> 
                     <div class="col-sm-3">
                         <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>
-                    </div>                
-                    
+                    </div>                            
                   <div class="row">
                       <div *ngIf="editMode">          
                         <div *ngFor="let uiparam of widget.uiparameters">

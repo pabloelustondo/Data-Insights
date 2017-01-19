@@ -36,7 +36,7 @@ export class DadTable {
                        Number of Rows:{{count}}
                     <span *ngFor="let key of tableParameterKeys()"> 
                        {{key}}:{{tableParameterValue(key)}}
-                    </span>
+                    </span><br/>
                 </div>
                 <div class="card-block">
                     <table class="table table-striped">
