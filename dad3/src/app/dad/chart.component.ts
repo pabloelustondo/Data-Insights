@@ -40,7 +40,7 @@ export class DadChart extends DadElement{
     </div>
     </div>
 
-     <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:auto" [id]="chart.id"></div>
+     <div *ngIf="chart.mini" style= "text-align:center; height:auto;  width:auto" [id]="chart.id"></div>
      <div *ngIf="!chart.mini">
         <a [routerLink]="['table', 100, chart.id]">
         <span style="color:black;">Drill down </span>

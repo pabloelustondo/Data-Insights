@@ -42,7 +42,7 @@ export class DadTable {
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th style="text-align:center;" *ngFor="let col of table.columns" >{{col.Name}}</th>
+                                <th style="text-align:left;" *ngFor="let col of table.columns" >{{col.Name}}</th>
                             </tr>  
                         </thead>
                         <tbody>
