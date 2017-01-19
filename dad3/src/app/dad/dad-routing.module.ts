@@ -10,14 +10,14 @@ const routes: Routes = [
     {
         path: '',
         data: {
-            title: 'Dashboard'
+            title: 'Battery Stats'
         },
         children: [
             {
                 path: '',
                 component: DadComponent,
                 data: {
-                title: 'Dashboard'
+                title: ''
                 }
             },
             {
@@ -31,11 +31,12 @@ const routes: Routes = [
                 path: 'table/:count/:id',
                 component: DadTableComponent,
                 data: {
-                    title: 'TableView'
+                    title: 'List of devices'
                 }
             }
         ]
-    }
+    },
+
 ];
 
 @NgModule({
