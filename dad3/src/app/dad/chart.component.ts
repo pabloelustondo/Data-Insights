@@ -167,6 +167,9 @@ export class DadChartComponent implements OnInit {
       color: {
         pattern: this.colorPalette,
       },
+      tooltip:{
+         show:false
+      },
       axis: {
         x: {
           type: 'category',
@@ -176,7 +179,6 @@ export class DadChartComponent implements OnInit {
               position: 'outer-right'
           },
           tick:{
-            rotate:0,
             multiline:false
           }
         },
@@ -231,14 +233,23 @@ export class DadChartComponent implements OnInit {
       c3Config.grid.y.show = false;
       c3Config.color.pattern = this.miniChartColor;
       c3Config.interaction.enabled = false;
-      //c3Config.regions = false;
+      c3Config.regions = [{'start':100}];
+      c3Config.data.color = function(color, d){
+        return d.value === 100 ? "#FFFF00" : color;
+      };
+
     };
     this.c3chart = c3.generate(c3Config);
 
       d3.selectAll(".c3-event-rect").on('click', this.goToTable());
-
-
+      d3.selectAll(".c3-event-rect").on('click', function(doga){
+        alert("Hey dude you clicked on me");
+      })
   };
+
+  differentColor(d, value){
+    return
+  }
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
