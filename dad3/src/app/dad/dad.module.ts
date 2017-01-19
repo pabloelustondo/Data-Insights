@@ -28,6 +28,7 @@ let LocalStorageServiceConfig = {
         CommonModule,
         FormsModule,
         HttpModule,
+        RouterModule,
         DropdownModule,
         DatepickerModule,
         TimepickerModule

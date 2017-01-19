@@ -1,10 +1,12 @@
-/**
+/**ActivatedRoutem
  * Created by pablo elustondo Nov 2016
  */
 import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
 import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
+import { Router, ActivatedRoute } from "@angular/router";
+
 
 
 declare var d3, c3: any;
@@ -40,7 +42,7 @@ export class DadChart extends DadElement{
 
      <div *ngIf="chart.mini" style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
      <div *ngIf="!chart.mini">
-             <a [routerLink]="['table', 100, chart.id]">
+        <a [routerLink]="['table', 100, chart.id]">
         <span style="color:black;">Drill down </span>
         </a>
        <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
@@ -71,8 +73,9 @@ export class DadChartComponent implements OnInit {
     refreshMode:boolean = false;
 
 
-  constructor(private dadChartDataService: DadElementDataService) { }
-    onDateChanged(event:any) {
+  constructor(private dadChartDataService: DadElementDataService, private router: Router, private route: ActivatedRoute) {}
+
+  onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     }
 
@@ -137,6 +140,10 @@ export class DadChartComponent implements OnInit {
     return 0;
   }
 
+  goToTable(){
+    this.router.navigate(['table', 100, this.chart.id],  { relativeTo: this.route });
+  };
+
   //mini applied
   drawChartBar(chartConfig:DadChart, data){
       let chartData = this.mapper.map(chartConfig, data);
@@ -145,21 +152,12 @@ export class DadChartComponent implements OnInit {
     bardata.selection ={
       enabled:true,
     };
-/*
-    bardata.onclick = function (d) {
-      alert('hello from chart');
-    };
-*/
-
-
-
 
     d3.selectAll(".c3-axis-x .tick").filter(function(d) {
         return d === 0;
       }).remove();
 
-
-      let c3Config = {
+    let c3Config = {
       size: {
         height: chartConfig.height,
         width: chartConfig.width,
@@ -237,12 +235,11 @@ export class DadChartComponent implements OnInit {
     };
     this.c3chart = c3.generate(c3Config);
 
-      d3.selectAll(".c3-event-rect").on('click', function (id) {
-          alert('fgafgr');
-      });
+      d3.selectAll(".c3-event-rect").on('click', this.goToTable());
 
 
   };
+
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
     let chartData = this.mapper.map(chartConfig, data);
