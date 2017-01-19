@@ -1,27 +1,14 @@
-CREATE temporary TABLE tbl1
-                (
-                devid VARCHAR(80) NOT NULL ENCODE lzo DISTKEY,
-                time_stamp timestamp,
-                occ INTEGER NOT NULL ENCODE delta,
-                intvalue int
-                )
-            SORTKEY
-                (
-                devid,
-                time_stamp
-                );
-        insert into tbl1 
-        (
             with variables as (    
                 SELECT
                 '$[shiftStartDateTime]'::timestamp as shiftStartTime
                 )
-            select 
+select devid into #t from (
+			select 
 				devid, 
 				time_stamp, 
 				case 
     				when intvalue-lead(intvalue, 1) over (partition by devid order by time_stamp)<0 
-            			OR (intvalue < 10) 
+            			OR (intvalue < $[minimumBatteryPercentageThreshold]) 
 					then 1 -- device got charged
     				else 0 -- device is discharging or on charger
 				end occ, 
@@ -29,13 +16,11 @@ CREATE temporary TABLE tbl1
 			from devstatint d, variables
 			where time_stamp between shiftStartTime and dateadd(hour, $[shiftDuration], shiftStartTime)
                 and stattype=-1)
-;
-select devid into #t
-from tbl1
 group by devid
 having sum(occ)<>0;
 
 SELECT 
+(select count(*) from #t) as CountDevicesNotLastedShift, 
 count(*) as count_Device_Not_Fully_Charged
 FROM 
 (
