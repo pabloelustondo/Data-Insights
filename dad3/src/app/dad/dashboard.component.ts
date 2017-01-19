@@ -15,7 +15,7 @@ declare var d3, c3: any;
     template: `
    
    <div class="animated fadeIn">
-        <div class="row">
+        <div class="row .row.row-eq-height > .col-xs-4">
             <div *ngFor="let widget of widgets">
                 <dadwidget [widget]="widget"></dadwidget>
             </div>
