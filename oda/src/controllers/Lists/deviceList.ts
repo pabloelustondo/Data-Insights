@@ -3,8 +3,8 @@
  */
 
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
-import {DeviceModel} from '../models/deviceModel';
-const config = require('../../appconfig.json');
+import {DeviceModel} from '../../models/deviceModel';
+const config = require('../../../appconfig.json');
 
 @Route('Devices')
 export class DeviceInformation {

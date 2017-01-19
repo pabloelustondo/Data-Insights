@@ -25,6 +25,7 @@ declare var d3, c3: any;
                 <dadchart [chart]="chart"></dadchart>
             </div>
         </div>
+        
     </div>
     `
 })

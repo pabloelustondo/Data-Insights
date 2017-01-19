@@ -2,11 +2,13 @@
 import './controllers/intialChargeLevelController';
 import './controllers/dischargeRateController';
 import './controllers/devicesDidNotSurviveShift';
-import './controllers/listOfDevicesDidNotSurviveShift';
-import './controllers/deviceList';
 import './controllers/retrieveReasonData';
 import './controllers/averageDischargeRateController';
-import './controllers/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
+import './controllers/Lists/listOfDevicesDidNotSurviveShift';
+import './controllers/Lists/deviceList';
+import './controllers/Lists/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
+import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
+
 
 import * as winston from 'winston';
 

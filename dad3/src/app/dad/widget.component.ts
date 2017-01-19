@@ -31,9 +31,10 @@ export class DadWidget extends DadElement{
                             <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh('lalal')">Refresh</div></button>
                         </div>
                     </div>
+                    <p>{{widget.metrics[0].Name}}</p>
                     <h3 *ngIf="data" class="mb-0">
                     <a [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
-                    <span style="font-size: 50px;color:white; text-decoration:underline; ">{{data[widget.metrics[0].DataSource]}} </span>
+                    <span style="font-size: 140px; color:white;">{{data[widget.metrics[0].DataSource]}} </span>
                     </a>
                     <br/>out of {{data[widget.metrics[1].DataSource]}} </h3><br/>
                     <div *ngIf="data" class="col-sm-6">
@@ -41,26 +42,23 @@ export class DadWidget extends DadElement{
                     </div>
                     <div *ngIf="data">{{percentageOfTotal()}}%</div>     
                     <br/>
-                    <div>
-                    <p>{{widget.metrics[0].Name}}</p>
-                    </div>
                     <br/>
+                    
                     <div *ngIf="data && widget.metrics.length>2">
-                    <h6>{{  data[widget.metrics[2].DataSource] }}</h6>   
+                    <div style="font-size:15px;">{{widget.metrics[2].Name}}: {{  data[widget.metrics[2].DataSource] }}</div>   
                     <div class="col-sm-3">
                            <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>
-                    <p style="font-size:12px;">{{widget.metrics[2].Name}}</p>
                     </div>
-                    
+                                       
+
+                    <!--<p style="font-size:12px;">{{widget.metrics[3].Name}}</p>-->
                     <div *ngIf="data && widget.metrics.length>3">
                     <h6>{{  data[widget.metrics[3].DataSource] }}</h6> 
                     <div class="col-sm-3">
                         <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>
-                    <p style="font-size:12px;">{{widget.metrics[3].Name}}</p>
-                    </div>
-                   
+                    </div>                
                     
                   <div class="row">
                       <div *ngIf="editMode">          
@@ -129,24 +127,24 @@ export class DadWidgetComponent implements OnInit {
               private dadWidgetConfigsService: DadWidgetConfigsService) {}
 
   onRefresh(message:string):void{
-      this.mapParameters2model();
-      this.dadWidgetConfigsService.saveOne(this.widget);
-      this.dadWidgetDataService.getElementData(this.widget).then(
-          data => {
-              this.data = data.data[0];
-              this.fixDataNulls();
-          }
-      ).catch(err => console.log(err.toString()));
-  }
+    this.mapParameters2model();
+    this.dadWidgetConfigsService.saveOne(this.widget);
+    this.dadWidgetDataService.getElementData(this.widget).then(
+        data => {
+            this.data = data.data[0];
+            this.fixDataNulls();
+        }
+    ).catch(err => console.log(err.toString()));
+}
 
-  addingZero(x:number):string{
-      return (x <10 )? "0" + x : "" + x;
-  }
+    addingZero(x:number):string{
+        return (x <10 )? "0" + x : "" + x;
+    }
 
-  onEdit(message:string):void{
-    if (!this.editMode) this.editMode = true
-    else this.editMode = false;
-  }
+    onEdit(message:string):void{
+        if (!this.editMode) this.editMode = true;
+        else this.editMode = false;
+    }
 
   changeData(event) {
     this.dadWidgetDataService.getElementData(this.widget).then(

@@ -3,11 +3,13 @@
  */
 import { DadWidget, DadWidgetType} from './widget.component';
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
+import {TABLES} from './mock.tables'
 
 export const WIDGETS: DadWidget[] = [
   {id: 'widget1',
     name:'Device battery during shift',
     type: 0,
+    tableId: 'table1',
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -64,6 +66,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget2',
     name:'Device battery during shift',
     type: 0,
+    tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -120,6 +123,7 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget3',
     name:'Device battery during shift',
     type: 0,
+    tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
     metrics:[
       {
@@ -176,36 +180,50 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget4',
     name:'Battery Metrics',
     type: 0,
+    tableId: 'table1',
     endpoint:'BatteryMetrics',
     metrics:[
       {
         Type: DadParameterType.String,
         Name: "Device Not Fully Charged",
-        DataSource: "countDeviceNotFullyChargedBeforeShift"
+        DataSource: "CountDevicesNotFullyCharged"
       },
       {
         Type: DadParameterType.String,
-        Name: "Total Active Devices",
-        DataSource: "totalActiveDevices"
+        Name: "Total Devices Not Lasted Shift",
+        DataSource: "CountDevicesNotLastedShift"
       }
     ],
     metricName: "DevicesDidNotLastShift",
     predicates: ["batteryNotFullyChargedBeforeShift"],
-    parameters: [
+    parameters:[
       {
-        parameterName: "string",
-        parameterValue:"string"
+        shiftStartDateTime: "2016-08-24T19:19:26.581Z",
+        endDate: "2016-08-25T19:19:26.581",
+        shiftDuration: 8,
+        minimumBatteryPercentageThreshold: 20
+
       }],
     uiparameters: [
       {
-        Type: DadParameterType.String,
-        Name: "Device Not Fully Charged",
-        DataSource: "parameterName"
+        Type: DadParameterType.DateTime,
+        Name: "Shift Start Date & Time",
+        DataSource: "shiftStartDateTime"
       },
       {
-        Type: DadParameterType.String,
-        Name: "Total Active Devices",
-        DataSource: "parameterValue"
+        Type: DadParameterType.Date,
+        Name: "End Date",
+        DataSource: "endDate"
+      },
+      {
+        Type: DadParameterType.Duration,
+        Name: "Shift Duration",
+        DataSource: "shiftDuration"
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Min Battery",
+        DataSource: "minimumBatteryPercentageThreshold"
       }
     ]
   }

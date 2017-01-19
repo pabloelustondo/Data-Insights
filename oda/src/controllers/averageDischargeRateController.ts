@@ -16,7 +16,9 @@ export class AverageDischargeRateController {
      * The AverageDischargeRate represents how quickly the battery is losing the charge per hour over the specified
      * number of days.
      *
-     * A date range is required to get the information.
+     * A date range specified by start date and end date is required to get the information.
+     * Shift start date time is required, the date in this field must be the same as the start date.
+     * Shift duration is also required to define the length of the shift.
      */
 
     @Get('Battery/Summary/AverageDischargeRate')
@@ -24,39 +26,39 @@ export class AverageDischargeRateController {
         'createdAt': '2016-11-29T20:30:21.385Z',
         'data': [
             {
-                'Percentage': 1,
+                'Percentage': 5,
                 'Count': 30
-            },
-            {
-                'Percentage': 2,
-                'Count': 40
-            },
-            {
-                'Percentage': 4,
-                'Count': 25
-            },
-            {
-                'Percentage': 7,
-                'Count': 67
-            },
-            {
-                'Percentage': 8,
-                'Count': 87
             },
             {
                 'Percentage': 10,
-                'Count': 30
+                'Count': 40
             },
             {
                 'Percentage': 15,
-                'Count': 10
+                'Count': 25
+            },
+            {
+                'Percentage': 20,
+                'Count': 67
             },
             {
                 'Percentage': 25,
-                'Count': 15
+                'Count': 87
             },
             {
                 'Percentage': 30,
+                'Count': 30
+            },
+            {
+                'Percentage': 35,
+                'Count': 10
+            },
+            {
+                'Percentage': 40,
+                'Count': 15
+            },
+            {
+                'Percentage': 45,
                 'Count': 11
             },
             {
@@ -68,20 +70,44 @@ export class AverageDischargeRateController {
                 'Count': 8
             },
             {
-                'Percentage': 57,
+                'Percentage': 60,
                 'Count': 9
             },
             {
-                'Percentage': 67,
+                'Percentage': 65,
                 'Count': 3
             },
             {
+                'Percentage': 70,
+                'Count': 0
+            },
+            {
+                'Percentage': 75,
+                'Count': 0
+            },
+            {
+                'Percentage': 80,
+                'Count': 0
+            },
+            {
+                'Percentage': 85,
+                'Count': 0
+            },
+            {
+                'Percentage': 90,
+                'Count': 0
+            },
+            {
+                'Percentage': 95,
+                'Count': 0
+            },
+            {
                 'Percentage': 100,
-                'Count': 1
+                'Count': 0
             }
         ]
     })
-    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number): Promise<SDS> {
+    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number): Promise<SDS> {
 
 
 
@@ -89,8 +115,11 @@ export class AverageDischargeRateController {
             throw new Error('shift start data time != to dateFrom');
         }
 
-        const xqs = {dateFrom: dateFrom, dateTo: dateTo };
-        const xurl = 'https://' + config['aws-hostname'] + config['aws-discharge'];
+        let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
+
+        const xqs = {shiftStartDateTime : shiftDateTimeString};
+        console.log(xqs);
+        const xurl = 'https://' + config['aws-hostname'] + config['aws-listAverageDischargeRate'];
 
         const options: rp.OptionsWithUrl = {
             headers: {
@@ -101,49 +130,16 @@ export class AverageDischargeRateController {
             qs: xqs,
             url: xurl
         };
-
-        // let p = await rp(options); // request library used
-        let mData = [''];
-
-        let returnData = [
-            {
-                percentage: 5,
-                countOfDevices: 1874
-            },
-            {
-                percentage: 10,
-                countOfDevices: 6520
-            },
-            {
-                percentage: 15,
-                countOfDevices: 172
-            },
-            {
-                percentage: 20,
-                countOfDevices: 21
-            },
-            {
-                percentage: 25,
-                countOfDevices: 10
-            },
-            {
-                percentage: 40,
-                countOfDevices: 3
-            },
-            {
-                percentage: 50,
-                countOfDevices: 1
-            },
-            {
-                percentage: 70,
-                countOfDevices: 3
-            }
-        ];
+        console.time('deviceNotSurviveShift: aws call');
+        let p = await rp(options); // request library used
+        console.timeEnd('deviceNotSurviveShift: aws call');
+        let mData = ['countOfDevices: int',
+            'percentage: int'];
 
         const user: any = {
             createdAt: new Date(),
             metadata: mData,
-            data: returnData
+            data: p
         };
 
         return user;

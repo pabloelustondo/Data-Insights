@@ -6,5 +6,9 @@
   "aws-path":  "/test/function_one",
   "aws-discharge" : "/test/dischargeratedistribution",
   "aws-deviceNotLasted" : "/test/countOfDevicesDidNotSurviveShift",
-  "aws-listDeviceNotLasted" : "/test/listOfDevicesDidNotSurviveShift"
-}
+  "aws-listDeviceNotLasted" : "/test/listOfDevicesDidNotSurviveShift",
+  "aws-batteryNotFullyCharged" : "/test/countOfDevicesDidNotSurviveShift/BatteryNotFullyCharged",
+  "aws-listNotSurvivedBatteryNotFullyCharged" : "/test/Device/Battery/List/NotSurvivedShiftNotFullyCharged",
+  "aws-listAverageDischargeRate" : "/test/Device/Battery/List/AverageDischargeRate",
+  "aws-listHighAverageDischargeRate" : "/test/Device/Battery/List/HighAverageDischargeRate"
+ }

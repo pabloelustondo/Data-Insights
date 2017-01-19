@@ -1,7 +1,7 @@
 /**
  * Created by dister on 1/12/2017.
  */
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { DadChart } from "./chart.component";
 import {DadElementDataService } from "./data.service";
 import {DadWidgetConfigsService, DadChartConfigsService} from './chart.service';
@@ -17,6 +17,11 @@ import {DadWidget} from "./widget.component";
           <div *ngIf="editMode">          
             <div *ngFor="let uiparam of element.uiparameters">
                <div><label>{{uiparam.Name}}</label></div>
+               
+               <div *ngIf="uiparam.Type == dadParameterType.Date">
+               <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
+               </div>
+               
                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
                <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
                <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>       
@@ -27,18 +32,22 @@ import {DadWidget} from "./widget.component";
                </div>
                <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>  
                <div *ngIf="uiparam.Type == dadParameterType.String"><input type="text" [(ngModel)]="uiparam.Value" /></div>   
-     
             </div>
             <!--refresh button here-->
             <br/>
             <div class="col-md-4 text-center">
-            <button (click)="onRefresh()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-outline-primary">Refresh</button>
+            <button (click)="onRefreshButton()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-secondary-active">
+                <span class="glyphicons glyphicons-refresh"></span>
+            </button>
             <br/><br/>
             </div>
             <div>
-            <button (click)="onEdit()" style="color:white;" type="button" class="btn btn-outline-primary pull-right">
+            <!--This is actually close button-->
+            <div class="col-md-4 text-center">
+            <button (click)="onEdit()" style="color:white; border-color:white;" type="button" class="btn btn-secondary-active">
                 <span class="glyphicons glyphicons-remove"></span>
             </button>
+            </div>
             </div>     
           </div>
     </div>      
@@ -67,8 +76,20 @@ export class DadParametersComponent implements OnInit {
     dadParameterType = DadParameterType;
     @Input()
     editMode:boolean = false;
+    refreshMode:boolean = false;
 
-    constructor(private dadElementDataService: DadElementDataService,
+    @Input()
+    set onRefresh(value:boolean){
+        if(this.element.uiparameters[0].Value ) {
+            this.mapParameters2model();
+            this.mapParameters2ui();
+            this.parametersChanged.emit(true);
+        }
+    };
+
+    @Output() parametersChanged = new EventEmitter();
+
+        constructor(private dadElementDataService: DadElementDataService,
                 private dadWidgetConfigsService: DadWidgetConfigsService) {}
 
     ngOnInit() {
@@ -81,18 +102,11 @@ export class DadParametersComponent implements OnInit {
         if (!this.editMode) this.editMode = true
         else this.editMode = false;
     }
-/*
-    onRefresh(message:string):void{
-        this.mapParameters2model();
-        this.dadWidgetConfigsService.saveOne(this.element);
-        this.dadElementDataService.getElementData(this.element).then(
-            data => {
-                this.data = data.data[0];
-                this.fixDataNulls();
-            }
-        ).catch(err => console.log(err.toString()));
+
+    onRefreshButton(){
+        this.onRefresh = true;
     }
-*/
+
     mapParameters2model():void{
         //this action will map UI parameters into model parameters back
         let parameters = this.element.parameters[0];   //maybe we need to stop having a list?
@@ -100,7 +114,8 @@ export class DadParametersComponent implements OnInit {
             return;
         }
         for (let uiparam of this.element.uiparameters) {
-            if (uiparam.Type === this.dadParameterType.DateTime) {
+
+            if (uiparam.Type === this.dadParameterType.DateTime || uiparam.Type === this.dadParameterType.Date) {
 
                 let datetime:Date = new Date(uiparam.Value['D']);
                 let time:Date = uiparam.Value['T'];
@@ -127,7 +142,7 @@ export class DadParametersComponent implements OnInit {
             return;
         }
         for (let uiparam of this.element.uiparameters) {
-            if (uiparam.Type === this.dadParameterType.DateTime) {
+            if (uiparam.Type === this.dadParameterType.DateTime || uiparam.Type === this.dadParameterType.Date) {
                 let d: Date;
                 if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
                     let dold = new Date(parameters[uiparam.DataSource]);
@@ -149,6 +164,7 @@ export class DadParametersComponent implements OnInit {
                 uiparam.Value['D'] = yyyy + "-" + mm + "-" + dd;
                 uiparam.Value['T'] = d;
             }
+
             if (uiparam.Type === this.dadParameterType.Number) {
                 uiparam.Value = parameters[uiparam.DataSource];
             }

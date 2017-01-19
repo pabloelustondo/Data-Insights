@@ -17,6 +17,10 @@ chart = c3.generate({
         },
         type:'bar',
     },
+    regions: [
+        {start:0, end:1},
+
+    ],
     tooltip: {
         format: {
             title: function(value) {return ('Teams');}
