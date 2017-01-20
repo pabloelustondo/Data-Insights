@@ -14,11 +14,14 @@ declare var d3, c3: any;
     styles:['.row{overflow:hidden;}'],
     providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
     template: `
-   
+ 
    <div class="animated fadeIn">
+    <div class="container "> 
         <div class="row">
-            <div class="col-m-12 row-sm-4" *ngFor="let widget of widgets">
+            <div class="row-height">
+                <div class="col-m-12 row-sm-4" *ngFor="let widget of widgets">
                 <dadwidget [widget]="widget"></dadwidget>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -27,6 +30,7 @@ declare var d3, c3: any;
             </div>
         </div>
         
+    </div>
     </div>
     `
 })

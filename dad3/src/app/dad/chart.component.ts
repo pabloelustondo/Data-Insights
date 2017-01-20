@@ -140,10 +140,6 @@ export class DadChartComponent implements OnInit {
     return 0;
   }
 
-  goToTable(){
-    this.router.navigate(['table', 100, this.chart.id]);
-  };
-
   //mini applied
   drawChartBar(chartConfig:DadChart, data){
       let chartData = this.mapper.map(chartConfig, data);
@@ -241,11 +237,19 @@ export class DadChartComponent implements OnInit {
     };
     this.c3chart = c3.generate(c3Config);
 
-      d3.selectAll(".c3-event-rect").on('click', this.goToTable());
-      d3.selectAll(".c3-event-rect").on('click', function(doga){
-        alert("Hey dude you clicked on me");
-      })
+    let eventHandler = this.goToTable;
+    let chart = this.chart;
+    let route = this.route;
+    let router = this.router;
+
+    d3.selectAll(".c3-event-rect").on('click', function(d){
+      eventHandler(d,chart,router,route);});
   };
+
+
+goToTable(d,chart,router,route){
+  router.navigate(['table', 100, chart.id], { relativeTo: route});
+};
 
   differentColor(d, value){
     return

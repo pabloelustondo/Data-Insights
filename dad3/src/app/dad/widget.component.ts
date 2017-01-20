@@ -19,8 +19,9 @@ export class DadWidget extends DadElement{
   selector: 'dadwidget',
   providers:[DadElementDataService, DadWidgetConfigsService],
   template: ` 
-  <div *ngIf="widget.type==0"  class="col-sm-6 col-lg-3">          
-     <div class="card card-inverse card-primary">
+  <div *ngIf="widget.type==0"  class="col-sm-6 col-lg-3">  
+  <div class="inside">
+     <div class="content card card-inverse card-primary">
                 <div class="card-block pb-0">
                     <div class="btn-group float-xs-right" dropdown>
                         <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
@@ -45,20 +46,28 @@ export class DadWidget extends DadElement{
                     <br/>
                     
                     <div *ngIf="data && widget.metrics.length>2">
-                    <div style="font-size:15px;">{{widget.metrics[2].Name}}: {{  data[widget.metrics[2].DataSource] }}</div>   
-                    <div class="col-sm-3">
+                    <div style="font-size:15px;">{{widget.metrics[2].Name}}</div> 
+                    <div style="font-size:15px;">{{  data[widget.metrics[2].DataSource] }}</div> 
+                    <div class="col-sm-6">
                            <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>
+                    </div>
+                    
+                    <div *ngIf="!data || widget.metrics.length<=2" style="height:65px">
                     </div>
                                        
 
                     <!--<p style="font-size:12px;">{{widget.metrics[3].Name}}</p>-->
                     <div *ngIf="data && widget.metrics.length>3">
-                    <h6>{{  data[widget.metrics[3].DataSource] }}</h6> 
-                    <div class="col-sm-3">
+                    <div style="font-size:15px;">{{widget.metrics[3].Name}}</div> 
+                    <div style="font-size:15px;">{{  data[widget.metrics[3].DataSource] }}</div> 
+                    <div class="col-sm-6">
                         <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
-                    </div><br/>
-                    </div>                
+                    </div><br/><br/><br>
+                    </div>  
+                       
+                    <div *ngIf="!data || widget.metrics.length<=3" style="height:66px">
+                    </div>
                     
                   <div class="row">
                       <div *ngIf="editMode">          
@@ -110,8 +119,7 @@ export class DadWidget extends DadElement{
                  
                 </div>       
      </div>
-    
-    
+  </div>     
     </div>
     `
 })
@@ -132,7 +140,7 @@ export class DadWidgetComponent implements OnInit {
     this.dadWidgetDataService.getElementData(this.widget).then(
         data => {
             this.data = data.data[0];
-            this.fixDataNulls();
+            this.fixNullsInMetrics();
         }
     ).catch(err => console.log(err.toString()));
 }
@@ -150,7 +158,7 @@ export class DadWidgetComponent implements OnInit {
     this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
         this.data = data.data[0];
-          this.fixDataNulls();
+          this.fixNullsInMetrics();
       }
     );
   }
@@ -247,11 +255,10 @@ export class DadWidgetComponent implements OnInit {
       }
     }
 
-    fixDataNulls(){
-        if (this.data[this.widget.metrics[0].DataSource] === null) this.data[this.widget.metrics[0].DataSource] = 0;
-        if (this.data[this.widget.metrics[1].DataSource] === null) this.data[this.widget.metrics[1].DataSource] = 0;
-        if (this.data[this.widget.metrics[2].DataSource] === null) this.data[this.widget.metrics[2].DataSource] = 0;
-        if (this.data[this.widget.metrics[3].DataSource] === null) this.data[this.widget.metrics[3].DataSource] = 0;
+    fixNullsInMetrics(){
+      if (!this.data || !this.widget.metrics) return;
+      for( let i:number=0; i<this.widget.metrics.length; i++)
+        if (this.data[this.widget.metrics[i].DataSource] === null) this.data[this.widget.metrics[i].DataSource] = 0;
     }
 
   ngOnInit() {
@@ -262,7 +269,7 @@ export class DadWidgetComponent implements OnInit {
     this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
         this.data = data.data[0];
-        this.fixDataNulls();
+        this.fixNullsInMetrics();
       }
     ).catch(err => console.log(err.toString()));
   }
