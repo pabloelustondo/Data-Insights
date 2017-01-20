@@ -33,7 +33,7 @@ export const CHARTS: DadChart[] = [
             },
             {
                 Type: DadParameterType.DateTime,
-                Name: "Shift Start Data & Time",
+                Name: "Shift Start Date & Time",
                 DataSource: "shiftStartDateTime"
             },
             {
