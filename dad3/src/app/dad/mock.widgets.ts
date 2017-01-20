@@ -14,7 +14,7 @@ export const WIDGETS: DadWidget[] = [
     metrics:[
       {
         Type: DadParameterType.Number,
-        Name: "Device Not Lasted Shift",
+        Name: "Devices Not Lasted a Shift",
         DataSource: "CountDevicesNotLastedShift"
       },
       {
@@ -66,7 +66,7 @@ export const WIDGETS: DadWidget[] = [
     metrics:[
       {
         Type: DadParameterType.Number,
-        Name: "Device Not Lasted Shift",
+        Name: "Devices Not Lasted a Shift",
         DataSource: "CountDevicesNotLastedShift"
       },
       {
@@ -116,7 +116,7 @@ export const WIDGETS: DadWidget[] = [
     ]
   },
   {id: 'widget3',
-    name:'Device battery during shift',
+    name:'Devices Not Lasted a Shift',
     type: 0,
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
@@ -180,7 +180,7 @@ export const WIDGETS: DadWidget[] = [
     metrics:[
       {
         Type: DadParameterType.String,
-        Name: "Device Not Fully Charged",
+        Name: "Devices Not Fully Charged",
         DataSource: "CountDevicesNotFullyCharged"
       },
       {
