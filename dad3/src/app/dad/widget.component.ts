@@ -29,6 +29,7 @@ export class DadWidget extends DadElement{
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                             <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                            <button *ngIf="widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
                             <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh('lalal')">Refresh</div></button>
                         </div>
                     </div>
@@ -45,7 +46,7 @@ export class DadWidget extends DadElement{
                     <br/>
                     <br/>
                     
-                    <div *ngIf="data && widget.metrics.length>2">
+                    <div *ngIf="moreDetails && data && widget.metrics.length>2">
                     <div style="font-size:15px;">{{widget.metrics[2].Name}}</div> 
                     <div style="font-size:15px;">{{  data[widget.metrics[2].DataSource] }}</div> 
                     <div class="col-sm-6">
@@ -53,21 +54,16 @@ export class DadWidget extends DadElement{
                     </div><br/>
                     </div>
                     
-                    <div *ngIf="!data || widget.metrics.length<=2" style="height:65px">
-                    </div>
-                                       
-
+                                      
                     <!--<p style="font-size:12px;">{{widget.metrics[3].Name}}</p>-->
-                    <div *ngIf="data && widget.metrics.length>3">
+                    <div *ngIf="moreDetails && data && widget.metrics.length>3">
                     <div style="font-size:15px;">{{widget.metrics[3].Name}}</div> 
                     <div style="font-size:15px;">{{  data[widget.metrics[3].DataSource] }}</div> 
                     <div class="col-sm-6">
                         <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/><br/><br>
                     </div>  
-                       
-                    <div *ngIf="!data || widget.metrics.length<=3" style="height:66px">
-                    </div>
+                    
                     
                   <div class="row">
                       <div *ngIf="editMode">          
@@ -108,7 +104,7 @@ export class DadWidget extends DadElement{
                         <span *ngFor="let uiparam of widget.uiparameters">
                    <!--  <div><label style="text-decoration: underline">{{uiparam.Name}} :</label></div> -->
                            <span *ngIf="uiparam.Type == dadParameterType.DateTime">
-                           {{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}                        
+                           {{uiparam.Value['D']  }}                        
                            </span>
                    <!--        <div *ngIf="uiparam.Type == dadParameterType.Duration">{{addingZero(uiparam.Value.getHours())}}:{{addingZero(uiparam.Value.getMinutes())}}</div>
                            <div *ngIf="uiparam.Type == dadParameterType.Number">{{uiparam.Value}}</div>   -->
@@ -130,6 +126,7 @@ export class DadWidgetComponent implements OnInit {
   mapper: Mapper = new Mapper();
   dadParameterType = DadParameterType;
   editMode:boolean = false;
+  moreDetails:boolean = false;
 
   constructor(private dadWidgetDataService: DadElementDataService,
               private dadWidgetConfigsService: DadWidgetConfigsService) {}
@@ -154,7 +151,13 @@ export class DadWidgetComponent implements OnInit {
         else this.editMode = false;
     }
 
-  changeData(event) {
+    onMoreDetails(message:string):void{
+        if (!this.moreDetails) this.moreDetails = true;
+        else this.moreDetails = false;
+    }
+
+
+    changeData(event) {
     this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
         this.data = data.data[0];

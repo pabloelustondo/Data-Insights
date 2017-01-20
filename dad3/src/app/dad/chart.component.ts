@@ -25,7 +25,7 @@ export class DadChart extends DadElement{
     selector: 'dadchart',
     providers:[DadElementDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
-   <div class="col-sm-12 col-lg-6">        
+   <div class="col-xs-12 col-sm-12 col-lg-12 col-xl-6">        
           <div class="card card-inverse card-secondary">
 
                 <div class="card-block pb-0">
@@ -42,9 +42,6 @@ export class DadChart extends DadElement{
 
      <div *ngIf="chart.mini" style= "text-align:center; height:auto;  width:auto" [id]="chart.id"></div>
      <div *ngIf="!chart.mini">
-        <a [routerLink]="['table', 100, chart.id]">
-        <span style="color:black;">Drill down </span>
-        </a>
        <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
        <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
        <div style="margin-left: 15px; color:black;">
