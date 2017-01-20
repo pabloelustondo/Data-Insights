@@ -25,11 +25,7 @@ export const CHARTS: DadChart[] = [
                 shiftDuration: 8
             }],
         uiparameters: [
-            {
-                Type: DadParameterType.Date,
-                Name: "Date From",
-                DataSource: "dateFrom"
-            },
+
             {
                 Type: DadParameterType.Date,
                 Name: "Date To",

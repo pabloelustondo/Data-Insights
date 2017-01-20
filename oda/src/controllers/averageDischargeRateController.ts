@@ -107,13 +107,8 @@ export class AverageDischargeRateController {
             }
         ]
     })
-    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number): Promise<SDS> {
+    public async Get(dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number, dateFrom?: Date): Promise<SDS> {
 
-
-
-        if (dateFrom.getDate() !== shiftStartDateTime.getDate()) {
-            throw new Error('shift start data time != to dateFrom');
-        }
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
