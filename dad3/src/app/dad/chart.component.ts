@@ -40,9 +40,6 @@ export class DadChart extends DadElement{
        
   
       <div *ngIf="!chart.mini">
-          <a [routerLink]="['table', 100, chart.id]">
-          <span style="color:black;">Drill down </span>
-          </a>
           <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
           <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
           <div style="margin-left: 15px; color:black;">
