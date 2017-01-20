@@ -130,7 +130,7 @@ export class AverageDischargeRateController {
         console.timeEnd('deviceNotSurviveShift: aws call');
         let mData = ['countOfDevices: int',
             'percentage: int'];
-        if (p.errorMessage !== null) {
+        if (p.errorMessage !== undefined) {
             p = [
                 {
                     percentage: 5,
