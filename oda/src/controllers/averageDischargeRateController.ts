@@ -117,7 +117,7 @@ export class AverageDischargeRateController {
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-        const xqs = {shiftStartDateTime : shiftDateTimeString};
+        const xqs = {shiftStartDateTime : shiftDateTimeString, endDate : dateTo, shiftDuration : shiftDuration};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-listAverageDischargeRate'];
 
