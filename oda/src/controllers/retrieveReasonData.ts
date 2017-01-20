@@ -61,7 +61,7 @@ export class MultiplePostsController {
                 metricName: request.metricName,
                 parameters: {
                     'shiftStartDateTime': request.parameters.shiftStartDateTime.toISOString().substring(0, 19),
-                    'endDate': request.parameters.endDate.toISOString().substring(0, 9),
+                    'endDate': request.parameters.endDate.toISOString().substring(0, 10),
                     'shiftDuration': request.parameters.shiftDuration.toString(),
                     'minimumBatteryPercentageThreshold': request.parameters.minimumBatteryPercentageThreshold.toString()
                 }

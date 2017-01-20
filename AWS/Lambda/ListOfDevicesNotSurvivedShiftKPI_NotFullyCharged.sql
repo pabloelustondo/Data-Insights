@@ -72,10 +72,16 @@ SELECT
 	 , SUM(bad_case) OVER(PARTITION BY devid) AS total_bad_case
 	 , SUM(initial_not_fully_charged) OVER(PARTITION BY devid) AS total_initial_not_fully_charged
 	 , SUM(too_fast_first_slope) OVER(PARTITION BY devid) AS total_too_fast_first_slope
+	 , row_number() over (partition by DevId order by time_stamp desc) rownum
+	 , last_value(intvalue) over (partition by DevId order by time_stamp rows between unbounded preceding and unbounded following) LastValue
   FROM marked_data	   
 )
 SELECT 
-       COUNT(DISTINCT devid) as CountDevicesNotLastedShift
-	 , COUNT(DISTINCT CASE WHEN total_initial_not_fully_charged >0 or total_too_fast_first_slope >0 THEN devid ELSE NULL  END ) AS CountDevicesNotFullyCharged
-  FROM agg_marked_data
-  where total_bad_case > 0 
+      DevId, 
+	  LastValue as LastBatteryStatus, '[' + listagg(intvalue, ', ') within group (order by time_stamp) + ']' BatteryChargeHistory
+FROM agg_marked_data
+where total_bad_case > 0 
+and rownum<=10
+and (total_initial_not_fully_charged >0 or total_too_fast_first_slope >0)
+group by DevId, LastValue
+order by DevId  limit $[rowsTake] offset $[rowsSkip]

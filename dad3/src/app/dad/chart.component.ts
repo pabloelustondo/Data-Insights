@@ -25,30 +25,33 @@ export class DadChart extends DadElement{
     selector: 'dadchart',
     providers:[DadElementDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
-   <div class="col-xs-12 col-sm-12 col-lg-12 col-xl-6">        
-          <div class="card card-inverse card-secondary">
-
-                <div class="card-block pb-0">
-     <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
-        <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
-            <i class="icon-settings"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
-            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
-        </div>
-    </div>
-    </div>
-
-     <div *ngIf="chart.mini" style= "text-align:center; height:auto;  width:auto" [id]="chart.id"></div>
-     <div *ngIf="!chart.mini">
-       <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
-       <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
-       <div style="margin-left: 15px; color:black;">
-       <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
-       </div>
-    </div>
-        </div>
+   <div class="col-sm-12 col-lg-6">        
+       <div class="card-block pb-0">
+       <div *ngIf="!chart.mini" class="card card-inverse card-secondary">
+           <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
+               <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+                   <i class="icon-settings"></i>
+               </button>
+               <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
+                   <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                   <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
+               </div>
+           </div>
+       
+  
+      <div *ngIf="!chart.mini">
+          <a [routerLink]="['table', 100, chart.id]">
+          <span style="color:black;">Drill down </span>
+          </a>
+          <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
+          <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
+          <div style="margin-left: 15px; color:black;">
+              <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
+          </div>
+      </div>
+      </div>
+      <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
+      </div>
     </div>
 
     <!--  END CHART COMPONENT -->`
@@ -228,7 +231,7 @@ export class DadChartComponent implements OnInit {
       c3Config.interaction.enabled = false;
       c3Config.regions = [{'start':100}];
       c3Config.data.color = function(color, d){
-        return d.value === 100 ? "#FFFF00" : color;
+        return d.value === 100 ? "#007F00" : color && d.value <= 30 ? "#FF0000" : color;
       };
 
     };
