@@ -204,7 +204,7 @@ export class DadChartComponent implements OnInit {
         show: true
       },*/
       legend: {
-        show: true
+        show: false
       },
       interaction: {
         enabled: true
