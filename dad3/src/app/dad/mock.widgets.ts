@@ -42,11 +42,6 @@ export const WIDGETS: DadWidget[] = [
   }],
   uiparameters: [
     {
-      Type: DadParameterType.String,
-      Name: "Date Time Type",
-      DataSource: "shiftStartDateTimeAuto"
-    },
-    {
     Type: DadParameterType.DateTime,
     Name: "Shift Start Date & Time",
     DataSource: "shiftStartDateTime"
