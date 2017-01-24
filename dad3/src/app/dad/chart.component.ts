@@ -1,13 +1,8 @@
-/**ActivatedRoutem
- * Created by pablo elustondo Nov 2016
- */
 import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
 import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
-
-
 
 declare var d3, c3: any;
 
@@ -37,7 +32,6 @@ export class DadChart extends DadElement{
                    <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                </div>
            </div>
-       
   
       <div *ngIf="!chart.mini">
           <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
@@ -200,9 +194,6 @@ export class DadChartComponent implements OnInit {
       zoom: {
         enabled: true
       },
-      /*subchart: {
-       show: true
-       },*/
       legend: {
         show: false
       },
@@ -245,20 +236,10 @@ export class DadChartComponent implements OnInit {
     }
     );
   };
-/*
-  d3.selectAll(".c3-event-rect").on('click', function(d){
-      eventHandler(d,chart,router,route);});
-  };
-*/
 
-
-goToTable(d,chart,router,route){
+  goToTable(d,chart,router,route){
   router.navigate(['table', 100, chart.id], { relativeTo: route});
 };
-
-  differentColor(d, value){
-    return
-  }
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
