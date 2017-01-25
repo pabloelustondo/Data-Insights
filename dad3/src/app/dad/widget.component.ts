@@ -58,7 +58,7 @@ export class DadWidget extends DadElement{
                         <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/><br/><br>
                     </div>  
-                    <dadparameters [element]="widget" [editMode]="editMode" (parametersChanged)="changeData()"></dadparameters>  
+                    <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>  
                 </div>       
      </div>
   </div>     
