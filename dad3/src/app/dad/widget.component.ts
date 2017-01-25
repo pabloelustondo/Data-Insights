@@ -1,6 +1,3 @@
-/**
- * Created by doga ister on 12/14/2016.
- */
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadElementDataService } from "./data.service";
@@ -30,7 +27,7 @@ export class DadWidget extends DadElement{
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                             <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
                             <button *ngIf="widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
-                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh('lalal')">Refresh</div></button>
+                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
                     </div>
                     <p>{{widget.metrics[0].Name}}</p>
@@ -53,9 +50,7 @@ export class DadWidget extends DadElement{
                            <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>
                     </div>
-                    
-                                      
-                    <!--<p style="font-size:12px;">{{widget.metrics[3].Name}}</p>-->
+                                   
                     <div *ngIf="moreDetails && data && widget.metrics.length>3">
                     <div style="font-size:15px;">{{widget.metrics[3].Name}}</div> 
                     <div style="font-size:15px;">{{  data[widget.metrics[3].DataSource] }}</div> 
@@ -63,8 +58,7 @@ export class DadWidget extends DadElement{
                         <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/><br/><br>
                     </div>  
-                    
-                    <dadparameters [element]="widget" [editMode]="editMode"></dadparameters>  
+                    <dadparameters [element]="widget" [editMode]="editMode" (parametersChanged)="changeData()"></dadparameters>  
                 </div>       
      </div>
   </div>     
@@ -79,20 +73,26 @@ export class DadWidgetComponent implements OnInit {
   dadParameterType = DadParameterType;
   editMode:boolean = false;
   moreDetails:boolean = false;
+  refreshMode:boolean = false;
 
-  constructor(private dadWidgetDataService: DadElementDataService,
+    constructor(private dadWidgetDataService: DadElementDataService,
               private dadWidgetConfigsService: DadWidgetConfigsService) {}
 
-  onRefresh(message:string):void{
-    this.dadWidgetConfigsService.saveOne(this.widget);
-    this.dadWidgetDataService.getElementData(this.widget).then(
+    onRefresh():void{
+        if (!this.refreshMode) this.refreshMode = true;
+        else this.refreshMode = false;
+    }
+/*
+  onRefresh():void{
+      this.dadWidgetConfigsService.saveOne(this.widget);
+      this.dadWidgetDataService.getElementData(this.widget).then(
         data => {
             this.data = data.data[0];
             this.fixNullsInMetrics();
         }
     ).catch(err => console.log(err.toString()));
 }
-
+*/
     addingZero(x:number):string{
         return (x <10 )? "0" + x : "" + x;
     }
@@ -107,8 +107,7 @@ export class DadWidgetComponent implements OnInit {
         else this.moreDetails = false;
     }
 
-
-    changeData(event) {
+    changeData() {
     this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
         this.data = data.data[0];

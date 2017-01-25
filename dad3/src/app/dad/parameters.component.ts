@@ -95,7 +95,6 @@ export class DadParametersComponent implements OnInit {
     ngOnInit() {
         this.mapParameters2ui();
         this.mapParameters2model();
-
     }
 
     onEdit(message:string):void{
