@@ -82,17 +82,7 @@ export class DadWidgetComponent implements OnInit {
         if (!this.refreshMode) this.refreshMode = true;
         else this.refreshMode = false;
     }
-/*
-  onRefresh():void{
-      this.dadWidgetConfigsService.saveOne(this.widget);
-      this.dadWidgetDataService.getElementData(this.widget).then(
-        data => {
-            this.data = data.data[0];
-            this.fixNullsInMetrics();
-        }
-    ).catch(err => console.log(err.toString()));
-}
-*/
+
     addingZero(x:number):string{
         return (x <10 )? "0" + x : "" + x;
     }
@@ -115,7 +105,6 @@ export class DadWidgetComponent implements OnInit {
       }
     );
   }
-
 
     percentageOfTotal(){
       if(this.data[this.widget.metrics[0].DataSource] == 0){
