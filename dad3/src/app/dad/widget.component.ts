@@ -45,11 +45,12 @@ export class DadWidget extends DadElement{
                     <br/>
                     <br/>
                     
-                    <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>  
+              
 
                     
                     <div *ngIf="moreDetails && data && widget.metrics.length>2">
-                    <div style="font-size:15px;">{{widget.metrics[2].Name}}</div> 
+
+                    <div style="font-size:15px;"><p>{{widget.metrics[2].Name}}</p></div> 
                     <div style="font-size:15px;">{{data[widget.metrics[2].DataSource]}}</div> 
                     <div class="col-sm-6">
                            <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
@@ -62,14 +63,14 @@ export class DadWidget extends DadElement{
                         <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>
                     </div>  
-                    
                     <div *ngIf="moreDetails && data" class="col-sm-9 ">
-                        <button (click)="onMoreDetails()" style="color:white; border-color:white;" type="button" class="btn btn-secondary-active">
-                            Less Details
+                        <button (click)="onMoreDetails()" type="button" class="btn btn-secondary pull-right">
+                            <span class="glyphicons glyphicons-chevron-up"></span>                        
                         </button><br/>
                     </div>
-                    
-                    </div>       
+
+                    </div> 
+                    <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
                     
                     
                     
