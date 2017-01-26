@@ -16,7 +16,7 @@ export class DadWidget extends DadElement{
   selector: 'dadwidget',
   providers:[DadElementDataService, DadWidgetConfigsService],
   template: ` 
-  <div *ngIf="widget.type==0" class="col-sm-6 col-lg-3">  
+  <div *ngIf="widget.type==0" class="col-sm-4 col-lg-3">  
   <div class="inside">
      <div class="content card card-inverse card-primary">
                 <div class="card-block pb-0">

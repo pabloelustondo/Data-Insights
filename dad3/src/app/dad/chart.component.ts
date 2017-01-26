@@ -21,9 +21,10 @@ export class DadChart extends DadElement{
     selector: 'dadchart',
     providers:[DadElementDataService],
     template: ` <!--  BEGIN CHART COMPONENT -->
-   <div class="col-sm-12 col-lg-6">        
-       <div class="card-block pb-0">
-       <div *ngIf="!chart.mini" class="card card-inverse card-secondary">
+      <div class="col-sm-8 col-lg-6">  
+    <div class="inside">
+     <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">
+                
            <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
                <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
                    <i class="icon-settings"></i>
@@ -45,6 +46,7 @@ export class DadChart extends DadElement{
       <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
       </div>
     </div>
+
 
     <!--  END CHART COMPONENT -->`
 })
