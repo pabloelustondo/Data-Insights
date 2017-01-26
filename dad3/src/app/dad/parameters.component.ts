@@ -36,7 +36,7 @@ import {DadWidget} from "./widget.component";
             <!--refresh button here-->
             <br/>
             <div class="col-md-4 text-center">
-            <button (click)="onRefreshButton()" style="border-color:white; color:white; margin-left:-15px;" type="button" class="btn btn-secondary-active">
+            <button (click)="onRefreshButton()" style=" margin-left:-15px;" type="button" class="btn btn-secondary">
                 <span class="glyphicons glyphicons-refresh"></span>
             </button>
             <br/><br/>
@@ -44,7 +44,7 @@ import {DadWidget} from "./widget.component";
             <div>
             <!--This is actually close button-->
             <div class="col-md-4 text-center">
-            <button (click)="onEdit()" style="color:white; border-color:white;" type="button" class="btn btn-secondary-active">
+            <button (click)="onEdit()" type="button" class="btn btn-secondary">
                 <span class="glyphicons glyphicons-remove"></span>
             </button>
             </div>

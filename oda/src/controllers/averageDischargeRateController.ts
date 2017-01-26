@@ -202,15 +202,15 @@ export class AverageDischargeRateController {
                 },
                 {
                     percentage: 90,
-                    countOfDevices: 0
+                    countOfDevices: 100
                 },
                 {
                     percentage: 95,
-                    countOfDevices: 0
+                    countOfDevices: 100
                 },
                 {
                     percentage: 100,
-                    countOfDevices: 0
+                    countOfDevices: 100
                 }
             ];
         }

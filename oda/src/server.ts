@@ -15,12 +15,21 @@ import * as winston from 'winston';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as methodOverride from 'method-override';
+import * as http from 'http';
+import * as https from 'https';
+import * as fs from 'fs';
+
 import {RegisterRoutes} from './routes';
 const expressWinston = require('express-winston');
 
 let config = require('../appconfig.json');
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
+
+let httpsOptions = {
+    key: fs.readFileSync('./src/63663247-localhost_3002.key'),
+    cert: fs.readFileSync('./src/63663247-localhost_3002.cert')
+};
 
 exports.app = app;
 
@@ -78,8 +87,16 @@ app.use(logger);
 // }));
 
 /* tslint:disable-next-line */
-console.log('Starting server.. http://localhost:' + config.port + '/docs');
-app.listen(config.port);
+// console.log('Starting server.. http://localhost:' + config.port + '/docs');
+
+
+// let httpServer = http.createServer(app);
+let httpsServer = https.createServer(httpsOptions, app);
+
+// app.listen(config.port);
+httpsServer.listen(config.port, function (){
+    console.log('started https');
+});
 
 module.exports = logger;
 module.exports.stream = {
