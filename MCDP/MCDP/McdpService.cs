@@ -54,7 +54,7 @@ namespace Soti.MCDP
         private void initPollService()
         {
             this.pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
-            
+
             //LOADING Process PROVIDER
             _dataProcessProvider = new DataProcessProvider();
 

@@ -7,3 +7,8 @@ D:\CustomBI\BI\MCDP\Database\bin\Debug\Database.pdb
 D:\CustomBI\BI\MCDP\Database\obj\Debug\Database.dll
 D:\CustomBI\BI\MCDP\Database\obj\Debug\Database.pdb
 D:\CustomBI\BI\MCDP\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache
+D:\BI\BINEW\MCDP\Database\bin\Debug\Database.dll
+D:\BI\BINEW\MCDP\Database\bin\Debug\Database.pdb
+D:\BI\BINEW\MCDP\Database\obj\Debug\Database.dll
+D:\BI\BINEW\MCDP\Database\obj\Debug\Database.pdb
+D:\BI\BINEW\MCDP\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache

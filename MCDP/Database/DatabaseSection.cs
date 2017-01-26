@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
 
-namespace Soti.MobiControl.Configuration
+namespace Soti.MCDP.Database
 {
     /// <summary>
     /// Represents the local machine's database connection information.
@@ -87,6 +87,23 @@ namespace Soti.MobiControl.Configuration
                 UseWindowsAuthentication = builder.IntegratedSecurity,
                 IsProtected = config.ConnectionStrings != null && config.ConnectionStrings.SectionInformation.IsProtected
             };
+        }
+
+        public static string LoadConnectionString(string path)
+        {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
+            var config = GetConfiguration(path);
+            
+            var settings = config.ConnectionStrings.ConnectionStrings["DbConnectionString"];
+            if (settings == null)
+            {
+                throw new InvalidDataException("Database section does not have an associated file!");
+            }
+
+            return settings.ConnectionString;
+
         }
 
         /// <summary>
