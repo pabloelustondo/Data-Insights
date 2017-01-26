@@ -33,10 +33,9 @@ export class DadChart extends DadElement{
                    <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                </div>
            </div>
-       
-  
+
       <div *ngIf="!chart.mini">
-          <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
+          <h6 style="color:black;">{{chart.name}}</h6><br/><br/><br/>        
           <div style= "text-align:center; height:auto;  width:auto" [id]="chart.id"></div>
           <div style="margin-left: 15px; color:black;">
               <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  

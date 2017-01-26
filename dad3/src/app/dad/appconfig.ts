@@ -4,10 +4,10 @@
 
 export const config = {
     "testing":false,
-    "InitialChargeLevels":"http://localhost:3002/Devices/Battery/Summary/InitialChargeLevels",
-    "DischargeRate":"http://localhost:3002/Devices/Battery/Summary/DischargeRate",
-    "DevicesNotSurvivedShift": "http://localhost:3002/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
-    "ListOfDevicesNotSurvivedShift": "http://localhost:3002/Devices/Battery/List/DevicesDidNotSurviveShift",
-    "BatteryMetrics": {url:"http://localhost:3002/Devices/Battery/getMetrics", method:"post"},
-    "AverageDischargeRate": "http://localhost:3002/Devices/Battery/Summary/AverageDischargeRate"
+    "InitialChargeLevels":"https://localhost:3002/Devices/Battery/Summary/InitialChargeLevels",
+    "DischargeRate":"https://localhost:3002/Devices/Battery/Summary/DischargeRate",
+    "DevicesNotSurvivedShift": "https://localhost:3002/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
+    "ListOfDevicesNotSurvivedShift": "https://localhost:3002/Devices/Battery/List/DevicesDidNotSurviveShift",
+    "BatteryMetrics": {url:"https://localhost:3002/Devices/Battery/getMetrics", method:"post"},
+    "AverageDischargeRate": "https://localhost:3002/Devices/Battery/Summary/AverageDischargeRate"
 }
