@@ -1,4 +1,6 @@
-﻿namespace Soti.MCDP
+﻿using System.ServiceProcess;
+
+namespace Soti.MCDP
 {
     static class Program
     {
