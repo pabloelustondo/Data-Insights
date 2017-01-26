@@ -1,12 +1,8 @@
-/**ActivatedRoutem
- * Created by pablo elustondo Nov 2016
- */
 import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
 import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
-
 
 
 declare var d3, c3: any;
@@ -41,7 +37,7 @@ export class DadChart extends DadElement{
   
       <div *ngIf="!chart.mini">
           <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
-          <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
+          <div style= "text-align:center; height:auto;  width:auto" [id]="chart.id"></div>
           <div style="margin-left: 15px; color:black;">
               <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
           </div>
@@ -68,7 +64,6 @@ export class DadChartComponent implements OnInit {
     secondDate: any;
     editMode:boolean = false;
     refreshMode:boolean = false;
-
 
   constructor(private dadChartDataService: DadElementDataService, private router: Router, private route: ActivatedRoute) {}
 
@@ -138,17 +133,17 @@ export class DadChartComponent implements OnInit {
   }
 
   //mini applied
-  drawChartBar(chartConfig:DadChart, data){
-      let chartData = this.mapper.map(chartConfig, data);
-      let bardata = chartData;
+  drawChartBar(chartConfig:DadChart, data) {
+    let chartData = this.mapper.map(chartConfig, data);
+    let bardata = chartData;
 
-    bardata.selection ={
-      enabled:true,
+    bardata.selection = {
+      enabled: true,
     };
 
-    d3.selectAll(".c3-axis-x .tick").filter(function(d) {
-        return d === 0;
-      }).remove();
+    d3.selectAll(".c3-axis-x .tick").filter(function (d) {
+      return d === 0;
+    }).remove();
 
     let c3Config = {
       size: {
@@ -160,26 +155,26 @@ export class DadChartComponent implements OnInit {
       color: {
         pattern: this.colorPalette,
       },
-      tooltip:{
-         show:false
+      tooltip: {
+        show: false
       },
       axis: {
         x: {
           type: 'category',
-          show : true,
+          show: true,
           label: {
             text: [chartConfig.bname],
-              position: 'outer-right'
+            position: 'outer-right'
           },
-          tick:{
-            multiline:false
+          tick: {
+            multiline: false
           }
         },
         y: {
-          show : true,
+          show: true,
           label: {
             text: [chartConfig.aname],
-              position: 'outer-top'
+            position: 'outer-top'
           }
         }
       },
@@ -200,22 +195,19 @@ export class DadChartComponent implements OnInit {
       zoom: {
         enabled: true
       },
-      /*subchart: {
-        show: true
-      },*/
       legend: {
         show: false
       },
       interaction: {
         enabled: true
       },
-      bar:{
+      bar: {
         width: {
           ratio: 0.7
         }
       }
     };
-    if(chartConfig.mini){
+    if (chartConfig.mini) {
       c3Config.size.width = this.miniChartWidth;
       c3Config.size.height = this.miniChartHeight;
       c3Config.legend.show = false;
@@ -226,12 +218,13 @@ export class DadChartComponent implements OnInit {
       c3Config.grid.y.show = false;
       c3Config.color.pattern = this.miniChartColor;
       c3Config.interaction.enabled = false;
-      c3Config.regions = [{'start':100}];
-      c3Config.data.color = function(color, d){
+      c3Config.regions = [{'start': 100}];
+      c3Config.data.color = function (color, d) {
         return d.value === 100 ? "#007F00" : color && d.value <= 30 ? "#FF0000" : color;
       };
 
-    };
+    }
+    ;
     this.c3chart = c3.generate(c3Config);
 
     let eventHandler = this.goToTable;
@@ -239,18 +232,15 @@ export class DadChartComponent implements OnInit {
     let route = this.route;
     let router = this.router;
 
-    d3.selectAll(".c3-event-rect").on('click', function(d){
-      eventHandler(d,chart,router,route);});
+    this.c3chart.internal.main.on('click', function(d){
+      eventHandler(d,chart,router,route);
+    }
+    );
   };
 
-
-goToTable(d,chart,router,route){
+  goToTable(d,chart,router,route){
   router.navigate(['table', 100, chart.id], { relativeTo: route});
 };
-
-  differentColor(d, value){
-    return
-  }
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {

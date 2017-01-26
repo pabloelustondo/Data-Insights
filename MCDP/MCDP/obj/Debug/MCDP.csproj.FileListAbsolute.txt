@@ -28,3 +28,6 @@ D:\CustomBI\BI\MCDP\MCDP\obj\Debug\MCDP.csprojResolveAssemblyReference.cache
 D:\CustomBI\BI\MCDP\MCDP\obj\Debug\Soti.MCDP.MCDP.resources
 D:\CustomBI\BI\MCDP\MCDP\obj\Debug\Soti.MCDP.ProjectInstaller.resources
 D:\CustomBI\BI\MCDP\MCDP\obj\Debug\MCDP.csproj.GenerateResource.Cache
+D:\BI\BINEW\MCDP\MCDP\bin\Debug\MCDP.exe.config
+D:\BI\BINEW\MCDP\MCDP\obj\Debug\MCDP.exe
+D:\BI\BINEW\MCDP\MCDP\obj\Debug\MCDP.pdb
