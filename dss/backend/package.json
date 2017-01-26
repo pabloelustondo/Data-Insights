@@ -4,7 +4,9 @@
   "description": "Chuck Norris Quotes API",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "startdebug": "node $NODE_DEBUG_OPTION server.js"
   },
   "repository": {
     "type": "git",

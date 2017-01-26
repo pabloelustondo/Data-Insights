@@ -16,6 +16,7 @@ export class Home {
   decodedJwt: string;
   response: string;
   api: string;
+  isSOTI: boolean;
 
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
