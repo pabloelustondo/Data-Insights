@@ -86,6 +86,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{ecaac8ab-1bf6-499d-a0d5-3915dd1efe63}</Project>
+      <Name>Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataProcess\DataProcess.csproj">
       <Project>{105a2bbf-f50b-4d34-aef9-f76ff7e723fc}</Project>
       <Name>DataProcess</Name>
