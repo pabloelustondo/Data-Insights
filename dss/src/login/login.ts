@@ -15,10 +15,10 @@ export class Login {
   constructor(public router: Router, public http: Http) {
   }
 
-  login(event, username, password) {
+  login(event, domain, username, password) {
     event.preventDefault();
     let body = JSON.stringify({ username, password });
-    this.http.post('http://localhost:3003/sessions/create', body, { headers: contentHeaders })
+    this.http.post('http://localhost:3004/sessions/create', body, { headers: contentHeaders })
       .subscribe(
         response => {
           localStorage.setItem('id_token', response.json().id_token);
