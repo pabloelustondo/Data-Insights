@@ -25,7 +25,7 @@ export class DadChart extends DadElement{
         <div class="inside">
             <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">    
                 <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
-                    <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+                    <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
                         <i class="icon-settings"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
@@ -35,9 +35,9 @@ export class DadChart extends DadElement{
                 </div>
 
                 <div *ngIf="!chart.mini">
-                    <h6 class="pb-1">{{chart.name}}</h6><br/><br/><br/>        
+                    <div style="margin-left: 20px; color:black;" class="card-header-secondary">{{chart.name}}</div><br/><br/><br/>        
                     <div style= "text-align:center; height:100%;  width:100%" [id]="chart.id"></div>
-                    <div style="margin-left: 15px; color:black;">
+                    <div style="margin-left: 30px; color:black;">
                         <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
                     </div>
                  </div>
