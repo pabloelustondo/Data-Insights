@@ -20,35 +20,32 @@ export class DadChart extends DadElement{
 @Component({
     selector: 'dadchart',
     providers:[DadElementDataService],
-    template: ` <!--  BEGIN CHART COMPONENT -->
-      <div class="col-sm-8 col-lg-6">  
-    <div class="inside">
-     <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">
-                
-           <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
-               <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
-                   <i class="icon-settings"></i>
-               </button>
-               <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-                   <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
-                   <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
-               </div>
-           </div>
+    template: `
+    <div class="col-sm-8 col-lg-6">  
+        <div class="inside">
+            <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">    
+                <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
+                    <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+                        <i class="icon-settings"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
+                       <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                       <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
+                    </div>
+                </div>
 
-      <div *ngIf="!chart.mini">
-          <h6 style="color:black;">{{chart.name}}</h6><br/><br/><br/>        
-          <div style= "text-align:center; height:auto;  width:auto" [id]="chart.id"></div>
-          <div style="margin-left: 15px; color:black;">
-              <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
-          </div>
-      </div>
-      </div>
-      <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
-      </div>
+                <div *ngIf="!chart.mini">
+                    <h6 class="pb-1">{{chart.name}}</h6><br/><br/><br/>        
+                    <div style= "text-align:center; height:100%;  width:100%" [id]="chart.id"></div>
+                    <div style="margin-left: 15px; color:black;">
+                        <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
+                    </div>
+                 </div>
+            </div>
+            <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
+        </div>
     </div>
-
-
-    <!--  END CHART COMPONENT -->`
+    `
 })
 export class DadChartComponent implements OnInit {
     @Input()
