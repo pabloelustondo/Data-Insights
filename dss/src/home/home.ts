@@ -36,6 +36,14 @@ export class Home {
     this._callApi('Secured', 'http://localhost:3001/api/protected/random-quote');
   }
 
+  callGetToken() {
+    this._callApi('Secured', 'http://localhost:3004/api/protected/token');
+  }
+
+  callGetDeviceGroups() {
+    this._callApi('Secured', 'http://localhost:3004/api/protected/devicegroups');
+  }
+
   _callApi(type, url) {
     this.response = null;
     if (type === 'Anonymous') {
