@@ -41,31 +41,8 @@ app.post('/users', function(req, res) {
    return res.status(400).send("A user with that username already exists");
   }
 
-  var profile = _.pick(req.body, 'username', 'password', 'extra');
-  profile.id = _.max(users, 'id').id + 1;
-
-  users.push(profile);
-
-  res.status(201).send({
-    id_token: createToken(profile)
-  });
-});
-
-app.post('/sessions/create', function(req, res) {
-  if (!req.body.username || !req.body.password) {
-    return res.status(400).send("You must send the username and the password");
-  }
-//////////////////////////////////////////////////
-
-  var user = _.find(users, {username: req.body.username});
-  if (!user) {
-    return res.status(401).send("The username or password don't match");
-  }
-
-  if (!(user.password === req.body.password)) {
-    return res.status(401).send("The username or password don't match");
-  }
-
+  var user = _.pick(req.body, 'username', 'password', 'extra');
+  user.id = _.max(users, 'id').id + 1;
 
   request({
     "rejectUnauthorized": false,
@@ -79,7 +56,51 @@ app.post('/sessions/create', function(req, res) {
   }, function(error, response, body){
     if(error) {
       console.log(error);
-      res.status(200).send("hi from modulus error:" + error);
+      res.status(400).send("Enrollment Failed, most likely du to authentication failure");
+    } else {
+      console.log(response.statusCode, body);
+
+      user.mc_token= "MC Token:" + response.statusCode + " body " + body;
+      users.push(user);
+      res.status(200).send({
+        id_token: createToken(user)
+      });
+      var resObj = JSON.parse(body);
+      currentAuthorizationString = "Bearer " + resObj.access_token;
+      localStorage.setItem('currentAuthorizationString', currentAuthorizationString)
+    }
+  });
+
+});
+
+app.post('/sessions/create', function(req, res) {
+  if (!req.body.username || !req.body.password) {
+    return res.status(400).send("You must send the username and the password");
+  }
+//////////////////////////////////////////////////
+
+  var user = _.find(users, {username: req.body.username});
+  if (!user){
+
+    user = {
+      username: req.body.username,
+      password: req.body.password
+    }
+  }
+
+  request({
+   // "rejectUnauthorized": false,
+    url: host + "/api/token",
+    method: 'POST', //Specify the method
+    headers: { //We can define headers too
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': basicAuthorizationString
+    },
+    body: "grant_type=password&username="+ user.username +"&password="+user.password,
+  }, function(error, response, body){
+    if(error) {
+      console.log(error);
+      res.status(400).send("Authentication Failed");
     } else {
       console.log(response.statusCode, body);
 

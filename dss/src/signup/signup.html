@@ -1,34 +1,37 @@
 <div class="signup center-block jumbotron">
+  <h3>SOTI Data Analytics</h3>
   <h1>Enroll</h1>
+
+  <small><i>As a MobiControl administrator, you can use this page to enroll an internet-exposed MobiControl instance into our Data Analytics service.
+  After approval is completed, all valid users of that MobiControl instance will be able to access our Data Analytics Dashboard and API.
+  </i></small>
+  <p></p>
+
   <form role="form" (submit)="signup($event, username.value, password.value)">
     <div class="form-group">
-      <label for="apiurl">Mobicontrol API URL (*)</label>
-      <input type="text" #apiurl class="form-control" id="apiurl" placeholder="Mobicontrol API URL">
+      <label for="accountid">Account ID </label>
+      <input type="text" #accountid class="form-control" id="accountid" placeholder="AccountID for SOTI Analytics Services">
+      <small><i>No account?, follow this <a href="http://www.soti.net">link</a> to create one </i></small>
     </div>
     <div class="form-group">
-      <label for="accountid">Friendly Unique Domain Name</label>
-      <input type="text" #accountid class="form-control" id="accountid" placeholder="New Unique Account Id">
+      <label for="apiurl">Mobicontrol API URL </label>
+      <input type="text" #apiurl class="form-control" id="apiurl" placeholder="i.e: https://cad059.corp.soti.net/MobiControl/api">
     </div>
     <div class="form-group">
-      <label for="apiclientid">Mobicontrol API Client ID(*)</label>
-      <input type="text" #apiclientid class="form-control" id="apiclientid" placeholder="Mobicontrol API Client ID">
-    </div>
-    <div class="form-group">
-      <label for="apiclientsecret">Mobicontrol API Client Secret(*)</label>
-      <input type="text" #apiclientsecret class="form-control" id="apiclientsecret" placeholder="Mobicontrol API Client Secret">
+      <label for="domainid">Short Unique Name</label>
+      <input type="text" #accountid class="form-control" id="domainid" placeholder="i.e: soti_cad059"  >
+      <small><i>Easy to remember identifier for this domain for user to log in. </i></small>
     </div>
   <div class="form-group">
-    <label for="username">Mobicontrol Username(*)</label>
+    <label for="username">Administrator Username</label>
     <input type="text" #username class="form-control" id="username" placeholder="Username">
   </div>
   <div class="form-group">
-    <label for="password">Mobicontrol Password(*)</label>
+    <label for="password">Password</label>
     <input type="password" #password class="form-control" id="password" placeholder="Password">
+    <small><i>Note: We are using the password to validate you against your MobiControl instance but we do not store this password.
+      Each time lo login to the dashboard you will be validated by your mobicontrol instance</i></small>
   </div>
-    <div class="form-group">
-      <label for="useremail">Mobicontrol User Email(*)</label>
-      <input type="text" #useremail class="form-control" id="useremail" placeholder="User Email">
-    </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
 </div>
