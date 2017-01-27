@@ -53,7 +53,7 @@ import {DadWidget} from "./widget.component";
       
     <div class="row">
         <div *ngIf="!editMode">          
-            <span style="margin-left:5px;" *ngFor="let uiparam of element.uiparameters">
+            <span *ngFor="let uiparam of element.uiparameters">
                 <span *ngIf="uiparam.Type == dadParameterType.DateTime">
                     {{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}                        
                 </span>
