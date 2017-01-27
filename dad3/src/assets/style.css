@@ -4590,7 +4590,7 @@ header.navbar {
     width: 155px;
     height: 55px;
     padding: 0.5rem 1rem;
-    background-color: #fff;
+    background-color: #384042;
     background-image: url("../img/logo.png");
     background-repeat: no-repeat;
     background-position: center center;
@@ -4598,8 +4598,9 @@ header.navbar {
     border-bottom: 1px solid #cfd8dc; }
 
 header.navbar .navbar-brand {
-  margin-right: 0; }
-
+  margin-right: 0;
+  background-color: #384042;
+}
 .navbar-toggler {
   padding: 0 .75em;
   line-height: 51px; }
