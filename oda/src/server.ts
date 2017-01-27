@@ -18,6 +18,7 @@ import * as methodOverride from 'method-override';
 import * as http from 'http';
 import * as https from 'https';
 import * as fs from 'fs';
+let localDynamo = require('local-dynamo');
 
 import {RegisterRoutes} from './routes';
 const expressWinston = require('express-winston');
@@ -75,6 +76,9 @@ app.use(logger);
 
 RegisterRoutes(app);
 app.use(logger);
+/* tslint:disable-next-line */
+
+let httpsServer = https.createServer(httpsOptions, app);
 // app.use(expressWinston.errorLogger({
 //     transports: [
 //         new winston.transports.Console({
@@ -85,18 +89,12 @@ app.use(logger);
 //         })
 //     ]
 // }));
-
-/* tslint:disable-next-line */
 // console.log('Starting server.. http://localhost:' + config.port + '/docs');
 
-
-// let httpServer = http.createServer(app);
-let httpsServer = https.createServer(httpsOptions, app);
-
-// app.listen(config.port);
 httpsServer.listen(config.port, function (){
-    console.log('started https');
+    console.log('Starting https server.. https://localhost:' + config.port + '/docs');
 });
+
 
 module.exports = logger;
 module.exports.stream = {
