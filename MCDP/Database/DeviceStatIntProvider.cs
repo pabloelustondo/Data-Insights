@@ -28,7 +28,8 @@ namespace Soti.MCDP.Database
         /// </summary>
         public DeviceStatIntProvider()
         {
-            this._mobicontrolDatabaseConnectionString = ConfigurationManager.ConnectionStrings["MobiControlDB"].ConnectionString;
+            this._mobicontrolDatabaseConnectionString = DatabaseSection.LoadConnectionString("C:\\Program Files\\SOTI\\MobiControl");
+
             this._datdatabaseTimeout = Convert.ToInt16(ConfigurationManager.AppSettings["waitDatabaseTimeout"]);
         }
 

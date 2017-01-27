@@ -1,12 +1,8 @@
-/**ActivatedRoutem
- * Created by pablo elustondo Nov 2016
- */
 import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
 import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
-
 
 
 declare var d3, c3: any;
@@ -24,37 +20,38 @@ export class DadChart extends DadElement{
 @Component({
     selector: 'dadchart',
     providers:[DadElementDataService],
-    template: ` <!--  BEGIN CHART COMPONENT -->
-   <div class="col-sm-12 col-lg-6">        
-       <div class="card-block pb-0">
-       <div *ngIf="!chart.mini" class="card card-inverse card-secondary">
-           <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
-               <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
-                   <i class="icon-settings"></i>
-               </button>
-               <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-                   <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
-                   <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
-               </div>
-           </div>
-       
-  
-      <div *ngIf="!chart.mini">
-          <a [routerLink]="['table', 100, chart.id]">
-          <span style="color:black;">Drill down </span>
-          </a>
-          <div style="color:black; font-weight:bold;">{{chart.name}}</div> <br/><br/><br/>        
-          <div style= "text-align:center; height:700px;  width:700px" [id]="chart.id"></div>
-          <div style="margin-left: 15px; color:black;">
-              <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
+    template: `
+    <div class="col-sm-8 col-lg-6">  
+        <div class="inside">
+          <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">    
+            <div class="card-block pb-0">
+                <div class="content card card-inverse card-secondary">    
+                    <div class="btn-group float-xs-right" dropdown>
+                        <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+                            <i class="icon-settings"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="color:black;" class="card-title ml-1 mt-1">{{chart.name}}</div><br/><br/><br/>        
+                        <div style= "text-align:center; height:100%;  width:100%" [id]="chart.id"></div>
+                        <div style=" margin-left: 5px; color:black;">
+                            <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
+                        </div>
+                    </div>
+                </div>
+            </div>
           </div>
-      </div>
-      </div>
-      <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
-      </div>
+          <!--If it is mini chart -->
+          <div class="card-block pb-0">
+              <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
+          </div>         
+        </div>
     </div>
-
-    <!--  END CHART COMPONENT -->`
+    `
 })
 export class DadChartComponent implements OnInit {
     @Input()
@@ -71,7 +68,6 @@ export class DadChartComponent implements OnInit {
     secondDate: any;
     editMode:boolean = false;
     refreshMode:boolean = false;
-
 
   constructor(private dadChartDataService: DadElementDataService, private router: Router, private route: ActivatedRoute) {}
 
@@ -106,6 +102,7 @@ export class DadChartComponent implements OnInit {
       this.dadChartDataService.getElementData(this.chart).then(
         data => {
           this.data = data.data;
+          //this.chart.data = data.data;
           this.drawChart(this.chart, this.data);
         }
       ).catch(err => console.log(err.toString()));
@@ -140,22 +137,18 @@ export class DadChartComponent implements OnInit {
     return 0;
   }
 
-  goToTable(){
-    this.router.navigate(['table', 100, this.chart.id]);
-  };
-
   //mini applied
-  drawChartBar(chartConfig:DadChart, data){
-      let chartData = this.mapper.map(chartConfig, data);
-      let bardata = chartData;
+  drawChartBar(chartConfig:DadChart, data) {
+    let chartData = this.mapper.map(chartConfig, data);
+    let bardata = chartData;
 
-    bardata.selection ={
-      enabled:true,
+    bardata.selection = {
+      enabled: true,
     };
 
-    d3.selectAll(".c3-axis-x .tick").filter(function(d) {
-        return d === 0;
-      }).remove();
+    d3.selectAll(".c3-axis-x .tick").filter(function (d) {
+      return d === 0;
+    }).remove();
 
     let c3Config = {
       size: {
@@ -167,26 +160,26 @@ export class DadChartComponent implements OnInit {
       color: {
         pattern: this.colorPalette,
       },
-      tooltip:{
-         show:false
+      tooltip: {
+        show: false
       },
       axis: {
         x: {
           type: 'category',
-          show : true,
+          show: true,
           label: {
             text: [chartConfig.bname],
-              position: 'outer-right'
+            position: 'outer-right'
           },
-          tick:{
-            multiline:false
+          tick: {
+            multiline: false
           }
         },
         y: {
-          show : true,
+          show: true,
           label: {
             text: [chartConfig.aname],
-              position: 'outer-top'
+            position: 'outer-top'
           }
         }
       },
@@ -207,22 +200,19 @@ export class DadChartComponent implements OnInit {
       zoom: {
         enabled: true
       },
-      /*subchart: {
-        show: true
-      },*/
       legend: {
-        show: true
+        show: false
       },
       interaction: {
         enabled: true
       },
-      bar:{
+      bar: {
         width: {
           ratio: 0.7
         }
       }
     };
-    if(chartConfig.mini){
+    if (chartConfig.mini) {
       c3Config.size.width = this.miniChartWidth;
       c3Config.size.height = this.miniChartHeight;
       c3Config.legend.show = false;
@@ -233,22 +223,29 @@ export class DadChartComponent implements OnInit {
       c3Config.grid.y.show = false;
       c3Config.color.pattern = this.miniChartColor;
       c3Config.interaction.enabled = false;
-      c3Config.regions = [{'start':100}];
-      c3Config.data.color = function(color, d){
+      c3Config.regions = [{'start': 100}];
+      c3Config.data.color = function (color, d) {
         return d.value === 100 ? "#007F00" : color && d.value <= 30 ? "#FF0000" : color;
       };
-    };
+
+    }
+    ;
     this.c3chart = c3.generate(c3Config);
 
-      d3.selectAll(".c3-event-rect").on('click', this.goToTable());
-      d3.selectAll(".c3-event-rect").on('click', function(doga){
-        alert("Hey dude you clicked on me");
-      })
+    let eventHandler = this.goToTable;
+    let chart = this.chart;
+    let route = this.route;
+    let router = this.router;
+
+    this.c3chart.internal.main.on('click', function(d){
+      eventHandler(d,chart,router,route);
+    }
+    );
   };
 
-  differentColor(d, value){
-    return
-  }
+  goToTable(d,chart,router,route){
+  router.navigate(['table', 100, chart.id], { relativeTo: route});
+};
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {

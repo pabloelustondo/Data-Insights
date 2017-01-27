@@ -107,17 +107,12 @@ export class AverageDischargeRateController {
             }
         ]
     })
-    public async Get(dateFrom: Date, dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number): Promise<SDS> {
+    public async Get(dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number, dateFrom?: Date): Promise<SDS> {
 
-
-
-        if (dateFrom.getDate() !== shiftStartDateTime.getDate()) {
-            throw new Error('shift start data time != to dateFrom');
-        }
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-        const xqs = {shiftStartDateTime : shiftDateTimeString};
+        const xqs = {shiftStartDateTime : shiftDateTimeString, endDate : dateTo, shiftDuration : shiftDuration};
         console.log(xqs);
         const xurl = 'https://' + config['aws-hostname'] + config['aws-listAverageDischargeRate'];
 
@@ -135,6 +130,90 @@ export class AverageDischargeRateController {
         console.timeEnd('deviceNotSurviveShift: aws call');
         let mData = ['countOfDevices: int',
             'percentage: int'];
+        if (p.errorMessage !== undefined) {
+            p = [
+                {
+                    percentage: 5,
+                    countOfDevices: 1874
+                },
+                {
+                    percentage: 10,
+                    countOfDevices: 6520
+                },
+                {
+                    percentage: 15,
+                    countOfDevices: 172
+                },
+                {
+                    percentage: 20,
+                    countOfDevices: 21
+                },
+                {
+                    percentage: 25,
+                    countOfDevices: 10
+                },
+                {
+                    percentage: 30,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 35,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 45,
+                    countOfDevices: 172
+                },
+                {
+                    percentage: 45,
+                    countOfDevices: 21
+                },
+                {
+                    percentage: 50,
+                    countOfDevices: 10
+                },
+                {
+                    percentage: 55,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 60,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 65,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 70,
+                    countOfDevices: 21
+                },
+                {
+                    percentage: 75,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 80,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 85,
+                    countOfDevices: 0
+                },
+                {
+                    percentage: 90,
+                    countOfDevices: 100
+                },
+                {
+                    percentage: 95,
+                    countOfDevices: 100
+                },
+                {
+                    percentage: 100,
+                    countOfDevices: 100
+                }
+            ];
+        }
 
         const user: any = {
             createdAt: new Date(),

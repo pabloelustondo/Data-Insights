@@ -16,3 +16,12 @@ D:\CustomBI\BI\MCDP\DataProcess\bin\Debug\Newtonsoft.Json.xml
 D:\CustomBI\BI\MCDP\DataProcess\obj\Debug\DataProcess.csprojResolveAssemblyReference.cache
 D:\CustomBI\BI\MCDP\DataProcess\obj\Debug\DataProcess.dll
 D:\CustomBI\BI\MCDP\DataProcess\obj\Debug\DataProcess.pdb
+D:\BI\BINEW\MCDP\DataProcess\bin\Debug\DataProcess.dll
+D:\BI\BINEW\MCDP\DataProcess\bin\Debug\DataProcess.pdb
+D:\BI\BINEW\MCDP\DataProcess\bin\Debug\Database.dll
+D:\BI\BINEW\MCDP\DataProcess\bin\Debug\Newtonsoft.Json.dll
+D:\BI\BINEW\MCDP\DataProcess\bin\Debug\Database.pdb
+D:\BI\BINEW\MCDP\DataProcess\bin\Debug\Newtonsoft.Json.xml
+D:\BI\BINEW\MCDP\DataProcess\obj\Debug\DataProcess.csprojResolveAssemblyReference.cache
+D:\BI\BINEW\MCDP\DataProcess\obj\Debug\DataProcess.dll
+D:\BI\BINEW\MCDP\DataProcess\obj\Debug\DataProcess.pdb

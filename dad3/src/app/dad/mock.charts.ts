@@ -19,7 +19,6 @@ export const CHARTS: DadChart[] = [
         tableId: 'table2',
         parameters: [
             {
-                dateFrom: "2016-08-24T20:30:21",
                 dateTo: "2016-08-25T20:30:21",
                 shiftStartDateTime: "2016-08-24T20:30:21",
                 shiftDuration: 8
@@ -27,17 +26,12 @@ export const CHARTS: DadChart[] = [
         uiparameters: [
             {
                 Type: DadParameterType.Date,
-                Name: "Date From",
-                DataSource: "dateFrom"
-            },
-            {
-                Type: DadParameterType.Date,
                 Name: "Date To",
                 DataSource: "dateTo"
             },
             {
                 Type: DadParameterType.DateTime,
-                Name: "Shift Start Data & Time",
+                Name: "Shift Start Date & Time",
                 DataSource: "shiftStartDateTime"
             },
             {
