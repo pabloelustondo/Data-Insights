@@ -17,69 +17,62 @@ export class DadWidget extends DadElement{
   providers:[DadElementDataService, DadWidgetConfigsService],
   template: ` 
   <div *ngIf="widget.type==0" class="col-sm-4 col-lg-3">  
-  <div class="inside">
-     <div class="content card card-inverse card-primary">
-                <div class="card-block pb-0">
-                    <div class="btn-group float-xs-right" dropdown>
-                        <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
-                            <i class="icon-settings"></i>
-                        </button>
-                        
-                        <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
-                            <button *ngIf="widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
-                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
-                        </div>
-
+     <div class="inside">
+        <div class="content card card-inverse card-primary">
+            <div class="card-block pb-0">
+                <div class="btn-group float-xs-right" dropdown>
+                    <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+                        <i class="icon-settings"></i>
+                    </button>                      
+                    <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
+                        <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                        <button *ngIf="widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
+                        <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                     </div>
-                    <p>{{widget.metrics[0].Name}}</p>
-                    <h3 *ngIf="data" class="mb-0">
-                    <a [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
-                    <span style="font-size: 140px; color:white;">{{data[widget.metrics[0].DataSource]}} </span>
+                </div>
+               
+                <div class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
+                <h3 *ngIf="data" class="mb-0">
+                    <a *ngIf="!(data[widget.metrics[0].DataSource]===0)" [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
+                        <span style="font-size: 140px; color:white;">{{data[widget.metrics[0].DataSource]}} </span>
                     </a>
-                    <br/>out of {{data[widget.metrics[1].DataSource]}} </h3><br/>
-                    <div *ngIf="data" class="col-sm-6">
-                       <progress style=" display:inline-block; margin-bottom: -.5px; align-content: center;" class="progress progress-xs progress-danger" value="{{data[widget.metrics[0].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>                                                          
-                    </div>
-                    <div *ngIf="data">{{percentageOfTotal()}}%</div>     
-                    <br/>
-                    <br/>
-                    
-              
-
-                    
-                    <div *ngIf="moreDetails && data && widget.metrics.length>2">
-
+                    <a *ngIf="(data[widget.metrics[0].DataSource]===0)">
+                        <span style="font-size: 140px; color:white;">{{data[widget.metrics[0].DataSource]}} </span>
+                    </a>
+                    <br/>out of {{data[widget.metrics[1].DataSource]}} 
+                </h3><br/>
+                <div *ngIf="data" class="col-sm-6">
+                   <progress style=" display:inline-block; margin-bottom: -.5px; margin-left: -15px;" class="progress progress-xs progress-danger pull-md-left" value="{{data[widget.metrics[0].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>                                                          
+                </div>
+                <div *ngIf="data">{{percentageOfTotal()}}%</div>     
+                <br/><br/>
+                <div *ngIf="moreDetails && data && widget.metrics.length>2">
                     <div style="font-size:15px;"><p>{{widget.metrics[2].Name}}</p></div> 
                     <div style="font-size:15px;">{{data[widget.metrics[2].DataSource]}}</div> 
                     <div class="col-sm-6">
-                           <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
-                    </div><br/>
-                                   
+                       <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
+                    </div><br/>            
                     <div *ngIf="moreDetails && data && widget.metrics.length>3">
-                    <div style="font-size:15px;">{{widget.metrics[3].Name}}</div> 
-                    <div style="font-size:15px;">{{data[widget.metrics[3].DataSource]}}</div> 
-                    <div class="col-sm-6">
-                        <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
-                    </div><br/>
+                        <div style="font-size:15px;">{{widget.metrics[3].Name}}</div> 
+                        <div style="font-size:15px;">{{data[widget.metrics[3].DataSource]}}</div> 
+                        <div class="col-sm-6">
+                            <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
+                        </div><br/>
                     </div>  
                     <div *ngIf="moreDetails && data" class="col-sm-9 ">
                         <button (click)="onMoreDetails()" type="button" class="btn btn-secondary pull-right">
                             <span class="glyphicons glyphicons-chevron-up"></span>                        
                         </button><br/>
                     </div>
-
-                    </div> 
-                    <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
-                    
-                    
-                    
+                </div> 
+                <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>               
+            </div>
+        </div>  
      </div>
-  </div>  
-     </div>
-    </div>
-    `
+  </div>
+  `
 })
+
 export class DadWidgetComponent implements OnInit {
   @Input()
   widget: DadWidget;
