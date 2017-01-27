@@ -47,14 +47,14 @@ export class DadWidget extends DadElement{
                 <div *ngIf="data">{{percentageOfTotal()}}%</div>     
                 <br/><br/>
                 <div *ngIf="moreDetails && data && widget.metrics.length>2">
-                    <div style="font-size:15px;"><p>{{widget.metrics[2].Name}}</p></div> 
-                    <div style="font-size:15px;">{{data[widget.metrics[2].DataSource]}}</div> 
+                    <div>{{widget.metrics[2].Name}}</div> 
+                    <div>{{data[widget.metrics[2].DataSource]}}</div> 
                     <div class="col-sm-6">
                        <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>            
                     <div *ngIf="moreDetails && data && widget.metrics.length>3">
-                        <div style="font-size:15px;">{{widget.metrics[3].Name}}</div> 
-                        <div style="font-size:15px;">{{data[widget.metrics[3].DataSource]}}</div> 
+                        <div>{{widget.metrics[3].Name}}</div> 
+                        <div>{{data[widget.metrics[3].DataSource]}}</div> 
                         <div class="col-sm-6">
                             <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
                         </div><br/>
