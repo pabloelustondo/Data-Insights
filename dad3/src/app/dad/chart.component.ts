@@ -23,6 +23,8 @@ export class DadChart extends DadElement{
     template: `
     <div class="col-sm-8 col-lg-6">  
         <div class="inside">
+        <div class="content card card-inverse card-secondary">
+            <div class="card-block pb-0">
             <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">    
                 <div *ngIf="!chart.mini" class="btn-group float-xs-right" dropdown>
                     <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
@@ -35,14 +37,15 @@ export class DadChart extends DadElement{
                 </div>
 
                 <div *ngIf="!chart.mini">
-                    <div style="margin-left: 20px; color:black;" class="card-header-secondary">{{chart.name}}</div><br/><br/><br/>        
+                    <div style="color:black;" class="card-title">{{chart.name}}</div><br/><br/><br/>        
                     <div style= "text-align:center; height:100%;  width:100%" [id]="chart.id"></div>
-                    <div style="margin-left: 30px; color:black;">
+                    <div style=" margin-left: 5px; color:black;">
                         <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
                     </div>
                  </div>
             </div>
             <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
+        </div>
         </div>
     </div>
     `
@@ -96,6 +99,7 @@ export class DadChartComponent implements OnInit {
       this.dadChartDataService.getElementData(this.chart).then(
         data => {
           this.data = data.data;
+          //this.chart.data = data.data;
           this.drawChart(this.chart, this.data);
         }
       ).catch(err => console.log(err.toString()));
