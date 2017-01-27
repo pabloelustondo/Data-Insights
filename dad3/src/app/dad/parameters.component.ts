@@ -14,56 +14,52 @@ import {DadWidget} from "./widget.component";
     providers: [DadElementDataService, DadWidgetConfigsService, DadChartConfigsService],
     template: `
     <div class="row">
-          <div *ngIf="editMode">          
+        <div *ngIf="editMode">          
             <div *ngFor="let uiparam of element.uiparameters">
-               <div><label>{{uiparam.Name}}</label></div>
+                <div><label>{{uiparam.Name}}</label></div>
+                <div *ngIf="uiparam.Type == dadParameterType.Date">
+                    <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
+                </div>
                
-               <div *ngIf="uiparam.Type == dadParameterType.Date">
-               <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
-               </div>
-               
-               <div *ngIf="uiparam.Type == dadParameterType.DateTime">
-               <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
-               <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>       
-               </div>
+                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
+                    <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
+                    <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>       
+                </div>
     
-               <div *ngIf="uiparam.Type == dadParameterType.Duration">
-               <timepicker [(ngModel)]="uiparam.Value" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>
-               </div>
-               <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>  
-               <div *ngIf="uiparam.Type == dadParameterType.String"><input type="text" [(ngModel)]="uiparam.Value" /></div>   
+                <div *ngIf="uiparam.Type == dadParameterType.Duration">
+                    <timepicker [(ngModel)]="uiparam.Value" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>
+                </div>
+                <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>  
+                <div *ngIf="uiparam.Type == dadParameterType.String"><input type="text" [(ngModel)]="uiparam.Value" /></div>   
             </div>
             <!--refresh button here-->
             <br/>
             <div class="col-md-4 text-center">
-            <button (click)="onRefreshButton()" style=" margin-left:-15px;" type="button" class="btn btn-secondary">
-                <span class="glyphicons glyphicons-refresh"></span>
-            </button>
-            <br/><br/>
+                <button (click)="onRefreshButton()" style=" margin-left:-15px;" type="button" class="btn btn-secondary">
+                    <span class="glyphicons glyphicons-refresh"></span>
+                </button>
+                <br/><br/>
             </div>
             <div>
             <!--This is actually close button-->
-            <div class="col-md-4 text-center">
-            <button (click)="onEdit()" type="button" class="btn btn-secondary">
-                <span class="glyphicons glyphicons-remove"></span>
-            </button>
-            </div>
+                <div class="col-md-4 text-center">
+                <button (click)="onEdit()" type="button" class="btn btn-secondary">
+                    <span class="glyphicons glyphicons-remove"></span>
+                </button>
+                </div>
             </div>     
-          </div>
+        </div>
     </div>      
       
     <div class="row">
-       <div *ngIf="!editMode">          
-         <span *ngFor="let uiparam of element.uiparameters">
-         <!--<div><label style="text-decoration: underline">{{uiparam.Name}} :</label></div> -->
-            <span *ngIf="uiparam.Type == dadParameterType.DateTime">
-                {{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}                        
-            </span>
-         <!--<div *ngIf="uiparam.Type == dadParameterType.Duration">{{addingZero(uiparam.Value.getHours())}}:{{addingZero(uiparam.Value.getMinutes())}}</div>
-         <div *ngIf="uiparam.Type == dadParameterType.Number">{{uiparam.Value}}</div>-->
-            <span *ngIf="uiparam.Type == dadParameterType.String && uiparam.Value!='custom'">({{uiparam.Value}})</span> 
-         </span>      
-       </div>
+        <div *ngIf="!editMode">          
+            <span *ngFor="let uiparam of element.uiparameters">
+                <span *ngIf="uiparam.Type == dadParameterType.DateTime">
+                    {{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}                        
+                </span>
+                 <span *ngIf="uiparam.Type == dadParameterType.String && uiparam.Value!='custom'">({{uiparam.Value}})</span> 
+            </span>      
+        </div>
     </div>
     `
 })
