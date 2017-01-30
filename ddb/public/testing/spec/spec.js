@@ -1,4 +1,12 @@
  var A1_Mind = {"name":"A1-Mind"};
+ var sample_dss_config = {"tenatID":"varun_2",
+ "customerID": "random",
+     "accessUsername": "customername",
+ "accessPswd":"hqWK{u9A)",
+     'RedShiftConnectionString': 'dataanalytics.cxvwwvumct05.us-east-1.redshift.amazonaws.com',
+     'DBName': 'dataanalyticsdb'
+ };
+
 var temp={};
 var sampleconfig = {
   "_id": "5667c384d0e9376908d9bf66",
@@ -139,7 +147,7 @@ describe("Jassplan TO-DO REST API Version 16", function() {
             });
         });
     });
-
+/*
     describe("DEL /todo", function() {
         it("drops a possible todo db for user 'test'", function(done) {
             $.ajax(
@@ -164,13 +172,35 @@ describe("Jassplan TO-DO REST API Version 16", function() {
             });
         });
     });
-
+ */
     describe("POST /todo", function() {
         it("creates a todo collection for test user and adds a first item", function(done) {
             $.ajax({
                 url: "/todo",
                 type:"POST",
                 data: "{\"name\":\"A1-Mind\"}",
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    console.log("From post: " + JSON.stringify(data,null,2));
+                    temp = data.data.ops[0];
+                    temp.name = "A1-Mind2";
+                    var emptyArray = [];
+                    expect(data).toBeDefined();
+                    expect(data.data).toBeDefined();
+                    expect(data.data.ops.length).toBe(1);
+                    done();}
+            });
+        });
+    });
+
+    describe("POST /todo", function() {
+        it("adds sample db users for DSS an", function(done) {
+            $.ajax({
+                url: "/todo",
+                type:"POST",
+                data: "{\"tentantID\":\"WHOA\" ," +
+                "\"sotiUserName\":\"hahahahah\", " +
+                "\"password\":\"ItWontBeThisEasy\"}",
                 contentType:"application/json",
                 success: function(data, textStatus, jqXHR) {
                     console.log("From post: " + JSON.stringify(data,null,2));
@@ -259,5 +289,20 @@ describe("Jassplan TO-DO REST API Version 16", function() {
         });
     });
 
+    describe("POST /todo", function() {
+        it("creates a first genie spec", function(done) {
+            $.ajax({
+                url: "/todo",
+                type:"POST",
+                data: JSON.stringify(sample_dss_config),
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    var emptyArray = [];
+                    expect(data).toBeDefined();
+                    expect(data.data).toBeDefined();
+                    done();}
+            });
+        });
+    });
 
 });

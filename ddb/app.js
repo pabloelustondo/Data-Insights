@@ -54,6 +54,16 @@ app.get('/todo/:id', function(req,res){
 	});
 });
 
+
+app.get('/getDBAccess/:tenatID', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+    	console.log(req.params.tenatID);
+    	db.collection('todo').findOne({
+            "tenatID":req.params.tenatID
+		}, next);
+    });
+});
+
 app.post('/todo', function(req,res){
 	callDbAndRespond(req,res, function(req,res,db, next){
 		db.collection('todo').insert(req.body,next);
