@@ -12,3 +12,15 @@ D:\CustomBI\BI_NEW\MCDP\MCDP\obj\Release\MCDP.pdb
 D:\BI\BINEW\MCDP\MCDP\bin\Release\MCDP.exe.config
 D:\BI\BINEW\MCDP\MCDP\obj\Release\MCDP.exe
 D:\BI\BINEW\MCDP\MCDP\obj\Release\MCDP.pdb
+D:\BI\BINEW\MCDP\MCDP\bin\Release\MCDP.exe
+D:\BI\BINEW\MCDP\MCDP\bin\Release\MCDP.pdb
+D:\BI\BINEW\MCDP\MCDP\bin\Release\Database.dll
+D:\BI\BINEW\MCDP\MCDP\bin\Release\DataProcess.dll
+D:\BI\BINEW\MCDP\MCDP\bin\Release\Newtonsoft.Json.dll
+D:\BI\BINEW\MCDP\MCDP\bin\Release\Database.pdb
+D:\BI\BINEW\MCDP\MCDP\bin\Release\DataProcess.pdb
+D:\BI\BINEW\MCDP\MCDP\bin\Release\Newtonsoft.Json.xml
+D:\BI\BINEW\MCDP\MCDP\obj\Release\MCDP.csprojResolveAssemblyReference.cache
+D:\BI\BINEW\MCDP\MCDP\obj\Release\Soti.MCDP.MCDP.resources
+D:\BI\BINEW\MCDP\MCDP\obj\Release\Soti.MCDP.ProjectInstaller.resources
+D:\BI\BINEW\MCDP\MCDP\obj\Release\MCDP.csproj.GenerateResource.Cache
