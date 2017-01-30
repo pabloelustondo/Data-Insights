@@ -4,8 +4,7 @@
 import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTable} from "./table.component";
-import DadTableColumn from "./table.model";
-import DadTableColumnType from "./table.model";
+
 
 export class DadElement {
   id: string;
@@ -21,9 +20,7 @@ export class DadElement {
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
   tableId?: string;
-  columns: DadTableColumn;
   chart?: DadChart;
-  type?:DadTableColumnType;
 }
 
 
