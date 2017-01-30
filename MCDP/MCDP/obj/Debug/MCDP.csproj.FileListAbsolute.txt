@@ -43,3 +43,6 @@ D:\BI\BINEW\MCDP\MCDP\obj\Debug\MCDP.exe
 D:\BI\BINEW\MCDP\MCDP\obj\Debug\MCDP.pdb
 D:\BI\BINEW\MCDP\MCDP\bin\Debug\MCDP.exe.config
 D:\BI\BINEW\MCDP\MCDP\bin\Debug\MCDP.pdb
+D:\BI\BI\MCDP\MCDP\bin\Debug\MCDP.exe.config
+D:\BI\BI\MCDP\MCDP\obj\Debug\MCDP.exe
+D:\BI\BI\MCDP\MCDP\obj\Debug\MCDP.pdb

@@ -33,9 +33,6 @@ app.get('/api/protected/random-quote', function(req, res) {
 });
 
 app.get('/api/protected/token', function(req, res) {
-  //https://jasswin.cloudapp.net/MobiControl/api/devicegroups
-  //performRequest('/api/token','GETTOKEN',{},function(response){
-  //res.status(200).send(myanswer)});/
 
   request({
     "rejectUnauthorized": false,
@@ -51,6 +48,7 @@ app.get('/api/protected/token', function(req, res) {
       console.log(error);
       res.status(200).send("hi from modulus error:" + error);
     } else {
+
       console.log(response.statusCode, body);
       res.status(200).send("hi from modulus success code:" + response.statusCode + " body " + body);
       var resObj = JSON.parse(body);
