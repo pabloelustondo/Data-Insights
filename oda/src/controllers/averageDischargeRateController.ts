@@ -107,10 +107,95 @@ export class AverageDischargeRateController {
             }
         ]
     })
+
+    public async Get(dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number, dateFrom?: Date): Promise<SDS> {
+
+        let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
+
+        let firstMethod = function () {
+          let promise = new Promise( function(resolve, reject) {
+              const getDBURL =  'http://localhost:8000/getDBAccess/varun_2';
+
+              const dboptions: rp.OptionsWithUrl = {
+                  json: true,
+                  method: 'GET',
+                  url: getDBURL
+              };
+              resolve( rp(dboptions) );
+          });
+          return promise;
+        };
+
+        let secondMethod = function (answer: any) {
+            let promise = new Promise (function( resolve, reject) {
+                console.log('answer is : ' + JSON.stringify(answer));
+
+                const xqs = {shiftStartDateTime : shiftDateTimeString, endDate : dateTo, shiftDuration : shiftDuration};
+                console.log(xqs);
+                const xurl = 'https://' + config['aws-hostname'] + config['aws-listAverageDischargeRate'];
+
+                const options: rp.OptionsWithUrl = {
+                    headers: {
+                        'x-api-key': config['aws-x-api-key'],
+                        'RedShiftConnectionString': answer.data.RedShiftConnectionString,
+                        'Username': answer.data.accessUsername,
+                        'Password': answer.data.accessPswd,
+                        'DBName': answer.data.DBName
+                    },
+                    json: true,
+                    method: 'GET',
+                    qs: xqs,
+                    url: xurl
+                };
+
+
+                resolve( rp(options) );
+            });
+            return promise;
+        };
+
+        let thirdMethod = function(awsData: string) {
+          let promise = new Promise(function (resolve, reject) {
+                console.log(JSON.stringify(awsData));
+
+              let mData = ['countOfDevices: int',
+                  'percentage: int'];
+
+              const user: any = {
+                  createdAt: new Date(),
+                  metadata: mData,
+                  data: awsData
+              };
+
+              resolve(user);
+          });
+          return promise;
+        };
+
+        let p: any = await firstMethod().then(secondMethod).then(thirdMethod);
+
+
+        console.log( 'waiting on p and p is: ' + JSON.stringify(p) );
+
+        return p;
+
+    }
+    /*
     public async Get(dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number, dateFrom?: Date): Promise<SDS> {
 
 
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
+
+
+        const getDBURL =  'http://localhost:8000/getDBAccess/varun';
+
+        const dboptions: rp.OptionsWithUrl = {
+            json: true,
+            method: 'GET',
+            url: getDBURL
+        };
+        let answer = await rp(dboptions);
+        console.log(JSON.stringify(answer));
 
         const xqs = {shiftStartDateTime : shiftDateTimeString, endDate : dateTo, shiftDuration : shiftDuration};
         console.log(xqs);
@@ -118,7 +203,11 @@ export class AverageDischargeRateController {
 
         const options: rp.OptionsWithUrl = {
             headers: {
-                'x-api-key': config['aws-x-api-key']
+                'x-api-key': config['aws-x-api-key'],
+                'RedShiftConnectionString': 'dataanalytics.cxvwwvumct05.us-east-1.redshift.amazonaws.com',
+                'Username': answer.data.accessUsername,
+                'Password': answer.data.accesspswd,
+                'DBName': 'dataanalyticsdb'
             },
             json: true,
             method: 'GET',
@@ -126,11 +215,13 @@ export class AverageDischargeRateController {
             url: xurl
         };
         console.time('deviceNotSurviveShift: aws call');
-        let p = await rp(options); // request library used
+
         console.timeEnd('deviceNotSurviveShift: aws call');
         let mData = ['countOfDevices: int',
             'percentage: int'];
-        if (p.errorMessage !== undefined) {
+
+        let p = rp(options); // request library used
+        /*if (p.errorMessage !== undefined) {
             p = [
                 {
                     percentage: 5,
@@ -206,11 +297,11 @@ export class AverageDischargeRateController {
                 },
                 {
                     percentage: 95,
-                    countOfDevices: 100
+                    countOfDevices: 1000
                 },
                 {
                     percentage: 100,
-                    countOfDevices: 100
+                    countOfDevices: 1000
                 }
             ];
         }
@@ -223,6 +314,6 @@ export class AverageDischargeRateController {
 
         return user;
     }
-
+     */
 
 }
