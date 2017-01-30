@@ -12,8 +12,12 @@ const template = require('./login.html');
   styles: [ styles ]
 })
 export class Login {
+  error;
+
   constructor(public router: Router, public http: Http) {
   }
+
+
 
   login(event, domain, username, password) {
     event.preventDefault();
@@ -21,11 +25,12 @@ export class Login {
     this.http.post('http://localhost:3004/sessions/create', body, { headers: contentHeaders })
       .subscribe(
         response => {
+          this.error = null;
           localStorage.setItem('id_token', response.json().id_token);
           this.router.navigate(['home']);
         },
         error => {
-          alert(error.text());
+          this.error = error.text();
           console.log(error.text());
         }
       );

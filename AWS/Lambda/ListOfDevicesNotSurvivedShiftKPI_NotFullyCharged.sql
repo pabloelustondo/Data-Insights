@@ -35,6 +35,7 @@ SELECT
 	 , time_stamp
 	 , intvalue
 	 , shiftNumber
+	 , next_value
 	 , case 
     	 when intvalue-next_value<0 
            OR (intvalue < $[minimumBatteryPercentageThreshold]) 
@@ -78,10 +79,11 @@ SELECT
 )
 SELECT 
       DevId, 
-	  LastValue as LastBatteryStatus, '[' + listagg(intvalue, ', ') within group (order by time_stamp) + ']' BatteryChargeHistory
+	  LastValue as LastBatteryStatus, 
+	  '[' + listagg(intvalue, ', ') within group (order by time_stamp) + ']' BatteryChargeHistory
 FROM agg_marked_data
 where total_bad_case > 0 
-and rownum<=10
+and rownum<=20 /* 20 last battery status values for every device to draw a minichart */
 and (total_initial_not_fully_charged >0 or total_too_fast_first_slope >0)
 group by DevId, LastValue
 order by DevId  limit $[rowsTake] offset $[rowsSkip]
