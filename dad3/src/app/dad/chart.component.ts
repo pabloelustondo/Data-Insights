@@ -37,7 +37,7 @@ export class DadChart extends DadElement{
                     </div>
                     <div>
                         <div style="color:black;" class="card-title ml-1 mt-1">{{chart.name}}</div><br/><br/><br/>        
-                        <div style= "text-align:center; height:100%;  width:100%" [id]="chart.id"></div>
+                        <div style= "text-align:center; height:100%; width:100%" [id]="chart.id"></div>
                         <div style=" margin-left: 5px; color:black;">
                             <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
                         </div>
@@ -47,7 +47,7 @@ export class DadChart extends DadElement{
           </div>
           <!--If it is mini chart -->
           <div class="card-block pb-0">
-              <div *ngIf="chart.mini" style= "text-align:left; height:auto;  width:auto;" [id]="chart.id"></div>
+              <div *ngIf="chart.mini" style= "text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
           </div>         
         </div>
     </div>
