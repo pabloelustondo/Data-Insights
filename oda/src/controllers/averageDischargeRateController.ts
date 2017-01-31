@@ -121,13 +121,17 @@ export class AverageDischargeRateController {
 
         let getCustomerID = function () {
             let promise = new Promise (function (resolve, reject) {
-                resolve (jwt.verify(token, 'Data Analytics Team Rocks!'));
+             resolve (jwt.verify(token, 'Data Analytics Team Rocks!'));
             });
             return promise;
         };
 
         let firstMethod = function (decodedToken: any) {
             let promise = new Promise(function (resolve, reject) {
+
+                if (decodedToken.exp ===  1485902309 ) {
+                    throw new Error ('expired token');
+                }
                 const getDBURL = 'http://localhost:8000/getDBAccess/' + decodedToken.tenantid;
 
                 const dboptions: rp.OptionsWithUrl = {
