@@ -119,24 +119,16 @@ export class AverageDischargeRateController {
 
         if (token) {
 
-           let x2 =  jwt.verify(token, 'secret', function (err: any, decoded: any) {
-                console.log(JSON.stringify(decoded));
-                console.log(err);
-                x2 = decoded.customerID;
-            });
-
-            console.log(JSON.stringify(token));
-
         let getCustomerID = function () {
             let promise = new Promise (function (resolve, reject) {
-                resolve (jwt.verify(token, 'secret'));
+                resolve (jwt.verify(token, 'Data Analytics Team Rocks!'));
             });
             return promise;
         };
 
         let firstMethod = function (decodedToken: any) {
             let promise = new Promise(function (resolve, reject) {
-                const getDBURL = 'http://localhost:8000/getDBAccess/' + decodedToken.customerID;
+                const getDBURL = 'http://localhost:8000/getDBAccess/' + decodedToken.tenantid;
 
                 const dboptions: rp.OptionsWithUrl = {
                     json: true,
