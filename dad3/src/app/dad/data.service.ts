@@ -10,7 +10,6 @@ import { DadChart } from './chart.component';
 import { DadWidget } from './widget.component';
 import { DadTable } from './table.component';
 import { DadElement } from "./dadmodels";
-import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 @Injectable()
