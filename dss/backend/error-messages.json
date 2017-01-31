@@ -1,0 +1,11 @@
+{
+  "missing_domainid": "Missing DomainID",
+  "not_found_domainid": "DomainID was not found",
+  "missing_username": "Missing Username",
+  "missing_password": "Missing Password",
+  "missing_mcurl": "Missing MobiControl Url",
+  "mcurl_already_enrolled": "MobiControl Url already enrolled",
+  "mcurl_enrollement_failed_authentication": "Failed to enroll due to authentication failure",
+  "mcurl_enrollement_failed_url_not_reachable": "Failed to enroll due to url not reachable",
+  "login_failed_authentication": "Failed to login due to MobiControl authentication failure"
+}

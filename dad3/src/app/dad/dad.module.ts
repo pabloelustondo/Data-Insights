@@ -7,6 +7,7 @@ import { DadChartComponent } from "./chart.component";
 import { DadWidgetComponent } from "./widget.component";
 import { DadConfigComponent } from './configuration.component';
 import { DadTableComponent } from './table.component';
+import { DadLoginComponent } from './login.component';
 import { DadComponent } from './dashboard.component';
 import { DadRoutingModule } from './dad-routing.module';
 import { CommonModule } from '@angular/common'; //<-- This one
@@ -14,6 +15,9 @@ import { DropdownModule } from 'ng2-bootstrap';
 import { DatepickerModule } from 'ng2-bootstrap/components/datepicker';
 import { TimepickerModule }         from 'ng2-bootstrap/components/timepicker';
 import { DadParametersComponent } from "./parameters.component";
+
+import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { AuthGuard } from './common/auth.guard';
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -34,6 +38,9 @@ let LocalStorageServiceConfig = {
         TimepickerModule
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
-        DadWidgetComponent, DadTableComponent, DadParametersComponent ]
+        DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent ],
+    providers: [
+        AuthGuard, ...AUTH_PROVIDERS
+    ]
 })
 export class DadModule { }

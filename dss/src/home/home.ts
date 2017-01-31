@@ -29,11 +29,11 @@ export class Home {
   }
 
   callAnonymousApi() {
-    this._callApi('Anonymous', 'http://localhost:3001/api/random-quote');
+    this._callApi('Anonymous', 'http://localhost:3004/api/random-quote');
   }
 
   callSecuredApi() {
-    this._callApi('Secured', 'http://localhost:3001/api/protected/random-quote');
+    this._callApi('Secured', 'http://localhost:3004/api/protected/random-quote');
   }
 
   callGetToken() {
@@ -42,6 +42,14 @@ export class Home {
 
   callGetDeviceGroups() {
     this._callApi('Secured', 'http://localhost:3004/api/protected/devicegroups');
+  }
+
+  callGetEnrollments() {
+    this._callApi('Secured', 'http://localhost:3004/api/enrollments');
+  }
+
+  callDeleteAllEnrollments() {
+    this._callApi('Secured', 'http://localhost:3004/delete_all');
   }
 
   _callApi(type, url) {

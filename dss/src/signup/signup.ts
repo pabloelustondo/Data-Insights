@@ -15,10 +15,10 @@ export class Signup {
   constructor(public router: Router, public http: Http) {
   }
 
-  signup(event, username, password) {
+  signup(event, mcurl, domainid, username, password) {
     event.preventDefault();
-    let body = JSON.stringify({ username, password });
-    this.http.post('http://localhost:3004/users', body, { headers: contentHeaders })
+    let body = JSON.stringify({ mcurl, domainid, username, password });
+    this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {
           localStorage.setItem('id_token', response.json().id_token);
