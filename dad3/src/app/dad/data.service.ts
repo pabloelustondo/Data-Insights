@@ -29,7 +29,7 @@ export class DadElementDataService {
     }
     let endpoint0 = config[element.endpoint];
     let token = localStorage.getItem('id_token');
-    let headers = new Headers({ 'Content-Type': 'application/json',  'Authorization': 'Bearer ' + token});
+    let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token': token});
     let data = {metricName:element.metricName, predicates:element.predicates, parameters:element.parameters[0]};
 
       if(endpoint0.method === "post"){
