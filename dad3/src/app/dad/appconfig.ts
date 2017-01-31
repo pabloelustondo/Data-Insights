@@ -4,6 +4,7 @@
 
 export const config = {
     "testing":false,
+    "authorizationserver":'http://localhost:3003',
     "InitialChargeLevels":"https://localhost:3002/Devices/Battery/Summary/InitialChargeLevels",
     "DischargeRate":"https://localhost:3002/Devices/Battery/Summary/DischargeRate",
     "DevicesNotSurvivedShift": "https://localhost:3002/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",

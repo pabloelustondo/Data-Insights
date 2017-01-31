@@ -6,8 +6,6 @@ import {DadWidget} from "./widget.component";
 import {DadTable} from "./table.component";
 
 
-
-
 export class DadElement {
   id: string;
   name: string;
@@ -22,6 +20,7 @@ export class DadElement {
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
   tableId?: string;
+  chart?: DadChart;
 }
 
 

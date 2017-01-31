@@ -3,8 +3,8 @@
     <h2>Data Analytics Enrollment & Security Service</h2>
     <h3>(Obviously, this page only for testing purposes)</h3>
 
-    <a class="btn btn-primary btn-lg" role="button" (click)="callGetDeviceGroups()">See Your Device Groups</a>
-    <a class="btn btn-primary btn-lg" role="button" (click)="callAnonymousApi()">Manage Account</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
 
     <pre *ngIf="response">{{ response }}</pre>

@@ -62,7 +62,7 @@ export class DadWidget extends DadElement{
                     <div *ngIf="moreDetails && data" class="col-sm-9 ">
                         <button (click)="onMoreDetails()" type="button" class="btn btn-secondary pull-right">
                             <span class="glyphicons glyphicons-chevron-up"></span>                        
-                        </button><br/>
+                        </button><br/><br/><br/>
                     </div>
                 </div> 
                 <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>               

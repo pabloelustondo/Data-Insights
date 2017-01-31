@@ -4,7 +4,9 @@ import { Routes,
 
 import { DadComponent }   from './dashboard.component';
 import { DadConfigComponent }   from './configuration.component';
+import { DadLoginComponent }   from './login.component';
 import { DadTableComponent }   from './table.component';
+import { AuthGuard } from './common/auth.guard';
 
 const routes: Routes = [
     {
@@ -16,6 +18,7 @@ const routes: Routes = [
             {
                 path: '',
                 component: DadComponent,
+                canActivate: [AuthGuard],
                 data: {
                 title: ''
                 }
@@ -23,6 +26,14 @@ const routes: Routes = [
             {
                 path: 'conf',
                 component: DadConfigComponent,
+                canActivate: [AuthGuard],
+                data: {
+                    title: 'Configuration'
+                }
+            },
+            {
+                path: 'login',
+                component: DadLoginComponent,
                 data: {
                     title: 'Configuration'
                 }
@@ -30,6 +41,7 @@ const routes: Routes = [
             {
                 path: 'table/:count/:id',
                 component: DadTableComponent,
+                canActivate: [AuthGuard],
                 data: {
                     title: 'List of devices'
                 }

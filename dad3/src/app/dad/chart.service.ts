@@ -45,7 +45,6 @@ export class DadChartConfigsService {
 
 }
 
-
 @Injectable()
 export class DadWidgetConfigsService {
 
@@ -100,6 +99,11 @@ export class DadTableConfigsService {
     localStorage.setItem("tabledata",tables_string);
   }
 
+  public getTableConfig(id:string): DadTable {
+    let tables = this.getTableConfigs();
+    let tableIndex = _.findIndex(tables, function(w) { return w.id == id; });
+    return tables[tableIndex];
+  }
 
   public getTableConfigs(): DadTable[] {
 

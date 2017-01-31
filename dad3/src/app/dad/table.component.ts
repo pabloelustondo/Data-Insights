@@ -3,7 +3,7 @@
  */
 import { Component, Input, OnInit  } from '@angular/core';
 import { DadChart } from "./chart.component";
-import { DadTableDataService } from "./data.service";
+import { DadElementDataService } from "./data.service";
 import { Mapper, ChartData } from "./mapper";
 import {DadDateRange, DadElement} from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
@@ -26,7 +26,7 @@ export class DadTable {
 
 @Component({
   selector: 'dadtable',
-  providers:[DadTableDataService,DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService],
+  providers:[DadElementDataService,DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService],
   template: ` 
     <div *ngIf="data">
         <div class="col-lg-10">
@@ -65,8 +65,6 @@ export class DadTable {
                 </div>
             </div>
         </div>
-  <!-- to show chart in widgets, use the line below-->
-  <!--<dadchart [chart]="widget.chart"></dadchart>-->
 
     <!--  END CHART COMPONENT --></div>`
 })
@@ -84,7 +82,7 @@ export class DadTableComponent implements OnInit {
   callerId:string;
   callerElement: DadElement;
 
-  constructor(private dadTableDataService: DadTableDataService,
+  constructor(private dadTableDataService: DadElementDataService,
               private dadTableConfigsService: DadTableConfigsService,
               private dadWidgetConfigsService: DadWidgetConfigsService,
               private activatedRoute: ActivatedRoute,
@@ -105,7 +103,7 @@ export class DadTableComponent implements OnInit {
 
     this.currentPage = page;
     this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
-    this.dadTableDataService.getTableData(this.table).then(
+    this.dadTableDataService.getElementData(this.table).then(
         data => {
           this.data = data.data;
         }
@@ -146,16 +144,15 @@ export class DadTableComponent implements OnInit {
           if (param['id'] !== undefined) {
               this.callerId = param['id'];
 
-
               this.callerElement  = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
               if (!this.callerElement){
                   this.callerElement  = this.dadChartConfigsService.getChartConfig(this.callerId);
               }
-
-
+              if (!this.callerElement) {
+                  this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
+              }
 
               let tableId = this.callerElement.tableId;
-
 
               this.table  = this.findTables(tableId);
               let elementParameters = this.callerElement.parameters[0];
@@ -168,7 +165,7 @@ export class DadTableComponent implements OnInit {
           }
 
           console.log("Tables are loading... :" + this.table.id);
-          this.dadTableDataService.getTableData(this.table).then(
+          this.dadTableDataService.getElementData(this.table).then(
               data => {
                 this.data = data.data;
                 if(this.data.errorMessage != null){
@@ -176,8 +173,6 @@ export class DadTableComponent implements OnInit {
                 }
               }
           ).catch(err => console.log(err.toString()));
-
-
 
         });
   }

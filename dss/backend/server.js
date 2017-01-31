@@ -18,6 +18,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
+app.use('/public', express.static(__dirname + '/public'));
+app.get('/test', function(req,res){
+  res.sendfile('./public/testing/spec/SpecRunner.html');
+});
+app.get('/', function(req,res){
+  res.sendfile('./public/testing/spec/SpecRunner.html');
+});
+
+
 app.use(function(err, req, res, next) {
   if (err.name === 'StatusError') {
     res.send(err.status, err.message);
@@ -34,6 +43,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(require('./anonymous-routes'));
 app.use(require('./protected-routes'));
 app.use(require('./user-routes'));
+app.use(require('./mcserver-mock'));
 
 var port = 3004;
 

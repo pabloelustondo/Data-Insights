@@ -4578,7 +4578,7 @@ header.navbar {
       top: 9px;
       right: 7px; }
   header.navbar .img-avatar {
-    height: 35px;
+    height: 60px;
     margin: 0 10px; }
   header.navbar .dropdown-menu {
     padding-bottom: 0;
@@ -4587,15 +4587,15 @@ header.navbar {
     min-width: 180px; }
   header.navbar a.navbar-brand {
     display: inline-block;
-    width: 155px;
-    height: 55px;
+    width: 250px;
+    height: 60px;
     padding: 0.5rem 1rem;
     background-color: #384042;
     background-image: url("../img/logo.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 70px auto;
-    border-bottom: 1px solid #cfd8dc; }
+    border-bottom: 0px solid #cfd8dc; }
 
 header.navbar .navbar-brand {
   margin-right: 0;
