@@ -1,15 +1,18 @@
 /**
  * Created by vdave on 1/10/2017.
  */
-import {Route, Get, Example} from 'tsoa';
+import * as express from '@types/express';
+import {Route, Get, Example, Request} from 'tsoa';
 import {SDS} from '../models/user';
 
+let jwt  = require('jsonwebtoken');
 
 // import * as https from 'https';
 const config = require('../../appconfig.json');
 import * as querystring from 'querystring';
 
 import * as rp from 'request-promise';
+
 @Route('Devices')
 export class AverageDischargeRateController {
     /**
@@ -108,29 +111,48 @@ export class AverageDischargeRateController {
         ]
     })
 
-    public async Get(dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number, dateFrom?: Date): Promise<SDS> {
+    public async Get(dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, @Request() request: express.Request, minimumBatteryPercentageThreshold?: number, dateFrom?: Date): Promise<SDS> {
 
+        let req = request;
+        let token = req.headers['x-access-token'];
         let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
 
-        let firstMethod = function () {
-          let promise = new Promise( function(resolve, reject) {
-              const getDBURL =  'http://localhost:8000/getDBAccess/varun_2';
+        if (token) {
 
-              const dboptions: rp.OptionsWithUrl = {
-                  json: true,
-                  method: 'GET',
-                  url: getDBURL
-              };
-              resolve( rp(dboptions) );
-          });
-          return promise;
+           let x2 =  jwt.verify(token, 'secret', function (err: any, decoded: any) {
+                console.log(JSON.stringify(decoded));
+                console.log(err);
+                x2 = decoded.customerID;
+            });
+
+            console.log(JSON.stringify(token));
+
+        let getCustomerID = function () {
+            let promise = new Promise (function (resolve, reject) {
+                resolve (jwt.verify(token, 'secret'));
+            });
+            return promise;
+        };
+
+        let firstMethod = function (decodedToken: any) {
+            let promise = new Promise(function (resolve, reject) {
+                const getDBURL = 'http://localhost:8000/getDBAccess/' + decodedToken.customerID;
+
+                const dboptions: rp.OptionsWithUrl = {
+                    json: true,
+                    method: 'GET',
+                    url: getDBURL
+                };
+                resolve(rp(dboptions));
+            });
+            return promise;
         };
 
         let secondMethod = function (answer: any) {
-            let promise = new Promise (function( resolve, reject) {
+            let promise = new Promise(function (resolve, reject) {
                 console.log('answer is : ' + JSON.stringify(answer));
 
-                const xqs = {shiftStartDateTime : shiftDateTimeString, endDate : dateTo, shiftDuration : shiftDuration};
+                const xqs = {shiftStartDateTime: shiftDateTimeString, endDate: dateTo, shiftDuration: shiftDuration};
                 console.log(xqs);
                 const xurl = 'https://' + config['aws-hostname'] + config['aws-listAverageDischargeRate'];
 
@@ -149,171 +171,35 @@ export class AverageDischargeRateController {
                 };
 
 
-                resolve( rp(options) );
+                resolve(rp(options));
             });
             return promise;
         };
 
-        let thirdMethod = function(awsData: string) {
-          let promise = new Promise(function (resolve, reject) {
+        let thirdMethod = function (awsData: string) {
+            let promise = new Promise(function (resolve, reject) {
                 console.log(JSON.stringify(awsData));
 
-              let mData = ['countOfDevices: int',
-                  'percentage: int'];
+                let mData = ['countOfDevices: int',
+                    'percentage: int'];
 
-              const user: any = {
-                  createdAt: new Date(),
-                  metadata: mData,
-                  data: awsData
-              };
+                const user: any = {
+                    createdAt: new Date(),
+                    metadata: mData,
+                    data: awsData
+                };
 
-              resolve(user);
-          });
-          return promise;
+                resolve(user);
+            });
+            return promise;
         };
 
-        let p: any = await firstMethod().then(secondMethod).then(thirdMethod);
-
-
-        console.log( 'waiting on p and p is: ' + JSON.stringify(p) );
-
+        let p: any = await getCustomerID().then(firstMethod).then(secondMethod).then(thirdMethod);
+        console.log('waiting on p and p is: ' + JSON.stringify(p));
         return p;
-
-    }
-    /*
-    public async Get(dateTo: Date, shiftStartDateTime: Date, shiftDuration: number, minimumBatteryPercentageThreshold?: number, dateFrom?: Date): Promise<SDS> {
-
-
-        let shiftDateTimeString = shiftStartDateTime.toISOString().substr(0, 19);
-
-
-        const getDBURL =  'http://localhost:8000/getDBAccess/varun';
-
-        const dboptions: rp.OptionsWithUrl = {
-            json: true,
-            method: 'GET',
-            url: getDBURL
-        };
-        let answer = await rp(dboptions);
-        console.log(JSON.stringify(answer));
-
-        const xqs = {shiftStartDateTime : shiftDateTimeString, endDate : dateTo, shiftDuration : shiftDuration};
-        console.log(xqs);
-        const xurl = 'https://' + config['aws-hostname'] + config['aws-listAverageDischargeRate'];
-
-        const options: rp.OptionsWithUrl = {
-            headers: {
-                'x-api-key': config['aws-x-api-key'],
-                'RedShiftConnectionString': 'dataanalytics.cxvwwvumct05.us-east-1.redshift.amazonaws.com',
-                'Username': answer.data.accessUsername,
-                'Password': answer.data.accesspswd,
-                'DBName': 'dataanalyticsdb'
-            },
-            json: true,
-            method: 'GET',
-            qs: xqs,
-            url: xurl
-        };
-        console.time('deviceNotSurviveShift: aws call');
-
-        console.timeEnd('deviceNotSurviveShift: aws call');
-        let mData = ['countOfDevices: int',
-            'percentage: int'];
-
-        let p = rp(options); // request library used
-        /*if (p.errorMessage !== undefined) {
-            p = [
-                {
-                    percentage: 5,
-                    countOfDevices: 1874
-                },
-                {
-                    percentage: 10,
-                    countOfDevices: 6520
-                },
-                {
-                    percentage: 15,
-                    countOfDevices: 172
-                },
-                {
-                    percentage: 20,
-                    countOfDevices: 21
-                },
-                {
-                    percentage: 25,
-                    countOfDevices: 10
-                },
-                {
-                    percentage: 30,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 35,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 45,
-                    countOfDevices: 172
-                },
-                {
-                    percentage: 45,
-                    countOfDevices: 21
-                },
-                {
-                    percentage: 50,
-                    countOfDevices: 10
-                },
-                {
-                    percentage: 55,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 60,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 65,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 70,
-                    countOfDevices: 21
-                },
-                {
-                    percentage: 75,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 80,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 85,
-                    countOfDevices: 0
-                },
-                {
-                    percentage: 90,
-                    countOfDevices: 100
-                },
-                {
-                    percentage: 95,
-                    countOfDevices: 1000
-                },
-                {
-                    percentage: 100,
-                    countOfDevices: 1000
-                }
-            ];
+    } else {
+            throw new Error('invalid auth token');
         }
 
-        const user: any = {
-            createdAt: new Date(),
-            metadata: mData,
-            data: p
-        };
-
-        return user;
     }
-     */
-
 }
