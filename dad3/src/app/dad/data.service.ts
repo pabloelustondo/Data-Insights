@@ -3,13 +3,15 @@
  */
 import { Injectable } from '@angular/core';
 import { MOCK_WIDGET_DATA } from './mock.data';
-import { Headers, Http,URLSearchParams } from '@angular/http';
+import { Headers, Http,URLSearchParams, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { config } from "./appconfig";
 import { DadChart } from './chart.component';
 import { DadWidget } from './widget.component';
 import { DadTable } from './table.component';
 import { DadElement } from "./dadmodels";
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class DadElementDataService {
@@ -26,7 +28,8 @@ export class DadElementDataService {
       params.set(param, parameters[param]);
     }
     let endpoint0 = config[element.endpoint];
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let token = localStorage.getItem('id_token');
+    let headers = new Headers({ 'Content-Type': 'application/json',  'Authorization': 'Bearer ' + token});
     let data = {metricName:element.metricName, predicates:element.predicates, parameters:element.parameters[0]};
 
       if(endpoint0.method === "post"){

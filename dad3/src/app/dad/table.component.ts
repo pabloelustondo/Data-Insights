@@ -65,8 +65,6 @@ export class DadTable {
                 </div>
             </div>
         </div>
-  <!-- to show chart in widgets, use the line below-->
-  <!--<dadchart [chart]="widget.chart"></dadchart>-->
 
     <!--  END CHART COMPONENT --></div>`
 })
@@ -175,7 +173,7 @@ export class DadTableComponent implements OnInit {
                 }
               }
           ).catch(err => console.log(err.toString()));
-            
+
         });
   }
 
