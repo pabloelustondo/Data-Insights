@@ -28,7 +28,7 @@ export class DadElementDataService {
     }
     let endpoint0 = config[element.endpoint];
     let token = localStorage.getItem('id_token');
-    let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token': token});
+    let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : token});
     let data = {metricName:element.metricName, predicates:element.predicates, parameters:element.parameters[0]};
 
       if(endpoint0.method === "post"){
@@ -40,7 +40,10 @@ export class DadElementDataService {
               }
           );
       } else{
-            return this.http.get(config[element.endpoint], {search:params} ).toPromise().then(
+            return this.http.get(config[element.endpoint], {
+                search:params,
+                headers: headers
+            }).toPromise().then(
                 response => JSON.parse(response['_body'])
             ).catch(
                 err =>{
