@@ -1,10 +1,13 @@
 <div>
   <div class="home jumbotron centered">
-    <h2>Data Analytics Enrollment & Security Service</h2>
-    <h3>(Obviously, this page only for testing purposes)</h3>
+    <h2>Data Analytics Account Management</h2>
+    <h3 *ngIf="isSOTI">(SOTI Administrator Account)</h3>
+      <p>Account: {{this.decodedJwt["accountid"]}}
+      Domain: {{this.decodedJwt["domainid"]}}
+      User: {{this.decodedJwt["username"]}}</p>
 
-    <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
-    <a class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
+    <a *ngIf="isSOTI" class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
+    <a *ngIf="isSOTI" class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
 
     <pre *ngIf="response">{{ response }}</pre>

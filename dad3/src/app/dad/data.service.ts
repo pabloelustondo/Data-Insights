@@ -11,11 +11,12 @@ import { DadWidget } from './widget.component';
 import { DadTable } from './table.component';
 import { DadElement } from "./dadmodels";
 import 'rxjs/add/operator/map';
+import { Router } from "@angular/router";
 
 @Injectable()
 export class DadElementDataService {
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private router: Router) { }
 
   getElementData(element:DadElement): Promise<any> {
     console.log("we got " + config["oda_dev_url"]);
@@ -47,6 +48,10 @@ export class DadElementDataService {
                 response => JSON.parse(response['_body'])
             ).catch(
                 err =>{
+                    if (err.status === 500) {
+                        localStorage.removeItem('id_token');
+                        this.router.navigate(['/dad']);
+                    }
                     console.log("we got " + err.json());
                 }
             );

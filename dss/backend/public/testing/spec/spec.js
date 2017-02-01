@@ -9,6 +9,7 @@ ErrorMsg =
     "missing_mcurl": "Missing MobiControl Url",
     "missing_apikey": "Missing API key",
     "mcurl_already_enrolled": "MobiControl Url already enrolled",
+    "domainid_already_enrolled": "Domain ID already enrolled",
     "mcurl_enrollement_failed_authentication": "Failed to enroll due to authentication failure",
     "mcurl_enrollement_failed_url_not_reachable": "Failed to enroll due to url not reachable",
     "login_failed_authentication": "Failed to login due to MobiControl authentication failure"
