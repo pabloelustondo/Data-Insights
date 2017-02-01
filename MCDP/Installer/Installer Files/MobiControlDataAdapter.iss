@@ -12,7 +12,7 @@
 #define MyAppIcon SourcePath + "\images.ico"
 
 [Setup]
-AppId = {{9E890C02-5500-4944-9F6B-86CE44BE3265}
+AppId = {{36A3C11A-C8CA-43DC-8546-6AD7FA5E0A4C}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher={#MyAppPublisher}
@@ -54,6 +54,7 @@ Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dacpac\Deploy.bat"; DestDir: "{tmp}"; Flags: ignoreversion
 Source: "dacpac\MobiControlDataAnalyticDB.dacpac"; DestDir: "{tmp}"; Flags: ignoreversion
+Source: "{src}\Auto.key"; DestDir: "{app}"; Flags: external;
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -61,8 +62,33 @@ Name: "{group}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Run]
 ;Filename: "{tmp}\Deploy.bat"
-Filename: {sys}\sc.exe; Parameters: "create MCDP start= auto binPath= ""{app}\{#MyAppExeName}""" ; Description: "MobiControl Data Producer"; Flags: nowait postinstall
+Filename: {sys}\sc.exe; Parameters: "create MCDP start=auto binPath=""{app}\{#MyAppExeName}"""; Description: "MobiControl Data Producer"; Flags: nowait runascurrentuser postinstall 
+;Filename: "{cmd}"; Parameters: "sc create MCDP start=auto DisplayName= MCDP binPath= ""{app}\{#MyAppExeName}"""; Description: "MobiControl Data Producer"; Flags: nowait runascurrentuser postinstall
+
 
 [UninstallRun]
-Filename: {sys}\sc.exe; Parameters: "stop {#MyAppExeName}" ; Flags: runhidden
-Filename: {sys}\sc.exe; Parameters: "delete {#MyAppExeName}" ; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "stop {#MyAppExeName}" ; Flags: runascurrentuser runhidden
+Filename: {sys}\sc.exe; Parameters: "delete {#MyAppExeName}" ; Flags: runascurrentuser runhidden
+
+[code]
+   function InitializeSetup(): Boolean;
+   begin
+     if (FileExists(ExpandConstant('{pf}\SOTI\MobiControl\Database.config'))) then
+     begin
+       //MsgBox('Installation validated', mbInformation, MB_OK);
+        if (FileExists(ExpandConstant('{src}\Auto.key'))) then
+        begin
+             Result := True;
+        end
+        else
+        begin
+            MsgBox('Please copy the key to the same location as installer.', mbCriticalError, MB_OK);
+            Result := False;
+        end;
+     end
+     else
+     begin
+       MsgBox('Require MobiControl.'+ #13#10 + 'Please install MobiControl before install MC Data Adaptor!', mbCriticalError, MB_OK);
+       Result := False;
+     end;
+   end;
