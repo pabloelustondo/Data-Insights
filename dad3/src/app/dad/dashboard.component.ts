@@ -14,7 +14,6 @@ declare var d3, c3: any;
     styles:['.row{overflow:hidden;}'],
     providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
     template: `
-   <button (click)="logout()"></button>
    <div class="animated fadeIn">
         <div class="row">
             <div class="col-m-12 row-sm-4" *ngFor="let widget of widgets">
@@ -45,11 +44,6 @@ export class DadComponent implements  OnInit{
 
     onSelect(chart:DadChart):void {
         this.selectedChart = chart;
-    }
-
-    logout(){
-        localStorage.removeItem('id_token');
-        window.location.reload();
     }
 
     ngOnInit() {
