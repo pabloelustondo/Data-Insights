@@ -14,7 +14,17 @@ localStorage = new LocalStorage('./temp');
 var app = module.exports = express.Router();
 
 // XXX: This should be a database of enrollments :).
-var enrollments = [];
+// XXX: This should be a database of enrollments :).
+var SotiAdminAccount =
+  {
+    accountid: "soti",
+    mcurl: "http://localhost:3004",
+    apikey:"112233445511223344",
+    domainid: "soti",
+    username: "Administrator"
+  };
+
+var enrollments = [SotiAdminAccount];
 
 function createToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 60*5 });
@@ -52,7 +62,7 @@ app.post('/enrollments', function(req, res) {
   }
 //////////////////////////////////////////////////
 
-  if (_.find(enrollments, {mcurl: req.body.mcurl})) {
+  if (_.find(enrollments, {mcurl: req.body.domainid})) {
    return res.status(400).send( ErrorMsg.mcurl_already_enrolled );
   }
 
@@ -98,7 +108,7 @@ app.post('/delete_test_domains', function(req, res) {
 });
 
 app.get('/delete_all', function(req, res) {   //for now for testing...
-  enrollments = [];
+  enrollments = [SotiAdminAccount];
   res.status(200).send({});
 });
 
@@ -145,7 +155,6 @@ app.post('/sessions/create', function(req, res) {
       console.log(response.statusCode, body);
       if (response.statusCode === 200){
 
-        enrollments.push(enrollment);
         var resObj = JSON.parse(body);
         enrollment.mc_token= resObj.access_token;
 
@@ -158,21 +167,4 @@ app.post('/sessions/create', function(req, res) {
     }
   });
 
-
-
-//////////////////////////////////////////////////
-  /*
-  var user = _.find(users, {username: req.body.username});
-  if (!user) {
-    return res.status(401).send("The username or password don't match");
-  }
-
-  if (!(user.password === req.body.password)) {
-    return res.status(401).send("The username or password don't match");
-  }
-
-  res.status(201).send({
-    id_token: createToken(user)
-  });
-  */
 });

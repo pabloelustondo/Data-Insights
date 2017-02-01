@@ -22,6 +22,7 @@ export class Home {
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
     this.decodedJwt = this.jwt && window.jwt_decode(this.jwt);
+    this.isSOTI = this.decodedJwt["domainid"] === 'soti';
   }
 
   logout() {
