@@ -1,7 +1,7 @@
 {
-  "name": "chuck-norris-quotes-api",
+  "name": "DSS",
   "version": "0.1.0",
-  "description": "Chuck Norris Quotes API",
+  "description": "SOTI Data Analytics Security Service",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,20 +9,12 @@
     "debugmac": "node $NODE_DEBUG_OPTION server.js",
     "debugwin": "node %NODE_DEBUG_OPTION% server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/auth0/angular2-authentication-sample"
-  },
   "keywords": [
     "jwt",
     "auth0"
   ],
-  "author": "Martin Gontovnikas",
+  "author": "Pablo Elustondo",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/auth0/in-memory-todo/issues"
-  },
-  "homepage": "https://github.com/auth0/in-memory-todo",
   "dependencies": {
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",

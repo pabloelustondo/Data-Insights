@@ -11,17 +11,6 @@ var request = require('request');
 var LocalStorage = require('node-localstorage').LocalStorage;
 localStorage = new LocalStorage('./temp');
 
-
-//var host = 'https://cad059.corp.soti.net/MobiControl';
-var host = 'http://localhost:3004'; //this is only for testing... real host come from DB
-var dbapihost = "http://localhost:8000";   //database api host
-var username = 'Administrator';
-var password = '1';
-var basicAuthorizationString = "Basic NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0";
-
-
-
-
 var app = module.exports = express.Router();
 
 // XXX: This should be a database of enrollments :).
@@ -42,8 +31,15 @@ app.get('/enrollments2', function(req, res) {
 
 app.post('/enrollments', function(req, res) {
 //////// Parameters Checking /////////
+  //////// Parameters Checking /////////
+  if (!req.body.accountid) {
+    return res.status(400).send( ErrorMsg.missing_accountid );
+  }
   if (!req.body.mcurl) {
     return res.status(400).send( ErrorMsg.missing_mcurl );
+  }
+  if (!req.body.apikey) {
+    return res.status(400).send( ErrorMsg.missing_apikey );
   }
   if (!req.body.domainid) {
     return res.status(400).send( ErrorMsg.missing_domainid );
@@ -60,14 +56,16 @@ app.post('/enrollments', function(req, res) {
    return res.status(400).send( ErrorMsg.mcurl_already_enrolled );
   }
 
-  var enrollment = _.pick(req.body, 'mcurl', 'domainid', 'username');
+  var enrollment = _.pick(req.body, 'accountid','mcurl', 'apikey', 'domainid', 'username');
   enrollment.tenantid = req.body.domainid; //for now
+
   request({
+    rejectUnauthorized: false,
     url: enrollment.mcurl  + "/api/token",
     method: 'POST', //Specify the method
     headers: { //We can define headers too
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': basicAuthorizationString
+      'Authorization': "Basic " + enrollment.apikey,
     },
     body: "grant_type=password&username=" + req.body.username  + "&password=" + req.body.password
   }, function(error, response, body){
@@ -128,12 +126,15 @@ app.post('/sessions/create', function(req, res) {
       password: req.body.password
     }
 
+  //var basicAuthorizationString = "Basic " + enrollment.apikey;
+
   request({
+    rejectUnauthorized: false, //need to improve this ..related with ssl certificate
     url:   enrollment.mcurl + "/api/token",
     method: 'POST', //Specify the method
     headers: { //We can define headers too
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': basicAuthorizationString
+      'Authorization': "Basic " + enrollment.apikey,
     },
     body: "grant_type=password&username="+ user.username +"&password="+user.password,
   }, function(error, response, body){

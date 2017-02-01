@@ -1,10 +1,13 @@
 ErrorMsg =
   {
+    "missing_accountid": "Missing AccountID",
+    "missing_apisecret": "Missing API secret",
     "missing_domainid": "Missing DomainID",
     "not_found_domainid": "DomainID was not found",
     "missing_username": "Missing Username",
     "missing_password": "Missing Password",
     "missing_mcurl": "Missing MobiControl Url",
+    "missing_apikey": "Missing API key",
     "mcurl_already_enrolled": "MobiControl Url already enrolled",
     "mcurl_enrollement_failed_authentication": "Failed to enroll due to authentication failure",
     "mcurl_enrollement_failed_url_not_reachable": "Failed to enroll due to url not reachable",
@@ -101,11 +104,28 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
   });
 
   describe("POST /enrollments(enrollment)", function() {
-    it("fails and send error message if MobiControl Url is not present", function(done) {
+    it("fails and send error message if Account ID is not present", function(done) {
       $.ajax({
         url: "/enrollments",
         type:"POST",
         data: JSON.stringify({}),
+        contentType:"application/json",
+        success: function(data, textStatus, jqXHR) {
+          fail("this API call must return an error when no accountid is provided");
+          done();},
+        error: function( jqXHR, textStatus, errorThrown){
+          expect(textStatus).toBe("error");
+          expect(errorThrown).toBe("Bad Request");
+          expect(jqXHR.responseText).toBe(ErrorMsg.missing_accountid);
+          done();
+        }
+      });
+    });
+    it("fails and send error message if MobiControl Url is not present", function(done) {
+      $.ajax({
+        url: "/enrollments",
+        type:"POST",
+        data: JSON.stringify({accountid:'acme'}),
         contentType:"application/json",
         success: function(data, textStatus, jqXHR) {
           fail("this API call must return an error when no domainid is provided");
@@ -118,11 +138,28 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
         }
       });
     });
+    it("fails and send error message if api key is not present", function(done) {
+      $.ajax({
+        url: "/enrollments",
+        type:"POST",
+        data: JSON.stringify({accountid:'acme', mcurl:"http://localhost:3004"}),
+        contentType:"application/json",
+        success: function(data, textStatus, jqXHR) {
+          fail("this API call must return an error when no  api key is provided");
+          done();},
+        error: function( jqXHR, textStatus, errorThrown){
+          expect(textStatus).toBe("error");
+          expect(errorThrown).toBe("Bad Request");
+          expect(jqXHR.responseText).toBe(ErrorMsg.missing_apikey);
+          done();
+        }
+      });
+    });
     it("fails and send error message if domainid is not present", function(done) {
       $.ajax({
         url: "/enrollments",
         type:"POST",
-        data: JSON.stringify({mcurl:"http://localhost:3004"}),
+        data: JSON.stringify({accountid:'acme', mcurl:"http://localhost:3004" , apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0"}),
         contentType:"application/json",
         success: function(data, textStatus, jqXHR) {
           fail("this API call must return an error when no domainid is provided");
@@ -139,7 +176,7 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
       $.ajax({
         url: "/enrollments",
         type:"POST",
-        data: JSON.stringify({mcurl:"http://localhost:3004", domainid:"utest"}),
+        data: JSON.stringify({accountid:'acme', mcurl:"http://localhost:3004", apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0", domainid:"utest"}),
         contentType:"application/json",
         success: function(data, textStatus, jqXHR) {
           fail("this API call must return an error when no username is provided");
@@ -156,7 +193,7 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
       $.ajax({
         url: "/enrollments",
         type:"POST",
-        data: JSON.stringify({mcurl:"http://localhost:3004", domainid:"utest", username:"Administrator"}),
+        data: JSON.stringify({accountid:'acme', mcurl:"http://localhost:3004", apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0", domainid:"utest", username:"Administrator"}),
         contentType:"application/json",
         success: function(data, textStatus, jqXHR) {
           fail("this API call must return an error when no password is provided");
@@ -173,7 +210,7 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
       $.ajax({
         url: "/enrollments",
         type:"POST",
-        data: JSON.stringify({mcurl:"http://localhost:9999", domainid:"utest", username:"Administrator", password:"nada"}),
+        data: JSON.stringify({accountid:'acme', mcurl:"http://localhost:9999", apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0", domainid:"utest", username:"Administrator", password:"nada"}),
         contentType:"application/json",
         success: function(data, textStatus, jqXHR) {
           fail("Enrollment did not fail even the password was wrong");
@@ -190,7 +227,7 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
       $.ajax({
         url: "/enrollments",
         type:"POST",
-        data: JSON.stringify({mcurl:"http://localhost:3004", domainid:"utest", username:"Administrator", password:"nada"}),
+        data: JSON.stringify({accountid:'acme', mcurl:"http://localhost:3004", apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0", domainid:"utest", username:"Administrator", password:"nada"}),
         contentType:"application/json",
         success: function(data, textStatus, jqXHR) {
           fail("Enrollment did not fail even the password was wrong");
@@ -207,7 +244,7 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
       $.ajax({
         url: "/enrollments",
         type:"POST",
-        data: JSON.stringify({mcurl:"http://localhost:3004", domainid:"utest", username:"Administrator", password:"1"}),
+        data: JSON.stringify({accountid:'acme', mcurl:"http://localhost:3004", apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0", domainid:"utest", username:"Administrator", password:"1"}),
         contentType:"application/json",
         success: function(data, textStatus, jqXHR) {
           expect(textStatus).toBe("success");
@@ -220,7 +257,7 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
         }
       });
     });
-    it("created enrollment has domainid, tenantid and username", function(done) {
+    it("created enrollment has accountid, mcurl, apikey, domainid, tenantid and username", function(done) {
       $.ajax({
         url: "/api/enrollments",
         type:"GET",
@@ -232,8 +269,10 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
           expect(enrollm).toBeDefined();
           expect(enrollm.domainid).toBe('utest');
           expect(enrollm.mcurl).toBe('http://localhost:3004');
+          expect(enrollm.apikey).toBe('NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0');
           expect(enrollm.username).toBe('Administrator');
           expect(enrollm.tenantid).toBe('utest');
+          expect(enrollm.accountid).toBe('acme');
           done();},
         error: function( jqXHR, textStatus, errorThrown){
           fail('this call must return data successfuly');

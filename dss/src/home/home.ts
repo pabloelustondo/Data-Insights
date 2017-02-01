@@ -15,6 +15,7 @@ export class Home {
   jwt: string;
   decodedJwt: string;
   response: string;
+  enrollments: string[];
   api: string;
   isSOTI: boolean;
 

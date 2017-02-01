@@ -7,7 +7,7 @@
   </i></small>
   <p></p>
 
-  <form role="form" (submit)="signup($event, mcurl.value, domainid.value, username.value, password.value)">
+  <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value)">
     <div class="form-group">
       <label for="accountid">Account ID </label>
       <input type="text" #accountid class="form-control" id="accountid" placeholder="AccountID for SOTI Analytics Services">
@@ -16,6 +16,14 @@
     <div class="form-group">
       <label for="mcurl">Mobicontrol API URL </label>
       <input type="text" #mcurl class="form-control" id="mcurl" placeholder="i.e: https://cad059.corp.soti.net/MobiControl/api">
+    </div>
+    <div class="form-group">
+      <label for="apikey">API Access Token</label>
+      <input type="text" #apikey class="form-control" id="apikey" placeholder="API Access Token for SOTI Analytics Services">
+      <small><i>No api access token?. This token can be generated using a process explained in https://yourserver/MobiControl/api/docs/index.
+        You need to use this utilityMCAdmin.exe APIClientAdd -n:API client name [-p:API secret] [-r:Redirect URI]
+        - Combine the “client ID” and “client secret” into a string separated by a colon. For example: "ClientID:ClientSecret". Note that these fields cannot otherwise contain a colon.
+        - Encode the resulting string using the RFC2045-MIME variant of Base64.</i></small>
     </div>
     <div class="form-group">
       <label for="domainid">Short Unique Name</label>

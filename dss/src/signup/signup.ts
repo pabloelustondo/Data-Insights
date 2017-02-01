@@ -15,9 +15,9 @@ export class Signup {
   constructor(public router: Router, public http: Http) {
   }
 
-  signup(event, mcurl, domainid, username, password) {
+  signup(event, accountid, mcurl, apikey, domainid, username, password) {
     event.preventDefault();
-    let body = JSON.stringify({ mcurl, domainid, username, password });
+    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password });
     this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {
