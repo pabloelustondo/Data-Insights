@@ -9,10 +9,10 @@
 #define MyAppPublisher "SOTI Inc."
 #define MyAppURL "https://www.soti.net/"
 #define MyAppExeName "MCDP.exe"
-#define MyAppIcon "D:\BI\BINEW\MCDP\Installer\Installer Files\images.ico"
+#define MyAppIcon SourcePath + "\images.ico"
 
 [Setup]
-AppId = {{7047A211-3359-424A-AEF0-9D9A2AC7C43B}
+AppId = {{9E890C02-5500-4944-9F6B-86CE44BE3265}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher={#MyAppPublisher}
@@ -44,7 +44,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "MCDP.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "MCDP.exe"; DestDir: "{app}"; Flags: ignoreversion 
 Source: "MCDP.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Database.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DataProcess.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -52,12 +52,17 @@ Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Newtonsoft.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dacpac\Deploy.bat"; DestDir: "{tmp}"; Flags: ignoreversion
+Source: "dacpac\MobiControlDataAnalyticDB.dacpac"; DestDir: "{tmp}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"
 ;Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+;Filename: "{tmp}\Deploy.bat"
+Filename: {sys}\sc.exe; Parameters: "create MCDP start= auto binPath= ""{app}\{#MyAppExeName}""" ; Description: "MobiControl Data Producer"; Flags: nowait postinstall
 
-
+[UninstallRun]
+Filename: {sys}\sc.exe; Parameters: "stop {#MyAppExeName}" ; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "delete {#MyAppExeName}" ; Flags: runhidden
