@@ -1,4 +1,3 @@
-import './controllers/usersController';
 import './controllers/multiplePosts';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
