@@ -2,12 +2,12 @@
  * Created by pabloelustondo on 2016-11-21.
  */
 import { Injectable } from '@angular/core';
-import { CHARTS } from './mock.charts';
+import { CHARTS } from './sample.charts';
 import { DadChart } from './chart.component';
 import { DadWidget } from "./widget.component";
 import { DadTable } from "./table.component";
-import { WIDGETS } from "./mock.widgets";
-import { TABLES } from "./mock.tables";
+import { WIDGETS } from "./sample.widgets";
+import { TABLES } from "./sample.tables";
 import * as _ from "lodash";
 
 @Injectable()

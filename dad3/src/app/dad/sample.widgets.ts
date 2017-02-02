@@ -3,7 +3,7 @@
  */
 import { DadWidget, DadWidgetType} from './widget.component';
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
-import {TABLES} from './mock.tables'
+import {TABLES} from './sample.tables'
 
 export const WIDGETS: DadWidget[] = [
   {id: 'widget1',
@@ -123,7 +123,7 @@ export const WIDGETS: DadWidget[] = [
     metrics:[
       {
         Type: DadParameterType.Number,
-        Name: "Devices Not Lasted a Shift",
+        Name: "Devices Not Lasted Shift",
         DataSource: "CountDevicesNotLastedShift"
       },
       {
