@@ -123,7 +123,7 @@ export const WIDGETS: DadWidget[] = [
     metrics:[
       {
         Type: DadParameterType.Number,
-        Name: "Device Not Lasted Shift",
+        Name: "Devices Not Lasted a Shift",
         DataSource: "CountDevicesNotLastedShift"
       },
       {
