@@ -68,6 +68,7 @@ app.post('/enrollments', function(req, res) {
 
   var enrollment = _.pick(req.body, 'accountid','mcurl', 'apikey', 'domainid', 'username');
   enrollment.tenantid = req.body.domainid; //for now
+  enrollment.status = "new"
 
   request({
     rejectUnauthorized: false,
@@ -90,9 +91,15 @@ app.post('/enrollments', function(req, res) {
         enrollments.push(enrollment);
         var resObj = JSON.parse(body);
         enrollment.mc_token= resObj.access_token;
+        tokenpayload = {};
+        tokenpayload.username =  enrollment.username;
+        tokenpayload.accountid =  enrollment.accountid;
+        tokenpayload.domainid =  enrollment.domainid;
+
+        //  sendEmail2(enrollment);
 
         res.status(200).send({
-          id_token: createToken(enrollment)
+          id_token: createToken(tokenpayload)
         });
       } else {
         res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
@@ -157,9 +164,13 @@ app.post('/sessions/create', function(req, res) {
 
         var resObj = JSON.parse(body);
         enrollment.mc_token= resObj.access_token;
+        tokenpayload = {};
+        tokenpayload.username =  enrollment.username;
+        tokenpayload.accountid =  enrollment.accountid;
+        tokenpayload.domainid =  enrollment.domainid;
 
         res.status(200).send({
-          id_token: createToken(enrollment)
+          id_token: createToken(tokenpayload)
         });
       } else {
         res.status(400).send(ErrorMsg.login_failed_authentication);
@@ -168,3 +179,50 @@ app.post('/sessions/create', function(req, res) {
   });
 
 });
+
+var nodemailer = require('nodemailer');
+
+var sendmail = require('sendmail')();
+
+function sendEmail(enrollment)
+{
+  sendmail({
+    from: 'no-reply@yourdomain.com',
+    to: 'pablo.elustondo@gmail.com',
+    subject: 'test sendmail',
+    html: 'Mail of test sendmail ',
+  }, function (err, reply) {
+    console.log(err && err.stack);
+    console.dir(reply);
+  });
+};
+
+function sendEmail2(enrollment) {
+
+  var transporter = nodemailer.createTransport({
+    service: 'localhost',
+    port:25,
+    auth: {
+      user: 'testdad666@gmail.com',
+      pass: 'aaa666bbb'
+    }
+  });
+
+  var text = 'Hello from DSS to:' + enrollment.username;
+
+  var mailOptions = {
+    from: 'testdad666@gmail.com', // sender address
+    to: enrollment.accountid, // list of receivers
+    subject: 'SOTI DAD - MobiControl Enrollment', // Subject line
+    html: '<b>Hi'+  enrollment.username +'please confirm you enrollment by clicking <a href=\"http://localhost:3004/\"></a></b>'
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+      console.log("sendMail error: " + error);
+    }else{
+      console.log('Message sent: ' + info.response);
+    };
+  });
+
+}
