@@ -2,7 +2,7 @@
  * Created by pabloelustondo on 2016-11-21.
  */
 import { Injectable } from '@angular/core';
-import { MOCK_WIDGET_DATA } from './mock.data';
+import { MOCK_WIDGET_DATA } from './sample.data';
 import { Headers, Http,URLSearchParams, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { config } from "./appconfig";
