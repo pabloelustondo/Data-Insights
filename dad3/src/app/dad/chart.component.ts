@@ -36,9 +36,9 @@ export class DadChart extends DadElement{
                         </div>
                     </div>
                     <div>
-                        <div style="color:black;" class="card-title ml-1 mt-1">{{chart.name}}</div><br/><br/><br/>        
+                        <div style="color:black;">{{chart.name}}</div><br/><br/><br/>        
                         <div style= "text-align:center; height:100%; width:100%" [id]="chart.id"></div>
-                        <div style=" margin-left: 5px; color:black;">
+                        <div style="color:black;">
                             <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
                         </div>
                     </div>
