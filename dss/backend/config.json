@@ -1,3 +1,4 @@
 {
-  "secret": "Data Analytics Team Rocks!"
+  "secret": "Data Analytics Team Rocks!",
+  "dadloginurl": "http://localhost:4200"
 }

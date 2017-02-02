@@ -8,6 +8,8 @@
 
     <a *ngIf="isSOTI" class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
     <a *ngIf="isSOTI" class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
+    <a href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="downloadFile()">Download MCDP Access Token</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
 
     <pre *ngIf="response">{{ response }}</pre>

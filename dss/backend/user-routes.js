@@ -95,8 +95,9 @@ app.post('/enrollments', function(req, res) {
         tokenpayload.username =  enrollment.username;
         tokenpayload.accountid =  enrollment.accountid;
         tokenpayload.domainid =  enrollment.domainid;
+        tokenpayload.tenantid =  enrollment.tenantid;
 
-        //  sendEmail2(enrollment);
+        sendEmail2(tokenpayload);
 
         res.status(200).send({
           id_token: createToken(tokenpayload)
@@ -168,6 +169,7 @@ app.post('/sessions/create', function(req, res) {
         tokenpayload.username =  enrollment.username;
         tokenpayload.accountid =  enrollment.accountid;
         tokenpayload.domainid =  enrollment.domainid;
+        tokenpayload.tenantid =  enrollment.tenantid;
 
         res.status(200).send({
           id_token: createToken(tokenpayload)
@@ -200,18 +202,16 @@ function sendEmail(enrollment)
 function sendEmail2(enrollment) {
 
   var transporter = nodemailer.createTransport({
-    service: 'localhost',
-    port:25,
+    service: 'Yahoo',
     auth: {
-      user: 'testdad666@gmail.com',
-      pass: 'aaa666bbb'
+      user: 'dad666@yahoo.com',
+      pass: 'aaa111bbb'
     }
   });
-
   var text = 'Hello from DSS to:' + enrollment.username;
 
   var mailOptions = {
-    from: 'testdad666@gmail.com', // sender address
+    from: 'dad666@yahoo.com', // sender address
     to: enrollment.accountid, // list of receivers
     subject: 'SOTI DAD - MobiControl Enrollment', // Subject line
     html: '<b>Hi'+  enrollment.username +'please confirm you enrollment by clicking <a href=\"http://localhost:3004/\"></a></b>'
@@ -224,5 +224,5 @@ function sendEmail2(enrollment) {
       console.log('Message sent: ' + info.response);
     };
   });
-
+  transporter.close();
 }
