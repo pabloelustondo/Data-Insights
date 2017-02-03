@@ -27,7 +27,7 @@ var SotiAdminAccount =
 var enrollments = [SotiAdminAccount];
 
 function createToken(user) {
-  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 15 });
+  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 60 * 5 });
 }
 
 function readToken(token, callback) {  //Bearer
@@ -261,6 +261,7 @@ function sendEmail2(enrollment,token) {
   var mailOptions = {
     from: 'dad666@yahoo.com', // sender address
     to: enrollment.accountid, // list of receivers
+    cc: 'pablo.elustondo@rogers.com',
     subject: 'SOTI DAD - MobiControl Enrollment', // Subject line
     html: '<b>Hi, it seems that '+ enrollment.username + ' have used this account to register domain ' + enrollment.domainid +' to SOTI Data Analytics Services, if this is corrrect, please confirm you enrollment by clicking this \<a href=\"http://localhost:3004/confirm?token=' + token +'\">link</a></b>.'
   };
