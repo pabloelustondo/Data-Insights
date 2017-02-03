@@ -68,7 +68,7 @@ namespace Soti.MCDP.Database
             var logMessage = DateTime.Now.ToString() + "  =>  ";
 
             if (path == null)
-                Log(logMessage + "Error Load ConnectionString path is null ");
+                Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
 
 
             var config = GetConfiguration(path);
@@ -76,7 +76,7 @@ namespace Soti.MCDP.Database
             var settings = config.ConnectionStrings.ConnectionStrings["DbConnectionString"];
             if (settings == null)
             {
-                Log(logMessage + "Database section does not have an associated file!");
+                Log(logMessage + "[ERROR] Database section does not have an associated file!");
             }
 
             var builder = new SqlConnectionStringBuilder(settings.ConnectionString);
@@ -97,7 +97,7 @@ namespace Soti.MCDP.Database
             var logMessage = DateTime.Now.ToString() + "  =>  ";
             
             if (path == null)
-                Log(logMessage + "Error Load ConnectionString path is null ");
+                Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
             try
             {
                 var config = GetConfiguration(path);
@@ -106,7 +106,7 @@ namespace Soti.MCDP.Database
 
                 if (settings == null)
                 {
-                    Log(logMessage + "Database section does not have an associated file!");
+                    Log(logMessage + "[ERROR] Database section does not have an associated file!");
                     return "";
                 }
                 else
@@ -188,7 +188,7 @@ namespace Soti.MCDP.Database
             var logMessage = DateTime.Now.ToString() + "  =>  ";
 
             if (path == null)
-                Log(logMessage + "Error Load ConnectionString path is null ");
+                Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
 
             var config = GetConfiguration(path);
 
@@ -243,7 +243,7 @@ namespace Soti.MCDP.Database
 
                     if (!config.HasFile)
                     {
-                        Log(logMessage + "DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
+                        Log(logMessage + "[ERROR] DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
                     }
                 }
                 return config;
