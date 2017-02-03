@@ -1,26 +1,36 @@
 <div>
   <div class="home jumbotron centered">
-    <h2>Data Analytics Account Management</h2>
+    <h2>Data Analytics Domain Management</h2>
     <h3 *ngIf="isSOTI">(SOTI Administrator Account)</h3>
-      <p>Account: {{this.decodedJwt["accountid"]}}
-      Domain: {{this.decodedJwt["domainid"]}}
-      User: {{this.decodedJwt["username"]}}</p>
+      <p>Account: {{decodedJwt["accountid"]}}
+      Domain: {{decodedJwt["domainid"]}}
+      User: {{decodedJwt["username"]}}</p>
 
-    <a *ngIf="isSOTI" class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
-    <a *ngIf="isSOTI" class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
     <a href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="downloadFile()">Download MCDP Access Token</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
 
-    <pre *ngIf="response">{{ response }}</pre>
+    <pre *ngIf="response">
+      All enrollments for account {{decodedJwt["accountid"]}}
+      <table>
+        <tr>
+          <td style="width: 200px">domainid</td>
+          <td style="width: 200px">status</td>
+          <td style="width: 200px">username</td>
+          <td style="width: 200px">tenantid</td>
+          <td style="width: 200px">MC Url</td>
+        </tr>
+        <tr *ngFor="let e of response">
+           <td>{{e.domainid}}</td><td>{{e.status}}</td><td>{{e.username}}</td><td>{{e.tenantid}}</td><td>{{e.mcurl}}</td>
+        </tr>
+      </table>
+    </pre>
 
     <h2 *ngIf="jwt">You are logged in and your JWT is:</h2>
     <pre *ngIf="jwt" class="jwt"><code>{{ jwt }}</code></pre>
     <pre *ngIf="jwt" class="jwt"><code>{{ decodedJwt | json }}</code></pre>
-
-
-
-
 
   </div>
 </div>

@@ -42,11 +42,19 @@ export class Home {
   }
 
   callGetEnrollments() {
-    this._callApi('Secured', 'http://localhost:3004/api/enrollments');
+    if (this.isSOTI) {
+      this._callApi('Secured', 'http://localhost:3004/api/enrollments');
+    } else {
+      this._callApi('Secured', 'http://localhost:3004/api/myenrollments');
+    }
   }
 
   callDeleteAllEnrollments() {
-    this._callApi('Secured', 'http://localhost:3004/delete_all');
+    if (this.isSOTI) {
+      this._callApi('Secured', 'http://localhost:3004/delete_all');
+    } else {
+      this._callApi('Secured', 'http://localhost:3004/delete_all_mine');
+    }
   }
 
   downloadFile(){
@@ -62,7 +70,7 @@ export class Home {
       // For non-protected routes, just use Http
       this.http.get(url)
         .subscribe(
-          response => this.response = response.text(),
+          response => this.response = JSON.parse(response.text()),
           error => this.response = error.text()
         );
     }
@@ -70,7 +78,7 @@ export class Home {
       // For protected routes, use AuthHttp
       this.authHttp.get(url)
         .subscribe(
-          response => this.response = response.text(),
+          response => this.response = JSON.parse(response.text()),
           error => this.response = error.text()
         );
     }
