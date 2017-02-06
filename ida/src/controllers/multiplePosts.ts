@@ -134,8 +134,6 @@ export class MultiplePostsController {
 
     }
 
-
-
 }
 /**
  * Created by vdave on 12/6/2016.
