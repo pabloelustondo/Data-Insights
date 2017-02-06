@@ -38,6 +38,10 @@ app.get('/test', function(req,res){
 	res.sendfile('./public/testing/spec/SpecRunner.html');
 });
 
+app.get('/putSampleRecords', function(req,res){
+    res.sendfile('./public/testing/spec/SpecRunner.html');
+});
+
 app.get('/', function(req,res){
 	res.send("Jassplan TO-DO REST API Version 16");
 });
@@ -83,5 +87,6 @@ app.delete('/todo', function(req,res){
 		db.collection('todo').drop(next);
 	});
 });
+
 
 app.listen(8000);

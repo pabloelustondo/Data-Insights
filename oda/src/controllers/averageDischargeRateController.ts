@@ -129,9 +129,8 @@ export class AverageDischargeRateController {
         let firstMethod = function (decodedToken: any) {
             let promise = new Promise(function (resolve, reject) {
 
-                if (decodedToken.exp ===  1485902309 ) {
-                    throw new Error ('expired token');
-                }
+                let minutes = (new Date).getTime();
+
                 const getDBURL = 'http://localhost:8000/getDBAccess/' + decodedToken.tenantid;
 
                 const dboptions: rp.OptionsWithUrl = {
@@ -196,6 +195,5 @@ export class AverageDischargeRateController {
     } else {
             throw new Error('invalid auth token');
         }
-
     }
 }

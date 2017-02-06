@@ -139,6 +139,7 @@ var sampleconfig = {
 
 describe("Jassplan TO-DO REST API Version 16", function() {
 
+    /*
     describe("GET /", function() {
         it("returns project name", function(done) {
             $.get("/", function(data, textStatus, jqXHR) {
@@ -172,7 +173,7 @@ describe("Jassplan TO-DO REST API Version 16", function() {
             });
         });
     });
- */
+
     describe("POST /todo", function() {
         it("creates a todo collection for test user and adds a first item", function(done) {
             $.ajax({
@@ -288,7 +289,7 @@ describe("Jassplan TO-DO REST API Version 16", function() {
             });
         });
     });
-
+*/
     describe("POST /todo", function() {
         it("creates a first genie spec", function(done) {
             $.ajax({
