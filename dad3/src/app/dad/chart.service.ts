@@ -6,8 +6,10 @@ import { CHARTS } from './sample.charts';
 import { DadChart } from './chart.component';
 import { DadWidget } from "./widget.component";
 import { DadTable } from "./table.component";
+import { DadPage } from "./page.component";
 import { WIDGETS } from "./sample.widgets";
 import { TABLES } from "./sample.tables";
+import { PAGES } from './sample.page';
 import * as _ from "lodash";
 
 @Injectable()
@@ -121,3 +123,39 @@ export class DadTableConfigsService {
     }
   }
 }
+
+@Injectable()
+export class DadPageConfigsService {
+
+  public clearLocalCopy(){
+    localStorage.removeItem("pagedata");
+  }
+
+  public save(pages:DadPage[] ){
+    let pages_string = JSON.stringify(pages);
+    localStorage.setItem("pagedata",pages_string);
+  }
+
+  public getPageConfig(id:string): DadPage {
+    let pages = this.getPageConfigs();
+    let pageIndex = _.findIndex(pages, function(w) { return w.id == id; });
+    return pages[pageIndex];
+  }
+
+  public getPageConfigs(): DadPage[] {
+
+    let pages_string = localStorage.getItem("pagedata");
+
+    if (pages_string != null){
+      let page_obj = JSON.parse(pages_string);
+      let DATA = page_obj as DadPage[];
+      return DATA;
+    }
+    else {
+      let pages_string = JSON.stringify(PAGES);
+      localStorage.setItem("pagedata",pages_string);
+      return PAGES;
+    }
+  }
+}
+

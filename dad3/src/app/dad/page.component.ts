@@ -2,26 +2,39 @@
  * Created by dister on 2/2/2017.
  */
 import { Component, OnInit } from '@angular/core';
-import { DadChart } from './chart.component';
-import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService } from './chart.service';
-import { DadWidget } from "./widget.component";
-import { DadTable } from "./table.component";
+import { DadTableConfigsService, DadChartConfigsService,DadWidgetConfigsService ,DadPageConfigsService } from './chart.service';
+import { DadElementDataService } from "./data.service";
+import {Subscription } from 'rxjs';
+import { ActivatedRoute} from '@angular/router';
+import {DadWidget} from "./widget.component";
+import {DadChart} from "./chart.component";
+import {DadTable} from "./table.component";
 
-declare var d3, c3: any;
+export class DadPage {
+    id: string;
+    name: string;
+    type?: string;
+    widgetids: string[];
+    chartids: string[];
+    tableids: string[];
+    widgets?: DadWidget[];
+    charts?: DadChart[];
+    tables?: DadTable[];
+}
 
 @Component({
     selector: 'dad',
     styles:['.row{overflow:hidden;}'],
-    providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
+    providers: [DadElementDataService, DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService, DadPageConfigsService],
     template: `
    <div class="animated fadeIn">
         <div class="row">
-            <div class="col-m-12 row-sm-4" *ngFor="let widget of widgets">
+            <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
                 <dadwidget [widget]="widget"></dadwidget>
             </div>
         </div>
         <div class="row">
-            <div *ngFor="let chart of charts">
+            <div *ngFor="let chart of page.charts">
                 <dadchart [chart]="chart"></dadchart>
             </div>
         </div>
@@ -29,26 +42,41 @@ declare var d3, c3: any;
     `
 })
 
-export class  DadPage implements OnInit{
+export class  DadPageComponent implements OnInit{
     public title = 'DAD 0.0';
-    public charts: DadChart[];
-    public widgets: DadWidget[];
-    public tables: DadTable[];
-    public selectedChart:DadChart;
     public data;
+    private subscription: Subscription;
+    page: DadPage;
+    public id : string;
 
-    constructor(private dadChartConfigsService: DadChartConfigsService,
+    constructor(private dadTableConfigsService: DadTableConfigsService,
                 private dadWidgetConfigsService: DadWidgetConfigsService,
-                private dadTableConfigsService: DadTableConfigsService
+                private dadPageConfigsService: DadPageConfigsService,
+                private dadChartConfigsService: DadChartConfigsService,
+                private activatedRoute: ActivatedRoute
     ) { }
 
-    onSelect(chart:DadChart):void {
-        this.selectedChart = chart;
-    }
-
     ngOnInit() {
-        this.charts = this.dadChartConfigsService.getChartConfigs();
-        this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
-        this.tables = this.dadTableConfigsService.getTableConfigs();
+
+        let tables = this.dadTableConfigsService.getTableConfigs();
+        let charts = this.dadChartConfigsService.getChartConfigs();
+        let widgets = this.dadWidgetConfigsService.getWidgetConfigs();
+
+        this.subscription = this.activatedRoute.params.subscribe(
+            (param: any) => {
+                let callerPageId = param['id'];
+                this.page = this.dadPageConfigsService.getPageConfig(callerPageId);
+
+                this.page.charts = [];
+                    for(let chartid of this.page.chartids){
+                        this.page.charts.push(this.dadChartConfigsService.getChartConfig(chartid));
+                    }
+
+                this.page.widgets = [];
+                for(let widgetid of this.page.widgetids){
+                    this.page.widgets.push(this.dadWidgetConfigsService.getWidgetConfig(widgetid));
+                }
+
+            });
     }
 }

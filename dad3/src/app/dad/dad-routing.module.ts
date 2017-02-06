@@ -7,6 +7,7 @@ import { DadConfigComponent }   from './configuration.component';
 import { DadLoginComponent }   from './login.component';
 import { DadTableComponent }   from './table.component';
 import { AuthGuard } from './common/auth.guard';
+import {DadPageComponent} from "./page.component";
 
 const routes: Routes = [
     {
@@ -16,8 +17,8 @@ const routes: Routes = [
         },
         children: [
             {
-                path: '', //page/:id
-                component: DadComponent,
+                path: 'page/:id',
+                component: DadPageComponent,
                 canActivate: [AuthGuard],
                 data: {
                 title: 'Dad Pages'
