@@ -37,5 +37,4 @@ D:\BI\BI\MCDP\MCDP\bin\Release\DataProcess.pdb
 D:\BI\BI\MCDP\MCDP\bin\Release\Newtonsoft.Json.xml
 D:\BI\BI\MCDP\MCDP\obj\Release\MCDP.csprojResolveAssemblyReference.cache
 D:\BI\BI\MCDP\MCDP\obj\Release\Soti.MCDP.MCDP.resources
-D:\BI\BI\MCDP\MCDP\obj\Release\Soti.MCDP.ProjectInstaller.resources
 D:\BI\BI\MCDP\MCDP\obj\Release\MCDP.csproj.GenerateResource.Cache

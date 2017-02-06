@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 import { AuthHttp } from 'angular2-jwt';
+import * as FileSaver from 'file-saver';
+
 
 const styles = require('./home.css');
 const template = require('./home.html');
@@ -30,13 +32,6 @@ export class Home {
     this.router.navigate(['login']);
   }
 
-  callAnonymousApi() {
-    this._callApi('Anonymous', 'http://localhost:3004/api/random-quote');
-  }
-
-  callSecuredApi() {
-    this._callApi('Secured', 'http://localhost:3004/api/protected/random-quote');
-  }
 
   callGetToken() {
     this._callApi('Secured', 'http://localhost:3004/api/protected/token');
@@ -47,11 +42,26 @@ export class Home {
   }
 
   callGetEnrollments() {
-    this._callApi('Secured', 'http://localhost:3004/api/enrollments');
+    if (this.isSOTI) {
+      this._callApi('Secured', 'http://localhost:3004/api/enrollments');
+    } else {
+      this._callApi('Secured', 'http://localhost:3004/api/myenrollments');
+    }
   }
 
   callDeleteAllEnrollments() {
-    this._callApi('Secured', 'http://localhost:3004/delete_all');
+    if (this.isSOTI) {
+      this._callApi('Secured', 'http://localhost:3004/delete_all');
+    } else {
+      this._callApi('Secured', 'http://localhost:3004/delete_all_mine');
+    }
+  }
+
+  downloadFile(){
+    var blob = new Blob([this.jwt], { type: 'text/csv' });
+    FileSaver.saveAs(blob, "mcdp_dad_access.key");
+   // var url= window.URL.createObjectURL(blob);
+   // window.open(url);
   }
 
   _callApi(type, url) {
@@ -60,7 +70,7 @@ export class Home {
       // For non-protected routes, just use Http
       this.http.get(url)
         .subscribe(
-          response => this.response = response.text(),
+          response => this.response = JSON.parse(response.text()),
           error => this.response = error.text()
         );
     }
@@ -68,7 +78,7 @@ export class Home {
       // For protected routes, use AuthHttp
       this.authHttp.get(url)
         .subscribe(
-          response => this.response = response.text(),
+          response => this.response = JSON.parse(response.text()),
           error => this.response = error.text()
         );
     }

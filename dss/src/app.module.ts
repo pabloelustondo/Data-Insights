@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import * as FileSaver from 'file-saver';
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 

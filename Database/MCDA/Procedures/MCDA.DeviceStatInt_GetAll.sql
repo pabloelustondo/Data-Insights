@@ -15,7 +15,7 @@ BEGIN
 	select @tablename = 'DeviceStatInt'
 
 	IF (@BatchSize = 0 )
-		SET @BatchSize = 5000;
+		SET @BatchSize = 400;
 
 	IF EXISTS(SELECT 1 from [MCDA].[DeviceSyncStatus] where Name = @tablename)
 	BEGIN

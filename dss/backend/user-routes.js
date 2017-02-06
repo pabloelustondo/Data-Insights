@@ -27,7 +27,15 @@ var SotiAdminAccount =
 var enrollments = [SotiAdminAccount];
 
 function createToken(user) {
-  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 60*5 });
+  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 60 * 5 });
+}
+
+function readToken(token, callback) {  //Bearer
+  try{
+    jwt.verify(token, config.secret,callback);
+  } catch(e){
+    console.log(e);
+  }
 }
 
 app.get('/api/enrollments', function(req, res){
@@ -68,7 +76,7 @@ app.post('/enrollments', function(req, res) {
 
   var enrollment = _.pick(req.body, 'accountid','mcurl', 'apikey', 'domainid', 'username');
   enrollment.tenantid = req.body.domainid; //for now
-  enrollment.status = "new"
+  enrollment.status = "new";
 
   request({
     rejectUnauthorized: false,
@@ -95,11 +103,14 @@ app.post('/enrollments', function(req, res) {
         tokenpayload.username =  enrollment.username;
         tokenpayload.accountid =  enrollment.accountid;
         tokenpayload.domainid =  enrollment.domainid;
+        tokenpayload.tenantid =  enrollment.tenantid;
 
-        //  sendEmail2(enrollment);
+        var token = createToken(tokenpayload);
+
+        sendEmail2(tokenpayload,token);
 
         res.status(200).send({
-          id_token: createToken(tokenpayload)
+          id_token: token
         });
       } else {
         res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
@@ -117,6 +128,44 @@ app.post('/delete_test_domains', function(req, res) {
 app.get('/delete_all', function(req, res) {   //for now for testing...
   enrollments = [SotiAdminAccount];
   res.status(200).send({});
+});
+
+app.get('/delete_all_mine', function(req, res) {   //for now for testing...
+
+  var rawToken = req.get('authorization').substr(7);
+  var jwt = readToken( raw, function(err,decoded){
+    enrollments = _.filter(enrollments, function(e){return e.accountid !== decoded.accountid;} );
+    res.status(200).send({});
+  });
+});
+
+app.get('/api/myenrollments', function(req, res){
+
+  var rawToken = req.get('authorization').substr(7);
+  var jwt = readToken(rawToken, function(err,decoded){
+    myenrollments = _.filter(enrollments, function(e){return e.accountid === decoded.accountid;} );
+    res.status(200).send(myenrollments);
+  });
+
+});
+
+app.get('/confirm', function(req, res){
+  try{
+    var token = req.query.token;
+  readToken(token, function(err,decoded){
+    if (err)  res.sendfile('./public/failure.html');
+    var e = [];
+    e = _.findIndex(enrollments, function(e){return e.domainid === decoded.domainid;} );
+    if (e > 0) {  //if not found findIndex returns -1
+      enrollments[e].status = "confirmed";
+      return res.sendfile('./public/thanks.html');
+    } else {
+      res.sendfile('./public/doesnotexist.html');
+    }
+  });
+  }catch(e){
+    res.sendfile('./public/failure.html');
+  }
 });
 
 app.post('/sessions/create', function(req, res) {
@@ -168,6 +217,7 @@ app.post('/sessions/create', function(req, res) {
         tokenpayload.username =  enrollment.username;
         tokenpayload.accountid =  enrollment.accountid;
         tokenpayload.domainid =  enrollment.domainid;
+        tokenpayload.tenantid =  enrollment.tenantid;
 
         res.status(200).send({
           id_token: createToken(tokenpayload)
@@ -197,24 +247,23 @@ function sendEmail(enrollment)
   });
 };
 
-function sendEmail2(enrollment) {
+function sendEmail2(enrollment,token) {
 
   var transporter = nodemailer.createTransport({
-    service: 'localhost',
-    port:25,
+    service: 'Yahoo',
     auth: {
-      user: 'testdad666@gmail.com',
-      pass: 'aaa666bbb'
+      user: 'dad666@yahoo.com',
+      pass: 'aaa111bbb'
     }
   });
-
   var text = 'Hello from DSS to:' + enrollment.username;
 
   var mailOptions = {
-    from: 'testdad666@gmail.com', // sender address
+    from: 'dad666@yahoo.com', // sender address
     to: enrollment.accountid, // list of receivers
+    cc: 'pablo.elustondo@rogers.com',
     subject: 'SOTI DAD - MobiControl Enrollment', // Subject line
-    html: '<b>Hi'+  enrollment.username +'please confirm you enrollment by clicking <a href=\"http://localhost:3004/\"></a></b>'
+    html: '<b>Hi, it seems that '+ enrollment.username + ' have used this account to register domain ' + enrollment.domainid +' to SOTI Data Analytics Services, if this is corrrect, please confirm you enrollment by clicking this \<a href=\"http://localhost:3004/confirm?token=' + token +'\">link</a></b>.'
   };
 
   transporter.sendMail(mailOptions, function(error, info){
@@ -224,5 +273,5 @@ function sendEmail2(enrollment) {
       console.log('Message sent: ' + info.response);
     };
   });
-
+  transporter.close();
 }

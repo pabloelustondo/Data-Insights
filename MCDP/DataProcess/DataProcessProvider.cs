@@ -39,6 +39,16 @@ namespace Soti.MCDP.DataProcess
         /// </summary>
         private readonly string idaUrl;
 
+        /// <summary>
+        /// get JWT Token for IDA.   
+        /// </summary>
+        private readonly string JWTTokenPath;
+
+        /// <summary>
+        /// get JWT Token for IDA.   
+        /// </summary>
+        private readonly string JWTToken;
+
 
         int dBSkippedAfterFailure = 0;
 
@@ -63,6 +73,16 @@ namespace Soti.MCDP.DataProcess
             this.maxIdaRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
             this.idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
             
+            this.JWTTokenPath = System.Environment.CurrentDirectory + "\\" + ConfigurationManager.AppSettings["JWTTokenName"];
+
+            if(File.Exists(JWTTokenPath))
+            {
+                JWTToken = File.ReadAllText(JWTTokenPath);
+            }
+            else
+            {
+                JWTToken = "";
+            }
             //LOADING DATABASE PROVIDER
             this._deviceStatIntProvider = new DeviceStatIntProvider();
         }
@@ -93,33 +113,34 @@ namespace Soti.MCDP.DataProcess
                     if (idaData != null && idaData.data != null && idaData.data.Count > 0)
                     {
                         var idaDataJson = Newtonsoft.Json.JsonConvert.SerializeObject(idaData);
-                        logMessage += "new data to be sent:  " + idaDataJson;
-
+                       
                         // send for real
                         try
                         {
                             this.SendData2Ida(idaData);
+
+                            logMessage += "[INFO] new data to be sent.";
+                            // write to log the success of the operation
+                            Log(logMessage);
                         }
                         catch (Exception ex)
                         {
                             // this expcetion is due to problems when sending data to input data adapter
                             this.numberOfConsecutiveIDAFailures += 1;
                             this._deviceStatIntProvider.ConfirmData(false);
-                            Log("Error communicating with input data adapter: " + ex.ToString());
+                            Log("[ERROR] Error communicating with input data adapter: " + ex.ToString());
                         }
                     }
 
                     this._deviceStatIntProvider.ConfirmData(true); // this shouuld go somewhere else later... 
 
-                    // write to log the success of the operation
-                    Log(logMessage);
                 }
                 catch (Exception eDB)
                 {
                     // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                     this.numberOfConsecutiveDBFailures += 1;
                     
-                    Log("Error reading database: " + eDB.ToString());
+                    Log("[ERROR] Error reading database: " + eDB.ToString());
                 }
             }
             else
@@ -144,7 +165,7 @@ namespace Soti.MCDP.DataProcess
                     this.idaSkippedAfterFailure = 0;
                 }
 
-                Log("Skipping Cycling due to reach maximum retry and failure count.");
+                Log("[INFO] Skipping Cycling due to reach maximum retry and failure count.");
             }
 
             this.processing = false; // this will enable other attempts to process to go ahead.
@@ -180,12 +201,15 @@ namespace Soti.MCDP.DataProcess
             string url = this.idaUrl;
             using (var client = new WebClient())
             {
-                client.Headers["x-api-key"] = "blah";
+                //client.Headers["x-api-key"] = "blah";
+                client.Headers["x-access-token"] = JWTToken;
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 
-                Log("http request to send            url: " + url + "           data: " + json);
                 result = client.UploadString(url, "POST", json.ToString());
+                var logMessage = DateTime.Now.ToString() + "  =>  ";
 
+                Log(logMessage + "[INFO] (80) " + result);
                 // client.UploadString will rise a web exception is communication did not go well (sure?)
             }
             //}

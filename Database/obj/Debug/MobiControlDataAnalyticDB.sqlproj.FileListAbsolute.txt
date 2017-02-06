@@ -7,3 +7,12 @@ D:\CustomBI\BI_NEW\Database\obj\Debug\postdeploy.sql
 D:\CustomBI\BI_NEW\Database\obj\Debug\predeploy.sql
 D:\CustomBI\BI_NEW\Database\obj\Debug\Soti.MobiControlDADB.Database.Clr.dll
 D:\CustomBI\BI_NEW\Database\obj\Debug\Soti.MobiControlDADB.Database.Clr.pdb
+D:\BI\BI\Database\bin\Debug\MobiControlDataAnalyticDB.dacpac
+D:\BI\BI\Database\bin\Debug\Soti.MobiControlDADB.Database.Clr.dll
+D:\BI\BI\Database\bin\Debug\Soti.MobiControlDADB.Database.Clr.pdb
+D:\BI\BI\Database\obj\Debug\Model.xml
+D:\BI\BI\Database\obj\Debug\refactor.xml
+D:\BI\BI\Database\obj\Debug\postdeploy.sql
+D:\BI\BI\Database\obj\Debug\predeploy.sql
+D:\BI\BI\Database\obj\Debug\Soti.MobiControlDADB.Database.Clr.dll
+D:\BI\BI\Database\obj\Debug\Soti.MobiControlDADB.Database.Clr.pdb

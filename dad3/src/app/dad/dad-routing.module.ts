@@ -16,11 +16,11 @@ const routes: Routes = [
         },
         children: [
             {
-                path: '',
+                path: '', //page/:id
                 component: DadComponent,
                 canActivate: [AuthGuard],
                 data: {
-                title: ''
+                title: 'Dad Pages'
                 }
             },
             {
