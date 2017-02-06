@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using Soti.MCDP.Database.Model;
 using System.Data.SqlClient;
@@ -28,9 +29,17 @@ namespace Soti.MCDP.Database
         /// </summary>
         public DeviceStatIntProvider()
         {
-            this._mobicontrolDatabaseConnectionString = DatabaseSection.LoadConnectionString("C:\\Program Files\\SOTI\\MobiControl");
+            try
+            {
+                this._mobicontrolDatabaseConnectionString = DatabaseSection.LoadConnectionString("C:\\Program Files\\SOTI\\MobiControl");
 
-            this._datdatabaseTimeout = Convert.ToInt16(ConfigurationManager.AppSettings["waitDatabaseTimeout"]);
+                this._datdatabaseTimeout = Convert.ToInt16(ConfigurationManager.AppSettings["waitDatabaseTimeout"]);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString() + "  =>  ";
+                Log(logMessage + "[ERROR] " + ex.ToString());
+            }
         }
 
         /// <summary>
@@ -39,20 +48,34 @@ namespace Soti.MCDP.Database
         /// <returns>Ida formatted dataset .</returns>
         public Data4Ida GetDeviceStatIntData()
         {
-            SqlConnection sqlConnection = new SqlConnection(this._mobicontrolDatabaseConnectionString);
-            sqlConnection.Open();
+            SqlConnection sqlConnection = null;
+            Data4Ida idaData = null;
+            try
+            {
+                sqlConnection = new SqlConnection(this._mobicontrolDatabaseConnectionString);
+                sqlConnection.Open();
 
-            SqlCommand sqlCommand = new SqlCommand("MCDA.DeviceStatInt_GetAll", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandTimeout = this._datdatabaseTimeout;
+                SqlCommand sqlCommand = new SqlCommand("MCDA.DeviceStatInt_GetAll", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.CommandTimeout = this._datdatabaseTimeout;
 
-            DataTable ds = new DataTable();
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
-            sqlDataAdapter.Fill(ds);
+                DataTable ds = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+                sqlDataAdapter.Fill(ds);
 
-            var idaData = Map2Ida(ds);
-
-            sqlConnection.Close();
+                idaData = Map2Ida(ds);
+                
+            }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString() + "  =>  ";
+                Log(logMessage + "[ERROR] " + ex.ToString());
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                { sqlConnection.Close(); }
+            }
             return idaData;
         }
 
@@ -62,29 +85,42 @@ namespace Soti.MCDP.Database
         /// <param name="pass">pass.</param>
         public void ConfirmData(bool pass)
         {
-            DeviceSyncStatus _DeviceSyncStatus = this.GetLastSyncTime();
-
-            SqlConnection sqlConnection = new SqlConnection(this._mobicontrolDatabaseConnectionString);
-            sqlConnection.Open();
-            SqlCommand sqlCommand = new SqlCommand("MCDA.DeviceSyncStatus_Update", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-
-            sqlCommand.Parameters.AddWithValue("@Name", "DeviceStatInt");
-
-            if (pass)
+            SqlConnection sqlConnection = null;
+            try
             {
-                sqlCommand.Parameters.AddWithValue("@Status", 0);
-                sqlCommand.Parameters.AddWithValue("@PreviousSyncTime", _DeviceSyncStatus.LastSyncTime);
+                DeviceSyncStatus _DeviceSyncStatus = this.GetLastSyncTime();
+
+                sqlConnection = new SqlConnection(this._mobicontrolDatabaseConnectionString);
+                sqlConnection.Open();
+                SqlCommand sqlCommand = new SqlCommand("MCDA.DeviceSyncStatus_Update", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.AddWithValue("@Name", "DeviceStatInt");
+
+                if (pass)
+                {
+                    sqlCommand.Parameters.AddWithValue("@Status", 0);
+                    sqlCommand.Parameters.AddWithValue("@PreviousSyncTime", _DeviceSyncStatus.LastSyncTime);
+                }
+                else
+                {
+                    sqlCommand.Parameters.AddWithValue("@Status", -1);
+                }
+
+                sqlCommand.CommandTimeout = this._datdatabaseTimeout;
+
+                sqlCommand.ExecuteNonQuery();
             }
-            else
+            catch (Exception ex)
             {
-                sqlCommand.Parameters.AddWithValue("@Status", -1);
+                var logMessage = DateTime.Now.ToString() + "  =>  ";
+                Log(logMessage + "[ERROR] " + ex.ToString());
             }
-
-            sqlCommand.CommandTimeout = this._datdatabaseTimeout;
-
-            sqlCommand.ExecuteNonQuery();
-            sqlConnection.Close();
+            finally
+            {
+                if (sqlConnection != null)
+                { sqlConnection.Close(); }
+            }
         }
 
         /// <summary>
@@ -93,6 +129,7 @@ namespace Soti.MCDP.Database
         /// <returns>DeviceSyncStatus dataset.</returns>
         public DeviceSyncStatus GetLastSyncTime()
         {
+            
             SqlConnection sqlConnection = null;
             SqlDataReader rdr = null;
             DeviceSyncStatus _DeviceSyncStatus = new DeviceSyncStatus();
@@ -117,6 +154,11 @@ namespace Soti.MCDP.Database
                     _DeviceSyncStatus.ServerTime = rdr["ServerTime"].ToString();
                 }
             }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString() + "  =>  ";
+                Log(logMessage + "[ERROR] " + ex.ToString());
+            }
             finally
             {
                 if (sqlConnection != null)
@@ -135,34 +177,53 @@ namespace Soti.MCDP.Database
         private static Data4Ida Map2Ida(DataTable ds)
         {
             Data4Ida idaData = null;
-
-            if (ds != null && ds.Rows != null && ds.Rows.Count > 0)
+            try
             {
-                // so we have something
-                idaData = new Data4Ida();
-                idaData.createdAt = DateTime.Now.ToString();
-                idaData.metadata = "data from MCDA.DeviceStatInt_GetAll....";
-                idaData.data = new List<DataRow4Ida>();
-
-                foreach (DataRow dr in ds.Rows)
+                if (ds != null && ds.Rows != null && ds.Rows.Count > 0)
                 {
-                    var idaDataRow = new DataRow4Ida();
-            
-                    //DevId Char(80)
-                    idaDataRow.dev_id = dr["DeviceId"].ToString();
-                    //server time
-                    idaDataRow.server_time_stamp = (DateTime)dr["ServerDateTime"];  
-                    //datetype -1=battery status
-                    idaDataRow.stat_type = (int)dr["StatType"];
-                    //data bigint
-                    idaDataRow.int_value = dr["IntValue"].ToString(); 
-                    // device time
-                    idaDataRow.time_stamp = (DateTime)dr["TimeStamp"]; 
-                    
-                    idaData.data.Add(idaDataRow);
+                    // so we have something
+                    idaData = new Data4Ida();
+                    idaData.createdAt = DateTime.Now.ToString();
+                    idaData.metadata = "data from MCDA.DeviceStatInt_GetAll....";
+                    idaData.data = new List<DataRow4Ida>();
+
+                    foreach (DataRow dr in ds.Rows)
+                    {
+                        var idaDataRow = new DataRow4Ida();
+
+                        //DevId Char(80)
+                        idaDataRow.dev_id = dr["DeviceId"].ToString();
+                        //server time
+                        idaDataRow.server_time_stamp = (DateTime)dr["ServerDateTime"];
+                        //datetype -1=battery status
+                        idaDataRow.stat_type = (int)dr["StatType"];
+                        //data bigint
+                        idaDataRow.int_value = dr["IntValue"].ToString();
+                        // device time
+                        idaDataRow.time_stamp = (DateTime)dr["TimeStamp"];
+
+                        idaData.data.Add(idaDataRow);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString() + "  =>  ";
+                Log(logMessage + "[ERROR] " + ex.ToString());
+            }
             return idaData;
+        }
+
+        /// <summary>
+        /// Log Service
+        /// </summary>
+        /// <param name="message">Log Message.</param>
+        private static void Log(string message)
+        {
+            StreamWriter streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
+            streamWriter.WriteLine(message);
+            streamWriter.Close();
+            streamWriter = null;
         }
     }
 }

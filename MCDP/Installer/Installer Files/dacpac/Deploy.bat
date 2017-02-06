@@ -1,3 +1,1 @@
-call "C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\sqlpackage.exe" /action:publish /sourcefile:"MobiControlDataAnalyticDB.dacpac" /targetservername:CAD056\SQL2014DEV /targetdatabasename:Nestle /p:BackupDatabaseBeforeChanges=False /p:BlockOnPossibleDataLoss=False /p:DropIndexesNotInSource=True /p:RegisterDataTierApplication=True /p:BlockWhenDriftDetected=False /p:VerifyDeployment=False /TargetUser:sa /TargetPassword:Welcome1234 
-
-pause
+call "C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\sqlpackage.exe" /action:publish /sourcefile:"MobiControlDataAnalyticDB.dacpac" /targetservername:CAD056\SQL2014DEV /targetdatabasename:test /p:BackupDatabaseBeforeChanges=False /p:BlockOnPossibleDataLoss=False /p:DropIndexesNotInSource=True /p:RegisterDataTierApplication=True /p:BlockWhenDriftDetected=False /p:VerifyDeployment=False /TargetUser:sa /TargetPassword:Welcome1234 

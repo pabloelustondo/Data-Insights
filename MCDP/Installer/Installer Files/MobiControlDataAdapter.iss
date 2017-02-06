@@ -9,6 +9,7 @@
 #define MyAppPublisher "SOTI Inc."
 #define MyAppURL "https://www.soti.net/"
 #define MyAppExeName "MCDP.exe"
+#define MyAppExeNameOnly "MCDP"
 #define MyAppIcon SourcePath + "\images.ico"
 
 [Setup]
@@ -37,8 +38,8 @@ ArchitecturesAllowed=x64
 ; 64-bit Program Files directory and the 64-bit view of the registry.
 ArchitecturesInstallIn64BitMode=x64
 
-[Languages]
-Name: "english"; MessagesFile: "compiler:Default.isl"
+;[Languages]
+;Name: "english"; MessagesFile: "compiler:Default.isl"
 
 ;[Tasks]
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -52,23 +53,21 @@ Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Newtonsoft.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dacpac\Deploy.bat"; DestDir: "{tmp}"; Flags: ignoreversion
-Source: "dacpac\MobiControlDataAnalyticDB.dacpac"; DestDir: "{tmp}"; Flags: ignoreversion
-Source: "{src}\Auto.key"; DestDir: "{app}"; Flags: external;
+Source: "dacpac\Deploy.bat"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "dacpac\MobiControlDataAnalyticDB.dacpac"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "{src}\mcdp_access.key"; DestDir: "{app}"; Flags: external;
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"
 ;Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-;Filename: "{tmp}\Deploy.bat"
-Filename: {sys}\sc.exe; Parameters: "create MCDP start=auto binPath=""{app}\{#MyAppExeName}"""; Description: "MobiControl Data Producer"; Flags: nowait runascurrentuser postinstall 
-;Filename: "{cmd}"; Parameters: "sc create MCDP start=auto DisplayName= MCDP binPath= ""{app}\{#MyAppExeName}"""; Description: "MobiControl Data Producer"; Flags: nowait runascurrentuser postinstall
-
+Filename: "{app}\Deploy.bat"; Flags: runascurrentuser
+Filename: "sc.exe"; Parameters: "create MCDP start=auto binPath=""{app}\{#MyAppExeName}"" DisplayName= ""MobiControl Data Producer Service"""; Flags: runascurrentuser
 
 [UninstallRun]
-Filename: {sys}\sc.exe; Parameters: "stop {#MyAppExeName}" ; Flags: runascurrentuser runhidden
-Filename: {sys}\sc.exe; Parameters: "delete {#MyAppExeName}" ; Flags: runascurrentuser runhidden
+Filename: "sc.exe"; Parameters: "stop {#MyAppExeNameOnly}"; Flags: runascurrentuser
+Filename: "sc.exe"; Parameters: "delete {#MyAppExeNameOnly}"; Flags: runascurrentuser
 
 [code]
    function InitializeSetup(): Boolean;
@@ -76,7 +75,7 @@ Filename: {sys}\sc.exe; Parameters: "delete {#MyAppExeName}" ; Flags: runascurre
      if (FileExists(ExpandConstant('{pf}\SOTI\MobiControl\Database.config'))) then
      begin
        //MsgBox('Installation validated', mbInformation, MB_OK);
-        if (FileExists(ExpandConstant('{src}\Auto.key'))) then
+        if (FileExists(ExpandConstant('{src}\mcdp_access.key'))) then
         begin
              Result := True;
         end

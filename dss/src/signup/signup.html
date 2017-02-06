@@ -1,21 +1,22 @@
-<div class="signup center-block jumbotron">
-  <h3>SOTI Data Analytics</h3>
-  <h1>Enroll</h1>
+<div class="center-block jumbotron">
+  <h3>SOTI Data Analytics Service</h3>
+  <h3>Mobicontrol Instance Enrollment</h3>
 
   <small><i>As a MobiControl administrator, you can use this page to enroll an internet-exposed MobiControl instance into our Data Analytics service.
-  After approval is completed, all valid users of that MobiControl instance will be able to access our Data Analytics Dashboard and API.
+    This enrollment serves two pourposes: 1) Allow valid mobicontrol user from that MobiControl instance to access our Data Analytics Dashboard and APIs.
+    2) Allows mobicontrol administrators to setup mobicontrol data extraction process that will populate your data analytics store.
   </i></small>
   <p></p>
 
   <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value)">
     <div class="form-group">
-      <label for="accountid">Account ID </label>
-      <input type="text" #accountid class="form-control" id="accountid" placeholder="AccountID for SOTI Analytics Services">
+      <label for="accountid">Account ID (email) </label>
+      <input type="email" #accountid class="form-control" id="accountid" placeholder="myaccount@email.com">
       <small><i>No account?, follow this <a href="http://www.soti.net">link</a> to create one </i></small>
     </div>
     <div class="form-group">
       <label for="mcurl">Mobicontrol API URL </label>
-      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="i.e: https://cad059.corp.soti.net/MobiControl/api">
+      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="https://cad059.corp.soti.net/MobiControl/api">
     </div>
     <div class="form-group">
       <label for="apikey">API Access Token</label>
