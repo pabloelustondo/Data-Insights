@@ -13,7 +13,7 @@ const routes: Routes = [
     {
         path: '',
         data: {
-            title: 'Battery Stats'
+            title: ''
         },
         children: [
             {
@@ -21,7 +21,7 @@ const routes: Routes = [
                 component: DadPageComponent,
                 canActivate: [AuthGuard],
                 data: {
-                title: 'Dad Pages'
+                title: ''
                 }
             },
             {
@@ -40,7 +40,7 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'table/:count/:id',
+                path: 'page/:id/table/:count/:id',
                 component: DadTableComponent,
                 canActivate: [AuthGuard],
                 data: {

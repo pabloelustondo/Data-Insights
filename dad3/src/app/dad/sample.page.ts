@@ -17,5 +17,4 @@ export const PAGES: DadPage[] = [
         chartids: ['chartbar'],
         tableids: []
     }
-
 ]
