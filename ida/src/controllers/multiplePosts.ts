@@ -6,17 +6,20 @@ import * as express from '@types/express';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
 const AWS      = require('aws-sdk');
-
+import * as fs from 'fs';
 import * as querystring from 'querystring';
 import * as rp from 'request-promise';
 
 import {SDSBattery} from '../models/batteryData';
 const awsPush = require('../awsPush');
 
+let accessKeyIdFile = fs.readFileSync('../../IDA_accessKeyID.txt', 'utf8');
+let secretAccessKeyFile = fs.readFileSync('../../IDA_secretAccessKey.txt', 'utf8');
 const options = ({
-    accessKeyId: config['aws-accessKeyId'],
-    secretAccessKey: config['aws-secretAccessKey']
+    accessKeyId: accessKeyIdFile,
+    secretAccessKey: secretAccessKeyFile
 });
+
 const creds = new AWS.Credentials(options);
 const firehose = new AWS.Firehose(
     {
@@ -49,6 +52,9 @@ export class MultiplePostsController {
         }
     })
     public async Create(request: ListBatteryStats, @Request() express: express.Request): Promise<SDS> {
+
+
+
 
         let req = express;
         let token = req.headers['x-access-token'];

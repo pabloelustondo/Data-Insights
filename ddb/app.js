@@ -9,12 +9,21 @@ var path = require('path');
 function callDbAndRespond(req,res,query){
 	var user = getUser(req);
 	mongodb.connect(dbUrl + "udb_" + user,function(err,db){
-		if (err) res.send({data:null, status:err });
+		if (err) {
+			res.send({data:null, status:err });
+        }
 		else query(req,res,db,function(err,doc){
 			res.send({data:doc, status:err?err:'ok' });
 			db.close();
 		});
 	});
+}
+
+function getDBInstance (req){
+    var user = getUser(req);
+    var x = mongodb.connect(dbUrl + "udb_" + user);
+
+    return x;
 }
 
 function getUser(req){
@@ -52,6 +61,7 @@ app.get('/todo', function(req,res){
 	});
 });
 
+
 app.get('/todo/:id', function(req,res){
 	callDbAndRespond(req,res, function(req,res,db, next){
 		db.collection('todo').findOne({"_id":ObjectID(req.params.id)},next);
@@ -81,6 +91,69 @@ app.put('/todo', function(req,res){
 		db.collection('todo').update({"_id":_id},req.body,next);
 	});
 });
+
+app.post('/updateDataSourceCredentials', function (req, res ) {
+
+
+    var _tenantId = req.body.tenatID;
+    console.log("tenant id = " + _tenantId);
+
+	callDbAndRespond(req, res, function(req,res,db, next) {
+
+        var _tenantId = req.body.tenatID;
+        db.collection('todo').update(
+            {
+                tenatID: req.body.tenatID
+            },
+            {
+                $set: {
+					accessUsername : req.body.accessUsername,
+					accessPswd : req.body.accessPswd,
+                    RedShiftConnectionString: req.body.RedShiftConnectionString,
+                    DBName: req.body.DBName
+                }
+            },
+            {
+                upsert: false
+            }, next);
+
+    });
+
+});
+
+/*
+ db.collection('todo').update(
+ {
+ tenatID: req.body.tenatID
+ },
+ {
+ $set: {
+ RedShiftConnectionString: req.body.RedShiftConnectionString,
+ DBName: req.body.DBName
+ }
+ },
+ {
+ upsert: false
+ },
+ req.body.next
+ );
+
+
+ db.collection('todo').findAndModify({
+ query: {
+ tenatID: req.body.tenatID
+ },
+ sort: { tenatID : 1 },
+ update: {
+ $set: {
+ RedShiftConnectionString: req.body.RedShiftConnectionString,
+ DBName: req.body.DBName
+ }
+ },
+ upsert: true
+ },
+ req.body,next
+ );*/
 
 app.delete('/todo', function(req,res){
 	callDbAndRespond(req,res, function(req,res,db, next){

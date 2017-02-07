@@ -5,7 +5,5 @@
   "aws-x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
   "aws-path":  "/test/function_one",
   "aws-dischargecontroller":  "/test/multiplePosts",
-  "aws-accessKeyId": "AKIAI724ZGGR5S3APCEQ",
-  "aws-secretAccessKey": "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",
   "aws-region": "us-east-1"
 }
