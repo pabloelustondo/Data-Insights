@@ -9,7 +9,7 @@ import { SimpleLayoutComponent }    from './layouts/simple-layout.component';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'dad',
+        redirectTo: 'dad/page/batstats',
         pathMatch: 'full',
     },
     {

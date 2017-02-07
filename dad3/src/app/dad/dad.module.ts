@@ -18,6 +18,7 @@ import { DadParametersComponent } from "./parameters.component";
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthGuard } from './common/auth.guard';
+import {DadPageComponent} from "./page.component";
 
 //Local Storage
 let LocalStorageServiceConfig = {
@@ -38,7 +39,7 @@ let LocalStorageServiceConfig = {
         TimepickerModule
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
-        DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent ],
+        DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent ],
     providers: [
         AuthGuard, ...AUTH_PROVIDERS
     ]

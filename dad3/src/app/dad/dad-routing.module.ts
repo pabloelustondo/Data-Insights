@@ -7,20 +7,21 @@ import { DadConfigComponent }   from './configuration.component';
 import { DadLoginComponent }   from './login.component';
 import { DadTableComponent }   from './table.component';
 import { AuthGuard } from './common/auth.guard';
+import {DadPageComponent} from "./page.component";
 
 const routes: Routes = [
     {
         path: '',
         data: {
-            title: 'Battery Stats'
+            title: ''
         },
         children: [
             {
-                path: '', //page/:id
-                component: DadComponent,
+                path: 'page/:id',
+                component: DadPageComponent,
                 canActivate: [AuthGuard],
                 data: {
-                title: 'Dad Pages'
+                title: ''
                 }
             },
             {
@@ -39,7 +40,7 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'table/:count/:id',
+                path: 'page/:id/table/:count/:id',
                 component: DadTableComponent,
                 canActivate: [AuthGuard],
                 data: {
