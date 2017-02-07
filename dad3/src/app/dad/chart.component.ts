@@ -12,6 +12,7 @@ export class DadChart extends DadElement{
     width: number;
     height: number;
     mini?: boolean = false;
+    horizontal?: boolean = false;
     data?: any;
     regionM?:number;
     aname?: String;
@@ -164,6 +165,7 @@ export class DadChartComponent implements OnInit {
         show: false
       },
       axis: {
+        rotated : false,
         x: {
           type: 'category',
           show: true,
@@ -227,9 +229,10 @@ export class DadChartComponent implements OnInit {
       c3Config.data.color = function (color, d) {
         return d.value === 100 ? "#007F00" : color && d.value <= 30 ? "#FF0000" : color;
       };
-
     }
-    ;
+    if (chartConfig.horizontal) {
+      c3Config.axis.rotated = true;
+    }
     this.c3chart = c3.generate(c3Config);
 
     let eventHandler = this.goToTable;

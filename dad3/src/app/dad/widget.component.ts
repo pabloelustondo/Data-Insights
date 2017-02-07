@@ -5,7 +5,7 @@ import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
 
-export enum DadWidgetType { OneNumber, Example};
+export enum DadWidgetType { OneNumber, Chart };
 
 export class DadWidget extends DadElement{
   type: DadWidgetType;
@@ -15,7 +15,7 @@ export class DadWidget extends DadElement{
 @Component({
   selector: 'dadwidget',
   providers:[DadElementDataService, DadWidgetConfigsService],
-  template: ` 
+  template: `   
   <div *ngIf="widget.type==0" class="col-sm-4 col-lg-3">  
      <div class="inside">
         <div class="content card card-inverse card-primary">

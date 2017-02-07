@@ -221,6 +221,59 @@ export const WIDGETS: DadWidget[] = [
         DataSource: "minimumBatteryPercentageThreshold"
       }
     ]
+  },
+
+
+
+
+  {id: 'widget_chart1',
+    name:'Application Deployment Count by Number of Devices',
+    type: 1,
+    endpoint:'BatteryMetrics',
+    metrics:[
+      {
+        Type: DadParameterType.String,
+        Name: "Devices Not Fully Charged",
+        DataSource: "CountDevicesNotFullyCharged"
+      },
+      {
+        Type: DadParameterType.String,
+        Name: "Total Devices Not Lasted Shift",
+        DataSource: "CountDevicesNotLastedShift"
+      }
+    ],
+    metricName: "DevicesDidNotLastShift",
+    predicates: ["batteryNotFullyChargedBeforeShift"],
+    parameters:[
+      {
+        shiftStartDateTime: "2016-08-24T19:19:26.581Z",
+        endDate: "2016-08-25T19:19:26.581",
+        shiftDuration: 8,
+        minimumBatteryPercentageThreshold: 20
+
+      }],
+    uiparameters: [
+      {
+        Type: DadParameterType.DateTime,
+        Name: "Shift Start Date & Time",
+        DataSource: "shiftStartDateTime"
+      },
+      {
+        Type: DadParameterType.Date,
+        Name: "End Date",
+        DataSource: "endDate"
+      },
+      {
+        Type: DadParameterType.Duration,
+        Name: "Shift Duration",
+        DataSource: "shiftDuration"
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Min Battery",
+        DataSource: "minimumBatteryPercentageThreshold"
+      }
+    ]
   }
 
 ];
