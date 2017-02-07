@@ -9,10 +9,11 @@ declare var d3, c3: any;
 
 export class DadChart extends DadElement{
     type: string;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
     mini?: boolean = false;
     horizontal?: boolean = false;
+    embeddedChart?: boolean = false;
     data?: any;
     regionM?:number;
     aname?: String;
@@ -24,7 +25,7 @@ export class DadChart extends DadElement{
     template: `
     <div class="col-sm-8 col-lg-6">  
         <div class="inside">
-          <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">    
+          <div *ngIf="!chart.mini && !chart.embeddedChart" class="content card card-inverse card-secondary">    
             <div class="card-block pb-0">
                 <div class="content card card-inverse card-secondary">    
                     <div class="btn-group float-xs-right" dropdown>
@@ -49,6 +50,7 @@ export class DadChart extends DadElement{
           <!--If it is mini chart -->
           <div class="card-block pb-0">
               <div *ngIf="chart.mini" style= "text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
+              <div *ngIf="chart.embeddedChart" style= "text-align:left; height:475px; width:auto;" [id]="chart.id"></div>
           </div>         
         </div>
     </div>
@@ -230,6 +232,9 @@ export class DadChartComponent implements OnInit {
         return d.value === 100 ? "#007F00" : color && d.value <= 30 ? "#FF0000" : color;
       };
     }
+    if (chartConfig.embeddedChart) {
+      c3Config.regions = [{'start': 100}];
+    };
     if (chartConfig.horizontal) {
       c3Config.axis.rotated = true;
     }
