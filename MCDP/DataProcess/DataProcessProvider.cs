@@ -72,17 +72,22 @@ namespace Soti.MCDP.DataProcess
             this.maxDBRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
             this.maxIdaRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
             this.idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
-            
-            this.JWTTokenPath = System.Environment.CurrentDirectory + "\\" + ConfigurationManager.AppSettings["JWTTokenName"];
 
-            if(File.Exists(JWTTokenPath))
+            this.JWTTokenPath = Path.Combine(Directory.GetCurrentDirectory(), ConfigurationManager.AppSettings["JWTTokenName"]);
+
+            var logMessage = DateTime.Now.ToString() + "  =>  ";
+            Log(logMessage + "[INFO] JWTTokenPath: " + JWTTokenPath);
+
+            if (File.Exists(JWTTokenPath))
             {
                 JWTToken = File.ReadAllText(JWTTokenPath);
             }
             else
             {
-                JWTToken = "";
+                JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ";
             }
+
+            Log(logMessage + "[INFO] JWTToken: " + JWTToken);
             //LOADING DATABASE PROVIDER
             this._deviceStatIntProvider = new DeviceStatIntProvider();
         }
@@ -119,6 +124,8 @@ namespace Soti.MCDP.DataProcess
                         {
                             this.SendData2Ida(idaData);
 
+                            this._deviceStatIntProvider.ConfirmData(true); // this shouuld go somewhere else later... 
+
                             logMessage += "[INFO] new data to be sent.";
                             // write to log the success of the operation
                             Log(logMessage);
@@ -128,12 +135,9 @@ namespace Soti.MCDP.DataProcess
                             // this expcetion is due to problems when sending data to input data adapter
                             this.numberOfConsecutiveIDAFailures += 1;
                             this._deviceStatIntProvider.ConfirmData(false);
-                            Log("[ERROR] Error communicating with input data adapter: " + ex.ToString());
+                            Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex.ToString());
                         }
-                    }
-
-                    this._deviceStatIntProvider.ConfirmData(true); // this shouuld go somewhere else later... 
-
+                    }                    
                 }
                 catch (Exception eDB)
                 {
