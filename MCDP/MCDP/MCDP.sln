@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelper", "..\TestHelper
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProcess", "..\DataProcess\DataProcess.csproj", "{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dacpac_Installer", "..\Dacpac_Installer\Dacpac_Installer.csproj", "{095D7996-DF16-44BD-B323-1D5C275085F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{095D7996-DF16-44BD-B323-1D5C275085F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095D7996-DF16-44BD-B323-1D5C275085F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095D7996-DF16-44BD-B323-1D5C275085F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095D7996-DF16-44BD-B323-1D5C275085F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
