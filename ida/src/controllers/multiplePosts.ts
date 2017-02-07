@@ -13,8 +13,9 @@ import * as rp from 'request-promise';
 import {SDSBattery} from '../models/batteryData';
 const awsPush = require('../awsPush');
 
-let accessKeyIdFile = fs.readFileSync('../../IDA_accessKeyID.txt', 'utf8');
-let secretAccessKeyFile = fs.readFileSync('../../IDA_secretAccessKey.txt', 'utf8');
+let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');
+let secretAccessKeyFile = fs.readFileSync(config['aws-secretKeyFileLocation'], 'utf8');
+
 const options = ({
     accessKeyId: accessKeyIdFile,
     secretAccessKey: secretAccessKeyFile

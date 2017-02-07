@@ -5,5 +5,8 @@
   "aws-x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
   "aws-path":  "/test/function_one",
   "aws-dischargecontroller":  "/test/multiplePosts",
-  "aws-region": "us-east-1"
+  "aws-region": "us-east-1",
+  "aws-accessKeyFileLocation": "../../IDA_accessKeyID.txt",
+  "aws-secretKeyFileLocation": "../../IDA_secretAccessKey.txt"
+
 }

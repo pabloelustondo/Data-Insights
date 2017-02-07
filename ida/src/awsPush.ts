@@ -5,8 +5,8 @@ import * as fs from 'fs';
 const config = require('../appconfig.json');
 const AWS      = require('aws-sdk');
 
-let accessKeyIdFile = fs.readFileSync('../../IDA_accessKeyID.txt', 'utf8');
-let secretAccessKeyFile = fs.readFileSync('../../IDA_secretAccessKey.txt', 'utf8');
+let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');
+let secretAccessKeyFile = fs.readFileSync(config['aws-secretKeyFileLocation'], 'utf8');
 const options = ({
     accessKeyId: accessKeyIdFile,
     secretAccessKey: secretAccessKeyFile
