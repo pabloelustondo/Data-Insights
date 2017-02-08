@@ -8,7 +8,7 @@ import {DadTable} from "./table.component";
 
 export class DadElement {
   id: string;
-  name: string;
+  name?: string;
   parameters?: any[];
   metricName?: string;
   predicates?: string[];

@@ -49,8 +49,8 @@ export class DadChart extends DadElement{
           </div>
           <!--If it is mini chart -->
           <div class="card-block pb-0">
-              <div *ngIf="chart.mini" style= "text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
-              <div *ngIf="chart.embeddedChart" style= "text-align:left; height:475px; width:auto;" [id]="chart.id"></div>
+              <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
+              <div *ngIf="chart.embeddedChart" style="text-align:left; width:auto;" [id]="chart.id"></div>
           </div>         
         </div>
     </div>
@@ -60,7 +60,16 @@ export class DadChartComponent implements OnInit {
     @Input()
     chart: DadChart
     @Input()
-    data;
+    set data(d){
+      this._data = d;
+      if (this.c3chart){
+      let chartData = this.mapper.map(this.chart, this.data);
+      this.c3chart.load(chartData);}
+    };
+    get data(){
+       return this._data;
+    };
+    _data;
     mapper: Mapper = new Mapper();
     colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
     c3chart: any;
@@ -233,7 +242,9 @@ export class DadChartComponent implements OnInit {
       };
     }
     if (chartConfig.embeddedChart) {
-      c3Config.regions = [{'start': 100}];
+      c3Config.regions = [{'start': 100}]
+      c3Config.axis.x.label.text = [];
+      c3Config.axis.y.label.text = [];
     };
     if (chartConfig.horizontal) {
       c3Config.axis.rotated = true;
