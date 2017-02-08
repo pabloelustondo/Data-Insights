@@ -28,12 +28,12 @@ export class DadWidget extends DadElement{
                     </button>                      
                     <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
-                        <button *ngIf="widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
+                        <button *ngIf="widget.type==0 && widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                     </div>
                 </div>
                
-               <div *ngIf="widget.type==0">
+               <div *ngIf="widget.type===0">
                 <div class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
                 <h3 *ngIf="data" class="mb-0">
                     <a *ngIf="!(data[widget.metrics[0].DataSource]===0)" [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
@@ -71,14 +71,17 @@ export class DadWidget extends DadElement{
                     <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
                 </div>
                 
-                  <div *ngIf="widget.type===1" class="col-sm-4 col-lg-3">  
-                      <dadchart style= "text-align:center; height:100%; width:100%"  [chart]="widget.chart"></dadchart>
+           <div *ngIf="data &&  widget.type===1" class="col-lg-8"> 
+                      <div class="card-title m-l-5">{{widget.name}}</div>
+                      <dadchart [chart]="widget.chart" [data]="data"></dadchart>
                       <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
-                 </div>   
+                 </div>  
             </div>
         </div>  
      </div>
   </div>
+  
+   
   `
 })
 
@@ -117,7 +120,7 @@ export class DadWidgetComponent implements OnInit {
     changeData() {
     this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
-        this.data = data.data[0];
+        this.data = data.data;
           this.fixNullsInMetrics();
       }
     );
@@ -144,7 +147,7 @@ export class DadWidgetComponent implements OnInit {
      // this.mapParameters2ui();
     this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
-        this.data = data.data[0];
+        this.data = data.data;
         this.fixNullsInMetrics();
       }
     ).catch(err => console.log(err.toString()));
