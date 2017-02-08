@@ -85,7 +85,7 @@ app.get('/getAgentToken', function(req, res) {
                var new_token = jwt.sign( {
                  agentid: '213',
                  tenantid: _tenantID
-               }, config.secret,  { expiresInMinutes: config.tempTokenExpiryTime} );
+               }, config.expiringSecret,  { expiresInMinutes: config.tempTokenExpiryTime} );
                console.log(new_token);
                res.status(200).send({
                  id_token: new_token
