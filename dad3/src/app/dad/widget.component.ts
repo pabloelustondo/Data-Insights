@@ -73,13 +73,12 @@ export class DadWidget extends DadElement{
                              
 
                 <div *ngIf="data && widget.type===1" class="card-title m-l-5">{{widget.name}}</div>
-   
                 <div *ngIf="data && widget.type===1" class="content card card-secondary"> 
-                    <div class="content card card-secondary">
+                    <div class="content card card-secondary"><br/><br/>
                         <dadchart [chart]="widget.chart" [data]="data"></dadchart>
                     </div>
                 </div>  
-                <dadparameters class="row" *ngIf="data && widget.type===1" [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>
+                <dadparameters *ngIf="data && widget.type===1" [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>
             </div>  
         </div>
      </div>
