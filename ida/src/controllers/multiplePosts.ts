@@ -3,7 +3,7 @@ import {SDS} from '../models/user';
 import {ListBatteryStats} from '../models/listBatteryStats';
 let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
-// import * as https from 'https';
+
 const config = require('../../appconfig.json');
 const AWS      = require('aws-sdk');
 import * as fs from 'fs';
