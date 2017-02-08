@@ -11,6 +11,7 @@
   },
   "scripts": {
     "start" : "node app.js",
+    "debugwin": "node %NODE_DEBUG_OPTION% app.js",
     "test": "./node_modules/.bin/jasmine-node spec"
   }
 }

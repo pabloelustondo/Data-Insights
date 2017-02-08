@@ -19,12 +19,6 @@ function callDbAndRespond(req,res,query){
 	});
 }
 
-function getDBInstance (req){
-    var user = getUser(req);
-    var x = mongodb.connect(dbUrl + "udb_" + user);
-
-    return x;
-}
 
 function getUser(req){
 	var username = 'test'; var password;
@@ -99,6 +93,19 @@ app.post ('/insertNewDataSource', function (req, res ) {
 	});
 });
 
+app.get('/verifyDataSource', function (req, res) {
+
+	console.log ('reached verify data source');
+	console.log (req.query.tenantID);
+	var _tenantID = req.query.tenantID;
+    callDbAndRespond(req,res, function(req,res,db, next){
+        console.log(req.params.tenatID);
+        db.collection('todo').findOne({
+            "tenantID": _tenantID
+        }, next);
+    });
+
+});
 
 app.post('/updateDataSourceCredentials', function (req, res ) {
 

@@ -174,7 +174,7 @@ app.put('/api/protected/putconfig', function(req, res) {
     headers: { //We can define headers too
       'Content-Type': 'application/json'
     },
-    body:JSON.stringify(req.body),
+    body:JSON.stringify(req.body)
   }, function(error, response, body){
     if(error) {
       console.log(error);
@@ -185,6 +185,9 @@ app.put('/api/protected/putconfig', function(req, res) {
     }
   });
 });
+
+
+
 
 function performRequest(endpoint, method, data, success) {
   var dataString = JSON.stringify(data);

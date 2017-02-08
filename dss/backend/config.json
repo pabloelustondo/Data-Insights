@@ -1,4 +1,6 @@
 {
   "secret": "Data Analytics Team Rocks!",
-  "dadloginurl": "http://localhost:4200"
+  "dadloginurl": "http://localhost:4200",
+  "ddbEndpointUrl" : "http://localhost:8000",
+  "tempTokenExpiryTime" : 10
 }
