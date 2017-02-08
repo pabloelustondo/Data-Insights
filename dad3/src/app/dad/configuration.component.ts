@@ -5,13 +5,14 @@ import { Component, OnInit } from '@angular/core';
 import { DadChart } from './chart.component';
 import { DadWidget } from './widget.component';
 import { DadTable } from './table.component';
-import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService } from './chart.service';
+import { DadPage } from './page.component';
+import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService, DadPageConfigsService } from './chart.service';
 
 declare var d3, c3: any;
 
 @Component({
     selector: 'dadconfig',
-    providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
+    providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService, DadPageConfigsService],
     template: `
 
     <div *ngIf="showTable" style="width:100%; display:inline-block;  vertical-align:top; border: solid;" > 
@@ -169,6 +170,7 @@ export class DadConfigComponent implements  OnInit{
     public charts: DadChart[];
     public widgets: DadWidget[];
     public tables: DadTable[];
+    public pages: DadPage[];
     public selectedChart: DadChart;
     public selectedWidget: DadWidget;
     public selectedTable: DadTable;
@@ -180,7 +182,8 @@ export class DadConfigComponent implements  OnInit{
     constructor(
       private dadChartConfigsService: DadChartConfigsService,
       private dadWidgetConfigsService: DadWidgetConfigsService,
-      private dadTableConfigsService: DadTableConfigsService
+      private dadTableConfigsService: DadTableConfigsService,
+      private dadPageConfigsService: DadPageConfigsService
     ) { }
 
     unselect(){
@@ -239,9 +242,11 @@ export class DadConfigComponent implements  OnInit{
     this.dadChartConfigsService.clearLocalCopy();
     this.dadWidgetConfigsService.clearLocalCopy();
     this.dadTableConfigsService.clearLocalCopy();
+    this.dadPageConfigsService.clearLocalCopy();
     this.charts = this.dadChartConfigsService.getChartConfigs();
     this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
     this.tables = this.dadTableConfigsService.getTableConfigs();
+    this.pages = this.dadPageConfigsService.getPageConfigs();
   }
 
     deleteChart(chart:DadChart){

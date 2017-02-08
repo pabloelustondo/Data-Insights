@@ -5,7 +5,7 @@ import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
 
-export enum DadWidgetType { OneNumber, Example};
+export enum DadWidgetType { OneNumber, Chart };
 
 export class DadWidget extends DadElement{
   type: DadWidgetType;
@@ -15,8 +15,10 @@ export class DadWidget extends DadElement{
 @Component({
   selector: 'dadwidget',
   providers:[DadElementDataService, DadWidgetConfigsService],
-  template: ` 
-  <div *ngIf="widget.type==0" class="col-sm-4 col-lg-3">  
+  template: `   
+
+     
+  <div class="col-sm-4 col-lg-3">  
      <div class="inside">
         <div class="content card card-inverse card-primary">
             <div class="card-block pb-0">
@@ -31,6 +33,7 @@ export class DadWidget extends DadElement{
                     </div>
                 </div>
                
+               <div *ngIf="widget.type==0">
                 <div class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
                 <h3 *ngIf="data" class="mb-0">
                     <a *ngIf="!(data[widget.metrics[0].DataSource]===0)" [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
@@ -65,7 +68,13 @@ export class DadWidget extends DadElement{
                         </button><br/><br/><br/>
                     </div>
                 </div> 
-                <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>               
+                    <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
+                </div>
+                
+                  <div *ngIf="widget.type===1" class="col-sm-4 col-lg-3">  
+                      <dadchart style= "text-align:center; height:100%; width:100%"  [chart]="widget.chart"></dadchart>
+                      <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
+                 </div>   
             </div>
         </div>  
      </div>

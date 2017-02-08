@@ -1,15 +1,15 @@
 [Setup]
 AppName=test
 AppVersion=1.0
-LicenseFile={#file AddBackslash(SourcePath) + "license.txt"}
+LicenseFile=C:\setup demo\License.rtf
 CreateAppDir=False
 UsePreviousGroup=False
 DisableProgramGroupPage=yes
 Uninstallable=no
 
 [Files]
-Source: "update_v1.sql"; Flags: dontcopy
-Source: "update_v1.sql"; Flags: dontcopy
+Source: "C:\setup demo\script 2008R2.sql"; Flags: dontcopy
+Source: "C:\setup demo\script 2012.sql"; Flags: dontcopy
 
 [CustomMessages]
 CustomForm_Caption=Connect to Database Server
@@ -198,9 +198,9 @@ var
 begin
 // extract required version of script
   if lstVersion.Text='2008 R2' then
-    ExtractTemporaryFile('"update_v1.sql"')
+    ExtractTemporaryFile('Script 2008R2.sql')
   if lstVersion.Text='2012' then
-    ExtractTemporaryFile('"update_v1.sql"');
+    ExtractTemporaryFile('Script 2012.sql');
 
   try
     // create the ADO connection object
@@ -227,7 +227,7 @@ begin
       // assign the currently opened connection to ADO command object
       ADOCommand.ActiveConnection := ADOConnection;
       // load a script from file into variable. Exclusive OR because both versions should never exist at the same time.
-        if (LoadStringFromFile(ExpandConstant('{tmp}\"update_v1.sql'), Script2012)) xor (LoadStringFromFile(ExpandConstant('{tmp}\update_v1.sql'), Script2008R2))     then
+        if (LoadStringFromFile(ExpandConstant('{tmp}\Script 2012.sql'), Script2012)) xor (LoadStringFromFile(ExpandConstant('{tmp}\Script 2008R2.sql'), Script2008R2))     then
       begin
         // assign text of a command to be issued against a provider. Append all 3 because one of the install assembly strings will always be empty.
         ADOCommand.CommandText := Script2008R2 + Script2012;

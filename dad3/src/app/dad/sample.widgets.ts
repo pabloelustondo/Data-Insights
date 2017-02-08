@@ -221,6 +221,99 @@ export const WIDGETS: DadWidget[] = [
         DataSource: "minimumBatteryPercentageThreshold"
       }
     ]
+  },
+
+
+
+
+  {id: 'widget_chart1',
+    name:'Application Deployment Count by Number of Devices',
+    type: 1,
+    endpoint:'BatteryMetrics',
+    metrics:[
+      {
+        Type: DadParameterType.String,
+        Name: "Devices Not Fully Charged",
+        DataSource: "CountDevicesNotFullyCharged"
+      },
+      {
+        Type: DadParameterType.String,
+        Name: "Total Devices Not Lasted Shift",
+        DataSource: "CountDevicesNotLastedShift"
+      }
+    ],
+    metricName: "DevicesDidNotLastShift",
+    predicates: ["batteryNotFullyChargedBeforeShift"],
+    parameters:[
+      {
+        shiftStartDateTime: "2016-08-24T19:19:26.581Z",
+        endDate: "2016-08-25T19:19:26.581",
+        shiftDuration: 8,
+        minimumBatteryPercentageThreshold: 20
+
+      }],
+    uiparameters: [
+      {
+        Type: DadParameterType.DateTime,
+        Name: "Shift Start Date & Time",
+        DataSource: "shiftStartDateTime"
+      },
+      {
+        Type: DadParameterType.Date,
+        Name: "End Date",
+        DataSource: "endDate"
+      },
+      {
+        Type: DadParameterType.Duration,
+        Name: "Shift Duration",
+        DataSource: "shiftDuration"
+      },
+      {
+        Type: DadParameterType.Number,
+        Name: "Min Battery",
+        DataSource: "minimumBatteryPercentageThreshold"
+      }
+    ],
+    chart:     {id: "charthorizontal",
+      name: 'Average Battery Discharge Rate',
+      type: "bar",
+      endpoint: "AverageDischargeRate",
+      a : 'countOfDevices',
+      b : 'percentage',
+      aname : 'Count Of Devices',
+      bname : 'Percentage',
+      width: 275,
+      height: 200,
+      regionM: 30,
+      embeddedChart: true,
+      tableId: 'table2',
+      horizontal: true,
+      parameters: [
+        {
+          dateTo: "2016-08-25T20:30:21",
+          shiftStartDateTime: "2016-08-24T20:30:21",
+          shiftDuration: 8
+        }],
+      uiparameters: [
+        {
+          Type: DadParameterType.Date,
+          Name: "Date To",
+          DataSource: "dateTo"
+        },
+        {
+          Type: DadParameterType.DateTime,
+          Name: "Shift Start Date & Time",
+          DataSource: "shiftStartDateTime"
+        },
+        {
+          Type: DadParameterType.Duration,
+          Name: "Shift Duration",
+          DataSource: "shiftDuration"
+        },
+      ],
+    }
   }
+
+
 
 ];
