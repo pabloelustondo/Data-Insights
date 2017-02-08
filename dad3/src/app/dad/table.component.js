@@ -44,7 +44,7 @@ var DadTableComponent = (function () {
         var _this = this;
         this.currentPage = page;
         this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
-        this.dadTableDataService.getTableData(this.table).then(function (data) {
+        this.dadTableDataService.getElementData(this.table).then(function (data) {
             _this.data = data.data;
         }).catch(function (err) { return console.log(err.toString()); });
     };
@@ -82,6 +82,9 @@ var DadTableComponent = (function () {
                 if (!_this.callerElement) {
                     _this.callerElement = _this.dadChartConfigsService.getChartConfig(_this.callerId);
                 }
+                if (!_this.callerElement) {
+                    _this.callerElement = _this.dadTableConfigsService.getTableConfig(_this.callerId);
+                }
                 var tableId = _this.callerElement.tableId;
                 _this.table = _this.findTables(tableId);
                 var elementParameters = _this.callerElement.parameters[0];
@@ -92,7 +95,7 @@ var DadTableComponent = (function () {
                 }
             }
             console.log("Tables are loading... :" + _this.table.id);
-            _this.dadTableDataService.getTableData(_this.table).then(function (data) {
+            _this.dadTableDataService.getElementData(_this.table).then(function (data) {
                 _this.data = data.data;
                 if (_this.data.errorMessage != null) {
                     alert(_this.data.errorMessage);
@@ -122,8 +125,8 @@ var DadTableComponent = (function () {
     DadTableComponent = __decorate([
         core_1.Component({
             selector: 'dadtable',
-            providers: [data_service_1.DadTableDataService, chart_service_1.DadTableConfigsService, chart_service_2.DadWidgetConfigsService, chart_service_1.DadChartConfigsService],
-            template: " \n    <div *ngIf=\"data\">\n        <div class=\"col-lg-10\">\n            <div class=\"card\">\n                <div class=\"card-header\">\n                    <h4>{{table.name}}</h4>\n                       Number of Rows:{{count}}\n                    <span *ngFor=\"let key of tableParameterKeys()\"> \n                       {{key}}:{{tableParameterValue(key)}}\n                    </span>\n                </div>\n                <div class=\"card-block\">\n                    <table class=\"table table-striped\">\n                        <thead>\n                            <tr>\n                                <th style=\"text-align:left;\" *ngFor=\"let col of table.columns\" >{{col.Name}}</th>\n                            </tr>  \n                        </thead>\n                        <tbody>\n                            <tr *ngFor=\"let row of data; let rowindex = index\">\n                                <td style=\"align-content: center;\" *ngFor=\"let col of table.columns\">\n                                    <span *ngIf=\"!isMiniChart(col)\"> {{row[col.DataSource]}} </span>\n                                    <span *ngIf=\"isMiniChart(col)\"> \n                                        <dadchart [chart]=\"miniChart(col,rowindex)\" [data]=\"chartData(row,col)\"></dadchart>\n                                    </span>        \n                                </td>\n                            </tr>\n                        </tbody>\n                    </table>\n                    <ul class=\"pagination\" style=\"cursor:pointer;\">\n                        <span *ngFor=\"let page of pages\">               \n                            <li  *ngIf=\"page == currentPage\" class=\"page-item active\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}}</a></li>\n                            <li  *ngIf=\"page != currentPage\" class=\"page-item\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}} </a></li>\n                        </span>\n                    </ul>\n                </div>\n            </div>\n        </div>\n  <!-- to show chart in widgets, use the line below-->\n  <!--<dadchart [chart]=\"widget.chart\"></dadchart>-->\n\n    <!--  END CHART COMPONENT --></div>"
+            providers: [data_service_1.DadElementDataService, chart_service_1.DadTableConfigsService, chart_service_2.DadWidgetConfigsService, chart_service_1.DadChartConfigsService],
+            template: " \n    <div *ngIf=\"data\">\n        <div class=\"col-lg-10\">\n            <div class=\"card\">\n                <div class=\"card-header\">\n                    <h4>{{table.name}}</h4>\n                       Number of Rows:{{count}}\n                    <span *ngFor=\"let key of tableParameterKeys()\"> \n                       {{key}}:{{tableParameterValue(key)}}\n                    </span>\n                </div>\n                <div class=\"card-block\">\n                    <table class=\"table table-striped\">\n                        <thead>\n                            <tr>\n                                <th style=\"text-align:left;\" *ngFor=\"let col of table.columns\" >{{col.Name}}</th>\n                            </tr>  \n                        </thead>\n                        <tbody>\n                            <tr *ngFor=\"let row of data; let rowindex = index\">\n                                <td style=\"align-content: center;\" *ngFor=\"let col of table.columns\">\n                                    <span *ngIf=\"!isMiniChart(col)\"> {{row[col.DataSource]}} </span>\n                                    <span *ngIf=\"isMiniChart(col)\"> \n                                        <dadchart [chart]=\"miniChart(col,rowindex)\" [data]=\"chartData(row,col)\"></dadchart>\n                                    </span>        \n                                </td>\n                            </tr>\n                        </tbody>\n                    </table>\n                    <ul class=\"pagination\" style=\"cursor:pointer;\">\n                        <span *ngFor=\"let page of pages\">               \n                            <li  *ngIf=\"page == currentPage\" class=\"page-item active\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}}</a></li>\n                            <li  *ngIf=\"page != currentPage\" class=\"page-item\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}} </a></li>\n                        </span>\n                    </ul>\n                </div>\n            </div>\n        </div>\n\n    <!--  END CHART COMPONENT --></div>"
         })
     ], DadTableComponent);
     return DadTableComponent;

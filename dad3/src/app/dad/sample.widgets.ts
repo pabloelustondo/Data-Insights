@@ -259,7 +259,8 @@ export const WIDGETS: DadWidget[] = [
       height: 200,
       embeddedChart: true,
       horizontal: true,
-    }
+      action: 'grow'
+      }
   },
   {id: 'widget_chart2',
     name:'Application Deployment Count by Number of Devices',
@@ -298,6 +299,7 @@ export const WIDGETS: DadWidget[] = [
       height: 200,
       embeddedChart: true,
       horizontal: true,
+      action: 'grow'
     }
   }
 ];

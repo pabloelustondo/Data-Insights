@@ -8,6 +8,7 @@ import { DadLoginComponent }   from './login.component';
 import { DadTableComponent }   from './table.component';
 import { AuthGuard } from './common/auth.guard';
 import {DadPageComponent} from "./page.component";
+import {DadBigChartComponent} from "./bigchart.component";
 
 const routes: Routes = [
     {
@@ -45,6 +46,14 @@ const routes: Routes = [
                 canActivate: [AuthGuard],
                 data: {
                     title: 'List of devices'
+                }
+            },
+            {
+                path: 'page/:id/bigchart/:id',
+                component: DadBigChartComponent,
+                canActivate: [AuthGuard],
+                data: {
+                    title: 'Big Chart'
                 }
             }
         ]

@@ -18,6 +18,7 @@ export class DadChart extends DadElement{
     regionM?:number;
     aname?: String;
     bname?: String;
+    action?: String;
 }
 @Component({
     selector: 'dadchart',
@@ -251,15 +252,30 @@ export class DadChartComponent implements OnInit {
     }
     this.c3chart = c3.generate(c3Config);
 
-    let eventHandler = this.goToTable;
-    let chart = this.chart;
-    let route = this.route;
-    let router = this.router;
+    if(chartConfig.action === 'drill') {
+      let eventHandler = this.goToTable;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
 
-    this.c3chart.internal.main.on('click', function(d){
-      eventHandler(d,chart,router,route);
+      this.c3chart.internal.main.on('click', function (d) {
+            eventHandler(d, chart, router, route);
+          }
+      );
+    } else {
+      let eventHandler = this.growIt;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
+
+        this.c3chart.internal.main.on('click', function (d) {
+          eventHandler(d, chart, router, route);
+      })
     }
-    );
+  };
+
+  growIt(d,chart,router,route){
+    router.navigate(['bigchart', chart.id], { relativeTo: route});
   };
 
   goToTable(d,chart,router,route){
