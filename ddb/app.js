@@ -92,18 +92,26 @@ app.put('/todo', function(req,res){
 	});
 });
 
+app.post ('/insertNewDataSource', function (req, res ) {
+
+	callDbAndRespond(req, res, function (req,res, db, next ){
+		db.collection('todo').insertOne(req.body, next);
+	});
+});
+
+
 app.post('/updateDataSourceCredentials', function (req, res ) {
 
 
-    var _tenantId = req.body.tenatID;
+    var _tenantId = req.body.tenantID;
     console.log("tenant id = " + _tenantId);
 
 	callDbAndRespond(req, res, function(req,res,db, next) {
 
-        var _tenantId = req.body.tenatID;
+        var _tenantId = req.body.tenantID;
         db.collection('todo').update(
             {
-                tenatID: req.body.tenatID
+                tenantID: _tenantId
             },
             {
                 $set: {
@@ -121,39 +129,6 @@ app.post('/updateDataSourceCredentials', function (req, res ) {
 
 });
 
-/*
- db.collection('todo').update(
- {
- tenatID: req.body.tenatID
- },
- {
- $set: {
- RedShiftConnectionString: req.body.RedShiftConnectionString,
- DBName: req.body.DBName
- }
- },
- {
- upsert: false
- },
- req.body.next
- );
-
-
- db.collection('todo').findAndModify({
- query: {
- tenatID: req.body.tenatID
- },
- sort: { tenatID : 1 },
- update: {
- $set: {
- RedShiftConnectionString: req.body.RedShiftConnectionString,
- DBName: req.body.DBName
- }
- },
- upsert: true
- },
- req.body,next
- );*/
 
 app.delete('/todo', function(req,res){
 	callDbAndRespond(req,res, function(req,res,db, next){
