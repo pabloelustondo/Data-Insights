@@ -222,7 +222,6 @@ export const WIDGETS: DadWidget[] = [
       }
     ]
   },
-
   {id: 'widget_chart1',
     name:'Application Deployment Count by Number of Devices',
     type: 1,
@@ -260,6 +259,47 @@ export const WIDGETS: DadWidget[] = [
       height: 200,
       embeddedChart: true,
       horizontal: true,
+      action: 'grow'
+      }
+  },
+  {id: 'widget_chart2',
+    name:'Application Deployment Count by Number of Devices',
+    type: 1,
+    endpoint: "AverageDischargeRate",
+    parameters:[
+      {
+        dateTo: "2016-08-25T20:30:21",
+        shiftStartDateTime: "2016-08-24T20:30:21",
+        shiftDuration: 8
+      }],
+    uiparameters: [
+      {
+        Type: DadParameterType.Date,
+        Name: "Date To",
+        DataSource: "dateTo"
+      },
+      {
+        Type: DadParameterType.DateTime,
+        Name: "Shift Start Date & Time",
+        DataSource: "shiftStartDateTime"
+      },
+      {
+        Type: DadParameterType.Duration,
+        Name: "Shift Duration",
+        DataSource: "shiftDuration"
+      },
+    ],
+    chart:{id: "charthorizontal2",
+      type: "bar",
+      a : 'countOfDevices',
+      b : 'percentage',
+      aname : 'Count Of Devices',
+      bname : 'Percentage',
+      width: 275,
+      height: 200,
+      embeddedChart: true,
+      horizontal: true,
+      action: 'grow'
     }
   }
 ];

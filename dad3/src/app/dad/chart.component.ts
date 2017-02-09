@@ -12,20 +12,22 @@ export class DadChart extends DadElement{
     width?: number;
     height?: number;
     mini?: boolean = false;
+    big?: boolean = false;
     horizontal?: boolean = false;
     embeddedChart?: boolean = false;
     data?: any;
     regionM?:number;
     aname?: String;
     bname?: String;
+    action?: String;
 }
 @Component({
     selector: 'dadchart',
     providers:[DadElementDataService],
     template: `
-    <div class="col-sm-8 col-lg-6">  
+    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="myclass()">  
         <div class="inside">
-          <div *ngIf="!chart.mini && !chart.embeddedChart" class="content card card-inverse card-secondary">    
+          <div  class="content card card-inverse card-secondary">    
             <div class="card-block pb-0">
                 <div class="content card card-inverse card-secondary">    
                     <div class="btn-group float-xs-right" dropdown>
@@ -48,12 +50,12 @@ export class DadChart extends DadElement{
             </div>
           </div>
           <!--If it is mini chart -->
-          <div class="card-block pb-0">
-              <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
-              <div *ngIf="chart.embeddedChart" style="text-align:left; width:auto;" [id]="chart.id"></div>
-          </div>         
+         
         </div>
     </div>
+        <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
+        <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
+
     `
 })
 export class DadChartComponent implements OnInit {
@@ -90,6 +92,14 @@ export class DadChartComponent implements OnInit {
   onRefresh():void{
     if (!this.refreshMode) this.refreshMode = true;
     else this.refreshMode = false;
+  }
+
+  myclass(){
+    if (this.chart.big){
+      return 'col-sm-12 col-lg-6';
+    } else {
+      return 'col-sm-8 col-lg-6';
+    }
   }
 
   ngOnInit() {
@@ -162,11 +172,7 @@ export class DadChartComponent implements OnInit {
       return d === 0;
     }).remove();
 
-    let c3Config = {
-      size: {
-        height: chartConfig.height,
-        width: chartConfig.width,
-      },
+    let c3Config:any= {
       bindto: '#' + chartConfig.id,
       data: bardata,
       color: {
@@ -207,9 +213,6 @@ export class DadChartComponent implements OnInit {
           show: false
         }
       },
-      regions: [
-        {start: this.indexOfRegions(chartData)},
-      ],
       zoom: {
         enabled: true
       },
@@ -225,7 +228,15 @@ export class DadChartComponent implements OnInit {
         }
       }
     };
+
+if (chartConfig.regionM){
+    c3Config.regions =[
+      {start: this.indexOfRegions(chartData)},
+    ];
+}
+
     if (chartConfig.mini) {
+      c3Config.size = {};
       c3Config.size.width = this.miniChartWidth;
       c3Config.size.height = this.miniChartHeight;
       c3Config.legend.show = false;
@@ -251,15 +262,30 @@ export class DadChartComponent implements OnInit {
     }
     this.c3chart = c3.generate(c3Config);
 
-    let eventHandler = this.goToTable;
-    let chart = this.chart;
-    let route = this.route;
-    let router = this.router;
+    if(chartConfig.action === 'drill') {
+      let eventHandler = this.goToTable;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
 
-    this.c3chart.internal.main.on('click', function(d){
-      eventHandler(d,chart,router,route);
+      this.c3chart.internal.main.on('click', function (d) {
+            eventHandler(d, chart, router, route);
+          }
+      );
+    } else {
+      let eventHandler = this.growIt;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
+
+        this.c3chart.internal.main.on('click', function (d) {
+          eventHandler(d, chart, router, route);
+      })
     }
-    );
+  };
+
+  growIt(d,chart,router,route){
+    router.navigate(['bigchart', chart.id], { relativeTo: route});
   };
 
   goToTable(d,chart,router,route){

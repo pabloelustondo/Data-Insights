@@ -32,34 +32,34 @@ export class DadWidget extends DadElement{
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                     </div>
                 </div>
-               
+                
                <div *ngIf="widget.type===0">
                 <div class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
                 <h3 *ngIf="data" class="mb-0">
-                    <a *ngIf="!(data[widget.metrics[0].DataSource]===0)" [routerLink]="['table', data[widget.metrics[0].DataSource],widget.id]">
-                        <span style="font-size: 140px; color:white;">{{data[widget.metrics[0].DataSource]}} </span>
+                    <a *ngIf="!(data[0][widget.metrics[0].DataSource]===0)" [routerLink]="['table', data[0][widget.metrics[0].DataSource],widget.id]">
+                        <span style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
                     </a>
-                    <a *ngIf="(data[widget.metrics[0].DataSource]===0)">
-                        <span style="font-size: 140px; color:white;">{{data[widget.metrics[0].DataSource]}} </span>
+                    <a *ngIf="(data[0][widget.metrics[0].DataSource]===0)">
+                        <span style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
                     </a>
-                    <br/>out of {{data[widget.metrics[1].DataSource]}} 
+                    <br/>out of {{data[0][widget.metrics[1].DataSource]}} 
                 </h3><br/>
                 <div *ngIf="data" class="col-sm-6">
-                   <progress style=" display:inline-block; margin-bottom: -.5px; margin-left: -15px;" class="progress progress-xs progress-danger pull-md-left" value="{{data[widget.metrics[0].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>                                                          
+                   <progress style=" display:inline-block; margin-bottom: -.5px; margin-left: -15px;" class="progress progress-xs progress-danger pull-md-left" value="{{data[0][widget.metrics[0].DataSource]}}" max="{{data[0][widget.metrics[1].DataSource]}}"></progress>                                                          
                 </div>
                 <div *ngIf="data">{{percentageOfTotal()}}%</div>     
                 <br/><br/>
                 <div *ngIf="moreDetails && data && widget.metrics.length>2">
                     <div>{{widget.metrics[2].Name}}</div> 
-                    <div>{{data[widget.metrics[2].DataSource]}}</div> 
+                    <div>{{data[0][widget.metrics[2].DataSource]}}</div> 
                     <div class="col-sm-6">
-                       <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[2].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
+                       <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[0][widget.metrics[2].DataSource]}}" max="{{data[0][widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>            
                     <div *ngIf="moreDetails && data && widget.metrics.length>3">
                         <div>{{widget.metrics[3].Name}}</div> 
-                        <div>{{data[widget.metrics[3].DataSource]}}</div> 
+                        <div>{{data[0][widget.metrics[3].DataSource]}}</div> 
                         <div class="col-sm-6">
-                            <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[widget.metrics[3].DataSource]}}" max="{{data[widget.metrics[1].DataSource]}}"></progress>
+                            <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[0][widget.metrics[3].DataSource]}}" max="{{data[0][widget.metrics[1].DataSource]}}"></progress>
                         </div><br/>
                     </div>  
                     <div *ngIf="moreDetails && data" class="col-sm-9 ">
@@ -70,14 +70,17 @@ export class DadWidget extends DadElement{
                 </div> 
                     <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
                 </div>
-                
-           <div *ngIf="data &&  widget.type===1" class="col-lg-8"> 
-                      <div class="card-title m-l-5">{{widget.name}}</div>
-                      <dadchart [chart]="widget.chart" [data]="data"></dadchart>
-                      <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
-                 </div>  
-            </div>
-        </div>  
+                             
+
+                <div *ngIf="data && widget.type===1" class="card-title m-l-5">{{widget.name}}</div>
+                <div *ngIf="data && widget.type===1" class="content card card-secondary"> 
+                    <div class="content card card-secondary"><br/><br/>
+                        <dadchart [chart]="widget.chart" [data]="data"></dadchart>
+                    </div>
+                </div>  
+                <dadparameters *ngIf="data && widget.type===1" [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>
+            </div>  
+        </div>
      </div>
   </div>
   
@@ -127,11 +130,11 @@ export class DadWidgetComponent implements OnInit {
   }
 
     percentageOfTotal(){
-      if(this.data[this.widget.metrics[0].DataSource] == 0){
+      if(this.data[0][this.widget.metrics[0].DataSource] == 0){
           return 0;
       }
       else {
-          let percentage = this.data[this.widget.metrics[0].DataSource] / this.data[this.widget.metrics[1].DataSource];
+          let percentage = this.data[0][this.widget.metrics[0].DataSource] / this.data[0][this.widget.metrics[1].DataSource];
           return Math.floor(percentage * 100);
       }
     }
@@ -139,7 +142,7 @@ export class DadWidgetComponent implements OnInit {
     fixNullsInMetrics(){
       if (!this.data || !this.widget.metrics) return;
       for( let i:number=0; i<this.widget.metrics.length; i++)
-        if (this.data[this.widget.metrics[i].DataSource] === null) this.data[this.widget.metrics[i].DataSource] = 0;
+        if (this.data[0][this.widget.metrics[i].DataSource] === null) this.data[0][this.widget.metrics[i].DataSource] = 0;
     }
 
   ngOnInit() {

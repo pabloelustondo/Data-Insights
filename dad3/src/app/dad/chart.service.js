@@ -9,9 +9,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
  * Created by pabloelustondo on 2016-11-21.
  */
 var core_1 = require('@angular/core');
-var mock_charts_1 = require('./mock.charts');
-var mock_widgets_1 = require("./mock.widgets");
-var mock_tables_1 = require("./mock.tables");
+var sample_charts_1 = require('./sample.charts');
+var sample_widgets_1 = require("./sample.widgets");
+var sample_tables_1 = require("./sample.tables");
+var sample_page_1 = require('./sample.page');
 var _ = require("lodash");
 var DadChartConfigsService = (function () {
     function DadChartConfigsService() {
@@ -31,8 +32,8 @@ var DadChartConfigsService = (function () {
             return DATA;
         }
         else {
-            this.save(mock_charts_1.CHARTS);
-            return mock_charts_1.CHARTS;
+            this.save(sample_charts_1.CHARTS);
+            return sample_charts_1.CHARTS;
         }
     };
     DadChartConfigsService.prototype.getChartConfig = function (id) {
@@ -75,9 +76,9 @@ var DadWidgetConfigsService = (function () {
             return DATA;
         }
         else {
-            var widget_string_1 = JSON.stringify(mock_widgets_1.WIDGETS);
+            var widget_string_1 = JSON.stringify(sample_widgets_1.WIDGETS);
             localStorage.setItem("widgetdata", widget_string_1);
-            return mock_widgets_1.WIDGETS;
+            return sample_widgets_1.WIDGETS;
         }
     };
     DadWidgetConfigsService = __decorate([
@@ -96,6 +97,11 @@ var DadTableConfigsService = (function () {
         var tables_string = JSON.stringify(tables);
         localStorage.setItem("tabledata", tables_string);
     };
+    DadTableConfigsService.prototype.getTableConfig = function (id) {
+        var tables = this.getTableConfigs();
+        var tableIndex = _.findIndex(tables, function (w) { return w.id == id; });
+        return tables[tableIndex];
+    };
     DadTableConfigsService.prototype.getTableConfigs = function () {
         var tables_string = localStorage.getItem("tabledata");
         if (tables_string != null) {
@@ -104,9 +110,9 @@ var DadTableConfigsService = (function () {
             return DATA;
         }
         else {
-            var tables_string_1 = JSON.stringify(mock_tables_1.TABLES);
+            var tables_string_1 = JSON.stringify(sample_tables_1.TABLES);
             localStorage.setItem("tabledata", tables_string_1);
-            return mock_tables_1.TABLES;
+            return sample_tables_1.TABLES;
         }
     };
     DadTableConfigsService = __decorate([
@@ -115,3 +121,37 @@ var DadTableConfigsService = (function () {
     return DadTableConfigsService;
 }());
 exports.DadTableConfigsService = DadTableConfigsService;
+var DadPageConfigsService = (function () {
+    function DadPageConfigsService() {
+    }
+    DadPageConfigsService.prototype.clearLocalCopy = function () {
+        localStorage.removeItem("pagedata");
+    };
+    DadPageConfigsService.prototype.save = function (pages) {
+        var pages_string = JSON.stringify(pages);
+        localStorage.setItem("pagedata", pages_string);
+    };
+    DadPageConfigsService.prototype.getPageConfig = function (id) {
+        var pages = this.getPageConfigs();
+        var pageIndex = _.findIndex(pages, function (w) { return w.id == id; });
+        return pages[pageIndex];
+    };
+    DadPageConfigsService.prototype.getPageConfigs = function () {
+        var pages_string = localStorage.getItem("pagedata");
+        if (pages_string != null) {
+            var page_obj = JSON.parse(pages_string);
+            var DATA = page_obj;
+            return DATA;
+        }
+        else {
+            var pages_string_1 = JSON.stringify(sample_page_1.PAGES);
+            localStorage.setItem("pagedata", pages_string_1);
+            return sample_page_1.PAGES;
+        }
+    };
+    DadPageConfigsService = __decorate([
+        core_1.Injectable()
+    ], DadPageConfigsService);
+    return DadPageConfigsService;
+}());
+exports.DadPageConfigsService = DadPageConfigsService;
