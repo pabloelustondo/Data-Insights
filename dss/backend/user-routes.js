@@ -63,7 +63,9 @@ app.get('/getAgentToken', function(req, res) {
          return res.status(400).send (ErrorMsg.token_verification_failed);
        }
        if (success) {
-         var _tenantID = success.tenantid;
+         var _tenantID = success.tenantId;
+         var _agentID = success.agentId;
+         var _activationKey = success.activationKey;
 
          request({
            rejectUnauthorized: false,
@@ -72,7 +74,7 @@ app.get('/getAgentToken', function(req, res) {
            headers: { //We can define headers too
              'Content-Type': 'application/json'
            },
-           qs: {tenantID:_tenantID, dataSourceID : _tenantID}
+           qs: {tenantId:_tenantID, agentId : _agentID, activationKeys: _activationKey }
          }, function(error, response, body){
            if(error) {
              console.log(error);
@@ -82,16 +84,27 @@ app.get('/getAgentToken', function(req, res) {
 
              if (response.statusCode === 200){
 
-               var new_token = jwt.sign( {
-                 agentid: '213',
-                 tenantid: _tenantID
-               }, config.expiringSecret,  { expiresInMinutes: config.tempTokenExpiryTime} );
-               console.log(new_token);
-               res.status(200).send({
-                 id_token: new_token
-               });
+               var body = JSON.parse(response.body);
 
-             } else {
+
+               if (body.activationKey === _activationKey) {
+
+                 var new_token = jwt.sign({
+                   agentid: '213',
+                   tenantid: _tenantID
+                 }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
+                 console.log(new_token);
+                 res.status(200).send({
+                   session_token: new_token
+                 });
+               } else {
+                 res.status(404).send(ErrorMsg.token_activationKey_failed)
+               }
+
+             } else if (response.statusCode === 404) {
+               res.status(404).send(ErrorMsg.token_verification_failed);
+             }
+             else {
                res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
              }
            }
