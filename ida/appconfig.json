@@ -7,6 +7,8 @@
   "aws-dischargecontroller":  "/test/multiplePosts",
   "aws-region": "us-east-1",
   "aws-accessKeyFileLocation": "../../IDA_accessKeyID.txt",
-  "aws-secretKeyFileLocation": "../../IDA_secretAccessKey.txt"
+  "aws-secretKeyFileLocation": "../../IDA_secretAccessKey.txt",
+  "mcdp-secret": "Data Analytics Team Rocks!",
+  "expiring-secret": "abcdefg9876543210"
 
 }
