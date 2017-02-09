@@ -17,6 +17,7 @@ export const CHARTS: DadChart[] = [
         height: 400,
         regionM: 30,
         tableId: 'table2',
+        action: 'drill',
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
@@ -53,7 +54,6 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         horizontal: true,
-        action: 'drill', // drill or grow
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
@@ -89,7 +89,6 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         horizontal: true,
-        action: 'drill', // drill or grow
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",

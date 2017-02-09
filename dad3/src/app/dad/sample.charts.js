@@ -13,6 +13,7 @@ exports.CHARTS = [
         height: 400,
         regionM: 30,
         tableId: 'table2',
+        action: 'drill',
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
@@ -48,7 +49,6 @@ exports.CHARTS = [
         width: 475,
         height: 400,
         horizontal: true,
-        action: 'drill',
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
@@ -84,7 +84,6 @@ exports.CHARTS = [
         width: 475,
         height: 400,
         horizontal: true,
-        action: 'drill',
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
