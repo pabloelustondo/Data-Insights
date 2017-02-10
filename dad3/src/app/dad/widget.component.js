@@ -89,6 +89,9 @@ var DadWidgetComponent = (function () {
         // this.mapParameters2ui();
         this.dadWidgetDataService.getElementData(this.widget).then(function (data) {
             _this.data = data.data;
+            if (_this.data.errorMessage != null) {
+                alert(_this.data.errorMessage);
+            }
             _this.fixNullsInMetrics();
         }).catch(function (err) { return console.log(err.toString()); });
     };

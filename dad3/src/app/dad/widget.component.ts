@@ -151,6 +151,9 @@ export class DadWidgetComponent implements OnInit {
     this.dadWidgetDataService.getElementData(this.widget).then(
       data => {
         this.data = data.data;
+        if(this.data.errorMessage != null){
+            alert (this.data.errorMessage);
+        }
         this.fixNullsInMetrics();
       }
     ).catch(err => console.log(err.toString()));
