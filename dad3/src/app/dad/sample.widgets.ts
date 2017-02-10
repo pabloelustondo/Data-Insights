@@ -225,36 +225,30 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget_chart1',
     name:'Application Deployment Count by Number of Devices',
     type: 1,
-    endpoint: "AverageDischargeRate",
+    endpoint: "ApplicationDeploymentCount",
     parameters:[
       {
-        dateTo: "2016-08-25T20:30:21",
-        shiftStartDateTime: "2016-08-24T20:30:21",
-        shiftDuration: 8
+        dateFrom: "2017-01-24T20:30:21",
+        dateTo: "2017-01-25T20:30:21"
       }],
     uiparameters: [
       {
         Type: DadParameterType.Date,
+        Name: "Date From",
+        DataSource: "dateFrom"
+      },
+      {
+        Type: DadParameterType.Date,
         Name: "Date To",
         DataSource: "dateTo"
-      },
-      {
-        Type: DadParameterType.DateTime,
-        Name: "Shift Start Date & Time",
-        DataSource: "shiftStartDateTime"
-      },
-      {
-        Type: DadParameterType.Duration,
-        Name: "Shift Duration",
-        DataSource: "shiftDuration"
-      },
+      }
     ],
     chart:{id: "charthorizontal",
       type: "bar",
-      a : 'countOfDevices',
-      b : 'percentage',
-      aname : 'Count Of Devices',
-      bname : 'Percentage',
+      a : 'ExecutionTimeMinutes',
+      b : 'AppId',
+      aname : 'Execution Minutes',
+      bname : 'Application ID',
       width: 275,
       height: 200,
       embeddedChart: true,
