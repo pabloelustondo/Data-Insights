@@ -27,9 +27,9 @@ export class DadChart extends DadElement{
     template: `
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="myclass()">  
         <div class="inside">
-          <div  class="content card card-inverse card-secondary">    
+          <div  class="content card card-secondary">    
             <div class="card-block pb-0">
-                <div class="content card card-inverse card-secondary">    
+                <div class="content card card-secondary">    
                     <div class="btn-group float-xs-right" dropdown>
                         <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
                             <i class="icon-settings"></i>
@@ -178,9 +178,9 @@ export class DadChartComponent implements OnInit {
       color: {
         pattern: this.colorPalette,
       },
-      tooltip: {
+      /*tooltip: {
         show: false
-      },
+      },*/
       axis: {
         rotated : false,
         x: {
@@ -226,6 +226,12 @@ export class DadChartComponent implements OnInit {
         width: {
           ratio: 0.7
         }
+      },
+      tooltip: {
+        'contents': function (d, defaultTitleFormat, defaultValueFormat, color) {
+          //  return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)"+</div>";
+          return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + " " + "</div>";
+        },
       }
     };
 

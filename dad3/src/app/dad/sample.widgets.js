@@ -257,7 +257,7 @@ exports.WIDGETS = [
         }
     },
     { id: 'widget_chart2',
-        name: 'Application Deployment Count by Number of Devices',
+        name: 'Application Popularity',
         type: 1,
         endpoint: "AverageDischargeRate",
         parameters: [
