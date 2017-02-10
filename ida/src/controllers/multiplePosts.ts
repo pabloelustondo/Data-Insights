@@ -71,7 +71,7 @@ export class MultiplePostsController {
 
             let getCustomerID = function () {
                 let promise = new Promise(function (resolve, reject) {
-                    resolve(jwt.verify(token, config['mcdp-secret']));
+                    resolve(jwt.verify(token, config['expiring-secret']));
                 });
                 return promise;
             };

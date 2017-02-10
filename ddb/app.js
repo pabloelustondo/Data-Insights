@@ -13,7 +13,14 @@ function callDbAndRespond(req,res,query){
 			res.send({data:null, status:err });
         }
 		else query(req,res,db,function(err,doc){
-			res.send({data:doc, status:err?err:'ok' });
+
+			console.log( 'returned data = ' + JSON.stringify(doc));
+			if (doc !== null) {
+                res.status(200).send(doc);
+            }
+            else {
+				res.status(404).send();
+			}
 			db.close();
 		});
 	});
@@ -65,9 +72,9 @@ app.get('/todo/:id', function(req,res){
 
 app.get('/getDBAccess/:tenatID', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-    	console.log(req.params.tenatID);
+    	console.log(req.params.tenantID);
     	db.collection('todo').findOne({
-            "tenatID":req.params.tenatID
+            "tenantID":req.params.tenatID
 		}, next);
     });
 });
@@ -86,22 +93,42 @@ app.put('/todo', function(req,res){
 	});
 });
 
-app.post ('/insertNewDataSource', function (req, res ) {
+app.post('/insertNewDataSource', function (req, res ) {
+
+	var _tentnatId = req.body.tenantID;
+	var _agentId = req.body.agentID;
+	var _activationKey = req.body.activationKey;
 
 	callDbAndRespond(req, res, function (req,res, db, next ){
-		db.collection('todo').insertOne(req.body, next);
+		db.collection('dataSources').insertOne(req.body, next);
 	});
+});
+
+app.get('/dataSources', function (req, res) {
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('dataSources').find({}).toArray(next);
+    });
+});
+
+
+app.get('/dataSources/:tenantID', function (req, res) {
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('dataSources').find({"tenantID":req.params.tenantID}).toArray(next);
+    });
 });
 
 app.get('/verifyDataSource', function (req, res) {
 
 	console.log ('reached verify data source');
-	console.log (req.query.tenantID);
-	var _tenantID = req.query.tenantID;
+	console.log (req.query.tenantId);
+	var _tenantId = req.query.tenantId;
+	var _agentId = req.query.agentId;
+	var _activationKey = req.query.activationKey;
+
     callDbAndRespond(req,res, function(req,res,db, next){
         console.log(req.params.tenatID);
-        db.collection('todo').findOne({
-            "tenantID": _tenantID
+        db.collection('dataSources').findOne({
+            "agentId": _agentId
         }, next);
     });
 

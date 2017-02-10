@@ -154,10 +154,10 @@ export class AverageDischargeRateController {
                 const options: rp.OptionsWithUrl = {
                     headers: {
                         'x-api-key': config['aws-x-api-key'],
-                        'RedShiftConnectionString': answer.data.RedShiftConnectionString,
-                        'Username': answer.data.accessUsername,
-                        'Password': answer.data.accessPswd,
-                        'DBName': answer.data.DBName
+                        'RedShiftConnectionString': answer.RedShiftConnectionString,
+                        'Username': answer.accessUsername,
+                        'Password': answer.accessPswd,
+                        'DBName': answer.DBName
                     },
                     json: true,
                     method: 'GET',
