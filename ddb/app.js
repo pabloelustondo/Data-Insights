@@ -13,7 +13,7 @@ function callDbAndRespond(req,res,query){
 			res.send({data:null, status:err });
         }
 		else query(req,res,db,function(err,doc){
-			var x = req;
+
 			console.log( 'returned data = ' + JSON.stringify(doc));
 			if (doc !== null) {
                 res.status(200).send(doc);
@@ -72,9 +72,9 @@ app.get('/todo/:id', function(req,res){
 
 app.get('/getDBAccess/:tenatID', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-    	console.log(req.params.tenatID);
+    	console.log(req.params.tenantID);
     	db.collection('todo').findOne({
-            "tenatID":req.params.tenatID
+            "tenantID":req.params.tenatID
 		}, next);
     });
 });
