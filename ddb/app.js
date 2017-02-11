@@ -9,13 +9,23 @@ var path = require('path');
 function callDbAndRespond(req,res,query){
 	var user = getUser(req);
 	mongodb.connect(dbUrl + "udb_" + user,function(err,db){
-		if (err) res.send({data:null, status:err });
+		if (err) {
+			res.send({data:null, status:err });
+        }
 		else query(req,res,db,function(err,doc){
-			res.send({data:doc, status:err?err:'ok' });
+
+			console.log( 'returned data = ' + JSON.stringify(doc));
+			if (doc !== null) {
+                res.status(200).send(doc);
+            }
+            else {
+				res.status(404).send();
+			}
 			db.close();
 		});
 	});
 }
+
 
 function getUser(req){
 	var username = 'test'; var password;
@@ -52,6 +62,7 @@ app.get('/todo', function(req,res){
 	});
 });
 
+
 app.get('/todo/:id', function(req,res){
 	callDbAndRespond(req,res, function(req,res,db, next){
 		db.collection('todo').findOne({"_id":ObjectID(req.params.id)},next);
@@ -61,9 +72,9 @@ app.get('/todo/:id', function(req,res){
 
 app.get('/getDBAccess/:tenatID', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-    	console.log(req.params.tenatID);
+    	console.log(req.params.tenantID);
     	db.collection('todo').findOne({
-            "tenatID":req.params.tenatID
+            "tenantID":req.params.tenatID
 		}, next);
     });
 });
@@ -81,6 +92,77 @@ app.put('/todo', function(req,res){
 		db.collection('todo').update({"_id":_id},req.body,next);
 	});
 });
+
+app.post('/insertNewDataSource', function (req, res ) {
+
+	var _tentnatId = req.body.tenantID;
+	var _agentId = req.body.agentID;
+	var _activationKey = req.body.activationKey;
+
+	callDbAndRespond(req, res, function (req,res, db, next ){
+		db.collection('dataSources').insertOne(req.body, next);
+	});
+});
+
+app.get('/dataSources', function (req, res) {
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('dataSources').find({}).toArray(next);
+    });
+});
+
+
+app.get('/dataSources/:tenantID', function (req, res) {
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('dataSources').find({"tenantID":req.params.tenantID}).toArray(next);
+    });
+});
+
+app.get('/verifyDataSource', function (req, res) {
+
+	console.log ('reached verify data source');
+	console.log (req.query.tenantId);
+	var _tenantId = req.query.tenantId;
+	var _agentId = req.query.agentId;
+	var _activationKey = req.query.activationKey;
+
+    callDbAndRespond(req,res, function(req,res,db, next){
+        console.log(req.params.tenatID);
+        db.collection('dataSources').findOne({
+            "agentId": _agentId
+        }, next);
+    });
+
+});
+
+app.post('/updateDataSourceCredentials', function (req, res ) {
+
+
+    var _tenantId = req.body.tenantID;
+    console.log("tenant id = " + _tenantId);
+
+	callDbAndRespond(req, res, function(req,res,db, next) {
+
+        var _tenantId = req.body.tenantID;
+        db.collection('todo').update(
+            {
+                tenantID: _tenantId
+            },
+            {
+                $set: {
+					accessUsername : req.body.accessUsername,
+					accessPswd : req.body.accessPswd,
+                    RedShiftConnectionString: req.body.RedShiftConnectionString,
+                    DBName: req.body.DBName
+                }
+            },
+            {
+                upsert: false
+            }, next);
+
+    });
+
+});
+
 
 app.delete('/todo', function(req,res){
 	callDbAndRespond(req,res, function(req,res,db, next){

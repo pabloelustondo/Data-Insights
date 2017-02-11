@@ -1,11 +1,19 @@
  var A1_Mind = {"name":"A1-Mind"};
- var sample_dss_config = {"tenatID":"varun_2",
+ var sample_dss_config = {"tenatID":"tenantXYZ",
  "customerID": "random",
-     "accessUsername": "customername",
+     "accessUsername": "cutomername",
  "accessPswd":"hqWK{u9A)",
+     'RedShiftConnectionString': 'Testing1233dataanalytics.cxvwwvumct05.us-east-1.redshift.amazonaws.com',
+     'DBName': 'dataanalyticsdb'
+ };
+ var original = {"tenatID":"tenantXYZ",
+     "customerID": "random",
+     "accessUsername": "cutomername",
+     "accessPswd":"hqWK{u9A)",
      'RedShiftConnectionString': 'dataanalytics.cxvwwvumct05.us-east-1.redshift.amazonaws.com',
      'DBName': 'dataanalyticsdb'
  };
+
 
 var temp={};
 var sampleconfig = {
@@ -289,11 +297,28 @@ describe("Jassplan TO-DO REST API Version 16", function() {
             });
         });
     });
-*/
+
     describe("POST /todo", function() {
         it("creates a first genie spec", function(done) {
             $.ajax({
                 url: "/todo",
+                type:"POST",
+                data: JSON.stringify(original),
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    var emptyArray = [];
+                    expect(data).toBeDefined();
+                    expect(data.data).toBeDefined();
+                    done();}
+            });
+        });
+    });
+
+     */
+    describe("POST /newIDP", function() {
+        it("creates a first genie spec", function(done) {
+            $.ajax({
+                url: "/newIDP",
                 type:"POST",
                 data: JSON.stringify(sample_dss_config),
                 contentType:"application/json",

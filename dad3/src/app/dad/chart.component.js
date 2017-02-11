@@ -19,6 +19,9 @@ var DadChart = (function (_super) {
     function DadChart() {
         _super.apply(this, arguments);
         this.mini = false;
+        this.big = false;
+        this.horizontal = false;
+        this.embeddedChart = false;
     }
     return DadChart;
 }(dadmodels_1.DadElement));
@@ -36,6 +39,22 @@ var DadChartComponent = (function () {
         this.editMode = false;
         this.refreshMode = false;
     }
+    Object.defineProperty(DadChartComponent.prototype, "data", {
+        get: function () {
+            return this._data;
+        },
+        set: function (d) {
+            this._data = d;
+            if (this.c3chart) {
+                var chartData = this.mapper.map(this.chart, this.data);
+                this.c3chart.load(chartData);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    ;
     DadChartComponent.prototype.onDateChanged = function (event) {
         console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     };
@@ -44,6 +63,14 @@ var DadChartComponent = (function () {
             this.refreshMode = true;
         else
             this.refreshMode = false;
+    };
+    DadChartComponent.prototype.myclass = function () {
+        if (this.chart.big) {
+            return 'col-sm-12 col-lg-12';
+        }
+        else {
+            return 'col-sm-8 col-lg-6';
+        }
     };
     DadChartComponent.prototype.ngOnInit = function () {
         this.miniChartWidth = this.chart.width;
@@ -62,6 +89,7 @@ var DadChartComponent = (function () {
         else {
             this.dadChartDataService.getElementData(this.chart).then(function (data) {
                 _this.data = data.data;
+                //this.chart.data = data.data;
                 _this.drawChart(_this.chart, _this.data);
             }).catch(function (err) { return console.log(err.toString()); });
         }
@@ -102,19 +130,19 @@ var DadChartComponent = (function () {
             return d === 0;
         }).remove();
         var c3Config = {
-            size: {
-                height: chartConfig.height,
-                width: chartConfig.width,
-            },
             bindto: '#' + chartConfig.id,
+            size: {
+                height: 400
+            },
             data: bardata,
             color: {
                 pattern: this.colorPalette,
             },
-            tooltip: {
-                show: false
-            },
+            /*tooltip: {
+              show: false
+            },*/
             axis: {
+                rotated: false,
                 x: {
                     type: 'category',
                     show: true,
@@ -145,9 +173,6 @@ var DadChartComponent = (function () {
                     show: false
                 }
             },
-            regions: [
-                { start: this.indexOfRegions(chartData) },
-            ],
             zoom: {
                 enabled: true
             },
@@ -161,9 +186,21 @@ var DadChartComponent = (function () {
                 width: {
                     ratio: 0.7
                 }
+            },
+            tooltip: {
+                'contents': function (d, defaultTitleFormat, defaultValueFormat, color) {
+                    //return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)+"</div>";
+                    return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + ' ' + "</div>";
+                },
             }
         };
+        if (chartConfig.regionM) {
+            c3Config.regions = [
+                { start: this.indexOfRegions(chartData) },
+            ];
+        }
         if (chartConfig.mini) {
+            c3Config.size = {};
             c3Config.size.width = this.miniChartWidth;
             c3Config.size.height = this.miniChartHeight;
             c3Config.legend.show = false;
@@ -179,15 +216,39 @@ var DadChartComponent = (function () {
                 return d.value === 100 ? "#007F00" : color && d.value <= 30 ? "#FF0000" : color;
             };
         }
+        if (chartConfig.embeddedChart) {
+            c3Config.regions = [{ 'start': 100 }];
+            c3Config.axis.x.label.text = [];
+            c3Config.axis.y.label.text = [];
+            c3Config.size.height = 200;
+        }
         ;
+        if (chartConfig.horizontal) {
+            c3Config.axis.rotated = true;
+        }
         this.c3chart = c3.generate(c3Config);
-        var eventHandler = this.goToTable;
-        var chart = this.chart;
-        var route = this.route;
-        var router = this.router;
-        this.c3chart.internal.main.on('click', function (d) {
-            eventHandler(d, chart, router, route);
-        });
+        if (chartConfig.action === 'drill') {
+            var eventHandler_1 = this.goToTable;
+            var chart_1 = this.chart;
+            var route_1 = this.route;
+            var router_1 = this.router;
+            this.c3chart.internal.main.on('click', function (d) {
+                eventHandler_1(d, chart_1, router_1, route_1);
+            });
+        }
+        else {
+            var eventHandler_2 = this.growIt;
+            var chart_2 = this.chart;
+            var route_2 = this.route;
+            var router_2 = this.router;
+            this.c3chart.internal.main.on('click', function (d) {
+                eventHandler_2(d, chart_2, router_2, route_2);
+            });
+        }
+    };
+    ;
+    DadChartComponent.prototype.growIt = function (d, chart, router, route) {
+        router.navigate(['bigchart', chart.id], { relativeTo: route });
     };
     ;
     DadChartComponent.prototype.goToTable = function (d, chart, router, route) {
@@ -415,12 +476,12 @@ var DadChartComponent = (function () {
     ], DadChartComponent.prototype, "chart", void 0);
     __decorate([
         core_1.Input()
-    ], DadChartComponent.prototype, "data", void 0);
+    ], DadChartComponent.prototype, "data", null);
     DadChartComponent = __decorate([
         core_1.Component({
             selector: 'dadchart',
             providers: [data_service_1.DadElementDataService],
-            template: " <!--  BEGIN CHART COMPONENT -->\n   <div class=\"col-sm-12 col-lg-6\">        \n       <div class=\"card-block pb-0\">\n       <div *ngIf=\"!chart.mini\" class=\"card card-inverse card-secondary\">\n           <div *ngIf=\"!chart.mini\" class=\"btn-group float-xs-right\" dropdown>\n               <button style=\"color:black;\" type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                   <i class=\"icon-settings\"></i>\n               </button>\n               <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                   <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('lalal')\">Edit</div></button>\n                   <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n               </div>\n           </div>\n  \n      <div *ngIf=\"!chart.mini\">\n          <div style=\"color:black; font-weight:bold;\">{{chart.name}}</div> <br/><br/><br/>        \n          <div style= \"text-align:center; height:700px;  width:700px\" [id]=\"chart.id\"></div>\n          <div style=\"margin-left: 15px; color:black;\">\n              <dadparameters [element]=\"chart\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeConfig()\"></dadparameters>  \n          </div>\n      </div>\n      </div>\n      <div *ngIf=\"chart.mini\" style= \"text-align:left; height:auto;  width:auto;\" [id]=\"chart.id\"></div>\n      </div>\n    </div>\n\n    <!--  END CHART COMPONENT -->"
+            template: "\n    <div *ngIf=\"!chart.mini && !chart.embeddedChart\" [ngClass]=\"myclass()\">  \n        <div class=\"inside\">\n          <div  class=\"content card-inverse card-secondary\">    \n            <div class=\"card-block pb-0\">\n                <div class=\"content card card-secondary\">    \n                    <div class=\"btn-group float-xs-right\" dropdown>\n                        <button style=\"color:black;\" type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                            <i class=\"icon-settings\"></i>\n                        </button>\n                        <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('lalal')\">Edit</div></button>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n                        </div>\n                    </div>\n                    <div>\n                        <div style=\"color:black;\">{{chart.name}}</div><br/><br/><br/>        \n                        <div style= \"text-align:center; height:100%; width:100%\" [id]=\"chart.id\"></div>\n                        <div style=\"color:black;\">\n                            <dadparameters [element]=\"chart\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeConfig()\"></dadparameters>  \n                        </div>\n                    </div>\n                </div>\n            </div>\n          </div>\n          <!--If it is mini chart -->\n         \n        </div>\n    </div>\n        <div *ngIf=\"chart.mini\" style=\"text-align:left; height:auto; width:auto;\" [id]=\"chart.id\"></div>\n        <div *ngIf=\"chart.embeddedChart\"  style=\"text-align:left; width:auto;\" [id]=\"chart.id\"></div>\n\n    "
         })
     ], DadChartComponent);
     return DadChartComponent;

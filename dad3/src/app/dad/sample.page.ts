@@ -13,9 +13,8 @@ export const PAGES: DadPage[] = [
 
     {id:"deviceapps",
         name: "Device Apps Usage Analytics",
-        widgetids:[ "widget1"],
-        chartids: ['chartbar'],
+        widgetids:['widget_chart1', 'widget_chart2'],
+        chartids: [],
         tableids: []
     }
-
-]
+];

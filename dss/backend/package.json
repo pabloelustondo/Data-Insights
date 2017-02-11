@@ -8,6 +8,7 @@
     "start": "node server.js",
     "debugmac": "node $NODE_DEBUG_OPTION server.js",
     "debugwin": "node %NODE_DEBUG_OPTION% server.js"
+
   },
   "keywords": [
     "jwt",

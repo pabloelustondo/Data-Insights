@@ -1,4 +1,5 @@
 import './controllers/multiplePosts';
+import './controllers/getAuthorizationToken';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as https from 'https';

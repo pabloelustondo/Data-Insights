@@ -8,6 +8,7 @@ import './controllers/Lists/listOfDevicesDidNotSurviveShift';
 import './controllers/Lists/deviceList';
 import './controllers/Lists/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
 import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
+import './controllers/applicationExecutionTime';
 
 
 import * as winston from 'winston';

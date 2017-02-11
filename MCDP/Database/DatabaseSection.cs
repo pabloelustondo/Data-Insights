@@ -111,7 +111,6 @@ namespace Soti.MCDP.Database
                 }
                 else
                 {
-                    Log(logMessage + settings.ConnectionString);
                     return settings.ConnectionString;
                 }
             }

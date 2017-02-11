@@ -9,23 +9,27 @@ declare var d3, c3: any;
 
 export class DadChart extends DadElement{
     type: string;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
     mini?: boolean = false;
+    big?: boolean = false;
+    horizontal?: boolean = false;
+    embeddedChart?: boolean = false;
     data?: any;
     regionM?:number;
     aname?: String;
     bname?: String;
+    action?: String;
 }
 @Component({
     selector: 'dadchart',
     providers:[DadElementDataService],
     template: `
-    <div class="col-sm-8 col-lg-6">  
+    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="myclass()">  
         <div class="inside">
-          <div *ngIf="!chart.mini" class="content card card-inverse card-secondary">    
+          <div  class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
-                <div class="content card card-inverse card-secondary">    
+                <div class="content card card-secondary">    
                     <div class="btn-group float-xs-right" dropdown>
                         <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
                             <i class="icon-settings"></i>
@@ -46,18 +50,28 @@ export class DadChart extends DadElement{
             </div>
           </div>
           <!--If it is mini chart -->
-          <div class="card-block pb-0">
-              <div *ngIf="chart.mini" style= "text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
-          </div>         
+         
         </div>
     </div>
+        <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
+        <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
+
     `
 })
 export class DadChartComponent implements OnInit {
     @Input()
     chart: DadChart
     @Input()
-    data;
+    set data(d){
+      this._data = d;
+      if (this.c3chart){
+      let chartData = this.mapper.map(this.chart, this.data);
+      this.c3chart.load(chartData);}
+    };
+    get data(){
+       return this._data;
+    };
+    _data;
     mapper: Mapper = new Mapper();
     colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
     c3chart: any;
@@ -78,6 +92,14 @@ export class DadChartComponent implements OnInit {
   onRefresh():void{
     if (!this.refreshMode) this.refreshMode = true;
     else this.refreshMode = false;
+  }
+
+  myclass(){
+    if (this.chart.big){
+      return 'col-sm-12 col-lg-12';
+    } else {
+      return 'col-sm-8 col-lg-6';
+    }
   }
 
   ngOnInit() {
@@ -150,20 +172,20 @@ export class DadChartComponent implements OnInit {
       return d === 0;
     }).remove();
 
-    let c3Config = {
-      size: {
-        height: chartConfig.height,
-        width: chartConfig.width,
-      },
+    let c3Config:any= {
       bindto: '#' + chartConfig.id,
+      size:{
+        height: 400
+      },
       data: bardata,
       color: {
         pattern: this.colorPalette,
       },
-      tooltip: {
+      /*tooltip: {
         show: false
-      },
+      },*/
       axis: {
+        rotated : false,
         x: {
           type: 'category',
           show: true,
@@ -194,9 +216,6 @@ export class DadChartComponent implements OnInit {
           show: false
         }
       },
-      regions: [
-        {start: this.indexOfRegions(chartData)},
-      ],
       zoom: {
         enabled: true
       },
@@ -210,9 +229,23 @@ export class DadChartComponent implements OnInit {
         width: {
           ratio: 0.7
         }
+      },
+      tooltip: {
+        'contents': function (d, defaultTitleFormat, defaultValueFormat, color) {
+            //return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)+"</div>";
+          return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + ' ' + "</div>";
+        },
       }
     };
+
+if (chartConfig.regionM){
+    c3Config.regions =[
+      {start: this.indexOfRegions(chartData)},
+    ];
+}
+
     if (chartConfig.mini) {
+      c3Config.size = {};
       c3Config.size.width = this.miniChartWidth;
       c3Config.size.height = this.miniChartHeight;
       c3Config.legend.show = false;
@@ -227,20 +260,42 @@ export class DadChartComponent implements OnInit {
       c3Config.data.color = function (color, d) {
         return d.value === 100 ? "#007F00" : color && d.value <= 30 ? "#FF0000" : color;
       };
-
     }
-    ;
+    if (chartConfig.embeddedChart) {
+      c3Config.regions = [{'start': 100}]
+      c3Config.axis.x.label.text = [];
+      c3Config.axis.y.label.text = [];
+      c3Config.size.height = 200;
+    };
+    if (chartConfig.horizontal) {
+      c3Config.axis.rotated = true;
+    }
     this.c3chart = c3.generate(c3Config);
 
-    let eventHandler = this.goToTable;
-    let chart = this.chart;
-    let route = this.route;
-    let router = this.router;
+    if(chartConfig.action === 'drill') {
+      let eventHandler = this.goToTable;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
 
-    this.c3chart.internal.main.on('click', function(d){
-      eventHandler(d,chart,router,route);
+      this.c3chart.internal.main.on('click', function (d) {
+            eventHandler(d, chart, router, route);
+          }
+      );
+    } else {
+      let eventHandler = this.growIt;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
+
+        this.c3chart.internal.main.on('click', function (d) {
+          eventHandler(d, chart, router, route);
+      })
     }
-    );
+  };
+
+  growIt(d,chart,router,route){
+    router.navigate(['bigchart', chart.id], { relativeTo: route});
   };
 
   goToTable(d,chart,router,route){
