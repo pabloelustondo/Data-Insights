@@ -250,7 +250,7 @@ export const WIDGETS: DadWidget[] = [
       aname : 'Execution Minutes',
       bname : 'Application ID',
       width: 275,
-      height: 200,
+      height: 250,
       embeddedChart: true,
       horizontal: true,
       action: 'grow'
