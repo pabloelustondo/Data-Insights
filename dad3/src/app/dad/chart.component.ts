@@ -3,6 +3,7 @@ import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
+import { config } from "./appconfig";
 
 
 declare var d3, c3: any;
@@ -15,7 +16,6 @@ export class DadChart extends DadElement{
     big?: boolean = false;
     horizontal?: boolean = false;
     embeddedChart?: boolean = false;
-    data?: any;
     regionM?:number;
     aname?: String;
     bname?: String;
@@ -118,8 +118,9 @@ export class DadChartComponent implements OnInit {
 
     if (this.data){
       this.drawChart(this.chart,this.data);
-    }
-    else
+    };
+
+    if (!config.testing && this.chart.endpoint)
     { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
       this.dadChartDataService.getElementData(this.chart).then(
         data => {

@@ -57,11 +57,4 @@ describe('DadConfigComponent', () => {
     let app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('Dashboard Configuration');
   }));
-
-  it('should render title in a h1 tag', async(() => {
-    let fixture = TestBed.createComponent(DadConfigComponent);
-    fixture.detectChanges();
-    let compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Data Analytics Dashboard');
-  }));
 });

@@ -9,6 +9,7 @@ import {DadTable} from "./table.component";
 export class DadElement {
   id: string;
   name?: string;
+  data?: any;
   parameters?: any[];
   metricName?: string;
   predicates?: string[];
@@ -21,6 +22,8 @@ export class DadElement {
   dimensions?: DadDimension[];
   tableId?: string;
   chart?: DadChart;
+  transformation?: any;
+  transformations?: any[];
 }
 
 

@@ -1,4 +1,5 @@
 "use strict";
+var transformer_1 = require("./transformer");
 var ChartData = (function () {
     function ChartData() {
         this.Dimension = [];
@@ -67,7 +68,8 @@ var Mapper = (function () {
                 type: config.type
             };
         }
-        return dataForChart;
+        var transformer = new transformer_1.DadTransformer();
+        return transformer.transform(config, dataForChart);
     };
     return Mapper;
 }());

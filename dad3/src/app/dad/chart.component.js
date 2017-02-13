@@ -14,6 +14,7 @@ var core_1 = require('@angular/core');
 var data_service_1 = require('./data.service');
 var mapper_1 = require("./mapper");
 var dadmodels_1 = require("./dadmodels");
+var appconfig_1 = require("./appconfig");
 var DadChart = (function (_super) {
     __extends(DadChart, _super);
     function DadChart() {
@@ -86,7 +87,8 @@ var DadChartComponent = (function () {
         if (this.data) {
             this.drawChart(this.chart, this.data);
         }
-        else {
+        ;
+        if (!appconfig_1.config.testing) {
             this.dadChartDataService.getElementData(this.chart).then(function (data) {
                 _this.data = data.data;
                 //this.chart.data = data.data;

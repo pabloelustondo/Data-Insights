@@ -220,6 +220,16 @@ exports.WIDGETS = [
         name: 'Application Deployment Count by Number of Devices',
         type: 1,
         endpoint: "ApplicationDeploymentCount",
+        data: [
+            {
+                "ExecutionTimeMinutes": 41628,
+                "AppId": "android"
+            },
+            {
+                "ExecutionTimeMinutes": 43,
+                "AppId": "com.ebay.mobile"
+            }
+        ],
         parameters: [
             {
                 dateFrom: "2017-01-24T20:30:21",

@@ -4,6 +4,7 @@ import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
+import { config } from "./appconfig";
 
 export enum DadWidgetType { OneNumber, Chart };
 
@@ -148,14 +149,21 @@ export class DadWidgetComponent implements OnInit {
   ngOnInit() {
     console.log("Widgets are loading... :" + this.widget.id);
      // this.mapParameters2ui();
-    this.dadWidgetDataService.getElementData(this.widget).then(
-      data => {
-        this.data = data.data;
-        if(this.data.errorMessage != null){
-            alert (this.data.errorMessage);
-        }
-        this.fixNullsInMetrics();
+
+      if (!this.data && this.widget.data){
+          this.data = this.widget.data;
       }
-    ).catch(err => console.log(err.toString()));
+
+      if (!config.testing) {
+          this.dadWidgetDataService.getElementData(this.widget).then(
+              data => {
+                  this.data = data.data;
+                  if (this.data.errorMessage != null) {
+                      alert(this.data.errorMessage);
+                  }
+                  this.fixNullsInMetrics();
+              }
+          ).catch(err => console.log(err.toString()));
+      }
   }
 }

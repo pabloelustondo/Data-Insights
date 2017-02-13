@@ -15,6 +15,7 @@ var data_service_1 = require("./data.service");
 var chart_service_1 = require('./chart.service');
 var mapper_1 = require("./mapper");
 var dadmodels_1 = require("./dadmodels");
+var appconfig_1 = require("./appconfig");
 (function (DadWidgetType) {
     DadWidgetType[DadWidgetType["OneNumber"] = 0] = "OneNumber";
     DadWidgetType[DadWidgetType["Chart"] = 1] = "Chart";
@@ -87,13 +88,18 @@ var DadWidgetComponent = (function () {
         var _this = this;
         console.log("Widgets are loading... :" + this.widget.id);
         // this.mapParameters2ui();
-        this.dadWidgetDataService.getElementData(this.widget).then(function (data) {
-            _this.data = data.data;
-            if (_this.data.errorMessage != null) {
-                alert(_this.data.errorMessage);
-            }
-            _this.fixNullsInMetrics();
-        }).catch(function (err) { return console.log(err.toString()); });
+        if (!this.data && this.widget.data) {
+            this.data = this.widget.data;
+        }
+        if (!appconfig_1.config.testing) {
+            this.dadWidgetDataService.getElementData(this.widget).then(function (data) {
+                _this.data = data.data;
+                if (_this.data.errorMessage != null) {
+                    alert(_this.data.errorMessage);
+                }
+                _this.fixNullsInMetrics();
+            }).catch(function (err) { return console.log(err.toString()); });
+        }
     };
     __decorate([
         core_1.Input()

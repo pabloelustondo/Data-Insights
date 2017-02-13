@@ -81,6 +81,6 @@ export class Mapper{
     }
   }
     let transformer = new DadTransformer();
-    return transformer.transform(config, dataForChart);
+    return transformer.transformAll(config, dataForChart);
   }
 }
