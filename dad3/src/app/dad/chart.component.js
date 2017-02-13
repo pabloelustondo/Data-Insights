@@ -66,7 +66,7 @@ var DadChartComponent = (function () {
     };
     DadChartComponent.prototype.myclass = function () {
         if (this.chart.big) {
-            return 'col-sm-12 col-lg-6';
+            return 'col-sm-12 col-lg-12';
         }
         else {
             return 'col-sm-8 col-lg-6';
@@ -131,6 +131,9 @@ var DadChartComponent = (function () {
         }).remove();
         var c3Config = {
             bindto: '#' + chartConfig.id,
+            size: {
+                height: 400
+            },
             data: bardata,
             color: {
                 pattern: this.colorPalette,
@@ -186,8 +189,8 @@ var DadChartComponent = (function () {
             },
             tooltip: {
                 'contents': function (d, defaultTitleFormat, defaultValueFormat, color) {
-                    //  return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)"+</div>";
-                    return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + " " + "</div>";
+                    //return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)+"</div>";
+                    return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + ' ' + "</div>";
                 },
             }
         };
@@ -217,6 +220,7 @@ var DadChartComponent = (function () {
             c3Config.regions = [{ 'start': 100 }];
             c3Config.axis.x.label.text = [];
             c3Config.axis.y.label.text = [];
+            c3Config.size.height = 200;
         }
         ;
         if (chartConfig.horizontal) {
@@ -477,7 +481,7 @@ var DadChartComponent = (function () {
         core_1.Component({
             selector: 'dadchart',
             providers: [data_service_1.DadElementDataService],
-            template: "\n    <div *ngIf=\"!chart.mini && !chart.embeddedChart\" [ngClass]=\"myclass()\">  \n        <div class=\"inside\">\n          <div  class=\"content card card-secondary\">    \n            <div class=\"card-block pb-0\">\n                <div class=\"content card card-secondary\">    \n                    <div class=\"btn-group float-xs-right\" dropdown>\n                        <button style=\"color:black;\" type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                            <i class=\"icon-settings\"></i>\n                        </button>\n                        <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('lalal')\">Edit</div></button>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n                        </div>\n                    </div>\n                    <div>\n                        <div style=\"color:black;\">{{chart.name}}</div><br/><br/><br/>        \n                        <div style= \"text-align:center; height:100%; width:100%\" [id]=\"chart.id\"></div>\n                        <div style=\"color:black;\">\n                            <dadparameters [element]=\"chart\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeConfig()\"></dadparameters>  \n                        </div>\n                    </div>\n                </div>\n            </div>\n          </div>\n          <!--If it is mini chart -->\n         \n        </div>\n    </div>\n        <div *ngIf=\"chart.mini\" style=\"text-align:left; height:auto; width:auto;\" [id]=\"chart.id\"></div>\n        <div *ngIf=\"chart.embeddedChart\"  style=\"text-align:left; width:auto;\" [id]=\"chart.id\"></div>\n\n    "
+            template: "\n    <div *ngIf=\"!chart.mini && !chart.embeddedChart\" [ngClass]=\"myclass()\">  \n        <div class=\"inside\">\n          <div  class=\"content card-inverse card-secondary\">    \n            <div class=\"card-block pb-0\">\n                <div class=\"content card card-secondary\">    \n                    <div class=\"btn-group float-xs-right\" dropdown>\n                        <button style=\"color:black;\" type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                            <i class=\"icon-settings\"></i>\n                        </button>\n                        <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('lalal')\">Edit</div></button>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n                        </div>\n                    </div>\n                    <div>\n                        <div style=\"color:black;\">{{chart.name}}</div><br/><br/><br/>        \n                        <div style= \"text-align:center; height:100%; width:100%\" [id]=\"chart.id\"></div>\n                        <div style=\"color:black;\">\n                            <dadparameters [element]=\"chart\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeConfig()\"></dadparameters>  \n                        </div>\n                    </div>\n                </div>\n            </div>\n          </div>\n          <!--If it is mini chart -->\n         \n        </div>\n    </div>\n        <div *ngIf=\"chart.mini\" style=\"text-align:left; height:auto; width:auto;\" [id]=\"chart.id\"></div>\n        <div *ngIf=\"chart.embeddedChart\"  style=\"text-align:left; width:auto;\" [id]=\"chart.id\"></div>\n\n    "
         })
     ], DadChartComponent);
     return DadChartComponent;

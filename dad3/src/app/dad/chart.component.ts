@@ -27,7 +27,7 @@ export class DadChart extends DadElement{
     template: `
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="myclass()">  
         <div class="inside">
-          <div  class="content card card-secondary">    
+          <div  class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
                 <div class="content card card-secondary">    
                     <div class="btn-group float-xs-right" dropdown>
@@ -96,7 +96,7 @@ export class DadChartComponent implements OnInit {
 
   myclass(){
     if (this.chart.big){
-      return 'col-sm-12 col-lg-6';
+      return 'col-sm-12 col-lg-12';
     } else {
       return 'col-sm-8 col-lg-6';
     }
@@ -174,6 +174,9 @@ export class DadChartComponent implements OnInit {
 
     let c3Config:any= {
       bindto: '#' + chartConfig.id,
+      size:{
+        height: 400
+      },
       data: bardata,
       color: {
         pattern: this.colorPalette,
@@ -229,8 +232,8 @@ export class DadChartComponent implements OnInit {
       },
       tooltip: {
         'contents': function (d, defaultTitleFormat, defaultValueFormat, color) {
-          //  return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)"+</div>";
-          return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + " " + "</div>";
+            //return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)+"</div>";
+          return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + ' ' + "</div>";
         },
       }
     };
@@ -262,6 +265,7 @@ if (chartConfig.regionM){
       c3Config.regions = [{'start': 100}]
       c3Config.axis.x.label.text = [];
       c3Config.axis.y.label.text = [];
+      c3Config.size.height = 200;
     };
     if (chartConfig.horizontal) {
       c3Config.axis.rotated = true;
