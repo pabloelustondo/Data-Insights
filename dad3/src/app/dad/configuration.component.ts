@@ -6,6 +6,7 @@ import { DadChart } from './chart.component';
 import { DadWidget } from './widget.component';
 import { DadTable } from './table.component';
 import { DadPage } from './page.component';
+import { FormsModule } from '@angular/forms';
 import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService, DadPageConfigsService } from './chart.service';
 
 declare var d3, c3: any;
