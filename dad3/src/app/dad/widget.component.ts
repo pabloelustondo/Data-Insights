@@ -150,7 +150,7 @@ export class DadWidgetComponent implements OnInit {
     console.log("Widgets are loading... :" + this.widget.id);
      // this.mapParameters2ui();
 
-      if (!this.data && this.widget.data){
+      if (!this.data && this.widget.data && config.testing){
           this.data = this.widget.data;
       }
 

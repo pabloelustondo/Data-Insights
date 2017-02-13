@@ -112,7 +112,7 @@ export class DadChartComponent implements OnInit {
   ngAfterViewInit() {
     console.log("CHART starts drawing AFTER VIEW INIT :" + this.chart.id);
 
-    if (!this.data && this.chart.data){
+    if (!this.data && this.chart.data && config.testing){
       this.data = this.chart.data;
     }
 
