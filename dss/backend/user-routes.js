@@ -27,7 +27,7 @@ var SotiAdminAccount =
 var enrollments = [SotiAdminAccount];
 
 function createToken(user) {
-  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 60 * 5 });
+  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 600 * 5 });
 }
 
 function readToken(token, callback) {  //Bearer
@@ -169,6 +169,28 @@ app.post('/enrollments', function(req, res) {
 
       if (response.statusCode === 200){
 
+        request({
+          rejectUnauthorized: false,
+          url: config.ddbEndpointUrl + "/newEnrollment",
+          json : {
+            'accountId' : enrollment.accountid,
+            'tenantId' : enrollment.tenantid,
+            'domainId' : enrollment.domainid
+          },
+          method: 'POST', //Specify the method
+          headers: { //We can define headers too
+            'Content-Type': 'application/json'
+          }
+
+        }, function(error, response, body) {
+          if (error) {
+            console.log(error);
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+          } else {
+            console.log('inserted : ' + JSON.stringify(enrollment));
+          }
+        });
+
         enrollments.push(enrollment);
         var resObj = JSON.parse(body);
         enrollment.mc_token= resObj.access_token;
@@ -206,7 +228,7 @@ app.get('/delete_all', function(req, res) {   //for now for testing...
 app.get('/delete_all_mine', function(req, res) {   //for now for testing...
 
   var rawToken = req.get('authorization').substr(7);
-  var jwt = readToken( raw, function(err,decoded){
+  var jwt = readToken( rawToken, function(err,decoded){
     enrollments = _.filter(enrollments, function(e){return e.accountid !== decoded.accountid;} );
     res.status(200).send({});
   });

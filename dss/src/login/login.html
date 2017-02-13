@@ -6,12 +6,13 @@
     <div class="form-group">
       <label for="loginmethod">Login Medhod</label>
       <select #loginmethod class="form-control" id="loginmethod" placeholder="LoginMethod">
-      <option value="mobicontrol">MobiControl</option>
+      <option value="mobicontrol">MobiControl Instance 1</option>
+        <option value="mobiControl2">Second MobiControl Instance</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="domainid">Domain ID</label>
-      <input type="text" #domainid class="form-control" id="domainid" placeholder="DomainID">
+      <label for="domainid">Tenant ID</label>
+      <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID">
     </div>
   <div class="form-group">
     <label for="username">Username</label>
@@ -21,7 +22,7 @@
     <label for="password">Password</label>
     <input type="password" #password class="form-control" id="password" placeholder="Password">
   </div>
-  <button type="submit" class="btn btn-default">Submit</button>
+  <button type="submit" class="btn btn-default">Login</button>
     <div style="height: 40px"></div>
     <a [routerLink]="['/signup']"><h4>Click here to Enroll</h4></a>
 
