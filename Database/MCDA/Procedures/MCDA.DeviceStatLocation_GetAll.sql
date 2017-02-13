@@ -31,7 +31,7 @@ BEGIN
 			BEGIN
 				Select @lastTimeTmp = max(a.ts) 
 				from (
-					select top (@BatchSize) [timestamp] as ts from DeviceStatInt 
+					select top (@BatchSize) [timestamp] as ts from [$(MobiControlDB)].dbo.DeviceStatLocation WITH (NOLOCK) 
 					where [timestamp] > @lastTime
 					order by [timestamp] asc
 					 ) a
@@ -42,7 +42,7 @@ BEGIN
 				END
 
 				SELECT A.DeviceId, A.[TimeStamp], StatType, IntValue
-					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
+					FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
 					WHERE [timestamp] > @lastTime and [timestamp] <= @lastTimeTmp
 			END
 		ELSE					--failed
@@ -59,8 +59,8 @@ BEGIN
 						  ,A.[Altitude]
 						  ,A.[Heading]
 						  ,A.[Speed]
-						FROM dbo.DeviceStatLocation AS A WITH (NOLOCK) 
-						INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+						FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+						INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 						WHERE [timestamp] > @PreviousTime and [timestamp] <= @lastTime
 				END
 				ELSE
@@ -75,8 +75,8 @@ BEGIN
 						  ,A.[Altitude]
 						  ,A.[Heading]
 						  ,A.[Speed]
-						FROM dbo.DeviceStatLocation AS A WITH (NOLOCK) 
-						INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+						FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+						INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 						WHERE [timestamp] <= @lastTime
 				END
 				
@@ -85,7 +85,7 @@ BEGIN
 	ELSE 
 	BEGIN
 		Select @lastTime = max(a.ts) from (
-			select top (@BatchSize) [timestamp] as ts from DeviceStatInt order by [timestamp] asc
+			select top (@BatchSize) [timestamp] as ts from [$(MobiControlDB)].dbo.DeviceStatLocation WITH (NOLOCK) order by [timestamp] asc
 			) a
 
 		IF (@lastTime IS NOT NULL AND NOT EXISTS(SELECT 1 from [MCDA].[DeviceSyncStatus] where Name = @tablename))
@@ -100,8 +100,8 @@ BEGIN
 				  ,A.[Altitude]
 				  ,A.[Heading]
 				  ,A.[Speed]
-				FROM dbo.DeviceStatLocation AS A WITH (NOLOCK) 
-				INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+				FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+				INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 				WHERE [timestamp] <= @lastTime
 		END
 	END

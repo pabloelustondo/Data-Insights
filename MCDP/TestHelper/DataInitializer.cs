@@ -13,11 +13,11 @@ namespace TestsHelper
         /// Dummy products
         /// </summary>
         /// <returns></returns>
-        public static List<DataRow4Ida> GetAll()
+        public static List<DeviceStatInt> GetAll()
         {
-            var DeviceSyncStatusList = new List<DataRow4Ida>
+            var DeviceSyncStatusList = new List<DeviceStatInt>
             {
-                new DataRow4Ida()
+                new DeviceStatInt()
                 {
                       dev_id = "0f32f9066aeabfcc1d0461841d331c7a54707452", 
                       int_value = "89", 
@@ -25,7 +25,7 @@ namespace TestsHelper
                       stat_type = -1, 
                       time_stamp = Convert.ToDateTime("2016-11-24 14:21:26.463")
                 },
-                new DataRow4Ida()
+                new DeviceStatInt()
                 {
                       dev_id = "0f32f9066aeabfcc1d0461841d331c7a54707452", 
                       int_value = "88", 
@@ -33,7 +33,7 @@ namespace TestsHelper
                       stat_type = -1, 
                       time_stamp = Convert.ToDateTime("2016-11-24 14:21:27.463")
                 },
-                new DataRow4Ida()
+                new DeviceStatInt()
                 {
                       dev_id = "0f32f9066aeabfcc1d0461841d331c7a54707452", 
                       int_value = "87", 
@@ -41,7 +41,7 @@ namespace TestsHelper
                       stat_type = -1, 
                       time_stamp = Convert.ToDateTime("2016-11-24 14:21:28.463")
                 },
-                new DataRow4Ida()
+                new DeviceStatInt()
                 {
                       dev_id = "0f32f9066aeabfcc1d0461841d331c7a54707451", 
                       int_value = "86", 
@@ -49,7 +49,7 @@ namespace TestsHelper
                       stat_type = -1, 
                       time_stamp = Convert.ToDateTime("2016-11-24 14:21:29.463")
                 },
-                new DataRow4Ida()
+                new DeviceStatInt()
                 {
                       dev_id = "0f32f9066aeabfcc1d0461841d331c7a54707451", 
                       int_value = "85", 
@@ -57,7 +57,7 @@ namespace TestsHelper
                       stat_type = -1, 
                       time_stamp = Convert.ToDateTime("2016-11-24 14:21:30.463")
                 },
-                new DataRow4Ida()
+                new DeviceStatInt()
                 {
                       dev_id = "0f32f9066aeabfcc1d0461841d331c7a54707451", 
                       int_value = "84", 

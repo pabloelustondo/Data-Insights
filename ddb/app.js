@@ -121,12 +121,13 @@ app.get('/verifyDataSource', function (req, res) {
 
 	console.log ('reached verify data source');
 	console.log (req.query.tenantId);
+	console.log ('req is ' + JSON.stringify(req.query));
 	var _tenantId = req.query.tenantId;
 	var _agentId = req.query.agentId;
 	var _activationKey = req.query.activationKey;
 
     callDbAndRespond(req,res, function(req,res,db, next){
-        console.log(req.params.tenatID);
+        console.log(_agentId);
         db.collection('dataSources').findOne({
             "agentId": _agentId
         }, next);

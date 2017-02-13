@@ -5,6 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json;
 
 
 namespace Soti.MCDP.DataProcess
@@ -40,14 +41,24 @@ namespace Soti.MCDP.DataProcess
         private readonly string idaUrl;
 
         /// <summary>
-        /// get JWT Token for IDA.   
+        /// get Unput Data Adapter (Ida) URL. 
+        /// </summary>
+        private readonly string idaHandShakeUrl;
+
+        /// <summary>
+        /// get JWT Token Path.   
         /// </summary>
         private readonly string JWTTokenPath;
 
         /// <summary>
-        /// get JWT Token for IDA.   
+        /// get JWT Token from IDA.   
         /// </summary>
         private readonly string JWTToken;
+
+        /// <summary>
+        /// get Expired JWT Token from IDA.   
+        /// </summary>
+        private string ExpiredJWTToken;
 
 
         int dBSkippedAfterFailure = 0;
@@ -72,6 +83,7 @@ namespace Soti.MCDP.DataProcess
             this.maxDBRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
             this.maxIdaRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
             this.idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
+            this.idaHandShakeUrl = ConfigurationManager.AppSettings["idaHandShakeUrl"];
 
             this.JWTTokenPath = Path.Combine(Directory.GetCurrentDirectory(), ConfigurationManager.AppSettings["JWTTokenName"]);
 
@@ -81,11 +93,13 @@ namespace Soti.MCDP.DataProcess
             if (File.Exists(JWTTokenPath))
             {
                 JWTToken = File.ReadAllText(JWTTokenPath);
+
+                this.ExpiredJWTToken = HandShakeToIda(JWTToken);
             }
-            else
-            {
-                JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ";
-            }
+            //else
+            //{
+            //    JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ";
+            //}
 
             Log(logMessage + "[INFO] JWTToken: " + JWTToken);
             //LOADING DATABASE PROVIDER
@@ -191,7 +205,7 @@ namespace Soti.MCDP.DataProcess
         /// This method is the one that actually send data to the input data adapter
         /// </summary>
         /// <param name="ida4Data">ida for Data.</param>
-        private void SendData2Ida(Data4Ida ida4Data)
+        private void SendData2Ida(DeviceStatIntList ida4Data)
         {
             //// TODO: is too bad that here we will send the post one by one... we need to send a chunk..and we are sending one by one
             //foreach (var data in ida4Data.data)
@@ -206,7 +220,7 @@ namespace Soti.MCDP.DataProcess
             using (var client = new WebClient())
             {
                 //client.Headers["x-api-key"] = "blah";
-                client.Headers["x-access-token"] = JWTToken;
+                client.Headers["x-access-token"] = ExpiredJWTToken;
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 
@@ -214,9 +228,57 @@ namespace Soti.MCDP.DataProcess
                 var logMessage = DateTime.Now.ToString() + "  =>  ";
 
                 Log(logMessage + "[INFO] (80) " + result);
-                // client.UploadString will rise a web exception is communication did not go well (sure?)
+                
+
             }
             //}
+        }
+
+        /// <summary>
+        /// This method is the one that actually send data to the input data adapter
+        /// </summary>
+        /// <param name="ida4Data">ida for Data.</param>
+        private string HandShakeToIda(string Token)
+        {
+            //// TODO: is too bad that here we will send the post one by one... we need to send a chunk..and we are sending one by one
+            //foreach (var data in ida4Data.data)
+            //{
+            dynamic result = string.Empty;
+           
+            string url = this.idaHandShakeUrl;
+        
+            try
+            { 
+                using (var client = new WebClient())
+                {
+                    //client.Headers["x-api-key"] = "blah";
+                    client.Headers["x-access-token"] = Token;
+                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+
+                    result = JsonConvert.DeserializeObject<dynamic>(client.DownloadString(url));
+
+                    var logMessage = DateTime.Now.ToString() + "  =>  ";
+
+                    Log(logMessage + "[INFO] (80) session_token: " + result.session_token); 
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response is HttpWebResponse)
+                {
+                    switch (((HttpWebResponse)ex.Response).StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            result = null;
+                            break;
+
+                        default:
+                            throw ex;
+                    }
+                }
+            }
+            return result.session_token;
         }
     }
 }

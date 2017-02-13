@@ -92,6 +92,13 @@
   <ItemGroup>
     <Build Include="MCDA\User Defined Types\MCDA.GEN_UDTTable_DeviceSyncStatus.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="MobiControlDB">
+      <DefaultValue>
+      </DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>xcopy /f /g /h /r /y "$(TargetDir)\MobiControlDataAnalyticDB.dacpac" "$(ProjectDir)..\..\"</PostBuildEvent>
   </PropertyGroup>
