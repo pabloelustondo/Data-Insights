@@ -1,15 +1,28 @@
+
+#pragma option -v+
+#pragma verboselevel 9
+
+#define AppName "MobiControlDataAdapter"
+#define AppVersion GetFileVersion(AddBackslash(SourcePath) + "MCDP.exe")
+#define MyAppPublisher "SOTI Inc."
+#define MyAppURL "https://www.soti.net/"
+#define MyAppExeName "MCDP.exe"
+#define MyAppExeNameOnly "MCDP"
+#define MyAppIcon SourcePath + "\images.ico"
+
 [Setup]
 AppName=test
 AppVersion=1.0
-LicenseFile=C:\setup demo\License.rtf
+LicenseFile={#file AddBackslash(SourcePath) + "license.txt"}
 CreateAppDir=False
 UsePreviousGroup=False
 DisableProgramGroupPage=yes
 Uninstallable=no
 
 [Files]
-Source: "C:\setup demo\script 2008R2.sql"; Flags: dontcopy
-Source: "C:\setup demo\script 2012.sql"; Flags: dontcopy
+Source: "dacpac\*"; DestDir: "{app}\dacpac"; Flags: ignoreversion recursesubdirs 
+;deleteafterinstall
+;Source: "D:\BI\BI\MCDP\Installer\Installer Files\script 2012.sql"; Flags: dontcopy
 
 [CustomMessages]
 CustomForm_Caption=Connect to Database Server
@@ -22,8 +35,7 @@ CustomForm_lblDatabase_Caption0=Database:
 CustomForm_lblVersion_Caption0=SQL Version:
 CustomForm_chkSQLAuth_Caption0=Use SQL Server Authentication
 CustomForm_chkWindowsAuth_Caption0=Use Windows Authentication
-CustomForm_lstVersion_Line0=2008 R2
-CustomForm_lstVersion_Line1=2012
+
 
 [Code]
 const
@@ -51,7 +63,7 @@ var
   lblPassword: TLabel;
   lblDatabase: TLabel;
   chkSQLAuth: TRadioButton;
-  txtServer: TEdit;
+  lstServer: TComboBox;
   chkWindowsAuth: TRadioButton;
   txtUsername: TEdit;
   txtPassword: TPasswordEdit;
@@ -65,13 +77,6 @@ var
 procedure ExitProcess(exitCode:integer);
   external 'ExitProcess@kernel32.dll stdcall';
 
-// Version drop down defaults to blank. Enable server textbox once a version is selected. This forces user to select the version first.
-Procedure VersionOnChange (Sender: TObject);
-begin                            
-  lblServer.Enabled := True;
-  txtServer.Enabled := True;
-end;
-
 // enable/disable child text boxes & functions when text has been entered into Server textbox. Makes no sense to populate child items unless a value exists for server.
 Procedure ServerOnChange (Sender: TObject);
 begin                            
@@ -79,13 +84,15 @@ begin
   lstDatabase.Text := '';
   bIsNextEnabled := False;
   WizardForm.NextButton.Enabled := bIsNextEnabled;
-  if Length(txtServer.Text) > 0 then
+  if Length(lstServer.Text) > 0 then
   begin
     lblAuthType.Enabled := True;
     lblDatabase.Enabled := True;
     lstDatabase.Enabled := True;
     chkWindowsAuth.Enabled := True;
     chkSQLAuth.Enabled := True;
+    txtUsername.Enabled := True;
+    txtPassword.Enabled := True;
   end
   else
   begin
@@ -94,6 +101,8 @@ begin
     lstDatabase.Enabled := False; 
     chkWindowsAuth.Enabled := False;
     chkSQLAuth.Enabled := False;
+    txtUsername.Enabled := False;
+    txtPassword.Enabled := False;
   end
 end;
 
@@ -131,13 +140,55 @@ begin
   end
 end;
 
+// Retrieve a list of databases server.
+// This list is shown in the database server dropdown list
+procedure RetrieveDatabaseServerList(Sender: TObject);
+var
+  
+  Tmp: string;
+  TmpServerName: string;
+  TmpExactName: string;
+  ResultCode: integer;
+  LineCount: Integer;
+  SectionLine: Integer;
+  Lines: TArrayOfString;
+begin
+  try
+    lstServer.Items.Clear;
+
+    Tmp := ExpandConstant('{tmp}');
+    TmpServerName := Tmp + '\SQLSERVER_FILE.txt';
+    TmpExactName := Tmp + '\SQLSERVERNAME.txt';
+
+    Exec('cmd.exe', '/c "sc query|findstr "DISPLAY_NAME"|findstr /C:"SQL Server (" > "' + TmpServerName + '""', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+
+    Exec('cmd.exe', '/c "FOR /F " tokens=2 delims=()" %i in (' + TmpServerName + ') do @echo %computername%\%i >> "' + TmpExactName + '""', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+
+    if LoadStringsFromFile(TmpExactName, Lines) then
+    begin
+        LineCount := GetArrayLength(Lines);
+        for SectionLine := 0 to LineCount - 1 do 
+        begin     
+          lstServer.Items.Add(Lines[SectionLine]); 
+        end;  
+    end; 
+    
+    finally
+       DeleteFile(TmpServerName);
+       DeleteFile(TmpExactName);
+    end;
+    
+    
+end;
+
+
 // Retrieve a list of databases accessible on the server with the credentials specified.
 // This list is shown in the database dropdown list
 procedure RetrieveDatabaseList(Sender: TObject);
 var  
   ADOCommand: Variant;
   ADORecordset: Variant;
-  ADOConnection: Variant;  
+  ADOConnection: Variant;       
 begin
   lstDatabase.Items.Clear;
   try
@@ -147,7 +198,7 @@ begin
     // connection string on the Internet 
     ADOConnection.ConnectionString := 
       'Provider=SQLOLEDB;' +               // provider
-      'Data Source=' + txtServer.Text + ';' +   // server name
+      'Data Source=' + lstServer.Text + ';' +   // server name
       'Application Name=' + '{#SetupSetting("AppName")}' + ' DB List;'
     if chkWindowsAuth.Checked then
       ADOConnection.ConnectionString := ADOConnection.ConnectionString +
@@ -191,16 +242,11 @@ end;
 // Execute files specified in [files] section (hardcoded) against the user defined server.database
 procedure DeploySQL();
 var  
-  Script2008R2: AnsiString;  
-  Script2012: AnsiString;    
+  Script2012: AnsiString;
   ADOCommand: Variant;
   ADOConnection: Variant;  
 begin
-// extract required version of script
-  if lstVersion.Text='2008 R2' then
-    ExtractTemporaryFile('Script 2008R2.sql')
-  if lstVersion.Text='2012' then
-    ExtractTemporaryFile('Script 2012.sql');
+  ExtractTemporaryFile('Script 2012.sql')
 
   try
     // create the ADO connection object
@@ -209,7 +255,7 @@ begin
     // connection string on the Internet 
     ADOConnection.ConnectionString := 
       'Provider=SQLOLEDB;' +               // provider
-      'Data Source=' + txtServer.Text + ';' +   // server name
+      'Data Source=' + lstServer.Text + ';' +   // server name
       'Initial Catalog=' + lstDatabase.Text + ';' +   // server name
       'Application Name=' + '{#SetupSetting("AppName")}' + ' Execute SQL;' ;     
     if chkWindowsAuth.Checked then
@@ -227,10 +273,10 @@ begin
       // assign the currently opened connection to ADO command object
       ADOCommand.ActiveConnection := ADOConnection;
       // load a script from file into variable. Exclusive OR because both versions should never exist at the same time.
-        if (LoadStringFromFile(ExpandConstant('{tmp}\Script 2012.sql'), Script2012)) xor (LoadStringFromFile(ExpandConstant('{tmp}\Script 2008R2.sql'), Script2008R2))     then
+        if (LoadStringFromFile(ExpandConstant('{tmp}\Script 2012.sql'), Script2012)) then
       begin
         // assign text of a command to be issued against a provider. Append all 3 because one of the install assembly strings will always be empty.
-        ADOCommand.CommandText := Script2008R2 + Script2012;
+        ADOCommand.CommandText := Script2012;
         // this will execute the script; the adCmdText flag here means
         // you're going to execute the CommandText text command, while
         // the adExecuteNoRecords flag ensures no data row will be get
@@ -264,7 +310,7 @@ begin
     // connection string on the Internet 
     ADOConnection.ConnectionString := 
       'Provider=SQLOLEDB;' +               // provider
-      'Data Source=' + txtServer.Text + ';' +   // server name
+      'Data Source=' + lstServer.Text + ';' +   // server name
       'Initial Catalog=' + lstDatabase.Text + ';' +   // server name
       'Application Name=' + '{#SetupSetting("AppName")}' + ' Execute SQL;' ;     
     if chkWindowsAuth.Checked then
@@ -273,7 +319,7 @@ begin
     else
       ADOConnection.ConnectionString := ADOConnection.ConnectionString +
       'User Id=' + txtUsername.Text + ';' +              // user name
-      'Password=' + txtPassword.Text + ';';                   // password
+      'Password=' + txtPassword.Text + ';';              // password
     // open the connection by the assigned ConnectionString
     ADOConnection.Open;
     Result := True;
@@ -290,36 +336,6 @@ begin
     ExpandConstant('{cm:CustomForm_Description}')
   );
 
-  { lblVersion }
-  lblVersion := TLabel.Create(Page);
-  with lblVersion do
-  begin
-    Parent := Page.Surface;
-    Caption := ExpandConstant('{cm:CustomForm_lblVersion_Caption0}');
-    Left := ScaleX(24);
-    Top := ScaleY(8);
-    Width := ScaleX(61);
-    Height := ScaleY(13);
-  end;
-
-  { lstVersion }
-  lstVersion := TComboBox.Create(Page);
-  with lstVersion do
-  begin
-    Parent := Page.Surface;
-    Left := ScaleX(112);
-    Top := ScaleY(8);
-    Width := ScaleX(145);
-    Height := ScaleY(21);
-    Style := csDropDownList;
-    DropDownCount := 2;
-    TabOrder := 0;
-    Items.Add(ExpandConstant('{cm:CustomForm_lstVersion_Line0}'));
-    Items.Add(ExpandConstant('{cm:CustomForm_lstVersion_Line1}'));
-    OnChange:= @VersionOnChange;
-
-  end;
-
   { lblServer }
   lblServer := TLabel.Create(Page);
   with lblServer do
@@ -330,12 +346,12 @@ begin
     Top := ScaleY(32);
     Width := ScaleX(68);
     Height := ScaleY(13);
-    Enabled := False;
+    Enabled := True;
   end;
 
-  { txtServer }
-  txtServer := TEdit.Create(Page);
-  with txtServer do
+  { lstServer }
+  lstServer := TComboBox.Create(Page);
+  with lstServer do
   begin
     Parent := Page.Surface;
     Left := ScaleX(112);
@@ -343,7 +359,8 @@ begin
     Width := ScaleX(273);
     Height := ScaleY(21);
     TabOrder := 1;
-    Enabled := False;
+    Enabled := True;
+    OnDropDown:= @RetrieveDatabaseServerList;
     OnChange := @ServerOnChange;
   end;
 

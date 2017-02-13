@@ -45,9 +45,10 @@
   <ItemGroup>
     <Compile Include="DatabaseSection.cs" />
     <Compile Include="DeviceStatIntProvider.cs" />
+    <Compile Include="IDeviceStatApplicationProvider.cs" />
     <Compile Include="IDeviceStatIntProvider.cs" />
-    <Compile Include="Model\Data4Ida.cs" />
-    <Compile Include="Model\DataRow4Ida.cs" />
+    <Compile Include="Model\DeviceStatIntList.cs" />
+    <Compile Include="Model\DeviceStatInt.cs" />
     <Compile Include="Model\DeviceSyncStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
