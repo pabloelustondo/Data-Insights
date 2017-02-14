@@ -25,7 +25,18 @@ var SotiAdminAccount =
     username: "Administrator"
   };
 
-var enrollments = [SotiAdminAccount];
+var MyMCAccount =
+  {
+    accountid: "pablo.elustonso@gmail.com",
+    mcurl: "https://cad059.corp.soti.net/MobiControl",
+    apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0",
+    apikey2:"NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0",
+    clientId2:"6a106988b81c43499ea04e96943e05c1",
+    domainid: "pme",
+    username: "Administrator"
+  };
+
+var enrollments = [SotiAdminAccount, MyMCAccount];
 
 function createToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 600 * 5 });
@@ -98,6 +109,79 @@ app.post('/resetCredentials/:agentId', function (req, res) {
       console.log(e);
       return res.status(400).send (ErrorMsg.token_verification_failed);
     }
+});
+
+
+app.get('/getAgentToken', function(req, res) {
+  var _header = req.headers;
+  var token = _header['x-access-token'];
+
+  if(!token){
+    return res.status(400).send ( ErrorMsg.login_failed_authentication);
+  }
+
+  try{
+    jwt.verify(token, config.secret, function (err, success) {
+      if (err) {
+        return res.status(400).send (ErrorMsg.token_verification_failed);
+      }
+      if (success) {
+        var _tenantID = success.tenantId;
+        var _agentID = success.agentId;
+        var _activationKey = success.activationKey;
+
+        request({
+          rejectUnauthorized: false,
+          rejectUnauthorized: false,
+          url: config.ddbEndpointUrl + "/verifyDataSource",
+          method: 'GET', //Specify the method
+          headers: { //We can define headers too
+            'Content-Type': 'application/json'
+          },
+          qs: {tenantId:_tenantID, agentId : _agentID, activationKeys: _activationKey }
+        }, function(error, response, body){
+          if(error) {
+            console.log(error);
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+          } else {
+            console.log(response.statusCode, body);
+
+            if (response.statusCode === 200){
+
+              var body = JSON.parse(response.body);
+
+
+              if (body.activationKey === _activationKey) {
+
+                var new_token = jwt.sign({
+                  agentid: '213',
+                  tenantid: _tenantID
+                }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
+                console.log(new_token);
+                res.status(200).send({
+                  session_token: new_token
+                });
+              } else {
+                res.status(404).send(ErrorMsg.token_activationKey_failed)
+              }
+
+            } else if (response.statusCode === 404) {
+              res.status(404).send(ErrorMsg.token_verification_failed);
+            }
+            else {
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+            }
+          }
+        });
+
+      }
+    });
+
+  }
+  catch (e) {
+    console.log(e);
+    return res.status(400).send (ErrorMsg.token_verification_failed);
+  }
 });
 
 app.get('/sourceCredentials/:agentId', function (req, res) {
@@ -404,15 +488,34 @@ app.get('/confirm', function(req, res){
   }
 });
 
+
+app.get('/urlbydomainid', function(req, res) {
+//////// Parameters Checking /////////
+  if (!req.query.domainid) {
+    return res.status(400).send( ErrorMsg.missing_domainid );
+  }
+
+
+  var enrollment =_.find(enrollments, {domainid: req.query.domainid});
+
+  if (!enrollment) {
+    return res.status(400).send( ErrorMsg.not_found_domainid );
+  }else {
+    res.status(200).send({
+      url: enrollment.mcurl
+    });
+  }
+});
+/////*******************************************
 app.post('/sessions/create', function(req, res) {
 //////// Parameters Checking /////////
   if (!req.body.domainid) {
     return res.status(400).send( ErrorMsg.missing_domainid );
   }
-  if (!req.body.username) {
+  if (!req.body.code && !req.body.username) {
     return res.status(400).send( ErrorMsg.missing_username );
   }
-  if (!req.body.password) {
+  if (!req.body.code && !req.body.password) {
     return res.status(400).send( ErrorMsg.missing_password );
   }
 //////////////////////////////////////////////////
@@ -430,15 +533,25 @@ app.post('/sessions/create', function(req, res) {
 
   //var basicAuthorizationString = "Basic " + enrollment.apikey;
 
+  var apikey = enrollment.apikey;
+  var grant_type = "grant_type=password&username="+ user.username +"&password="+user.password;
+
+  if (req.body.code){
+    apikey = enrollment.apikey2;
+    grant_type = "grant_type=authorization_code&code=" + req.body.code;
+  }
+
+
+
   request({
     rejectUnauthorized: false, //need to improve this ..related with ssl certificate
     url:   enrollment.mcurl + "/api/token",
     method: 'POST', //Specify the method
     headers: { //We can define headers too
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': "Basic " + enrollment.apikey,
+      'Authorization': "Basic " + apikey,
     },
-    body: "grant_type=password&username="+ user.username +"&password="+user.password,
+    body: grant_type,
   }, function(error, response, body){
     if(error) {
       console.log(error);
