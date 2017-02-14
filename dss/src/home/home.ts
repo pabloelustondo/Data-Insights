@@ -26,6 +26,7 @@ export class Home {
   error;
   url:string;
   isSOTI: boolean;
+  McUrl: any[];
 
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
@@ -50,10 +51,6 @@ export class Home {
   showDataSources(){
       if (!this.showEnrollments) this.showEnrollments = true;
       else this.showEnrollments = false;
-  }
-
-  callMcUrl() {
-    this._callApi('Secured', 'http://localhost:3004/getDataSources');
   }
 
   callGetToken() {
@@ -88,7 +85,7 @@ export class Home {
   }
 
   downloadCredentials(){
-    this.http.get('http://localhost:3004/sourceCredentials/sfsaf', { headers: contentHeaders })
+    this.http.get('http://localhost:3004/sourceCredentials/;agentId', { headers: contentHeaders })
       .subscribe(
         response => {
           this.error = null;
@@ -105,6 +102,21 @@ export class Home {
     this.http.post('http://localhost:3004/resetCredentials/:agentId', { headers: contentHeaders })
       .subscribe(
         response => {
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
+  }
+
+  getMcUrl() {
+    this.http.get('http://localhost:3004/getDataSources', { headers: contentHeaders })
+      .subscribe(
+        response => {
+          this.McUrl = this.response;
           this.error = null;
           this.router.navigate(['home']);
         },
