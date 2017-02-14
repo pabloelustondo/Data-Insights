@@ -70,11 +70,11 @@ app.get('/todo/:id', function(req,res){
 });
 
 
-app.get('/getDBAccess/:tenatID', function(req,res){
+app.get('/getDBAccess/:tenantID', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
     	console.log(req.params.tenantID);
     	db.collection('todo').findOne({
-            "tenantID":req.params.tenatID
+            "tenantID":req.params.tenantID
 		}, next);
     });
 });
