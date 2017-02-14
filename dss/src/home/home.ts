@@ -98,7 +98,7 @@ export class Home {
       .subscribe(
         response => {
           let response_body = JSON.parse(response._body);
-          var blob = new Blob([response_body.activationKey], { type: 'text/csv' });
+          var blob = new Blob([response_body[0].activationKey], { type: 'text/csv' });
           FileSaver.saveAs(blob, "mcdp_dad_access.key");
           this.error = null;
           this.router.navigate(['home']);
