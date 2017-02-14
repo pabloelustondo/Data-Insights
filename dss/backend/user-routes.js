@@ -240,7 +240,7 @@ app.get('/getDataSources', function(req, res) {
              if (response.statusCode === 200){
 
                var body = JSON.parse(response.body);
-               res.status(200).send(response.body);
+               res.status(200).send(body);
 
              } else if (response.statusCode === 404) {
                res.status(404).send(ErrorMsg.token_verification_failed);

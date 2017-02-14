@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
+import {Http, Headers} from '@angular/http';
 import { Router } from '@angular/router';
 import { AuthHttp } from 'angular2-jwt';
 import { contentHeaders } from '../common/headers';
@@ -51,6 +51,8 @@ export class Home {
   showDataSources(){
       if (!this.showEnrollments) this.showEnrollments = true;
       else this.showEnrollments = false;
+
+    this.getMcUrl();
   }
 
   callGetToken() {
@@ -84,10 +86,20 @@ export class Home {
    // window.open(url);
   }
 
-  downloadCredentials(){
-    this.http.get('http://localhost:3004/sourceCredentials/;agentId', { headers: contentHeaders })
+  downloadCredentials(agentId: any){
+
+    let _agentId = agentId.innerHTML;
+
+    var headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token' : this.jwt
+    });
+    this.http.get('http://localhost:3004/sourceCredentials/'+ _agentId, { headers: headers })
       .subscribe(
         response => {
+          let response_body = JSON.parse(response._body);
+          var blob = new Blob([response_body.activationKey], { type: 'text/csv' });
+          FileSaver.saveAs(blob, "mcdp_dad_access.key");
           this.error = null;
           this.router.navigate(['home']);
         },
@@ -99,7 +111,13 @@ export class Home {
   }
 
   resetCredentials(){
-    this.http.post('http://localhost:3004/resetCredentials/:agentId', { headers: contentHeaders })
+
+    var headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token' : this.jwt
+    });
+
+    this.http.post('http://localhost:3004/resetCredentials/:agentId', { headers: headers })
       .subscribe(
         response => {
           this.error = null;
@@ -112,11 +130,21 @@ export class Home {
       );
   }
 
+
+
   getMcUrl() {
-    this.http.get('http://localhost:3004/getDataSources', { headers: contentHeaders })
+
+
+    var headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token' : this.jwt
+    });
+
+    this.http.get('http://localhost:3004/getDataSources', { headers: headers})
       .subscribe(
         response => {
-          this.McUrl = this.response;
+          var data = JSON.parse(response._body);
+         this.McUrl = data;
           this.error = null;
           this.router.navigate(['home']);
         },
