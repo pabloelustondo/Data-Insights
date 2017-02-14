@@ -73,11 +73,17 @@
                   <tr>
                     <td>Vishnu Serghei</td>
                     <td>2012/01/01</td>
-                    <td><a style="color:black;" class="btn btn" role="button" (click)="downloadFile()"><button>Download Credentials</button></a></td>
+                    <td><a style="color:black;" class="btn btn" role="button" (click)="downloadCredentials()"><button>Download Credentials</button></a></td>
                     <td><a style="color:black;" class="btn btn" role="button" (click)="resetCredentials()"><button>Reset Credentials</button></a></td>
                   </tr>
                 </tbody>
               </table>
+              <ul class="pagination" style="cursor:pointer;">
+                        <span *ngFor="let page of pages">
+                            <li  *ngIf="page == currentPage" class="page-item active" ><a class="page-link" (click)=refresh(page) >{{page+1}}</a></li>
+                            <li  *ngIf="page != currentPage" class="page-item" ><a class="page-link" (click)=refresh(page) >{{page+1}} </a></li>
+                        </span>
+              </ul>
             </div>
           </div>
         </div>
