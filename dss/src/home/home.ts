@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
 import { AuthHttp } from 'angular2-jwt';
+import { contentHeaders } from '../common/headers';
 import * as FileSaver from 'file-saver';
+import { DadTable } from '../../../dad3/src/app/dad/table.component';
 
 
 const styles = require('./home.css');
@@ -17,9 +19,14 @@ export class Home {
   jwt: string;
   decodedJwt: string;
   response: string;
+  enrollStatus: boolean;
   enrollments: string[];
+  showEnrollments: boolean;
   api: string;
+  error;
+  url:string;
   isSOTI: boolean;
+  McUrl: any[];
 
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
@@ -32,6 +39,19 @@ export class Home {
     this.router.navigate(['login']);
   }
 
+
+  showAddSource(){
+    console.log('enter show add source');
+    if (this.enrollStatus === undefined || this.enrollStatus === null){
+      this.enrollStatus = true;
+      return;
+    }
+  }
+
+  showDataSources(){
+      if (!this.showEnrollments) this.showEnrollments = true;
+      else this.showEnrollments = false;
+  }
 
   callGetToken() {
     this._callApi('Secured', 'http://localhost:3004/api/protected/token');
@@ -64,6 +84,80 @@ export class Home {
    // window.open(url);
   }
 
+  downloadCredentials(){
+    this.http.get('http://localhost:3004/sourceCredentials/;agentId', { headers: contentHeaders })
+      .subscribe(
+        response => {
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
+  }
+
+  resetCredentials(){
+    this.http.post('http://localhost:3004/resetCredentials/:agentId', { headers: contentHeaders })
+      .subscribe(
+        response => {
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
+  }
+
+  getMcUrl() {
+    this.http.get('http://localhost:3004/getDataSources', { headers: contentHeaders })
+      .subscribe(
+        response => {
+          this.McUrl = this.response;
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
+  }
+
+  addSource(mcurl, agentId){
+    var decoded = this.decodedJwt;
+
+    var agent = {
+      tenantid : decoded.tenantid,
+      agentid : agentId,
+      mcurl : mcurl
+    };
+
+
+    console.log('in add source : ', mcurl);
+    console.log('in add source : ', agentId);
+    console.log('it will be enrolled don\'t worry. ', JSON.stringify(agent));
+
+    this.enrollStatus = null;
+      console.log('it will be enrolled don\'t worry. ', agentId);
+
+    let body = JSON.stringify(agent);
+    this.http.post('http://localhost:3004/registerDataSource', body, { headers: contentHeaders })
+      .subscribe(
+        response => {
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
+  }
+
   _callApi(type, url) {
     this.response = null;
     if (type === 'Anonymous') {
@@ -83,4 +177,6 @@ export class Home {
         );
     }
   }
+
+
 }

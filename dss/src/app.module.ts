@@ -12,13 +12,15 @@ import { Home } from './home';
 import { Login } from './login';
 import { Signup } from './signup';
 import { App } from './app';
+import { SourceForms } from './home/sourceForm'
+import { SourceFormComponent } from './source'
 
 import { routes } from './app.routes';
 
 @NgModule({
   bootstrap: [App],
   declarations: [
-    Home, Login, Signup, App
+    Home, Login, Signup, App, SourceForms
   ],
   imports: [
     HttpModule, BrowserModule, FormsModule,

@@ -6,6 +6,7 @@ var express = require('express'),
 var  ErrorMsg = require('./error-messages');
 var querystring = require('querystring');
 var https = require('https');
+var uuid = require('node-uuid');
 
 var request = require('request');
 var LocalStorage = require('node-localstorage').LocalStorage;
@@ -59,8 +60,163 @@ app.get('/enrollments2', function(req, res) {
   res.status(200).send('Hi from the DSS Anonymous Route at + ' + d.toISOString());
 });
 
+app.post('/resetCredentials/:agentId', function (req, res) {
 
-app.get('/getAgentToken', function(req, res) {
+  var _header = req.headers;
+  var token = _header['x-access-token'];
+  var agentId = req.params.agentId;
+
+  try{
+    jwt.verify(token, config.secret, function (err, success) {
+      if (err) {
+        return res.status(400).send (ErrorMsg.token_verification_failed);
+      }
+      if (success) {
+        request({
+          rejectUnauthorized: false,
+          url: config.ddbEndpointUrl + "/dataSource/"+ agentId,
+          method: 'post', //Specify the method
+          headers: { //We can define headers too
+            'Content-Type': 'application/json'
+          }
+        }, function(error, response, body){
+          if(error) {
+            console.log(error);
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+          } else {
+            console.log(response.statusCode, body);
+
+            if (response.statusCode === 200){
+
+              var body = JSON.parse(response.body);
+              res.status(200).send({
+                message: "Success fully reset"
+              });
+
+            } else if (response.statusCode === 404) {
+              res.status(404).send(ErrorMsg.token_verification_failed);
+            }
+            else {
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+            }
+          }
+        });
+
+      }
+    });
+  }
+  catch (e) {
+      console.log(e);
+      return res.status(400).send (ErrorMsg.token_verification_failed);
+    }
+});
+
+app.get('/sourceCredentials/:agentId', function (req, res) {
+  var _header = req.headers;
+  var agentId = req.params.agentId;
+  var token = _header['x-access-token'];
+
+
+  try{
+    jwt.verify(token, config.secret, function (err, success) {
+      if (err) {
+        return res.status(400).send (ErrorMsg.token_verification_failed);
+      }
+      if (success) {
+        request({
+          rejectUnauthorized: false,
+          url: config.ddbEndpointUrl + "/dataSource/"+ agentId,
+          method: 'GET', //Specify the method
+          headers: { //We can define headers too
+            'Content-Type': 'application/json'
+          }
+        }, function(error, response, body){
+          if(error) {
+            console.log(error);
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+          } else {
+            console.log(response.statusCode, body);
+
+            if (response.statusCode === 200){
+
+              var body = JSON.parse(response.body);
+              res.status(200).send(response.body);
+
+            } else if (response.statusCode === 404) {
+              res.status(404).send(ErrorMsg.token_verification_failed);
+            }
+            else {
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+            }
+          }
+        });
+
+      }
+    });
+
+  }
+  catch (e) {
+    console.log(e);
+    return res.status(400).send (ErrorMsg.token_verification_failed);
+  }
+});
+
+app.post('/registerDataSource', function (req, res) {
+
+  if (!req.body.mcurl) {
+    return res.status(400).send( ErrorMsg.missing_mcurl );
+  }
+  if (!req.body.agentid) {
+    return res.status(400).send( ErrorMsg.missing_apikey );
+  }
+  if (!req.body.tenantid) {
+    return res.status(400).send( ErrorMsg.missing_domainid );
+  }
+
+
+  var activationKey = uuid.v4();
+  var dataSource = {
+    tenantId: req.body.tenantid,
+    agentId: uuid.v4(),
+    mcurl: req.body.mcurl,
+    activationKey: activationKey
+  };
+
+  request({
+    rejectUnauthorized: false,
+    url: config.ddbEndpointUrl + "/insertNewDataSource",
+    json : {
+      'agentId' :dataSource.agentId,
+      'tenantId' : dataSource.tenantId,
+      'mcUrl' : dataSource.mcurl,
+      'activationKey': dataSource.activationKey
+    },
+    method: 'POST', //Specify the method
+    headers: { //We can define headers too
+      'Content-Type': 'application/json'
+    }
+  }, function(error, response, body){
+    if(error) {
+      console.log(error);
+      res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+    } else {
+      console.log(response.statusCode, body);
+
+      if (response.statusCode === 200){
+
+
+        res.status(200).send({
+          message: 'added'
+        });
+      } else {
+        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+      }
+    }
+  });
+
+});
+
+app.get('/getDataSources', function(req, res) {
    var _header = req.headers;
    var token = _header['x-access-token'];
 
@@ -74,18 +230,17 @@ app.get('/getAgentToken', function(req, res) {
          return res.status(400).send (ErrorMsg.token_verification_failed);
        }
        if (success) {
-         var _tenantID = success.tenantId;
-         var _agentID = success.agentId;
-         var _activationKey = success.activationKey;
+         var _tenantID = success.tenantid;
 
          request({
            rejectUnauthorized: false,
-           url: config.ddbEndpointUrl + "/verifyDataSource",
+           rejectUnauthorized: false,
+           url: config.ddbEndpointUrl + "/dataSources/"+ success.tenantid,
            method: 'GET', //Specify the method
            headers: { //We can define headers too
              'Content-Type': 'application/json'
            },
-           qs: {tenantId:_tenantID, agentId : _agentID, activationKeys: _activationKey }
+           qs: {tenantId:_tenantID}
          }, function(error, response, body){
            if(error) {
              console.log(error);
@@ -96,21 +251,7 @@ app.get('/getAgentToken', function(req, res) {
              if (response.statusCode === 200){
 
                var body = JSON.parse(response.body);
-
-
-               if (body.activationKey === _activationKey) {
-
-                 var new_token = jwt.sign({
-                   agentid: '213',
-                   tenantid: _tenantID
-                 }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
-                 console.log(new_token);
-                 res.status(200).send({
-                   session_token: new_token
-                 });
-               } else {
-                 res.status(404).send(ErrorMsg.token_activationKey_failed)
-               }
+               res.status(200).send(response.body);
 
              } else if (response.statusCode === 404) {
                res.status(404).send(ErrorMsg.token_verification_failed);
