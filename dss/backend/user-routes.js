@@ -48,6 +48,64 @@ app.get('/enrollments2', function(req, res) {
   res.status(200).send('Hi from the DSS Anonymous Route at + ' + d.toISOString());
 });
 
+app.post('/registerDataSource', function (req, res) {
+
+  if (!req.body.mcurl) {
+    return res.status(400).send( ErrorMsg.missing_mcurl );
+  }
+  if (!req.body.agentid) {
+    return res.status(400).send( ErrorMsg.missing_apikey );
+  }
+  if (!req.body.tenantid) {
+    return res.status(400).send( ErrorMsg.missing_domainid );
+  }
+
+
+  var enrollment = _.pick(req.body, 'accountid','mcurl', 'apikey', 'domainid', 'username');
+  enrollment.tenantid = req.body.domainid; //for now
+  enrollment.status = "new";
+
+  var activationKey = 'hello';
+  var dataSource = {
+    tenantId: req.body.tenantid,
+    agentId: req.body.agentid,
+    mcurl: req.body.mcurl,
+    activationKey: activationKey
+  };
+
+  request({
+    rejectUnauthorized: false,
+    url: config.ddbEndpointUrl + "/insertNewDataSource",
+    json : {
+      'agentId' :dataSource.agentId,
+      'tenantId' : dataSource.tenantId,
+      'mcUrl' : dataSource.mcurl,
+      'activationKey': dataSource.activationKey
+    },
+    method: 'POST', //Specify the method
+    headers: { //We can define headers too
+      'Content-Type': 'application/json'
+    }
+  }, function(error, response, body){
+    if(error) {
+      console.log(error);
+      res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+    } else {
+      console.log(response.statusCode, body);
+
+      if (response.statusCode === 200){
+
+
+        res.status(200).send({
+          message: 'added'
+        });
+      } else {
+        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+      }
+    }
+  });
+
+});
 
 app.get('/getAgentToken', function(req, res) {
    var _header = req.headers;
@@ -68,6 +126,7 @@ app.get('/getAgentToken', function(req, res) {
          var _activationKey = success.activationKey;
 
          request({
+           rejectUnauthorized: false,
            rejectUnauthorized: false,
            url: config.ddbEndpointUrl + "/verifyDataSource",
            method: 'GET', //Specify the method
