@@ -93,14 +93,18 @@ app.post('/resetCredentials/:agentId', function (req, res) {
 
       }
     });
-
-
+  }
+  catch (e) {
+      console.log(e);
+      return res.status(400).send (ErrorMsg.token_verification_failed);
+    }
 });
 
 app.get('/sourceCredentials/:agentId', function (req, res) {
   var _header = req.headers;
-  var token = _header['x-access-token'];
   var agentId = req.params.agentId;
+  var token = _header['x-access-token'];
+
 
   try{
     jwt.verify(token, config.secret, function (err, success) {
