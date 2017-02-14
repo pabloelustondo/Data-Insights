@@ -100,6 +100,79 @@ app.post('/resetCredentials/:agentId', function (req, res) {
     }
 });
 
+
+app.get('/getAgentToken', function(req, res) {
+  var _header = req.headers;
+  var token = _header['x-access-token'];
+
+  if(!token){
+    return res.status(400).send ( ErrorMsg.login_failed_authentication);
+  }
+
+  try{
+    jwt.verify(token, config.secret, function (err, success) {
+      if (err) {
+        return res.status(400).send (ErrorMsg.token_verification_failed);
+      }
+      if (success) {
+        var _tenantID = success.tenantId;
+        var _agentID = success.agentId;
+        var _activationKey = success.activationKey;
+
+        request({
+          rejectUnauthorized: false,
+          rejectUnauthorized: false,
+          url: config.ddbEndpointUrl + "/verifyDataSource",
+          method: 'GET', //Specify the method
+          headers: { //We can define headers too
+            'Content-Type': 'application/json'
+          },
+          qs: {tenantId:_tenantID, agentId : _agentID, activationKeys: _activationKey }
+        }, function(error, response, body){
+          if(error) {
+            console.log(error);
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+          } else {
+            console.log(response.statusCode, body);
+
+            if (response.statusCode === 200){
+
+              var body = JSON.parse(response.body);
+
+
+              if (body.activationKey === _activationKey) {
+
+                var new_token = jwt.sign({
+                  agentid: '213',
+                  tenantid: _tenantID
+                }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
+                console.log(new_token);
+                res.status(200).send({
+                  session_token: new_token
+                });
+              } else {
+                res.status(404).send(ErrorMsg.token_activationKey_failed)
+              }
+
+            } else if (response.statusCode === 404) {
+              res.status(404).send(ErrorMsg.token_verification_failed);
+            }
+            else {
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+            }
+          }
+        });
+
+      }
+    });
+
+  }
+  catch (e) {
+    console.log(e);
+    return res.status(400).send (ErrorMsg.token_verification_failed);
+  }
+});
+
 app.get('/sourceCredentials/:agentId', function (req, res) {
   var _header = req.headers;
   var agentId = req.params.agentId;
