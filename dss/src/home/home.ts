@@ -50,8 +50,11 @@ export class Home {
   showDataSources(){
       if (!this.showEnrollments) this.showEnrollments = true;
       else this.showEnrollments = false;
-    }
+  }
 
+  callMcUrl() {
+    this._callApi('Secured', 'http://localhost:3004/getDataSources');
+  }
 
   callGetToken() {
     this._callApi('Secured', 'http://localhost:3004/api/protected/token');
@@ -84,9 +87,32 @@ export class Home {
    // window.open(url);
   }
 
+  downloadCredentials(){
+    this.http.get('http://localhost:3004/sourceCredentials/sfsaf', { headers: contentHeaders })
+      .subscribe(
+        response => {
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
+  }
+
   resetCredentials(){
-    //varuuuuuun
-    
+    this.http.post('http://localhost:3004/resetCredentials/:agentId', { headers: contentHeaders })
+      .subscribe(
+        response => {
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
   }
 
   addSource(mcurl, agentId){
@@ -111,10 +137,6 @@ export class Home {
       .subscribe(
         response => {
           this.error = null;
-        //  localStorage.setItem('id_token', response.json().id_token);
-        //  if (this.url) {
-        //    window.location.href=this.url + "/#/dad/login?id_token=" + response.json().id_token;
-        //  }
           this.router.navigate(['home']);
         },
         error => {
@@ -143,4 +165,6 @@ export class Home {
         );
     }
   }
+
+
 }
