@@ -48,6 +48,7 @@ app.get('/enrollments2', function(req, res) {
   res.status(200).send('Hi from the DSS Anonymous Route at + ' + d.toISOString());
 });
 
+
 app.post('/registerDataSource', function (req, res) {
 
   if (!req.body.mcurl) {
@@ -107,7 +108,7 @@ app.post('/registerDataSource', function (req, res) {
 
 });
 
-app.get('/getAgentToken', function(req, res) {
+app.get('/getDataSources', function(req, res) {
    var _header = req.headers;
    var token = _header['x-access-token'];
 
@@ -121,19 +122,17 @@ app.get('/getAgentToken', function(req, res) {
          return res.status(400).send (ErrorMsg.token_verification_failed);
        }
        if (success) {
-         var _tenantID = success.tenantId;
-         var _agentID = success.agentId;
-         var _activationKey = success.activationKey;
+         var _tenantID = success.tenantid;
 
          request({
            rejectUnauthorized: false,
            rejectUnauthorized: false,
-           url: config.ddbEndpointUrl + "/verifyDataSource",
+           url: config.ddbEndpointUrl + "/dataSources/"+ success.tenantid,
            method: 'GET', //Specify the method
            headers: { //We can define headers too
              'Content-Type': 'application/json'
            },
-           qs: {tenantId:_tenantID, agentId : _agentID, activationKeys: _activationKey }
+           qs: {tenantId:_tenantID}
          }, function(error, response, body){
            if(error) {
              console.log(error);
@@ -144,21 +143,7 @@ app.get('/getAgentToken', function(req, res) {
              if (response.statusCode === 200){
 
                var body = JSON.parse(response.body);
-
-
-               if (body.activationKey === _activationKey) {
-
-                 var new_token = jwt.sign({
-                   agentid: '213',
-                   tenantid: _tenantID
-                 }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
-                 console.log(new_token);
-                 res.status(200).send({
-                   session_token: new_token
-                 });
-               } else {
-                 res.status(404).send(ErrorMsg.token_activationKey_failed)
-               }
+               res.status(200).send(response.body);
 
              } else if (response.statusCode === 404) {
                res.status(404).send(ErrorMsg.token_verification_failed);
