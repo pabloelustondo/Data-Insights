@@ -51,9 +51,50 @@ app.get('/enrollments2', function(req, res) {
 
 app.post('/resetCredentials/:agentId', function (req, res) {
 
-  res.status(200).send({
-    data: "reset successful"
-  });
+  var _header = req.headers;
+  var token = _header['x-access-token'];
+  var agentId = req.params.agentId;
+
+  try{
+    jwt.verify(token, config.secret, function (err, success) {
+      if (err) {
+        return res.status(400).send (ErrorMsg.token_verification_failed);
+      }
+      if (success) {
+        request({
+          rejectUnauthorized: false,
+          url: config.ddbEndpointUrl + "/dataSource/"+ agentId,
+          method: 'post', //Specify the method
+          headers: { //We can define headers too
+            'Content-Type': 'application/json'
+          }
+        }, function(error, response, body){
+          if(error) {
+            console.log(error);
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+          } else {
+            console.log(response.statusCode, body);
+
+            if (response.statusCode === 200){
+
+              var body = JSON.parse(response.body);
+              res.status(200).send({
+                message: "Success fully reset"
+              });
+
+            } else if (response.statusCode === 404) {
+              res.status(404).send(ErrorMsg.token_verification_failed);
+            }
+            else {
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+            }
+          }
+        });
+
+      }
+    });
+
+
 });
 
 app.get('/sourceCredentials/:agentId', function (req, res) {
