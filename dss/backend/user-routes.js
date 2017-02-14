@@ -74,11 +74,15 @@ app.post('/resetCredentials/:agentId', function (req, res) {
       if (success) {
         request({
           rejectUnauthorized: false,
-          url: config.ddbEndpointUrl + "/dataSource/"+ agentId,
+          url: config.ddbEndpointUrl + "/updateDataSourceCredentials",
           method: 'post', //Specify the method
           headers: { //We can define headers too
             'Content-Type': 'application/json'
-          }
+          },
+          json : {
+            'agentId' : agentId,
+            'activationKey': uuid.v4()
+          },
         }, function(error, response, body){
           if(error) {
             console.log(error);

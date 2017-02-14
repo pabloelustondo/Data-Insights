@@ -87,9 +87,7 @@ export class Home {
   }
 
   downloadCredentials(agentId: any){
-
     let _agentId = agentId.innerHTML;
-
     var headers = new Headers({
       'Content-Type': 'application/json',
       'x-access-token' : this.jwt
@@ -110,20 +108,21 @@ export class Home {
       );
   }
 
-  resetCredentials(){
-
+  resetCredentials(agentId: any){
+    let _agentId = agentId.innerHTML;
     var headers = new Headers({
       'Content-Type': 'application/json',
       'x-access-token' : this.jwt
     });
-
-    this.http.post('http://localhost:3004/resetCredentials/:agentId', { headers: headers })
+    this.http.post('http://localhost:3004/resetCredentials/'+ _agentId, { headers: headers })
       .subscribe(
         response => {
+          alert('successfully reset, download new credentials');
           this.error = null;
           this.router.navigate(['home']);
         },
         error => {
+          alert('reset failed.');
           this.error = error.text();
           console.log(error.text());
         }

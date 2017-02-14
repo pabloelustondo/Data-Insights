@@ -169,7 +169,7 @@ app.get('/verifyDataSource', function (req, res) {
 app.post('/updateDataSourceCredentials', function (req, res ) {
 
     var _agentId = req.body.agentId;
-    var _accessKey = req.body.accessKey;
+    var _accessKey = req.body.activationKey;
 
     console.log("tenant id = " +_agentId);
 
