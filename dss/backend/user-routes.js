@@ -6,6 +6,7 @@ var express = require('express'),
 var  ErrorMsg = require('./error-messages');
 var querystring = require('querystring');
 var https = require('https');
+var uuid = require('node-uuid');
 
 var request = require('request');
 var LocalStorage = require('node-localstorage').LocalStorage;
@@ -48,6 +49,61 @@ app.get('/enrollments2', function(req, res) {
   res.status(200).send('Hi from the DSS Anonymous Route at + ' + d.toISOString());
 });
 
+app.post('/resetCredentials/:agentId', function (req, res) {
+
+  res.status(200).send({
+    data: "reset successful"
+  });
+});
+
+app.get('/sourceCredentials/:agentId', function (req, res) {
+  var _header = req.headers;
+  var token = _header['x-access-token'];
+  var agentId = req.params.agentId;
+
+  try{
+    jwt.verify(token, config.secret, function (err, success) {
+      if (err) {
+        return res.status(400).send (ErrorMsg.token_verification_failed);
+      }
+      if (success) {
+        request({
+          rejectUnauthorized: false,
+          url: config.ddbEndpointUrl + "/dataSource/"+ agentId,
+          method: 'GET', //Specify the method
+          headers: { //We can define headers too
+            'Content-Type': 'application/json'
+          }
+        }, function(error, response, body){
+          if(error) {
+            console.log(error);
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+          } else {
+            console.log(response.statusCode, body);
+
+            if (response.statusCode === 200){
+
+              var body = JSON.parse(response.body);
+              res.status(200).send(response.body);
+
+            } else if (response.statusCode === 404) {
+              res.status(404).send(ErrorMsg.token_verification_failed);
+            }
+            else {
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+            }
+          }
+        });
+
+      }
+    });
+
+  }
+  catch (e) {
+    console.log(e);
+    return res.status(400).send (ErrorMsg.token_verification_failed);
+  }
+});
 
 app.post('/registerDataSource', function (req, res) {
 
@@ -62,14 +118,10 @@ app.post('/registerDataSource', function (req, res) {
   }
 
 
-  var enrollment = _.pick(req.body, 'accountid','mcurl', 'apikey', 'domainid', 'username');
-  enrollment.tenantid = req.body.domainid; //for now
-  enrollment.status = "new";
-
-  var activationKey = 'hello';
+  var activationKey = uuid.v4();
   var dataSource = {
     tenantId: req.body.tenantid,
-    agentId: req.body.agentid,
+    agentId: uuid.v4(),
     mcurl: req.body.mcurl,
     activationKey: activationKey
   };
