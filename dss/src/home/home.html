@@ -12,7 +12,7 @@
     <a class="btn btn-primary btn-lg" role="button" (click)="downloadFile()">Download MCDP Access Token</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
     <a id="enrollDataSource" class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source </a>
-
+    <a id="showDataSource" class="btn btn-primary btn-lg" role="button" (click)=" showDataSources()">Show Data Sources </a>
 
 
     <pre *ngIf="response">
@@ -53,9 +53,39 @@
       </table>
       </form>
     </pre>
+
+    <div *ngIf="showEnrollments">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+
+            <div class="card-block">
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Mc Url</th>
+                    <th>Agent ID</th>
+                    <th>Download Credentials</th>
+                    <th>Reset Credentials</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Vishnu Serghei</td>
+                    <td>2012/01/01</td>
+                    <td><a style="color:black;" class="btn btn" role="button" (click)="downloadFile()"><button>Download Credentials</button></a></td>
+                    <td><a style="color:black;" class="btn btn" role="button" (click)="resetCredentials()"><button>Reset Credentials</button></a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
     <h2 *ngIf="jwt">You are logged in and your JWT is:</h2>
     <pre *ngIf="jwt" class="jwt"><code>{{ jwt }}</code></pre>
     <pre *ngIf="jwt" class="jwt"><code>{{ decodedJwt | json }}</code></pre>
 
-  </div>
 </div>

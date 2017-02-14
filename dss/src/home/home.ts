@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthHttp } from 'angular2-jwt';
 import { contentHeaders } from '../common/headers';
 import * as FileSaver from 'file-saver';
+import { DadTable } from '../../../dad3/src/app/dad/table.component';
 
 
 const styles = require('./home.css');
@@ -20,6 +21,7 @@ export class Home {
   response: string;
   enrollStatus: boolean;
   enrollments: string[];
+  showEnrollments: boolean;
   api: string;
   error;
   url:string;
@@ -44,6 +46,13 @@ export class Home {
       return;
     }
   }
+
+  showDataSources(){
+      if (!this.showEnrollments) this.showEnrollments = true;
+      else this.showEnrollments = false;
+    }
+
+
   callGetToken() {
     this._callApi('Secured', 'http://localhost:3004/api/protected/token');
   }
@@ -73,6 +82,11 @@ export class Home {
     FileSaver.saveAs(blob, "mcdp_dad_access.key");
    // var url= window.URL.createObjectURL(blob);
    // window.open(url);
+  }
+
+  resetCredentials(){
+    //varuuuuuun
+    
   }
 
   addSource(mcurl, agentId){
