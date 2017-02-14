@@ -14,6 +14,7 @@ const template = require('./login.html');
 export class Login {
   error;
   url:string;
+  adminflow:boolean = false;
 
   constructor(public router: Router,
               private activatedRoute: ActivatedRoute,
@@ -27,24 +28,38 @@ export class Login {
     });
   }
 
-  login(event, domainid, username, password) {
+  changeMethod(v){
+    console.log(v);
+
+  }
+
+  login(event, loginmethod, domainid, username, password) {
+    alert(loginmethod.value)
     event.preventDefault();
-    let body = JSON.stringify({ domainid, username, password });
-    this.http.post('http://localhost:3004/sessions/create', body, { headers: contentHeaders })
-      .subscribe(
-        response => {
-          this.error = null;
-          localStorage.setItem('id_token', response.json().id_token);
-          if (this.url) {
-            window.location.href=this.url + "/#/dad/login?id_token=" + response.json().id_token;
+
+    if (loginmethod.value === 'mcuser') {
+      window.location.href = "http://www.soti.net";
+      return;
+    } else {
+
+      let body = JSON.stringify({domainid, username, password});
+      this.http.post('http://localhost:3004/sessions/create', body, {headers: contentHeaders})
+        .subscribe(
+          response => {
+            this.error = null;
+            localStorage.setItem('id_token', response.json().id_token);
+            if (this.url) {
+              window.location.href = this.url + "/#/dad/login?id_token=" + response.json().id_token;
+            }
+            this.router.navigate(['home']);
+          },
+          error => {
+            this.error = error.text();
+            console.log(error.text());
           }
-          this.router.navigate(['home']);
-        },
-        error => {
-          this.error = error.text();
-          console.log(error.text());
-        }
-      );
+        );
+
+    }
   }
 
   signup(event) {

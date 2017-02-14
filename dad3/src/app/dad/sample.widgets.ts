@@ -226,6 +226,23 @@ export const WIDGETS: DadWidget[] = [
     name:'Application Deployment Count by Number of Devices',
     type: 1,
     endpoint: "ApplicationDeploymentCount",
+    data: [
+      {
+        "ExecutionTimeMinutes": 41628,
+        "AppId": "android",
+        "NumberOfDevices": 127
+      },
+      {
+        "ExecutionTimeMinutes": 43,
+        "AppId": "com.ebay.mobile",
+        "NumberOfDevices": 156
+      },
+      {
+        "ExecutionTimeMinutes": 55000,
+        "AppId": "soti",
+        "NumberOfDevices": 189
+      }
+    ],
     parameters:[
       {
         dateFrom: "2017-01-24T20:30:21",
@@ -253,7 +270,8 @@ export const WIDGETS: DadWidget[] = [
       height: 250,
       embeddedChart: true,
       horizontal: true,
-      action: 'grow'
+      action: 'grow',
+      transformations : [{sort: true}, {top:5}]
       }
   },
   {id: 'widget_chart2',
