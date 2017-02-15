@@ -95,11 +95,11 @@ export class Home {
     this.http.get('http://localhost:3004/sourceCredentials/'+ _agentId, { headers: headers })
       .subscribe(
         response => {
-          let response_body = JSON.parse(response._body);
-          var blob = new Blob([response_body[0].activationKey], { type: 'text/csv' });
+          let response_body = response["_body"];
+          var blob = new Blob([response_body], { type: 'text/csv' });
           FileSaver.saveAs(blob, "mcdp_dad_access.key");
           this.error = null;
-          this.router.navigate(['home']);
+       //    this.router.navigate(['home']);
         },
         error => {
           this.error = error.text();
@@ -119,7 +119,7 @@ export class Home {
         response => {
           alert('successfully reset, download new credentials');
           this.error = null;
-          this.router.navigate(['home']);
+         // this.router.navigate(['home']);
         },
         error => {
           alert('reset failed.');
@@ -142,7 +142,7 @@ export class Home {
     this.http.get('http://localhost:3004/getDataSources', { headers: headers})
       .subscribe(
         response => {
-          var data = JSON.parse(response._body);
+          var data = JSON.parse(response["_body"]);
          this.McUrl = data;
           this.error = null;
           this.router.navigate(['home']);
