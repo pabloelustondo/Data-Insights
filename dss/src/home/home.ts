@@ -34,6 +34,8 @@ export class Home {
     this.isSOTI = this.decodedJwt["domainid"] === 'soti';
   }
 
+  rowsTake = 10;
+
   logout() {
     localStorage.removeItem('id_token');
     this.router.navigate(['login']);
