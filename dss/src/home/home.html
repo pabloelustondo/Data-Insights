@@ -34,20 +34,15 @@
 
 
     <pre *ngIf="enrollStatus" >
-      Add new data source {{decodedJwt["accountid"]}}
-      <form>
+      Add new data source for tenant {{decodedJwt["tenantid"]}}
+      <form (submit)="addSource(mcurl.value)">
       <table>
-        <tr>
-          <td style="width: 200px"> <label>id: </label>  </td>
-          <td style="width: 300px"><input #aId id="aId" style="width:300px" placeholder="agent name"></td>
-        </tr>
         <tr>
           <td style="width: 200px"> <label>mcurl: </label>  </td>
           <td style="width: 300px"><input #mcurl id="mcurl" style="width:300px" placeholder="https://cad059.corp.soti.net/MobiControl/api"></td>
         </tr>
         <tr>
-           <td><a (click)="addSource(mcurl.value, aId.value)" class="btn btn-sm glyphicons glyphicons-bin x1"> add </a></td>
-          <td> <button type="submit" class="btn btn-success">Submit</button></td>
+          <td> <button type="submit" class="btn btn-success">Add Source</button></td>
         </tr>
 
       </table>

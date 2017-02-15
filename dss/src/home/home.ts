@@ -154,22 +154,21 @@ export class Home {
       );
   }
 
-  addSource(mcurl, agentId){
+  addSource(mcurl){
     var decoded = this.decodedJwt;
 
     var agent = {
-      tenantid : decoded.tenantid,
-      agentid : agentId,
+      tenantid : decoded['tenantid'],
+      agentid : 'asdas',
       mcurl : mcurl
     };
 
 
     console.log('in add source : ', mcurl);
-    console.log('in add source : ', agentId);
+
     console.log('it will be enrolled don\'t worry. ', JSON.stringify(agent));
 
     this.enrollStatus = null;
-      console.log('it will be enrolled don\'t worry. ', agentId);
 
     let body = JSON.stringify(agent);
     this.http.post('http://localhost:3004/registerDataSource', body, { headers: contentHeaders })
