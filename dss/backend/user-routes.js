@@ -33,6 +33,7 @@ var MyMCAccount =
     apikey2:"NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0",
     clientId2:"6a106988b81c43499ea04e96943e05c1",
     domainid: "pme",
+    tenantid: "pme",
     username: "Administrator"
   };
 
