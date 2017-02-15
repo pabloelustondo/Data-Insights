@@ -12,8 +12,7 @@ const template = require('./signup.html');
   styles: [ styles ]
 })
 export class Signup {
-  constructor(public router: Router, public http: Http) {
-  }
+  constructor(public router: Router, public http: Http) {}
 
   signup(event, accountid, mcurl, apikey, domainid, username, password) {
     event.preventDefault();
