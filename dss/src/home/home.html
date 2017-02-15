@@ -8,12 +8,12 @@
 
     <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
-    <a href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
-    <a class="btn btn-primary btn-lg" role="button" (click)="downloadFile()">Download MCDP Access Token</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="showDataSources()">Show Data Sources</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
-    <a id="enrollDataSource" class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source </a>
-    <a id="showDataSource" class="btn btn-primary btn-lg" role="button" (click)=" showDataSources()">Show Data Sources </a>
 
+
+    <a href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
 
     <pre *ngIf="response">
       All enrollments for account {{decodedJwt["accountid"]}}

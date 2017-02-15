@@ -42,17 +42,16 @@ export class Home {
 
   showAddSource(){
     console.log('enter show add source');
-    if (this.enrollStatus === undefined || this.enrollStatus === null){
-      this.enrollStatus = true;
-      return;
-    }
+
+    if (!this.enrollStatus) this.enrollStatus = true;
+    else this.enrollStatus = false;
   }
 
   showDataSources(){
       if (!this.showEnrollments) this.showEnrollments = true;
       else this.showEnrollments = false;
 
-    this.getMcUrl();
+      this.getMcUrl();
   }
 
   callGetToken() {
@@ -97,7 +96,7 @@ export class Home {
         response => {
           let response_body = response["_body"];
           var blob = new Blob([response_body], { type: 'text/csv' });
-          FileSaver.saveAs(blob, "mcdp_dad_access.key");
+          FileSaver.saveAs(blob, "MCDP_Access.key");
           this.error = null;
        //    this.router.navigate(['home']);
         },
