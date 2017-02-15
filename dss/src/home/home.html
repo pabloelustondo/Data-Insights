@@ -13,7 +13,7 @@
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
 
 
-    <a href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
+    <a id="DownloadMCDP" href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
 
     <pre *ngIf="response">
       All enrollments for account {{decodedJwt["accountid"]}}
@@ -53,7 +53,6 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
-
             <div class="card-block">
               <table class="table table-bordered table-striped table-condensed">
                 <thead>
@@ -66,7 +65,7 @@
                 </thead>
                 <tbody>
                    <tr *ngFor="let x of McUrl;">
-                      <td style="align-content: center;">
+                      <td>
                         <span> {{x.mcUrl}} </span>
                       </td>
                       <td style="align-content: center;">

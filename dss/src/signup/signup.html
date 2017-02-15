@@ -8,7 +8,7 @@
   </i></small>
   <p></p>
 
-  <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value)">
+  <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value, companyname.value, companyaddress.value, phone.value)">
     <div class="form-group">
       <label for="accountid">Account ID (email) </label>
       <input type="email" #accountid class="form-control" id="accountid" placeholder="myaccount@email.com">
@@ -41,6 +41,24 @@
     <small><i>Note: We are using the password to validate you against your MobiControl instance but we do not store this password.
       Each time lo login to the dashboard you will be validated by your mobicontrol instance</i></small>
   </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
+  <div (optional)="optionalInfo($event, companyname.value, companyaddress.value, phone.value)">
+    <div class="form-group">
+      <label for="companyname">Company Name</label>
+      <input type="text" #companyname class="form-control" id="companyname" placeholder="i.e: SOTI Inc."  >
+    </div>
+    <div class="form-group">
+      <label for="companyaddress">Company Address</label>
+      <input type="text" #companyaddress class="form-control" id="companyaddress" placeholder="i.e: 5770 Hurontario St #1100, Mississauga, ON L5R 3G5"  >
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" pattern="[\(]\d{3}[\)][\s]\d{3}[\-]\d{4}" #phone class="form-control" id="phone" placeholder="i.e: (905) 624-9828">
+    </div>
+  </div>
+    <button type="submit" class="btn btn-default">Enroll</button>
+
+  </form>
+
+
+
 </div>
