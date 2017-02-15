@@ -12,29 +12,15 @@ let jwt  = require('jsonwebtoken');
 export class NumberOfApplicationInstalls {
 
     /**
-     * This api can be used to retrieve data related to possible reasons for device not lasting shift.
-     * To use:
-     * Provide the reasonId and the associated parameters with it.
+     * This api is used to provide a snapshot of number of application installs across all devices
      *
-     * Supported reasons:
-     * batteryNotFullyChargedBeforeShift
-     *  - shiftDuration: int
-     *  - shiftStartTime: int
-     *  - minimumBatteryPercentageThreshold: int
+     * To use:
+     * Provide the access token in the header parameter that contains the registered tenant
      *
      */
 
     @Get('Applications/numberOfInstallations')
-    @Example<any>({
-        metricName: 'DevicesDidNotLastShift',
-        predicates: 'batteryNotFullyChargedBeforeShift',
-        params: {
-            shiftStartDateTime : '2017-01-01T08:00',
-            endDate: '2017-01-12',
-            shiftDuration: 8
-        }
 
-    })
     public async Get( @Request() request: express.Request): Promise<SDS> {
 
         let req = request;

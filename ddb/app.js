@@ -70,14 +70,18 @@ app.get('/todo/:id', function(req,res){
 });
 
 
-app.get('/getDBAccess/:tenatID', function(req,res){
+app.get('/getDBAccess/:tenantID', function(req,res){
+
+    var _tenantId = req.params.tenantID;
     callDbAndRespond(req,res, function(req,res,db, next){
         console.log(req.params.tenantID);
         db.collection('enrollments').findOne({
-            "tenantID":req.params.tenatID
+            "tenantId":req.params.tenantID
         }, next);
     });
 });
+
+
 
 app.post('/todo', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
@@ -201,7 +205,7 @@ app.post('/updateDataSourceAws', function (req, res) {
         var _tenantId = req.body.tenantID;
         db.collection('enrollments').update(
             {
-                tenantID: _tenantId
+                tenantId: _tenantId
             },
             {
                 $set: {
