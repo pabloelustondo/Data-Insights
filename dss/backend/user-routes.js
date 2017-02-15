@@ -563,7 +563,7 @@ app.post('/sessions/create', function(req, res) {
     method: 'POST', //Specify the method
     headers: { //We can define headers too
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': "Basic " + apikey,
+      'Authorization': "Basic " + apikey
     },
     body: grant_type,
   }, function(error, response, body){

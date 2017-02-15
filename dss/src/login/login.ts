@@ -62,6 +62,7 @@ export class Login {
 
   login(event, loginmethod, domainid, username, password) {
 
+    let dmv = domainid.value;
     if(event) event.preventDefault();
 
     if (loginmethod.value === 'mcuser' && !this.code) {
@@ -82,14 +83,18 @@ export class Login {
 
     } else {
       let code = this.code;
-      let body = JSON.stringify({domainid, username, password, code});
-      this.http.post('http://localhost:3004/sessions/create', body, {headers: contentHeaders})
+    //  let body = JSON.stringify({domainid, username, password, code});
+      let body = JSON.stringify({
+        domainid: domainid.value,
+        username: username.value,
+        password: password.value});
+      this.http.post('http://localhost:3004/sessions/create', body, { headers: contentHeaders })
         .subscribe(
           response => {
             this.error = null;
             localStorage.setItem('id_token', response.json().id_token);
             if (this.url) {
-              window.location.href = this.url + "/#/dad/login?id_token=" + response.json().id_token;
+             window.location.href = this.url + "/#/dad/login?id_token=" + response.json().id_token;
             }
             this.router.navigate(['home']);
           },
