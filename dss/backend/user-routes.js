@@ -216,8 +216,18 @@ app.get('/sourceCredentials/:agentId', function (req, res) {
 
             if (response.statusCode === 200){
 
+              tokenpayload = {};
+
               var body = JSON.parse(response.body);
-              res.status(200).send(response.body);
+
+              tokenpayload.accountId =  success.accountid;
+              tokenpayload.tenantId =  success.tenantid;
+              tokenpayload.agentId = agentId;
+              tokenpayload.activationKey =  body[0].activationKey;
+
+              var _token = createToken(tokenpayload);
+
+              res.status(200).send(_token);
 
             } else if (response.statusCode === 404) {
               res.status(404).send(ErrorMsg.token_verification_failed);
