@@ -62,16 +62,17 @@ app.get('/enrollments2', function(req, res) {
 
 app.post('/resetCredentials/:agentId', function (req, res) {
 
-  var _header = req.headers;
-  var token = _header['x-access-token'];
+  var _header = req.body.headers;
+  var _token = _header['x-access-token'];
   var agentId = req.params.agentId;
-
+  var token = _token[0];
   try{
     jwt.verify(token, config.secret, function (err, success) {
       if (err) {
         return res.status(400).send (ErrorMsg.token_verification_failed);
       }
       if (success) {
+        var newActivationKey = uuid.v4();
         request({
           rejectUnauthorized: false,
           url: config.ddbEndpointUrl + "/updateDataSourceCredentials",
@@ -81,8 +82,8 @@ app.post('/resetCredentials/:agentId', function (req, res) {
           },
           json : {
             'agentId' : agentId,
-            'activationKey': uuid.v4()
-          },
+            'activationKey': newActivationKey
+          }
         }, function(error, response, body){
           if(error) {
             console.log(error);
@@ -92,7 +93,6 @@ app.post('/resetCredentials/:agentId', function (req, res) {
 
             if (response.statusCode === 200){
 
-              var body = JSON.parse(response.body);
               res.status(200).send({
                 message: "Success fully reset"
               });

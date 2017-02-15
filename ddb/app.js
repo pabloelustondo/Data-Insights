@@ -171,17 +171,17 @@ app.post('/updateDataSourceCredentials', function (req, res ) {
     var _agentId = req.body.agentId;
     var _accessKey = req.body.activationKey;
 
-    console.log("tenant id = " +_agentId);
+    console.log("agent id = " +_agentId);
 
     callDbAndRespond(req, res, function(req,res,db, next) {
 
-        db.collection('enrollments').update(
+        db.collection('dataSources').update(
             {
-                agentid : _agentId
+                agentId : _agentId
             },
             {
                 $set: {
-                    accessKey : _accessKey
+                    activationKey : _accessKey
 
                 }
             },
@@ -226,5 +226,11 @@ app.delete('/todo', function(req,res){
     });
 });
 
+
+app.delete('/dataSources', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('dataSources').drop(next);
+    });
+});
 
 app.listen(8000);
