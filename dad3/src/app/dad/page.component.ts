@@ -1,7 +1,7 @@
 /**
  * Created by dister on 2/2/2017.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component,OnInit, AfterViewInit } from '@angular/core';
 import { DadTableConfigsService, DadChartConfigsService,DadWidgetConfigsService ,DadPageConfigsService } from './chart.service';
 import { DadElementDataService } from "./data.service";
 import {Subscription } from 'rxjs';
@@ -27,13 +27,13 @@ export class DadPage {
     styles:['.row{overflow:hidden;}'],
     providers: [DadElementDataService, DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService, DadPageConfigsService],
     template: `
-   <div class="animated fadeIn">
-        <div class="row">
+   <div *ngIf="page" class="animated fadeIn">
+        <div *ngIf="page.widgets" class="row">
             <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
                 <dadwidget [widget]="widget"></dadwidget>
             </div>
         </div>
-        <div class="row">
+        <div *ngIf="page.charts" class="row">
             <div *ngFor="let chart of page.charts">
                 <dadchart [chart]="chart"></dadchart>
             </div>
@@ -56,7 +56,7 @@ export class  DadPageComponent implements OnInit{
                 private activatedRoute: ActivatedRoute
     ) { }
 
-    ngOnInit() {
+    ngOnInit()  {
 
         let tables = this.dadTableConfigsService.getTableConfigs();
         let charts = this.dadChartConfigsService.getChartConfigs();
@@ -68,15 +68,15 @@ export class  DadPageComponent implements OnInit{
                 this.page = this.dadPageConfigsService.getPageConfig(callerPageId);
 
                 this.page.charts = [];
-                    for(let chartid of this.page.chartids){
-                        this.page.charts.push(this.dadChartConfigsService.getChartConfig(chartid));
-                    }
+                for(let chartid of this.page.chartids){
+                    this.page.charts.push(this.dadChartConfigsService.getChartConfig(chartid));
+                }
 
                 this.page.widgets = [];
                 for(let widgetid of this.page.widgetids){
                     this.page.widgets.push(this.dadWidgetConfigsService.getWidgetConfig(widgetid));
                 }
-
             });
     }
+
 }

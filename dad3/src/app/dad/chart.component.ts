@@ -41,7 +41,10 @@ export class DadChart extends DadElement{
                     </div>
                     <div>
                         <div style="color:black;">{{chart.name}}</div><br/><br/><br/>        
-                        <div style= "text-align:center; height:100%; width:100%" [id]="chart.id"></div>
+
+                        <div *ngIf="chart.big" style="text-align:center; padding-bottom:70%; height:100%; width:100%;" [id]="chart.id"></div>
+                        <div *ngIf="!chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
+                                                
                         <div style="color:black;">
                             <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
                         </div>
@@ -175,9 +178,7 @@ export class DadChartComponent implements OnInit {
 
     let c3Config:any= {
       bindto: '#' + chartConfig.id,
-      size:{
-        height: 400
-      },
+      size:{},
       data: bardata,
       color: {
         pattern: this.colorPalette,
@@ -267,7 +268,10 @@ if (chartConfig.regionM){
       c3Config.axis.x.label.text = [];
       c3Config.axis.y.label.text = [];
       c3Config.size.height = 200;
+      c3Config.axis.y.show = false;
+      c3Config.grid.y.show = false;
     };
+
     if (chartConfig.horizontal) {
       c3Config.axis.rotated = true;
     }

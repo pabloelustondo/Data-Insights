@@ -19,7 +19,7 @@ export class NumberOfApplicationInstalls {
      *
      */
 
-    @Get('Applications/numberOfInstallations')
+    @Get('Application/numberOfInstallations')
 
     public async Get( @Request() request: express.Request): Promise<SDS> {
 
