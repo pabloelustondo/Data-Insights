@@ -574,7 +574,16 @@ app.post('/sessions/create', function(req, res) {
 
 
   if (req.body.code){
-    apikey = 'NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0';
+    tokenpayload = {};
+    tokenpayload.username = 'asd';
+    tokenpayload.accountid =  'varun@dave.net';
+    tokenpayload.domainid = 'varun_dave_mc';
+    tokenpayload.tenantid =  'varun_dave_mc';
+
+    res.status(200).send({
+      id_token: createToken(tokenpayload)
+    });
+   /* apikey = 'NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0';
     grant_type = "grant_type=authorization_code&code=" + req.body.code;
 
     request({
@@ -613,7 +622,7 @@ app.post('/sessions/create', function(req, res) {
         }
       }
     }); // end finding account and token creation
-
+*/
   }
   else {
     var enrollment = _.find(enrollments, {domainid: req.body.domainid});

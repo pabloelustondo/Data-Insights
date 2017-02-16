@@ -112,7 +112,20 @@ app.get('/dataSources', function (req, res) {
 });
 
 
-
+app.get('/getTenantUrl', function (req, res) {
+    var _tenantId = req.query.tenantId;
+    callDbAndRespond(req,res, function(req,res,db, next){
+        console.log(req.params.tenantID);
+        db.collection('enrollments').findOne({
+            "tenantId": _tenantId
+            }
+            ,
+            {
+                "mcurl": 1
+            }
+        , next);
+    });
+});
 
 app.post('/newEnrollment', function (req, res ) {
     callDbAndRespond(req,res, function(req,res,db, next){
