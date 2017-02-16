@@ -179,7 +179,7 @@ export class Home {
     var decoded = this.decodedJwt;
 
     var agent = {
-      tenantid : decoded['tenantid'],
+      tenantid : decoded['tenantId'],
       agentid : 'asdas',
       mcurl : mcurl
     };

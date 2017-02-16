@@ -636,15 +636,55 @@ app.post('/sessions/create', function(req, res) {
 
 
   if (req.body.code){
-    tokenpayload = {};
-    tokenpayload.username = 'asd';
-    tokenpayload.accountid =  'varun@dave.net';
-    tokenpayload.domainid = 'varun_dave_mc';
-    tokenpayload.tenantId =  'varun_dave_mc';
+    var _tenantID = req.body.domainid;
+    try {
+      request({
+        rejectUnauthorized: false,
+        rejectUnauthorized: false,
+        url: config.ddbEndpointUrl + "/getEnrollment",
+        method: 'GET', //Specify the method
+        headers: { //We can define headers too
+          'Content-Type': 'application/json'
+        },
+        qs: {tenantId: _tenantID}
+      }, function (error, response, body) {
+        if (error) {
+          console.log(error);
+          res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+        } else {
+          console.log(response.statusCode, body);
 
-    res.status(200).send({
-      id_token: createToken(tokenpayload)
-    });
+          if (response.statusCode === 200) {
+
+
+            var body = JSON.parse(response.body);
+
+            tokenpayload = {};
+            tokenpayload.username = body.tenantId;
+            tokenpayload.accountid = body.accountId;
+            tokenpayload.domainid = body.domainid;
+            tokenpayload.tenantId = body.tenantId;
+
+            res.status(200).send({
+              id_token: createToken(tokenpayload)
+            });
+
+          } else if (response.statusCode === 404) {
+            res.status(404).send(ErrorMsg.token_verification_failed);
+          }
+          else {
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+          }
+        }
+      });
+    }
+    catch (e) {
+      console.log(e);
+      return res.status(400).send (ErrorMsg.token_verification_failed);
+    }
+
+
+
    /* apikey = 'NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0';
     grant_type = "grant_type=authorization_code&code=" + req.body.code;
 

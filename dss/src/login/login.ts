@@ -66,14 +66,12 @@ export class Login {
 
   login(event, loginmethod, domainid, username, password) {
 
-    let dmv = domainid.value;
+
     if(event) event.preventDefault();
 
     if (loginmethod.value === 'mcuser' && !this.code) {
 
       //we need to get the url for the domain id entered, which by the way is a good way to verify the domain id
-
-
       this.http.get('http://localhost:3004/urlbydomainid?domainid=' + domainid.value)
         .subscribe(
           response => {
