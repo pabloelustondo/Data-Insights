@@ -8,9 +8,12 @@
 
     <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
-    <a href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
-    <a class="btn btn-primary btn-lg" role="button" (click)="downloadFile()">Download MCDP Access Token</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source</a>
+    <a class="btn btn-primary btn-lg" role="button" (click)="showDataSources()">Show Data Sources</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
+
+
+    <a id="DownloadMCDP" href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
 
     <pre *ngIf="response">
       All enrollments for account {{decodedJwt["accountid"]}}
@@ -22,15 +25,71 @@
           <td style="width: 200px">tenantid</td>
           <td style="width: 200px">MC Url</td>
         </tr>
-        <tr *ngFor="let e of response">
-           <td>{{e.domainid}}</td><td>{{e.status}}</td><td>{{e.username}}</td><td>{{e.tenantid}}</td><td>{{e.mcurl}}</td>
+        <tr>
+           <td>{{response.domainid}}</td><td>{{response.status}}</td><td>{{response.username}}</td><td>{{response.tenantid}}</td><td>{{response.mcurl}}</td>
         </tr>
       </table>
     </pre>
+
+
+
+    <pre *ngIf="enrollStatus" >
+      Add new data source for tenant {{decodedJwt["tenantid"]}}
+      <form (submit)="addSource(mcurl.value)">
+      <table>
+        <tr>
+          <td style="width: 200px"> <label>mcurl: </label>  </td>
+          <td style="width: 300px"><input #mcurl id="mcurl" style="width:300px" placeholder="https://cad059.corp.soti.net/MobiControl/api"></td>
+        </tr>
+        <tr>
+          <td> <button type="submit" class="btn btn-success">Add Source</button></td>
+        </tr>
+
+      </table>
+      </form>
+    </pre>
+    <br/><br/>
+    <div *ngIf="showEnrollments">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-block">
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Mc Url</th>
+                    <th>Agent ID</th>
+                    <th>Download Credentials</th>
+                    <th>Reset Credentials</th>
+                  </tr>
+                </thead>
+                <tbody>
+                   <tr *ngFor="let x of McUrl;">
+                      <td>
+                        <span> {{x.mcUrl}} </span>
+                      </td>
+                      <td style="align-content: center;">
+                        <span #agentId id = "agentId" >{{x.agentId}} </span>
+                      </td>
+                      <td><a style="color:black;" class="btn btn" role="button" (click)="downloadCredentials(agentId)"><button>Download Credentials</button></a></td>
+                      <td><a style="color:black;" class="btn btn" role="button" (click)="resetCredentials(agentId)"><button>Reset Credentials</button></a></td>
+                  </tr>
+                </tbody>
+              </table>
+              <ul class="pagination" style="cursor:pointer;">
+                        <span *ngFor="let page of pages">
+                            <li  *ngIf="page == currentPage" class="page-item active" ><a class="page-link" (click)=refresh(page) >{{page+1}}</a></li>
+                            <li  *ngIf="page != currentPage" class="page-item" ><a class="page-link" (click)=refresh(page) >{{page+1}} </a></li>
+                        </span>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 
     <h2 *ngIf="jwt">You are logged in and your JWT is:</h2>
     <pre *ngIf="jwt" class="jwt"><code>{{ jwt }}</code></pre>
     <pre *ngIf="jwt" class="jwt"><code>{{ decodedJwt | json }}</code></pre>
 
-  </div>
 </div>

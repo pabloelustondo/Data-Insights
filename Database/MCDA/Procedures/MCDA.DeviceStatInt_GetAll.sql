@@ -31,7 +31,7 @@ BEGIN
 			BEGIN
 				Select @lastTimeTmp = max(a.ts) 
 				from (
-					select top (@BatchSize) [timestamp] as ts from DeviceStatInt 
+					select top (@BatchSize) [timestamp] as ts from [$(MobiControlDB)].dbo.DeviceStatInt WITH (NOLOCK) 
 					where [timestamp] > @lastTime
 					order by [timestamp] asc
 					 ) a
@@ -42,8 +42,8 @@ BEGIN
 				END
 
 				SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
-					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
-					INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+					FROM [$(MobiControlDB)].dbo.DeviceStatInt AS A WITH (NOLOCK) 
+					INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 					WHERE [timestamp] > @lastTime and [timestamp] <= @lastTimeTmp
 			END
 		ELSE					--failed
@@ -53,8 +53,8 @@ BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
 					SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
-					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
-					INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+					FROM [$(MobiControlDB)].dbo.DeviceStatInt AS A WITH (NOLOCK) 
+					INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 					WHERE [timestamp] > @PreviousTime and [timestamp] <= @lastTime
 				END
 				ELSE
@@ -62,8 +62,8 @@ BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
 					SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
-					FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
-					INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+					FROM [$(MobiControlDB)].dbo.DeviceStatInt AS A WITH (NOLOCK) 
+					INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 					WHERE A.[timestamp] <= @lastTime
 				END
 				
@@ -72,7 +72,7 @@ BEGIN
 	ELSE 
 	BEGIN
 		Select @lastTime = max(a.ts) from (
-			select top (@BatchSize) [timestamp] as ts from DeviceStatInt order by [timestamp] asc
+			select top (@BatchSize) [timestamp] as ts from [$(MobiControlDB)].dbo.DeviceStatInt WITH (NOLOCK) order by [timestamp] asc
 			) a
 
 		IF (@lastTime IS NOT NULL AND NOT EXISTS(SELECT 1 from [MCDA].[DeviceSyncStatus] where Name = @tablename))
@@ -80,8 +80,8 @@ BEGIN
 			EXEC [MCDA].[DeviceSyncStatus_Insert] @Name = @tablename, @status = 1, @LastSyncTime = @lastTime
 
 			SELECT d.DevId as DeviceId, A.[TimeStamp], A.[StatType], A.[IntValue], A.[ServerDateTime]
-				FROM dbo.DeviceStatInt AS A WITH (NOLOCK) 
-				INNER JOIN dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+				FROM [$(MobiControlDB)].dbo.DeviceStatInt AS A WITH (NOLOCK) 
+				INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 				WHERE A.[timestamp] <= @lastTime
 		END
 	END

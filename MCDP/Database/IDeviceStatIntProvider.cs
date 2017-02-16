@@ -11,7 +11,7 @@ namespace Soti.MCDP.Database
         /// Checks for agent duplicated name.
         /// </summary>
         /// <returns>dataset for Ida format.</returns>
-        Data4Ida GetDeviceStatIntData();
+        DeviceStatIntList GetDeviceStatIntData();
 
         /// <summary>
         /// Confirm the requested.

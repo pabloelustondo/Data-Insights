@@ -7,9 +7,8 @@ import {SDS} from '../models/user';
 
 let jwt  = require('jsonwebtoken');
 
-// import * as https from 'https';
 const config = require('../../appconfig.json');
-import * as querystring from 'querystring';
+
 
 import * as rp from 'request-promise';
 

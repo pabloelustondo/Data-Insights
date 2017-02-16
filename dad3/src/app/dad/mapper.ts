@@ -3,6 +3,7 @@
  */
 import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
+import {DadTransformer } from "./transformer";
 
 export class ChartData{
   Dimension = [];
@@ -79,6 +80,7 @@ export class Mapper{
       type:  config.type
     }
   }
-    return dataForChart;
+    let transformer = new DadTransformer();
+    return transformer.transformAll(config, dataForChart);
   }
 }

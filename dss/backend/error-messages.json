@@ -12,5 +12,6 @@
   "mcurl_enrollement_failed_url_not_reachable": "Failed to enroll due to url not reachable",
   "login_failed_authentication": "Failed to login due to MobiControl authentication failure",
   "token_verification_failed" : "Failed to verify the token, please consult your administrator",
-  "token_activationKey_failed": "Activation key is not valid. Please consult with your administrator"
+  "token_activationKey_failed": "Activation key is not valid. Please consult with your administrator",
+  "tenantid_not_registered": "System could not find IDP for provided tenantID"
 }

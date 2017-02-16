@@ -313,7 +313,41 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
           expect(jqXHR.responseJSON.id_token).toBeDefined();
           done();},
         error: function( jqXHR, textStatus, errorThrown){
-        fail("Use should be able to log in in this case")
+          fail("Use should be able to log in in this case")
+          done();
+        }
+      });
+    });
+  });
+
+  describe("GET /urlbydomainid", function() {
+
+    it("it fails if missing domainid", function(done) {
+      $.ajax({
+        url: "/urlbydomainid",
+        type:"GET",
+        contentType:"application/json",
+        success: function(data, textStatus, jqXHR) {
+          fail("it should reject a call without domain id")
+          done();},
+        error: function( jqXHR, textStatus, errorThrown){
+          expect(jqXHR.responseText).toBe(ErrorMsg.missing_domainid);
+          done();
+        }
+      });
+    });
+
+    it("returns the URL for a given domainid", function(done) {
+      $.ajax({
+        url: "/urlbydomainid?domainid=utest",
+        type:"GET",
+        contentType:"application/json",
+        success: function(data, textStatus, jqXHR) {
+          expect(textStatus).toBe('success');
+          expect(jqXHR.responseJSON.url).toBeDefined();
+          done();},
+        error: function( jqXHR, textStatus, errorThrown){
+          fail("This call should not fail");
           done();
         }
       });

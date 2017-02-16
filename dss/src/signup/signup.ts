@@ -12,12 +12,28 @@ const template = require('./signup.html');
   styles: [ styles ]
 })
 export class Signup {
-  constructor(public router: Router, public http: Http) {
-  }
+  constructor(public router: Router, public http: Http) {}
 
   signup(event, accountid, mcurl, apikey, domainid, username, password) {
     event.preventDefault();
-    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password });
+    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password});
+    this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
+      .subscribe(
+        response => {
+          localStorage.setItem('id_token', response.json().id_token);
+          this.router.navigate(['home']);
+        },
+        error => {
+          alert(error.text());
+          console.log(error.text());
+        }
+      );
+  }
+
+  optional(event, companyname, companyaddress, phone)
+  {
+    event.preventDefault();
+    let body = JSON.stringify({companyname, companyaddress, phone});
     this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {

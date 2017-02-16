@@ -3,7 +3,7 @@
  */
 "use strict";
 exports.config = {
-    "testing": false,
+    "testing": true,
     "authorizationserver": 'http://localhost:3003',
     "InitialChargeLevels": "https://localhost:3002/Devices/Battery/Summary/InitialChargeLevels",
     "DischargeRate": "https://localhost:3002/Devices/Battery/Summary/DischargeRate",

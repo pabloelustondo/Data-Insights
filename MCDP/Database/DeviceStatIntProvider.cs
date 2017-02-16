@@ -46,10 +46,10 @@ namespace Soti.MCDP.Database
         /// Get DeviceStatInt Data.
         /// </summary>
         /// <returns>Ida formatted dataset .</returns>
-        public Data4Ida GetDeviceStatIntData()
+        public DeviceStatIntList GetDeviceStatIntData()
         {
             SqlConnection sqlConnection = null;
-            Data4Ida idaData = null;
+            DeviceStatIntList idaData = null;
             try
             {
                 sqlConnection = new SqlConnection(this._mobicontrolDatabaseConnectionString);
@@ -174,22 +174,22 @@ namespace Soti.MCDP.Database
         /// </summary>]
         /// <param name="DataSet">DataSet from DB.</param>
         /// <returns>Ida dataset.</returns>
-        private static Data4Ida Map2Ida(DataTable ds)
+        private static DeviceStatIntList Map2Ida(DataTable ds)
         {
-            Data4Ida idaData = null;
+            DeviceStatIntList idaData = null;
             try
             {
                 if (ds != null && ds.Rows != null && ds.Rows.Count > 0)
                 {
                     // so we have something
-                    idaData = new Data4Ida();
+                    idaData = new DeviceStatIntList();
                     idaData.createdAt = DateTime.Now.ToString();
                     idaData.metadata = "data from MCDA.DeviceStatInt_GetAll....";
-                    idaData.data = new List<DataRow4Ida>();
+                    idaData.data = new List<DeviceStatInt>();
 
                     foreach (DataRow dr in ds.Rows)
                     {
-                        var idaDataRow = new DataRow4Ida();
+                        var idaDataRow = new DeviceStatInt();
 
                         //DevId Char(80)
                         idaDataRow.dev_id = dr["DeviceId"].ToString();

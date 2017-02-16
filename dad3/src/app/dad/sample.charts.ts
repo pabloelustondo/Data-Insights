@@ -54,6 +54,21 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         horizontal: true,
+        transformations : [{sort: true}],
+        data: [
+            {
+                "ExecutionTimeMinutes": 41628,
+                "AppId": "android"
+            },
+            {
+                "ExecutionTimeMinutes": 43,
+                "AppId": "com.ebay.mobile"
+            },
+            {
+                "ExecutionTimeMinutes": 60000,
+                "AppId": "soti"
+            }
+        ],
         parameters: [
             {
                 dateFrom: "2017-01-24T20:30:21",
@@ -83,6 +98,7 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         horizontal: true,
+        transformations : [{sort: true}],
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
