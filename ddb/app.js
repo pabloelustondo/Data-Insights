@@ -81,6 +81,16 @@ app.get('/getDBAccess/:tenantID', function(req,res){
     });
 });
 
+app.get('/getEnrollment', function (req, res) {
+    var _tenantId = req.query.tenantId;
+    callDbAndRespond(req,res, function(req,res,db, next){
+        console.log(req.params.tenantID);
+        db.collection('enrollments').findOne({
+                "tenantId": _tenantId
+            }
+            , next);
+    });
+});
 
 
 app.post('/todo', function(req,res){
