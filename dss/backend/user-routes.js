@@ -416,8 +416,8 @@ app.post('/enrollments', function(req, res) {
             'accountId' : enrollment.accountid,
             'mcurl' : enrollment.mcurl,
             'tenantId' : enrollment.tenantid,
-            'domainId' : enrollment.domainid
-
+            'domainId' : enrollment.domainid,
+            'status' : 'new'
           },
           method: 'POST', //Specify the method
           headers: { //We can define headers too

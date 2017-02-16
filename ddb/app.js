@@ -209,11 +209,11 @@ app.post('/updateDataSourceCredentials', function (req, res ) {
     });
 });
 
-app.post('/updateDataSourceAws', function (req, res) {
-    var _tenantId = req.body.tenantID;
-    console.log("tenant id = " + _tenantId);
 
-    callDbAndRespond(req, res, function(req,res,db, next) {
+
+app.post('/updateDataSourceAws', function (req, res) {
+
+ callDbAndRespond(req, res, function(req,res,db, next) {
 
         var _tenantId = req.body.tenantID;
         db.collection('enrollments').update(
@@ -225,7 +225,8 @@ app.post('/updateDataSourceAws', function (req, res) {
                     accessUsername : req.body.accessUsername,
                     accessPswd : req.body.accessPswd,
                     RedShiftConnectionString: req.body.RedShiftConnectionString,
-                    DBName: req.body.DBName
+                    DBName: req.body.DBName,
+                    Status: req.body.status
                 }
             },
             {
