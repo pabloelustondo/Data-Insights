@@ -254,6 +254,12 @@ app.delete('/todo', function(req,res){
     });
 });
 
+app.delete('/enrollments', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('enrollments').drop(next);
+    });
+});
+
 
 app.delete('/dataSources', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){

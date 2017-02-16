@@ -14,9 +14,9 @@ const template = require('./signup.html');
 export class Signup {
   constructor(public router: Router, public http: Http) {}
 
-  signup(event, accountid, mcurl, apikey, domainid, username, password) {
+  signup(event, accountid, mcurl, apikey, domainid, username, password, clientsecret) {
     event.preventDefault();
-    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password});
+    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password, clientsecret});
     this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {
