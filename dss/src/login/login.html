@@ -5,7 +5,7 @@
   <form role="form" (submit)="login($event, loginmethod, domainid, username, password)">
     <div class="form-group">
       <label for="loginmethod">Login Medhod</label>
-      <select (change)="changeMethod()" #loginmethod class="form-control" id="loginmethod" placeholder="LoginMethod">
+      <select (change)="changeMethod(loginmethod.value)" #loginmethod class="form-control" id="loginmethod" placeholder="LoginMethod">
       <option value="mcuser">MobiControl User</option>
         <option value="mcadmin">MobiControl Admin</option>
       </select>
@@ -14,14 +14,16 @@
       <label for="domainid">Tenant ID</label>
       <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID" required>
     </div>
-  <div [hidden]="false" class="form-group">
-    <label for="username">Username</label>
-    <input type="text" #username class="form-control" id="username" placeholder="Username">
-  </div>
-  <div [hidden]="false" class="form-group">
-    <label for="password">Password</label>
-    <input type="password" #password class="form-control" id="password" placeholder="Password">
-  </div>
+
+      <div  *ngIf="manualLogin" class="form-group">
+        <label  for="username">Username</label>
+        <input type="text" #username class="form-control" id="username" placeholder="Username">
+      </div>
+      <div  *ngIf="manualLogin" class="form-group">
+        <label for="password">Password</label>
+        <input type="password" #password class="form-control" id="password" placeholder="Password">
+      </div>
+
   <button type="submit" class="btn btn-default">Login</button>
     <div style="height: 40px"></div>
     <a [routerLink]="['/signup']"><h4>Click here to Enroll</h4></a>
