@@ -2,6 +2,7 @@
 using Soti.MCDP.Database.Model;
 using System;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -73,7 +74,9 @@ namespace Soti.MCDP.DataProcess
 
         private DeviceStatIntProvider _deviceStatIntProvider = null;
 
-         /// <summary>
+        private DeviceStatApplicationProvider _deviceStatApplicationProvider = null;
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceStatIntProvider"/> class.
         /// </summary>
         public DataProcessProvider()
@@ -85,16 +88,17 @@ namespace Soti.MCDP.DataProcess
             this.idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
             this.idaHandShakeUrl = ConfigurationManager.AppSettings["idaHandShakeUrl"];
 
-            this.JWTTokenPath = Path.Combine(Directory.GetCurrentDirectory(), ConfigurationManager.AppSettings["JWTTokenName"]);
+            this.JWTTokenPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), ConfigurationManager.AppSettings["JWTTokenName"]);
 
             var logMessage = DateTime.Now.ToString() + "  =>  ";
             Log(logMessage + "[INFO] JWTTokenPath: " + JWTTokenPath);
-
+            
             if (File.Exists(JWTTokenPath))
             {
                 JWTToken = File.ReadAllText(JWTTokenPath);
-
+                Log(logMessage + "[INFO] JWTToken: " + JWTToken);
                 this.ExpiredJWTToken = HandShakeToIda(JWTToken);
+                Log(logMessage + "[INFO] ExpiredJWTToken: " + ExpiredJWTToken);
             }
             //else
             //{
@@ -104,6 +108,7 @@ namespace Soti.MCDP.DataProcess
             Log(logMessage + "[INFO] JWTToken: " + JWTToken);
             //LOADING DATABASE PROVIDER
             this._deviceStatIntProvider = new DeviceStatIntProvider();
+            this._deviceStatApplicationProvider = new DeviceStatApplicationProvider();
         }
 
         /// <summary>
@@ -129,14 +134,12 @@ namespace Soti.MCDP.DataProcess
                     var idaData = this._deviceStatIntProvider.GetDeviceStatIntData();
                     var logMessage = DateTime.Now.ToString() + "  =>  ";
 
-                    if (idaData != null && idaData.data != null && idaData.data.Count > 0)
+                    if (idaData != null && idaData.Rows.Count > 0)
                     {
-                        var idaDataJson = Newtonsoft.Json.JsonConvert.SerializeObject(idaData);
-                       
                         // send for real
                         try
                         {
-                            this.SendData2Ida(idaData);
+                            this.SendData2Ida(idaData, "DeviceStatInt");
 
                             this._deviceStatIntProvider.ConfirmData(true); // this shouuld go somewhere else later... 
 
@@ -205,7 +208,7 @@ namespace Soti.MCDP.DataProcess
         /// This method is the one that actually send data to the input data adapter
         /// </summary>
         /// <param name="ida4Data">ida for Data.</param>
-        private void SendData2Ida(DeviceStatIntList ida4Data)
+        private void SendData2Ida(DataTable ida4Data, string TableName)
         {
             //// TODO: is too bad that here we will send the post one by one... we need to send a chunk..and we are sending one by one
             //foreach (var data in ida4Data.data)
@@ -213,25 +216,32 @@ namespace Soti.MCDP.DataProcess
             string result = string.Empty;
             StringBuilder json = new StringBuilder();
             json.Append("{\"stats\":");
-            json.Append(Newtonsoft.Json.JsonConvert.SerializeObject(ida4Data.data));
+            json.Append(Newtonsoft.Json.JsonConvert.SerializeObject(ida4Data));
             json.Append("}");
 
             string url = this.idaUrl;
-            using (var client = new WebClient())
+            try
             {
-                //client.Headers["x-api-key"] = "blah";
-                client.Headers["x-access-token"] = ExpiredJWTToken;
-                client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+                using (var client = new WebClient())
+                {
+                    //client.Headers["x-api-key"] = "blah";
+                    client.Headers["x-access-token"] = ExpiredJWTToken;
+                    client.Headers["TableName"] = TableName;
+                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 
-                result = client.UploadString(url, "POST", json.ToString());
+                    result = client.UploadString(url, "POST", json.ToString());
+                    var logMessage = DateTime.Now.ToString() + "  =>  ";
+
+                    Log(logMessage + "[INFO] (80) " + result);
+                }
+            }
+            catch (Exception ex)
+            {
                 var logMessage = DateTime.Now.ToString() + "  =>  ";
 
-                Log(logMessage + "[INFO] (80) " + result);
-                
-
+                Log(logMessage + "[ERROR] " + ex.ToString());
             }
-            //}
         }
 
         /// <summary>
@@ -253,6 +263,7 @@ namespace Soti.MCDP.DataProcess
                 {
                     //client.Headers["x-api-key"] = "blah";
                     client.Headers["x-access-token"] = Token;
+                    
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
 
@@ -263,20 +274,11 @@ namespace Soti.MCDP.DataProcess
                     Log(logMessage + "[INFO] (80) session_token: " + result.session_token); 
                 }
             }
-            catch (WebException ex)
+            catch (Exception ex)
             {
-                if (ex.Response is HttpWebResponse)
-                {
-                    switch (((HttpWebResponse)ex.Response).StatusCode)
-                    {
-                        case HttpStatusCode.NotFound:
-                            result = null;
-                            break;
+                var logMessage = DateTime.Now.ToString() + "  =>  ";
 
-                        default:
-                            throw ex;
-                    }
-                }
+                Log(logMessage + "[ERROR] " + ex.ToString());
             }
             return result.session_token;
         }

@@ -31,7 +31,7 @@ namespace Soti.MCDP.Database
         {
             try
             {
-                this._mobicontrolDatabaseConnectionString = DatabaseSection.LoadConnectionString("C:\\Program Files\\SOTI\\MobiControl");
+                this._mobicontrolDatabaseConnectionString = DatabaseSection.LoadConnectionString(ConfigurationManager.AppSettings["MCPath"]);
 
                 this._datdatabaseTimeout = Convert.ToInt16(ConfigurationManager.AppSettings["waitDatabaseTimeout"]);
             }
@@ -46,10 +46,10 @@ namespace Soti.MCDP.Database
         /// Get DeviceStatInt Data.
         /// </summary>
         /// <returns>Ida formatted dataset .</returns>
-        public DeviceStatIntList GetDeviceStatIntData()
+        public DataTable GetDeviceStatIntData()
         {
             SqlConnection sqlConnection = null;
-            DeviceStatIntList idaData = null;
+            DataTable ds = null;
             try
             {
                 sqlConnection = new SqlConnection(this._mobicontrolDatabaseConnectionString);
@@ -59,11 +59,11 @@ namespace Soti.MCDP.Database
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.CommandTimeout = this._datdatabaseTimeout;
 
-                DataTable ds = new DataTable();
+                ds = new DataTable();
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                 sqlDataAdapter.Fill(ds);
 
-                idaData = Map2Ida(ds);
+                //idaData = Map2Ida(ds);
                 
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace Soti.MCDP.Database
                 if (sqlConnection != null)
                 { sqlConnection.Close(); }
             }
-            return idaData;
+            return ds;
         }
 
         /// <summary>
