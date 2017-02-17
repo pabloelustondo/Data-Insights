@@ -59,7 +59,7 @@ export class MultiplePostsController {
 
         let req = express;
         let token = req.headers['x-access-token'];
-        let dataTable= req.headers['table-name'];
+        let dataTable = req.headers['table-name'];
 
         if (request.stats.length > 500) {
             throw new Error('Maximum Record input Length Exceeded: ' + request.stats.length);
