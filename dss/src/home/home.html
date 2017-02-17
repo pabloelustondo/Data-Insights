@@ -2,12 +2,16 @@
   <div class="home jumbotron centered">
     <h2>Data Analytics Domain Management</h2>
     <h3 *ngIf="isSOTI">(SOTI Administrator Account)</h3>
-      <p>Account: {{decodedJwt["accountid"]}}
-      Domain: {{decodedJwt["domainid"]}}
-      User: {{decodedJwt["username"]}}</p>
 
-    <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">See Current Enrollments</a>
-    <a class="btn btn-primary btn-lg" role="button" (click)="callDeleteAllEnrollments()">Delete All Enrollments</a>
+    <p> Account: {{decodedJwt["accountid"]}} <p>
+    <p> Tenant Id: {{decodedJwt["tenantId"]}} <p>
+    <p> User: {{decodedJwt["username"]}}</p>
+    <p> Address:  {{decodedJwt["companyaddress"]}}</p>
+    <p> Phone Number:  {{decodedJwt["companyphone"]}} </p>
+
+
+
+    <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">Additional Information</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="showDataSources()">Show Data Sources</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
@@ -16,7 +20,7 @@
     <a id="DownloadMCDP" href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
 
     <pre *ngIf="response">
-      All enrollments for account {{decodedJwt["accountid"]}}
+      Tentant Infromation {{decodedJwt["accountid"]}}
       <table>
         <tr>
           <td style="width: 200px">domainid</td>
@@ -29,6 +33,7 @@
            <td>{{response.domainid}}</td><td>{{response.status}}</td><td>{{response.username}}</td><td>{{response.tenantid}}</td><td>{{response.mcurl}}</td>
         </tr>
       </table>
+
     </pre>
 
 
@@ -38,7 +43,7 @@
       <form (submit)="addSource(mcurl.value)">
       <table>
         <tr>
-          <td style="width: 200px"> <label>mcurl: </label>  </td>
+          <td style="width: 200px"> <label>Data source label: </label>  </td>
           <td style="width: 300px"><input #mcurl id="mcurl" style="width:300px" placeholder="https://cad059.corp.soti.net/MobiControl/api"></td>
         </tr>
         <tr>

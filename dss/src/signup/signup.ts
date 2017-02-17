@@ -6,17 +6,39 @@ import { contentHeaders } from '../common/headers';
 const styles   = require('./signup.css');
 const template = require('./signup.html');
 
+
+export interface SignupInfo {
+  accountid: string,
+  mcurl : string,
+  apikey : string,
+  domainid : string,
+  username : string,
+  password : string,
+  clientsecret : string,
+  companyname? : string,
+  companyphone? : string,
+  companyaddress? : string
+
+}
+
 @Component({
   selector: 'signup',
   template: template,
   styles: [ styles ]
 })
+
+
 export class Signup {
+
   constructor(public router: Router, public http: Http) {}
 
-  signup(event, accountid, mcurl, apikey, domainid, username, password, clientsecret) {
+  testsignup (event, SignupInfo){
+
+  }
+
+  signup(event, accountid, mcurl, apikey, domainid, username, password, clientsecret, companyName, companyAddress, companyPhone) {
     event.preventDefault();
-    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password, clientsecret});
+    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password, clientsecret, companyPhone, companyAddress, companyName});
     this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {
@@ -29,6 +51,7 @@ export class Signup {
         }
       );
   }
+
 
   optional(event, companyname, companyaddress, phone)
   {

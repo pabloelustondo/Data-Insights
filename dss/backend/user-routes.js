@@ -423,7 +423,10 @@ app.post('/enrollments', function(req, res) {
             'domainId' : req.body.domainid,
             'status' : 'new',
             "clientid" : req.body.apikey,
-            "clientsecret" : req.body.clientsecret
+            "clientsecret" : req.body.clientsecret,
+            "companyName" : req.body.companyName,
+            "companyAddress" : req.body.companyAddress,
+            "companyPhone" : req.body.companyPhone
           },
           method: 'POST', //Specify the method
           headers: { //We can define headers too
@@ -436,25 +439,29 @@ app.post('/enrollments', function(req, res) {
             res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
           } else {
             console.log('inserted : ' + JSON.stringify(enrollment));
+            enrollments.push(enrollment);
+            //var resObj = JSON.parse(body);
+            //enrollment.mc_token= resObj.access_token;
+            tokenpayload = {};
+            tokenpayload.username =  req.body.username;
+            tokenpayload.accountid = req.body.accountid;
+            tokenpayload.domainid =  req.body.username;
+            tokenpayload.tenantId =  req.body.domainid;
+            tokenpayload.companyname = req.body.companyName;
+            tokenpayload.companyaddress = req.body.companyAddress;
+            tokenpayload.companyphone = req.body.companyPhone;
+
+            var token = createToken(tokenpayload);
+
+            sendEmail2(tokenpayload,token);
+
+            res.status(200).send({
+              id_token: token
+            });
           }
         });
 
-        enrollments.push(enrollment);
-        var resObj = JSON.parse(body);
-        enrollment.mc_token= resObj.access_token;
-        tokenpayload = {};
-        tokenpayload.username =  enrollment.username;
-        tokenpayload.accountid =  enrollment.accountid;
-        tokenpayload.domainid =  enrollment.domainid;
-        tokenpayload.tenantid =  enrollment.tenantid;
 
-        var token = createToken(tokenpayload);
-
-        sendEmail2(tokenpayload,token);
-
-        res.status(200).send({
-          id_token: token
-        });
       } else {
         res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
       }
@@ -700,12 +707,16 @@ app.post('/sessions/create', function(req, res) {
                         console.log(response.statusCode, body);
                         var mbuser = JSON.parse(__body);
                         if (mbuser[0].Name === 'MobiControl Administrators') {
-                         // res.status(200).send(body);
+
                           tokenpayload = {};
                           tokenpayload.username = body.tenantId;
                           tokenpayload.accountid = body.accountId;
                           tokenpayload.domainid = body.domainId;
                           tokenpayload.tenantId = body.tenantId;
+                          tokenpayload.companyname = body.companyName;
+                          tokenpayload.companyaddress = body.companyAddress;
+                          tokenpayload.companyphone = body.companyPhone;
+
 
                           res.status(200).send({
                             id_token: createToken(tokenpayload)
