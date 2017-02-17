@@ -95,7 +95,7 @@ namespace Soti.MCDP.Database
         public static string LoadConnectionString(string path)
         {
             var logMessage = DateTime.Now.ToString() + "  =>  ";
-            
+
             if (path == null)
                 Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
             try
@@ -106,12 +106,14 @@ namespace Soti.MCDP.Database
 
                 if (settings == null)
                 {
-                    Log(logMessage + "[ERROR] Database section does not have an associated file!");
+                    Log(logMessage +  "[ERROR] Database section does not have an associated file!");
                     return "";
                 }
                 else
                 {
-                    return settings.ConnectionString;
+                    string rlt = settings.ConnectionString.Insert(settings.ConnectionString.LastIndexOf(";"), "_MCDP");
+                    //Log(logMessage + rlt);
+                    return rlt;
                 }
             }
             catch(Exception ex)

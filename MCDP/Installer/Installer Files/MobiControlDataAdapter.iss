@@ -54,8 +54,8 @@ Source: "Newtonsoft.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dacpac\*"; DestDir: "{app}\dacpac"; Flags: ignoreversion recursesubdirs
-;Flags: ignoreversion deleteafterinstall
-Source: "{src}\mcdp_access.key"; DestDir: "{app}"; Flags: external;
+Source: "{src}\mcdp_access.key"; DestDir: "{sys}"; Flags: external;
+Source: "server.bat"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
 
 [CustomMessages]
 CustomForm_Caption=Connect to Database Server
@@ -64,7 +64,7 @@ CustomForm_lblServer_Caption0=Server name:
 CustomForm_lblAuthType_Caption0=Log on credentials
 CustomForm_lblUser_Caption0=User name:
 CustomForm_lblPassword_Caption0=Password:
-CustomForm_lblDatabase_Caption0=Database:
+CustomForm_lblDatabase_Caption0=MobiControl Data Source:
 CustomForm_lblVersion_Caption0=SQL Version:
 CustomForm_chkSQLAuth_Caption0=Use SQL Server Authentication
 CustomForm_chkWindowsAuth_Caption0=Use Windows Authentication
@@ -160,6 +160,8 @@ begin
     chkSQLAuth.Enabled := True;
     txtUsername.Enabled := True;
     txtPassword.Enabled := True;
+    lblUser.Enabled := True;
+    lblPassword.Enabled := True;
   end
   else
   begin
@@ -170,6 +172,8 @@ begin
     chkSQLAuth.Enabled := False;
     txtUsername.Enabled := False;
     txtPassword.Enabled := False;
+    lblUser.Enabled := False;
+    lblPassword.Enabled := False;
   end
 end;
 
@@ -214,8 +218,8 @@ var
   Tmp: string;
   TmpServerName: string;
   TmpExactName: string;
+  TmpResult: string;
   ResultCode: integer;
-  LineCount: Integer;
   SectionLine: Integer;
   Lines: TArrayOfString;
 begin
@@ -225,15 +229,18 @@ begin
     Tmp := ExpandConstant('{tmp}');
     TmpServerName := Tmp + '\SQLSERVER_FILE.txt';
     TmpExactName := Tmp + '\SQLSERVERNAME.txt';
+    //MsgBox(TmpExactName, mbError, MB_OK);
+
     try
     Exec('cmd.exe', '/c "sc query|findstr "DISPLAY_NAME"|findstr /C:"SQL Server (" > "' + TmpServerName + '""', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
-
-    Exec('cmd.exe', '/c "FOR /F " tokens=2 delims=()" %i in (' + TmpServerName + ') do @echo %computername%\%i >> "' + TmpExactName + '""', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
-
-    if LoadStringsFromFile(TmpExactName, Lines) then
+    //MsgBox(TmpExactName, mbError, MB_OK);
+    Exec('cmd.exe', '/c "(for /f " tokens=2 delims=()" %i in (' + TmpServerName + ') do @echo %computername%\%i) >> "' +  TmpExactName + '""', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    //MsgBox(TmpExactName, mbError, MB_OK);
+    if FileExists(TmpExactName) then
     begin
-        LineCount := GetArrayLength(Lines);
-        for SectionLine := 0 to LineCount - 1 do 
+        LoadStringsFromFile(TmpExactName, Lines);
+
+        for SectionLine := 0 to GetArrayLength(Lines) - 1 do 
         begin     
           lstServer.Items.Add(Lines[SectionLine]); 
         end  
@@ -412,7 +419,7 @@ begin
     Top := ScaleY(88);
     Width := ScaleX(177);
     Height := ScaleY(17);
-    Checked := True;
+    Checked := False;
     TabOrder := 2;
     TabStop := True;
     OnClick := @AuthOnChange;
@@ -429,7 +436,8 @@ begin
     Top := ScaleY(108);
     Width := ScaleX(185);
     Height := ScaleY(17);
-    TabOrder := 3;
+    Checked := True;
+    TabOrder := 3;    
     OnClick := @AuthOnChange;
     Enabled := False;
   end;
@@ -465,10 +473,11 @@ begin
   with txtUsername do
   begin
     Parent := Page.Surface;
-    Left := ScaleX(120);
+    Left := ScaleX(160);
     Top := ScaleY(128);
-    Width := ScaleX(241);
+    Width := ScaleX(201);
     Height := ScaleY(21);
+    Text := 'sa';
     Enabled := False;
     TabOrder := 4;
   end;
@@ -478,24 +487,28 @@ begin
   with txtPassword do
   begin
     Parent := Page.Surface;
-    Left := ScaleX(120);
+    Left := ScaleX(160);
     Top := ScaleY(152);
-    Width := ScaleX(241);
+    Width := ScaleX(201);
     Height := ScaleY(21);
     Enabled := False;
     TabOrder := 5;
   end;
-
+        
    { lblDatabase }
   lblDatabase := TLabel.Create(Page);
   with lblDatabase do
   begin
     Parent := Page.Surface;
     Caption := ExpandConstant('{cm:CustomForm_lblDatabase_Caption0}');
-    Left := ScaleX(56);
+    //Left := ScaleX(56);
+    //Top := ScaleY(192);
+    //Width := ScaleX(53);
+    //Height := ScaleY(13);
+    Left := ScaleX(24);
     Top := ScaleY(192);
-    Width := ScaleX(53);
-    Height := ScaleY(13);
+    Width := ScaleX(177);
+    Height := ScaleY(17);
     Enabled := False;
   end;
 
@@ -504,8 +517,8 @@ begin
   with lstDatabase do
   begin
     Parent := Page.Surface;
-    Left := ScaleX(120);
-    Top := ScaleY(192);
+    Left := ScaleX(160);
+    Top := ScaleY(190);
     Width := ScaleX(145);
     Height := ScaleY(21);
     Enabled := False;

@@ -16,3 +16,4 @@ D:\BI\BI\MCDP\Database\bin\Debug\Database.dll
 D:\BI\BI\MCDP\Database\bin\Debug\Database.pdb
 D:\BI\BI\MCDP\Database\obj\Debug\Database.dll
 D:\BI\BI\MCDP\Database\obj\Debug\Database.pdb
+D:\BI\BI\MCDP\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache

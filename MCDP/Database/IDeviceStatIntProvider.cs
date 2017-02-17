@@ -1,5 +1,5 @@
 ﻿using Soti.MCDP.Database.Model;
-
+using System.Data;
 namespace Soti.MCDP.Database
 {
     /// <summary>
@@ -11,7 +11,7 @@ namespace Soti.MCDP.Database
         /// Checks for agent duplicated name.
         /// </summary>
         /// <returns>dataset for Ida format.</returns>
-        DeviceStatIntList GetDeviceStatIntData();
+        DataTable GetDeviceStatIntData();
 
         /// <summary>
         /// Confirm the requested.
