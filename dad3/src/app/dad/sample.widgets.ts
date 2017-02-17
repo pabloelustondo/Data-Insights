@@ -250,7 +250,7 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.Date,
+        Type: DadParameterType.DateTime,
         Name: "Date From",
         DataSource: "dateFrom"
       },
@@ -299,7 +299,7 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.Date,
+        Type: DadParameterType.DateTime,
         Name: "Date From",
         DataSource: "dateFrom"
       },
