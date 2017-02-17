@@ -387,86 +387,103 @@ app.post('/enrollments', function(req, res) {
   }
 //////////////////////////////////////////////////
 
-  if (_.find(enrollments, {mcurl: req.body.domainid})) {
-   return res.status(400).send( ErrorMsg.mcurl_already_enrolled );
-  }
+  var _tenantID = req.body.domainid;
 
-  var enrollment = _.pick(req.body, 'accountid','mcurl', 'apikey', 'domainid', 'username');
-  enrollment.tenantid = req.body.domainid; //for now
-  enrollment.status = "new";
-
-  request({
-    rejectUnauthorized: false,
-    url: enrollment.mcurl  + "/api/token",
-    method: 'POST', //Specify the method
-    headers: { //We can define headers too
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': "Basic " + req.body.clientsecret
-    },
-    body: "grant_type=password&username=" + req.body.username  + "&password=" + req.body.password
-  }, function(error, response, body){
-    if(error) {
-      console.log(error);
-      res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
-    } else {
-      console.log(response.statusCode, body);
-
-      if (response.statusCode === 200){
-
-        request({
-          rejectUnauthorized: false,
-          url: config.ddbEndpointUrl + "/newEnrollment",
-          json : {
-            'accountId' : req.body.accountid,
-            'mcurl' : req.body.mcurl,
-            'tenantId' : req.body.domainid,
-            'domainId' : req.body.domainid,
-            'status' : 'new',
-            "clientid" : req.body.apikey,
-            "clientsecret" : req.body.clientsecret,
-            "companyName" : req.body.companyName,
-            "companyAddress" : req.body.companyAddress,
-            "companyPhone" : req.body.companyPhone
-          },
-          method: 'POST', //Specify the method
-          headers: { //We can define headers too
-            'Content-Type': 'application/json'
-          }
-
-        }, function(error, response, body) {
-          if (error) {
-            console.log(error);
-            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
-          } else {
-            console.log('inserted : ' + JSON.stringify(enrollment));
-            enrollments.push(enrollment);
-            //var resObj = JSON.parse(body);
-            //enrollment.mc_token= resObj.access_token;
-            tokenpayload = {};
-            tokenpayload.username =  req.body.username;
-            tokenpayload.accountid = req.body.accountid;
-            tokenpayload.domainid =  req.body.username;
-            tokenpayload.tenantId =  req.body.domainid;
-            tokenpayload.companyname = req.body.companyName;
-            tokenpayload.companyaddress = req.body.companyAddress;
-            tokenpayload.companyphone = req.body.companyPhone;
-
-            var token = createToken(tokenpayload);
-
-            sendEmail2(tokenpayload,token);
-
-            res.status(200).send({
-              id_token: token
-            });
-          }
-        });
-
-
+  try {
+    request({
+      rejectUnauthorized: false,
+      rejectUnauthorized: false,
+      url: config.ddbEndpointUrl + "/getEnrollment",
+      method: 'GET', //Specify the method
+      headers: { //We can define headers too
+        'Content-Type': 'application/json'
+      },
+      qs: {tenantId: _tenantID}
+    }, function (error, response, body) {
+      if (error) {
+        console.log(error);
+        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
       } else {
-        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+        if (response.statusMessage === 'Not Found') {
+
+
+          request({
+            rejectUnauthorized: false,
+            url: req.body.mcurl + "/api/token",
+            method: 'POST', //Specify the method
+            headers: { //We can define headers too
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': "Basic " + req.body.clientsecret
+            },
+            body: "grant_type=password&username=" + req.body.username + "&password=" + req.body.password
+          }, function (error, response, body) {
+            if (error) {
+              console.log(error);
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+            } else {
+              console.log(response.statusCode, body);
+
+              if (response.statusCode === 200) {
+
+                request({
+                  rejectUnauthorized: false,
+                  url: config.ddbEndpointUrl + "/newEnrollment",
+                  json: {
+                    'accountId': req.body.accountid,
+                    'mcurl': req.body.mcurl,
+                    'tenantId': req.body.domainid,
+                    'domainId': req.body.domainid,
+                    'Status': 'new',
+                    "clientid": req.body.apikey,
+                    "clientsecret": req.body.clientsecret,
+                    "companyName": req.body.companyName,
+                    "companyAddress": req.body.companyAddress,
+                    "companyPhone": req.body.companyPhone
+                  },
+                  method: 'POST', //Specify the method
+                  headers: { //We can define headers too
+                    'Content-Type': 'application/json'
+                  }
+
+                }, function (error, response, body) {
+                  if (error) {
+                    console.log(error);
+                    res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+                  } else {
+
+                    tokenpayload = {};
+                    tokenpayload.username = req.body.username;
+                    tokenpayload.accountid = req.body.accountid;
+                    tokenpayload.domainid = req.body.username;
+                    tokenpayload.tenantId = req.body.domainid;
+                    tokenpayload.companyname = req.body.companyName;
+                    tokenpayload.companyaddress = req.body.companyAddress;
+                    tokenpayload.companyphone = req.body.companyPhone;
+
+                    var token = createToken(tokenpayload);
+
+                    sendEmail2(tokenpayload, token);
+
+                    res.status(200).send({
+                      id_token: token
+                    });
+                  }
+                });
+
+
+              } else {
+                res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+              }
+            }
+          });
+        } else {
+          res.status(500).send('Tenant Already Registered. Provide a new Unique name');
+        }
       }
-    }
-  });
+    });
+  } catch (e)  {
+    res.status(500).send({});
+  }
 
 });
 
@@ -527,7 +544,7 @@ app.get('/api/myenrollments', function(req, res){
               var body = JSON.parse(response.body);
 
               var responseBody = {
-                status : body.status,
+                status : body.Status,
                 tenantid : body.tenantId,
                 mcurl : body.mcurl,
                 domainid : body.accountId,
