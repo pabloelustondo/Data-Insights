@@ -223,7 +223,7 @@ export const WIDGETS: DadWidget[] = [
     ]
   },
   {id: 'widget_chart1',
-    name:'Application Deployment Count by Number of Devices',
+    name:'Application Count by Number of Devices',
     type: 1,
     endpoint: "ApplicationDeploymentCount",
     data: [
@@ -277,41 +277,50 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget_chart2',
     name:'Application Popularity',
     type: 1,
-    endpoint: "AverageDischargeRate",
+    endpoint: "NumberOfInstallations",
+    data: [
+      {
+        "NumberOfInstallations": 2923,
+        "AppId": "com.amazon.windowshop"
+      },
+      {
+        "NumberOfInstallations": 2922,
+        "AppId": "com.brainium.solitairefree"
+      },
+      {
+        "NumberOfInstallations": 2912,
+        "AppId": "com.game.BubbleShooter"
+      }
+    ],
     parameters:[
       {
-        dateTo: "2016-08-25T20:30:21",
-        shiftStartDateTime: "2016-08-24T20:30:21",
-        shiftDuration: 8
+        dateFrom: "2017-01-24T20:30:21",
+        dateTo: "2017-01-27T20:30:21"
       }],
     uiparameters: [
       {
         Type: DadParameterType.Date,
+        Name: "Date From",
+        DataSource: "dateFrom"
+      },
+      {
+        Type: DadParameterType.Date,
         Name: "Date To",
         DataSource: "dateTo"
-      },
-      {
-        Type: DadParameterType.DateTime,
-        Name: "Shift Start Date & Time",
-        DataSource: "shiftStartDateTime"
-      },
-      {
-        Type: DadParameterType.Duration,
-        Name: "Shift Duration",
-        DataSource: "shiftDuration"
-      },
+      }
     ],
     chart:{id: "charthorizontal2",
       type: "bar",
-      a : 'countOfDevices',
-      b : 'percentage',
-      aname : 'Count Of Devices',
-      bname : 'Percentage',
+      a : 'NumberOfInstallations',
+      b : 'AppId',
+      aname : 'Number Of Installations',
+      bname : 'Application ID',
       width: 275,
-      height: 200,
+      height: 250,
       embeddedChart: true,
       horizontal: true,
-      action: 'grow'
+      action: 'grow',
+      transformations : [{sort: true}, {top:5}]
     }
   }
 ];

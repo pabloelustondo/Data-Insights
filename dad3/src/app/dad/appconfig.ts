@@ -11,5 +11,6 @@ export const config = {
     "ListOfDevicesNotSurvivedShift": "https://localhost:3002/Devices/Battery/List/DevicesDidNotSurviveShift",
     "BatteryMetrics": {url:"https://localhost:3002/Devices/Battery/getMetrics", method:"post"},
     "AverageDischargeRate": "https://localhost:3002/Devices/Battery/Summary/AverageDischargeRate",
-    "ApplicationDeploymentCount": "https://localhost:3002/Devices/Application/executionTime"
-}
+    "ApplicationDeploymentCount": "https://localhost:3002/Devices/Application/executionTime",
+    "NumberOfInstallations": "https://localhost:3002/Devices/Application/numberOfInstallations"
+};
