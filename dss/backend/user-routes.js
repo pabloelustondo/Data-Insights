@@ -520,7 +520,7 @@ app.get('/api/myenrollments', function(req, res){
               var body = JSON.parse(response.body);
 
               var responseBody = {
-                status : body.Status,
+                status : body.status,
                 tenantid : body.tenantId,
                 mcurl : body.mcurl,
                 domainid : body.accountId,
