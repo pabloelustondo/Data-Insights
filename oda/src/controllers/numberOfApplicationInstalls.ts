@@ -40,7 +40,7 @@ export class NumberOfApplicationInstalls {
 
                     let minutes = (new Date).getTime();
 
-                    const getDBURL = config['db-address'] + '/getDBAccess/' + decodedToken.tenantid;
+                    const getDBURL = config['db-address'] + '/getDBAccess/' + decodedToken.tenantId;
 
                     const dboptions: rp.OptionsWithUrl = {
                         json: true,
