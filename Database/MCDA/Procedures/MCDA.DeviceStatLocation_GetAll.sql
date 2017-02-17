@@ -41,8 +41,9 @@ BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name= @tablename, @Status=0, @LastSyncTime=@lastTimeTmp, @PreviousSyncTime=@lastTime
 				END
 
-				SELECT A.DeviceId, A.[TimeStamp], StatType, IntValue
+				SELECT [DevId], [TimeStamp], [StatType], [Latitude], [Longitude], [Altitude], [Heading], [Speed]
 					FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+					INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 					WHERE [timestamp] > @lastTime and [timestamp] <= @lastTimeTmp
 			END
 		ELSE					--failed
@@ -51,32 +52,18 @@ BEGIN
 				BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
-					SELECT d.DevId as DeviceId
-						  ,A.[TimeStamp]
-						  ,A.[StatType]
-						  ,A.[Latitude]
-						  ,A.[Longitude]
-						  ,A.[Altitude]
-						  ,A.[Heading]
-						  ,A.[Speed]
-						FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
-						INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+					SELECT [DevId], [TimeStamp], [StatType], [Latitude], [Longitude], [Altitude], [Heading], [Speed]
+					FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+					INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 						WHERE [timestamp] > @PreviousTime and [timestamp] <= @lastTime
 				END
 				ELSE
 				BEGIN
 					EXEC [MCDA].[DeviceSyncStatus_Update] @Name=@tablename, @Status=1
 
-						SELECT d.DevId as DeviceId
-						  ,A.[TimeStamp]
-						  ,A.[StatType]
-						  ,A.[Latitude]
-						  ,A.[Longitude]
-						  ,A.[Altitude]
-						  ,A.[Heading]
-						  ,A.[Speed]
-						FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
-						INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
+					SELECT [DevId], [TimeStamp], [StatType], [Latitude], [Longitude], [Altitude], [Heading], [Speed]
+					FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
+					INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 						WHERE [timestamp] <= @lastTime
 				END
 				
@@ -92,14 +79,7 @@ BEGIN
 		BEGIN
 			EXEC [MCDA].[DeviceSyncStatus_Insert] @Name = @tablename, @status = 1, @LastSyncTime = @lastTime
 
-			SELECT d.DevId as DeviceId
-				  ,A.[TimeStamp]
-				  ,A.[StatType]
-				  ,A.[Latitude]
-				  ,A.[Longitude]
-				  ,A.[Altitude]
-				  ,A.[Heading]
-				  ,A.[Speed]
+				SELECT [DevId], [TimeStamp], [StatType], [Latitude], [Longitude], [Altitude], [Heading], [Speed]
 				FROM [$(MobiControlDB)].dbo.DeviceStatLocation AS A WITH (NOLOCK) 
 				INNER JOIN [$(MobiControlDB)].dbo.devInfo as D WITH (NOLOCK) ON A.DeviceId = D.DeviceId
 				WHERE [timestamp] <= @lastTime
