@@ -662,9 +662,9 @@ app.post('/sessions/create', function(req, res) {
 
 
   if (req.body.code){
-    var _tenantID = req.body.domainid;
-
-
+    var _reqBody = req.body.domainid;
+    var fullState = _reqBody.split('?');
+    var _tenantID = fullState[0];
 
     try {
       request({
