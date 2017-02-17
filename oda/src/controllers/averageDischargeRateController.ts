@@ -130,7 +130,7 @@ export class AverageDischargeRateController {
 
                 let minutes = (new Date).getTime();
 
-                const getDBURL = 'http://localhost:8000/getDBAccess/' + decodedToken.tenantid;
+                const getDBURL =  config['db-address'] + '/getDBAccess/' + decodedToken.tenantid;
 
                 const dboptions: rp.OptionsWithUrl = {
                     json: true,

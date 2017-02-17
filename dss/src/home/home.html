@@ -14,13 +14,11 @@
     <a class="btn btn-primary btn-lg" role="button" (click)="callGetEnrollments()">Additional Information</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="showDataSources()">Show Data Sources</a>
+
+    <a class="btn btn-primary btn-lg" href="http://localhost:3004/public/MobiControlDataAdaptor.exe" role="button">Download MCDP</a>
     <a class="btn btn-primary btn-lg" role="button" (click)="logout()">Logout</a>
-
-
-    <a id="DownloadMCDP" href="http://localhost:3004/public/MobiControlDataAdaptor.exe" class="btn btn-primary btn-lg" role="button">Download MCDP</a>
-
     <pre *ngIf="response">
-      Tentant Infromation {{decodedJwt["accountid"]}}
+      IDP Information {{decodedJwt["accountid"]}}
       <table>
         <tr>
           <td style="width: 200px">domainid</td>
