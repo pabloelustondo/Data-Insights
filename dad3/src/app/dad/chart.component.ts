@@ -25,9 +25,9 @@ export class DadChart extends DadElement{
     selector: 'dadchart',
     providers:[DadElementDataService],
     template: `
-    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="myclass()">  
+    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
-          <div  class="content card-inverse card-secondary">    
+          <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
                 <div class="content card card-secondary">    
                     <div class="btn-group float-xs-right" dropdown>
@@ -97,7 +97,7 @@ export class DadChartComponent implements OnInit {
     else this.refreshMode = false;
   }
 
-  myclass(){
+  chartClass(){
     if (this.chart.big){
       return 'col-sm-12 col-lg-12';
     } else {
@@ -186,6 +186,14 @@ export class DadChartComponent implements OnInit {
       /*tooltip: {
         show: false
       },*/
+      tooltip: {
+        grouped: false,
+        format: {
+          title: function () {
+            return ([chartConfig.aname]);
+          },
+        }
+      },
       axis: {
         rotated : false,
         x: {
