@@ -11,10 +11,13 @@ import {Subscription } from 'rxjs';
   selector: 'bigchart',
   providers:[DadChartConfigsService],
   template: `
-  <div *ngIf = "chart">
+  <div id = "ch" *ngIf = "chart">
     <dadchart [chart]="chart"></dadchart>
   </div>
-  `
+  `,
+    styles: [`
+    #ch {overflow-y: scroll;}
+    `]
 })
 export class DadBigChartComponent {
   @Input()

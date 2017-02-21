@@ -196,7 +196,7 @@ export class DadChartComponent implements OnInit {
             position: 'outer-right'
           },
           tick: {
-            multiline: false
+            multiline: false,
           }
         },
         y: {
@@ -231,12 +231,6 @@ export class DadChartComponent implements OnInit {
         width: {
           ratio: 0.7
         }
-      },
-      tooltip: {
-        'contents': function (d, defaultTitleFormat, defaultValueFormat, color) {
-            //return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)+"</div>";
-          return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + ' ' + "</div>";
-        },
       }
     };
 
@@ -268,6 +262,7 @@ if (chartConfig.regionM){
       c3Config.axis.x.label.text = [];
       c3Config.axis.y.label.text = [];
       c3Config.size.height = 200;
+      c3Config.legend.show = false;
       c3Config.axis.y.show = false;
       c3Config.grid.y.show = false;
     };
