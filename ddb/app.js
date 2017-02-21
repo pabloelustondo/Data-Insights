@@ -131,7 +131,8 @@ app.get('/getTenantUrl', function (req, res) {
             }
             ,
             {
-                "mcurl": 1
+                "mcurl": 1,
+                "clientid": 1
             }
         , next);
     });

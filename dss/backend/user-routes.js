@@ -622,7 +622,8 @@ app.get('/urlbydomainid', function(req, res) {
         var body = JSON.parse(response.body);
 
           res.status(200).send({
-            url: body.mcurl
+            url: body.mcurl,
+            clientId: body.clientid
           });
 
       } else if (response.statusCode === 404) {
