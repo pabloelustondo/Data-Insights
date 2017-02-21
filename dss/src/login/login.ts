@@ -86,9 +86,9 @@ export class Login {
           response => {
             let result = JSON.parse(response['_body']);
             if (this.url){
-              window.location.href = result.url + "/oauth/authorize?response_type=code&client_id=6a106988b81c43499ea04e96943e05c1" + "&state=" + domainid.value + '?redirectUrl=' + this.url;
+              window.location.href = result.url + "/oauth/authorize?response_type=code&client_id="+ result.clientId + "&state=" + domainid.value + '?redirectUrl=' + this.url;
             } else {
-              window.location.href = result.url + "/oauth/authorize?response_type=code&client_id=6a106988b81c43499ea04e96943e05c1" + "&state=" + domainid.value;
+              window.location.href = result.url + "/oauth/authorize?response_type=code&client_id="+ result.clientId + "&state=" + domainid.value;
             }
 
           },

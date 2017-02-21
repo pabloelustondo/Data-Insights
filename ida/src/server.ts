@@ -24,6 +24,11 @@ app.use('/swagger.json', (req, res) => {
     res.sendfile(swaggerPath);
 });
 
+
+app.use(function(req, res, next) {
+    res.header('X-Content-Type-Option', 'nosniff');
+    next();
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
