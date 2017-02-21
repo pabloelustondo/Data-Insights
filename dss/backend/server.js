@@ -45,6 +45,11 @@ app.use(require('./protected-routes'));
 app.use(require('./user-routes'));
 app.use(require('./mcserver-mock'));
 
+
+app.use(function(req, res, next) {
+  res.header('X-Content-Type-Option', 'nosniff');
+  next();
+});
 var port = 3004;
 
 http.createServer(app).listen(port, function (err) {
