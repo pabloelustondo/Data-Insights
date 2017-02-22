@@ -4,6 +4,7 @@
 import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTransformer } from "./transformer";
+import {DadReducer } from "./reducer";
 
 export class ChartData{
   Dimension = [];
@@ -15,6 +16,13 @@ export class Mapper{
   var chartData = new ChartData();
   var dataForChart:any;
   var index=0;
+
+
+  if (config.reduction){
+    let reducer = new DadReducer();
+    data = reducer.reduce(config, data);
+  }
+
 
   if ( config.type !== 'bar' && config.type !== 'spline') {
     data.forEach(function (e) {
