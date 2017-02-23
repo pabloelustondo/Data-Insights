@@ -24,35 +24,7 @@ export class Mapper{
   }
 
 
-  if ( config.type !== 'bar' && config.type !== 'spline') {
-    data.forEach(function (e) {
-
-      //need to review this idea.. works for now b==metric a=dimension
-
-      if (!config.a && !config.b) {
-        chartData.Metric.push("#" + index);
-        chartData.Dimension["#" + index] = e;
-      }
-
-      if (config.a && config.b) {
-        chartData.Metric.push(e[config.a]);
-        chartData.Dimension[e[config.a]] = e[config.b];
-      }
-      index++;
-    });
-
-      dataForChart = {
-        json: [chartData.Dimension],
-        keys: {
-          value: chartData.Metric
-        },
-        selection:{
-          enabled:true
-        },
-        type:  config.type
-      };
-
-  } else {
+  if ( config.type === 'bar' || config.type === 'pie' || config.type === 'spline')  {
 
     let configa:string;
     let configb:string;

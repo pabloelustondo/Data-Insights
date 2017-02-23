@@ -11,6 +11,7 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: 'table1',
     endpoint:'DevicesNotSurvivedShift',
+    drillTo: 'chartbardrill',
     data:[{
       CountDevicesNotLastedShift:50,
       CountTotalActiveDevices: 100,
@@ -69,6 +70,13 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
+    drillTo: 'chartpiedrill',
+    data:[{
+      CountDevicesNotLastedShift:60,
+      CountTotalActiveDevices: 120,
+      CountDevicesLastedShift: 55,
+      CountDevicesChargingEntireShift: 15
+    }],
     metrics:[
       {
         Type: DadParameterType.Number,
@@ -120,6 +128,12 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
+    data:[{
+      CountDevicesNotLastedShift:50,
+      CountTotalActiveDevices: 90,
+      CountDevicesLastedShift: 45,
+      CountDevicesChargingEntireShift: 20
+    }],
     metrics:[
       {
         Type: DadParameterType.Number,
@@ -177,6 +191,10 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: 'table1',
     endpoint:'BatteryMetrics',
+    data:[{
+      CountDevicesNotLastedShift:200,
+      CountDevicesNotFullyCharged: 80,
+    }],
     metrics:[
       {
         Type: DadParameterType.String,
