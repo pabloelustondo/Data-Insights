@@ -668,8 +668,10 @@ app.post('/sessions/create', function(req, res) {
     var _tenantID = fullState[0];
 
     try {
+
+
+
       request({
-        rejectUnauthorized: false,
         rejectUnauthorized: false,
         url: config.ddbEndpointUrl + "/getEnrollment",
         method: 'GET', //Specify the method
@@ -693,7 +695,7 @@ app.post('/sessions/create', function(req, res) {
               var jsonBody = JSON.parse(response.body);
               request({
                 rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-                url:   'https://cad059.corp.soti.net/MobiControl' + "/api/token",
+                url:   jsonBody.mcurl + "/api/token",
                 method: 'POST', //Specify the method
                 headers: { //We can define headers too
                   'Content-Type': 'application/x-www-form-urlencoded',
@@ -712,7 +714,7 @@ app.post('/sessions/create', function(req, res) {
 
                     request({
                       "rejectUnauthorized": false,
-                      url: "https://cad059.corp.soti.net/MobiControl/api/security/users/Administrator/groups",
+                      url: jsonBody.mcurl + '/api/security/users/Administrator/groups',
                       method: 'GET', //Specify the method
                       headers: { //We can define headers too
                         'Authorization': 'bearer ' + _body.access_token
