@@ -13,24 +13,68 @@ export class ChartData{
 }
 
 export class DadReducer {
-    reduce(config: DadChart|DadWidget, dataForChart) {
-        if (!config.reduction) return dataForChart;
+    reduce(config: DadChart|DadWidget, data) {
+        if (!config.reduction) return data;
 
-        let newDataForChart: any = {};
+        let newData: any[] = [];
+        let map: any = {}; //this temporary variable will store the map before the reduce
 
-        if (config.reduction.test) {
+        if (config.reduction) {
 
-            newDataForChart= [
-                {countOfDevices:10, percentage:50},
-                {countOfDevices:9, percentage:60},
-                {countOfDevices:8, percentage:70},
-                {countOfDevices:7, percentage:80},
-                {countOfDevices:6, percentage:90},
-                {countOfDevices:5, percentage:40}
-            ]
+            config.a = 'metric';
+            config.b = 'dimension';
+
+            config['aname'] = config.reduction.metric.name;
+            config['bname'] = config.reduction.dimension.name;
+
+            // chartConfig.reduction = {
+              //  dimension: {attribute: 'os', name:'percentage'},
+              //  metric: {op:'count', name:'countOfDevices'}};
+
+            //map
+            for(let i=0; i<data.length; i++ ){
+                let dimensionPoint = data[i][config.reduction.dimension.attribute];    //need to handle error if this value is null
+
+                if (dimensionPoint) {
+                    if ( ! map[dimensionPoint] )  //so we need to create on
+                    {map[dimensionPoint] = [];};
+                    map[dimensionPoint].push(data[i]);
+                }
+            }
+
+            //reduce
+            //Reduces collection to a value which is the accumulated result of running each element in collection thru iteratee, where each successive invocation is supplied the return value of the previous. If accumulator is not given, the first element of collection is used as the initial value. The iteratee is invoked with four arguments:
+            //    (accumulator, value, index|key, collection).
+
+            for( let key in map) {
+                let collection = map[key];
+                let initialValue = 0; // need to generalize this count and sum is fine...but.
+                let result = initialValue;
+                let count = 0;
+                collection.forEach(function(v){
+                    if (config.reduction.metric.op == "count"){
+                        result = result + 1;
+                        count++;
+                    }
+                    if (config.reduction.metric.op == "sum" || config.reduction.metric.op == "avg"){
+                        result = result + v[config.reduction.metric.attribute];
+                        count++;
+                    }
+                });
+
+                if (config.reduction.metric.op == "avg"){
+                    result = result / count;
+                }
+
+                let newElement = {};
+                newElement[config.a] = result;
+                newElement[config.b] = key;
+                newData.push(newElement);
+            }
+
         }
 
-        return newDataForChart;
+        return newData;
     }
 
 }
