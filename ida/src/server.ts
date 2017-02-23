@@ -1,5 +1,7 @@
 import './controllers/multiplePosts';
 import './controllers/getAuthorizationToken';
+import './controllers/uploadLargeDataSet';
+
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as https from 'https';
@@ -23,7 +25,8 @@ app.use('/', express.static(__dirname + '/swagger-ui'));
 app.use('/swagger.json', (req, res) => {
     res.sendfile(swaggerPath);
 });
-
+app.use(bodyParser.json({limit: '500mb'}));
+app.use(bodyParser.urlencoded({limit: '500mb', extended: true}));
 
 app.use(function(req, res, next) {
     res.header('X-Content-Type-Option', 'nosniff');
@@ -32,6 +35,7 @@ app.use(function(req, res, next) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
+
 
 RegisterRoutes(app);
 

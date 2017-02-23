@@ -7,6 +7,7 @@
   "aws-path":  "/test/function_one",
   "aws-dischargecontroller":  "/test/multiplePosts",
   "aws-region": "us-east-1",
+  "aws-s3bucket": "da-s3-bucket/DataExchange",
   "aws-accessKeyFileLocation": "../../IDA_accessKeyID.txt",
   "aws-secretKeyFileLocation": "../../IDA_secretAccessKey.txt",
   "mcdp-secret": "Data Analytics Team Rocks!",
