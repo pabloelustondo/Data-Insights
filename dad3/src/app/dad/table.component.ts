@@ -5,19 +5,21 @@ import { Component, Input, OnInit  } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadElementDataService } from "./data.service";
 import { Mapper, ChartData } from "./mapper";
-import {DadDateRange, DadElement} from "./dadmodels";
+import { DadDateRange, DadElement} from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
 import { DadChartComponent } from "./chart.component"
-import {DadTableConfigsService, DadChartConfigsService} from './chart.service';
+import { DadTableConfigsService, DadChartConfigsService} from './chart.service';
 import { DadWidgetConfigsService } from './chart.service';
 import { Router, ActivatedRoute} from '@angular/router';
-import {Subscription } from 'rxjs';
-import {DadWidget} from "./widget.component";
+import { Subscription } from 'rxjs';
+import { DadWidget} from "./widget.component";
+import { config } from "./appconfig";
 
 export class DadTable {
   id: string;
   name: string;
   type?:string;
+  data?:any[];
   parameters: any[];  //we are going to change this!
   endpoint :string;
   columns: DadTableColumn[];
@@ -165,15 +167,21 @@ export class DadTableComponent implements OnInit {
           }
 
           console.log("Tables are loading... :" + this.table.id);
-          this.dadTableDataService.getElementData(this.table).then(
-              data => {
-                this.data = data.data;
-                if(this.data.errorMessage != null){
-                    alert (this.data.errorMessage);
-                }
-              }
-          ).catch(err => console.log(err.toString()));
 
+            if (!this.data && this.table.data && config.testing){
+                this.data = this.table.data;
+            }
+
+            if (!config.testing) {
+                this.dadTableDataService.getElementData(this.table).then(
+                    data => {
+                        this.data = data.data;
+                        if (this.data.errorMessage != null) {
+                            alert(this.data.errorMessage);
+                        }
+                    }
+                ).catch(err => console.log(err.toString()));
+            }
         });
   }
 

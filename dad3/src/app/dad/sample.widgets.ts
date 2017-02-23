@@ -11,6 +11,12 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: 'table1',
     endpoint:'DevicesNotSurvivedShift',
+    data:[{
+      CountDevicesNotLastedShift:50,
+      CountTotalActiveDevices: 100,
+      CountDevicesLastedShift: 40,
+      CountDevicesChargingEntireShift: 10
+    }],
     metrics:[
       {
         Type: DadParameterType.Number,

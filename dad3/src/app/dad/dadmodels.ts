@@ -24,6 +24,8 @@ export class DadElement {
   chart?: DadChart;
   transformation?: any;
   transformations?: any[];
+  reduction?:any;
+  reductions?:any[];
 }
 
 

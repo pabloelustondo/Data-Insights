@@ -668,8 +668,10 @@ app.post('/sessions/create', function(req, res) {
     var _tenantID = fullState[0];
 
     try {
+
+
+
       request({
-        rejectUnauthorized: false,
         rejectUnauthorized: false,
         url: config.ddbEndpointUrl + "/getEnrollment",
         method: 'GET', //Specify the method
@@ -693,7 +695,7 @@ app.post('/sessions/create', function(req, res) {
               var jsonBody = JSON.parse(response.body);
               request({
                 rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-                url:   'https://cad059.corp.soti.net/MobiControl' + "/api/token",
+                url:   jsonBody.mcurl + "/api/token",
                 method: 'POST', //Specify the method
                 headers: { //We can define headers too
                   'Content-Type': 'application/x-www-form-urlencoded',
@@ -712,7 +714,7 @@ app.post('/sessions/create', function(req, res) {
 
                     request({
                       "rejectUnauthorized": false,
-                      url: "https://cad059.corp.soti.net/MobiControl/api/security/users/Administrator/groups",
+                      url: jsonBody.mcurl + '/api/security/users/Administrator/groups',
                       method: 'GET', //Specify the method
                       headers: { //We can define headers too
                         'Authorization': 'bearer ' + _body.access_token
@@ -779,46 +781,6 @@ app.post('/sessions/create', function(req, res) {
 
 
 
-   /* apikey = 'NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0';
-    grant_type = "grant_type=authorization_code&code=" + req.body.code;
-
-    request({
-      rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-      url:   'https://cad059.corp.soti.net/MobiControl' + "/api/token",
-      method: 'POST', //Specify the method
-      headers: { //We can define headers too
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': "Basic " + apikey
-      },
-      body: grant_type
-    }, function(error, response, body){
-      if(error) {
-        console.log(error);
-        res.status(400).send(ErrorMsg.login_failed_authentication);
-      } else {
-        console.log(response.statusCode, body);
-        if (response.statusCode === 200){
-
-          var resObj = JSON.parse(body);
-       //   enrollment.mc_token= resObj.access_token;
-          enrollment = {
-            mc_token : resObj.access_token
-          };
-          tokenpayload = {};
-          tokenpayload.username = 'asd';
-          tokenpayload.accountid =  'varun@dave.net';
-          tokenpayload.domainid = 'varun_dave_mc';
-          tokenpayload.tenantid =  'varun_dave_mc';
-
-          res.status(200).send({
-            id_token: createToken(tokenpayload)
-          });
-        } else {
-          res.status(400).send(ErrorMsg.login_failed_authentication);
-        }
-      }
-    }); // end finding account and token creation
-*/
   }
   else {
     var enrollment = _.find(enrollments, {domainid: req.body.domainid});
@@ -839,40 +801,6 @@ app.post('/sessions/create', function(req, res) {
 
   }
 
-/*
-  request({
-    rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-    url:   enrollment.mcurl + "/api/token",
-    method: 'POST', //Specify the method
-    headers: { //We can define headers too
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': "Basic " + apikey
-    },
-    body: grant_type,
-  }, function(error, response, body){
-    if(error) {
-      console.log(error);
-      res.status(400).send(ErrorMsg.login_failed_authentication);
-    } else {
-      console.log(response.statusCode, body);
-      if (response.statusCode === 200){
-
-        var resObj = JSON.parse(body);
-        enrollment.mc_token= resObj.access_token;
-        tokenpayload = {};
-        tokenpayload.username =  enrollment.username;
-        tokenpayload.accountid =  enrollment.accountid;
-        tokenpayload.domainid =  enrollment.domainid;
-        tokenpayload.tenantid =  enrollment.tenantid;
-
-        res.status(200).send({
-          id_token: createToken(tokenpayload)
-        });
-      } else {
-        res.status(400).send(ErrorMsg.login_failed_authentication);
-      }
-    }
-  }); */
 
 });
 

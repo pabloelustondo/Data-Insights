@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
 
   constructor(private router: Router) {}
   canActivate() {
-    if (tokenNotExpired()) {
+    if (tokenNotExpired() || config.testing) {
       return true;
     }
     var authurl = config.authorizationserver + "/#/login?url=" + window.location.href;

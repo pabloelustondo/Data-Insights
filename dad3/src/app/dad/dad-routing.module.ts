@@ -9,6 +9,7 @@ import { DadTableComponent }   from './table.component';
 import { AuthGuard } from './common/auth.guard';
 import {DadPageComponent} from "./page.component";
 import {DadBigChartComponent} from "./bigchart.component";
+import {DadDrillChartsComponent} from "./drillcharts.component";
 
 const routes: Routes = [
     {
@@ -57,11 +58,11 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'page/:id/distribution',
-                component: DadBigChartComponent,
+                path: 'page/:id/drillcharts/:id',
+                component: DadDrillChartsComponent,
                 canActivate: [AuthGuard],
                 data: {
-                    title: 'Distribution'
+                    title: 'Drill Charts'
                 }
             }
         ]
