@@ -313,30 +313,47 @@ if (chartConfig.regionM){
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
     let chartData = this.mapper.map(chartConfig, data);
-    let c3Config = {
-      size: {
-        height: chartConfig.height,
-        width: chartConfig.width
-      },
+    let piedata = chartData;
+
+    piedata.selection = {
+      enabled: true
+    };
+
+    let c3Config:any = {
+      size: {},
       bindto: '#' + chartConfig.id,
-      data: chartData,
+      data: piedata,
       color: {
         pattern: this.colorPalette,
+      },
+      tooltip: {
+        grouped: false,
+        format: {
+          title: function () {
+            return ([chartConfig.aname]);
+          },
+        }
       },
       zoom: {
         enabled: true
       },
       legend: {
         show : true
+      },
+      interaction: {
+        enabled: true
       }
     };
+
     if(chartConfig.mini){
       c3Config.size.width = this.miniChartWidth;
       c3Config.size.height = this.miniChartHeight;
       c3Config.legend.show = false;
+      c3Config.interaction.enabled = false;
     };
     this.c3chart = c3.generate(c3Config);
   };
+
   //mini applied
   drawChartDot(chartConfig:DadChart, data) {
     let chartData = this.mapper.map(chartConfig, data);

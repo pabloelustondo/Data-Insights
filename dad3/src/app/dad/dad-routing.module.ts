@@ -55,6 +55,14 @@ const routes: Routes = [
                 data: {
                     title: 'Big Chart'
                 }
+            },
+            {
+                path: 'page/:id/distribution',
+                component: DadBigChartComponent,
+                canActivate: [AuthGuard],
+                data: {
+                    title: 'Distribution'
+                }
             }
         ]
     },

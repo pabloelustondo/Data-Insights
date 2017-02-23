@@ -7,7 +7,7 @@ export const PAGES: DadPage[] = [
     {id:"batstats",
      name: "Battery Stats",
      widgetids:[ "widget1","widget2","widget3", "widget4"],
-     chartids: ['chartbar'],
+     chartids: ['chartbar'], //'chartpie'
      tableids: ['table1', 'table2']
     },
 

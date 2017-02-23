@@ -116,8 +116,35 @@ export const CHARTS: DadChart[] = [
                 DataSource: "dateTo"
             }
         ],
-    }
-
+    },
+/*
+    {id: "chartpie",
+        name: 'Test Pie',
+        type:"pie",
+        endpoint: "AverageDischargeRate",
+        a : 'countOfDevices',
+        b : 'percentage',
+        width: 475,
+        height: 400,
+        uiparameters: [
+            {
+                Type: DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            },
+            {
+                Type: DadParameterType.DateTime,
+                Name: "Shift Start Date & Time",
+                DataSource: "shiftStartDateTime"
+            },
+            {
+                Type: DadParameterType.Duration,
+                Name: "Shift Duration",
+                DataSource: "shiftDuration"
+            },
+        ],
+    },
+*/
 
 
 ];
