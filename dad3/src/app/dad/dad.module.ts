@@ -16,6 +16,7 @@ import { DatepickerModule } from 'ng2-bootstrap/components/datepicker';
 import { TimepickerModule }         from 'ng2-bootstrap/components/timepicker';
 import { DadParametersComponent } from "./parameters.component";
 import { DadBigChartComponent } from "./bigchart.component";
+import { DadDrillChartsComponent } from "./drillcharts.component";
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthGuard } from './common/auth.guard';
@@ -40,7 +41,7 @@ let LocalStorageServiceConfig = {
         TimepickerModule
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
-        DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent, DadBigChartComponent ],
+        DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent, DadBigChartComponent, DadDrillChartsComponent ],
     providers: [
         AuthGuard, ...AUTH_PROVIDERS
     ]

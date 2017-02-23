@@ -14,7 +14,7 @@ export class ChartData{
 
 export class DadTransformer {
     transform(config: DadChart|DadWidget, dataForChart) {
-        if (!config.reduction) return dataForChart;
+        if (!config.transformation) return dataForChart;
 
         /*current data shape
          dataForChart = {
