@@ -3,6 +3,7 @@ import { DadChart } from "./chart.component";
 import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
+import { Router, ActivatedRoute } from "@angular/router";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
 import { config } from "./appconfig";
 
@@ -29,6 +30,7 @@ export class DadWidget extends DadElement{
                     </button>                      
                     <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                        <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onDrill()">Drill...</div></button>
                         <button *ngIf="widget.type==0 && widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                     </div>
@@ -100,7 +102,8 @@ export class DadWidgetComponent implements OnInit {
   refreshMode:boolean = false;
 
     constructor(private dadWidgetDataService: DadElementDataService,
-              private dadWidgetConfigsService: DadWidgetConfigsService) {}
+                private dadWidgetConfigsService: DadWidgetConfigsService,
+                private router: Router, private route: ActivatedRoute) {}
 
     onRefresh():void{
         if (!this.refreshMode) this.refreshMode = true;
@@ -119,6 +122,10 @@ export class DadWidgetComponent implements OnInit {
     onMoreDetails(message:string):void{
         if (!this.moreDetails) this.moreDetails = true;
         else this.moreDetails = false;
+    }
+
+    onDrill(message:string):void{
+            this.router.navigate(['bigchart', 'chartbardrill'], { relativeTo: this.route});
     }
 
     changeData() {
