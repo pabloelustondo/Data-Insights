@@ -53,7 +53,7 @@ Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Newtonsoft.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{src}\mcdp_access.key"; DestDir: "{sys}"; Flags: external;
+Source: "{src}\mcdp_access.key"; DestDir: "{app}"; Flags: external;
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"
