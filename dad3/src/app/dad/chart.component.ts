@@ -36,6 +36,7 @@ export class DadChart extends DadElement{
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
                     </div>
@@ -90,7 +91,11 @@ export class DadChartComponent implements OnInit {
 
   onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
-    }
+  }
+
+  onRawData(message:string):void{
+    this.router.navigate(['table', 100, this.chart.id], { relativeTo: this.route});
+  }
 
   onRefresh():void{
     if (!this.refreshMode) this.refreshMode = true;

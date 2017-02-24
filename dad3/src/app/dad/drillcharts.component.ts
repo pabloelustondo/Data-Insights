@@ -48,6 +48,7 @@ export class DadDrillChartsComponent {
               for (let i=0; i<this.chart.reductions.length; i++) {
                 let drillchart = this.createDrillChart(this.chart,i);
                   this.charts.push(drillchart);
+                  this.dadChartConfigsService.saveOne(drillchart);
                   console.log("Charts are loading... :" + drillchart.id);
               }
           });

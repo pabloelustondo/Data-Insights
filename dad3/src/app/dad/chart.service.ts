@@ -24,6 +24,17 @@ export class DadChartConfigsService {
     localStorage.setItem("chartdata",charts_string);
   }
 
+  public saveOne(chart:DadChart ){
+    let charts:DadChart[] = this.getChartConfigs();
+    let chartIndex = _.findIndex(charts, function(w) { return w.id == chart.id; });
+    if(chartIndex === -1){
+      charts.push(chart);
+    } else {
+      charts.splice(chartIndex, 1, chart);
+    }
+    this.save(charts);
+  }
+
     public getChartConfigs(): DadChart[] {
 
       let charts_string = localStorage.getItem("chartdata");

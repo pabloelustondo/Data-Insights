@@ -156,7 +156,7 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         regionM: 30,
-        tableId: 'table2',
+        tableId: 'table1',
         action: 'drill',
         parameters: [
             {
@@ -221,7 +221,7 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         regionM: 30,
-        tableId: 'table2',
+        tableId: 'table1',
         action: 'drill',
         parameters: [
             {

@@ -64,6 +64,14 @@ const routes: Routes = [
                 data: {
                     title: 'Drill Charts'
                 }
+            },
+            {
+                path: 'page/:id/drillcharts/:id/table/:count/:id',
+                component: DadTableComponent,
+                canActivate: [AuthGuard],
+                data: {
+                    title: 'Drill Charts Table'
+                }
             }
         ]
     },
