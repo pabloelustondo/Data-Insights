@@ -141,7 +141,6 @@ app.get('/getAgentToken', function(req, res) {
 
         request({
           rejectUnauthorized: false,
-          rejectUnauthorized: false,
           url: config.ddbEndpointUrl + "/verifyDataSource",
           method: 'GET', //Specify the method
           headers: { //We can define headers too
@@ -158,12 +157,9 @@ app.get('/getAgentToken', function(req, res) {
             if (response.statusCode === 200){
 
               var body = JSON.parse(response.body);
-
-
               if (body.activationKey === _activationKey) {
-
                 var new_token = jwt.sign({
-                  agentid: '213',
+                  agentid: body.agentId,
                   tenantid: _tenantID
                 }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
                 console.log(new_token);

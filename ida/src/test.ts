@@ -11,6 +11,8 @@ let server = require('./server');
 let should = chai.should();
 let expect = chai.expect;
 
+const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhZ2VudGlkIjoiMjEzIiwidGVuYW50aWQiOiJ4eXphMTIiLCJpYXQiOjE0ODc4Nzk1NTcsImV4cCI6MTQ5NTA3OTU1N30.TnX4J-xSBGxvgSd2CO5CCMZvQ4TBHJX5Ne4Ioy6A2Kk';
+
 const testData =  {
     'createdAt': '2016-12-02T17:28:44.996Z',
     'metadata': 'To Be Defined',
@@ -58,6 +60,7 @@ const testData =  {
 
 @suite class Hello {
 
+    /*
     @test('should pass async tests')
     public assert_pass_async(done: Function) {
         setTimeout(() => done(), 1);
@@ -143,6 +146,29 @@ const testData =  {
             });
     }
 
+    */
+
+    @test('put json data in aws in large file')
+    public test_put_large_json_file(done: Function) {
+
+        const testData = {
+            'file' : config['large-data-set']
+        };
+        console.log('testing');
+        chai.use(chaiHttp);
+        chai.request('https://localhost:3010')
+            .post('/Data/LargeDataSets')
+            .set('x-access-token', testToken )
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .send(testData)
+            .end((err: any, res: any) => {
+                expect(err).to.be.null;
+                expect(res).to.be.json;
+                expect(res).to.have.status(200);
+                done();
+            });
+    }
 
 }
 /**

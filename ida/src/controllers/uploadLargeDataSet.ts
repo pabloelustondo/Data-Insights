@@ -63,7 +63,7 @@ export class UploadLargeDataSetController {
 
         let req = express;
         let token = req.headers['x-access-token'];
-
+        let contentType = req.headers['content-type'];
         if (token) {
 
             let getCustomerID = function () {
