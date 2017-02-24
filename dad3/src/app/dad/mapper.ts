@@ -17,14 +17,10 @@ export class Mapper{
   var dataForChart:any;
   var index=0;
 
-
   if (config.reduction){
     let reducer = new DadReducer();
     data = reducer.reduce(config, data);
   }
-
-
-  if ( config.type === 'bar' || config.type === 'pie' || config.type === 'spline')  {
 
     let configa:string;
     let configb:string;
@@ -54,10 +50,22 @@ export class Mapper{
 
     }
 
+
+  if ( config.type === 'bar' || config.type === 'spline')  {
     dataForChart = {
       x: config.b,
       columns: [chartData.Dimension, chartData.Metric],
       type:  config.type
+    }
+  }
+
+  if ( config.type === 'pie') {
+    dataForChart = {
+     columns: [],
+      type: config.type
+    };
+    for(let i = 1; i < chartData.Dimension.length; i++){
+      dataForChart.columns.push([chartData.Dimension[i], chartData.Metric[i]])
     }
   }
     let transformer = new DadTransformer();
