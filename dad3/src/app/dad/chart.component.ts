@@ -20,6 +20,7 @@ export class DadChart extends DadElement{
     aname?: String;
     bname?: String;
     action?: String;
+    widgetClickChart?: boolean = false;
 }
 @Component({
     selector: 'dadchart',
@@ -168,6 +169,20 @@ export class DadChartComponent implements OnInit {
     return 0;
   }
 
+  drillFromElement(data){
+    if (this.chart.action = 'drillFromElement') {
+
+      let eventHandler = this.goToTable;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
+
+      data.onclick = function (d, element) {
+        eventHandler(d, chart, router, route);
+      };
+    }
+  }
+
   //mini applied
   drawChartBar(chartConfig:DadChart, data) {
     let chartData = this.mapper.map(chartConfig, data);
@@ -176,6 +191,8 @@ export class DadChartComponent implements OnInit {
     bardata.selection = {
       enabled: true,
     };
+
+    this.drillFromElement(bardata);
 
     d3.selectAll(".c3-axis-x .tick").filter(function (d) {
       return d === 0;
@@ -295,7 +312,9 @@ if (chartConfig.regionM){
             eventHandler(d, chart, router, route);
           }
       );
-    } else {
+    };
+
+    if(!chartConfig.action || chartConfig.action === 'grow') {
       let eventHandler = this.growIt;
       let chart = this.chart;
       let route = this.route;
@@ -323,6 +342,8 @@ if (chartConfig.regionM){
     piedata.selection = {
       enabled: true
     };
+
+    this.drillFromElement(piedata);
 
     let c3Config:any = {
       size: {},
