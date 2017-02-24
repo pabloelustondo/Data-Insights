@@ -134,7 +134,7 @@ namespace Soti.MCDP.DataProcess
                     var idaData = this._deviceStatIntProvider.GetDeviceStatIntData();
                     var logMessage = DateTime.Now.ToString() + "  =>  ";
 
-                    if (idaData != null && idaData.Rows.Count > 0)
+                    if (idaData != null && idaData.data != null && idaData.data.Count > 0)
                     {
                         // send for real
                         try
@@ -208,7 +208,7 @@ namespace Soti.MCDP.DataProcess
         /// This method is the one that actually send data to the input data adapter
         /// </summary>
         /// <param name="ida4Data">ida for Data.</param>
-        private void SendData2Ida(DataTable ida4Data, string TableName)
+        private void SendData2Ida(DeviceStatIntList ida4Data, string TableName)
         {
             //// TODO: is too bad that here we will send the post one by one... we need to send a chunk..and we are sending one by one
             //foreach (var data in ida4Data.data)
@@ -216,7 +216,7 @@ namespace Soti.MCDP.DataProcess
             string result = string.Empty;
             StringBuilder json = new StringBuilder();
             json.Append("{\"stats\":");
-            json.Append(Newtonsoft.Json.JsonConvert.SerializeObject(ida4Data));
+            json.Append(Newtonsoft.Json.JsonConvert.SerializeObject(ida4Data.data));
             json.Append("}");
 
             string url = this.idaUrl;

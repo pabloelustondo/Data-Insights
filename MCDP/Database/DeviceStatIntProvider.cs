@@ -46,10 +46,11 @@ namespace Soti.MCDP.Database
         /// Get DeviceStatInt Data.
         /// </summary>
         /// <returns>Ida formatted dataset .</returns>
-        public DataTable GetDeviceStatIntData()
+        public DeviceStatIntList GetDeviceStatIntData()
         {
             SqlConnection sqlConnection = null;
             DataTable ds = null;
+            DeviceStatIntList idaData = null;
             try
             {
                 sqlConnection = new SqlConnection(this._mobicontrolDatabaseConnectionString);
@@ -63,7 +64,7 @@ namespace Soti.MCDP.Database
                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
                 sqlDataAdapter.Fill(ds);
 
-                //idaData = Map2Ida(ds);
+                idaData = Map2Ida(ds);
                 
             }
             catch (Exception ex)
@@ -76,7 +77,7 @@ namespace Soti.MCDP.Database
                 if (sqlConnection != null)
                 { sqlConnection.Close(); }
             }
-            return ds;
+            return idaData;
         }
 
         /// <summary>
