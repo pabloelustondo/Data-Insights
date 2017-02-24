@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Soti.MCDP.Database.Model
 {
-    class DeviceStatApplication
+    public class DeviceStatApplication
     {
-        public string DevId;
+        public string DevId { get; set; }
 
-        public string AppId;
+        public string AppId { get; set; }
 
-        public DateTime StartTime;
+        public DateTime StartTime { get; set; }
 
-        public DateTime EndTime;
+        public DateTime EndTime { get; set; }
 
-        public DateTime StartTimeRounded;
+        public DateTime StartTimeRounded { get; set; }
 
-        public DateTime EndTimeRounded;
+        public DateTime EndTimeRounded { get; set; }
     }
 }

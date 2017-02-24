@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Soti.MCDP.Database.Model;
 
-namespace TestsHelper
+namespace TestHelper
 {
     public class ProductComparer : IComparer, IComparer<DeviceStatInt>
     {
@@ -17,7 +17,7 @@ namespace TestsHelper
 
         public int Compare(DeviceStatInt expected, DeviceStatInt actual)
         {
-            return expected.dev_id.CompareTo(actual.dev_id);
+            return string.Compare(expected.dev_id, actual.dev_id, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

@@ -15,10 +15,10 @@ namespace Soti.MCDP
         /// <summary>
         /// get polling interval. This setting will determine how fast we poll the database to get posible new data
         /// </summary>
-        private double pollinginterval;
+        private double _pollinginterval;
 
         // this timer is used to schedule the calls to the database according to the polling interval.
-        Timer mcdpTimer = null;
+        private Timer _mcdpTimer = null;
 
         private DataProcessProvider _dataProcessProvider = null;
 
@@ -37,7 +37,7 @@ namespace Soti.MCDP
         /// </summary>
         protected override void OnStart(string[] args)
         {
-            this.initPollService();
+            this.InitPollService();
         }
 
         /// <summary>
@@ -45,38 +45,40 @@ namespace Soti.MCDP
         /// </summary>
         protected override void OnStop()
         {
-            this.stopPollService();
+            this.StopPollService();
         }
 
         /// <summary>
         /// This method initialize the polling process that will run in a loop each polling interval
         /// </summary>
-        private void initPollService()
+        private void InitPollService()
         {
-            this.pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
+            this._pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
 
             //LOADING Process PROVIDER
             _dataProcessProvider = new DataProcessProvider();
 
-            this.mcdpTimer = new System.Timers.Timer(this.pollinginterval);
-            this.mcdpTimer.Enabled = true;
-            this.mcdpTimer.AutoReset = true;
-            this.mcdpTimer.Elapsed += mcdpTimerProcess;
-            this.mcdpTimer.Start();
+            this._mcdpTimer = new Timer(this._pollinginterval)
+            {
+                Enabled = true,
+                AutoReset = true
+            };
+            this._mcdpTimer.Elapsed += McdpTimerProcess;
+            this._mcdpTimer.Start();
         }
 
         /// <summary>
         /// This method initialize the polling process that will run in a loop each polling interval
         /// </summary>
-        private void stopPollService()
+        private void StopPollService()
         {
-            this.mcdpTimer.Dispose();
+            this._mcdpTimer.Dispose();
         }
 
         /// <summary>
         /// Start Process
         /// </summary>
-        private void mcdpTimerProcess(object sender, ElapsedEventArgs e)
+        private void McdpTimerProcess(object sender, ElapsedEventArgs e)
         {
             _dataProcessProvider.McdpTimerProcess();
         }
