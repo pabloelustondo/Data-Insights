@@ -36,6 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 RegisterRoutes(app);
 
