@@ -1,147 +1,138 @@
-﻿using Soti.MCDP.Database;
-using Soti.MCDP.Database.Model;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
-
+using Soti.MCDP.Database;
+using Soti.MCDP.Database.Model;
 
 namespace Soti.MCDP.DataProcess
 {
     /// <summary>
-    /// Process Provider sends that data to our input data adapter that will, later, sends this data to the corresponding cloud storage. 
+    ///     Process Provider sends that data to our input data adapter that will, later, sends this data to the corresponding
+    ///     cloud storage.
     /// </summary>
     public class DataProcessProvider : IDataProcessProvider
     {
         /// <summary>
-        /// Max Number Of Consecutive DB Failures
+        ///     get Data Tracker Path.
         /// </summary>
-        private readonly int maxNumberOfConsecutiveDBFailures;
+        private readonly string _dataTrackerPath;
 
         /// <summary>
-        /// Max Number Of Consecutive IDA Failures
+        ///     get Unput Data Adapter (Ida) URL.
         /// </summary>
-        private readonly int maxNumberOfConsecutiveIDAFailures;
+        private readonly string _idaHandShakeUrl;
 
         /// <summary>
-        /// Max Number Of DB Retry after Failures
+        ///     get Unput Data Adapter (Ida) URL.
         /// </summary>
-        private readonly int maxDBRetryAfterFailureDelay;
+        private readonly string _idaUrl;
 
         /// <summary>
-        /// Max Number Of IDA Retry after Failures
+        ///     get JWT Token Path.
         /// </summary>
-        private readonly int maxIdaRetryAfterFailureDelay;
+        private readonly string _jwtTokenPath;
 
         /// <summary>
-        /// get Unput Data Adapter (Ida) URL. 
+        ///     Max Number Of DB Retry after Failures
         /// </summary>
-        private readonly string idaUrl;
+        private readonly int _maxDbRetryAfterFailureDelay;
 
         /// <summary>
-        /// get Unput Data Adapter (Ida) URL. 
+        ///     Max Number Of IDA Retry after Failures
         /// </summary>
-        private readonly string idaHandShakeUrl;
+        private readonly int _maxIdaRetryAfterFailureDelay;
 
         /// <summary>
-        /// get JWT Token Path.   
+        ///     Max Number Of Consecutive DB Failures
         /// </summary>
-        private readonly string JWTTokenPath;
+        private readonly int _maxNumberOfConsecutiveDbFailures;
 
         /// <summary>
-        /// get JWT Token from IDA.   
+        ///     Max Number Of Consecutive IDA Failures
         /// </summary>
-        private readonly string JWTToken;
+        private readonly int _maxNumberOfConsecutiveIdaFailures;
+        
+        private readonly int _batchSize;
+
+        private int _dBSkippedAfterFailure;
+
+        private int _idaSkippedAfterFailure;
+
+        private int _numberOfConsecutiveDbFailures;
+
+        private int _numberOfConsecutiveIdaFailures;
 
         /// <summary>
-        /// get Expired JWT Token from IDA.   
+        ///     get Expired JWT Token from IDA.
         /// </summary>
-        private string ExpiredJWTToken;
-
-
-        int dBSkippedAfterFailure = 0;
-
-        int idaSkippedAfterFailure = 0;
-
-        int numberOfConsecutiveDBFailures = 0;
-
-        int numberOfConsecutiveIDAFailures = 0;
-
-        bool processing = false;
-
-        private DeviceStatIntProvider _deviceStatIntProvider = null;
-
-        private DeviceStatApplicationProvider _deviceStatApplicationProvider = null;
+        private string _expiredJwtToken;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DeviceStatIntProvider"/> class.
+        /// get JWT Token from IDA.
+        /// </summary>
+        private string _jwtToken;
+
+        private bool _processing;
+
+        private IDeviceStatApplicationProvider _deviceStatApplicationProvider;
+
+        private IDeviceStatIntProvider _deviceStatIntProvider;
+       
+        private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DeviceStatIntProvider" /> class.
         /// </summary>
         public DataProcessProvider()
         {
-            this.maxNumberOfConsecutiveDBFailures = Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveDBFailures"]);
-            this.maxNumberOfConsecutiveIDAFailures = Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveIDAFailures"]);
-            this.maxDBRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
-            this.maxIdaRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
-            this.idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
-            this.idaHandShakeUrl = ConfigurationManager.AppSettings["idaHandShakeUrl"];
+            _maxNumberOfConsecutiveDbFailures =
+                Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveDBFailures"]);
+            _maxNumberOfConsecutiveIdaFailures =
+                Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveIDAFailures"]);
+            _maxDbRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
+            _maxIdaRetryAfterFailureDelay =
+                Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
+            _idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
+            _idaHandShakeUrl = ConfigurationManager.AppSettings["idaHandShakeUrl"];
 
-            this.JWTTokenPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), ConfigurationManager.AppSettings["JWTTokenName"]);
-
-            var logMessage = DateTime.Now.ToString() + "  =>  ";
-            Log(logMessage + "[INFO] JWTTokenPath: " + JWTTokenPath);
-            
-            if (File.Exists(JWTTokenPath))
-            {
-                JWTToken = File.ReadAllText(JWTTokenPath);
-                Log(logMessage + "[INFO] JWTToken: " + JWTToken);
-                this.ExpiredJWTToken = HandShakeToIda(JWTToken);
-                Log(logMessage + "[INFO] ExpiredJWTToken: " + ExpiredJWTToken);
-            }
-            //else
-            //{
-            //    JWTToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ";
-            //}
-
-            Log(logMessage + "[INFO] JWTToken: " + JWTToken);
+            _jwtTokenPath = Path.Combine(Directory.GetCurrentDirectory(),
+                ConfigurationManager.AppSettings["JWTTokenName"]);
+            _dataTrackerPath = Path.Combine(Directory.GetCurrentDirectory(),
+                ConfigurationManager.AppSettings["DataTracker"]);
+            _batchSize = Convert.ToInt16(ConfigurationManager.AppSettings["batchSize"]);
             //LOADING DATABASE PROVIDER
-            this._deviceStatIntProvider = new DeviceStatIntProvider();
-            this._deviceStatApplicationProvider = new DeviceStatApplicationProvider();
+            Init();
         }
 
         /// <summary>
-        /// Start MCDP Process.
+        ///     Start MCDP Process.
         /// </summary>
         public void McdpTimerProcess()
         {
-            if (this.processing)
-            {
+            if (_processing)
                 return;
-            }
-            else
-            {
-                this.processing = true; // this avvoid running one process when the other did not finish.
-            }
+            _processing = true; // this avvoid running one process when the other did not finish.
 
-            if (this.numberOfConsecutiveDBFailures < this.maxNumberOfConsecutiveDBFailures
-                && this.numberOfConsecutiveIDAFailures < this.maxNumberOfConsecutiveIDAFailures)
+            if (_numberOfConsecutiveDbFailures < _maxNumberOfConsecutiveDbFailures
+                && _numberOfConsecutiveIdaFailures < _maxNumberOfConsecutiveIdaFailures)
             {
                 // we only call the database is the number of failures of any type is less than the permitted. 
                 try
                 {
-                    var idaData = this._deviceStatIntProvider.GetDeviceStatIntData();
-                    var logMessage = DateTime.Now.ToString() + "  =>  ";
+                    var idaData = _deviceStatIntProvider.RetrieveDeviceStatIntData(_batchSize);
+                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
-                    if (idaData != null && idaData.Rows.Count > 0)
-                    {
-                        // send for real
+                    if (idaData != "")
                         try
                         {
-                            this.SendData2Ida(idaData, "DeviceStatInt");
+                            SendData2Ida(idaData, "DeviceStatInt");
 
-                            this._deviceStatIntProvider.ConfirmData(true); // this shouuld go somewhere else later... 
+                            _deviceStatIntProvider.ConfirmData(true); // this shouuld go somewhere else later... 
 
                             logMessage += "[INFO] new data to be sent.";
                             // write to log the success of the operation
@@ -150,135 +141,175 @@ namespace Soti.MCDP.DataProcess
                         catch (Exception ex)
                         {
                             // this expcetion is due to problems when sending data to input data adapter
-                            this.numberOfConsecutiveIDAFailures += 1;
-                            this._deviceStatIntProvider.ConfirmData(false);
-                            Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex.ToString());
+                            _numberOfConsecutiveIdaFailures += 1;
+                            _deviceStatIntProvider.ConfirmData(false);
+                            Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
                         }
-                    }                    
                 }
-                catch (Exception eDB)
+                catch (Exception eDb)
                 {
                     // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
-                    this.numberOfConsecutiveDBFailures += 1;
-                    
-                    Log("[ERROR] Error reading database: " + eDB.ToString());
+                    _numberOfConsecutiveDbFailures += 1;
+
+                    Log("[ERROR] Error reading database: " + eDb);
                 }
             }
             else
             {
                 // if we are here the number of failures have reached a maximun. so now we need to wait a number of cycles as defined in the delay
                 // we are gong to wait until both 
-                if (this.dBSkippedAfterFailure < this.maxDBRetryAfterFailureDelay
-                    || this.idaSkippedAfterFailure < this.maxIdaRetryAfterFailureDelay)
+                if (_dBSkippedAfterFailure < _maxDbRetryAfterFailureDelay
+                    || _idaSkippedAfterFailure < _maxIdaRetryAfterFailureDelay)
                 {
                     // we need to wait still. We increse both as same time becuase both are waiting at the same time.
-                    this.dBSkippedAfterFailure += 1;
+                    _dBSkippedAfterFailure += 1;
 
                     // we need to wait still
-                    this.idaSkippedAfterFailure += 1;
+                    _idaSkippedAfterFailure += 1;
                 }
                 else
                 {
                     // this is the last skipped cycle. We have waited for probably both cases so we clear the number of retrials for the new cycle to kick in again
-                    this.numberOfConsecutiveDBFailures = 0;
-                    this.numberOfConsecutiveIDAFailures = 0;
-                    this.dBSkippedAfterFailure = 0;
-                    this.idaSkippedAfterFailure = 0;
+                    _numberOfConsecutiveDbFailures = 0;
+                    _numberOfConsecutiveIdaFailures = 0;
+                    _dBSkippedAfterFailure = 0;
+                    _idaSkippedAfterFailure = 0;
                 }
 
                 Log("[INFO] Skipping Cycling due to reach maximum retry and failure count.");
             }
 
-            this.processing = false; // this will enable other attempts to process to go ahead.
+            _processing = false; // this will enable other attempts to process to go ahead.
         }
 
         /// <summary>
-        /// Log Service
+        ///     Initialized
+        /// </summary>
+        private void Init()
+        {
+            try
+            { 
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+                Log(logMessage + "[INFO] JWTTokenPath: " + _jwtTokenPath);
+                Log(logMessage + "[INFO] DataTrackerPath: " + _dataTrackerPath);
+                if (File.Exists(_jwtTokenPath))
+                {
+                    _jwtToken = File.ReadAllText(_jwtTokenPath);
+                    Log(logMessage + "[INFO] JWTToken: " + _jwtToken);
+                    _expiredJwtToken = HandShakeToIda(_jwtToken);
+                    Log(logMessage + "[INFO] ExpiredJWTToken: " + _expiredJwtToken);
+                }
+
+                _deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
+           
+                var result = JsonConvert.DeserializeObject<List<DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
+
+                if (result != null)
+                {
+                    foreach (var tmp in result)
+                    {
+                        _deviceSyncStausList.Add(tmp.Name, tmp);
+                    }
+                }
+
+                _deviceStatIntProvider = new DeviceStatIntProvider(_deviceSyncStausList);
+                _deviceStatApplicationProvider = new DeviceStatApplicationProvider(_deviceSyncStausList);
+
+            }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+
+                Log(logMessage + "[ERROR] " + ex);
+    }
+}
+
+        /// <summary>
+        ///     Log Service
         /// </summary>
         /// <param name="message">Log Message.</param>
         private static void Log(string message)
         {
-            StreamWriter streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
+            var streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
             streamWriter.WriteLine(message);
             streamWriter.Close();
             streamWriter = null;
         }
 
         /// <summary>
-        /// This method is the one that actually send data to the input data adapter
+        ///     This method is the one that actually send data to the input data adapter
         /// </summary>
         /// <param name="ida4Data">ida for Data.</param>
-        private void SendData2Ida(DataTable ida4Data, string TableName)
+        /// <param name="tableName"></param>
+        private void SendData2Ida(string ida4Data, string tableName)
         {
-            //// TODO: is too bad that here we will send the post one by one... we need to send a chunk..and we are sending one by one
-            //foreach (var data in ida4Data.data)
-            //{
-            string result = string.Empty;
-            StringBuilder json = new StringBuilder();
+            var json = new StringBuilder();
             json.Append("{\"stats\":");
-            json.Append(Newtonsoft.Json.JsonConvert.SerializeObject(ida4Data));
+            json.Append(ida4Data);
             json.Append("}");
 
-            string url = this.idaUrl;
+            //UPDATE URL
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            var url = _idaUrl;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             try
             {
                 using (var client = new WebClient())
                 {
                     //client.Headers["x-api-key"] = "blah";
-                    client.Headers["x-access-token"] = ExpiredJWTToken;
-                    client.Headers["TableName"] = TableName;
+                    client.Headers["x-access-token"] = _expiredJwtToken;
+                    client.Headers["TableName"] = tableName;
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+                    ServicePointManager.ServerCertificateValidationCallback +=
+                        (sender, certificate, chain, sslPolicyErrors) => true;
 
-                    result = client.UploadString(url, "POST", json.ToString());
-                    var logMessage = DateTime.Now.ToString() + "  =>  ";
+                    var result = client.UploadString(url, "POST", json.ToString());
+                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
                     Log(logMessage + "[INFO] (80) " + result);
                 }
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString() + "  =>  ";
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
-                Log(logMessage + "[ERROR] " + ex.ToString());
+                Log(logMessage + "[ERROR] " + ex);
             }
         }
 
         /// <summary>
-        /// This method is the one that actually send data to the input data adapter
+        ///     This method is the one that actually send data to the input data adapter
         /// </summary>
-        /// <param name="ida4Data">ida for Data.</param>
-        private string HandShakeToIda(string Token)
+        /// <param name="token"></param>
+        private string HandShakeToIda(string token)
         {
-            //// TODO: is too bad that here we will send the post one by one... we need to send a chunk..and we are sending one by one
-            //foreach (var data in ida4Data.data)
-            //{
             dynamic result = string.Empty;
-           
-            string url = this.idaHandShakeUrl;
-        
+
+            var url = _idaHandShakeUrl;
+
             try
-            { 
+            {
                 using (var client = new WebClient())
                 {
                     //client.Headers["x-api-key"] = "blah";
-                    client.Headers["x-access-token"] = Token;
-                    
+                    client.Headers["x-access-token"] = token;
+
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+                    ServicePointManager.ServerCertificateValidationCallback +=
+                        (sender, certificate, chain, sslPolicyErrors) => true;
 
                     result = JsonConvert.DeserializeObject<dynamic>(client.DownloadString(url));
 
-                    var logMessage = DateTime.Now.ToString() + "  =>  ";
+                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
-                    Log(logMessage + "[INFO] (80) session_token: " + result.session_token); 
+                    Log(logMessage + "[INFO] (80) session_token: " + result.session_token);
                 }
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString() + "  =>  ";
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
-                Log(logMessage + "[ERROR] " + ex.ToString());
+                Log(logMessage + "[ERROR] " + ex);
             }
             return result.session_token;
         }

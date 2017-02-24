@@ -5,14 +5,22 @@
     /// </summary>
     public class DeviceSyncStatus
     {
-        public string Name;
+        public string Name { get; set; }
 
-        public string Status;
+        public int Status { get; set; }
 
-        public string LastSyncTime;
+        public string LastSyncTime { get; set; }
 
-        public string PreviousSyncTime;
+        public string PreviousSyncTime { get; set; }
 
-        public string ServerTime;
+        public DeviceSyncStatus() {}
+
+        public DeviceSyncStatus(string name, int status, string lastSyncTime, string previousSyncTime)
+        {
+            this.Name = name;
+            this.Status = status;
+            this.LastSyncTime = lastSyncTime;
+            this.PreviousSyncTime = previousSyncTime;
+        }
     }
 }

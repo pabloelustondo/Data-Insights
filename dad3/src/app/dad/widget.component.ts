@@ -12,6 +12,7 @@ export enum DadWidgetType { OneNumber, Chart };
 export class DadWidget extends DadElement{
   type: DadWidgetType;
   chart?: DadChart;
+  drillTo?: string;
 }
 
 @Component({
@@ -39,9 +40,9 @@ export class DadWidget extends DadElement{
                <div *ngIf="widget.type===0">
                 <div class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
                 <h3 *ngIf="data" class="mb-0">
-                    <a *ngIf="!(data[0][widget.metrics[0].DataSource]===0)" [routerLink]="['drillcharts', 'chartbardrill' ]">
+                    <div style="cursor:pointer;" *ngIf="!(data[0][widget.metrics[0].DataSource]===0)" (click)="onDrill('lalala')">
                         <span style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
-                    </a>
+                    </div>
                     <a *ngIf="(data[0][widget.metrics[0].DataSource]===0)">
                         <span style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
                     </a>
@@ -124,8 +125,12 @@ export class DadWidgetComponent implements OnInit {
         else this.moreDetails = false;
     }
 
+    onDrill(message:string):void{
+        //[routerLink]="['drillcharts', widget.drillTo ]"
+        this.router.navigate(['drillcharts', this.widget.drillTo], { relativeTo: this.route});
+    }
+
     onRawData(message:string):void{
-        //[routerLink]="['table', data[0][widget.metrics[0].DataSource],widget.id]">
             this.router.navigate(['table', this.data[0][this.widget.metrics[0].DataSource], this.widget.id], { relativeTo: this.route});
     }
 

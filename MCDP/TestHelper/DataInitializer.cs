@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Soti.MCDP.Database.Model;
 
-namespace TestsHelper
+namespace TestHelper
 {
     /// <summary>
     /// Data initializer for unit tests
@@ -15,7 +15,7 @@ namespace TestsHelper
         /// <returns></returns>
         public static List<DeviceStatInt> GetAll()
         {
-            var DeviceSyncStatusList = new List<DeviceStatInt>
+            var deviceSyncStatusList = new List<DeviceStatInt>
             {
                 new DeviceStatInt()
                 {
@@ -66,7 +66,7 @@ namespace TestsHelper
                       time_stamp = Convert.ToDateTime("2016-11-24 14:21:31.463")
                 },
             };
-            return DeviceSyncStatusList;
+            return deviceSyncStatusList;
         }
     }
 }
