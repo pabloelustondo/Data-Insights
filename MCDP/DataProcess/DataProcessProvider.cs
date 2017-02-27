@@ -104,9 +104,55 @@ namespace Soti.MCDP.DataProcess
                 ConfigurationManager.AppSettings["JWTTokenName"]);
             _dataTrackerPath = Path.Combine(Directory.GetCurrentDirectory(),
                 ConfigurationManager.AppSettings["DataTracker"]);
-            _batchSize = Convert.ToInt16(ConfigurationManager.AppSettings["batchSize"]);
+            _batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["batchSize"]);
             //LOADING DATABASE PROVIDER
             Init();
+        }
+
+        /// <summary>
+        ///     Initialized
+        /// </summary>
+        public void Init()
+        {
+            try
+            {
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+                Log(logMessage + "[INFO] JWTTokenPath: " + _jwtTokenPath);
+                Log(logMessage + "[INFO] DataTrackerPath: " + _dataTrackerPath);
+                if (File.Exists(_jwtTokenPath))
+                {
+                    _jwtToken = File.ReadAllText(_jwtTokenPath);
+                    Log(logMessage + "[INFO] JWTToken: " + _jwtToken);
+                    _expiredJwtToken = HandShakeToIda(_jwtToken);
+                    Log(logMessage + "[INFO] ExpiredJWTToken: " + _expiredJwtToken);
+                }
+
+                _deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
+
+                if (File.Exists(_dataTrackerPath))
+                {
+                    var result =
+                        JsonConvert.DeserializeObject<List<DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
+                        
+                    if (result != null)
+                    {
+                        foreach (var tmp in result)
+                        {
+                            _deviceSyncStausList.Add(tmp.Name, tmp);
+                        }
+                    }
+                }
+
+                _deviceStatIntProvider = new DeviceStatIntProvider(_deviceSyncStausList);
+                _deviceStatApplicationProvider = new DeviceStatApplicationProvider(_deviceSyncStausList);
+
+            }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+
+                Log(logMessage + "[ERROR] " + ex);
+            }
         }
 
         /// <summary>
@@ -132,7 +178,7 @@ namespace Soti.MCDP.DataProcess
                         {
                             SendData2Ida(idaData, "DeviceStatInt");
 
-                            _deviceStatIntProvider.ConfirmData(true); // this shouuld go somewhere else later... 
+                            _deviceStatIntProvider.ConfirmStatusData(true); // this shouuld go somewhere else later... 
 
                             logMessage += "[INFO] new data to be sent.";
                             // write to log the success of the operation
@@ -142,7 +188,40 @@ namespace Soti.MCDP.DataProcess
                         {
                             // this expcetion is due to problems when sending data to input data adapter
                             _numberOfConsecutiveIdaFailures += 1;
-                            _deviceStatIntProvider.ConfirmData(false);
+                            _deviceStatIntProvider.ConfirmStatusData(false);
+                            Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
+                        }
+                }
+                catch (Exception eDb)
+                {
+                    // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
+                    _numberOfConsecutiveDbFailures += 1;
+
+                    Log("[ERROR] Error reading database: " + eDb);
+                }
+
+                // we only call the database is the number of failures of any type is less than the permitted. 
+                try
+                {
+                    var idaData = _deviceStatApplicationProvider.RetrieveDeviceStatApplicationData(_batchSize);
+                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+
+                    if (idaData != "")
+                        try
+                        {
+                            SendData2Ida(idaData, "DeviceStatInt");
+
+                            _deviceStatApplicationProvider.ConfirmStatusData(true); // this shouuld go somewhere else later... 
+
+                            logMessage += "[INFO] new data to be sent.";
+                            // write to log the success of the operation
+                            Log(logMessage);
+                        }
+                        catch (Exception ex)
+                        {
+                            // this expcetion is due to problems when sending data to input data adapter
+                            _numberOfConsecutiveIdaFailures += 1;
+                            _deviceStatApplicationProvider.ConfirmStatusData(false);
                             Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
                         }
                 }
@@ -182,48 +261,7 @@ namespace Soti.MCDP.DataProcess
             _processing = false; // this will enable other attempts to process to go ahead.
         }
 
-        /// <summary>
-        ///     Initialized
-        /// </summary>
-        private void Init()
-        {
-            try
-            { 
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[INFO] JWTTokenPath: " + _jwtTokenPath);
-                Log(logMessage + "[INFO] DataTrackerPath: " + _dataTrackerPath);
-                if (File.Exists(_jwtTokenPath))
-                {
-                    _jwtToken = File.ReadAllText(_jwtTokenPath);
-                    Log(logMessage + "[INFO] JWTToken: " + _jwtToken);
-                    _expiredJwtToken = HandShakeToIda(_jwtToken);
-                    Log(logMessage + "[INFO] ExpiredJWTToken: " + _expiredJwtToken);
-                }
-
-                _deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
-           
-                var result = JsonConvert.DeserializeObject<List<DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
-
-                if (result != null)
-                {
-                    foreach (var tmp in result)
-                    {
-                        _deviceSyncStausList.Add(tmp.Name, tmp);
-                    }
-                }
-
-                _deviceStatIntProvider = new DeviceStatIntProvider(_deviceSyncStausList);
-                _deviceStatApplicationProvider = new DeviceStatApplicationProvider(_deviceSyncStausList);
-
-            }
-            catch (Exception ex)
-            {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-                Log(logMessage + "[ERROR] " + ex);
-    }
-}
-
+  
         /// <summary>
         ///     Log Service
         /// </summary>
@@ -248,10 +286,8 @@ namespace Soti.MCDP.DataProcess
             json.Append(ida4Data);
             json.Append("}");
 
-            //UPDATE URL
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             var url = _idaUrl;
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             try
             {
                 using (var client = new WebClient())

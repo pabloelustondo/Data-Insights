@@ -5,9 +5,18 @@
     /// </summary>
     public interface IDataProcessProvider
     {
+
+        /// <summary>
+        /// Initialize Process.
+        /// </summary>
+        void Init();
+
+
         /// <summary>
         /// Start MCDP Process.
         /// </summary>
         void McdpTimerProcess();
+
+
     }
 }

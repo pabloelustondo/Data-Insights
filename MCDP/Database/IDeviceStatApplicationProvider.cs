@@ -12,18 +12,12 @@ namespace Soti.MCDP.Database
         ///     Checks for agent duplicated name.
         /// </summary>
         /// <returns>dataset for Ida format.</returns>
-        DataTable GetDeviceStatApplicationData();
+        string RetrieveDeviceStatApplicationData(int batchSize);
 
         /// <summary>
         ///     Confirm the requested.
         /// </summary>
         /// <param name="pass">True if data received.</param>
-        void ConfirmData(bool pass);
-
-        /// <summary>
-        ///     Get Last Sync Time
-        /// </summary>
-        /// <returns>Agent identifier.</returns>
-        DeviceSyncStatus GetLastSyncTime();
+        void ConfirmStatusData(bool pass);
     }
 }

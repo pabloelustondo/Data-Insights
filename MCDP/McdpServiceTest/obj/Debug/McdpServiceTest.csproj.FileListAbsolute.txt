@@ -44,3 +44,5 @@ D:\BI\BI\MCDP\McdpServiceTest\bin\Debug\nunit.framework.xml
 D:\BI\BI\MCDP\McdpServiceTest\obj\Debug\McdpServiceTest.csprojResolveAssemblyReference.cache
 D:\BI\BI\MCDP\McdpServiceTest\obj\Debug\McdpServiceTest.dll
 D:\BI\BI\MCDP\McdpServiceTest\obj\Debug\McdpServiceTest.pdb
+D:\BI\BI\MCDP\McdpServiceTest\bin\Debug\Newtonsoft.Json.dll
+D:\BI\BI\MCDP\McdpServiceTest\bin\Debug\Newtonsoft.Json.xml
