@@ -20,6 +20,7 @@ export class DadChart extends DadElement{
     aname?: String;
     bname?: String;
     action?: String;
+    widgetClickChart?: boolean = false;
 }
 @Component({
     selector: 'dadchart',
@@ -36,6 +37,7 @@ export class DadChart extends DadElement{
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
                     </div>
@@ -90,7 +92,11 @@ export class DadChartComponent implements OnInit {
 
   onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
-    }
+  }
+
+  onRawData(message:string):void{
+    this.router.navigate(['table', 100, this.chart.id], { relativeTo: this.route});
+  }
 
   onRefresh():void{
     if (!this.refreshMode) this.refreshMode = true;
@@ -163,6 +169,20 @@ export class DadChartComponent implements OnInit {
     return 0;
   }
 
+  drillFromElement(data){
+    if (this.chart.action = 'drillFromElement') {
+
+      let eventHandler = this.goToTable;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
+
+      data.onclick = function (d, element) {
+        eventHandler(d, chart, router, route);
+      };
+    }
+  }
+
   //mini applied
   drawChartBar(chartConfig:DadChart, data) {
     let chartData = this.mapper.map(chartConfig, data);
@@ -171,6 +191,8 @@ export class DadChartComponent implements OnInit {
     bardata.selection = {
       enabled: true,
     };
+
+    this.drillFromElement(bardata);
 
     d3.selectAll(".c3-axis-x .tick").filter(function (d) {
       return d === 0;
@@ -290,7 +312,9 @@ if (chartConfig.regionM){
             eventHandler(d, chart, router, route);
           }
       );
-    } else {
+    };
+
+    if(!chartConfig.action || chartConfig.action === 'grow') {
       let eventHandler = this.growIt;
       let chart = this.chart;
       let route = this.route;
@@ -318,6 +342,8 @@ if (chartConfig.regionM){
     piedata.selection = {
       enabled: true
     };
+
+    this.drillFromElement(piedata);
 
     let c3Config:any = {
       size: {},

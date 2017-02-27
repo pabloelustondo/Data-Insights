@@ -155,9 +155,8 @@ export const CHARTS: DadChart[] = [
         bname : 'Percentage',
         width: 475,
         height: 400,
-        regionM: 30,
-        tableId: 'table2',
-        action: 'drill',
+        tableId: 'table1',
+        action: 'drillFromElement',
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
@@ -221,8 +220,8 @@ export const CHARTS: DadChart[] = [
         width: 475,
         height: 400,
         regionM: 30,
-        tableId: 'table2',
-        action: 'drill',
+        tableId: 'table1',
+        action: 'drillFromElement',
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",

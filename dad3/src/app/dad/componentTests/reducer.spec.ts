@@ -8,7 +8,7 @@ import  { CHARTS } from "../sample.charts";
 import { Mapper, ChartData } from "../mapper";
 
 
-describe('DadReduceer', () => {
+describe('DadReducer', () => {
     beforeEach(() => {
         //we create a chartConfig and clean the reduction setting so individual specs can set it
         let chartConfig:DadChart = CHARTS[1]; //this chart does not have any transformation spec
