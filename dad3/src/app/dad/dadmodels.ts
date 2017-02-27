@@ -10,6 +10,7 @@ export class DadElement {
   id: string;
   name?: string;
   data?: any;
+  mappedData?: any;
   parameters?: any[];
   metricName?: string;
   predicates?: string[];

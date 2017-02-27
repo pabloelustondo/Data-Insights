@@ -12,7 +12,7 @@ export class ChartData{
 }
 
 export class Mapper{
-  map(config:DadChart|DadWidget, data){
+  map(config:DadChart|DadWidget, data):any{
   var chartData = new ChartData();
   var dataForChart:any;
   var index=0;
@@ -69,6 +69,8 @@ export class Mapper{
     }
   }
     let transformer = new DadTransformer();
-    return transformer.transformAll(config, dataForChart);
+    config.mappedData = transformer.transformAll(config, dataForChart);
+
+    return config.mappedData;
   }
 }

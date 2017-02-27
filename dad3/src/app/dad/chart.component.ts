@@ -189,8 +189,7 @@ export class DadChartComponent implements OnInit {
 
   //mini applied
   drawChartBar(chartConfig:DadChart, data) {
-    let chartData = this.mapper.map(chartConfig, data);
-    let bardata = chartData;
+    let bardata = this.mapper.map(chartConfig, data);
 
     bardata.selection = {
       enabled: true,
@@ -270,7 +269,7 @@ export class DadChartComponent implements OnInit {
 
 if (chartConfig.regionM){
     c3Config.regions =[
-      {start: this.indexOfRegions(chartData)},
+      {start: this.indexOfRegions(bardata)},
     ];
 }
 
@@ -351,7 +350,7 @@ if (chartConfig.regionM){
 
     if (chart.type === 'pie') value = d.id;
     if (chart.type === 'bar') {
-        value = d.x;
+        value = chart.mappedData.columns[0][d.x + 1];
     }
 
     tableConfig.filter[attribute] = value;
@@ -365,8 +364,7 @@ if (chartConfig.regionM){
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
-    let chartData = this.mapper.map(chartConfig, data);
-    let piedata = chartData;
+    let piedata = this.mapper.map(chartConfig, data);
 
     piedata.selection = {
       enabled: true
