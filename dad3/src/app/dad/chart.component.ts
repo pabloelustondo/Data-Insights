@@ -346,14 +346,20 @@ if (chartConfig.regionM){
     //let find the attribute   come in the reducer dimensin
 
     let attribute = chart.reduction.dimension.attribute;
-    let value = d.id;
+
+    let value;
+
+    if (chart.type === 'pie') value = d.id;
+    if (chart.type === 'bar') {
+        value = d.x;
+    }
 
     tableConfig.filter[attribute] = value;
 
     self.dadTableConfigsService.saveOne(tableConfig);
 
     //go to that table
-    router.navigate(['table', 100, chart.id,  tableConfig.id], { relativeTo: route});
+    router.navigate(['table', d.value, chart.id,  tableConfig.id], { relativeTo: route});
 };
 
 
