@@ -26,6 +26,7 @@ export class DadElement {
   transformations?: any[];
   reduction?:any;
   reductions?:any[];
+  filter?:any;
 }
 
 
