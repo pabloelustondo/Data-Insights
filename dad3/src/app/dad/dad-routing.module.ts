@@ -66,7 +66,7 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'page/:id/drillcharts/:id/table/:count/:id',
+                path: 'page/:id/drillcharts/:id/table/:count/:id/:tableid',
                 component: DadTableComponent,
                 canActivate: [AuthGuard],
                 data: {

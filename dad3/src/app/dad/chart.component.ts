@@ -334,19 +334,26 @@ if (chartConfig.regionM){
     router.navigate(['bigchart', chart.id], { relativeTo: route});
   };
 
-  goToTable(d,chart,router,route, self){
+  goToTable(d,chart:DadChart,router,route, self){
 
     //create the table
     let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
     let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
 
-    tableConfig.id += self.chart.id + d;
-    tableConfig.filter = { 'os':'iOS' } ;
+    tableConfig.id += self.chart.id + d.id;
+    tableConfig.filter = { } ;
+
+    //let find the attribute   come in the reducer dimensin
+
+    let attribute = chart.reduction.dimension.attribute;
+    let value = d.id;
+
+    tableConfig.filter[attribute] = value;
 
     self.dadTableConfigsService.saveOne(tableConfig);
 
     //go to that table
-    router.navigate(['table', 100, chart.id], { relativeTo: route});
+    router.navigate(['table', 100, chart.id,  tableConfig.id], { relativeTo: route});
 };
 
 
