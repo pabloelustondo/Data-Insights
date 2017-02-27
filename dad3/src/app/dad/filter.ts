@@ -2,6 +2,7 @@
  * Created by dister on 2/24/2017.
  */
 import { DadElement } from './dadmodels';
+import * as _ from "lodash";
 import { DadTable } from './table.component';
 import { DadChart } from './chart.component';
 import { DadWidget } from './widget.component';

@@ -112,6 +112,17 @@ export class DadTableConfigsService {
     localStorage.setItem("tabledata",tables_string);
   }
 
+  public saveOne(table:DadTable ){
+    let tables:DadTable[] = this.getTableConfigs();
+    let tableIndex = _.findIndex(tables, function(w) { return w.id == table.id; });
+    if(tableIndex === -1){
+      tables.push(table);
+    } else {
+      tables.splice(tableIndex, 1, table);
+    }
+    this.save(tables);
+  }
+
   public getTableConfig(id:string): DadTable {
     let tables = this.getTableConfigs();
     let tableIndex = _.findIndex(tables, function(w) { return w.id == id; });
