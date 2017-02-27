@@ -14,8 +14,6 @@ localStorage = new LocalStorage('./temp');
 
 var app = module.exports = express.Router();
 
-// XXX: This should be a database of enrollments :).
-// XXX: This should be a database of enrollments :).
 var SotiAdminAccount =
   {
     accountid: "soti",
@@ -40,7 +38,7 @@ var MyMCAccount =
 var enrollments = [SotiAdminAccount, MyMCAccount];
 
 function createToken(user) {
-  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 600 * 5 });
+  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: config['agentPermTokenExpiryTime'] });
 }
 
 function readToken(token, callback) {  //Bearer
