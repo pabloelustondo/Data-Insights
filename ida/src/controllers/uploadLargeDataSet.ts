@@ -64,6 +64,19 @@ export class UploadLargeDataSetController {
         let req = express;
         let token = req.headers['x-access-token'];
         let contentType = req.headers['content-type'];
+
+        if (contentType !== 'application/json') {
+            throw new Error('Content-type must be Application/JSON');
+        }
+
+        let data = JSON.stringify(req.body);
+
+        try {
+            JSON.parse(data);
+        } catch (e) {
+             throw new Error('Body must be json type');
+        }
+
         if (token) {
 
             let getCustomerID = function () {

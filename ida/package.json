@@ -32,6 +32,7 @@
     "winser": "1.0.2",
 	"aws-iot-device-sdk": "1.0.13",
     "aws-sdk": "2.7.11",
+    "helmet" : "^3.4.1",
     "jsonwebtoken" : "7.2.1"
   },
   "devDependencies": {
