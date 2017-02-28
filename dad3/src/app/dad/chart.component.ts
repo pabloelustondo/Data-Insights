@@ -30,7 +30,7 @@ export class DadChart extends DadElement{
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
-            <div class="card-block pb-0"><br/> 
+            <div class="card-block pb-0">
                 <div class="content card card-secondary">   
                     <div class="btn-group float-xs-right" dropdown>
                         <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>

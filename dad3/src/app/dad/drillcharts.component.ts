@@ -12,7 +12,7 @@ import {Subscription } from 'rxjs';
   providers:[DadChartConfigsService],
   template: `
 <h1>Drill Charts</h1>
-        <div *ngIf="charts" class="row">
+        <div *ngIf="charts" class="row m-t-md">
             <div *ngFor="let drillchart of charts">
                 <dadchart [chart]="drillchart"></dadchart>
             </div>
