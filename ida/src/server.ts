@@ -16,8 +16,8 @@ const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
 let httpsOptions = {
-    key: fs.readFileSync('C:/users/vdave/webstormprojects/untitled/CustomerBI/ida/src/63663247-localhost_3002.key'),
-    cert: fs.readFileSync('C:/users/vdave/webstormprojects/untitled/CustomerBI/ida/src/63663247-localhost_3002.cert')
+    key: fs.readFileSync(config['https-key-location'] ),
+    cert: fs.readFileSync(config['https-cert-location'] )
 };
 
 
