@@ -128,11 +128,8 @@ namespace Soti.MCDP.Database
                     Log(logMessage + "[ERROR] Database section does not have an associated file!");
                     return "";
                 }
-                var rlt =
-                    settings.ConnectionString.Insert(
-                        settings.ConnectionString.LastIndexOf(";", StringComparison.InvariantCultureIgnoreCase), "_MCDP");
-                //Log(logMessage + rlt);
-                return rlt;
+                
+                return settings.ConnectionString;
             }
             catch (Exception ex)
             {
