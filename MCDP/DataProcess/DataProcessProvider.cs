@@ -132,13 +132,13 @@ namespace Soti.MCDP.DataProcess
                 if (File.Exists(_dataTrackerPath))
                 {
                     var result =
-                        JsonConvert.DeserializeObject<List<DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
+                        JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
                         
                     if (result != null)
                     {
-                        foreach (var tmp in result)
+                        foreach (var item in result)
                         {
-                            _deviceSyncStausList.Add(tmp.Name, tmp);
+                            _deviceSyncStausList.Add(item.Key, item.Value);
                         }
                     }
                 }
@@ -282,7 +282,9 @@ namespace Soti.MCDP.DataProcess
         private void SendData2Ida(string ida4Data, string tableName)
         {
             var json = new StringBuilder();
-            json.Append("{\"stats\":");
+            json.Append("{\"AgentMetadata\": { \"tableName\": \"");
+            json.Append(tableName);
+            json.Append("\"}, \"Data\": ");
             json.Append(ida4Data);
             json.Append("}");
 
@@ -299,7 +301,8 @@ namespace Soti.MCDP.DataProcess
                     ServicePointManager.ServerCertificateValidationCallback +=
                         (sender, certificate, chain, sslPolicyErrors) => true;
 
-                    var result = client.UploadString(url, "POST", json.ToString());
+                    //var result = client.UploadString(url, "POST", json.ToString());
+                    var result = client.UploadString(url, "POST", ida4Data);
                     var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
                     Log(logMessage + "[INFO] (80) " + result);
@@ -335,10 +338,6 @@ namespace Soti.MCDP.DataProcess
                         (sender, certificate, chain, sslPolicyErrors) => true;
 
                     result = JsonConvert.DeserializeObject<dynamic>(client.DownloadString(url));
-
-                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-                    Log(logMessage + "[INFO] (80) session_token: " + result.session_token);
                 }
             }
             catch (Exception ex)
