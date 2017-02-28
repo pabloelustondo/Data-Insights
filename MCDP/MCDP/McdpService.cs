@@ -58,13 +58,14 @@ namespace Soti.MCDP
             //LOADING Process PROVIDER
             _dataProcessProvider = new DataProcessProvider();
 
-            this._mcdpTimer = new Timer(this._pollinginterval)
-            {
-                Enabled = true,
-                AutoReset = true
-            };
-            this._mcdpTimer.Elapsed += McdpTimerProcess;
-            this._mcdpTimer.Start();
+            //this._mcdpTimer = new Timer(this._pollinginterval)
+            //{
+            //    Enabled = true,
+            //    AutoReset = true
+            //};
+            //this._mcdpTimer.Elapsed += McdpTimerProcess;
+            //this._mcdpTimer.Start();
+            _dataProcessProvider.McdpTimerProcess();
         }
 
         /// <summary>

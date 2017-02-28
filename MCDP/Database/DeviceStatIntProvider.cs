@@ -5,7 +5,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Soti.MCDP.Database.Model;
 
 namespace Soti.MCDP.Database
@@ -79,7 +81,7 @@ namespace Soti.MCDP.Database
             try
             {
                 //time tracker for lasttime
-                var lasttime = "";
+                var lasttime = new object();
 
                 if (DeviceSyncStausList.ContainsKey(TableName) && DeviceSyncStausList[TableName].Status == 1)        //In progress with skipped preventing overlapping
                     return "";
@@ -101,7 +103,7 @@ namespace Soti.MCDP.Database
 
                         sqlConnection.Open();
 
-                        lasttime = ((DateTime)cmd.ExecuteScalar()).ToString("yyyy-MM-ddTHH:mm:ss.fff");
+                        lasttime = cmd.ExecuteScalar();
                     }
                 }
                 else if (DeviceSyncStausList.ContainsKey(TableName) && DeviceSyncStausList[TableName].Status == -1)   //previous call is failed
@@ -122,7 +124,7 @@ namespace Soti.MCDP.Database
 
                         sqlConnection.Open();
 
-                        lasttime = ((DateTime)cmd.ExecuteScalar()).ToString("yyyy-MM-ddTHH:mm:ss.fff");
+                        lasttime = cmd.ExecuteScalar();
                     }
                 }
                 else if (!DeviceSyncStausList.ContainsKey(TableName)) //initial stage without data in table
@@ -141,13 +143,15 @@ namespace Soti.MCDP.Database
 
                         sqlConnection.Open();
 
-                        lasttime = ((DateTime)cmd.ExecuteScalar()).ToString("yyyy-MM-ddTHH:mm:ss.fff");
+                        lasttime = cmd.ExecuteScalar();
                     }
                 }
-
+                
                 //This is a final data collection taken result from previous conditions
-                if (lasttime != "")
+                if (lasttime.ToString() != "")
                 {
+                        lasttime = ((DateTime)lasttime).ToString("yyyy-MM-ddTHH:mm:ss.fff");
+
                         var querydata = "SELECT top " + batchSize
                                         + " d.DevId as dev_id, A.[IntValue] as int_value, A.[ServerDateTime] as server_time_stamp, " 
                                         + "A.[StatType] as stat_type, A.[TimeStamp] as time_stamp FROM dbo.DeviceStatInt AS A WITH (NOLOCK) INNER JOIN "
@@ -271,7 +275,7 @@ namespace Soti.MCDP.Database
 
             try
             {
-                File.WriteAllText(_dataTrackerPath, JsonConvert.SerializeObject(DeviceSyncStausList));
+                UpdateJson();
             }
             catch (Exception ex)
             {
@@ -285,13 +289,13 @@ namespace Soti.MCDP.Database
         /// </summary>
         /// <param name="lasttime">lasttime.</param>
         /// <param name="status">status.</param>
-        private void UpdateStatusData(string lasttime, int status)
+        private void UpdateStatusData(object lasttime, int status)
         {
             lock (_factLock)
             {
                 if (!DeviceSyncStausList.ContainsKey(TableName))
                 {
-                    DeviceSyncStausList.Add(TableName, new DeviceSyncStatus(TableName, 1, lasttime, ""));
+                    DeviceSyncStausList.Add(TableName, new DeviceSyncStatus(TableName, 1, lasttime.ToString(), ""));
                 }
                 else
                 {
@@ -299,13 +303,13 @@ namespace Soti.MCDP.Database
                     DeviceSyncStausList[TableName] = new DeviceSyncStatus()
                     {
                         Name = TableName,
-                        LastSyncTime = lasttime,
+                        LastSyncTime = lasttime.ToString(),
                         PreviousSyncTime = DeviceSyncStausList[TableName].LastSyncTime,
                         Status = status
                     };
                 }
-                // serialize JSON to a string and then write string to a file
-                File.WriteAllText(_dataTrackerPath, JsonConvert.SerializeObject(DeviceSyncStausList));
+               
+                UpdateJson();
             }
         }
 
@@ -318,6 +322,34 @@ namespace Soti.MCDP.Database
             var streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
             streamWriter.WriteLine(message);
             streamWriter.Close();
+        }
+
+        /// <summary>
+        /// Update Json
+        /// </summary>        
+        private void UpdateJson()
+        {
+            try
+            {
+                // serialize JSON to a string and then write string to a file
+                var json = JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(
+                               File.ReadAllText(_dataTrackerPath)) ?? new Dictionary<string, DeviceSyncStatus>();
+
+                if (json.ContainsKey(TableName))
+                {
+                    json[TableName] = DeviceSyncStausList[TableName];
+                }
+                else
+                {
+                    json.Add(TableName, DeviceSyncStausList[TableName]);
+                }
+                File.WriteAllText(_dataTrackerPath, JsonConvert.SerializeObject(json));
+            }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+                Log(logMessage + "[ERROR] " + ex);
+            }
         }
     }
 }

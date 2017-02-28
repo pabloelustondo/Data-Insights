@@ -31,7 +31,7 @@ export class DadChart extends DadElement{
         <div class="inside">
           <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
-                <div class="content card card-secondary">    
+                <div class="content card card-secondary">   
                     <div class="btn-group float-xs-right" dropdown>
                         <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
                             <i class="icon-settings"></i>
@@ -45,12 +45,13 @@ export class DadChart extends DadElement{
                     <div>
                         <div style="color:black;">{{chart.name}}</div><br/><br/><br/>        
 
-                        <div *ngIf="chart.big" style="text-align:center; padding-bottom:70%; height:100%; width:100%;" [id]="chart.id"></div>
+                        <div *ngIf="chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
                         <div *ngIf="!chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
                                                 
                         <div style="color:black;">
-                            <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
+                            <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>
                         </div>
+                        <br/>
                     </div>
                 </div>
             </div>
@@ -208,9 +209,6 @@ export class DadChartComponent implements OnInit {
       color: {
         pattern: this.colorPalette,
       },
-      /*tooltip: {
-        show: false
-      },*/
       tooltip: {
         grouped: false,
         format: {
@@ -358,9 +356,8 @@ if (chartConfig.regionM){
     self.dadTableConfigsService.saveOne(tableConfig);
 
     //go to that table
-    router.navigate(['table', d.value, chart.id,  tableConfig.id], { relativeTo: route});
+    router.navigate(['table', chart.mappedData.columns[0].length, chart.id,  tableConfig.id], { relativeTo: route});
 };
-
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {

@@ -5,7 +5,6 @@ import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTable} from "./table.component";
 
-
 export class DadElement {
   id: string;
   name?: string;
@@ -29,7 +28,6 @@ export class DadElement {
   reductions?:any[];
   filter?:any;
 }
-
 
 export class DadDateRange{
   dateFrom: string;
