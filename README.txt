@@ -11,28 +11,66 @@ install node.js (version 7)
 Stop all the MobiControl services (MS, DS, Elastic Search Proxy Server(if you have it))
 Ensure Port in TSOA.json and Appconfig.json match.
 
-open a commend prompt
-git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
-cd CustomerBI
-cd oda
-npm install
-npm start  
-check out data adapter (ODA) at http://localhost:3001/
+Ensure MONGO db installed and running
 
-open another command prompt
-cd CustomerBI
-cd dad
-npm install
-npm start  
-check Data Analytics Dashboard(DAD) at http://localhost:3000/
 
-open a commend prompt
-git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
+=== pull code from the repository ===
+1) git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
+2) retireve AWS access credential files and store them locally (Ask Sergey Khanzin for now)
+3) Place local SSL certificates (self-signed). These are provided in the repository for now. 
+
+open command prompt and nagivate to the folder that has mongodb data
+mongod -dbpath ./
+
+open command prompt to start database adapter
 cd CustomerBI
-cd ida
+cd ddb
 npm install
 npm start
-check out input data adapter (IDA) at http://localhost:3003/
+in your browser navigate to http://localhost:8000/dataSources and verify response
+
+open a command prompt to start ODA (output data adapter)
+1) cd CustomerBI
+2) cd oda
+3) npm install
+4) npm start  
+5) check out data adapter (ODA) at  port specified in command prompt https://localhost:3002/
+
+open a command prompt to start data service back endpoint
+1) cd CustomerBI
+2) cd dss\backend
+3) npm install
+4) npm start
+
+open a command prompt to start data service front end. (This serves as log in and admin screen)
+1) cd CustomerBI
+2) cd dss
+3) npm install
+4) npm start
+
+open command prompt to start database engine endpoint (ddb)
+1) cd CustomerBI
+2) cd ddb
+3) npm install
+4) npm start
+
+open another command prompt to start input data adapter 
+1) cd CustomerBI
+2) cd ida
+3) open appconfig.json and replace the "aws-accessKeyFileLocation" and "aws-secretKeyFileLocation" with address of local storage
+4) update "https-key-location" and "https-cert-location" in app config to point to 
+the SSL key are and certificate location for ida. 
+5) npm install
+6) npm start
+check out input data adapter (IDA) at https://localhost:3010/
+
+
+open another command prompt
+1) cd CustomerBI
+2) cd dad
+3) npm install
+4) npm start  
+5) check Data Analytics Dashboard(DAD) at the port specified in command prompt  https://localhost:4200/
 
 
 Note: Data Analytics Dashboard(DAD) is only the client side for now, server side coming soon
@@ -83,3 +121,5 @@ Glossary:
     1) DAD - Data Analytics Dashboard
     2) ODA - Checkout Data Adapter
     3) IDA - Input data Adapter
+	4) DSS - Data Service Server
+	5) DDB - Data Database
