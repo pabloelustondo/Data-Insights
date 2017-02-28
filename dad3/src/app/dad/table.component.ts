@@ -14,6 +14,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DadWidget} from "./widget.component";
 import { config } from "./appconfig";
+import { DadFilter } from './filter';
 
 export class DadTable {
   id: string;
@@ -154,7 +155,8 @@ export class DadTableComponent implements OnInit {
                   this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
               }
 
-              let tableId = this.callerElement.tableId;
+              let tableId =  this.callerId = param['tableid'];
+              if (!tableId) tableId = this.callerElement.tableId;
 
               this.table  = this.findTables(tableId);
               let elementParameters = this.callerElement.parameters[0];
@@ -168,14 +170,16 @@ export class DadTableComponent implements OnInit {
 
           console.log("Tables are loading... :" + this.table.id);
 
+            let filter = new DadFilter();
+
             if (!this.data && this.table.data && config.testing){
-                this.data = this.table.data;
-            }
+                this.data = filter.filter(this.table, this.table.data);
+  }
 
             if (!config.testing) {
                 this.dadTableDataService.getElementData(this.table).then(
                     data => {
-                        this.data = data.data;
+                        this.data = filter.filter(this.table, data.data);
                         if (this.data.errorMessage != null) {
                             alert(this.data.errorMessage);
                         }

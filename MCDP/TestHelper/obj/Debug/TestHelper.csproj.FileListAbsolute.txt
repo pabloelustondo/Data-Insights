@@ -34,3 +34,5 @@ D:\BI\BI\MCDP\TestHelper\bin\Debug\nunit.framework.xml
 D:\BI\BI\MCDP\TestHelper\obj\Debug\TestHelper.csprojResolveAssemblyReference.cache
 D:\BI\BI\MCDP\TestHelper\obj\Debug\TestHelper.dll
 D:\BI\BI\MCDP\TestHelper\obj\Debug\TestHelper.pdb
+D:\BI\BI\MCDP\TestHelper\bin\Debug\Newtonsoft.Json.dll
+D:\BI\BI\MCDP\TestHelper\bin\Debug\Newtonsoft.Json.xml

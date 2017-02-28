@@ -8,12 +8,12 @@ namespace Soti.MCDP.Database.Model
 
         public string AppId { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public string StartTime { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public string EndTime { get; set; }
 
-        public DateTime StartTimeRounded { get; set; }
+        public string StartTimeRounded { get; set; }
 
-        public DateTime EndTimeRounded { get; set; }
+        public string EndTimeRounded { get; set; }
     }
 }

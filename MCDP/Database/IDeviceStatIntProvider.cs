@@ -18,6 +18,6 @@ namespace Soti.MCDP.Database
         ///     Confirm the requested.
         /// </summary>
         /// <param name="pass">True if data received.</param>
-        void ConfirmData(bool pass);
+        void ConfirmStatusData(bool pass);
     }
 }

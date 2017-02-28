@@ -10,6 +10,7 @@ export class DadElement {
   id: string;
   name?: string;
   data?: any;
+  mappedData?: any;
   parameters?: any[];
   metricName?: string;
   predicates?: string[];
@@ -26,6 +27,7 @@ export class DadElement {
   transformations?: any[];
   reduction?:any;
   reductions?:any[];
+  filter?:any;
 }
 
 

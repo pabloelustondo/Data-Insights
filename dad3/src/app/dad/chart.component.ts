@@ -4,7 +4,8 @@ import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
 import { config } from "./appconfig";
-
+import { DadTableConfigsService } from "./chart.service";
+import { DadFilter } from "./filter";
 
 declare var d3, c3: any;
 
@@ -24,7 +25,7 @@ export class DadChart extends DadElement{
 }
 @Component({
     selector: 'dadchart',
-    providers:[DadElementDataService],
+    providers:[DadElementDataService,DadTableConfigsService],
     template: `
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
@@ -88,7 +89,9 @@ export class DadChartComponent implements OnInit {
     editMode:boolean = false;
     refreshMode:boolean = false;
 
-  constructor(private dadChartDataService: DadElementDataService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private dadChartDataService: DadElementDataService,
+              private dadTableConfigsService : DadTableConfigsService,
+              private router: Router, private route: ActivatedRoute) {}
 
   onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
@@ -172,21 +175,21 @@ export class DadChartComponent implements OnInit {
   drillFromElement(data){
     if (this.chart.action = 'drillFromElement') {
 
+      let self = this;
       let eventHandler = this.goToTable;
       let chart = this.chart;
       let route = this.route;
       let router = this.router;
 
       data.onclick = function (d, element) {
-        eventHandler(d, chart, router, route);
+        eventHandler(d, chart, router, route, self);
       };
     }
   }
 
   //mini applied
   drawChartBar(chartConfig:DadChart, data) {
-    let chartData = this.mapper.map(chartConfig, data);
-    let bardata = chartData;
+    let bardata = this.mapper.map(chartConfig, data);
 
     bardata.selection = {
       enabled: true,
@@ -266,7 +269,7 @@ export class DadChartComponent implements OnInit {
 
 if (chartConfig.regionM){
     c3Config.regions =[
-      {start: this.indexOfRegions(chartData)},
+      {start: this.indexOfRegions(bardata)},
     ];
 }
 
@@ -309,7 +312,7 @@ if (chartConfig.regionM){
       let router = this.router;
 
       this.c3chart.internal.main.on('click', function (d) {
-            eventHandler(d, chart, router, route);
+            eventHandler(d, chart, router, route, self);
           }
       );
     };
@@ -330,14 +333,38 @@ if (chartConfig.regionM){
     router.navigate(['bigchart', chart.id], { relativeTo: route});
   };
 
-  goToTable(d,chart,router,route){
-  router.navigate(['table', 100, chart.id], { relativeTo: route});
+  goToTable(d,chart:DadChart,router,route, self){
+
+    //create the table
+    let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
+    let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
+
+    tableConfig.id += self.chart.id + d.id;
+    tableConfig.filter = { } ;
+
+    //let find the attribute   come in the reducer dimensin
+
+    let attribute = chart.reduction.dimension.attribute;
+
+    let value;
+
+    if (chart.type === 'pie') value = d.id;
+    if (chart.type === 'bar') {
+        value = chart.mappedData.columns[0][d.x + 1];
+    }
+
+    tableConfig.filter[attribute] = value;
+
+    self.dadTableConfigsService.saveOne(tableConfig);
+
+    //go to that table
+    router.navigate(['table', d.value, chart.id,  tableConfig.id], { relativeTo: route});
 };
+
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
-    let chartData = this.mapper.map(chartConfig, data);
-    let piedata = chartData;
+    let piedata = this.mapper.map(chartConfig, data);
 
     piedata.selection = {
       enabled: true
