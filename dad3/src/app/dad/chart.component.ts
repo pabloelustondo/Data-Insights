@@ -347,17 +347,24 @@ if (chartConfig.regionM){
 
     let value;
 
-    if (chart.type === 'pie') value = d.id;
+
+    if (chart.type === 'pie') {
+      value = d.id;
+    }
     if (chart.type === 'bar') {
         value = chart.mappedData.columns[0][d.x + 1];
     }
 
     tableConfig.filter[attribute] = value;
 
+    let filter = new DadFilter();
+    let filteredData = filter.filter(tableConfig, chart.data);
+    let count = filteredData.length;
+
     self.dadTableConfigsService.saveOne(tableConfig);
 
     //go to that table
-    router.navigate(['table', chart.mappedData.columns[0].length, chart.id,  tableConfig.id], { relativeTo: route});
+    router.navigate(['table', count , chart.id,  tableConfig.id], { relativeTo: route});
 };
 
   //mini applied
