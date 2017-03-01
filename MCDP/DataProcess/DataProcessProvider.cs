@@ -17,10 +17,19 @@ namespace Soti.MCDP.DataProcess
     /// </summary>
     public class DataProcessProvider : IDataProcessProvider
     {
+
+        private const string Devstatint = "DeviceStatInt";
+
+        private const string Devstatapplication = "DeviceStatApplication";
         /// <summary>
         ///     get Data Tracker Path.
         /// </summary>
         private readonly string _dataTrackerPath;
+
+        /// <summary>
+        ///     get Supported Data Table Path.
+        /// </summary>
+        private readonly string _supportedDataTablePath;
 
         /// <summary>
         ///     get Unput Data Adapter (Ida) URL.
@@ -85,6 +94,8 @@ namespace Soti.MCDP.DataProcess
 
         private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
 
+        private List<string> _supportedDataTable = new List<string>();
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceStatIntProvider" /> class.
         /// </summary>
@@ -110,6 +121,8 @@ namespace Soti.MCDP.DataProcess
                     ConfigurationManager.AppSettings["JWTTokenName"]);
                 _dataTrackerPath = Path.Combine(Directory.GetCurrentDirectory(),
                     ConfigurationManager.AppSettings["DataTracker"]);
+                _supportedDataTablePath = Path.Combine(Directory.GetCurrentDirectory(),
+                    ConfigurationManager.AppSettings["SupportedDataTable"]);
                 _batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["batchSize"]);
                 //LOADING DATABASE PROVIDER
                 Init();
@@ -139,24 +152,60 @@ namespace Soti.MCDP.DataProcess
                     _expiredJwtToken = HandShakeToIda(_jwtToken);
                     Log(logMessage + "[INFO] ExpiredJWTToken: " + _expiredJwtToken);
                 }
-             
-                if (!File.Exists(_dataTrackerPath)) return;
 
-                var result =
-                    JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
-
-                if (result == null) return;
-
-                foreach (var item in result)
-                {
-                    _deviceSyncStausList.Add(item.Key, item.Value);
-                }
+                ExtractDataTracker();
+                
+                ExtractSupportedDataTable();
+               
             }
             catch (Exception ex)
             {
                 var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
                 Log(logMessage + "[ERROR] " + ex);
+            }
+        }
+
+        private void ExtractSupportedDataTable()
+        {
+            if (!File.Exists(_supportedDataTablePath))
+            {
+                _supportedDataTable.Add(Devstatint);
+                _supportedDataTable.Add(Devstatapplication);
+
+                File.WriteAllText(_supportedDataTablePath, JsonConvert.SerializeObject(_supportedDataTable));
+            }
+
+            var result =
+                JsonConvert.DeserializeObject<List<string>>(
+                    File.ReadAllText(_supportedDataTablePath));
+
+            if (result == null) return;
+
+            foreach (var item in result)
+            {
+                _supportedDataTable.Add(item);
+            }
+        }
+
+        private void ExtractDataTracker()
+        {
+            if (!File.Exists(_dataTrackerPath)) return;
+
+            var result =
+                JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(
+                    File.ReadAllText(_dataTrackerPath));
+
+            if (result == null) return;
+
+            foreach (var item in result)
+            {
+                //ignore inprogress when restart services.
+                if (item.Value.Status == 1)
+                {
+                    item.Value.Status = -1;
+                }
+                _deviceSyncStausList.Add(item.Key, item.Value);
             }
         }
 
@@ -175,68 +224,74 @@ namespace Soti.MCDP.DataProcess
             if (_numberOfConsecutiveDbFailures < _maxNumberOfConsecutiveDbFailures
                 && _numberOfConsecutiveIdaFailures < _maxNumberOfConsecutiveIdaFailures)
             {
-                
-                try
+                if (_supportedDataTable.Contains(Devstatint))
                 {
-                    var idaData = _deviceStatIntProvider.RetrieveDeviceStatIntData(_batchSize);
-                    
-                    if (idaData != "")
-                        try
-                        {
-                            SendData2Ida(idaData, "DeviceStatInt");
+                    try
+                    {
+                        var idaData = _deviceStatIntProvider.RetrieveDeviceStatIntData(_batchSize);
 
-                            _deviceStatIntProvider.ConfirmStatusData(true); // this shouuld go somewhere else later... 
+                        if (idaData != "")
+                            try
+                            {
+                                SendData2Ida(idaData, "DeviceStatInt");
 
-                            logMessage += "[INFO] new data to be sent.";
-                            // write to log the success of the operation
-                            Log(logMessage);
-                        }
-                        catch (Exception ex)
-                        {
-                            // this expcetion is due to problems when sending data to input data adapter
-                            _numberOfConsecutiveIdaFailures += 1;
-                            _deviceStatIntProvider.ConfirmStatusData(false);
-                            Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
-                        }
+                                _deviceStatIntProvider.ConfirmStatusData(true);
+                                    // this shouuld go somewhere else later... 
+
+                                logMessage += "[INFO] new data to be sent.";
+                                // write to log the success of the operation
+                                Log(logMessage);
+                            }
+                            catch (Exception ex)
+                            {
+                                // this expcetion is due to problems when sending data to input data adapter
+                                _numberOfConsecutiveIdaFailures += 1;
+                                _deviceStatIntProvider.ConfirmStatusData(false);
+                                Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
+                            }
+                    }
+                    catch (Exception eDb)
+                    {
+                        // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
+                        _numberOfConsecutiveDbFailures += 1;
+
+                        Log(logMessage + "[ERROR] Error reading database: " + eDb);
+                    }
                 }
-                catch (Exception eDb)
-                {
-                    // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
-                    _numberOfConsecutiveDbFailures += 1;
-
-                    Log(logMessage + "[ERROR] Error reading database: " + eDb);
-                }
-
                 //we only call the database is the number of failures of any type is less than the permitted.
-                try
+                if (_supportedDataTable.Contains(Devstatapplication))
                 {
-                    var idaData = _deviceStatApplicationProvider.RetrieveDeviceStatApplicationData(_batchSize);
-                    
-                    if (idaData != "")
-                        try
-                        {
-                            SendData2Ida(idaData, "DeviceStatInt");
+                    try
+                    {
+                        var idaData = _deviceStatApplicationProvider.RetrieveDeviceStatApplicationData(_batchSize);
 
-                            _deviceStatApplicationProvider.ConfirmStatusData(true); // this shouuld go somewhere else later... 
+                        if (idaData != "")
+                            try
+                            {
+                                SendData2Ida(idaData, "DeviceStatInt");
 
-                            logMessage += "[INFO] new data to be sent.";
-                            // write to log the success of the operation
-                            Log(logMessage);
-                        }
-                        catch (Exception ex)
-                        {
-                            // this expcetion is due to problems when sending data to input data adapter
-                            _numberOfConsecutiveIdaFailures += 1;
-                            _deviceStatApplicationProvider.ConfirmStatusData(false);
-                            Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
-                        }
-                }
-                catch (Exception eDb)
-                {
-                    // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
-                    _numberOfConsecutiveDbFailures += 1;
+                                _deviceStatApplicationProvider.ConfirmStatusData(true);
+                                    // this shouuld go somewhere else later... 
 
-                    Log(logMessage + "[ERROR] Error reading database: " + eDb);
+                                logMessage += "[INFO] new data to be sent.";
+                                // write to log the success of the operation
+                                Log(logMessage);
+                            }
+                            catch (Exception ex)
+                            {
+                                // this expcetion is due to problems when sending data to input data adapter
+                                _numberOfConsecutiveIdaFailures += 1;
+                                _deviceStatApplicationProvider.ConfirmStatusData(false);
+                                Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
+                            }
+                    }
+                    catch (Exception eDb)
+                    {
+                        // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
+                        _numberOfConsecutiveDbFailures += 1;
+
+                        Log(logMessage + "[ERROR] Error reading database: " + eDb);
+                    }
                 }
             }
             else

@@ -76,7 +76,7 @@ namespace Soti.MCDP.Database
         public static string Load()
         {
             try
-            {
+            { 
                 var regkey =
                     Registry.LocalMachine.OpenSubKey(
                         $@"SYSTEM\CurrentControlSet\services\{ConfigurationManager.AppSettings["MCName"]}");

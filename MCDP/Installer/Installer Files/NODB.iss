@@ -13,7 +13,7 @@
 #define MyAppIcon SourcePath + "\images.ico"
 
 [Setup]
-AppId = {{36A3C11A-C8CA-43DC-8546-6AD7FA5E0A4C}
+AppId = {{F268B5D3-CF35-4DD7-83D3-F12EC178D50E}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppPublisher={#MyAppPublisher}
@@ -27,16 +27,16 @@ LicenseFile={#file AddBackslash(SourcePath) + "license.txt"}
 OutputDir=bin
 OutputBaseFilename=MobiControlDataAdaptor
 SetupIconFile={#MyAppIcon}
-Compression=lzma2
-SolidCompression=yes
+;Compression=lzma2
+;SolidCompression=yes
 
 ; "ArchitecturesAllowed=x64" specifies that Setup cannot run on
 ; anything but x64.
-ArchitecturesAllowed=x64
+;ArchitecturesAllowed=x64
 ; "ArchitecturesInstallIn64BitMode=x64" requests that the install be
 ; done in "64-bit mode" on x64, meaning it should use the native
 ; 64-bit Program Files directory and the 64-bit view of the registry.
-ArchitecturesInstallIn64BitMode=x64
+;ArchitecturesInstallIn64BitMode=x64
 
 ;[Languages]
 ;Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -70,7 +70,7 @@ Filename: "sc.exe"; Parameters: "delete {#MyAppExeNameOnly}"; Flags: runascurren
    //Pre checkup
    function InitializeSetup(): Boolean;
    begin
-     if (FileExists(ExpandConstant('{pf}\SOTI\MobiControl\Database.config'))) then
+     if RegKeyExists(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\services\MobiControl Management Service')  then
      begin
        //MsgBox('Installation validated', mbInformation, MB_OK);
         if (FileExists(ExpandConstant('{src}\mcdp_access.key'))) then
