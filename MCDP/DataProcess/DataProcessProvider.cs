@@ -79,34 +79,47 @@ namespace Soti.MCDP.DataProcess
 
         private bool _processing;
 
-        private IDeviceStatApplicationProvider _deviceStatApplicationProvider;
+        private readonly IDeviceStatApplicationProvider _deviceStatApplicationProvider;
 
-        private IDeviceStatIntProvider _deviceStatIntProvider;
-       
+        private readonly IDeviceStatIntProvider _deviceStatIntProvider;
+
         private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceStatIntProvider" /> class.
         /// </summary>
-        public DataProcessProvider()
+        public DataProcessProvider(IDeviceStatApplicationProvider deviceStatApplicationProvider, IDeviceStatIntProvider deviceStatIntProvider, Dictionary<string, DeviceSyncStatus> deviceSyncStatusList)
         {
-            _maxNumberOfConsecutiveDbFailures =
-                Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveDBFailures"]);
-            _maxNumberOfConsecutiveIdaFailures =
-                Convert.ToInt16(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveIDAFailures"]);
-            _maxDbRetryAfterFailureDelay = Convert.ToInt16(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
-            _maxIdaRetryAfterFailureDelay =
-                Convert.ToInt16(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
-            _idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
-            _idaHandShakeUrl = ConfigurationManager.AppSettings["idaHandShakeUrl"];
+            _deviceStatApplicationProvider = deviceStatApplicationProvider;
+            _deviceStatIntProvider = deviceStatIntProvider;
+            _deviceSyncStausList = deviceSyncStatusList;
+            try
+            {
+                _maxNumberOfConsecutiveDbFailures =
+                    Convert.ToInt32(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveDBFailures"]);
+                _maxNumberOfConsecutiveIdaFailures =
+                    Convert.ToInt32(ConfigurationManager.AppSettings["MaxNumberOfConsecutiveIDAFailures"]);
+                _maxDbRetryAfterFailureDelay =
+                    Convert.ToInt32(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
+                _maxIdaRetryAfterFailureDelay =
+                    Convert.ToInt32(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
+                _idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
+                _idaHandShakeUrl = ConfigurationManager.AppSettings["idaHandShakeUrl"];
 
-            _jwtTokenPath = Path.Combine(Directory.GetCurrentDirectory(),
-                ConfigurationManager.AppSettings["JWTTokenName"]);
-            _dataTrackerPath = Path.Combine(Directory.GetCurrentDirectory(),
-                ConfigurationManager.AppSettings["DataTracker"]);
-            _batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["batchSize"]);
-            //LOADING DATABASE PROVIDER
-            Init();
+                _jwtTokenPath = Path.Combine(Directory.GetCurrentDirectory(),
+                    ConfigurationManager.AppSettings["JWTTokenName"]);
+                _dataTrackerPath = Path.Combine(Directory.GetCurrentDirectory(),
+                    ConfigurationManager.AppSettings["DataTracker"]);
+                _batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["batchSize"]);
+                //LOADING DATABASE PROVIDER
+                Init();
+            }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+
+                Log(logMessage + "[ERROR] DataProcessProvider: " + ex);
+            }
         }
 
         /// <summary>
@@ -126,26 +139,18 @@ namespace Soti.MCDP.DataProcess
                     _expiredJwtToken = HandShakeToIda(_jwtToken);
                     Log(logMessage + "[INFO] ExpiredJWTToken: " + _expiredJwtToken);
                 }
+             
+                if (!File.Exists(_dataTrackerPath)) return;
 
-                _deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
+                var result =
+                    JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
 
-                if (File.Exists(_dataTrackerPath))
+                if (result == null) return;
+
+                foreach (var item in result)
                 {
-                    var result =
-                        JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
-                        
-                    if (result != null)
-                    {
-                        foreach (var item in result)
-                        {
-                            _deviceSyncStausList.Add(item.Key, item.Value);
-                        }
-                    }
+                    _deviceSyncStausList.Add(item.Key, item.Value);
                 }
-
-                _deviceStatIntProvider = new DeviceStatIntProvider(_deviceSyncStausList);
-                _deviceStatApplicationProvider = new DeviceStatApplicationProvider(_deviceSyncStausList);
-
             }
             catch (Exception ex)
             {
@@ -164,15 +169,17 @@ namespace Soti.MCDP.DataProcess
                 return;
             _processing = true; // this avvoid running one process when the other did not finish.
 
+            // we only call the database is the number of failures of any type is less than the permitted. 
+            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+
             if (_numberOfConsecutiveDbFailures < _maxNumberOfConsecutiveDbFailures
                 && _numberOfConsecutiveIdaFailures < _maxNumberOfConsecutiveIdaFailures)
             {
-                // we only call the database is the number of failures of any type is less than the permitted. 
+                
                 try
                 {
                     var idaData = _deviceStatIntProvider.RetrieveDeviceStatIntData(_batchSize);
-                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
+                    
                     if (idaData != "")
                         try
                         {
@@ -197,15 +204,14 @@ namespace Soti.MCDP.DataProcess
                     // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                     _numberOfConsecutiveDbFailures += 1;
 
-                    Log("[ERROR] Error reading database: " + eDb);
+                    Log(logMessage + "[ERROR] Error reading database: " + eDb);
                 }
 
-                // we only call the database is the number of failures of any type is less than the permitted. 
+                //we only call the database is the number of failures of any type is less than the permitted.
                 try
                 {
                     var idaData = _deviceStatApplicationProvider.RetrieveDeviceStatApplicationData(_batchSize);
-                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
+                    
                     if (idaData != "")
                         try
                         {
@@ -230,7 +236,7 @@ namespace Soti.MCDP.DataProcess
                     // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                     _numberOfConsecutiveDbFailures += 1;
 
-                    Log("[ERROR] Error reading database: " + eDb);
+                    Log(logMessage + "[ERROR] Error reading database: " + eDb);
                 }
             }
             else
@@ -254,8 +260,7 @@ namespace Soti.MCDP.DataProcess
                     _dBSkippedAfterFailure = 0;
                     _idaSkippedAfterFailure = 0;
                 }
-
-                Log("[INFO] Skipping Cycling due to reach maximum retry and failure count.");
+                Log(logMessage + "[INFO] Skipping Cycling due to reach maximum retry and failure count.");
             }
 
             _processing = false; // this will enable other attempts to process to go ahead.
@@ -305,7 +310,7 @@ namespace Soti.MCDP.DataProcess
                     var result = client.UploadString(url, "POST", ida4Data);
                     var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
-                    Log(logMessage + "[INFO] (80) " + result);
+                    Log(logMessage + "[INFO] " + result);
                 }
             }
             catch (Exception ex)

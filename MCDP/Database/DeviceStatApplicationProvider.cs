@@ -43,23 +43,22 @@ namespace Soti.MCDP.Database
         /// <summary>
         /// Device Sync Staus List
         /// </summary>
-        private Dictionary<string, DeviceSyncStatus> DeviceSyncStausList { get; set; }
+        private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
         /// <summary>
         ///     Initializes a new instance of the <see cref="DeviceStatApplicationProvider" /> class.
         /// </summary>
         public DeviceStatApplicationProvider(Dictionary<string, DeviceSyncStatus> deviceSyncStausList)
         {
-            DeviceSyncStausList = deviceSyncStausList;
+            _deviceSyncStausList = deviceSyncStausList;
 
             try
             {
                 _dataTrackerPath = Path.Combine(Directory.GetCurrentDirectory(),
                     ConfigurationManager.AppSettings["DataTracker"]);
 
-                _mobicontrolDatabaseConnectionString =
-                    DatabaseSection.LoadConnectionString(ConfigurationManager.AppSettings["MCPath"]);
+                _mobicontrolDatabaseConnectionString = DatabaseSection.Load();
 
-                _datdatabaseTimeout = Convert.ToInt16(ConfigurationManager.AppSettings["waitDatabaseTimeout"]);
+                _datdatabaseTimeout = Convert.ToInt32(ConfigurationManager.AppSettings["waitDatabaseTimeout"]);
             }
             catch (Exception ex)
             {
@@ -82,14 +81,14 @@ namespace Soti.MCDP.Database
                 //time tracker for lasttime
                 var lasttime = new object();
 
-                if (DeviceSyncStausList.ContainsKey(TableName) && DeviceSyncStausList[TableName].Status == 1)        //In progress with skipped preventing overlapping
+                if (_deviceSyncStausList.ContainsKey(TableName) && _deviceSyncStausList[TableName].Status == 1)        //In progress with skipped preventing overlapping
                     return "";
-                else if (DeviceSyncStausList.ContainsKey(TableName) && DeviceSyncStausList[TableName].Status == 0)   //previous call is successed
+                else if (_deviceSyncStausList.ContainsKey(TableName) && _deviceSyncStausList[TableName].Status == 0)   //previous call is successed
                 {
                     var queryLastTime = "Select min(a.ts) from (select top " + batchSize +
-                                        " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) where StartTime > "
-                                        + DeviceSyncStausList[TableName].LastSyncTime +
-                                        " order by [StartTime] desc ) a ";
+                                        " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) where StartTime > '"
+                                        + _deviceSyncStausList[TableName].LastSyncTime +
+                                        "' order by [StartTime] desc ) a ";
 
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
                     {
@@ -104,12 +103,12 @@ namespace Soti.MCDP.Database
                         lasttime = cmd.ExecuteScalar();
                     }
                 }
-                else if (DeviceSyncStausList.ContainsKey(TableName) && DeviceSyncStausList[TableName].Status == -1)   //previous call is failed
+                else if (_deviceSyncStausList.ContainsKey(TableName) && _deviceSyncStausList[TableName].Status == -1)   //previous call is failed
                 {
                     var queryLastTime = "Select min(a.ts) from (select top " + batchSize +
-                                        " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) where StartTime > "
-                                        + DeviceSyncStausList[TableName].PreviousSyncTime +
-                                        " order by [StartTime] desc ) a ";
+                                        " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) where StartTime > '"
+                                        + _deviceSyncStausList[TableName].PreviousSyncTime +
+                                        "' order by [StartTime] desc ) a ";
 
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
                     {
@@ -124,7 +123,7 @@ namespace Soti.MCDP.Database
                         lasttime = cmd.ExecuteScalar();
                     }
                 }
-                else if (!DeviceSyncStausList.ContainsKey(TableName)) //initial stage without data in table
+                else if (!_deviceSyncStausList.ContainsKey(TableName)) //initial stage without data in table
                 {
                     var queryLastTime = "Select min(a.ts) from (select top " + batchSize +
                                         " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) order by [StartTime] desc ) a ";
@@ -172,9 +171,9 @@ namespace Soti.MCDP.Database
                                     DevId = reader.GetString(0),
                                     AppId = reader.GetString(1),
                                     StartTime = reader.GetDateTime(2).ToString(CultureInfo.InvariantCulture),
-                                    EndTime = reader.GetDateTime(2).ToString(CultureInfo.InvariantCulture),
-                                    StartTimeRounded = reader.GetDateTime(2).ToString(CultureInfo.InvariantCulture),
-                                    EndTimeRounded = reader.GetDateTime(2).ToString(CultureInfo.InvariantCulture)
+                                    EndTime = reader.GetDateTime(3).ToString(CultureInfo.InvariantCulture),
+                                    StartTimeRounded = reader.GetDateTime(4).ToString(CultureInfo.InvariantCulture),
+                                    EndTimeRounded = reader.GetDateTime(5).ToString(CultureInfo.InvariantCulture)
                                 });
                             }
                         } 
@@ -204,11 +203,11 @@ namespace Soti.MCDP.Database
             {
                 const string queryCount = "select count(1) from dbo.DeviceStatApplication WITH (NOLOCK)";
 
-                if (DeviceSyncStausList.ContainsKey(TableName))
+                if (_deviceSyncStausList.ContainsKey(TableName))
                 {
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
                     {
-                        var cmd = new SqlCommand(queryCount + " where StartTime > " + DeviceSyncStausList[TableName].LastSyncTime, sqlConnection)
+                        var cmd = new SqlCommand(queryCount + " where StartTime > '" + _deviceSyncStausList[TableName].LastSyncTime + "'", sqlConnection)
                         {
                             CommandType = CommandType.Text,
                             CommandTimeout = _datdatabaseTimeout
@@ -257,14 +256,14 @@ namespace Soti.MCDP.Database
         public void ConfirmStatusData(bool pass)
         {
 
-            if (DeviceSyncStausList[TableName] != null && pass)
+            if (_deviceSyncStausList[TableName] != null && pass)
             {
-                DeviceSyncStausList[TableName].PreviousSyncTime = DeviceSyncStausList[TableName].LastSyncTime;
-                DeviceSyncStausList[TableName].Status = 0;
+                _deviceSyncStausList[TableName].PreviousSyncTime = _deviceSyncStausList[TableName].LastSyncTime;
+                _deviceSyncStausList[TableName].Status = 0;
             }
-            else if (DeviceSyncStausList[TableName] != null && !pass)
+            else if (_deviceSyncStausList[TableName] != null && !pass)
             {
-                DeviceSyncStausList[TableName].Status = -1;
+                _deviceSyncStausList[TableName].Status = -1;
             }
 
             try
@@ -290,18 +289,18 @@ namespace Soti.MCDP.Database
             {
                 lock (_factLock)
                 {
-                    if (!DeviceSyncStausList.ContainsKey(TableName))
+                    if (!_deviceSyncStausList.ContainsKey(TableName))
                     {
-                        DeviceSyncStausList.Add(TableName, new DeviceSyncStatus(TableName, 1, lasttime.ToString(), ""));
+                        _deviceSyncStausList.Add(TableName, new DeviceSyncStatus(TableName, 1, lasttime.ToString(), ""));
                     }
                     else
                     {
                         //update device Sync Status Table
-                        DeviceSyncStausList[TableName] = new DeviceSyncStatus()
+                        _deviceSyncStausList[TableName] = new DeviceSyncStatus()
                         {
                             Name = TableName,
                             LastSyncTime = lasttime.ToString(),
-                            PreviousSyncTime = DeviceSyncStausList[TableName].LastSyncTime,
+                            PreviousSyncTime = _deviceSyncStausList[TableName].LastSyncTime,
                             Status = status
                         };
                     }
@@ -334,17 +333,24 @@ namespace Soti.MCDP.Database
         {
             try
             {
+                var json = new Dictionary<string, DeviceSyncStatus>();
                 // serialize JSON to a string and then write string to a file
-                var json = JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(
-                               File.ReadAllText(_dataTrackerPath)) ?? new Dictionary<string, DeviceSyncStatus>();
-
-                if (json.ContainsKey(TableName))
+                if (File.Exists(_dataTrackerPath))
                 {
-                    json[TableName] = DeviceSyncStausList[TableName];
+                    json = JsonConvert.DeserializeObject<Dictionary<string, DeviceSyncStatus>>(File.ReadAllText(_dataTrackerPath));
+
+                    if (json.ContainsKey(TableName))
+                    {
+                        json[TableName] = _deviceSyncStausList[TableName];
+                    }
+                    else
+                    {
+                        json.Add(TableName, _deviceSyncStausList[TableName]);
+                    }
                 }
                 else
                 {
-                    json.Add(TableName, DeviceSyncStausList[TableName]);
+                    json.Add(TableName, _deviceSyncStausList[TableName]);
                 }
                 File.WriteAllText(_dataTrackerPath, JsonConvert.SerializeObject(json));
             }

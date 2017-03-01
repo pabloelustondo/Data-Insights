@@ -1,4 +1,6 @@
-﻿namespace Soti.MCDP
+﻿using System.ServiceProcess;
+
+namespace Soti.MCDP
 {
     internal static class Program
     {
@@ -14,12 +16,11 @@
                 System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
             
 #else
-                ServiceBase[] ServicesToRun;
-                ServicesToRun = new ServiceBase[]
-                {
-                    new MCDP()
-                };
-                ServiceBase.Run(ServicesToRun);
+            var servicesToRun = new ServiceBase[]
+            {
+                new MCDP()
+            };
+                ServiceBase.Run(servicesToRun);
             
 #endif
 
