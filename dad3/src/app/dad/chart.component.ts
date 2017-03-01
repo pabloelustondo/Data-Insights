@@ -22,6 +22,7 @@ export class DadChart extends DadElement{
     bname?: String;
     action?: String;
     widgetClickChart?: boolean = false;
+    drillchart?:any;
 }
 @Component({
     selector: 'dadchart',
