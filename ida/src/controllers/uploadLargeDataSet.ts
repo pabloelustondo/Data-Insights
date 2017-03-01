@@ -62,6 +62,8 @@ export class UploadLargeDataSetController {
 
 
         let req = express;
+        let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress ||
+        req.socket.remoteAddress ;
         let token = req.headers['x-access-token'];
         let contentType = req.headers['content-type'];
 
@@ -88,13 +90,24 @@ export class UploadLargeDataSetController {
 
 
             let awsResponseCall = function (awsP: any) {
-                let promise = new Promise(function (resolve) {
+                let promise = new Promise(function (resolve, reject) {
                     let uploadParams = {Bucket: config['aws-s3bucket'], Key: '', Body: ''};
-                    uploadParams.Body = JSON.stringify(express.body);
+                    let xyz = {
+                        idaMetadata : {
+                            referer: 'sampleData',
+                            agentId: 'test-id',
+                            timeStamp: (new Date()).toISOString,
+                        },
+                        clientData : express.body
+                    };
+
+                    xyz.clientData = express.body;
+                    uploadParams.Body = JSON.stringify(xyz);
                     uploadParams.Key = path.basename(awsP.tenantid + '.' + awsP.agentid + '.' + (new Date()).toISOString() + '.json');
                     s3instance.upload(uploadParams, function (err: any, data: any) {
                         if (err) {
-                            console.log('error', err);
+                            err.code = 'External Error, contact SOTI support with code 0001';
+                            reject(err.code);
                         }
                         if (data) {
 
@@ -118,6 +131,7 @@ export class UploadLargeDataSetController {
                     };
 
                     resolve(user);
+
                 });
                 return promise;
             };
