@@ -128,6 +128,7 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
+    drillTo: 'chartpiedrill',
     data:[{
       CountDevicesNotLastedShift:50,
       CountTotalActiveDevices: 90,
@@ -191,6 +192,7 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: 'table1',
     endpoint:'BatteryMetrics',
+    drillTo: 'chartpiedrill',
     data:[{
       CountDevicesNotLastedShift:200,
       CountDevicesNotFullyCharged: 80,

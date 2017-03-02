@@ -133,19 +133,16 @@ export const CHARTS: DadChart[] = [
             {DevId:'vzfsvzfsvzfsvz7', LastBatteryStatus:40, BatteryChargeHistory:JSON.stringify([5,6,12,7,8,9]),os:'Android', brand:'Motorola', model: "Z Force Droid", carrier: "Bell"  },
             {DevId:'vzfsvzfsvzfsvz8', LastBatteryStatus:50, BatteryChargeHistory:JSON.stringify([5,6,13,7,8,9]),os:'Android', brand:'Blackberry', model: "Bold", carrier:  "chatr" },
             {DevId:'vzfsvzfsvzfsvz9', LastBatteryStatus:90, BatteryChargeHistory:JSON.stringify([5,6,14,7,8,9]),os:'Windows', brand:'Nokia', model: "3310", carrier:  "Sears Connect" },
-            {DevId:'vzfsvzfsvzfsvz10', LastBatteryStatus:95, BatteryChargeHistory:JSON.stringify([5,6,15,7,8,9]),os:'Android', brand:'Samsung'  }
+            {DevId:'vzfsvzfsvzfsvz10', LastBatteryStatus:95, BatteryChargeHistory:JSON.stringify([5,6,15,7,8,9]),os:'Android', brand:'Samsung', model: "S5", carrier:  "Sears Connect"   }
         ],
         reduction:{
-            name:"asdasd",
             dimension: {attribute: 'os', name:'OS'},
             metric: {attribute:'DevId', op:'count', name:'Number of Devices'}},
         reductions:[
-            {     name:"asdasd",
-                dimension: {attribute: 'model', name:'Model'},
+            {dimension: {attribute: 'model', name:'Model'},
                 metric: {attribute:'DevId', op:'count', name:'Number of Devices'}},
 
-            {     name:"asdasd",
-                dimension: {attribute: 'carrier', name:'Carrier'},
+            {dimension: {attribute: 'carrier', name:'Carrier'},
                 metric: {attribute:'DevId', op:'count', name:'Number of Devices'}},
 
             {dimension: {attribute: 'brand', name:'Brand'},
@@ -202,7 +199,7 @@ export const CHARTS: DadChart[] = [
             {DevId:'vzfsvzfsvzfsvz7', LastBatteryStatus:40, BatteryChargeHistory:JSON.stringify([5,6,12,7,8,9]),os:'Android', brand:'Motorola', model: "Z Force Droid", carrier: "Bell"  },
             {DevId:'vzfsvzfsvzfsvz8', LastBatteryStatus:50, BatteryChargeHistory:JSON.stringify([5,6,13,7,8,9]),os:'Android', brand:'Blackberry', model: "Bold", carrier:  "chatr" },
             {DevId:'vzfsvzfsvzfsvz9', LastBatteryStatus:90, BatteryChargeHistory:JSON.stringify([5,6,14,7,8,9]),os:'Windows', brand:'Nokia', model: "3310", carrier:  "Sears Connect" },
-            {DevId:'vzfsvzfsvzfsvz10', LastBatteryStatus:95, BatteryChargeHistory:JSON.stringify([5,6,15,7,8,9]),os:'Android', brand:'Samsung'  }
+            {DevId:'vzfsvzfsvzfsvz10', LastBatteryStatus:95, BatteryChargeHistory:JSON.stringify([5,6,15,7,8,9]),os:'Android', brand:'Samsung', model: "S5", carrier:  "Sears Connect"   }
         ],
         reduction:{
             dimension: {attribute: 'os', name:'OS'},

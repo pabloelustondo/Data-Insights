@@ -7,7 +7,7 @@
   "aws-path":  "/test/function_one",
   "aws-dischargecontroller":  "/test/multiplePosts",
   "aws-region": "us-east-1",
-  "aws-s3bucket": "da-s3-bucket/test4",
+  "aws-s3bucket": "da-s3-bucket/DataExchange",
   "aws-accessKeyFileLocation": "C:/users/vdave/webstormprojects/untitled/IDA_accessKeyID.txt",
   "aws-secretKeyFileLocation": "C:/users/vdave/webstormprojects/untitled/IDA_secretAccessKey.txt",
   "https-key-location" : "C:/users/vdave/webstormprojects/untitled/CustomerBI/ida/src/63663247-localhost_3002.key",

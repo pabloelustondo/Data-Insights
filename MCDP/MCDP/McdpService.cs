@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceProcess;
 using System.Timers;
 using Soti.MCDP.DataProcess;
+using Soti.MCDP.Database;
+using Soti.MCDP.Database.Model;
 
 namespace Soti.MCDP
 {
@@ -21,6 +24,13 @@ namespace Soti.MCDP
         private Timer _mcdpTimer = null;
 
         private DataProcessProvider _dataProcessProvider = null;
+
+        private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
+
+        private IDeviceStatApplicationProvider _deviceStatApplicationProvider;
+
+        private IDeviceStatIntProvider _deviceStatIntProvider;
+
 
         public MCDP()
         {
@@ -53,19 +63,26 @@ namespace Soti.MCDP
         /// </summary>
         private void InitPollService()
         {
+            this._deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
+            this._deviceStatApplicationProvider = new DeviceStatApplicationProvider(_deviceSyncStausList);
+            this._deviceStatIntProvider = new DeviceStatIntProvider(_deviceSyncStausList);
+
             this._pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
 
+            //make default min value to 1 second
+            if (this._pollinginterval < 1000)
+                this._pollinginterval = 1000;
             //LOADING Process PROVIDER
-            _dataProcessProvider = new DataProcessProvider();
+            _dataProcessProvider = new DataProcessProvider(_deviceStatApplicationProvider, _deviceStatIntProvider, _deviceSyncStausList);
 
-            //this._mcdpTimer = new Timer(this._pollinginterval)
-            //{
-            //    Enabled = true,
-            //    AutoReset = true
-            //};
-            //this._mcdpTimer.Elapsed += McdpTimerProcess;
-            //this._mcdpTimer.Start();
-            _dataProcessProvider.McdpTimerProcess();
+            this._mcdpTimer = new Timer(this._pollinginterval)
+            {
+                Enabled = true,
+                AutoReset = true
+            };
+            this._mcdpTimer.Elapsed += McdpTimerProcess;
+            this._mcdpTimer.Start();
+
         }
 
         /// <summary>

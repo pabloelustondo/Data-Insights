@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace Soti.MCDP.Database
 {
@@ -71,47 +73,34 @@ namespace Soti.MCDP.Database
         ///     Loads the database configuration for the local system.
         /// </summary>
         /// <returns>The database configuration.</returns>
-        public static DatabaseSection Load()
+        public static string Load()
         {
-            return Load(Directory.GetCurrentDirectory());
-        }
+            try
+            { 
+                var regkey =
+                    Registry.LocalMachine.OpenSubKey(
+                        $@"SYSTEM\CurrentControlSet\services\{ConfigurationManager.AppSettings["MCName"]}");
 
-        /// <summary>
-        ///     Loads the database configuration from the given location.
-        /// </summary>
-        /// <param name="path">The path to the MobiControl installation files.</param>
-        /// <returns>The database configuration.</returns>
-        private static DatabaseSection Load(string path)
-        {
-            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+                if (regkey != null && regkey.GetValue("ImagePath") == null)
+                    return "Not Found";
+                else if (regkey != null)
+                {
+                    var mcPath = Path.GetInvalidPathChars().Aggregate(regkey.GetValue("ImagePath").ToString(), (current,c)=> current.Replace(c.ToString(), string.Empty));
 
-            if (path == null)
-                Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
-
-
-            var config = GetConfiguration(path);
-
-            var settings = config.ConnectionStrings.ConnectionStrings["DbConnectionString"];
-            if (settings == null)
-                Log(logMessage + "[ERROR] Database section does not have an associated file!");
-
-            if (settings == null) return null;
-
-            var builder = new SqlConnectionStringBuilder(settings.ConnectionString);
-
-            return new DatabaseSection
+                    var path = Path.GetDirectoryName(mcPath);
+                    return LoadConnectionString(path);
+                }
+                else return "";
+            }
+            catch (Exception ex)
             {
-                DatabaseName = builder.InitialCatalog,
-                ServerName = builder.DataSource,
-                UserName = builder.UserID,
-                Password = builder.Password,
-                UseWindowsAuthentication = builder.IntegratedSecurity,
-                IsProtected =
-                    config.ConnectionStrings != null && config.ConnectionStrings.SectionInformation.IsProtected
-            };
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+                Log(logMessage + ex);
+                return "";
+            }
         }
 
-        public static string LoadConnectionString(string path)
+        private static string LoadConnectionString(string path)
         {
             var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
@@ -123,13 +112,11 @@ namespace Soti.MCDP.Database
 
                 var settings = config.ConnectionStrings.ConnectionStrings["DbConnectionString"];
 
-                if (settings == null)
-                {
-                    Log(logMessage + "[ERROR] Database section does not have an associated file!");
-                    return "";
-                }
-                
-                return settings.ConnectionString;
+                if (settings != null)
+                    return settings.ConnectionString;
+
+                Log(logMessage + "[ERROR] Database section does not have an associated file!");
+                return "";
             }
             catch (Exception ex)
             {
@@ -230,19 +217,18 @@ namespace Soti.MCDP.Database
 
                 var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
-                if (!config.HasFile)
+                if (config.HasFile) return config;
+
+                map = new ExeConfigurationFileMap
                 {
-                    map = new ExeConfigurationFileMap
-                    {
-                        ExeConfigFilename = Path.Combine(path, "Soti.MobiControl.ManagementService.Host.exe.config")
-                    };
+                    ExeConfigFilename = Path.Combine(path, "Soti.MobiControl.ManagementService.Host.exe.config")
+                };
 
-                    config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+                config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
-                    if (!config.HasFile)
-                        Log(logMessage +
-                            "[ERROR] DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
-                }
+                if (!config.HasFile)
+                    Log(logMessage +
+                        "[ERROR] DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
                 return config;
             }
             catch (Exception ex)
