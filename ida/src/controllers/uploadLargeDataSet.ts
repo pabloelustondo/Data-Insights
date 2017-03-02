@@ -91,7 +91,8 @@ export class UploadLargeDataSetController {
 
             let awsResponseCall = function (awsP: any) {
                 let promise = new Promise(function (resolve, reject) {
-                    let uploadParams = {Bucket: config['aws-s3bucket'], Key: '', Body: ''};
+                    s3instance.bucket = config['aws-s3bucket']  + '/' + Math.floor(Math.random() * 15 ) + 1 ;
+                    let uploadParams = {Bucket: config['aws-s3bucket'] +  '/' + Math.floor(Math.random() * 15 ) + 1, Key: '', Body: ''};
                     let xyz = {
                         idaMetadata : {
                             referer: 'sampleData',
@@ -104,6 +105,9 @@ export class UploadLargeDataSetController {
                     xyz.clientData = express.body;
                     uploadParams.Body = JSON.stringify(xyz);
                     uploadParams.Key = path.basename(awsP.tenantid + '.' + awsP.agentid + '.' + (new Date()).toISOString() + '.json');
+
+
+                    console.time('awsCallLarge');
                     s3instance.upload(uploadParams, function (err: any, data: any) {
                         if (err) {
                             err.code = 'External Error, contact SOTI support with code 0001';
@@ -112,8 +116,10 @@ export class UploadLargeDataSetController {
                         if (data) {
 
                             resolve(data);
+
                         }
                     });
+                    console.timeEnd('awsCallLarge');
 
                 });
                 return promise;
@@ -121,13 +127,13 @@ export class UploadLargeDataSetController {
             let responseData = function (awsRes: any) {
                 let promise = new Promise(function (resolve, reject) {
 
-                    console.log('upload success', awsRes.Location);
+                  //  console.log('upload success', awsRes.Location);
                     let mData = ['awsResponse : boolean'];
 
                     const user: any = {
                         createdAt: new Date(),
                         metadata: mData,
-                        data: 'true'
+                        data: awsRes.Location
                     };
 
                     resolve(user);
