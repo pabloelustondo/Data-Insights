@@ -10,6 +10,9 @@ export class DadFilter {
             return data;
         }
         let filteredData = _.filter(data, _.matches(element.filter));
+
+
+
             return filteredData;
     }
 }

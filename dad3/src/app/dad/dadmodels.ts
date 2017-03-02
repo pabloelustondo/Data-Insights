@@ -27,6 +27,7 @@ export class DadElement {
   reduction?:any;
   reductions?:any[];
   filter?:any;
+  search?:string;
 }
 
 export class DadDateRange{

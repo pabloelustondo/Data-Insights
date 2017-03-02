@@ -16,7 +16,7 @@ import { DadWidget} from "./widget.component";
 import { config } from "./appconfig";
 import { DadFilter } from './filter';
 
-export class DadTable {
+export class DadTable extends DadElement{
   id: string;
   name: string;
   type?:string;
@@ -40,6 +40,14 @@ export class DadTable {
                     <span *ngFor="let key of tableParameterKeys()"> 
                        {{key}}:{{tableParameterValue(key)}}
                     </span>
+                    
+                    <div class="form-inline b-r-1 px-2 float-xs-left hidden-md-down">
+                        <button (click)="search()" type="button" class="btn btn-secondary">
+                            <span class="fa fa-search"></span>
+                        </button>
+                        <input [(ngModel)]=" table.search" type="text" placeholder="Search...">
+                    </div>
+                    
                 </div>
                 <div class="card-block">
                     <table class="table table-striped">
@@ -84,6 +92,7 @@ export class DadTableComponent implements OnInit {
   currentPage:number=0;
   callerId:string;
   callerElement: DadElement;
+  searchString: string;
 
   constructor(private dadTableDataService: DadElementDataService,
               private dadTableConfigsService: DadTableConfigsService,
@@ -100,6 +109,10 @@ export class DadTableComponent implements OnInit {
     let chartConfig = JSON.parse(JSON.stringify(col.MiniChart)); //to clone object
     chartConfig.id += rowindex;
     return chartConfig;
+  }
+
+  search(){
+      alert(this.searchString);
   }
 
   refresh(page:number){
