@@ -161,10 +161,11 @@ export const CHARTS: DadChart[] = [
         action: 'drillFromElement',
         parameters: [
             {
-                shiftStartDateTimeAuto:"custom",
-                shiftStartDateTime:"2016-08-15T13:00:00.000Z",
-                shiftDuration: "8",
-                minimumBatteryPercentageThreshold: 20
+                shiftDuration:8,
+                rowsSkip:0,
+                rowsTake:10,
+                shiftStartDateTime:"2016-08-25",
+                minimumBatteryPercentageThreshold:20
             }],
         uiparameters: [
             {
@@ -229,10 +230,11 @@ export const CHARTS: DadChart[] = [
         action: 'drillFromElement',
         parameters: [
             {
-                shiftStartDateTimeAuto:"custom",
-                shiftStartDateTime:"2016-08-15T13:00:00.000Z",
-                shiftDuration: "8",
-                minimumBatteryPercentageThreshold: 20
+                shiftDuration:8,
+                rowsSkip:0,
+                rowsTake:10,
+                shiftStartDateTime:"2016-08-25",
+                minimumBatteryPercentageThreshold:20
             }],
         uiparameters: [
             {
