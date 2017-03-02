@@ -121,7 +121,7 @@ export const CHARTS: DadChart[] = [
     {id: "chartbardrill",
         name: 'Drill Test',
         type: "bar",
-        endpoint: "AverageDischargeRate",
+        endpoint:'ListOfDevicesNotSurvivedShift',
         data:[
             {DevId:'vzfsvzfsvzfsvz0', LastBatteryStatus:10, BatteryChargeHistory:JSON.stringify([5,6,5,7,8,9]),os:'iOS', brand:'Apple', model: "iPhone 6" , carrier: "Fido"},
             {DevId:'vzfsvzfsvzfsvz1', LastBatteryStatus:11, BatteryChargeHistory:JSON.stringify([5,6,6,7,8,9]),os:'iOS', brand:'Apple', model: "iPhone 6", carrier:  "Rogers" },
@@ -161,16 +161,12 @@ export const CHARTS: DadChart[] = [
         action: 'drillFromElement',
         parameters: [
             {
-                dateTo: "2016-08-25T20:30:21",
-                shiftStartDateTime: "2016-08-24T20:30:21",
-                shiftDuration: 8
+                shiftStartDateTimeAuto:"custom",
+                shiftStartDateTime:"2016-08-15T13:00:00.000Z",
+                shiftDuration: "8",
+                minimumBatteryPercentageThreshold: 20
             }],
         uiparameters: [
-            {
-                Type: DadParameterType.Date,
-                Name: "Date To",
-                DataSource: "dateTo"
-            },
             {
                 Type: DadParameterType.DateTime,
                 Name: "Shift Start Date & Time",
@@ -181,13 +177,18 @@ export const CHARTS: DadChart[] = [
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
-        ],
+            {
+                Type: DadParameterType.Number,
+                Name: "Min Battery",
+                DataSource: "minimumBatteryPercentageThreshold"
+            }
+        ]
     },
 
     {id: "chartpiedrill",
         name: 'Drill Test',
         type: "pie",
-        endpoint: "AverageDischargeRate",
+        endpoint:'ListOfDevicesNotSurvivedShift',
         data:[
             {DevId:'vzfsvzfsvzfsvz0', LastBatteryStatus:10, BatteryChargeHistory:JSON.stringify([5,6,5,7,8,9]),os:'iOS', brand:'Apple', model: "iPhone 6" , carrier: "Fido"},
             {DevId:'vzfsvzfsvzfsvz1', LastBatteryStatus:11, BatteryChargeHistory:JSON.stringify([5,6,6,7,8,9]),os:'iOS', brand:'Apple', model: "iPhone 6", carrier:  "Rogers" },
@@ -228,16 +229,12 @@ export const CHARTS: DadChart[] = [
         action: 'drillFromElement',
         parameters: [
             {
-                dateTo: "2016-08-25T20:30:21",
-                shiftStartDateTime: "2016-08-24T20:30:21",
-                shiftDuration: 8
+                shiftStartDateTimeAuto:"custom",
+                shiftStartDateTime:"2016-08-15T13:00:00.000Z",
+                shiftDuration: "8",
+                minimumBatteryPercentageThreshold: 20
             }],
         uiparameters: [
-            {
-                Type: DadParameterType.Date,
-                Name: "Date To",
-                DataSource: "dateTo"
-            },
             {
                 Type: DadParameterType.DateTime,
                 Name: "Shift Start Date & Time",
@@ -248,7 +245,12 @@ export const CHARTS: DadChart[] = [
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
-        ],
+            {
+                Type: DadParameterType.Number,
+                Name: "Min Battery",
+                DataSource: "minimumBatteryPercentageThreshold"
+            }
+        ]
     }
 
 ];

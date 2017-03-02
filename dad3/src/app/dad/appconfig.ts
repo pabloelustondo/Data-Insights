@@ -3,8 +3,10 @@
  */
 
 export const config = {
-    "testing":true,
-    "authorizationserver":'http://localhost:3003',
+    "testing":false,
+    "authorizationserver":'http://10.0.91.25:3013',
+ //   "authorizationserver":'http://localhost:3003',
+
     "InitialChargeLevels":"https://localhost:3002/Devices/Battery/Summary/InitialChargeLevels",
     "DischargeRate":"https://localhost:3002/Devices/Battery/Summary/DischargeRate",
     "DevicesNotSurvivedShift": "https://localhost:3002/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
