@@ -3,5 +3,6 @@
   "expiringSecret" : "abcdefg9876543210",
   "dadloginurl": "http://localhost:4200",
   "ddbEndpointUrl" : "http://localhost:8000",
-  "tempTokenExpiryTime" : 1
+  "tempTokenExpiryTime" : 120000,
+  "agentPermTokenExpiryTime": 6000000
 }

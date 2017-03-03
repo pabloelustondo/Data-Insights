@@ -4,7 +4,8 @@ import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
 import { config } from "./appconfig";
-
+import { DadTableConfigsService } from "./chart.service";
+import { DadFilter } from "./filter";
 
 declare var d3, c3: any;
 
@@ -20,31 +21,38 @@ export class DadChart extends DadElement{
     aname?: String;
     bname?: String;
     action?: String;
+    widgetClickChart?: boolean = false;
+    drillchart?:any;
 }
 @Component({
     selector: 'dadchart',
-    providers:[DadElementDataService],
+    providers:[DadElementDataService,DadTableConfigsService],
     template: `
-    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="myclass()">  
+    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
-          <div  class="content card-inverse card-secondary">    
+          <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
-                <div class="content card card-secondary">    
+                <div class="content card card-secondary">   
                     <div class="btn-group float-xs-right" dropdown>
                         <button style="color:black;" type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
                             <i class="icon-settings"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
                     </div>
                     <div>
                         <div style="color:black;">{{chart.name}}</div><br/><br/><br/>        
-                        <div style= "text-align:center; height:100%; width:100%" [id]="chart.id"></div>
+
+                        <div *ngIf="chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
+                        <div *ngIf="!chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
+                                                
                         <div style="color:black;">
-                            <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>  
+                            <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>
                         </div>
+                        <br/>
                     </div>
                 </div>
             </div>
@@ -83,18 +91,24 @@ export class DadChartComponent implements OnInit {
     editMode:boolean = false;
     refreshMode:boolean = false;
 
-  constructor(private dadChartDataService: DadElementDataService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private dadChartDataService: DadElementDataService,
+              private dadTableConfigsService : DadTableConfigsService,
+              private router: Router, private route: ActivatedRoute) {}
 
   onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
-    }
+  }
+
+  onRawData(message:string):void{
+    this.router.navigate(['table', 100, this.chart.id], { relativeTo: this.route});
+  }
 
   onRefresh():void{
     if (!this.refreshMode) this.refreshMode = true;
     else this.refreshMode = false;
   }
 
-  myclass(){
+  chartClass(){
     if (this.chart.big){
       return 'col-sm-12 col-lg-12';
     } else {
@@ -160,14 +174,30 @@ export class DadChartComponent implements OnInit {
     return 0;
   }
 
+  drillFromElement(data){
+    if (this.chart.action = 'drillFromElement') {
+
+      let self = this;
+      let eventHandler = this.goToTable;
+      let chart = this.chart;
+      let route = this.route;
+      let router = this.router;
+
+      data.onclick = function (d, element) {
+        eventHandler(d, chart, router, route, self);
+      };
+    }
+  }
+
   //mini applied
   drawChartBar(chartConfig:DadChart, data) {
-    let chartData = this.mapper.map(chartConfig, data);
-    let bardata = chartData;
+    let bardata = this.mapper.map(chartConfig, data);
 
     bardata.selection = {
       enabled: true,
     };
+
+    this.drillFromElement(bardata);
 
     d3.selectAll(".c3-axis-x .tick").filter(function (d) {
       return d === 0;
@@ -175,16 +205,19 @@ export class DadChartComponent implements OnInit {
 
     let c3Config:any= {
       bindto: '#' + chartConfig.id,
-      size:{
-        height: 400
-      },
+      size:{},
       data: bardata,
       color: {
         pattern: this.colorPalette,
       },
-      /*tooltip: {
-        show: false
-      },*/
+      tooltip: {
+        grouped: false,
+        format: {
+          title: function () {
+            return ([chartConfig.aname]);
+          },
+        }
+      },
       axis: {
         rotated : false,
         x: {
@@ -195,7 +228,7 @@ export class DadChartComponent implements OnInit {
             position: 'outer-right'
           },
           tick: {
-            multiline: false
+            multiline: false,
           }
         },
         y: {
@@ -230,18 +263,12 @@ export class DadChartComponent implements OnInit {
         width: {
           ratio: 0.7
         }
-      },
-      tooltip: {
-        'contents': function (d, defaultTitleFormat, defaultValueFormat, color) {
-            //return "<div style='background-color:lightgrey;'>"+JSON.stringify(d)+"</div>";
-          return "<div style='background-color:white; color: black'>" + chartConfig.aname + ' | ' + defaultValueFormat(d[0].value) + ' ' + "</div>";
-        },
       }
     };
 
 if (chartConfig.regionM){
     c3Config.regions =[
-      {start: this.indexOfRegions(chartData)},
+      {start: this.indexOfRegions(bardata)},
     ];
 }
 
@@ -267,7 +294,11 @@ if (chartConfig.regionM){
       c3Config.axis.x.label.text = [];
       c3Config.axis.y.label.text = [];
       c3Config.size.height = 200;
+      c3Config.legend.show = false;
+      c3Config.axis.y.show = false;
+      c3Config.grid.y.show = false;
     };
+
     if (chartConfig.horizontal) {
       c3Config.axis.rotated = true;
     }
@@ -280,10 +311,12 @@ if (chartConfig.regionM){
       let router = this.router;
 
       this.c3chart.internal.main.on('click', function (d) {
-            eventHandler(d, chart, router, route);
+            eventHandler(d, chart, router, route, self);
           }
       );
-    } else {
+    };
+
+    if(!chartConfig.action || chartConfig.action === 'grow') {
       let eventHandler = this.growIt;
       let chart = this.chart;
       let route = this.route;
@@ -299,37 +332,86 @@ if (chartConfig.regionM){
     router.navigate(['bigchart', chart.id], { relativeTo: route});
   };
 
-  goToTable(d,chart,router,route){
-  router.navigate(['table', 100, chart.id], { relativeTo: route});
+  goToTable(d,chart:DadChart,router,route, self){
+
+    //create the table
+    let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
+    let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
+
+    tableConfig.id += self.chart.id + d.id;
+    tableConfig.filter = { } ;
+
+    //let find the attribute   come in the reducer dimensin
+
+    let attribute = chart.reduction.dimension.attribute;
+
+    let value;
+
+
+    if (chart.type === 'pie') {
+      value = d.id;
+    }
+    if (chart.type === 'bar') {
+        value = chart.mappedData.columns[0][d.x + 1];
+    }
+
+    tableConfig.filter[attribute] = value;
+
+    let filter = new DadFilter();
+    let filteredData = filter.filter(tableConfig, chart.data);
+    let count = filteredData.length;
+
+    self.dadTableConfigsService.saveOne(tableConfig);
+
+    //go to that table
+    router.navigate(['table', count , chart.id,  tableConfig.id], { relativeTo: route});
 };
 
   //mini applied
   drawChartPie(chartConfig:DadChart, data) {
-    let chartData = this.mapper.map(chartConfig, data);
-    let c3Config = {
-      size: {
-        height: chartConfig.height,
-        width: chartConfig.width
-      },
+    let piedata = this.mapper.map(chartConfig, data);
+
+    piedata.selection = {
+      enabled: true
+    };
+
+    this.drillFromElement(piedata);
+
+    let c3Config:any = {
+      size: {},
       bindto: '#' + chartConfig.id,
-      data: chartData,
+      data: piedata,
       color: {
         pattern: this.colorPalette,
+      },
+      tooltip: {
+        grouped: false,
+        format: {
+          title: function () {
+            return ([chartConfig.aname]);
+          },
+        }
       },
       zoom: {
         enabled: true
       },
       legend: {
         show : true
+      },
+      interaction: {
+        enabled: true
       }
     };
+
     if(chartConfig.mini){
       c3Config.size.width = this.miniChartWidth;
       c3Config.size.height = this.miniChartHeight;
       c3Config.legend.show = false;
+      c3Config.interaction.enabled = false;
     };
     this.c3chart = c3.generate(c3Config);
   };
+
   //mini applied
   drawChartDot(chartConfig:DadChart, data) {
     let chartData = this.mapper.map(chartConfig, data);

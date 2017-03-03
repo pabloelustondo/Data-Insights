@@ -14,8 +14,6 @@ localStorage = new LocalStorage('./temp');
 
 var app = module.exports = express.Router();
 
-// XXX: This should be a database of enrollments :).
-// XXX: This should be a database of enrollments :).
 var SotiAdminAccount =
   {
     accountid: "soti",
@@ -40,7 +38,7 @@ var MyMCAccount =
 var enrollments = [SotiAdminAccount, MyMCAccount];
 
 function createToken(user) {
-  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: 600 * 5 });
+  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: config['agentPermTokenExpiryTime'] });
 }
 
 function readToken(token, callback) {  //Bearer
@@ -141,7 +139,6 @@ app.get('/getAgentToken', function(req, res) {
 
         request({
           rejectUnauthorized: false,
-          rejectUnauthorized: false,
           url: config.ddbEndpointUrl + "/verifyDataSource",
           method: 'GET', //Specify the method
           headers: { //We can define headers too
@@ -158,12 +155,9 @@ app.get('/getAgentToken', function(req, res) {
             if (response.statusCode === 200){
 
               var body = JSON.parse(response.body);
-
-
               if (body.activationKey === _activationKey) {
-
                 var new_token = jwt.sign({
-                  agentid: '213',
+                  agentid: body.agentId,
                   tenantid: _tenantID
                 }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
                 console.log(new_token);
@@ -387,77 +381,103 @@ app.post('/enrollments', function(req, res) {
   }
 //////////////////////////////////////////////////
 
-  if (_.find(enrollments, {mcurl: req.body.domainid})) {
-   return res.status(400).send( ErrorMsg.mcurl_already_enrolled );
-  }
+  var _tenantID = req.body.domainid;
 
-  var enrollment = _.pick(req.body, 'accountid','mcurl', 'apikey', 'domainid', 'username');
-  enrollment.tenantid = req.body.domainid; //for now
-  enrollment.status = "new";
-
-  request({
-    rejectUnauthorized: false,
-    url: enrollment.mcurl  + "/api/token",
-    method: 'POST', //Specify the method
-    headers: { //We can define headers too
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': "Basic " + enrollment.apikey
-    },
-    body: "grant_type=password&username=" + req.body.username  + "&password=" + req.body.password
-  }, function(error, response, body){
-    if(error) {
-      console.log(error);
-      res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
-    } else {
-      console.log(response.statusCode, body);
-
-      if (response.statusCode === 200){
-
-        request({
-          rejectUnauthorized: false,
-          url: config.ddbEndpointUrl + "/newEnrollment",
-          json : {
-            'accountId' : enrollment.accountid,
-            'mcurl' : enrollment.mcurl,
-            'tenantId' : enrollment.tenantid,
-            'domainId' : enrollment.domainid,
-            'status' : 'new'
-          },
-          method: 'POST', //Specify the method
-          headers: { //We can define headers too
-            'Content-Type': 'application/json'
-          }
-
-        }, function(error, response, body) {
-          if (error) {
-            console.log(error);
-            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
-          } else {
-            console.log('inserted : ' + JSON.stringify(enrollment));
-          }
-        });
-
-        enrollments.push(enrollment);
-        var resObj = JSON.parse(body);
-        enrollment.mc_token= resObj.access_token;
-        tokenpayload = {};
-        tokenpayload.username =  enrollment.username;
-        tokenpayload.accountid =  enrollment.accountid;
-        tokenpayload.domainid =  enrollment.domainid;
-        tokenpayload.tenantid =  enrollment.tenantid;
-
-        var token = createToken(tokenpayload);
-
-        sendEmail2(tokenpayload,token);
-
-        res.status(200).send({
-          id_token: token
-        });
+  try {
+    request({
+      rejectUnauthorized: false,
+      rejectUnauthorized: false,
+      url: config.ddbEndpointUrl + "/getEnrollment",
+      method: 'GET', //Specify the method
+      headers: { //We can define headers too
+        'Content-Type': 'application/json'
+      },
+      qs: {tenantId: _tenantID}
+    }, function (error, response, body) {
+      if (error) {
+        console.log(error);
+        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
       } else {
-        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+        if (response.statusMessage === 'Not Found') {
+
+
+          request({
+            rejectUnauthorized: false,
+            url: req.body.mcurl + "/api/token",
+            method: 'POST', //Specify the method
+            headers: { //We can define headers too
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': "Basic " + req.body.clientsecret
+            },
+            body: "grant_type=password&username=" + req.body.username + "&password=" + req.body.password
+          }, function (error, response, body) {
+            if (error) {
+              console.log(error);
+              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+            } else {
+              console.log(response.statusCode, body);
+
+              if (response.statusCode === 200) {
+
+                request({
+                  rejectUnauthorized: false,
+                  url: config.ddbEndpointUrl + "/newEnrollment",
+                  json: {
+                    'accountId': req.body.accountid,
+                    'mcurl': req.body.mcurl,
+                    'tenantId': req.body.domainid,
+                    'domainId': req.body.domainid,
+                    'Status': 'new',
+                    "clientid": req.body.apikey,
+                    "clientsecret": req.body.clientsecret,
+                    "companyName": req.body.companyName,
+                    "companyAddress": req.body.companyAddress,
+                    "companyPhone": req.body.companyPhone
+                  },
+                  method: 'POST', //Specify the method
+                  headers: { //We can define headers too
+                    'Content-Type': 'application/json'
+                  }
+
+                }, function (error, response, body) {
+                  if (error) {
+                    console.log(error);
+                    res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+                  } else {
+
+                    tokenpayload = {};
+                    tokenpayload.username = req.body.username;
+                    tokenpayload.accountid = req.body.accountid;
+                    tokenpayload.domainid = req.body.username;
+                    tokenpayload.tenantId = req.body.domainid;
+                    tokenpayload.companyname = req.body.companyName;
+                    tokenpayload.companyaddress = req.body.companyAddress;
+                    tokenpayload.companyphone = req.body.companyPhone;
+
+                    var token = createToken(tokenpayload);
+
+                    sendEmail2(tokenpayload, token);
+
+                    res.status(200).send({
+                      id_token: token
+                    });
+                  }
+                });
+
+
+              } else {
+                res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+              }
+            }
+          });
+        } else {
+          res.status(500).send('Tenant Already Registered. Provide a new Unique name');
+        }
       }
-    }
-  });
+    });
+  } catch (e)  {
+    res.status(500).send({});
+  }
 
 });
 
@@ -596,7 +616,8 @@ app.get('/urlbydomainid', function(req, res) {
         var body = JSON.parse(response.body);
 
           res.status(200).send({
-            url: body.mcurl
+            url: body.mcurl,
+            clientId: body.clientid
           });
 
       } else if (response.statusCode === 404) {
@@ -636,55 +657,124 @@ app.post('/sessions/create', function(req, res) {
 
 
   if (req.body.code){
-    tokenpayload = {};
-    tokenpayload.username = 'asd';
-    tokenpayload.accountid =  'varun@dave.net';
-    tokenpayload.domainid = 'varun_dave_mc';
-    tokenpayload.tenantId =  'varun_dave_mc';
+    var _reqBody = req.body.domainid;
+    var fullState = _reqBody.split('?');
+    var _tenantID = fullState[0];
 
-    res.status(200).send({
-      id_token: createToken(tokenpayload)
-    });
-   /* apikey = 'NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0';
-    grant_type = "grant_type=authorization_code&code=" + req.body.code;
+    try {
 
-    request({
-      rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-      url:   'https://cad059.corp.soti.net/MobiControl' + "/api/token",
-      method: 'POST', //Specify the method
-      headers: { //We can define headers too
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': "Basic " + apikey
-      },
-      body: grant_type
-    }, function(error, response, body){
-      if(error) {
-        console.log(error);
-        res.status(400).send(ErrorMsg.login_failed_authentication);
-      } else {
-        console.log(response.statusCode, body);
-        if (response.statusCode === 200){
 
-          var resObj = JSON.parse(body);
-       //   enrollment.mc_token= resObj.access_token;
-          enrollment = {
-            mc_token : resObj.access_token
-          };
-          tokenpayload = {};
-          tokenpayload.username = 'asd';
-          tokenpayload.accountid =  'varun@dave.net';
-          tokenpayload.domainid = 'varun_dave_mc';
-          tokenpayload.tenantid =  'varun_dave_mc';
 
-          res.status(200).send({
-            id_token: createToken(tokenpayload)
-          });
+      request({
+        rejectUnauthorized: false,
+        url: config.ddbEndpointUrl + "/getEnrollment",
+        method: 'GET', //Specify the method
+        headers: { //We can define headers too
+          'Content-Type': 'application/json'
+        },
+        qs: {tenantId: _tenantID}
+      }, function (error, response, body) {
+        if (error) {
+          console.log(error);
+          res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
         } else {
-          res.status(400).send(ErrorMsg.login_failed_authentication);
+          console.log(response.statusCode, body);
+
+          if (response.statusCode === 200) {
+
+
+            try {
+
+              grant_type = "grant_type=authorization_code&code=" + req.body.code;
+              var jsonBody = JSON.parse(response.body);
+              request({
+                rejectUnauthorized: false, //need to improve this ..related with ssl certificate
+                url:   jsonBody.mcurl + "/api/token",
+                method: 'POST', //Specify the method
+                headers: { //We can define headers too
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Authorization': "Basic " + jsonBody.clientsecret
+                },
+                body: grant_type
+              }, function(error, response, _body){
+                if(error) {
+                  console.log(error);
+                  res.status(400).send(ErrorMsg.login_failed_authentication);
+                } else {
+                  console.log(response.statusCode, body);
+                  if (response.statusCode === 200){
+
+                    _body = JSON.parse(_body);
+
+                    request({
+                      "rejectUnauthorized": false,
+                      url: jsonBody.mcurl + '/api/security/users/Administrator/groups',
+                      method: 'GET', //Specify the method
+                      headers: { //We can define headers too
+                        'Authorization': 'bearer ' + _body.access_token
+                      }
+                    }, function(error, response, __body){
+                      if(error) {
+                        console.log(error);
+                        res.status(200).send("hi from modulus error:" + error);
+                      } else {
+                        console.log(response.statusCode, body);
+                        var mbuser = JSON.parse(__body);
+                        if (mbuser[0].Name === 'MobiControl Administrators') {
+
+                          tokenpayload = {};
+                          tokenpayload.username = body.tenantId;
+                          tokenpayload.accountid = body.accountId;
+                          tokenpayload.domainid = body.domainId;
+                          tokenpayload.tenantId = body.tenantId;
+                          tokenpayload.companyname = body.companyName;
+                          tokenpayload.companyaddress = body.companyAddress;
+                          tokenpayload.companyphone = body.companyPhone;
+
+
+                          res.status(200).send({
+                            id_token: createToken(tokenpayload)
+                          });
+                        }
+                      }
+                    });
+
+
+                  } else {
+                    res.status(400).send(ErrorMsg.login_failed_authentication);
+                  }
+                }
+              });
+
+
+
+              var body = JSON.parse(response.body);
+
+
+
+            } catch (e){
+              console.log(e);
+              return res.status(400).send (ErrorMsg.token_verification_failed);
+            }
+
+
+
+          } else if (response.statusCode === 404) {
+            res.status(404).send(ErrorMsg.token_verification_failed);
+          }
+          else {
+            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+          }
         }
-      }
-    }); // end finding account and token creation
-*/
+      });
+    }
+    catch (e) {
+      console.log(e);
+      return res.status(400).send (ErrorMsg.token_verification_failed);
+    }
+
+
+
   }
   else {
     var enrollment = _.find(enrollments, {domainid: req.body.domainid});
@@ -705,40 +795,6 @@ app.post('/sessions/create', function(req, res) {
 
   }
 
-/*
-  request({
-    rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-    url:   enrollment.mcurl + "/api/token",
-    method: 'POST', //Specify the method
-    headers: { //We can define headers too
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': "Basic " + apikey
-    },
-    body: grant_type,
-  }, function(error, response, body){
-    if(error) {
-      console.log(error);
-      res.status(400).send(ErrorMsg.login_failed_authentication);
-    } else {
-      console.log(response.statusCode, body);
-      if (response.statusCode === 200){
-
-        var resObj = JSON.parse(body);
-        enrollment.mc_token= resObj.access_token;
-        tokenpayload = {};
-        tokenpayload.username =  enrollment.username;
-        tokenpayload.accountid =  enrollment.accountid;
-        tokenpayload.domainid =  enrollment.domainid;
-        tokenpayload.tenantid =  enrollment.tenantid;
-
-        res.status(200).send({
-          id_token: createToken(tokenpayload)
-        });
-      } else {
-        res.status(400).send(ErrorMsg.login_failed_authentication);
-      }
-    }
-  }); */
 
 });
 

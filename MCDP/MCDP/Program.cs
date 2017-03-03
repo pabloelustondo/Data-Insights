@@ -1,34 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration.Install;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.ServiceProcess;
-using System.Text;
+﻿using System.ServiceProcess;
 
 namespace Soti.MCDP
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-
+                System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
 #if DEBUG
-                MCDP mcdp = new MCDP();
+                var mcdp = new MCDP();
                 mcdp.OnDebug();
                 System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
             
 #else
-                ServiceBase[] ServicesToRun;
-                ServicesToRun = new ServiceBase[]
-                {
-                    new MCDP()
-                };
-                ServiceBase.Run(ServicesToRun);
+            var servicesToRun = new ServiceBase[]
+            {
+                new MCDP()
+            };
+                ServiceBase.Run(servicesToRun);
             
 #endif
 

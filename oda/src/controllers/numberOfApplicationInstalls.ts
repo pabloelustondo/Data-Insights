@@ -19,7 +19,7 @@ export class NumberOfApplicationInstalls {
      *
      */
 
-    @Get('Applications/numberOfInstallations')
+    @Get('Application/numberOfInstallations')
 
     public async Get( @Request() request: express.Request): Promise<SDS> {
 
@@ -40,7 +40,7 @@ export class NumberOfApplicationInstalls {
 
                     let minutes = (new Date).getTime();
 
-                    const getDBURL = 'http://localhost:8000/getDBAccess/' + decodedToken.tenantid;
+                    const getDBURL = config['db-address'] + '/getDBAccess/' + decodedToken.tenantId;
 
                     const dboptions: rp.OptionsWithUrl = {
                         json: true,

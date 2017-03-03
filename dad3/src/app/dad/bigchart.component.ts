@@ -11,7 +11,7 @@ import {Subscription } from 'rxjs';
   selector: 'bigchart',
   providers:[DadChartConfigsService],
   template: `
-  <div *ngIf = "chart">
+  <div style="min-width: 800px" *ngIf = "chart">
     <dadchart [chart]="chart"></dadchart>
   </div>
   `

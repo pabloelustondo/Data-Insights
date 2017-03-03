@@ -5,19 +5,22 @@ import { Component, Input, OnInit  } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadElementDataService } from "./data.service";
 import { Mapper, ChartData } from "./mapper";
-import {DadDateRange, DadElement} from "./dadmodels";
+import { DadDateRange, DadElement} from "./dadmodels";
 import { DadTableColumn, DadTableColumnType } from "./table.model"
 import { DadChartComponent } from "./chart.component"
-import {DadTableConfigsService, DadChartConfigsService} from './chart.service';
+import { DadTableConfigsService, DadChartConfigsService} from './chart.service';
 import { DadWidgetConfigsService } from './chart.service';
 import { Router, ActivatedRoute} from '@angular/router';
-import {Subscription } from 'rxjs';
-import {DadWidget} from "./widget.component";
+import { Subscription } from 'rxjs';
+import { DadWidget} from "./widget.component";
+import { config } from "./appconfig";
+import { DadFilter } from './filter';
 
-export class DadTable {
+export class DadTable extends DadElement{
   id: string;
   name: string;
   type?:string;
+  data?:any[];
   parameters: any[];  //we are going to change this!
   endpoint :string;
   columns: DadTableColumn[];
@@ -37,6 +40,14 @@ export class DadTable {
                     <span *ngFor="let key of tableParameterKeys()"> 
                        {{key}}:{{tableParameterValue(key)}}
                     </span>
+                    
+                    <div class="form-inline b-r-1 px-2 float-xs-left hidden-md-down">
+                        <button (click)="search()" type="button" class="btn btn-secondary">
+                            <span class="fa fa-search"></span>
+                        </button>
+                        <input [(ngModel)]=" table.search" type="text" placeholder="Search...">
+                    </div>
+                    
                 </div>
                 <div class="card-block">
                     <table class="table table-striped">
@@ -81,6 +92,7 @@ export class DadTableComponent implements OnInit {
   currentPage:number=0;
   callerId:string;
   callerElement: DadElement;
+  searchString: string;
 
   constructor(private dadTableDataService: DadElementDataService,
               private dadTableConfigsService: DadTableConfigsService,
@@ -97,6 +109,10 @@ export class DadTableComponent implements OnInit {
     let chartConfig = JSON.parse(JSON.stringify(col.MiniChart)); //to clone object
     chartConfig.id += rowindex;
     return chartConfig;
+  }
+
+  search(){
+      alert(this.searchString);
   }
 
   refresh(page:number){
@@ -152,7 +168,8 @@ export class DadTableComponent implements OnInit {
                   this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
               }
 
-              let tableId = this.callerElement.tableId;
+              let tableId =  this.callerId = param['tableid'];
+              if (!tableId) tableId = this.callerElement.tableId;
 
               this.table  = this.findTables(tableId);
               let elementParameters = this.callerElement.parameters[0];
@@ -165,15 +182,23 @@ export class DadTableComponent implements OnInit {
           }
 
           console.log("Tables are loading... :" + this.table.id);
-          this.dadTableDataService.getElementData(this.table).then(
-              data => {
-                this.data = data.data;
-                if(this.data.errorMessage != null){
-                    alert (this.data.errorMessage);
-                }
-              }
-          ).catch(err => console.log(err.toString()));
 
+            let filter = new DadFilter();
+
+            if (!this.data && this.table.data && config.testing){
+                this.data = filter.filter(this.table, this.table.data);
+  }
+
+            if (!config.testing) {
+                this.dadTableDataService.getElementData(this.table).then(
+                    data => {
+                        this.data = filter.filter(this.table, data.data);
+                        if (this.data.errorMessage != null) {
+                            alert(this.data.errorMessage);
+                        }
+                    }
+                ).catch(err => console.log(err.toString()));
+            }
         });
   }
 

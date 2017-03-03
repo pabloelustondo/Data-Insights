@@ -131,7 +131,8 @@ app.get('/getTenantUrl', function (req, res) {
             }
             ,
             {
-                "mcurl": 1
+                "mcurl": 1,
+                "clientid": 1
             }
         , next);
     });
@@ -251,6 +252,12 @@ app.post('/updateDataSourceAws', function (req, res) {
 app.delete('/todo', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('todo').drop(next);
+    });
+});
+
+app.delete('/enrollments', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('enrollments').drop(next);
     });
 });
 

@@ -11,6 +11,13 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: 'table1',
     endpoint:'DevicesNotSurvivedShift',
+    drillTo: 'chartbardrill',
+    data:[{
+      CountDevicesNotLastedShift:50,
+      CountTotalActiveDevices: 100,
+      CountDevicesLastedShift: 40,
+      CountDevicesChargingEntireShift: 10
+    }],
     metrics:[
       {
         Type: DadParameterType.Number,
@@ -63,6 +70,13 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
+    drillTo: 'chartpiedrill',
+    data:[{
+      CountDevicesNotLastedShift:60,
+      CountTotalActiveDevices: 120,
+      CountDevicesLastedShift: 55,
+      CountDevicesChargingEntireShift: 15
+    }],
     metrics:[
       {
         Type: DadParameterType.Number,
@@ -87,17 +101,11 @@ export const WIDGETS: DadWidget[] = [
     ],
     parameters: [
       {
-        shiftStartDateTimeAuto:"yesterday",
         shiftStartDateTime:"2016-08-25T13:00:00.000Z",
         shiftDuration: "8",
         minimumBatteryPercentageThreshold: 20
       }],
     uiparameters: [
-      {
-        Type: DadParameterType.String,
-        Name: "Date Time Type",
-        DataSource: "shiftStartDateTimeAuto"
-      },
       {
         Type: DadParameterType.DateTime,
         Name: "Shift Start",
@@ -120,6 +128,13 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
+    drillTo: 'chartpiedrill',
+    data:[{
+      CountDevicesNotLastedShift:50,
+      CountTotalActiveDevices: 90,
+      CountDevicesLastedShift: 45,
+      CountDevicesChargingEntireShift: 20
+    }],
     metrics:[
       {
         Type: DadParameterType.Number,
@@ -177,6 +192,11 @@ export const WIDGETS: DadWidget[] = [
     type: 0,
     tableId: 'table1',
     endpoint:'BatteryMetrics',
+    drillTo: 'chartpiedrill',
+    data:[{
+      CountDevicesNotLastedShift:200,
+      CountDevicesNotFullyCharged: 80,
+    }],
     metrics:[
       {
         Type: DadParameterType.String,
@@ -223,7 +243,7 @@ export const WIDGETS: DadWidget[] = [
     ]
   },
   {id: 'widget_chart1',
-    name:'Application Deployment Count by Number of Devices',
+    name:'Application Count by Number of Devices',
     type: 1,
     endpoint: "ApplicationDeploymentCount",
     data: [
@@ -250,7 +270,7 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.Date,
+        Type: DadParameterType.DateTime,
         Name: "Date From",
         DataSource: "dateFrom"
       },
@@ -277,41 +297,50 @@ export const WIDGETS: DadWidget[] = [
   {id: 'widget_chart2',
     name:'Application Popularity',
     type: 1,
-    endpoint: "AverageDischargeRate",
+    endpoint: "NumberOfInstallations",
+    data: [
+      {
+        "NumberOfInstallations": 2923,
+        "AppId": "com.amazon.windowshop"
+      },
+      {
+        "NumberOfInstallations": 2922,
+        "AppId": "com.brainium.solitairefree"
+      },
+      {
+        "NumberOfInstallations": 2912,
+        "AppId": "com.game.BubbleShooter"
+      }
+    ],
     parameters:[
       {
-        dateTo: "2016-08-25T20:30:21",
-        shiftStartDateTime: "2016-08-24T20:30:21",
-        shiftDuration: 8
+        dateFrom: "2017-01-24T20:30:21",
+        dateTo: "2017-01-27T20:30:21"
       }],
     uiparameters: [
+      {
+        Type: DadParameterType.DateTime,
+        Name: "Date From",
+        DataSource: "dateFrom"
+      },
       {
         Type: DadParameterType.Date,
         Name: "Date To",
         DataSource: "dateTo"
-      },
-      {
-        Type: DadParameterType.DateTime,
-        Name: "Shift Start Date & Time",
-        DataSource: "shiftStartDateTime"
-      },
-      {
-        Type: DadParameterType.Duration,
-        Name: "Shift Duration",
-        DataSource: "shiftDuration"
-      },
+      }
     ],
     chart:{id: "charthorizontal2",
       type: "bar",
-      a : 'countOfDevices',
-      b : 'percentage',
-      aname : 'Count Of Devices',
-      bname : 'Percentage',
+      a : 'NumberOfInstallations',
+      b : 'AppId',
+      aname : 'Number Of Installations',
+      bname : 'Application ID',
       width: 275,
-      height: 200,
+      height: 250,
       embeddedChart: true,
       horizontal: true,
-      action: 'grow'
+      action: 'grow',
+      transformations : [{sort: true}, {top:5}]
     }
   }
 ];

@@ -8,27 +8,30 @@
   </i></small>
   <p></p>
 
-  <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value, companyname.value, companyaddress.value, phone.value)">
+  <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value, clientsecret.value, companyname.value, companyaddress.value, phone.value)">
     <div class="form-group">
       <label for="accountid">Account ID (email) </label>
       <input type="email" #accountid class="form-control" id="accountid" placeholder="myaccount@email.com">
-      <small><i>No account?, follow this <a href="http://www.soti.net">link</a> to create one </i></small>
+      <small><i>No account?, follow this <a href="https://www.soti.net/products/mobicontrol/trial/" target="_blank">link</a> to create one </i></small>
     </div>
     <div class="form-group">
-      <label for="mcurl">Mobicontrol API URL </label>
-      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="https://cad059.corp.soti.net/MobiControl/api">
+      <label for="mcurl">Mobicontrol URL </label>
+      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="">
     </div>
     <div class="form-group">
-      <label for="apikey">API Access Token</label>
-      <input type="text" #apikey class="form-control" id="apikey" placeholder="API Access Token for SOTI Analytics Services">
-      <small><i>No api access token?. This token can be generated using a process explained in https://yourserver/MobiControl/api/docs/index.
-        You need to use this utilityMCAdmin.exe APIClientAdd -n:API client name [-p:API secret] [-r:Redirect URI]
+      <label for="apikey">Client Id</label>
+      <input type="text" #apikey class="form-control" id="apikey" placeholder="Client ID Token for SOTI Analytics Services">
+    </div>
+    <div class="form-group">
+      <label for="apikey">Base 64 Encoded Client:Secret</label>
+      <input type="text" #clientsecret class="form-control" id="clientSecret" placeholder="Client secret for SOTI Analytics Services">
+      <small><i>
         - Combine the “client ID” and “client secret” into a string separated by a colon. For example: "ClientID:ClientSecret". Note that these fields cannot otherwise contain a colon.
         - Encode the resulting string using the RFC2045-MIME variant of Base64.</i></small>
     </div>
     <div class="form-group">
       <label for="domainid">Short Unique Name</label>
-      <input type="text" #domainid class="form-control" id="domainid" placeholder="i.e: soti_cad059"  >
+      <input type="text" #domainid class="form-control" id="domainid" placeholder=""  >
       <small><i>Easy to remember identifier for this domain for user to log in. </i></small>
     </div>
   <div class="form-group">

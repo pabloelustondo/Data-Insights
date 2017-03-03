@@ -3,6 +3,7 @@ import { DadChart } from "./chart.component";
 import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
+import { Router, ActivatedRoute } from "@angular/router";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
 import { config } from "./appconfig";
 
@@ -11,6 +12,7 @@ export enum DadWidgetType { OneNumber, Chart };
 export class DadWidget extends DadElement{
   type: DadWidgetType;
   chart?: DadChart;
+  drillTo?: string;
 }
 
 @Component({
@@ -29,6 +31,7 @@ export class DadWidget extends DadElement{
                     </button>                      
                     <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                        <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                         <button *ngIf="widget.type==0 && widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                     </div>
@@ -37,9 +40,9 @@ export class DadWidget extends DadElement{
                <div *ngIf="widget.type===0">
                 <div class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
                 <h3 *ngIf="data" class="mb-0">
-                    <a *ngIf="!(data[0][widget.metrics[0].DataSource]===0)" [routerLink]="['table', data[0][widget.metrics[0].DataSource],widget.id]">
+                    <div style="cursor:pointer;" *ngIf="!(data[0][widget.metrics[0].DataSource]===0)" (click)="onDrill('lalala')">
                         <span style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
-                    </a>
+                    </div>
                     <a *ngIf="(data[0][widget.metrics[0].DataSource]===0)">
                         <span style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
                     </a>
@@ -100,7 +103,8 @@ export class DadWidgetComponent implements OnInit {
   refreshMode:boolean = false;
 
     constructor(private dadWidgetDataService: DadElementDataService,
-              private dadWidgetConfigsService: DadWidgetConfigsService) {}
+                private dadWidgetConfigsService: DadWidgetConfigsService,
+                private router: Router, private route: ActivatedRoute) {}
 
     onRefresh():void{
         if (!this.refreshMode) this.refreshMode = true;
@@ -119,6 +123,15 @@ export class DadWidgetComponent implements OnInit {
     onMoreDetails(message:string):void{
         if (!this.moreDetails) this.moreDetails = true;
         else this.moreDetails = false;
+    }
+
+    onDrill(message:string):void{
+        //[routerLink]="['drillcharts', widget.drillTo ]"
+        this.router.navigate(['drillcharts', this.widget.drillTo], { relativeTo: this.route});
+    }
+
+    onRawData(message:string):void{
+            this.router.navigate(['table', this.data[0][this.widget.metrics[0].DataSource], this.widget.id], { relativeTo: this.route});
     }
 
     changeData() {

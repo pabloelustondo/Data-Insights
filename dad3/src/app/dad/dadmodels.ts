@@ -5,11 +5,11 @@ import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTable} from "./table.component";
 
-
 export class DadElement {
   id: string;
   name?: string;
   data?: any;
+  mappedData?: any;
   parameters?: any[];
   metricName?: string;
   predicates?: string[];
@@ -24,8 +24,11 @@ export class DadElement {
   chart?: DadChart;
   transformation?: any;
   transformations?: any[];
+  reduction?:any;
+  reductions?:any[];
+  filter?:any;
+  search?:string;
 }
-
 
 export class DadDateRange{
   dateFrom: string;

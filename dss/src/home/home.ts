@@ -19,6 +19,8 @@ export class Home {
   jwt: string;
   decodedJwt: string;
   response: string;
+  showTermsAndConditions: boolean;
+  acceptedTermsAndConditions: boolean;
   enrollStatus: boolean;
   enrollments: string[];
   showEnrollments: boolean;
@@ -100,9 +102,14 @@ export class Home {
     }
   }
 
-  downloadFile(){
-    var blob = new Blob([this.jwt], { type: 'text/csv' });
-    FileSaver.saveAs(blob, "mcdp_dad_access.key");
+  downloadFile(conditionStatus: any){
+    if (this.acceptedTermsAndConditions) {
+      var blob = new Blob([this.jwt], {type: 'text/csv'});
+      FileSaver.saveAs(blob, "mcdp_dad_access.key");
+    }
+    else {
+      this.showTermsAndConditions = true;
+    }
    // var url= window.URL.createObjectURL(blob);
    // window.open(url);
   }
@@ -179,7 +186,7 @@ export class Home {
     var decoded = this.decodedJwt;
 
     var agent = {
-      tenantid : decoded['tenantid'],
+      tenantid : decoded['tenantId'],
       agentid : 'asdas',
       mcurl : mcurl
     };

@@ -33,6 +33,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\MCDP\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -44,13 +48,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseSection.cs" />
+    <Compile Include="DeviceStatApplicationProvider.cs" />
     <Compile Include="DeviceStatIntProvider.cs" />
     <Compile Include="IDeviceStatApplicationProvider.cs" />
     <Compile Include="IDeviceStatIntProvider.cs" />
-    <Compile Include="Model\DeviceStatIntList.cs" />
+    <Compile Include="Model\DeviceStatApplication.cs" />
     <Compile Include="Model\DeviceStatInt.cs" />
     <Compile Include="Model\DeviceSyncStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceProcess;
 using System.Timers;
 using Soti.MCDP.DataProcess;
+using Soti.MCDP.Database;
+using Soti.MCDP.Database.Model;
 
 namespace Soti.MCDP
 {
@@ -15,12 +18,19 @@ namespace Soti.MCDP
         /// <summary>
         /// get polling interval. This setting will determine how fast we poll the database to get posible new data
         /// </summary>
-        private double pollinginterval;
+        private double _pollinginterval;
 
         // this timer is used to schedule the calls to the database according to the polling interval.
-        Timer mcdpTimer = null;
+        private Timer _mcdpTimer = null;
 
         private DataProcessProvider _dataProcessProvider = null;
+
+        private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
+
+        private IDeviceStatApplicationProvider _deviceStatApplicationProvider;
+
+        private IDeviceStatIntProvider _deviceStatIntProvider;
+
 
         public MCDP()
         {
@@ -37,7 +47,7 @@ namespace Soti.MCDP
         /// </summary>
         protected override void OnStart(string[] args)
         {
-            this.initPollService();
+            this.InitPollService();
         }
 
         /// <summary>
@@ -45,38 +55,48 @@ namespace Soti.MCDP
         /// </summary>
         protected override void OnStop()
         {
-            this.stopPollService();
+            this.StopPollService();
         }
 
         /// <summary>
         /// This method initialize the polling process that will run in a loop each polling interval
         /// </summary>
-        private void initPollService()
+        private void InitPollService()
         {
-            this.pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
+            this._deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
+            this._deviceStatApplicationProvider = new DeviceStatApplicationProvider(_deviceSyncStausList);
+            this._deviceStatIntProvider = new DeviceStatIntProvider(_deviceSyncStausList);
 
+            this._pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
+
+            //make default min value to 1 second
+            if (this._pollinginterval < 1000)
+                this._pollinginterval = 1000;
             //LOADING Process PROVIDER
-            _dataProcessProvider = new DataProcessProvider();
+            _dataProcessProvider = new DataProcessProvider(_deviceStatApplicationProvider, _deviceStatIntProvider, _deviceSyncStausList);
 
-            this.mcdpTimer = new System.Timers.Timer(this.pollinginterval);
-            this.mcdpTimer.Enabled = true;
-            this.mcdpTimer.AutoReset = true;
-            this.mcdpTimer.Elapsed += mcdpTimerProcess;
-            this.mcdpTimer.Start();
+            this._mcdpTimer = new Timer(this._pollinginterval)
+            {
+                Enabled = true,
+                AutoReset = true
+            };
+            this._mcdpTimer.Elapsed += McdpTimerProcess;
+            this._mcdpTimer.Start();
+
         }
 
         /// <summary>
         /// This method initialize the polling process that will run in a loop each polling interval
         /// </summary>
-        private void stopPollService()
+        private void StopPollService()
         {
-            this.mcdpTimer.Dispose();
+            this._mcdpTimer.Dispose();
         }
 
         /// <summary>
         /// Start Process
         /// </summary>
-        private void mcdpTimerProcess(object sender, ElapsedEventArgs e)
+        private void McdpTimerProcess(object sender, ElapsedEventArgs e)
         {
             _dataProcessProvider.McdpTimerProcess();
         }

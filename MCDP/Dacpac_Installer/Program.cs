@@ -30,17 +30,17 @@ namespace Soti.MCDP.DacpacInstaller
                 {
                     case "-S":
                         targetServer = args[++i];
-                        Trace(string.Format("Target server: '{0}'", targetServer));
+                        Trace($"Target server: '{targetServer}'");
                         break;
 
                     case "-D":
                         targetDatabaseName = args[++i];
-                        Trace(string.Format("Target database: '{0}'", targetDatabaseName));
+                        Trace($"Target database: '{targetDatabaseName}'");
                         break;
 
                     case "-U":
                         userName = args[++i];
-                        Trace(string.Format("User name: '{0}'", userName));
+                        Trace($"User name: '{userName}'");
                         break;
 
                     case "-P":
@@ -49,7 +49,7 @@ namespace Soti.MCDP.DacpacInstaller
 
                     case "-d":
                         dacpacFile = args[++i];
-                        Trace(string.Format(@"DACPAC File: ""{0}""", dacpacFile));
+                        Trace($@"DACPAC File: ""{dacpacFile}""");
                         break;
 
                     case "-v":

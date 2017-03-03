@@ -1,101 +1,109 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace Soti.MCDP.Database
 {
     /// <summary>
-    /// Represents the local machine's database connection information.
+    ///     Represents the local machine's database connection information.
     /// </summary>
     public class DatabaseSection : ICloneable
     {
         /// <summary>
-        /// Initializes a new instance of the DatabaseSection class.
+        ///     Initializes a new instance of the DatabaseSection class.
         /// </summary>
-        public DatabaseSection()
+        private DatabaseSection()
         {
             UseWindowsAuthentication = true;
         }
 
         /// <summary>
-        /// Gets or sets the name of the database.
+        ///     Gets or sets the name of the database.
         /// </summary>
-        public string DatabaseName { get; set; }
+        private string DatabaseName { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
+        ///     Gets or sets the password.
         /// </summary>
-        public string Password { get; set; }
+        private string Password { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the database server.
+        ///     Gets or sets the name of the database server.
         /// </summary>
-        public string ServerName { get; set; }
+        private string ServerName { get; set; }
 
         /// <summary>
-        /// Gets or sets the user name.
+        ///     Gets or sets the user name.
         /// </summary>
-        public string UserName { get; set; }
+        private string UserName { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the connection will
-        /// use Windows Authentication.
+        ///     Gets or sets a value indicating whether the connection will
+        ///     use Windows Authentication.
         /// </summary>
-        public bool UseWindowsAuthentication { get; set; }
+        private bool UseWindowsAuthentication { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the section is encrypted.
+        ///     Gets or sets a value indicating whether the section is encrypted.
         /// </summary>
-        public bool IsProtected { get; set; }
+        private bool IsProtected { get; set; }
 
         /// <summary>
-        /// Loads the database configuration for the local system.
+        ///     Creates a clone of this object.
         /// </summary>
-        /// <returns>The database configuration.</returns>
-        public static DatabaseSection Load()
+        /// <returns>The cloned object.</returns>
+        public object Clone()
         {
-            return Load(Directory.GetCurrentDirectory());
-        }
-
-        /// <summary>
-        /// Loads the database configuration from the given location.
-        /// </summary>
-        /// <param name="path">The path to the MobiControl installation files.</param>
-        /// <returns>The database configuration.</returns>
-        public static DatabaseSection Load(string path)
-        {
-            var logMessage = DateTime.Now.ToString() + "  =>  ";
-
-            if (path == null)
-                Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
-
-
-            var config = GetConfiguration(path);
-
-            var settings = config.ConnectionStrings.ConnectionStrings["DbConnectionString"];
-            if (settings == null)
-            {
-                Log(logMessage + "[ERROR] Database section does not have an associated file!");
-            }
-
-            var builder = new SqlConnectionStringBuilder(settings.ConnectionString);
-
             return new DatabaseSection
             {
-                DatabaseName = builder.InitialCatalog,
-                ServerName = builder.DataSource,
-                UserName = builder.UserID,
-                Password = builder.Password,
-                UseWindowsAuthentication = builder.IntegratedSecurity,
-                IsProtected = config.ConnectionStrings != null && config.ConnectionStrings.SectionInformation.IsProtected
+                DatabaseName = DatabaseName,
+                Password = Password,
+                ServerName = ServerName,
+                UserName = UserName,
+                UseWindowsAuthentication = UseWindowsAuthentication,
+                IsProtected = IsProtected
             };
         }
 
-        public static string LoadConnectionString(string path)
+        /// <summary>
+        ///     Loads the database configuration for the local system.
+        /// </summary>
+        /// <returns>The database configuration.</returns>
+        public static string Load()
         {
-            var logMessage = DateTime.Now.ToString() + "  =>  ";
-            
+            try
+            { 
+                var regkey =
+                    Registry.LocalMachine.OpenSubKey(
+                        $@"SYSTEM\CurrentControlSet\services\{ConfigurationManager.AppSettings["MCName"]}");
+
+                if (regkey != null && regkey.GetValue("ImagePath") == null)
+                    return "Not Found";
+                else if (regkey != null)
+                {
+                    var mcPath = Path.GetInvalidPathChars().Aggregate(regkey.GetValue("ImagePath").ToString(), (current,c)=> current.Replace(c.ToString(), string.Empty));
+
+                    var path = Path.GetDirectoryName(mcPath);
+                    return LoadConnectionString(path);
+                }
+                else return "";
+            }
+            catch (Exception ex)
+            {
+                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+                Log(logMessage + ex);
+                return "";
+            }
+        }
+
+        private static string LoadConnectionString(string path)
+        {
+            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+
             if (path == null)
                 Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
             try
@@ -104,42 +112,21 @@ namespace Soti.MCDP.Database
 
                 var settings = config.ConnectionStrings.ConnectionStrings["DbConnectionString"];
 
-                if (settings == null)
-                {
-                    Log(logMessage + "[ERROR] Database section does not have an associated file!");
-                    return "";
-                }
-                else
-                {
+                if (settings != null)
                     return settings.ConnectionString;
-                }
-            }
-            catch(Exception ex)
-            {
-                Log(logMessage + ex.ToString());
+
+                Log(logMessage + "[ERROR] Database section does not have an associated file!");
                 return "";
-            }         
-        }
-
-        /// <summary>
-        /// Creates a clone of this object.
-        /// </summary>
-        /// <returns>The cloned object.</returns>
-        public object Clone()
-        {
-            return new DatabaseSection
+            }
+            catch (Exception ex)
             {
-                DatabaseName = this.DatabaseName,
-                Password = this.Password,
-                ServerName = this.ServerName,
-                UserName = this.UserName,
-                UseWindowsAuthentication = this.UseWindowsAuthentication,
-                IsProtected = this.IsProtected
-            };
+                Log(logMessage + ex);
+                return "";
+            }
         }
 
         /// <summary>
-        /// Determines if this object equals the given object.
+        ///     Determines if this object equals the given object.
         /// </summary>
         /// <param name="obj">The object to compare.</param>
         /// <returns>True if the objects are equal and false if not.</returns>
@@ -150,28 +137,28 @@ namespace Soti.MCDP.Database
                 return false;
 
             return DatabaseName.Equals(comparand.DatabaseName) &&
-                Equals(Password, comparand.Password) &&
-                ServerName.Equals(comparand.ServerName) &&
-                Equals(UserName, comparand.UserName) &&
-                UseWindowsAuthentication == comparand.UseWindowsAuthentication &&
-                IsProtected == comparand.IsProtected;
+                   Equals(Password, comparand.Password) &&
+                   ServerName.Equals(comparand.ServerName) &&
+                   Equals(UserName, comparand.UserName) &&
+                   UseWindowsAuthentication == comparand.UseWindowsAuthentication &&
+                   IsProtected == comparand.IsProtected;
         }
 
         /// <summary>
-        /// Gets a hash code for this object.
+        ///     Gets a hash code for this object.
         /// </summary>
         /// <returns>The object's hash code.</returns>
         public override int GetHashCode()
         {
             return DatabaseName.GetHashCode() ^
-                (Password != null ? Password.GetHashCode() : 0) ^
-                ServerName.GetHashCode() ^
-                (UserName != null ? UserName.GetHashCode() : 0) ^
-                UseWindowsAuthentication.GetHashCode() ^ IsProtected.GetHashCode();
+                   (Password?.GetHashCode() ?? 0) ^
+                   ServerName.GetHashCode() ^
+                   (UserName?.GetHashCode() ?? 0) ^
+                   UseWindowsAuthentication.GetHashCode() ^ IsProtected.GetHashCode();
         }
 
         /// <summary>
-        /// Saves the database configuration.
+        ///     Saves the database configuration.
         /// </summary>
         public void Save()
         {
@@ -179,12 +166,12 @@ namespace Soti.MCDP.Database
         }
 
         /// <summary>
-        /// Saves the database configuration.
+        ///     Saves the database configuration.
         /// </summary>
         /// <param name="path">The path to the MobiControl installation files.</param>
-        public void Save(string path)
+        private void Save(string path)
         {
-            var logMessage = DateTime.Now.ToString() + "  =>  ";
+            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
             if (path == null)
                 Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
@@ -204,7 +191,7 @@ namespace Soti.MCDP.Database
             IsProtected = true;
 
             // no longer need to write to MCDB.ini, just in case make sure MCDB.ini was deleted
-            if (File.Exists(Path.Combine(path, "MCDB.ini")))
+            if (path != null && File.Exists(Path.Combine(path, "MCDB.ini")))
                 File.Delete(Path.Combine(path, "MCDB.ini"));
 
             // Since we use the same database connection string for this
@@ -214,68 +201,67 @@ namespace Soti.MCDP.Database
         }
 
         /// <summary>
-        /// Gets a configuration
+        ///     Gets a configuration
         /// </summary>
         /// <param name="path">The configuration folder's path</param>
         /// <returns>Loaded configuration</returns>
-        private static System.Configuration.Configuration GetConfiguration(string path)
+        private static Configuration GetConfiguration(string path)
         {
-            var logMessage = DateTime.Now.ToString() + "  =>  ";
+            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
             try
             {
-                ExeConfigurationFileMap map = new ExeConfigurationFileMap
+                var map = new ExeConfigurationFileMap
                 {
                     ExeConfigFilename = Path.Combine(path, "MCDeplSvr.exe.config")
                 };
 
                 var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
-                if (!config.HasFile)
+                if (config.HasFile) return config;
+
+                map = new ExeConfigurationFileMap
                 {
+                    ExeConfigFilename = Path.Combine(path, "Soti.MobiControl.ManagementService.Host.exe.config")
+                };
 
-                    map = new ExeConfigurationFileMap
-                    {
-                        ExeConfigFilename = Path.Combine(path, "Soti.MobiControl.ManagementService.Host.exe.config")
-                    };
+                config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
-                    config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-
-                    if (!config.HasFile)
-                    {
-                        Log(logMessage + "[ERROR] DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
-                    }
-                }
+                if (!config.HasFile)
+                    Log(logMessage +
+                        "[ERROR] DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
                 return config;
             }
             catch (Exception ex)
             {
-                Log(logMessage + ex.ToString());
+                Log(logMessage + ex);
                 return null;
             }
-            
         }
 
         /// <summary>
-        /// Log Service
+        ///     Log Service
         /// </summary>
         /// <param name="message">Log Message.</param>
         private static void Log(string message)
         {
-            StreamWriter streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
+            var streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
             streamWriter.WriteLine(message);
             streamWriter.Close();
             streamWriter = null;
         }
+
         /// <summary>
-        /// Builds a database connection string using the given builder.
+        ///     Builds a database connection string using the given builder.
         /// </summary>
         /// <returns>The connection string.</returns>
         private string BuildConnectionString()
         {
-            var builder = new SqlConnectionStringBuilder();
+            var builder = new SqlConnectionStringBuilder
+            {
+                ["Data Source"] = ServerName,
+                ["Initial Catalog"] = DatabaseName
+            };
 
-            builder["Data Source"] = ServerName;
-            builder["Initial Catalog"] = DatabaseName;
 
             if (UseWindowsAuthentication)
             {
