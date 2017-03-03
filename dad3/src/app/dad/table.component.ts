@@ -40,14 +40,14 @@ export class DadTable extends DadElement{
                     <span *ngFor="let key of tableParameterKeys()"> 
                        {{key}}:{{tableParameterValue(key)}}
                     </span>
-                    
+                    <!--
                     <div class="form-inline b-r-1 px-2 float-xs-left hidden-md-down">
                         <button (click)="search()" type="button" class="btn btn-secondary">
                             <span class="fa fa-search"></span>
                         </button>
                         <input [(ngModel)]=" table.search" type="text" placeholder="Search...">
                     </div>
-                    
+                    -->
                 </div>
                 <div class="card-block">
                     <table class="table table-striped">
