@@ -43,6 +43,16 @@ describe('DadFilter', () => {
         expect(result.length).toBe(2); //use better test
     });
 
+    it("should return one attribute's value and applies a search", () => {
+        let element: DadElement = TABLES[0]; //this chart does not have any transformation spec
+        element.filter = {os:'Android'};
+        element.search = "Samsung";
+        let filter = new DadFilter();
+        var result = filter.filter(element, element.data);
+        expect(result).toBeDefined();
+        expect(result.length).toBe(3); //use better test
+    });
+
 
 
 });

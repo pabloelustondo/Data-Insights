@@ -6,7 +6,7 @@ import { TABLES} from "../sample.tables"
 import {DadTable} from "../table.component";
 import {DadElement} from "../dadmodels";
 
-describe('DadFilter', () => {
+describe('DadSearch', () => {
     beforeEach(() => {
 
     });
@@ -24,4 +24,14 @@ describe('DadFilter', () => {
         expect(result).toBeDefined();
         expect(result.length).toBe(element.data.length); //use better test
     });
+
+    it('should filter is search provided', () => {
+        let element: DadElement = TABLES[0]; //this chart does not have any transformation spec
+        element.search = "Android";
+        let search = new DadSearch();
+        var result = search.search(element, element.data);
+        expect(result).toBeDefined();
+        expect(result.length).toBe(8); //use better test
+    });
+
 });
