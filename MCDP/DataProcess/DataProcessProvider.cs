@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
@@ -125,13 +126,12 @@ namespace Soti.MCDP.DataProcess
                     ConfigurationManager.AppSettings["SupportedDataTable"]);
                 _batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["batchSize"]);
                 //LOADING DATABASE PROVIDER
+                Logger.Log(LogSeverity.Info, "BatchSize: " + _batchSize);
                 Init();
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-                Log(logMessage + "[ERROR] DataProcessProvider: " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -142,15 +142,15 @@ namespace Soti.MCDP.DataProcess
         {
             try
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[INFO] JWTTokenPath: " + _jwtTokenPath);
-                Log(logMessage + "[INFO] DataTrackerPath: " + _dataTrackerPath);
+                Logger.Log(LogSeverity.Info, "JWTTokenPath: " + _jwtTokenPath);
+                Logger.Log(LogSeverity.Info, "DataTrackerPath: " + _dataTrackerPath);
+
                 if (File.Exists(_jwtTokenPath))
                 {
                     _jwtToken = File.ReadAllText(_jwtTokenPath);
-                    Log(logMessage + "[INFO] JWTToken: " + _jwtToken);
+                    Logger.Log(LogSeverity.Info, "JWTToken: " + _jwtToken);
                     _expiredJwtToken = HandShakeToIda(_jwtToken);
-                    Log(logMessage + "[INFO] ExpiredJWTToken: " + _expiredJwtToken);
+                    Logger.Log(LogSeverity.Info, "ExpiredJWTToken: " + _expiredJwtToken);
                 }
 
                 ExtractDataTracker();
@@ -160,9 +160,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -218,9 +216,6 @@ namespace Soti.MCDP.DataProcess
                 return;
             _processing = true; // this avvoid running one process when the other did not finish.
 
-            // we only call the database is the number of failures of any type is less than the permitted. 
-            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
             if (_numberOfConsecutiveDbFailures < _maxNumberOfConsecutiveDbFailures
                 && _numberOfConsecutiveIdaFailures < _maxNumberOfConsecutiveIdaFailures)
             {
@@ -228,26 +223,34 @@ namespace Soti.MCDP.DataProcess
                 {
                     try
                     {
+                        var count = _deviceStatIntProvider.CheckDeviceStatIntSize();
+                        // write to log the success of the operation
+                        Logger.Log(LogSeverity.Info, count + " of DeviceStatInt wait for send.");
+
+                        
                         var idaData = _deviceStatIntProvider.RetrieveDeviceStatIntData(_batchSize);
+                       
 
                         if (idaData != "")
                             try
                             {
+                                var watch = System.Diagnostics.Stopwatch.StartNew();
                                 SendData2Ida(idaData, "DeviceStatInt");
-
+                                watch.Stop();
                                 _deviceStatIntProvider.ConfirmStatusData(true);
-                                    // this shouuld go somewhere else later... 
+                                // this shouuld go somewhere else later... 
 
-                                logMessage += "[INFO] new data to be sent.";
                                 // write to log the success of the operation
-                                Log(logMessage);
+                                Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: "
+                                    + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte."
+                                    + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
                             }
                             catch (Exception ex)
                             {
                                 // this expcetion is due to problems when sending data to input data adapter
                                 _numberOfConsecutiveIdaFailures += 1;
                                 _deviceStatIntProvider.ConfirmStatusData(false);
-                                Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
+                                Logger.Log(LogSeverity.Error, " communicating with input data adapter: " + ex);
                             }
                     }
                     catch (Exception eDb)
@@ -255,7 +258,7 @@ namespace Soti.MCDP.DataProcess
                         // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                         _numberOfConsecutiveDbFailures += 1;
 
-                        Log(logMessage + "[ERROR] Error reading database: " + eDb);
+                        Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
                     }
                 }
                 //we only call the database is the number of failures of any type is less than the permitted.
@@ -263,26 +266,35 @@ namespace Soti.MCDP.DataProcess
                 {
                     try
                     {
+                        var count = _deviceStatApplicationProvider.CheckDeviceStatApplicationSize();
+                        // write to log the success of the operation
+                        Logger.Log(LogSeverity.Info, count + " of DeviceStatApplication wait for send.");
+
+
                         var idaData = _deviceStatApplicationProvider.RetrieveDeviceStatApplicationData(_batchSize);
 
                         if (idaData != "")
                             try
                             {
-                                SendData2Ida(idaData, "DeviceStatInt");
+                                var watch = System.Diagnostics.Stopwatch.StartNew();
+                                SendData2Ida(idaData, "DeviceStatApplication");
+                                watch.Stop();
 
                                 _deviceStatApplicationProvider.ConfirmStatusData(true);
-                                    // this shouuld go somewhere else later... 
+                                // this shouuld go somewhere else later... 
 
-                                logMessage += "[INFO] new data to be sent.";
                                 // write to log the success of the operation
-                                Log(logMessage);
+                                Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: " 
+                                    + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte." 
+                                    + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
                             }
                             catch (Exception ex)
                             {
                                 // this expcetion is due to problems when sending data to input data adapter
                                 _numberOfConsecutiveIdaFailures += 1;
                                 _deviceStatApplicationProvider.ConfirmStatusData(false);
-                                Log(logMessage + "[ERROR] Error communicating with input data adapter: " + ex);
+                              
+                                Logger.Log(LogSeverity.Error," communicating with input data adapter: " + ex);
                             }
                     }
                     catch (Exception eDb)
@@ -290,7 +302,7 @@ namespace Soti.MCDP.DataProcess
                         // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                         _numberOfConsecutiveDbFailures += 1;
 
-                        Log(logMessage + "[ERROR] Error reading database: " + eDb);
+                        Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
                     }
                 }
             }
@@ -315,23 +327,10 @@ namespace Soti.MCDP.DataProcess
                     _dBSkippedAfterFailure = 0;
                     _idaSkippedAfterFailure = 0;
                 }
-                Log(logMessage + "[INFO] Skipping Cycling due to reach maximum retry and failure count.");
+                Logger.Log(LogSeverity.Info, " Skipping Cycling due to reach maximum retry and failure count.");
             }
 
             _processing = false; // this will enable other attempts to process to go ahead.
-        }
-
-  
-        /// <summary>
-        ///     Log Service
-        /// </summary>
-        /// <param name="message">Log Message.</param>
-        private static void Log(string message)
-        {
-            var streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
-            streamWriter.WriteLine(message);
-            streamWriter.Close();
-            streamWriter = null;
         }
 
         /// <summary>
@@ -363,16 +362,13 @@ namespace Soti.MCDP.DataProcess
 
                     //var result = client.UploadString(url, "POST", json.ToString());
                     var result = client.UploadString(url, "POST", ida4Data);
-                    var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-                    Log(logMessage + "[INFO] " + result);
+                    
+                    //Logger.Log(LogSeverity.Info, result);
                 }
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -402,9 +398,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
             return result.session_token;
         }

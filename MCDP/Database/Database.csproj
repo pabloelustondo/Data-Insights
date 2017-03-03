@@ -52,9 +52,11 @@
     <Compile Include="DeviceStatIntProvider.cs" />
     <Compile Include="IDeviceStatApplicationProvider.cs" />
     <Compile Include="IDeviceStatIntProvider.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Model\DeviceStatApplication.cs" />
     <Compile Include="Model\DeviceStatInt.cs" />
     <Compile Include="Model\DeviceSyncStatus.cs" />
+    <Compile Include="Model\LogSeverity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

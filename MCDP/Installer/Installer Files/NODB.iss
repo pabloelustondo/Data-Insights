@@ -4,8 +4,8 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define AppName "MobiControlDataAdapter"
-#define AppVersion GetFileVersion(AddBackslash(SourcePath) + "MCDP.exe")
+#define MyAppName "MobiControlDataAdapter"
+#define MyAppVersion GetFileVersion(AddBackslash(SourcePath) + "MCDP.exe")
 #define MyAppPublisher "SOTI Inc."
 #define MyAppURL "https://www.soti.net/"
 #define MyAppExeName "MCDP.exe"
@@ -14,12 +14,12 @@
 
 [Setup]
 AppId = {{F268B5D3-CF35-4DD7-83D3-F12EC178D50E}
-AppName={#AppName}
-AppVersion={#AppVersion}
+AppName={#MyAppName}
+AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
-DefaultDirName={pf}\SOTI\{#AppName}
-DefaultGroupName={#AppName}
+DefaultDirName={reg:HKLM\SYSTEM\CurrentControlSet\services\MCDP,ImagePath}
+DefaultGroupName={#MyAppName}
 DisableDirPage=no
 DisableProgramGroupPage=yes
 UninstallDisplayIcon={#MyAppIcon}
@@ -53,23 +53,49 @@ Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Newtonsoft.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "SupportedDataTable.json"; DestDir: "{app}"; Flags: ignoreversion 
 Source: "{src}\mcdp_access.key"; DestDir: "{app}"; Flags: external;
 
 [Icons]
-Name: "{group}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 ;Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "sc.exe"; Parameters: "create MCDP start=delayed-auto binPath=""{app}\{#MyAppExeName}"" DisplayName= ""MobiControl Data Producer Service"""; Flags: runascurrentuser
+Filename: "sc.exe"; Parameters: "create MCDP start=delayed-auto binPath=""{app}\{#MyAppExeName}"" DisplayName= ""MobiControl Data Producer Service"""; Flags: runascurrentuser runhidden
 
 [UninstallRun]
 Filename: "sc.exe"; Parameters: "stop {#MyAppExeNameOnly}"; Flags: runascurrentuser
 Filename: "sc.exe"; Parameters: "delete {#MyAppExeNameOnly}"; Flags: runascurrentuser
 
+[CustomMessages]
+MyAppOld=The Setup detected application version 
+MyAppRequired=The installation of {#MyAppName} requires MyApp to be installed.%nInstall MyApp before installing this update.%n%n
+MyAppTerminated=The setup of update will be terminated.
+
 [code]
+    var
+    InstallLocation: String;
+
+    function GetInstallString(): String;
+    var
+    InstPath: String;
+    InstallString: String;
+    begin
+    InstPath := ExpandConstant('SYSTEM\CurrentControlSet\services\MCDP');
+    InstallString := '';
+    if not RegQueryStringValue(HKLM, InstPath, 'InstallLocation', InstallString) then
+    RegQueryStringValue(HKCU, InstPath, 'InstallLocation', InstallString);
+    Result := InstallString;
+    InstallLocation := InstallString;
+    end;
+
    //Pre checkup
-   function InitializeSetup(): Boolean;
-   begin
+    function InitializeSetup(): Boolean;
+     var
+        V: Integer;
+        sUnInstallString: String;
+        Version: String;
+     begin
      if RegKeyExists(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\services\MobiControl Management Service')  then
      begin
        //MsgBox('Installation validated', mbInformation, MB_OK);
@@ -88,5 +114,21 @@ Filename: "sc.exe"; Parameters: "delete {#MyAppExeNameOnly}"; Flags: runascurren
        MsgBox('Require MobiControl.'+ #13#10 + 'Please install MobiControl before install MC Data Adaptor!', mbCriticalError, MB_OK);
        Result := False;
      end;
-   end;
+
+     //upgrade case check out
+     if RegKeyExists(HKEY_LOCAL_MACHINE,'SYSTEM\CurrentControlSet\Services\MCDP') then 
+     begin
+       RegQueryStringValue(HKEY_LOCAL_MACHINE,'SYSTEM\CurrentControlSet\services\MCDP', 'Version', Version);
+       //if Version =< ExpandConstant('{#MyAppVersion}') then 
+       //begin 
+         // Result := True;
+         // GetInstallString();
+       //end
+       MsgBox(Version, mbInformation, MB_OK);
+     end
+     else 
+     begin
+       RegWriteStringValue(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\services\MCDP', 'Version', '{#MyAppVersion}');
+     end;
+    end;
 
