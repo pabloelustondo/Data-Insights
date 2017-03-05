@@ -31,16 +31,21 @@ export class DadTable extends DadElement{
   selector: 'dadtable',
   providers:[DadElementDataService,DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService],
   template: ` 
-    <div *ngIf="data">
+    <div *ngIf="table && data">
         <div class="col-lg-10">
             <div class="card">
                 <div class="card-header">
                     <h4>{{table.name}}</h4>
                        Number of Rows:{{count}}
-                    <span *ngFor="let key of tableParameterKeys()"> 
+                    <span *ngFor="let key of parameterKeys"> 
                        {{key}}:{{tableParameterValue(key)}}
                     </span>
-                    <!--
+                          
+                    <form role="form" (submit)="search(querystr)">
+                    <input id="querystr" type="text" #querystr  placeholder=“Search…”>
+                    <button type="submit" >Search</button>
+                    </form>
+              <!--
                     <div class="form-inline b-r-1 px-2 float-xs-left hidden-md-down">
                         <button (click)="search()" type="button" class="btn btn-secondary">
                             <span class="fa fa-search"></span>
@@ -58,11 +63,13 @@ export class DadTable extends DadElement{
                         </thead>
                         <tbody>
                             <tr *ngFor="let row of data; let rowindex = index">
-                                <td style="align-content: center;" *ngFor="let col of table.columns">
-                                    <span *ngIf="!isMiniChart(col)"> {{row[col.DataSource]}} </span>
-                                    <span *ngIf="isMiniChart(col)"> 
-                                        <dadchart [chart]="miniChart(col,rowindex)" [data]="chartData(row,col)"></dadchart>
-                                    </span>        
+                                <td style="align-content: center;" *ngFor="let col of table.columns; let colindex= index">
+                                    <span *ngIf="!(col.Type === 2)"> {{row[col.DataSource]}} </span>
+                                 
+                                    <span *ngIf="col.Type === 2"> 
+                                        <dadchart [chart]="this.miniChartD[rowindex][colindex]" [data]="chartDataD[rowindex][colindex]"></dadchart>
+                                    </span>   
+                                         
                                 </td>
                             </tr>
                         </tbody>
@@ -86,6 +93,7 @@ export class DadTableComponent implements OnInit {
   chartData(row,col){
     return JSON.parse(row[col.DataSource]);
   }
+  allData;any;
   count:number = 0;
   private subscription: Subscription;
   pages:number[];
@@ -93,6 +101,9 @@ export class DadTableComponent implements OnInit {
   callerId:string;
   callerElement: DadElement;
   searchString: string;
+  parameterKeys: any[];
+  miniChartD: any[];
+  chartDataD: any[];
 
   constructor(private dadTableDataService: DadElementDataService,
               private dadTableConfigsService: DadTableConfigsService,
@@ -111,8 +122,31 @@ export class DadTableComponent implements OnInit {
     return chartConfig;
   }
 
-  search(){
-      alert(this.searchString);
+  search(s){
+      if (!s)return;
+      this.table.search = s.value;
+      let filter = new DadFilter();
+      this.data = filter.filter(this.table, this.allData);
+
+      //    <dadchart [chart]="miniChart(col,rowindex)" [data]="chartData(row,col)"></dadchart>
+
+      this.preCalculateCharts();
+  }
+
+  preCalculateCharts(){
+      this.miniChartD = [];
+      this.chartDataD = [];
+      for (let d=0; d<this.data.length; d++){
+          this.miniChartD[d] = [];
+          this.chartDataD[d] = [];
+
+          for(let c=0; c<this.table.columns.length; c++){
+              if(this.table.columns[c].Type===2){
+              this.miniChartD[d][c] = this.miniChart(this.table.columns[c],d);
+              this.chartDataD[d][c] = this.chartData(this.data[d],this.table.columns[c]);
+              }
+          }
+      }
   }
 
   refresh(page:number){
@@ -121,7 +155,8 @@ export class DadTableComponent implements OnInit {
     this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
     this.dadTableDataService.getElementData(this.table).then(
         data => {
-          this.data = data.data;
+          this.allData = data.data;
+
         }
     ).catch(err => console.log(err.toString()));
   }
@@ -149,10 +184,19 @@ export class DadTableComponent implements OnInit {
 
   ngAfterViewInit(){
 
-    this.subscription = this.activatedRoute.params.subscribe(
+      this.allData = this.data;
+
+      this.subscription = this.activatedRoute.params.subscribe(
         (param: any) => {
           this.count = Number(param['count']);
           console.log(this.count);
+
+
+            let tableId =  this.callerId = param['tableid'];
+            if (!tableId) tableId = this.callerElement.tableId;
+
+            this.table  = this.findTables(tableId);
+
           let numberOfPages = this.count/this.table.parameters[0].rowsTake;
           this.pages = [];
           for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
@@ -168,15 +212,12 @@ export class DadTableComponent implements OnInit {
                   this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
               }
 
-              let tableId =  this.callerId = param['tableid'];
-              if (!tableId) tableId = this.callerElement.tableId;
-
-              this.table  = this.findTables(tableId);
               let elementParameters = this.callerElement.parameters[0];
               let tableParameters = this.table.parameters[0];
 
+              this.parameterKeys = [];
               for (let param of Object.keys(elementParameters)) {
-
+                    this.parameterKeys.push(param);
                   tableParameters[param] = elementParameters[param];
               }
           }
@@ -186,13 +227,18 @@ export class DadTableComponent implements OnInit {
             let filter = new DadFilter();
 
             if (!this.data && this.table.data && config.testing){
-                this.data = filter.filter(this.table, this.table.data);
-  }
+                this.allData = this.table.data;
+                this.data = filter.filter(this.table, this.allData);
+                this.preCalculateCharts();
+             }
 
             if (!config.testing) {
                 this.dadTableDataService.getElementData(this.table).then(
                     data => {
-                        this.data = filter.filter(this.table, data.data);
+                        this.allData = data.data;
+                        this.data = filter.filter(this.table, this.allData);
+                        this.preCalculateCharts();
+
                         if (this.data.errorMessage != null) {
                             alert(this.data.errorMessage);
                         }
@@ -203,24 +249,5 @@ export class DadTableComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    if (!this.table){
-
-      let tables = this.dadTableConfigsService.getTableConfigs();
-
-
-      this.subscription = this.activatedRoute.params.subscribe(
-          (param: any) => {
-              let callerId = param['id'];
-              let callerTableId = param['id'];
-              if (callerId === 'chartbar'){
-                  this.table = tables[1]; //This table is without minichart
-              }
-              else {
-                  this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
-              }
-        });
-       //this.table = tables[0]; //TO-DO we need to pass the ID as a router parameter
-    }
   }
 }
