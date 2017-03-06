@@ -73,7 +73,7 @@ export class Home {
   callGetEnrollments() {
 
     var headers = new Headers({
-      'Content-Type': 'application/json',
+      'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
     });
     this.http.get('http://localhost:3004/api/myenrollments', { headers: headers })
@@ -90,12 +90,6 @@ export class Home {
           console.log(error.text());
         }
       );
-    /*
-    if (this.isSOTI) {
-      this._callApi('Secured', 'http://localhost:3004/api/enrollments');
-    } else {
-      this._callApi('Secured', 'http://localhost:3004/api/myenrollments');
-    }*/
   }
 
   callDeleteAllEnrollments() {
@@ -119,17 +113,16 @@ export class Home {
   downloadCredentials(agentId: any) {
     let _agentId = agentId.innerHTML;
     var headers = new Headers({
-      'Content-Type': 'application/json',
+      'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
     });
-    this.http.get('http://localhost:3004/sourceCredentials/'+ _agentId, { headers: headers })
+    this.http.get('http://localhost:3004/sourceCredentials/' + _agentId, { headers: headers })
       .subscribe(
         response => {
           let response_body = response['_body'];
           var blob = new Blob([response_body], { type: 'text/csv' });
           FileSaver.saveAs(blob, 'MCDP_Access.key');
           this.error = null;
-       //    this.router.navigate(['home']);
         },
         error => {
           this.error = error.text();
@@ -138,13 +131,13 @@ export class Home {
       );
   }
 
-  resetCredentials(agentId: any){
+  resetCredentials(agentId: any) {
     let _agentId = agentId.innerHTML;
     var headers = new Headers({
-      'Content-Type': 'application/json',
+      'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
     });
-    this.http.post('http://localhost:3004/resetCredentials/'+ _agentId, { headers: headers })
+    this.http.post('http://localhost:3004/resetCredentials/' + _agentId, { headers: headers })
       .subscribe(
         response => {
           alert('successfully reset, download new credentials');
@@ -165,7 +158,7 @@ export class Home {
 
 
     var headers = new Headers({
-      'Content-Type': 'application/json',
+      'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
     });
 
@@ -184,7 +177,7 @@ export class Home {
       );
   }
 
-  addSource(mcurl){
+  addSource(mcurl) {
     var decoded = this.decodedJwt;
 
     var agent = {
