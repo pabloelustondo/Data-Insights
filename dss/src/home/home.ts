@@ -16,27 +16,26 @@ const template = require('./home.html');
   styles: [ styles ]
 })
 export class Home {
-  jwt: string;
-  decodedJwt: string;
-  response: string;
-  showTermsAndConditions: boolean;
-  acceptedTermsAndConditions: boolean;
-  enrollStatus: boolean;
-  enrollments: string[];
-  showEnrollments: boolean;
-  api: string;
-  error;
-  url:string;
-  isSOTI: boolean;
-  McUrl: any[];
+  jwt : string;
+  decodedJwt : string;
+  response : string;
+  showTermsAndConditions : boolean;
+  acceptedTermsAndConditions : boolean;
+  enrollStatus : boolean;
+  enrollments : string[];
+  showEnrollments : boolean;
+  api : string;
+  error : any;
+  url : string;
+  isSOTI : boolean;
+  McUrl : any[];
+  rowsTake = 10;
 
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
     this.decodedJwt = this.jwt && window.jwt_decode(this.jwt);
-    this.isSOTI = this.decodedJwt["domainid"] === 'soti';
+    this.isSOTI = this.decodedJwt['domainid'] === 'soti';
   }
-
-  rowsTake = 10;
 
   logout() {
     localStorage.removeItem('id_token');
@@ -44,17 +43,22 @@ export class Home {
   }
 
 
-  showAddSource(){
+  showAddSource() {
     console.log('enter show add source');
 
-    if (!this.enrollStatus) this.enrollStatus = true;
-    else this.enrollStatus = false;
+    if (!this.enrollStatus) {
+      this.enrollStatus = true;
+    } else {
+      this.enrollStatus = false;
+    }
   }
 
-  showDataSources(){
-      if (!this.showEnrollments) this.showEnrollments = true;
-      else this.showEnrollments = false;
-
+  showDataSources() {
+      if (!this.showEnrollments) {
+        this.showEnrollments = true;
+      } else {
+        this.showEnrollments = false;
+      }
       this.getMcUrl();
   }
 
@@ -75,7 +79,7 @@ export class Home {
     this.http.get('http://localhost:3004/api/myenrollments', { headers: headers })
       .subscribe(
         response => {
-          let response_body = response["_body"];
+          let response_body = response['_body'];
           var blob = new Blob([response_body], { type: 'text/csv' });
           this.error = null;
           this.response =  JSON.parse(response.text());
@@ -102,19 +106,17 @@ export class Home {
     }
   }
 
-  downloadFile(conditionStatus: any){
+  downloadFile(conditionStatus: any) {
     if (this.acceptedTermsAndConditions) {
       var blob = new Blob([this.jwt], {type: 'text/csv'});
-      FileSaver.saveAs(blob, "mcdp_dad_access.key");
-    }
-    else {
+      FileSaver.saveAs(blob, 'mcdp_dad_access.key');
+    } else {
       this.showTermsAndConditions = true;
     }
-   // var url= window.URL.createObjectURL(blob);
-   // window.open(url);
+
   }
 
-  downloadCredentials(agentId: any){
+  downloadCredentials(agentId: any) {
     let _agentId = agentId.innerHTML;
     var headers = new Headers({
       'Content-Type': 'application/json',
@@ -123,9 +125,9 @@ export class Home {
     this.http.get('http://localhost:3004/sourceCredentials/'+ _agentId, { headers: headers })
       .subscribe(
         response => {
-          let response_body = response["_body"];
+          let response_body = response['_body'];
           var blob = new Blob([response_body], { type: 'text/csv' });
-          FileSaver.saveAs(blob, "MCDP_Access.key");
+          FileSaver.saveAs(blob, 'MCDP_Access.key');
           this.error = null;
        //    this.router.navigate(['home']);
         },
@@ -170,7 +172,7 @@ export class Home {
     this.http.get('http://localhost:3004/getDataSources', { headers: headers})
       .subscribe(
         response => {
-          var data = JSON.parse(response["_body"]);
+          var data = JSON.parse(response['_body']);
          this.McUrl = data;
           this.error = null;
           this.router.navigate(['home']);

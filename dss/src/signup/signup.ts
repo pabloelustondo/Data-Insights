@@ -8,16 +8,16 @@ const template = require('./signup.html');
 
 
 export interface SignupInfo {
-  accountid: string,
-  mcurl : string,
-  apikey : string,
-  domainid : string,
-  username : string,
-  password : string,
-  clientsecret : string,
-  companyname? : string,
-  companyphone? : string,
-  companyaddress? : string
+  accountid : string;
+  mcurl : string;
+  apikey : string;
+  domainid : string;
+  username : string;
+  password : string;
+  clientsecret : string;
+  companyname? : string;
+  companyphone? : string;
+  companyaddress? : string;
 
 }
 
@@ -32,13 +32,15 @@ export class Signup {
 
   constructor(public router: Router, public http: Http) {}
 
-  testsignup (event, SignupInfo){
+  testsignup (event, SignupInfo) {
 
   }
 
-  signup(event, accountid, mcurl, apikey, domainid, username, password, clientsecret, companyName, companyAddress, companyPhone) {
+  signup(event, accountid, mcurl, apikey, domainid, username, password, clientsecret,
+         companyName, companyAddress, companyPhone) {
     event.preventDefault();
-    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password, clientsecret, companyPhone, companyAddress, companyName});
+    let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password,
+      clientsecret, companyPhone, companyAddress, companyName});
     this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {
@@ -53,8 +55,7 @@ export class Signup {
   }
 
 
-  optional(event, companyname, companyaddress, phone)
-  {
+  optional(event, companyname, companyaddress, phone) {
     event.preventDefault();
     let body = JSON.stringify({companyname, companyaddress, phone});
     this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })

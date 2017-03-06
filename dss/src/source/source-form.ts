@@ -4,5 +4,5 @@
 export class SourcingForm {
   constructor (
     public agentName : string
-  ){ }
+  ) { }
 }

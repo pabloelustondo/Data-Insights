@@ -13,12 +13,12 @@ const template = require('./login.html');
 })
 export class Login {
   error;
-  redirectUrl:string;
-  url:string;
-  code;string;
-  domainid:string;
-  manualLogin: boolean;
-  adminflow:boolean = false;
+  redirectUrl : string;
+  url : string;
+  code : string;
+  domainid : string;
+  manualLogin : boolean;
+  adminflow : boolean = false;
 
   constructor(public router: Router,
               private activatedRoute: ActivatedRoute,
@@ -50,7 +50,8 @@ export class Login {
               this.error = null;
               localStorage.setItem('id_token', response.json().id_token);
               if (this.url) {
-                window.location.href = this.url + "/#/dad/login?id_token=" + response.json().id_token;
+                window.location.href = this.url + '/#/dad/login?id_token='
+                  + response.json().id_token;
               }
               this.router.navigate(['home']);
             },
@@ -63,9 +64,9 @@ export class Login {
     });
   }
 
-  changeMethod(v){
-    console.log(v);
-    if (v === 'mcuser'){
+  changeMethod( v ) {
+    console.log( v );
+    if (v === 'mcuser') {
       this.manualLogin = false;
     } else {
       this.manualLogin = true;
@@ -76,31 +77,38 @@ export class Login {
   login(event, loginmethod, domainid, username, password) {
 
 
-    if(event) event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
 
     if (loginmethod.value === 'mcuser' && !this.code) {
 
-      //we need to get the url for the domain id entered, which by the way is a good way to verify the domain id
+      // we need to get the url for the domain id entered,
+      // which by the way is a good way to verify the domain id
       this.http.get('http://localhost:3004/urlbydomainid?domainid=' + domainid.value)
         .subscribe(
           response => {
             let result = JSON.parse(response['_body']);
-            if (this.url){
-              window.location.href = result.url + "/oauth/authorize?response_type=code&client_id="+ result.clientId + "&state=" + domainid.value + '?redirectUrl=' + this.url;
+            if (this.url) {
+              window.location.href = result.url +
+                '/oauth/authorize?response_type=code&client_id=' + result.clientId + '&state=' +
+                domainid.value + '?redirectUrl=' + this.url;
             } else {
-              window.location.href = result.url + "/oauth/authorize?response_type=code&client_id="+ result.clientId + "&state=" + domainid.value;
+              window.location.href = result.url +
+                '/oauth/authorize?response_type=code&client_id=' + result.clientId +  '&state=' +
+                domainid.value;
             }
 
           },
           error => {
-            alert("the provided domain id could not be found");
+            alert('the provided domain id could not be found');
             console.log(error.text());
           }
         );
 
     } else {
       let code = this.code;
-    //  let body = JSON.stringify({domainid, username, password, code});
+
       let body = JSON.stringify({
         domainid: domainid.value,
         username: username.value,
@@ -112,7 +120,7 @@ export class Login {
             this.error = null;
             localStorage.setItem('id_token', response.json().id_token);
             if (this.url) {
-             window.location.href = this.url + "/#/dad/login?id_token=" + response.json().id_token;
+             window.location.href = this.url + '/#/dad/login?id_token=' + response.json().id_token;
             }
             this.router.navigate(['home']);
           },
