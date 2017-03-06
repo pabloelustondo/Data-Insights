@@ -38,7 +38,7 @@ var MyMCAccount =
 var enrollments = [SotiAdminAccount, MyMCAccount];
 
 function createToken(user) {
-  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresInMinutes: config['agentPermTokenExpiryTime'] });
+  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: config['agentPermTokenExpiryTime'] });
 }
 
 function readToken(token, callback) {  //Bearer
@@ -159,7 +159,7 @@ app.get('/getAgentToken', function(req, res) {
                 var new_token = jwt.sign({
                   agentid: body.agentId,
                   tenantid: _tenantID
-                }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
+                }, config.expiringSecret, {expiresIn: config.tempTokenExpiryTime});
                 console.log(new_token);
                 res.status(200).send({
                   session_token: new_token
@@ -606,7 +606,7 @@ app.get('/urlbydomainid', function(req, res) {
   }, function(error, response, body){
     if(error) {
       console.log(error);
-      res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+      res.status(400).send(ErrorMsg.db_connection_not_establish);
     } else {
       console.log(response.statusCode, body);
 
@@ -746,11 +746,7 @@ app.post('/sessions/create', function(req, res) {
                 }
               });
 
-
-
               var body = JSON.parse(response.body);
-
-
 
             } catch (e){
               console.log(e);
@@ -777,6 +773,8 @@ app.post('/sessions/create', function(req, res) {
 
   }
   else {
+    res.status(400).send(ErrorMsg.session_missing_callback_token);
+    /*
     var enrollment = _.find(enrollments, {domainid: req.body.domainid});
 
     if (!enrollment) {
@@ -786,13 +784,13 @@ app.post('/sessions/create', function(req, res) {
     user = {
       username: req.body.username,
       password: req.body.password
-    }
+    };
 
     //var basicAuthorizationString = "Basic " + enrollment.apikey;
 
     var apikey = enrollment.apikey;
     var grant_type = "grant_type=password&username="+ user.username +"&password="+user.password;
-
+    */
   }
 
 

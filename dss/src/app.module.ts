@@ -12,8 +12,8 @@ import { Home } from './home';
 import { Login } from './login';
 import { Signup } from './signup';
 import { App } from './app';
-import { SourceForms } from './home/sourceForm'
-import { SourceFormComponent } from './source'
+import { SourceForms } from './home/sourceForm';
+import { SourceFormComponent } from './source';
 
 import { routes } from './app.routes';
 
