@@ -159,7 +159,7 @@ app.get('/getAgentToken', function(req, res) {
                 var new_token = jwt.sign({
                   agentid: body.agentId,
                   tenantid: _tenantID
-                }, config.expiringSecret, {expiresInMinutes: config.tempTokenExpiryTime});
+                }, config.expiringSecret, {expiresIn: config.tempTokenExpiryTime});
                 console.log(new_token);
                 res.status(200).send({
                   session_token: new_token
