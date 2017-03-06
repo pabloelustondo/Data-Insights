@@ -64,10 +64,10 @@ export class DadTable extends DadElement{
                         <tbody>
                             <tr *ngFor="let row of data; let rowindex = index">
                                 <td style="align-content: center;" *ngFor="let col of table.columns; let colindex= index">
-                                    <span *ngIf="!(col.Type === 2)"> {{row[col.DataSource]}} </span>
+                                    <span *ngIf="!(col.Type === 'MiniChart')"> {{row[col.DataSource]}}</span>
                                  
-                                    <span *ngIf="col.Type === 2"> 
-                                        <dadchart [chart]="this.miniChartD[rowindex][colindex]" [data]="chartDataD[rowindex][colindex]"></dadchart>
+                                    <span *ngIf="col.Type === 'MiniChart' "> 
+                                        <dadchart [chart]="miniChartD[rowindex][colindex]" [data]="chartDataD[rowindex][colindex]"></dadchart>
                                     </span>   
                                          
                                 </td>
@@ -113,7 +113,7 @@ export class DadTableComponent implements OnInit {
   ) { }
 
   isMiniChart(col:DadTableColumn){
-    return col.Type == DadTableColumnType.MiniChart;
+    return col.Type == "MiniChart";
   }
 
   miniChart(col:DadTableColumn, rowindex:number){
@@ -141,7 +141,7 @@ export class DadTableComponent implements OnInit {
           this.chartDataD[d] = [];
 
           for(let c=0; c<this.table.columns.length; c++){
-              if(this.table.columns[c].Type===2){
+              if(this.table.columns[c].Type==='MiniChart'){
               this.miniChartD[d][c] = this.miniChart(this.table.columns[c],d);
               this.chartDataD[d][c] = this.chartData(this.data[d],this.table.columns[c]);
               }

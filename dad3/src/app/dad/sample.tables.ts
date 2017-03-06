@@ -31,37 +31,37 @@ export const TABLES: DadTable[] = [
       }],
     columns: [
       {
-        Type: DadTableColumnType.Number,
+        Type: "Number",
         Name: "Device Id",
         DataSource: "DevId"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Battery Status",
         DataSource: "LastBatteryStatus"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Manufacturer",
         DataSource: "brand"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Model",
         DataSource: "model"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "OS",
         DataSource: "os"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Carrier Network",
         DataSource: "carrier"
       },
       {
-        Type: DadTableColumnType.MiniChart,
+        Type: "MiniChart",
         Name: "Battery Charge History",
         DataSource: "BatteryChargeHistory",
         MiniChart: {id: "charttable1",
@@ -88,12 +88,12 @@ export const TABLES: DadTable[] = [
       }],
     columns: [
       {
-        Type: DadTableColumnType.Number,
+        Type: "Number",
         Name: "Device Id",
         DataSource: "DevId"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Last Known Battery Status",
         DataSource: "LastBatteryStatus"
       }

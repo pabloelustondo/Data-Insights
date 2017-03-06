@@ -6,9 +6,7 @@ import {DadTable} from "./table.component";
 import {DadChart} from "./chart.component";
 
 
-export enum DadTableColumnType {
-  Number, String, MiniChart
-}
+export type DadTableColumnType = "Number" | "String" | "MiniChart";
 
 export interface DadTableColumn{
   Type: DadTableColumnType,

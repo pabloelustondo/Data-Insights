@@ -16,7 +16,7 @@ describe('DadSearch', () => {
         expect(search).toBeTruthy();
     });
 
-    it('should leave if the search is empty', () => {
+    it('should return the same data if the search string is empty', () => {
         let element: DadElement = TABLES[0]; //this chart does not have any transformation spec
         element.search = null;
         let search = new DadSearch();
@@ -25,8 +25,8 @@ describe('DadSearch', () => {
         expect(result.length).toBe(element.data.length); //use better test
     });
 
-    it('should filter is search provided', () => {
-        let element: DadElement = TABLES[0]; //this chart does not have any transformation spec
+    it('should filter the data according to the user input', () => {
+        let element: DadElement = TABLES[0]; //this chart does not have any transformation
         element.search = "Android";
         let search = new DadSearch();
         var result = search.search(element, element.data);
