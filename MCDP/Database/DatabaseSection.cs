@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Soti.MCDP.Database.Model;
 
 namespace Soti.MCDP.Database
 {
@@ -76,7 +77,7 @@ namespace Soti.MCDP.Database
         public static string Load()
         {
             try
-            { 
+            {
                 var regkey =
                     Registry.LocalMachine.OpenSubKey(
                         $@"SYSTEM\CurrentControlSet\services\{ConfigurationManager.AppSettings["MCName"]}");
@@ -85,7 +86,9 @@ namespace Soti.MCDP.Database
                     return "Not Found";
                 else if (regkey != null)
                 {
-                    var mcPath = Path.GetInvalidPathChars().Aggregate(regkey.GetValue("ImagePath").ToString(), (current,c)=> current.Replace(c.ToString(), string.Empty));
+                    var mcPath = Path.GetInvalidPathChars()
+                        .Aggregate(regkey.GetValue("ImagePath").ToString(),
+                            (current, c) => current.Replace(c.ToString(), string.Empty));
 
                     var path = Path.GetDirectoryName(mcPath);
                     return LoadConnectionString(path);
@@ -94,18 +97,15 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
                 return "";
             }
         }
 
         private static string LoadConnectionString(string path)
         {
-            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-
-            if (path == null)
-                Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
+            if (path == null)  
+                Logger.Log(LogSeverity.Error, " Error Load ConnectionString path is null ");
             try
             {
                 var config = GetConfiguration(path);
@@ -114,13 +114,13 @@ namespace Soti.MCDP.Database
 
                 if (settings != null)
                     return settings.ConnectionString;
-
-                Log(logMessage + "[ERROR] Database section does not have an associated file!");
+                
+                Logger.Log(LogSeverity.Error, "Database section does not have an associated file!");
                 return "";
             }
             catch (Exception ex)
             {
-                Log(logMessage + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
                 return "";
             }
         }
@@ -174,7 +174,7 @@ namespace Soti.MCDP.Database
             var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
             if (path == null)
-                Log(logMessage + "[ERROR] Error Load ConnectionString path is null ");
+                Logger.Log(LogSeverity.Error, " Error Load ConnectionString path is null ");
 
             var config = GetConfiguration(path);
 
@@ -206,8 +206,7 @@ namespace Soti.MCDP.Database
         /// <param name="path">The configuration folder's path</param>
         /// <returns>Loaded configuration</returns>
         private static Configuration GetConfiguration(string path)
-        {
-            var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
+        {            
             try
             {
                 var map = new ExeConfigurationFileMap
@@ -227,29 +226,15 @@ namespace Soti.MCDP.Database
                 config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
                 if (!config.HasFile)
-                    Log(logMessage +
-                        "[ERROR] DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
+                    Logger.Log(LogSeverity.Error, " DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
                 return config;
             }
             catch (Exception ex)
             {
-                Log(logMessage + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
                 return null;
             }
-        }
-
-        /// <summary>
-        ///     Log Service
-        /// </summary>
-        /// <param name="message">Log Message.</param>
-        private static void Log(string message)
-        {
-            var streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
-            streamWriter.WriteLine(message);
-            streamWriter.Close();
-            streamWriter = null;
-        }
-
+        }     
         /// <summary>
         ///     Builds a database connection string using the given builder.
         /// </summary>
