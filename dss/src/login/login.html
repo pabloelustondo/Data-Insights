@@ -4,7 +4,7 @@
   <h2 *ngIf="error">{{error}}</h2>
   <form role="form" (submit)="login($event, loginmethod, domainid, username, password)">
     <div class="form-group">
-      <label for="loginmethod">Login Medhod</label>
+      <label for="loginmethod">Login Method</label>
       <select (change)="changeMethod(loginmethod.value)" #loginmethod class="form-control" id="loginmethod" placeholder="LoginMethod">
       <option value="mcuser">MobiControl User</option>
         <option value="mcadmin">MobiControl Admin</option>
