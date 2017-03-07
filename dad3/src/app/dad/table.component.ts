@@ -34,7 +34,7 @@ export class DadTable extends DadElement{
     <div *ngIf="table && data">
         <div class="col-lg-10">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header">                    
                     <h4>{{table.name}}</h4>
                        Number of Rows:{{count}}
                     <span *ngFor="let key of parameterKeys"> 
@@ -45,23 +45,30 @@ export class DadTable extends DadElement{
                     <input id="querystr" type="text" #querystr  placeholder=“Search…”>
                     <button type="submit" >Search</button>
                     </form>
-              <!--
-                    <div class="form-inline b-r-1 px-2 float-xs-left hidden-md-down">
-                        <button (click)="search()" type="button" class="btn btn-secondary">
-                            <span class="fa fa-search"></span>
-                        </button>
-                        <input [(ngModel)]=" table.search" type="text" placeholder="Search...">
-                    </div>
-                    -->
                 </div>
+                
                 <div class="card-block">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th style="text-align:left;" *ngFor="let col of table.columns" >{{col.Name}}</th>
+                                
                             </tr>  
                         </thead>
+                        
                         <tbody>
+                            <tr>     
+                               <td *ngFor="let col of table.columns" [[(ngModel)]="values">
+                                <select *ngIf="!col.values" class="form-control" >
+                                    <option disabled selected>Select</option>
+                                </select>  
+                                <select  *ngIf="col.values" class="form-control" >
+                                    <option selected disabled>Select</option>
+                                    <option style="color:black;" (click)="select()" *ngFor="let i of col.values">{{i}}</option>
+                                </select>  
+                               </td>
+                            </tr>
+                        
                             <tr *ngFor="let row of data; let rowindex = index">
                                 <td style="align-content: center;" *ngFor="let col of table.columns; let colindex= index">
                                     <span *ngIf="!(col.Type === 'MiniChart')"> {{row[col.DataSource]}}</span>
@@ -69,7 +76,6 @@ export class DadTable extends DadElement{
                                     <span *ngIf="col.Type === 'MiniChart' "> 
                                         <dadchart [chart]="miniChartD[rowindex][colindex]" [data]="chartDataD[rowindex][colindex]"></dadchart>
                                     </span>   
-                                         
                                 </td>
                             </tr>
                         </tbody>
@@ -120,6 +126,12 @@ export class DadTableComponent implements OnInit {
     let chartConfig = JSON.parse(JSON.stringify(col.MiniChart)); //to clone object
     chartConfig.id += rowindex;
     return chartConfig;
+  }
+//need to be done
+  select(v){
+      if (!v) return;
+      let filter = new DadFilter();
+      this.data = filter.filter(this.table, this.allData);
   }
 
   search(s){

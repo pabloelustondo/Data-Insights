@@ -53,7 +53,8 @@ export const TABLES: DadTable[] = [
       {
         Type: "String",
         Name: "OS",
-        DataSource: "os"
+        DataSource: "os",
+        values:["iOS", "Android"]
       },
       {
         Type: "String",
