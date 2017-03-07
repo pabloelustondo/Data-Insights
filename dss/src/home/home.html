@@ -38,12 +38,27 @@
            <td>{{response.domainid}}</td><td>{{response.status}}</td><td>{{response.username}}</td><td>{{response.tenantid}}</td><td>{{response.mcurl}}</td>
         </tr>
       </table>
-
     </pre>
 
+    <div *ngIf="enrollStatus">
+      <br/>
+      <p> Select Type: </p>
+      <tr>
+        <td>
+          <select (change)="select()" class="form-control" >
+            <option selected disabled>Select Your Type</option>
+            <option style="color:black;">MobiControl</option>
+            <option style="color:black;">NextBus</option>
+            <option style="color:black;">Other...</option>
+          </select>
+        </td>
+      </tr>
+
+    </div>
 
 
-    <pre *ngIf="enrollStatus" >
+  <!-- *ngIf= type is chosen as mobicontrol (*ngIf="enrollStatus" ) -->
+    <!--<pre>
       Add new data source for tenant {{decodedJwt["tenantid"]}}
       <form (submit)="addSource(mcurl.value)">
       <table>
@@ -57,7 +72,7 @@
 
       </table>
       </form>
-    </pre>
+    </pre>-->
     <br/><br/>
     <div *ngIf="showEnrollments">
       <div class="row">
