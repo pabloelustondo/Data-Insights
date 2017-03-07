@@ -25,43 +25,44 @@ export const TABLES: DadTable[] = [
       {
         shiftDuration:8,
         rowsSkip:0,
-        rowsTake:10,
+        rowsTake:1000,
         shiftStartDateTime:"2016-08-25",
         minimumBatteryPercentageThreshold:20
       }],
     columns: [
       {
-        Type: DadTableColumnType.Number,
+        Type: "Number",
         Name: "Device Id",
         DataSource: "DevId"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Battery Status",
         DataSource: "LastBatteryStatus"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Manufacturer",
         DataSource: "brand"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Model",
         DataSource: "model"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "OS",
-        DataSource: "os"
+        DataSource: "os",
+        values:["iOS", "Android"]
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Carrier Network",
         DataSource: "carrier"
       },
       {
-        Type: DadTableColumnType.MiniChart,
+        Type: "MiniChart",
         Name: "Battery Charge History",
         DataSource: "BatteryChargeHistory",
         MiniChart: {id: "charttable1",
@@ -82,18 +83,18 @@ export const TABLES: DadTable[] = [
       {
         shiftDuration:10,
         rowsSkip:0,
-        rowsTake:10,
+        rowsTake:1000,
         shiftStartDateTime:"2016-08-25T08:00",
         minimumBatteryPercentageThreshold:30
       }],
     columns: [
       {
-        Type: DadTableColumnType.Number,
+        Type: "Number",
         Name: "Device Id",
         DataSource: "DevId"
       },
       {
-        Type: DadTableColumnType.String,
+        Type: "String",
         Name: "Last Known Battery Status",
         DataSource: "LastBatteryStatus"
       }
