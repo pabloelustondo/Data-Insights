@@ -54,13 +54,11 @@ export const TABLES: DadTable[] = [
         Type: "String",
         Name: "OS",
         DataSource: "os",
-        values:["iOS", "Android"]
       },
       {
         Type: "String",
         Name: "Carrier Network",
         DataSource: "carrier",
-        values:["Fido", "Rogers"]
       },
       {
         Type: "MiniChart",

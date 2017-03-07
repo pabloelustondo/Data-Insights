@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { DadWidget} from "./widget.component";
 import { config } from "./appconfig";
 import { DadFilter } from './filter';
+import * as _ from "lodash";
 
 export class DadTable extends DadElement{
   id: string;
@@ -80,12 +81,12 @@ export class DadTable extends DadElement{
                             </tr>
                         </tbody>
                     </table>
-                    <ul class="pagination" style="cursor:pointer;">
+                    <!--<ul class="pagination" style="cursor:pointer;">
                         <span *ngFor="let page of pages">               
                             <li  *ngIf="page == currentPage" class="page-item active" ><a class="page-link" (click)=refresh(page) >{{page+1}}</a></li>
                             <li  *ngIf="page != currentPage" class="page-item" ><a class="page-link" (click)=refresh(page) >{{page+1}} </a></li>
                         </span>
-                    </ul>
+                    </ul>-->
                 </div>
             </div>
         </div>
@@ -143,14 +144,13 @@ export class DadTableComponent implements OnInit {
           column.values = [];
           for(let d=0; d<this.data.length; d++){
               let option = this.data[d][column.DataSource];
-              
-               if(!column.values.includes(option)){
+
+               if(!(_.includes(column.values, option))){
                    column.values.push(option);
               }
           }
       }
   }
-
 
   search(s){
       if (!s)return;
