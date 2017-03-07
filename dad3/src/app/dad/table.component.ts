@@ -42,8 +42,8 @@ export class DadTable extends DadElement{
                     </span>
                           
                     <form role="form" (submit)="search(querystr)">
-                    <input id="querystr" type="text" #querystr  placeholder=“Search…”>
-                    <button type="submit" >Search</button>
+                    <button class="fa fa-search" type="submit"></button>
+                    <input id="querystr" type="text" #querystr  placeholder=Search…>
                     </form>
                 </div>
                 
@@ -58,13 +58,13 @@ export class DadTable extends DadElement{
                         
                         <tbody>
                             <tr>     
-                               <td *ngFor="let col of table.columns" [[(ngModel)]="values">
-                                <select *ngIf="!col.values" class="form-control" >
+                               <td *ngFor="let col of table.columns">
+                                <select *ngIf="!col.values" class="form-control">
                                     <option disabled selected>Select</option>
                                 </select>  
-                                <select  *ngIf="col.values" class="form-control" >
+                                <select (change)="select($event, col)" *ngIf="col.values && col.Type!=='MiniChart'" class="form-control" >
                                     <option selected disabled>Select</option>
-                                    <option style="color:black;" (click)="select()" *ngFor="let i of col.values">{{i}}</option>
+                                    <option style="color:black;" *ngFor="let val of col.values">{{val}}</option>
                                 </select>  
                                </td>
                             </tr>
@@ -128,11 +128,29 @@ export class DadTableComponent implements OnInit {
     return chartConfig;
   }
 //need to be done
-  select(v){
+  select(v,c){
       if (!v) return;
       let filter = new DadFilter();
+      let attribute = c.DataSource;
+
+      this.table.filter[attribute] = v.target.value;
       this.data = filter.filter(this.table, this.allData);
   }
+
+  addValues(){
+      for(let c=0; c<this.table.columns.length; c++){
+          let column =  this.table.columns[c];
+          column.values = [];
+          for(let d=0; d<this.data.length; d++){
+              let option = this.data[d][column.DataSource];
+              
+               if(!column.values.includes(option)){
+                   column.values.push(option);
+              }
+          }
+      }
+  }
+
 
   search(s){
       if (!s)return;
@@ -242,6 +260,7 @@ export class DadTableComponent implements OnInit {
                 this.allData = this.table.data;
                 this.data = filter.filter(this.table, this.allData);
                 this.preCalculateCharts();
+                this.addValues();
              }
 
             if (!config.testing) {
@@ -250,6 +269,8 @@ export class DadTableComponent implements OnInit {
                         this.allData = data.data;
                         this.data = filter.filter(this.table, this.allData);
                         this.preCalculateCharts();
+                        this.addValues();
+
 
                         if (this.data.errorMessage != null) {
                             alert(this.data.errorMessage);
