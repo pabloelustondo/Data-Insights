@@ -1,0 +1,25 @@
+{
+  "name": "DataLoadingManager",
+  "version": "0.0.1",
+  "main": "app.js",
+  "description": "This is the component used to manage api calls and other schedules",
+  "author": "varun.dave@soti.net",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "1.14.1",
+    "express": "4.13.3",
+    "jasmine-node": "^1.14.5",
+    "mongodb": "2.0.46",
+    "request": "^2.65.0",
+    "agenda": "0.9.0"
+  },
+  "scripts": {
+    "start" : "node app.js",
+    "debugwin": "node %NODE_DEBUG_OPTION% app.js",
+    "test": "./node_modules/.bin/jasmine-node spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://taipan:8080/tfs/SOTITFS/_git/CustomerBI"
+  }
+}

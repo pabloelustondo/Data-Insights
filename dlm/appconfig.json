@@ -1,0 +1,7 @@
+{
+  "deployment_type":"dev",
+  "port": 8002,
+  "ida_token" : "x-access-token",
+  "ida_url" : "https://localhost:3010/Data/LargeDataSets",
+  "ida_url_method" : "POST"
+}
