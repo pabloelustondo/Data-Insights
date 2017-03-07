@@ -163,7 +163,7 @@ export const CHARTS: DadChart[] = [
             {
                 shiftDuration:8,
                 rowsSkip:0,
-                rowsTake:10,
+                rowsTake:1000,
                 shiftStartDateTime:"2016-08-25",
                 minimumBatteryPercentageThreshold:20
             }],
@@ -232,7 +232,7 @@ export const CHARTS: DadChart[] = [
             {
                 shiftDuration:8,
                 rowsSkip:0,
-                rowsTake:10,
+                rowsTake:1000,
                 shiftStartDateTime:"2016-08-25",
                 minimumBatteryPercentageThreshold:20
             }],
