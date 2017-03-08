@@ -145,7 +145,7 @@ var sampleconfig = {
   "checked": false
 };
 
-describe("Jassplan TO-DO REST API Version 16", function() {
+describe("Test services to make restfull calls", function() {
 
     /*
     describe("GET /", function() {
@@ -223,8 +223,8 @@ describe("Jassplan TO-DO REST API Version 16", function() {
             });
         });
     });
-    
-    
+
+
     describe("GET /todo", function() {
         it("returns a todo list with one item, as  posted before", function(done) {
             $.get("/todo", function(data, textStatus, jqXHR) {
@@ -315,20 +315,8 @@ describe("Jassplan TO-DO REST API Version 16", function() {
     });
 
      */
-    describe("POST /newIDP", function() {
-        it("creates a first genie spec", function(done) {
-            $.ajax({
-                url: "/newIDP",
-                type:"POST",
-                data: JSON.stringify(sample_dss_config),
-                contentType:"application/json",
-                success: function(data, textStatus, jqXHR) {
-                    var emptyArray = [];
-                    expect(data).toBeDefined();
-                    expect(data.data).toBeDefined();
-                    done();}
-            });
-        });
+    describe("Call API with valid data", function() {
+
     });
 
 });
