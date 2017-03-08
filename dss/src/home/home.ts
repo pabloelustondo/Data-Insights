@@ -10,6 +10,8 @@ import { DadTable } from '../../../dad3/src/app/dad/table.component';
 const styles = require('./home.css');
 const template = require('./home.html');
 
+export type DataSourceTypeOptions = "Mobicontrol" | "NextBus" | "Other...";
+
 @Component({
   selector: 'home',
   template: template,
@@ -30,6 +32,8 @@ export class Home {
   isSOTI : boolean;
   McUrl : any[];
   rowsTake = 10;
+  options: any[] = [{"option": "MobiControl"}, {"option": "NextBus"}, {"option": "Other..."}];
+  dataSourceType: DataSourceTypeOptions;
 
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
@@ -41,7 +45,6 @@ export class Home {
     localStorage.removeItem('id_token');
     this.router.navigate(['login']);
   }
-
 
   showAddSource() {
     console.log('enter show add source');
@@ -152,11 +155,7 @@ export class Home {
       );
   }
 
-
-
   getMcUrl() {
-
-
     var headers = new Headers({
       'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
@@ -185,7 +184,6 @@ export class Home {
       agentid : 'asdas',
       mcurl : mcurl
     };
-
 
     console.log('in add source : ', mcurl);
 
@@ -226,6 +224,4 @@ export class Home {
         );
     }
   }
-
-
 }

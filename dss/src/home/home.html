@@ -42,24 +42,20 @@
 
     <div *ngIf="enrollStatus">
       <br/>
-      <p> Select Type: </p>
+      <p> Select Type: {{dataSourceType}} </p>
       <tr>
         <td>
-          <select (change)="select()" class="form-control" >
-            <option selected disabled>Select Your Type</option>
-            <option style="color:black;">MobiControl</option>
-            <option style="color:black;">NextBus</option>
-            <option style="color:black;">Other...</option>
-          </select>
+            <select [(ngModel)]="dataSourceType">
+              <option selected disabled>Select Your Type</option>
+              <option style="color:black;" *ngFor="let o of options">{{o.option}}</option>
+            </select>
         </td>
       </tr>
 
-    </div>
 
-
-  <!-- *ngIf= type is chosen as mobicontrol (*ngIf="enrollStatus" ) -->
-    <!--<pre>
-      Add new data source for tenant {{decodedJwt["tenantid"]}}
+    <br/>
+    <pre *ngIf="dataSourceType === 'MobiControl'">
+      <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
       <form (submit)="addSource(mcurl.value)">
       <table>
         <tr>
@@ -69,11 +65,36 @@
         <tr>
           <td> <button type="submit" class="btn btn-success">Add Source</button></td>
         </tr>
-
       </table>
       </form>
-    </pre>-->
-    <br/><br/>
+    </pre>
+
+    <br/>
+    <pre *ngIf="dataSourceType === 'NextBus'">
+      <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
+      <form (submit)="addSource(nbname.value && nburl.value && nbfrequency.value)">
+      <table>
+        <tr>
+          <td style="width: 200px"> <label>Data source Name: </label>  </td>
+          <td style="width: 300px"><input #nbname id="nextBusName" style="width:300px" placeholder="Enter preferred agent name"></td>
+        </tr>
+        <tr>
+          <td style="width: 200px"> <label>Data source URL: </label>  </td>
+          <td style="width: 300px"><input #nburl id="nextBusURL" style="width:300px" placeholder="Enter agent URL"></td>
+        </tr>
+        <tr>
+          <td style="width: 200px"> <label>Data source Frequency: </label>  </td>
+          <td style="width: 300px"><input type="number" #nbfrequency id="nextBusFrequency" style="width:300px" placeholder="Enter Frequency in seconds"></td>
+        </tr>
+        <tr>
+          <td> <button type="submit" class="btn btn-success">Add Source</button></td>
+        </tr>
+      </table>
+      </form>
+    </pre>
+    </div>
+
+    <br/>
     <div *ngIf="showEnrollments">
       <div class="row">
         <div class="col-lg-12">
