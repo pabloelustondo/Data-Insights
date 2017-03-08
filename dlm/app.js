@@ -9,6 +9,8 @@ var Agenda = require('agenda');
 var request = require('request');
 var querystring = require('querystring');
 
+var ApiCallService = require('./Services/ApiCallService');
+
 var config = require('./appconfig.json');
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
@@ -39,7 +41,7 @@ IdaCallService  = {
     }
 };
 
-ApiCallService = {
+ApiCallService2 = {
     send: function(req,  next){
         request({
             json: true,
@@ -177,7 +179,7 @@ setInterval(function() {
     ApiCallService.send(req, function(result) {
         console.log('6');
         console.log(result);
-        done();
+      //  done();
     });
 
-}, 300);
+}, 10000);
