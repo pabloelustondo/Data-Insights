@@ -45,8 +45,6 @@ ApiService = {
     }
 };
 
-
-
 // define job processor
 agenda.define('say hello', function (job) {
     ApiService.log(job.attrs.data.url, function(err, result) {
@@ -65,29 +63,7 @@ agenda.define(config['api_service_job_name'], function (job) {
     })
 });
 
-function testJob (jobProperties, next) {
 
-    var req = {
-        url: jobProperties.url,
-        method: jobProperties.method
-    };
-    console.log( 'will send: ' + JSON.stringify(req));
-    next();
-    /*
-    ApiCallService.send(req, function (result) {
-        console.log( (new Date().toISOString()) +':' + jobProperties.url );
-        console.log(result);
-        next();
-    })*/
-}
-
-function defineJob(name, next) {
-    agenda.define('randomJob: ' + name, testJob({
-        url: name,
-        method : 'get'
-    }, next));
-}
-/*
 setInterval(function() {
     var jobData = {
         url: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=ttc&r=32&t=1488819607',
@@ -104,7 +80,7 @@ setInterval(function() {
 
 
 }, 15000);
-
+/*
 setInterval(function() {
 
     /*
@@ -155,9 +131,6 @@ setInterval(function() {
 agenda.on('ready', function () {
     agenda.start();
     agenda.processEvery('1 second');
-  /*  agenda.on('start', function(job) {
-        console.log("Job %s starting", job.attrs.name);
-    }); */
 });
 
 function graceful() {
