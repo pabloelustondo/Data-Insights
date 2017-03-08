@@ -20,6 +20,11 @@ ApiCallService = {
                 IdaCallService.makeIdaCall(body, next)
             }
         });
+    },
+
+    log: function(req, next) {
+      console.log(JSON.stringify(req));
+      next();
     }
 
 };

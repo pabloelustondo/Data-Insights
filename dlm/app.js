@@ -10,6 +10,7 @@ var request = require('request');
 var querystring = require('querystring');
 
 var ApiCallService = require('./Services/ApiCallService');
+var JobManagementService = require('./Services/JobManagementService');
 
 var config = require('./appconfig.json');
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
@@ -58,6 +59,12 @@ agenda.define('say hello', function (job) {
 });
 
 
+agenda.define(config['api_service_job_name'], function (job) {
+    ApiCallService.log(job, function () {
+        console.log('done');
+    })
+});
+
 function testJob (jobProperties, next) {
 
     var req = {
@@ -80,9 +87,24 @@ function defineJob(name, next) {
         method : 'get'
     }, next));
 }
-
-
 /*
+setInterval(function() {
+    var jobData = {
+        url: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=ttc&r=32&t=1488819607',
+        method: 'GET',
+        dataSourceId: 'varun dave test data source',
+        interval: 10
+    };
+
+    JobManagementService.addJob(jobData, function(err, response){
+        console.log('check db');
+    })
+
+
+
+
+}, 15000);
+
 setInterval(function() {
 
     /*
