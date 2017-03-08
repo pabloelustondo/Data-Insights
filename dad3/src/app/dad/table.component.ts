@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { DadWidget} from "./widget.component";
 import { config } from "./appconfig";
 import { DadFilter } from './filter';
+import * as _ from "lodash";
 
 export class DadTable extends DadElement{
   id: string;
@@ -42,8 +43,8 @@ export class DadTable extends DadElement{
                     </span>
                           
                     <form role="form" (submit)="search(querystr)">
-                    <input id="querystr" type="text" #querystr  placeholder=“Search…”>
-                    <button type="submit" >Search</button>
+                    <button class="fa fa-search" type="submit"></button>
+                    <input id="querystr" type="text" #querystr  placeholder=Search…>
                     </form>
                 </div>
                 
@@ -58,13 +59,13 @@ export class DadTable extends DadElement{
                         
                         <tbody>
                             <tr>     
-                               <td *ngFor="let col of table.columns" [[(ngModel)]="values">
-                                <select *ngIf="!col.values" class="form-control" >
+                               <td *ngFor="let col of table.columns">
+                                <select *ngIf="!col.values" class="form-control">
                                     <option disabled selected>Select</option>
                                 </select>  
-                                <select  *ngIf="col.values" class="form-control" >
+                                <select (change)="select($event, col)" *ngIf="col.values && col.Type!=='MiniChart'" class="form-control" >
                                     <option selected disabled>Select</option>
-                                    <option style="color:black;" (click)="select()" *ngFor="let i of col.values">{{i}}</option>
+                                    <option style="color:black;" *ngFor="let val of col.values">{{val}}</option>
                                 </select>  
                                </td>
                             </tr>
@@ -80,12 +81,12 @@ export class DadTable extends DadElement{
                             </tr>
                         </tbody>
                     </table>
-                    <ul class="pagination" style="cursor:pointer;">
+                    <!--<ul class="pagination" style="cursor:pointer;">
                         <span *ngFor="let page of pages">               
                             <li  *ngIf="page == currentPage" class="page-item active" ><a class="page-link" (click)=refresh(page) >{{page+1}}</a></li>
                             <li  *ngIf="page != currentPage" class="page-item" ><a class="page-link" (click)=refresh(page) >{{page+1}} </a></li>
                         </span>
-                    </ul>
+                    </ul>-->
                 </div>
             </div>
         </div>
@@ -128,10 +129,27 @@ export class DadTableComponent implements OnInit {
     return chartConfig;
   }
 //need to be done
-  select(v){
+  select(v,c){
       if (!v) return;
       let filter = new DadFilter();
+      let attribute = c.DataSource;
+
+      this.table.filter[attribute] = v.target.value;
       this.data = filter.filter(this.table, this.allData);
+  }
+
+  addValues(){
+      for(let c=0; c<this.table.columns.length; c++){
+          let column =  this.table.columns[c];
+          column.values = [];
+          for(let d=0; d<this.data.length; d++){
+              let option = this.data[d][column.DataSource];
+
+               if(!(_.includes(column.values, option))){
+                   column.values.push(option);
+              }
+          }
+      }
   }
 
   search(s){
@@ -242,6 +260,7 @@ export class DadTableComponent implements OnInit {
                 this.allData = this.table.data;
                 this.data = filter.filter(this.table, this.allData);
                 this.preCalculateCharts();
+                this.addValues();
              }
 
             if (!config.testing) {
@@ -250,6 +269,8 @@ export class DadTableComponent implements OnInit {
                         this.allData = data.data;
                         this.data = filter.filter(this.table, this.allData);
                         this.preCalculateCharts();
+                        this.addValues();
+
 
                         if (this.data.errorMessage != null) {
                             alert(this.data.errorMessage);

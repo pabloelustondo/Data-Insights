@@ -3,7 +3,7 @@
  */
 
 export const config = {
-    "testing":false,
+    "testing":true,
     "authorizationserver":'http://10.0.91.25:3013',
     //"authorizationserver":'http://localhost:3003',
     "InitialChargeLevels":"https://localhost:3002/Devices/Battery/Summary/InitialChargeLevels",
