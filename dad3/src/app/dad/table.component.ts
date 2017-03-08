@@ -43,8 +43,8 @@ export class DadTable extends DadElement{
                     </span>
                           
                     <form role="form" (submit)="search(querystr)">
-                    <button class="fa fa-search" type="submit"></button>
-                    <input id="querystr" type="text" #querystr  placeholder=Search…>
+                    <button class="glyphicons glyphicons-search" type="submit"></button>
+                    <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
                     </form>
                 </div>
                 
