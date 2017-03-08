@@ -51,7 +51,7 @@
             </select>
         </td>
       </tr>
-    </div>
+
 
     <br/>
     <pre *ngIf="dataSourceType === 'MobiControl'">
@@ -84,7 +84,7 @@
         </tr>
         <tr>
           <td style="width: 200px"> <label>Data source Frequency: </label>  </td>
-          <td style="width: 300px"><input #nbfrequency id="nextBusFrequency" style="width:300px" placeholder="Enter Frequency"></td>
+          <td style="width: 300px"><input type="number" #nbfrequency id="nextBusFrequency" style="width:300px" placeholder="Enter Frequency in seconds"></td>
         </tr>
         <tr>
           <td> <button type="submit" class="btn btn-success">Add Source</button></td>
@@ -92,6 +92,7 @@
       </table>
       </form>
     </pre>
+    </div>
 
     <br/>
     <div *ngIf="showEnrollments">
