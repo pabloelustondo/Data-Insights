@@ -72,7 +72,7 @@
     <br/>
     <pre *ngIf="dataSourceType === 'NextBus'">
       <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
-      <form (submit)="addSource(nbname.value && nburl.value && nbfrequency.value)">
+      <form (submit)="addSource(nburl.value && nbfrequency.value && nbname.value)">
       <table>
         <tr>
           <td style="width: 200px"> <label>Data source Name: </label>  </td>
