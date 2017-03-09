@@ -4,7 +4,7 @@ import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
 import { config } from "./appconfig";
-import { DadTableConfigsService } from "./chart.service";
+import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
 import { DadFilter } from "./filter";
 
 declare var d3, c3: any;
@@ -26,7 +26,7 @@ export class DadChart extends DadElement{
 }
 @Component({
     selector: 'dadchart',
-    providers:[DadElementDataService,DadTableConfigsService],
+    providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
@@ -106,12 +106,14 @@ export class DadChartComponent implements OnInit {
 
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
+              private dadChartConfigsService : DadChartConfigsService,
               private router: Router, private route: ActivatedRoute) {}
 
  selectDimension(d){
 
    let newDimension = this.chart.dimensions[d];
    this.chart.reduction.dimension = newDimension;
+   this.dadChartConfigsService.saveOne(this.chart);
    let chartData = this.mapper.map(this.chart, this.data);
    chartData.unload = true;
    this.c3chart.load(chartData);
@@ -120,6 +122,7 @@ export class DadChartComponent implements OnInit {
   selectMetric(d){
     let newMetric = this.chart.metrics[d];
     this.chart.reduction.metric = newMetric;
+    this.dadChartConfigsService.saveOne(this.chart);
     let chartData = this.mapper.map(this.chart, this.data);
     chartData.unload = true;
     this.c3chart.load(chartData);
