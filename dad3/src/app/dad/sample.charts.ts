@@ -151,6 +151,12 @@ export const CHARTS: DadChart[] = [
             {dimension: {attribute: 'os', name:'OS'},
                 metric: {attribute:'LastBatteryStatus', op:'avg', name:'Average Battery Status'}}
             ],
+        dimensions:[
+            {attribute: 'model', name:'Model'},
+            {attribute: 'carrier', name:'Carrier'},
+            {attribute: 'brand', name:'Brand'},
+            {attribute: 'os', name:'OS'}
+        ],
         a : 'countOfDevices',
         b : 'percentage',
         aname : 'Count Of Devices',
@@ -187,7 +193,7 @@ export const CHARTS: DadChart[] = [
     },
 
     {id: "chartpiedrill",
-        name: 'Drill Test',
+        name: 'Devices & Battery Performance',
         type: "pie",
         endpoint:'ListOfDevicesNotSurvivedShift',
         data:[
@@ -218,6 +224,12 @@ export const CHARTS: DadChart[] = [
 
             {dimension: {attribute: 'carrier', name:'Carrier'},
                 metric: {attribute:'DevId', op:'count', name:'Number of Devices'}},
+        ],
+        dimensions:[
+            {attribute: 'model', name:'Model'},
+            {attribute: 'carrier', name:'Carrier'},
+            {attribute: 'brand', name:'Brand'},
+            {attribute: 'os', name:'OS'}
         ],
         a : 'countOfDevices',
         b : 'percentage',

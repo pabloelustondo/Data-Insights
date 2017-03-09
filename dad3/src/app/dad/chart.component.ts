@@ -38,13 +38,24 @@ export class DadChart extends DadElement{
                             <i class="icon-settings"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('')">Edit</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
                     </div>
                     <div>
-                        <div style="color:black;">{{chart.name}}</div><br/><br/><br/>        
+                        <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
+                        <div *ngIf="chart.reduction" style="color:black;">                      
+                           {{ chart.reduction.metric.name }} by                       
+                           <select (change)="selectDimension($event.target.value)" class="form-control" style="color:black; max-width:150px;" >
+                                    <option selected disabled>{{chart.reduction.dimension.name}}</option>
+                                    <option style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}">{{dim.name}}</option>
+                                </select>  
+                           
+
+                        
+                        
+                        </div><br/><br/><br/> 
 
                         <div *ngIf="chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
                         <div *ngIf="!chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
@@ -94,6 +105,20 @@ export class DadChartComponent implements OnInit {
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
               private router: Router, private route: ActivatedRoute) {}
+
+ selectDimension(d){
+
+   let newDimension = this.chart.dimensions[d];
+   this.chart.reduction.dimension = newDimension;
+   let chartData = this.mapper.map(this.chart, this.data);
+   chartData.unload = true;
+   this.c3chart.load(chartData);
+ }
+
+  selectMetric(d){
+    alert(d);
+  }
+
 
   onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
