@@ -61,7 +61,10 @@ export interface DadMetric{
   Name: string,
   DataSource: string,
   Value?:any,
-  Dimensions?: DadDimension[]
+  Dimensions?: DadDimension[],
+  attribute?:string;
+  name?:string;
+  op?:string
 }
 
 
@@ -70,10 +73,12 @@ export enum DadDimensionType {
 }
 
 export interface DadDimension{
-  Type: DadDimensionType,
-  Name: string,
-  DataSource: string,
-  Value?:any
+  Type?: DadDimensionType,
+  Name?: string,
+  DataSource?: string,
+  Value?:any,
+  attribute?:string,
+  name?:string
 }
 
 

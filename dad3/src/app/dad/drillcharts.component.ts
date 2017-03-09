@@ -11,8 +11,8 @@ import {Subscription } from 'rxjs';
   selector: 'drillcharts',
   providers:[DadChartConfigsService],
   template: `
-<h1>Drill Charts</h1>
-        <div *ngIf="charts" class="card-block pb-0">
+        <div *ngIf="chart && charts" class="card-block pb-0">
+        <h1>{{chart.name}}</h1>
             <div *ngFor="let drillchart of charts">
                 <dadchart [chart]="drillchart"></dadchart>
             </div>
@@ -35,7 +35,6 @@ export class DadDrillChartsComponent {
         let chartConfig = JSON.parse(JSON.stringify(chart)); //to clone object
         chartConfig.id += rowindex;
         chartConfig.reduction = chartConfig.reductions[rowindex];
-        chartConfig.name = chartConfig.reduction.metric.name + " by " + chartConfig.reduction.dimension.name;
         return chartConfig;
     }
 
