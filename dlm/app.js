@@ -11,41 +11,17 @@ var querystring = require('querystring');
 
 var ApiCallService = require('./Services/ApiCallService');
 var JobManagementService = require('./Services/JobManagementService');
+var ManageAgendaService = require('./Services/ManageAgendaService');
 
 var config = require('./appconfig.json');
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
-var connectionString = "127.0.0.1:27017/api_schedule";
-var agenda = new Agenda({db: { address: connectionString, collection: 'jobs' }});
-
-
-
-ScheduleService = {
-    AddEventSchedule: function(req,  next){
-        request({
-            json: true,
-            url : req.url,
-            method : req.method
-        }, function (error, response, body) {
-            if (error) {
-                next(new Error('error with api response', error));
-            }
-            if (body) {
-                // success pass it back to runner which should call api
-                IdaCallService.makeIdaCall(body, next)
-            }
-        });
-    }
-};
-
-ApiService = {
-    log: function(data, callback) {
-        console.log('data received = ' + data);
-        callback();
-    }
-};
+// var connectionString = "127.0.0.1:27017/api_schedule";
+//var agenda = new Agenda({db: { address: connectionString, collection: 'jobs' }});
+var agenda = require('./Services/Agenda');
 
 // define job processor
+/*
 agenda.define('say hello', function (job) {
     ApiService.log(job.attrs.data.url, function(err, result) {
         if(err) {
@@ -79,7 +55,7 @@ setInterval(function() {
 
 
 
-}, 15000);
+}, 15000);*/
 /*
 setInterval(function() {
 
@@ -126,18 +102,21 @@ setInterval(function() {
       //  done();
     });
 
-}, 15000);*/
+}, 15000);
 
-agenda.on('ready', function () {
-    agenda.start();
-    agenda.processEvery('1 second');
-});
+*/
 
-function graceful() {
+ManageAgendaService.startAgenda(0.1); //process agenda request every second
+
+process.on('SIGTERM', function () {
     agenda.stop(function() {
         process.exit(0);
     });
-}
+});
+process.on('SIGINT' , function () {
+    agenda.stop(function() {
+        process.exit(0);
+    });
+});
 
-process.on('SIGTERM', graceful);
-process.on('SIGINT' , graceful);
+app.listen(config['port']);
