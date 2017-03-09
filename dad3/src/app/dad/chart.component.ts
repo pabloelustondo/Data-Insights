@@ -46,11 +46,13 @@ export class DadChart extends DadElement{
                     <div>
                         <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
                         <div *ngIf="chart.reduction" style="color:black;">                      
-                           {{ chart.reduction.metric.name }} by                       
-                           <select (change)="selectDimension($event.target.value)" class="form-control" style="color:black; max-width:150px;" >
-                                    <option selected disabled>{{chart.reduction.dimension.name}}</option>
+                           <select (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
+                                    <option style="color:black;" *ngFor="let dim of chart.metrics; let i=index" value="{{i}}">{{dim.name}}</option>
+                           </select>  
+                           by                       
+                           <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}">{{dim.name}}</option>
-                                </select>  
+                           </select>  
                            
 
                         
@@ -116,7 +118,11 @@ export class DadChartComponent implements OnInit {
  }
 
   selectMetric(d){
-    alert(d);
+    let newMetric = this.chart.metrics[d];
+    this.chart.reduction.metric = newMetric;
+    let chartData = this.mapper.map(this.chart, this.data);
+    chartData.unload = true;
+    this.c3chart.load(chartData);
   }
 
 
