@@ -280,5 +280,4 @@ export class DadTableComponent implements OnInit {
             }
         });
   }
-    
 }
