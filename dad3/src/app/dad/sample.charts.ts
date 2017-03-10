@@ -157,6 +157,10 @@ export const CHARTS: DadChart[] = [
             {attribute: 'brand', name:'Brand'},
             {attribute: 'os', name:'OS'}
         ],
+        metrics:[
+            {attribute:'DevId', op:'count', name:'Number of Devices'},
+            {attribute:'LastBatteryStatus', op:'avg', name:'Average Battery Status'}
+        ],
         a : 'countOfDevices',
         b : 'percentage',
         aname : 'Count Of Devices',
@@ -230,6 +234,9 @@ export const CHARTS: DadChart[] = [
             {attribute: 'carrier', name:'Carrier'},
             {attribute: 'brand', name:'Brand'},
             {attribute: 'os', name:'OS'}
+        ],
+        metrics:[
+            {attribute:'DevId', op:'count', name:'Number of Devices'}
         ],
         a : 'countOfDevices',
         b : 'percentage',

@@ -63,8 +63,9 @@ export class DadTable extends DadElement{
                                 <select *ngIf="!col.values" class="form-control">
                                     <option disabled selected>Select</option>
                                 </select>  
-                                <select (change)="select($event.target.value)" class="form-control" >
-                                    <option *ngFor="let val of dimensions" value="col">{{val}}</option>
+                                <select (change)="select($event, col)" *ngIf="col.values && col.Type!=='MiniChart'" class="form-control" >
+                                    <option selected disabled>Select</option>
+                                    <option style="color:black;" *ngFor="let val of col.values">{{val}}</option>
                                 </select>  
                                </td>
                             </tr>
@@ -211,7 +212,7 @@ export class DadTableComponent implements OnInit {
         return null;
     }
 
-  ngAfterViewInit(){
+    ngOnInit(){
 
       this.allData = this.data;
 
@@ -278,8 +279,5 @@ export class DadTableComponent implements OnInit {
                 ).catch(err => console.log(err.toString()));
             }
         });
-  }
-
-  ngOnInit() {
   }
 }
