@@ -7,6 +7,7 @@ ManageAgendaService = {
     // ensure job is defined. If not defined, define it
     startAgenda: function (timeInterval) {
         //TODO: Provide a wrapper that allows a user to start agenda/scheduler service
+
         agenda.on('ready', function () {
            agenda.start();
            agenda.processEvery(timeInterval + ' seconds');

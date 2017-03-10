@@ -6,20 +6,25 @@ var request = require('request');
 var config = require('./../appconfig.json');
 
 IdaCallService  = {
-    makeIdaCall:  function(data,  next) {
+    makeIdaCall:  function(req,  next) {
         request({
             json: true,
             url : config['ida_url'],
             method :  config['ida_url_method'],
-            body : data,
+            body : req.body,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token' : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhZ2VudGlkIjoiMjEzIiwidGVuYW50aWQiOiJ4eXphMTIiLCJpYXQiOjE0ODc4Nzk1NTcsImV4cCI6MTQ5NTA3OTU1N30.TnX4J-xSBGxvgSd2CO5CCMZvQ4TBHJX5Ne4Ioy6A2Kk'
+                'x-access-token' : req.expiringToken
             } }, function(_error, _response, _body) {
 
             if (!_error ) {
                 // console.log( _body);
-                next(_body);
+                if (_response.statusCode === 500) {
+                    next (new Error('Token has expired'), null);
+                } else {
+                    next(null, _body);
+                }
+
             }
             else{
                 console.log('yes error');

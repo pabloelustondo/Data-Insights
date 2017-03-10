@@ -43,7 +43,9 @@ JobManagementService = {
         var job = agenda.create( config['api_service_job_name'], {
             url: jobData.url,
             method: jobData.method,
-            dataSourceId: jobData.dataSourceId
+            dataSourceId: jobData.dataSourceId,
+            expiringToken: jobData.expiringToken,
+            tenantId: jobData.tenantId
         });
         job.repeatEvery(jobData.interval + ' seconds');
         job.enable();
