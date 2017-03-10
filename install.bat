@@ -22,6 +22,7 @@ cd %installdir%\dad3\
 call npm install
 
 ::Its Mongo Time
+start cmd.exe /k 
 mkdir data_folder
 mongod -dbpath ./
 
