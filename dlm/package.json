@@ -14,12 +14,14 @@
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "mocha": "3.2.0",
-    "chai-spies": "0.7.1"
+    "chai-spies": "0.7.1",
+    "underscore" : "1.8.3",
+    "jsonwebtoken": "^7.3.0"
   },
   "scripts": {
     "start" : "node app.js",
     "debugwin": "node %NODE_DEBUG_OPTION% app.js",
-    "test": "cd tests && mocha --debug --timeout 5000"
+    "test": "cd tests && mocha --debug --timeout 15000"
   },
   "repository": {
     "type": "git",
