@@ -212,7 +212,7 @@ export class DadTableComponent implements OnInit {
         return null;
     }
 
-  ngAfterViewInit(){
+    ngOnInit(){
 
       this.allData = this.data;
 
@@ -280,7 +280,5 @@ export class DadTableComponent implements OnInit {
             }
         });
   }
-
-  ngOnInit() {
-  }
+    
 }
