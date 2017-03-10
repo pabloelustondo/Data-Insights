@@ -30,6 +30,7 @@ export class Home {
   error : any;
   url : string;
   isSOTI : boolean;
+  dataSource: any[];
   McUrl : any[];
   rowsTake = 10;
   options: any[] = [{"option": "MobiControl"}, {"option": "NextBus"}, {"option": "Other..."}];
@@ -176,16 +177,29 @@ export class Home {
       );
   }
 
-  addSource(mcurl) {
+  addSource(dataSourceForm) {
     var decoded = this.decodedJwt;
 
+    let inputs = dataSourceForm.getElementsByTagName("input");
+    let inputLengths = inputs.length;
+    //create a json
+
+    let inputValues = [];
+
+
+    for (let ctr = 0;  ctr < inputLengths; ctr++){
+      let inputInformation = {
+        inputName : inputs[ctr].id,
+        inputValue :  inputs[ctr].value
+      };
+      inputValues.push(inputInformation);
+    }
+    
     var agent = {
       tenantid : decoded['tenantId'],
       agentid : 'asdas',
-      mcurl : mcurl
+      data : inputValues
     };
-
-    console.log('in add source : ', mcurl);
 
     console.log('it will be enrolled don\'t worry. ', JSON.stringify(agent));
 

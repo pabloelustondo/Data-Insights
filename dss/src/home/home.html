@@ -56,7 +56,7 @@
     <br/>
     <pre *ngIf="dataSourceType === 'MobiControl'">
       <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
-      <form (submit)="addSource(mcurl.value)">
+      <form #mcForm (submit)="addSource(mcForm)">
       <table>
         <tr>
           <td style="width: 200px"> <label>Data source label: </label>  </td>
@@ -72,7 +72,8 @@
     <br/>
     <pre *ngIf="dataSourceType === 'NextBus'">
       <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
-      <form (submit)="addSource(nburl.value && nbfrequency.value && nbname.value)">
+
+      <form #nbForm (submit)="addSource(nbForm)">
       <table>
         <tr>
           <td style="width: 200px"> <label>Data source Name: </label>  </td>
