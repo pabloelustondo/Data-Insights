@@ -106,7 +106,7 @@ export const TABLES: DadTable[] = [
         DataSource: "DevId"
       },
       {
-        Type: "String",
+        Type: "Number",
         Name: "Last Known Battery Status",
         DataSource: "LastBatteryStatus"
       }
