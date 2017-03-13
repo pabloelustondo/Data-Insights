@@ -194,7 +194,7 @@ export class Home {
       };
       inputValues.push(inputInformation);
     }
-    
+
     var agent = {
       tenantid : decoded['tenantId'],
       agentid : 'asdas',

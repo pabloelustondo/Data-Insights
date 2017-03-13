@@ -51,7 +51,7 @@ export class DadChart extends DadElement{
                            </select>  
                            by                       
                            <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
-                                    <option style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" selected="dim.name === chart.reduction.dimension.name" >{{dim.name}}</option>
+                                    <option style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                            </select>  
 
                         </div><br/><br/><br/> 
