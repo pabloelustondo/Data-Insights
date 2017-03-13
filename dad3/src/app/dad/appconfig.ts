@@ -4,7 +4,7 @@
 
 export const config = {
     "testing":true,
-    "authorizationserver":'https://dev2012r2-sk.sotidev.com:3013',
+    "authorizationserver":'http://10.0.91.25:3013',
     //"authorizationserver":'http://localhost:3003',
     "InitialChargeLevels":"https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/Summary/InitialChargeLevels",
     "DischargeRate":"https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/Summary/DischargeRate",
