@@ -18,6 +18,7 @@ export const CHARTS: DadChart[] = [
         regionM: 30,
         tableId: 'table2',
         action: 'drill',
+        data: [{"countOfDevices":56,"percentage":5},{"countOfDevices":112,"percentage":10},{"countOfDevices":20,"percentage":15},{"countOfDevices":6,"percentage":20},{"countOfDevices":3,"percentage":25},{"countOfDevices":0,"percentage":30},{"countOfDevices":1,"percentage":35},{"countOfDevices":1,"percentage":40},{"countOfDevices":2,"percentage":45},{"countOfDevices":0,"percentage":50},{"countOfDevices":0,"percentage":55},{"countOfDevices":0,"percentage":60},{"countOfDevices":0,"percentage":65},{"countOfDevices":0,"percentage":70},{"countOfDevices":0,"percentage":75},{"countOfDevices":0,"percentage":80},{"countOfDevices":0,"percentage":85},{"countOfDevices":0,"percentage":90},{"countOfDevices":0,"percentage":95},{"countOfDevices":0,"percentage":100}],
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
@@ -69,6 +70,7 @@ export const CHARTS: DadChart[] = [
                 "AppId": "soti"
             }
         ],
+        action: 'drillFromElement',
         parameters: [
             {
                 dateFrom: "2017-01-24T20:30:21",

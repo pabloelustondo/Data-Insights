@@ -206,7 +206,7 @@ export class DadChartComponent implements OnInit {
   }
 
   drillFromElement(data){
-    if (this.chart.action = 'drillFromElement') {
+    if (this.chart.action === 'drillFromElement') {
 
       let self = this;
       let eventHandler = this.goToTable;
@@ -336,6 +336,7 @@ if (chartConfig.regionM){
     this.c3chart = c3.generate(c3Config);
 
     if(chartConfig.action === 'drill') {
+      let self = this;
       let eventHandler = this.goToTable;
       let chart = this.chart;
       let route = this.route;
@@ -368,29 +369,32 @@ if (chartConfig.regionM){
     //create the table
     let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
     let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
+    let count = 1000;
 
-    tableConfig.id += self.chart.id + d.id;
+    tableConfig.id += self.chart.id + ((d)?d.id:"");
     tableConfig.filter = { } ;
 
     //let find the attribute   come in the reducer dimensin
 
-    let attribute = chart.reduction.dimension.attribute;
+    if (chart.reduction ) {
+      let attribute = chart.reduction.dimension.attribute;
 
-    let value;
+      let value;
 
 
-    if (chart.type === 'pie') {
-      value = d.id;
-    }
-    if (chart.type === 'bar') {
+      if (chart.type === 'pie') {
+        value = d.id;
+      }
+      if (chart.type === 'bar') {
         value = chart.mappedData.columns[0][d.x + 1];
+      }
+
+      tableConfig.filter[attribute] = value;
+
+      let filter = new DadFilter();
+      let filteredData = filter.filter(tableConfig, chart.data);
+      count = filteredData.length;
     }
-
-    tableConfig.filter[attribute] = value;
-
-    let filter = new DadFilter();
-    let filteredData = filter.filter(tableConfig, chart.data);
-    let count = filteredData.length;
 
     self.dadTableConfigsService.saveOne(tableConfig);
 
