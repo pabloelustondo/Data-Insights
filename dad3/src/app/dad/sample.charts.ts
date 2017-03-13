@@ -45,7 +45,7 @@ export const CHARTS: DadChart[] = [
     },
 
     {id: "charthorizontal",
-        name: 'Average Battery Discharge Rate',
+        name: 'Application Count by Number of Devices',
         type: "bar",
         endpoint: "ApplicationDeploymentCount",
         a : 'ExecutionTimeMinutes',
