@@ -244,7 +244,9 @@ export class DadTableComponent implements OnInit {
                   this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
               }
 
-              if (!tableId) tableId = this.callerElement.tableId;
+              if (!tableId) tableId = this.callerElement.tableId; //horrible code
+              if (!tableId) tableId = this.callerId;
+
               this.table  = this.findTables(tableId);
 
               let elementParameters = this.callerElement.parameters[0];

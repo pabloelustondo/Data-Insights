@@ -369,14 +369,17 @@ if (chartConfig.regionM){
     //create the table
     let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
     let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
-    let count = 1000;
+    let count = chart.data.length;
 
-    tableConfig.id += self.chart.id + ((d)?d.id:"");
-    tableConfig.filter = { } ;
+
 
     //let find the attribute   come in the reducer dimensin
 
     if (chart.reduction ) {
+
+      tableConfig.id += self.chart.id + ((d)?d.id:"");
+      tableConfig.filter = { } ;
+
       let attribute = chart.reduction.dimension.attribute;
 
       let value;
@@ -398,8 +401,12 @@ if (chartConfig.regionM){
 
     self.dadTableConfigsService.saveOne(tableConfig);
 
-    //go to that table
+    if (chart.action === 'drillFromElement'){
     router.navigate(['table', count , chart.id,  tableConfig.id], { relativeTo: route});
+    } else {
+      router.navigate(['table', count , tableConfig.id], { relativeTo: route});
+    }
+
 };
 
   //mini applied
