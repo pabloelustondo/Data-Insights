@@ -47,7 +47,7 @@ export class DadChart extends DadElement{
                         <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
                         <div *ngIf="chart.reduction" style="color:black;">                      
                            <select (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
-                                    <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" selected="met.name === chart.reduction.metric.name">{{met.name}}</option>
+                                    <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
                            </select>  
                            by                       
                            <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
