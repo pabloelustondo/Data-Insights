@@ -221,13 +221,15 @@ export class DadTableComponent implements OnInit {
           this.count = Number(param['count']);
           console.log(this.count);
 
+          let tableId =  this.callerId = param['tableid'];
 
-            let tableId =  this.callerId = param['tableid'];
-            if (!tableId) tableId = this.callerElement.tableId;
+          let numberOfPages = 1;
 
-            this.table  = this.findTables(tableId);
+          if (tableId){
+              this.table  = this.findTables(tableId);
+              numberOfPages = this.count/this.table.parameters[0].rowsTake;
+          }
 
-          let numberOfPages = this.count/this.table.parameters[0].rowsTake;
           this.pages = [];
           for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
 
@@ -241,6 +243,9 @@ export class DadTableComponent implements OnInit {
               if (!this.callerElement) {
                   this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
               }
+
+              if (!tableId) tableId = this.callerElement.tableId;
+              this.table  = this.findTables(tableId);
 
               let elementParameters = this.callerElement.parameters[0];
               let tableParameters = this.table.parameters[0];
