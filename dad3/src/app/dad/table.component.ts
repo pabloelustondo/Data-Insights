@@ -63,7 +63,11 @@ export class DadTable extends DadElement{
                                 <select *ngIf="!col.values" class="form-control">
                                     <option disabled selected>Select</option>
                                 </select>  
-                                <select (change)="select($event, col)" *ngIf="col.values && col.Type!=='MiniChart'" class="form-control" data-dadtype="Number">
+                                 <select (change)="select($event, col)" *ngIf="col.Type==='Number' && col.values && col.Type!=='MiniChart'" class="form-control" data-dadtype="Number">
+                                    <option selected disabled>Select</option>
+                                    <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
+                                </select> 
+                                <select (change)="select($event, col)" *ngIf="col.Type!=='Number' && col.values && col.Type!=='MiniChart'" class="form-control">
                                     <option selected disabled>Select</option>
                                     <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
                                 </select>  
