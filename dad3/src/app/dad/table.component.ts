@@ -64,11 +64,11 @@ export class DadTable extends DadElement{
                                     <option disabled selected>Select</option>
                                 </select>  
                                  <select (change)="select($event, col)" *ngIf="col.Type==='Number' && col.values && col.Type!=='MiniChart'" class="form-control" data-dadtype="Number">
-                                    <option selected disabled>Select</option>
+                                    <option value="$clear">Select</option>
                                     <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
                                 </select> 
                                 <select (change)="select($event, col)" *ngIf="col.Type!=='Number' && col.values && col.Type!=='MiniChart'" class="form-control">
-                                    <option selected disabled>Select</option>
+                                    <option value="$clear">Select</option>
                                     <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
                                 </select>  
                                </td>
@@ -141,9 +141,13 @@ export class DadTableComponent implements OnInit {
       if (!this.table.filter)this.table.filter = {};
 
       let value = v.target.value;
-      if (v.target.dataset.dadtype && v.target.dataset.dadtype === 'Number') value = parseInt(value);
 
-      this.table.filter[attribute] = value;
+      if (value !== "$clear") {
+          if (v.target.dataset.dadtype && v.target.dataset.dadtype === 'Number') value = parseInt(value);
+          this.table.filter[attribute] = value;
+      }else {
+          delete  this.table.filter[attribute];
+      }
       this.data = filter.filter(this.table, this.allData);
   }
 
