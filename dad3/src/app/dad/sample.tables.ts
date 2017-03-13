@@ -31,7 +31,7 @@ export const TABLES: DadTable[] = [
       }],
     columns: [
       {
-        Type: "Number",
+        Type: "String",
         Name: "Device Id",
         DataSource: "DevId"
       },
@@ -101,7 +101,7 @@ export const TABLES: DadTable[] = [
       }],
     columns: [
       {
-        Type: "Number",
+        Type: "String",
         Name: "Device Id",
         DataSource: "DevId"
       },
