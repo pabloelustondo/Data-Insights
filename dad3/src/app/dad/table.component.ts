@@ -63,9 +63,13 @@ export class DadTable extends DadElement{
                                 <select *ngIf="!col.values" class="form-control">
                                     <option disabled selected>Select</option>
                                 </select>  
-                                <select (change)="select($event, col)" *ngIf="col.values && col.Type!=='MiniChart'" class="form-control" >
-                                    <option selected disabled>Select</option>
-                                    <option style="color:black;" *ngFor="let val of col.values">{{val}}</option>
+                                 <select (change)="select($event, col)" *ngIf="col.Type==='Number' && col.values && col.Type!=='MiniChart'" class="form-control" data-dadtype="Number">
+                                    <option value="$clear">Select</option>
+                                    <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
+                                </select> 
+                                <select (change)="select($event, col)" *ngIf="col.Type!=='Number' && col.values && col.Type!=='MiniChart'" class="form-control">
+                                    <option value="$clear">Select</option>
+                                    <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
                                 </select>  
                                </td>
                             </tr>
@@ -134,7 +138,16 @@ export class DadTableComponent implements OnInit {
       let filter = new DadFilter();
       let attribute = c.DataSource;
 
-      this.table.filter[attribute] = v.target.value;
+      if (!this.table.filter)this.table.filter = {};
+
+      let value = v.target.value;
+
+      if (value !== "$clear") {
+          if (v.target.dataset.dadtype && v.target.dataset.dadtype === 'Number') value = parseInt(value);
+          this.table.filter[attribute] = value;
+      }else {
+          delete  this.table.filter[attribute];
+      }
       this.data = filter.filter(this.table, this.allData);
   }
 
@@ -146,6 +159,9 @@ export class DadTableComponent implements OnInit {
               let option = this.data[d][column.DataSource];
 
                if(!(_.includes(column.values, option))){
+                   if (column.Type === 'Number') {
+                       option = parseInt(option);
+                   }
                    column.values.push(option);
               }
           }
@@ -221,13 +237,15 @@ export class DadTableComponent implements OnInit {
           this.count = Number(param['count']);
           console.log(this.count);
 
+          let tableId =  this.callerId = param['tableid'];
 
-            let tableId =  this.callerId = param['tableid'];
-            if (!tableId) tableId = this.callerElement.tableId;
+          let numberOfPages = 1;
 
-            this.table  = this.findTables(tableId);
+          if (tableId){
+              this.table  = this.findTables(tableId);
+              numberOfPages = this.count/this.table.parameters[0].rowsTake;
+          }
 
-          let numberOfPages = this.count/this.table.parameters[0].rowsTake;
           this.pages = [];
           for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
 
@@ -241,6 +259,11 @@ export class DadTableComponent implements OnInit {
               if (!this.callerElement) {
                   this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
               }
+
+              if (!tableId) tableId = this.callerElement.tableId; //horrible code
+              if (!tableId) tableId = this.callerId;
+
+              this.table  = this.findTables(tableId);
 
               let elementParameters = this.callerElement.parameters[0];
               let tableParameters = this.table.parameters[0];
