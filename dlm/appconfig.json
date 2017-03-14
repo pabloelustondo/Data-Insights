@@ -2,9 +2,11 @@
   "deployment_type":"dev",
   "port": 8002,
   "ida_token" : "x-access-token",
+  "ddbUrlGetDataSources" : "http://localhost:8000/dataSourceByType",
   "ida_url" : "https://localhost:3010/Data/LargeDataSets",
   "ida_url_method" : "POST",
   "api_service_job_name" : "api_service_job",
   "secret": "abcdefg9876543210",
+  "nextBusSourceType" : "NextBus",
   "tempTokenExpiryTime" : 15
 }

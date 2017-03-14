@@ -151,8 +151,21 @@ ManageApiConfigurations.retrieveNewExpToken(config1.dataSourceId, function () {
     ManageApiConfigurations.printConfigs();
 });
 */
+//ManageAgendaService.startAgenda(0.1); //process agenda request every 0.1 second
 
-ManageAgendaService.startAgenda(0.1); //process agenda request every second
+ManageApiConfigurations.clearAllConfigs(function (err, length) {
+   if (length === 0) {
+       ManageAgendaService.startAgenda(0.1, function () {
+           ManageAgendaService.createLocalCache(); // retrieve the local cache
+          // setInterval(function(){
+          //     ManageAgendaService.retrieveConfigurations(); //periodically get updates from mongodb
+          // },6000);
+       }); //process agenda request every 0.1 second
+   } else {
+       throw new Error('could not reset configs, server stopping ....');
+   }
+});
+
 
 process.on('SIGTERM', function () {
     agenda.stop(function() {
@@ -165,4 +178,42 @@ process.on('SIGINT' , function () {
     });
 });
 
-//app.listen(config['port']);
+app.use(bodyParser.json());
+app.post('/newUrlConfig', function (req, res) {
+
+    var data = req.body;
+
+    if (!data.dataSourceId) {
+        res.status(500).send('missing dataSourceId');
+    } else {
+
+        JobManagementService.findJobByDataSource(data.dataSourceId, function (e, result) {
+
+            if (result) {
+                res.status(500).send('This data source has already been registered, please update or contact soti support');
+            }
+            if (!result) {
+                JobManagementService.addJob(data, function (err, success) {
+                    if (err) {
+                        res.status(400).send('could not add api. Please contact SOTI support: ' + err.message);
+                    }
+
+                    if (success) {
+                        ManageApiConfigurations.addApiConfig(data, function (_err, result) {
+                            if (_err) {
+                                res.status(500).send('could not update local cache');
+                            }
+                            if (result) {
+                                res.status(200).send('job is successfully scheduled.');
+                            }
+                        });
+
+                    }
+                });
+            }
+        });
+    }
+});
+
+
+app.listen(config['port']);
