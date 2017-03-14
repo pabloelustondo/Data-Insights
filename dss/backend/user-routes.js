@@ -247,16 +247,112 @@ app.get('/sourceCredentials/:agentId', function (req, res) {
   }
 });
 
+function enrollDlmDataSource (dataSource, callback){
+
+  var tempToken = jwt.sign({
+    agentid: dataSource.agentId,
+    tenantid:  dataSource.tenantId
+  }, config.expiringSecret, {expiresIn: config.tempTokenExpiryTime});
+  // map UI input to server input
+  var data = {
+    dataSourceId : dataSource.agentId,
+    method : 'GET',
+    url : dataSource.dataSourceData[1].inputValue,
+    expiringToken : tempToken,
+    name : dataSource.dataSourceData[0].inputValue,
+    interval : dataSource.dataSourceData[2].inputValue,
+    tenantId : dataSource.tenantId,
+    status : 'active'
+  };
+
+  request({ rejectUnauthorized: false,
+    url: config.dlmEndpointUrl + "/newUrlConfig",
+    json : data,
+    method: 'POST', //Specify the method
+    headers: { //We can define headers too
+    'Content-Type': 'application/json'
+  }
+}, function(error, response, body) {
+      if (error) {
+        console.log(error);
+        callback({
+          status: 400,
+          message : ErrorMsg.dlm_generic_error
+        });
+       //  res.status(400).send(ErrorMsg.dlm_generic_error);
+      } else {
+        console.log(response.statusCode, body);
+        if (response.statusCode === 200) {
+          registerDataSourceHelper(dataSource, callback)
+        } else {
+          callback({
+            status: 400,
+            message : ErrorMsg.mcurl_enrollement_failed_authentication
+          });
+          // res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+        }
+      }
+    }
+  );
+}
+
+
+function registerDataSourceHelper (dataSource, callback) {
+
+  request({
+    rejectUnauthorized: false,
+    url: config.ddbEndpointUrl + "/insertNewDataSource",
+    json : dataSource,
+    method: 'POST', //Specify the method
+    headers: { //We can define headers too
+      'Content-Type': 'application/json'
+    }
+  }, function(error, response, body){
+    if(error) {
+      console.log(error);
+      // res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+      var e = {
+        status : 400,
+        message : ErrorMsg.mcurl_enrollement_failed_url_not_reachable
+      };
+      callback(e, null);
+    } else {
+      console.log(response.statusCode, body);
+
+      if (response.statusCode === 200){
+        callback(null, {
+          status: 200,
+          message: 'added successfully'
+        });
+
+      } else {
+
+        callback({
+          status : 400,
+          message : ErrorMsg.mcurl_enrollement_failed_authentication
+        }, null);
+      }
+    }
+  });
+
+}
 app.post('/registerDataSource', function (req, res) {
 
-  if (!req.body.mcurl) {
-    return res.status(400).send( ErrorMsg.missing_mcurl );
-  }
+  // determine data source type
+
+  var dataSourceType = req.body.dataSourceType;
+  var dataSourceData = req.body.data;
+
+  // map data Source properties to data
+
   if (!req.body.agentid) {
     return res.status(400).send( ErrorMsg.missing_apikey );
   }
   if (!req.body.tenantid) {
     return res.status(400).send( ErrorMsg.missing_domainid );
+  }
+  if (!req.body.dataSourceType) {
+    return res.status(400).send( ErrorMsg.missing_dataSourceType );
   }
 
 
@@ -264,19 +360,38 @@ app.post('/registerDataSource', function (req, res) {
   var dataSource = {
     tenantId: req.body.tenantid,
     agentId: uuid.v4(),
+    dataSourceType : dataSourceType,
+    dataSourceData : dataSourceData,
     mcurl: req.body.mcurl,
-    activationKey: activationKey
+    activationKey: activationKey,
+    status : 'active'
   };
 
+  if (dataSourceType === 'NextBus'){
+    enrollDlmDataSource(dataSource, function (err, result){
+        if (err){
+          res.status(err.status).send(err.message);
+        }
+        if (result) {
+          res.status(result.status).send(result.message);
+        }
+      });
+  }
+  else {
+    registerDataSourceHelper(dataSource, function (err, result){
+      if (err){
+        res.status(err.status).send(err.message);
+      }
+      if (result) {
+        res.status(result.status).send(result.message);
+      }
+    });
+  }
+  /*
   request({
     rejectUnauthorized: false,
     url: config.ddbEndpointUrl + "/insertNewDataSource",
-    json : {
-      'agentId' :dataSource.agentId,
-      'tenantId' : dataSource.tenantId,
-      'mcUrl' : dataSource.mcurl,
-      'activationKey': dataSource.activationKey
-    },
+    json : dataSource,
     method: 'POST', //Specify the method
     headers: { //We can define headers too
       'Content-Type': 'application/json'
@@ -299,6 +414,7 @@ app.post('/registerDataSource', function (req, res) {
       }
     }
   });
+  */
 
 });
 
@@ -587,6 +703,64 @@ app.get('/confirm', function(req, res){
   }
 });
 
+app.post('/deleteDataSource', function (req, res) {
+
+  var token = req.headers['x-access-token'];
+
+  if(!token){
+    return res.status(400).send ( ErrorMsg.login_failed_authentication);
+  }
+  else {
+    try{
+      jwt.verify(token, config.secret, function (err, success) {
+        if (err) {
+          return res.status(400).send (ErrorMsg.token_verification_failed);
+        }
+        if (success) {
+          var _tenantID = success.tenantId;
+
+          request({
+            rejectUnauthorized: false,
+            rejectUnauthorized: false,
+            url: config.ddbEndpointUrl + "/deleteDataSource",
+            method: 'Delete', //Specify the method
+            headers: { //We can define headers too
+              'Content-Type': 'application/json'
+            },
+            qs: { tenantId : _tenantID,
+                  agentId : req.body.agentid
+            }
+          }, function(error, response, body){
+            if(error) {
+              console.log(error);
+              res.status(400).send('Error in deleteing data source with database server error');
+            } else {
+              console.log(response.statusCode, body);
+
+              if (response.statusCode === 200){
+
+                var body = JSON.parse(response.body);
+                res.status(200).send(body);
+
+              } else if (response.statusCode === 404) {
+                res.status(404).send('Error with query and data soruce');
+              }
+              else {
+                res.status(400).send('Error with token');
+              }
+            }
+          });
+
+        }
+      });
+
+    }
+    catch (e) {
+      console.log(e);
+      return res.status(400).send (ErrorMsg.token_verification_failed);
+    }
+  }
+});
 
 app.get('/urlbydomainid', function(req, res) {
 //////// Parameters Checking /////////
