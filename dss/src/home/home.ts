@@ -10,7 +10,7 @@ import { DadTable } from '../../../dad3/src/app/dad/table.component';
 const styles = require('./home.css');
 const template = require('./home.html');
 
-export type DataSourceTypeOptions = "Mobicontrol" | "NextBus" | "Other...";
+export type DataSourceTypeOptions = 'Mobicontrol' | 'NextBus' | 'Other...';
 
 @Component({
   selector: 'home',
@@ -33,7 +33,7 @@ export class Home {
   dataSource: any[];
   McUrl : any[];
   rowsTake = 10;
-  options: any[] = [{"option": "MobiControl"}, {"option": "NextBus"}, {"option": "Other..."}];
+  options: any[] = [{'option': 'MobiControl'}, {'option': 'NextBus'}, {'option': 'Other...'}];
   dataSourceType: DataSourceTypeOptions;
 
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
@@ -136,11 +136,13 @@ export class Home {
   }
 
   resetCredentials(agentId: any) {
-    let _agentId = agentId.innerHTML;
+    let _agentId = agentId.innerHTML.trim();
+
     var headers = new Headers({
       'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
     });
+
     this.http.post('http://localhost:3004/resetCredentials/' + _agentId, { headers: headers })
       .subscribe(
         response => {
@@ -177,26 +179,53 @@ export class Home {
       );
   }
 
+  deleteAgent (agentId: any) {
+
+    let _agentId = agentId.innerHTML.trim();
+    var agent = {
+      dataSourceType : this.dataSourceType,
+      agentid : _agentId
+    };
+
+    var headers = new Headers({
+      'Content-Type' : 'application/json',
+      'x-access-token' : this.jwt
+    });
+
+
+    let body = JSON.stringify(agent);
+    this.http.post('http://localhost:3004/deleteDataSource', body, { headers: headers })
+      .subscribe(
+        response => {
+          this.error = null;
+          this.router.navigate(['home']);
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );
+  }
+
   addSource(dataSourceForm) {
     var decoded = this.decodedJwt;
 
-    let inputs = dataSourceForm.getElementsByTagName("input");
+    let inputs = dataSourceForm.getElementsByTagName('input');
     let inputLengths = inputs.length;
-    //create a json
-
+    //create a array of all inputs
     let inputValues = [];
 
-
-    for (let ctr = 0;  ctr < inputLengths; ctr++){
+    for (let ctr = 0;  ctr < inputLengths; ctr++) {
       let inputInformation = {
         inputName : inputs[ctr].id,
         inputValue :  inputs[ctr].value
       };
       inputValues.push(inputInformation);
     }
-    
+
     var agent = {
       tenantid : decoded['tenantId'],
+      dataSourceType : this.dataSourceType,
       agentid : 'asdas',
       data : inputValues
     };

@@ -59,8 +59,8 @@
       <form #mcForm (submit)="addSource(mcForm)">
       <table>
         <tr>
-          <td style="width: 200px"> <label>Data source label: </label>  </td>
-          <td style="width: 300px"><input #mcurl id="mcurl" style="width:300px" placeholder="Enter preferred agent name"></td>
+          <td style="width: 200px"> <label>MobiControl Url: </label>  </td>
+          <td style="width: 300px"><input #mcurl id="mcurl" style="width:300px" placeholder="Enter the mobi control url" type="url"></td>
         </tr>
         <tr>
           <td> <button type="submit" class="btn btn-success">Add Source</button></td>
@@ -69,7 +69,24 @@
       </form>
     </pre>
 
-    <br/>
+    <pre *ngIf="dataSourceType === 'Other...'">
+      <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
+      <form #otherForm (submit)="addSource(otherForm)">
+      <table>
+        <tr>
+          <td style="width: 200px"> <label>Data source label: </label>  </td>
+          <td style="width: 300px"><input #agentLabel id="agentLabel" style="width:300px" placeholder="Enter preferred agent name. (Max 16 characters)"
+                                          type="string" maxlength="16"></td>
+        </tr>
+        <tr>
+          <td> <button type="submit" class="btn btn-success">Add Source</button></td>
+        </tr>
+      </table>
+      </form>
+    </pre>
+
+
+      <br/>
     <pre *ngIf="dataSourceType === 'NextBus'">
       <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
 
@@ -81,7 +98,7 @@
         </tr>
         <tr>
           <td style="width: 200px"> <label>Data source URL: </label>  </td>
-          <td style="width: 300px"><input #nburl id="nextBusURL" style="width:300px" placeholder="Enter agent URL"></td>
+          <td style="width: 300px"><input #nburl id="nextBusURL" style="width:300px" placeholder="Enter agent URL" type="url"></td>
         </tr>
         <tr>
           <td style="width: 200px"> <label>Data source Frequency: </label>  </td>
@@ -104,22 +121,26 @@
               <table class="table table-bordered table-striped table-condensed">
                 <thead>
                   <tr>
-                    <th>Agent </th>
+                    <th>Agent Type </th>
                     <th>Agent ID</th>
                     <th>Download Credentials</th>
                     <th>Reset Credentials</th>
+                    <th>Status</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
                    <tr *ngFor="let x of McUrl;">
                       <td>
-                        <span> {{x.mcUrl}} </span>
+                        <span> {{x.dataSourceType}} </span>
                       </td>
                       <td style="align-content: center;">
                         <span #agentId id = "agentId" >{{x.agentId}} </span>
                       </td>
                       <td><a style="color:black;" class="btn btn" role="button" (click)="downloadCredentials(agentId)"><button>Download Credentials</button></a></td>
                       <td><a style="color:black;" class="btn btn" role="button" (click)="resetCredentials(agentId)"><button>Reset Credentials</button></a></td>
+                       <td>{{x.status}}<a style="color:black;" class="btn btn" role="button" (click)="resetCredentials(agentId)"> <button>Change Status</button></a></td>
+                     <td><a style="color:black;" class="btn btn" role="button" (click)="deleteAgent(agentId)"><button>Delete</button></a></td>
                   </tr>
                 </tbody>
               </table>
