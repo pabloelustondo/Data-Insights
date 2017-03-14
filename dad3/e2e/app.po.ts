@@ -1,11 +1,9 @@
-import { browser, element, by } from 'protractor/globals';
+import { browser, element, by } from 'protractor';
 
-export class CoreUIPage {
-  navigateTo() {
-    return browser.get('/');
+export class DADPage {
+
+  static getWidgetsOnThePage() {
+    return element(by.css('dadWidget'))
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
-  }
 }
