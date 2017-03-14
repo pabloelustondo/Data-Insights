@@ -4,6 +4,7 @@ import { DadChart, DadChartComponent } from "../src/app/dad/chart.component";
 import { DadWidget, DadWidgetComponent } from "../src/app/dad/widget.component";
 import { WIDGETS } from "../src/app/dad/sample.widgets";
 import { PAGES } from "../src/app/dad/sample.page";
+import { CHARTS } from "../src/app/dad/sample.charts";
 import { DadPage, DadPageComponent } from "../src/app/dad/page.component";
 
 
@@ -20,24 +21,28 @@ describe('SOTI DATA ANALYTICS DASHBOARD', () => {
   });
 });
 
-describe('DAD', () => {
-  it('should have right number of widgets on the page', () => {
+describe('DAD elements', () => {
+  it('should have the right number of widgets on the page', (done) => {
     let numberOfWidgetsInConfig = PAGES[0].widgetids;
-    let numberOfWidgetsInPage = DADPage.getWidgetsOnThePage();
-    expect(numberOfWidgetsInConfig.length).toBe(numberOfWidgetsInPage);
-  });
-});
-
-/*
-describe('DAD', () => {
-  let dadChart;
-  beforeEach(() => {
-    dadChart = new DadChart();
-    browser.get('http://localhost:4200/#/dad/page/batstats');
+    DADPage.getWidgetsOnThePage().then(function(elements){
+      expect(numberOfWidgetsInConfig.length).toBe(elements.length);
+      done();
+    });
   });
 
-  it('should find the chart on the main page', () => {
-    expect(dadChartdtype.isPresent()).toBeTruthy();
-  })
+  it('should have the right number of charts on the page', (done) => {
+    let numberOfChartsInConfig = PAGES[0].chartids;
+    DADPage.getChartsOnThePage().then(function(elements){
+      expect(numberOfChartsInConfig.length).toBe(elements.length);
+      done()
+    });
+  });
+
+  it('should return the same number on the widget', (done) => {
+    let deviceNotLastedShiftCount = WIDGETS[0].data[0].CountDevicesNotLastedShift;
+    DADPage.getValueOnTheWidget().then(function(elements){
+      expect(deviceNotLastedShiftCount).toBe(elements.length);
+      done();
+    });
+  });
 });
-*/
