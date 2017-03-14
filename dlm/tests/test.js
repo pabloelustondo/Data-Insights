@@ -93,7 +93,7 @@ describe("Test IDA API service calls", function() {
 
     describe("ensure ida is up", function () {
 
-        var jwtToekn3 = '';
+        var jwtToken3 = '';
         before( function (done) {
             var config1 = {
                 dataSourceId : 'varun dave test data source',
@@ -106,7 +106,7 @@ describe("Test IDA API service calls", function() {
             ManageApiConfigurations.addApiConfig(config1, function (){
 
                 ManageApiConfigurations.getToken(config1.dataSourceId, function (err, result) {
-                   jwtToekn3 = result.expiringToken;
+                   jwtToken3 = result.expiringToken;
                 });
                 done();
             });
@@ -237,8 +237,7 @@ describe("Test job scheduler", function () {
             var dataSourceId = 'varun dave test data source';
             JobManagementService.findJobByDataSource(dataSourceId, function (err, result) {
 
-                var job = result[0];
-              //  console.log(job.attrs.name);
+
                 expect(err).to.be.null;
 
                 expect(result).to.not.be.undefined;
