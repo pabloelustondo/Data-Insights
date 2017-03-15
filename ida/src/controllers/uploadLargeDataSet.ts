@@ -92,11 +92,12 @@ export class UploadLargeDataSetController {
             let awsResponseCall = function (awsP: any) {
                 let promise = new Promise(function (resolve, reject) {
                     s3instance.bucket = config['aws-s3bucket']  + '/' + Math.floor(Math.random() * 15 ) + 1 ;
-                    let uploadParams = {Bucket: config['aws-s3bucket'] +  '/' + Math.floor(Math.random() * 15 ) + 1, Key: '', Body: ''};
+                    let uploadParams = {Bucket: config['aws-s3bucket'] +  '/dlmTest', Key: '', Body: ''};
                     let xyz = {
                         idaMetadata : {
-                            referer: 'sampleData',
-                            agentId: 'test-id',
+                            referer : 'sampleRequestOriginInfo',
+                            agentId:  awsP.agentid,
+                            tenantId: awsP.tenantid,
                             timeStamp: (new Date()).toISOString,
                         },
                         clientData : express.body
