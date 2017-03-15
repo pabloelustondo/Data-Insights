@@ -28,6 +28,7 @@ export class DadChart extends DadElement{
     selector: 'dadchart',
     providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
+<div class="dadChart">
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
@@ -50,7 +51,7 @@ export class DadChart extends DadElement{
                                     <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
                            </select>  
                            by                       
-                           <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                           <select  (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                            </select>  
 
@@ -73,7 +74,7 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
-
+</div>
     `
 })
 export class DadChartComponent implements OnInit {
