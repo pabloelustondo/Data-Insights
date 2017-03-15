@@ -1,0 +1,30 @@
+{
+  "name": "DataLoadingManager",
+  "version": "0.0.1",
+  "main": "app.js",
+  "description": "This is the component used to manage api calls and other schedules",
+  "author": "varun.dave@soti.net",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "1.14.1",
+    "express": "4.13.3",
+    "mongodb": "2.0.46",
+    "request": "^2.65.0",
+    "agenda": "0.9.0",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "3.2.0",
+    "chai-spies": "0.7.1",
+    "underscore" : "1.8.3",
+    "jsonwebtoken": "^7.3.0"
+  },
+  "scripts": {
+    "start" : "node app.js",
+    "debugwin": "node %NODE_DEBUG_OPTION% app.js",
+    "test": "cd tests && mocha --debug --timeout 15000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://taipan:8080/tfs/SOTITFS/_git/CustomerBI"
+  }
+}

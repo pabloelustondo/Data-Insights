@@ -56,12 +56,18 @@ export enum DadMetricType {
   Number, String, Date, Time
 }
 
+
+export type MetricOperator = 'count' | 'sum' | 'avg';
+
 export interface DadMetric{
-  Type: DadParameterType,
-  Name: string,
-  DataSource: string,
+  Type?: DadParameterType,
+  Name?: string,
+  DataSource?: string,
   Value?:any,
-  Dimensions?: DadDimension[]
+  Dimensions?: DadDimension[],
+  attribute?:string;
+  name?:string;
+  op?:MetricOperator
 }
 
 
@@ -70,10 +76,12 @@ export enum DadDimensionType {
 }
 
 export interface DadDimension{
-  Type: DadDimensionType,
-  Name: string,
-  DataSource: string,
-  Value?:any
+  Type?: DadDimensionType,
+  Name?: string,
+  DataSource?: string,
+  Value?:any,
+  attribute?:string,
+  name?:string
 }
 
 

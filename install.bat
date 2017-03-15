@@ -21,11 +21,16 @@ call npm install
 cd %installdir%\dad3\
 call npm install
 
+::Its Mongo Time
+start cmd.exe /k 
+mkdir data_folder
+mongod -dbpath ./
+
 ::Start Everything
 start cmd.exe /k 
 cd %installdir%\ddb & start call npm start
 start cmd.exe /k 
- cd %installdir%oda\ & start call npm start
+ cd %installdir%\oda & start call npm start
 start cmd.exe /k 
  cd %installdir%\dss\backend & start call npm start
 start cmd.exe /k 
@@ -35,5 +40,6 @@ start cmd.exe /k
 start cmd.exe /k 
  cd %installdir%\dad3 & start call npm start
 start cmd.exe /k 
-mkdir data_folder
-mongod -dbpath ./
+ cd %installdir%\dlm & start call npm start
+start cmd.exe /k 
+

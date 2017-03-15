@@ -62,8 +62,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -85,10 +84,10 @@ namespace Soti.MCDP.Database
                     return "";
                 else if (_deviceSyncStausList.ContainsKey(TableName) && _deviceSyncStausList[TableName].Status == 0)   //previous call is successed
                 {
-                    var queryLastTime = "Select min(a.ts) from (select top " + batchSize +
+                    var queryLastTime = "Select max(a.ts) from (select top " + batchSize +
                                         " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) where StartTime > '"
-                                        + _deviceSyncStausList[TableName].LastSyncTime +
-                                        "' order by [StartTime] desc ) a ";
+                                        + _deviceSyncStausList[TableName].LastSyncTime + "' and StartTime <= '" + DateTime.Now +
+                                       "' order by [StartTime] asc ) a ";
 
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
                     {
@@ -105,10 +104,10 @@ namespace Soti.MCDP.Database
                 }
                 else if (_deviceSyncStausList.ContainsKey(TableName) && _deviceSyncStausList[TableName].Status == -1)   //previous call is failed
                 {
-                    var queryLastTime = "Select min(a.ts) from (select top " + batchSize +
+                    var queryLastTime = "Select max(a.ts) from (select top " + batchSize +
                                         " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) where StartTime > '"
-                                        + _deviceSyncStausList[TableName].PreviousSyncTime +
-                                        "' order by [StartTime] desc ) a ";
+                                        + _deviceSyncStausList[TableName].PreviousSyncTime + "' and StartTime <= '" + DateTime.Now +
+                                        "' order by [StartTime] asc ) a ";
 
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
                     {
@@ -125,8 +124,10 @@ namespace Soti.MCDP.Database
                 }
                 else if (!_deviceSyncStausList.ContainsKey(TableName)) //initial stage without data in table
                 {
-                    var queryLastTime = "Select min(a.ts) from (select top " + batchSize +
-                                        " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) order by [StartTime] desc ) a ";
+                    var queryLastTime = "Select max(a.ts) from (select top " + batchSize +
+                                        " [StartTime] as ts from dbo.DeviceStatApplication WITH (NOLOCK) "
+                                        + " where StartTime <= '" + DateTime.Now 
+                                        + "' order by [StartTime] asc ) a ";
 
 
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
@@ -154,7 +155,8 @@ namespace Soti.MCDP.Database
                     var queryLastTime = "SELECT top " + batchSize + " A.DevId, A.AppId, A.StartTime, A.EndTime, "
                                                   + " DATEADD(HOUR, DATEDIFF(HOUR, 0, StartTime), 0) AS StartTimeRounded, DATEADD(HOUR, DATEDIFF(HOUR, 0, EndTime), 0) AS EndTimeRounded "
                                                   + " FROM dbo.DeviceStatApplication AS A WITH (NOLOCK) INNER JOIN dbo.devInfo as D WITH(NOLOCK) ON A.DevId = D.DevId "
-                                                  + " WHERE A.[StartTime] <= '" + lasttime + "' order by StartTime asc ";
+                                                  + " WHERE A.[StartTime] <= '" + lasttime + "' and A.[StartTime] <= '" + DateTime.Now 
+                                                  + "' order by StartTime asc ";
 
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
                     {
@@ -180,12 +182,13 @@ namespace Soti.MCDP.Database
                     }
                     
                     result = JsonConvert.SerializeObject(idaData);
+
+                    Logger.Log(LogSeverity.Info, "Try to send " + idaData.Count + " of DeviceStatApplication");
                 }
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
@@ -195,7 +198,7 @@ namespace Soti.MCDP.Database
             return result;
         }
 
-        public bool CheckDeviceStatApplicationSize()
+        public int CheckDeviceStatApplicationSize()
         {
             SqlConnection sqlConnection = null;
             var count = 0;
@@ -207,15 +210,34 @@ namespace Soti.MCDP.Database
                 {
                     using (sqlConnection = new SqlConnection(_mobicontrolDatabaseConnectionString))
                     {
-                        var cmd = new SqlCommand(queryCount + " where StartTime > '" + _deviceSyncStausList[TableName].LastSyncTime + "'", sqlConnection)
+                        if (_deviceSyncStausList[TableName].LastSyncTime != "")
                         {
-                            CommandType = CommandType.Text,
-                            CommandTimeout = _datdatabaseTimeout
-                        };
+                            var cmd =
+                                new SqlCommand(
+                                    queryCount + " where StartTime > '" + _deviceSyncStausList[TableName].LastSyncTime +
+                                    "' and  StartTime <= '" + DateTime.Now + "'", sqlConnection)
+                                {
+                                    CommandType = CommandType.Text,
+                                    CommandTimeout = _datdatabaseTimeout
+                                };
+                            sqlConnection.Open();
 
-                        sqlConnection.Open();
+                            int.TryParse(cmd.ExecuteScalar().ToString(), out count);
+                        }
+                        else
+                        {
+                            var cmd =
+                                new SqlCommand(
+                                    queryCount + " where StartTime <= '" + DateTime.Now + "'", sqlConnection)
+                                {
+                                    CommandType = CommandType.Text,
+                                    CommandTimeout = _datdatabaseTimeout
+                                };
 
-                        int.TryParse(cmd.ExecuteScalar().ToString(), out count);
+                            sqlConnection.Open();
+
+                            int.TryParse(cmd.ExecuteScalar().ToString(), out count);
+                        }
                     }
                 }
                 else
@@ -238,15 +260,14 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
                 if (sqlConnection != null && sqlConnection.State != ConnectionState.Closed)
                     sqlConnection.Close();
             }
-            return count > 10000;
+            return count;
         }
 
         /// <summary>
@@ -273,8 +294,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -310,20 +330,8 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
-        }
-
-        /// <summary>
-        ///     Log Service
-        /// </summary>
-        /// <param name="message">Log Message.</param>
-        private static void Log(string message)
-        {
-            var streamWriter = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "MCDP.log", true);
-            streamWriter.WriteLine(message);
-            streamWriter.Close();
         }
 
         /// <summary>
@@ -356,8 +364,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
-                Log(logMessage + "[ERROR] " + ex);
+                Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
     }

@@ -4,7 +4,7 @@ import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
 import { Router, ActivatedRoute } from "@angular/router";
 import { config } from "./appconfig";
-import { DadTableConfigsService } from "./chart.service";
+import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
 import { DadFilter } from "./filter";
 
 declare var d3, c3: any;
@@ -26,7 +26,7 @@ export class DadChart extends DadElement{
 }
 @Component({
     selector: 'dadchart',
-    providers:[DadElementDataService,DadTableConfigsService],
+    providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
@@ -38,13 +38,23 @@ export class DadChart extends DadElement{
                             <i class="icon-settings"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
-                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('')">Edit</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
                     </div>
                     <div>
-                        <div style="color:black;">{{chart.name}}</div><br/><br/><br/>        
+                        <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
+                        <div *ngIf="chart.reduction" style="color:black;">                      
+                           <select (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
+                                    <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
+                           </select>  
+                           by                       
+                           <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                                    <option style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
+                           </select>  
+
+                        </div><br/><br/><br/> 
 
                         <div *ngIf="chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
                         <div *ngIf="!chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
@@ -93,7 +103,28 @@ export class DadChartComponent implements OnInit {
 
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
+              private dadChartConfigsService : DadChartConfigsService,
               private router: Router, private route: ActivatedRoute) {}
+
+ selectDimension(d){
+
+   let newDimension = this.chart.dimensions[d];
+   this.chart.reduction.dimension = newDimension;
+   this.dadChartConfigsService.saveOne(this.chart);
+   let chartData = this.mapper.map(this.chart, this.data);
+   chartData.unload = true;
+   this.c3chart.load(chartData);
+ }
+
+  selectMetric(d){
+    let newMetric = this.chart.metrics[d];
+    this.chart.reduction.metric = newMetric;
+    this.dadChartConfigsService.saveOne(this.chart);
+    let chartData = this.mapper.map(this.chart, this.data);
+    chartData.unload = true;
+    this.c3chart.load(chartData);
+  }
+
 
   onDateChanged(event:any) {
       console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
@@ -175,7 +206,7 @@ export class DadChartComponent implements OnInit {
   }
 
   drillFromElement(data){
-    if (this.chart.action = 'drillFromElement') {
+    if (this.chart.action === 'drillFromElement') {
 
       let self = this;
       let eventHandler = this.goToTable;
@@ -305,6 +336,7 @@ if (chartConfig.regionM){
     this.c3chart = c3.generate(c3Config);
 
     if(chartConfig.action === 'drill') {
+      let self = this;
       let eventHandler = this.goToTable;
       let chart = this.chart;
       let route = this.route;
@@ -337,34 +369,44 @@ if (chartConfig.regionM){
     //create the table
     let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
     let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
+    let count = chart.data.length;
 
-    tableConfig.id += self.chart.id + d.id;
-    tableConfig.filter = { } ;
+
 
     //let find the attribute   come in the reducer dimensin
 
-    let attribute = chart.reduction.dimension.attribute;
+    if (chart.reduction ) {
 
-    let value;
+      tableConfig.id += self.chart.id + ((d)?d.id:"");
+      tableConfig.filter = { } ;
+
+      let attribute = chart.reduction.dimension.attribute;
+
+      let value;
 
 
-    if (chart.type === 'pie') {
-      value = d.id;
-    }
-    if (chart.type === 'bar') {
+      if (chart.type === 'pie') {
+        value = d.id;
+      }
+      if (chart.type === 'bar') {
         value = chart.mappedData.columns[0][d.x + 1];
+      }
+
+      tableConfig.filter[attribute] = value;
+
+      let filter = new DadFilter();
+      let filteredData = filter.filter(tableConfig, chart.data);
+      count = filteredData.length;
     }
-
-    tableConfig.filter[attribute] = value;
-
-    let filter = new DadFilter();
-    let filteredData = filter.filter(tableConfig, chart.data);
-    let count = filteredData.length;
 
     self.dadTableConfigsService.saveOne(tableConfig);
 
-    //go to that table
+    if (chart.action === 'drillFromElement'){
     router.navigate(['table', count , chart.id,  tableConfig.id], { relativeTo: route});
+    } else {
+      router.navigate(['table', count , tableConfig.id], { relativeTo: route});
+    }
+
 };
 
   //mini applied

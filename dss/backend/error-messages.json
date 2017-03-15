@@ -13,5 +13,9 @@
   "login_failed_authentication": "Failed to login due to authentication failure",
   "token_verification_failed" : "Failed to verify the token, please consult your administrator",
   "token_activationKey_failed": "Activation key is not valid. Please consult with your administrator",
-  "tenantid_not_registered": "System could not find IDP for provided tenantID"
+  "tenantid_not_registered": "System could not find IDP for provided tenantID",
+  "session_missing_callback_token" : "Redirect mechanism did not provide auth Token.",
+  "db_connection_not_establish" : "Could not connect to DB. Please contact SOTI support",
+  "missing_dataSourceType" : "A data source type was not provided in the request. Please contact SOTI support",
+  "dlm_generic_error" : "There is an issue enrolling the nextBus data Source. Please contact SOTI support."
 }

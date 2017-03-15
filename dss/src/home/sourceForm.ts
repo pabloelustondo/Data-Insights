@@ -18,14 +18,14 @@ const _template = require('../source/source-form.component.html');
   template:  _template,
   styles: [ styles ]
 })
-export class SourceForms  implements OnInit{
-  jwt: string;
-  decodedJwt: string;
-  response: string;
-  enrollStatus: boolean;
-  enrollments: string[];
-  api: string;
-  isSOTI: boolean;
+export class SourceForms  implements OnInit {
+  jwt : string;
+  decodedJwt : string;
+  response : string;
+  enrollStatus : boolean;
+  enrollments : string[];
+  api : string;
+  isSOTI : boolean;
   @Input()
   agentId : string;
 
@@ -34,7 +34,7 @@ export class SourceForms  implements OnInit{
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
     this.decodedJwt = this.jwt && window.jwt_decode(this.jwt);
-    this.isSOTI = this.decodedJwt["domainid"] === 'soti';
+    this.isSOTI = this.decodedJwt['domainid'] === 'soti';
   }
 
   ngOnInit() {
@@ -46,11 +46,10 @@ export class SourceForms  implements OnInit{
 
     console.log('you submitted value : ', form);
     this.router.navigate(['sf']);
-   // console.log(this.agentId);
-    // post call to db with  (form)
+
   }
 
-  addSource(event, mcurl, agentid){
+  addSource(event, mcurl, agentid) {
 
     var decoded = this.decodedJwt;
 

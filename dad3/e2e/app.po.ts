@@ -1,11 +1,18 @@
-import { browser, element, by } from 'protractor/globals';
+import { browser, element, by } from 'protractor';
+import { DadWidget, DadWidgetComponent } from '../src/app/dad/widget.component';
+export class DADPage {
 
-export class CoreUIPage {
-  navigateTo() {
-    return browser.get('/');
+  static getWidgetsOnThePage() {
+    return element.all(by.css('dadWidget'))
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  static getChartsOnThePage() {
+    return element.all(by.css('dadChart'))
   }
+
+  static getValueOnTheWidget() {
+    return element.all(by.id('widget1'));
+    //widgetID.data[0][widget.metrics[0].DataSource]
+  }
+
 }

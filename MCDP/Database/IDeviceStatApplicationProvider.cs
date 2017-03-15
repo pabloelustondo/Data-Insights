@@ -19,5 +19,11 @@ namespace Soti.MCDP.Database
         /// </summary>
         /// <param name="pass">True if data received.</param>
         void ConfirmStatusData(bool pass);
+
+        /// <summary>
+        ///     Check DeviceStatApplication Size.
+        /// </summary>
+        /// <returns>Size</returns>
+        int CheckDeviceStatApplicationSize();
     }
 }

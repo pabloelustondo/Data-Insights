@@ -2,7 +2,7 @@ var express  = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var mongodb = require('mongodb').MongoClient;
-var ObjectID=require('mongodb').ObjectID;
+var ObjectID = require('mongodb').ObjectID;
 var dbUrl ='mongodb://127.0.0.1:27017/';
 var path = require('path');
 
@@ -109,7 +109,6 @@ app.put('/todo', function(req,res){
 
 app.post('/insertNewDataSource', function (req, res ) {
 
-
     callDbAndRespond(req, res, function (req,res, db, next ){
         db.collection('dataSources').insertOne(req.body, next);
     });
@@ -179,7 +178,6 @@ app.get('/dataSource/:agentId', function (req, res) {
 
 app.get('/verifyDataSource', function (req, res) {
 
-    console.log ('reached verify data source');
     console.log (req.query.tenantId);
     var _tenantId = req.query.tenantId;
     var _agentId = req.query.agentId;
@@ -192,6 +190,28 @@ app.get('/verifyDataSource', function (req, res) {
         }, next);
     });
 
+});
+
+
+///////////////////////
+// DLM related APIS  //
+//                   //
+//                   //
+///////////////////////
+app.get('/getAgendas', function (req, res ) {
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('jobs').find({}).toArray(next);
+    });
+});
+
+
+
+app.get('/dataSourceByType', function(req,res) {
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('dataSources').find({
+            'dataSourceType' : req.query.dataSourceType
+        }).toArray(next);
+    });
 });
 
 app.post('/updateDataSourceCredentials', function (req, res ) {
@@ -249,6 +269,12 @@ app.post('/updateDataSourceAws', function (req, res) {
 });
 
 
+//////
+//  All delete APIS
+//
+///////
+
+
 app.delete('/todo', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('todo').drop(next);
@@ -262,10 +288,24 @@ app.delete('/enrollments', function(req,res){
 });
 
 
-app.delete('/dataSources', function(req,res){
+app.delete('/deleteAllDataSources', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('dataSources').drop(next);
     });
 });
+
+app.delete('/deleteDataSource', function(req,res){
+
+    var _agent = req.query.agentId;
+    var _tenant = req.query.tenantId;
+
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('dataSources').removeOne(
+        {
+           agentId : _agent
+        },next);
+    });
+});
+
 
 app.listen(8000);

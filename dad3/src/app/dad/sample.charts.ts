@@ -18,6 +18,17 @@ export const CHARTS: DadChart[] = [
         regionM: 30,
         tableId: 'table2',
         action: 'drill',
+        data: [{"countOfDevices":56,"percentage":5},{"countOfDevices":112,"percentage":10},
+            {"countOfDevices":20,"percentage":15},{"countOfDevices":6,"percentage":20},
+            {"countOfDevices":3,"percentage":25},{"countOfDevices":0,"percentage":30},
+            {"countOfDevices":1,"percentage":35},{"countOfDevices":1,"percentage":40},
+            {"countOfDevices":2,"percentage":45},{"countOfDevices":0,"percentage":50},
+            {"countOfDevices":0,"percentage":55},{"countOfDevices":0,"percentage":60},
+            {"countOfDevices":0,"percentage":65},{"countOfDevices":0,"percentage":70},
+            {"countOfDevices":0,"percentage":75},{"countOfDevices":0,"percentage":80},
+            {"countOfDevices":0,"percentage":85},{"countOfDevices":0,"percentage":90},
+            {"countOfDevices":0,"percentage":95},{"countOfDevices":0,"percentage":100}
+        ],
         parameters: [
             {
                 dateTo: "2016-08-25T20:30:21",
@@ -44,7 +55,7 @@ export const CHARTS: DadChart[] = [
     },
 
     {id: "charthorizontal",
-        name: 'Average Battery Discharge Rate',
+        name: 'Application Count by Number of Devices',
         type: "bar",
         endpoint: "ApplicationDeploymentCount",
         a : 'ExecutionTimeMinutes',
@@ -69,6 +80,7 @@ export const CHARTS: DadChart[] = [
                 "AppId": "soti"
             }
         ],
+        action: 'drillFromElement',
         parameters: [
             {
                 dateFrom: "2017-01-24T20:30:21",
@@ -99,6 +111,21 @@ export const CHARTS: DadChart[] = [
         height: 400,
         horizontal: true,
         transformations : [{sort: true}],
+        data: [
+            {
+                "NumberOfInstallations": 41628,
+                "AppId": "android"
+            },
+            {
+                "NumberOfInstallations": 4300,
+                "AppId": "com.ebay.mobile"
+            },
+            {
+                "NumberOfInstallations": 60000,
+                "AppId": "soti"
+            }
+        ],
+        action: 'drillFromElement',
         parameters: [
             {
                 dateFrom: "2017-01-24T20:30:21",
@@ -151,6 +178,16 @@ export const CHARTS: DadChart[] = [
             {dimension: {attribute: 'os', name:'OS'},
                 metric: {attribute:'LastBatteryStatus', op:'avg', name:'Average Battery Status'}}
             ],
+        dimensions:[
+            {attribute: 'model', name:'Model'},
+            {attribute: 'carrier', name:'Carrier'},
+            {attribute: 'brand', name:'Brand'},
+            {attribute: 'os', name:'OS'}
+        ],
+        metrics:[
+            {attribute:'DevId', op:'count', name:'Number of Devices'},
+            {attribute:'LastBatteryStatus', op:'avg', name:'Average Battery Status'}
+        ],
         a : 'countOfDevices',
         b : 'percentage',
         aname : 'Count Of Devices',
@@ -163,7 +200,7 @@ export const CHARTS: DadChart[] = [
             {
                 shiftDuration:8,
                 rowsSkip:0,
-                rowsTake:10,
+                rowsTake:1000,
                 shiftStartDateTime:"2016-08-25",
                 minimumBatteryPercentageThreshold:20
             }],
@@ -187,7 +224,7 @@ export const CHARTS: DadChart[] = [
     },
 
     {id: "chartpiedrill",
-        name: 'Drill Test',
+        name: 'Devices & Battery Performance',
         type: "pie",
         endpoint:'ListOfDevicesNotSurvivedShift',
         data:[
@@ -219,6 +256,15 @@ export const CHARTS: DadChart[] = [
             {dimension: {attribute: 'carrier', name:'Carrier'},
                 metric: {attribute:'DevId', op:'count', name:'Number of Devices'}},
         ],
+        dimensions:[
+            {attribute: 'model', name:'Model'},
+            {attribute: 'carrier', name:'Carrier'},
+            {attribute: 'brand', name:'Brand'},
+            {attribute: 'os', name:'OS'}
+        ],
+        metrics:[
+            {attribute:'DevId', op:'count', name:'Number of Devices'}
+        ],
         a : 'countOfDevices',
         b : 'percentage',
         aname : 'Count Of Devices',
@@ -232,7 +278,7 @@ export const CHARTS: DadChart[] = [
             {
                 shiftDuration:8,
                 rowsSkip:0,
-                rowsTake:10,
+                rowsTake:1000,
                 shiftStartDateTime:"2016-08-25",
                 minimumBatteryPercentageThreshold:20
             }],

@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 import { SourcingForm } from './source-form'
 
 @Component({
-  moduleId: module.id,
+  moduleId: this.module.id,
   selector: 'source-form',
   templateUrl: './source-form.component.html'
 })
