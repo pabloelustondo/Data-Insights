@@ -51,7 +51,7 @@ var DadPageComponent = (function () {
             selector: 'dad',
             styles: ['.row{overflow:hidden;}'],
             providers: [data_service_1.DadElementDataService, chart_service_1.DadTableConfigsService, chart_service_1.DadWidgetConfigsService, chart_service_1.DadChartConfigsService, chart_service_1.DadPageConfigsService],
-            template: "\n   <div class=\"animated fadeIn\">\n        <div class=\"row\">\n            <div class=\"col-m-12 row-sm-4\" *ngFor=\"let widget of page.widgets\">\n                <dadwidget [widget]=\"widget\"></dadwidget>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div *ngFor=\"let chart of page.charts\">\n                <dadchart [chart]=\"chart\"></dadchart>\n            </div>\n        </div>\n    </div>\n    "
+            template: "\n   <div *ngIf=\"page\" class=\"animated fadeIn\">\n        <div *ngIf=\"page.widgets\" class=\"row\">\n            <div class=\"col-m-12 row-sm-4\" *ngFor=\"let widget of page.widgets\">\n                <dadwidget [widget]=\"widget\"></dadwidget>\n            </div>\n        </div>\n        <div *ngIf=\"page.charts\" class=\"row\">\n            <div *ngFor=\"let chart of page.charts\">\n                <dadchart [chart]=\"chart\"></dadchart>\n            </div>\n        </div>\n    </div>\n    "
         })
     ], DadPageComponent);
     return DadPageComponent;

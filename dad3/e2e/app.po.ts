@@ -11,8 +11,8 @@ export class DADPage {
   }
 
   static getValueOnTheWidget() {
-    let widgetID =  element(by.id('widget1'));
-    widgetID.data[0][widget.metrics[0].DataSource]
+    return element.all(by.id('widget1'));
+    //widgetID.data[0][widget.metrics[0].DataSource]
   }
 
 }

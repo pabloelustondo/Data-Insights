@@ -6,6 +6,13 @@ exports.WIDGETS = [
         type: 0,
         tableId: 'table1',
         endpoint: 'DevicesNotSurvivedShift',
+        drillTo: 'chartbardrill',
+        data: [{
+                CountDevicesNotLastedShift: 50,
+                CountTotalActiveDevices: 100,
+                CountDevicesLastedShift: 40,
+                CountDevicesChargingEntireShift: 10
+            }],
         metrics: [
             {
                 Type: dadmodels_1.DadParameterType.Number,
@@ -58,6 +65,13 @@ exports.WIDGETS = [
         type: 0,
         tableId: "table1",
         endpoint: 'DevicesNotSurvivedShift',
+        drillTo: 'chartpiedrill',
+        data: [{
+                CountDevicesNotLastedShift: 60,
+                CountTotalActiveDevices: 120,
+                CountDevicesLastedShift: 55,
+                CountDevicesChargingEntireShift: 15
+            }],
         metrics: [
             {
                 Type: dadmodels_1.DadParameterType.Number,
@@ -82,17 +96,11 @@ exports.WIDGETS = [
         ],
         parameters: [
             {
-                shiftStartDateTimeAuto: "yesterday",
                 shiftStartDateTime: "2016-08-25T13:00:00.000Z",
                 shiftDuration: "8",
                 minimumBatteryPercentageThreshold: 20
             }],
         uiparameters: [
-            {
-                Type: dadmodels_1.DadParameterType.String,
-                Name: "Date Time Type",
-                DataSource: "shiftStartDateTimeAuto"
-            },
             {
                 Type: dadmodels_1.DadParameterType.DateTime,
                 Name: "Shift Start",
@@ -115,6 +123,13 @@ exports.WIDGETS = [
         type: 0,
         tableId: "table1",
         endpoint: 'DevicesNotSurvivedShift',
+        drillTo: 'chartpiedrill',
+        data: [{
+                CountDevicesNotLastedShift: 50,
+                CountTotalActiveDevices: 90,
+                CountDevicesLastedShift: 45,
+                CountDevicesChargingEntireShift: 20
+            }],
         metrics: [
             {
                 Type: dadmodels_1.DadParameterType.Number,
@@ -172,6 +187,11 @@ exports.WIDGETS = [
         type: 0,
         tableId: 'table1',
         endpoint: 'BatteryMetrics',
+        drillTo: 'chartpiedrill',
+        data: [{
+                CountDevicesNotLastedShift: 200,
+                CountDevicesNotFullyCharged: 80,
+            }],
         metrics: [
             {
                 Type: dadmodels_1.DadParameterType.String,
@@ -217,17 +237,24 @@ exports.WIDGETS = [
         ]
     },
     { id: 'widget_chart1',
-        name: 'Application Deployment Count by Number of Devices',
+        name: 'Application Count by Number of Devices',
         type: 1,
         endpoint: "ApplicationDeploymentCount",
         data: [
             {
                 "ExecutionTimeMinutes": 41628,
-                "AppId": "android"
+                "AppId": "android",
+                "NumberOfDevices": 127
             },
             {
                 "ExecutionTimeMinutes": 43,
-                "AppId": "com.ebay.mobile"
+                "AppId": "com.ebay.mobile",
+                "NumberOfDevices": 156
+            },
+            {
+                "ExecutionTimeMinutes": 55000,
+                "AppId": "soti",
+                "NumberOfDevices": 189
             }
         ],
         parameters: [
@@ -237,7 +264,7 @@ exports.WIDGETS = [
             }],
         uiparameters: [
             {
-                Type: dadmodels_1.DadParameterType.Date,
+                Type: dadmodels_1.DadParameterType.DateTime,
                 Name: "Date From",
                 DataSource: "dateFrom"
             },
@@ -257,47 +284,57 @@ exports.WIDGETS = [
             height: 250,
             embeddedChart: true,
             horizontal: true,
-            action: 'grow'
+            action: 'grow',
+            transformations: [{ sort: true }, { top: 5 }]
         }
     },
     { id: 'widget_chart2',
         name: 'Application Popularity',
         type: 1,
-        endpoint: "AverageDischargeRate",
+        endpoint: "NumberOfInstallations",
+        data: [
+            {
+                "NumberOfInstallations": 2923,
+                "AppId": "com.amazon.windowshop"
+            },
+            {
+                "NumberOfInstallations": 2922,
+                "AppId": "com.brainium.solitairefree"
+            },
+            {
+                "NumberOfInstallations": 2912,
+                "AppId": "com.game.BubbleShooter"
+            }
+        ],
         parameters: [
             {
-                dateTo: "2016-08-25T20:30:21",
-                shiftStartDateTime: "2016-08-24T20:30:21",
-                shiftDuration: 8
+                dateFrom: "2017-01-24T20:30:21",
+                dateTo: "2017-01-27T20:30:21"
             }],
         uiparameters: [
+            {
+                Type: dadmodels_1.DadParameterType.DateTime,
+                Name: "Date From",
+                DataSource: "dateFrom"
+            },
             {
                 Type: dadmodels_1.DadParameterType.Date,
                 Name: "Date To",
                 DataSource: "dateTo"
-            },
-            {
-                Type: dadmodels_1.DadParameterType.DateTime,
-                Name: "Shift Start Date & Time",
-                DataSource: "shiftStartDateTime"
-            },
-            {
-                Type: dadmodels_1.DadParameterType.Duration,
-                Name: "Shift Duration",
-                DataSource: "shiftDuration"
-            },
+            }
         ],
         chart: { id: "charthorizontal2",
             type: "bar",
-            a: 'countOfDevices',
-            b: 'percentage',
-            aname: 'Count Of Devices',
-            bname: 'Percentage',
+            a: 'NumberOfInstallations',
+            b: 'AppId',
+            aname: 'Number Of Installations',
+            bname: 'Application ID',
             width: 275,
-            height: 200,
+            height: 250,
             embeddedChart: true,
             horizontal: true,
-            action: 'grow'
+            action: 'grow',
+            transformations: [{ sort: true }, { top: 5 }]
         }
     }
 ];
