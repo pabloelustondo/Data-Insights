@@ -1,5 +1,6 @@
 "use strict";
 var transformer_1 = require("./transformer");
+var reducer_1 = require("./reducer");
 var ChartData = (function () {
     function ChartData() {
         this.Dimension = [];
@@ -15,61 +16,51 @@ var Mapper = (function () {
         var chartData = new ChartData();
         var dataForChart;
         var index = 0;
-        if (config.type !== 'bar' && config.type !== 'spline') {
+        if (config.reduction) {
+            var reducer = new reducer_1.DadReducer();
+            data = reducer.reduce(config, data);
+        }
+        var configa;
+        var configb;
+        if (!config.a && !config.b) {
+            configa = "a";
+            configb = "b";
+            chartData.Metric.push(configa);
+            chartData.Dimension.push(configb);
             data.forEach(function (e) {
-                //need to review this idea.. works for now b==metric a=dimension
-                if (!config.a && !config.b) {
-                    chartData.Metric.push("#" + index);
-                    chartData.Dimension["#" + index] = e;
-                }
-                if (config.a && config.b) {
-                    chartData.Metric.push(e[config.a]);
-                    chartData.Dimension[e[config.a]] = e[config.b];
-                }
-                index++;
+                chartData.Dimension.push(e);
+                chartData.Metric.push(e);
             });
-            dataForChart = {
-                json: [chartData.Dimension],
-                keys: {
-                    value: chartData.Metric
-                },
-                selection: {
-                    enabled: true
-                },
-                type: config.type
-            };
         }
         else {
-            var configa_1;
-            var configb_1;
-            if (!config.a && !config.b) {
-                configa_1 = "a";
-                configb_1 = "b";
-                chartData.Metric.push(configa_1);
-                chartData.Dimension.push(configb_1);
-                data.forEach(function (e) {
-                    chartData.Dimension.push(e);
-                    chartData.Metric.push(e);
-                });
-            }
-            else {
-                configa_1 = config.a;
-                configb_1 = config.b;
-                chartData.Metric.push(configa_1);
-                chartData.Dimension.push(configb_1);
-                data.forEach(function (e) {
-                    chartData.Dimension.push(e[configb_1]);
-                    chartData.Metric.push(e[configa_1]);
-                });
-            }
+            configa = config.a;
+            configb = config.b;
+            chartData.Metric.push(configa);
+            chartData.Dimension.push(configb);
+            data.forEach(function (e) {
+                chartData.Dimension.push(e[configb]);
+                chartData.Metric.push(e[configa]);
+            });
+        }
+        if (config.type === 'bar' || config.type === 'spline') {
             dataForChart = {
                 x: config.b,
                 columns: [chartData.Dimension, chartData.Metric],
                 type: config.type
             };
         }
+        if (config.type === 'pie') {
+            dataForChart = {
+                columns: [],
+                type: config.type
+            };
+            for (var i = 1; i < chartData.Dimension.length; i++) {
+                dataForChart.columns.push([chartData.Dimension[i], chartData.Metric[i]]);
+            }
+        }
         var transformer = new transformer_1.DadTransformer();
-        return transformer.transform(config, dataForChart);
+        config.mappedData = transformer.transformAll(config, dataForChart);
+        return config.mappedData;
     };
     return Mapper;
 }());

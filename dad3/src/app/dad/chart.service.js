@@ -24,6 +24,17 @@ var DadChartConfigsService = (function () {
         var charts_string = JSON.stringify(charts);
         localStorage.setItem("chartdata", charts_string);
     };
+    DadChartConfigsService.prototype.saveOne = function (chart) {
+        var charts = this.getChartConfigs();
+        var chartIndex = _.findIndex(charts, function (w) { return w.id == chart.id; });
+        if (chartIndex === -1) {
+            charts.push(chart);
+        }
+        else {
+            charts.splice(chartIndex, 1, chart);
+        }
+        this.save(charts);
+    };
     DadChartConfigsService.prototype.getChartConfigs = function () {
         var charts_string = localStorage.getItem("chartdata");
         if (charts_string != null) {
@@ -96,6 +107,17 @@ var DadTableConfigsService = (function () {
     DadTableConfigsService.prototype.save = function (tables) {
         var tables_string = JSON.stringify(tables);
         localStorage.setItem("tabledata", tables_string);
+    };
+    DadTableConfigsService.prototype.saveOne = function (table) {
+        var tables = this.getTableConfigs();
+        var tableIndex = _.findIndex(tables, function (w) { return w.id == table.id; });
+        if (tableIndex === -1) {
+            tables.push(table);
+        }
+        else {
+            tables.splice(tableIndex, 1, table);
+        }
+        this.save(tables);
     };
     DadTableConfigsService.prototype.getTableConfig = function (id) {
         var tables = this.getTableConfigs();

@@ -20,7 +20,7 @@ export class DadWidget extends DadElement{
   providers:[DadElementDataService, DadWidgetConfigsService],
   template: `   
 
-     
+<div class="dadWidget">
   <div class="col-sm-4 col-lg-3">  
      <div class="inside">
         <div class="content card card-inverse card-primary">
@@ -87,6 +87,7 @@ export class DadWidget extends DadElement{
         </div>
      </div>
   </div>
+</div>
   
    
   `
