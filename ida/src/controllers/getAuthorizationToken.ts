@@ -99,8 +99,6 @@ export class GetAuthorizationToken {
         } else {
             throw new Error('invalid auth token');
         }
-
-
     }
 }
 
