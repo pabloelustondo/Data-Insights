@@ -53,7 +53,15 @@ export class DadChart extends DadElement{
                            by                       
                            <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
+                                    <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Custom Dimension</option>
                            </select>  
+                           
+                           <div *ngIf="addDimension">
+                                    <form role="form" (submit)="search(querystr)">
+                                    <button class="glyphicons glyphicons-search" type="submit"></button>
+                                    <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
+                                    </form>                         
+                           </div>
 
                         </div><br/><br/><br/> 
 
@@ -101,6 +109,7 @@ export class DadChartComponent implements OnInit {
     secondDate: any;
     editMode:boolean = false;
     refreshMode:boolean = false;
+    addDimension: boolean = false;
 
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
@@ -109,12 +118,18 @@ export class DadChartComponent implements OnInit {
 
  selectDimension(d){
 
-   let newDimension = this.chart.dimensions[d];
-   this.chart.reduction.dimension = newDimension;
-   this.dadChartConfigsService.saveOne(this.chart);
-   let chartData = this.mapper.map(this.chart, this.data);
-   chartData.unload = true;
-   this.c3chart.load(chartData);
+   if (d>0) {
+     let newDimension = this.chart.dimensions[d];
+     this.chart.reduction.dimension = newDimension;
+     this.dadChartConfigsService.saveOne(this.chart);
+     let chartData = this.mapper.map(this.chart, this.data);
+     chartData.unload = true;
+     this.c3chart.load(chartData);
+   } else {  //we have a new dimension
+
+     this.addDimension = true;
+
+   }
  }
 
   selectMetric(d){
