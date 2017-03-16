@@ -9,10 +9,4 @@ export class DADPage {
   static getChartsOnThePage() {
     return element.all(by.css('dadChart'))
   }
-
-  static getValueOnTheWidget() {
-    return element.all(by.id('widget1'));
-    //widgetID.data[0][widget.metrics[0].DataSource]
-  }
-
 }
