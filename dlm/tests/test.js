@@ -10,6 +10,8 @@ var IdaCallService = require('../Services/IdaCallService');
 var ApiCallService = require ('../Services/ApiCallService');
 var JobManagementService = require('../Services/JobManagementService');
 var ManageApiConfigurations = require('../Services/ManageApiConfigurations');
+var agenda = require ('../Services/Agenda');
+var ManageAgendaConfigurations = require ('../Services/ManageAgendaService');
 
 var config = require('../appconfig.json');
 
@@ -117,7 +119,7 @@ describe("Test IDA API service calls", function() {
                 body : {
                 'testObj': 'testValue'
                 },
-                'expiringToken': jwtToekn3
+                'expiringToken': jwtToken3
 
             };
             IdaCallService.makeIdaCall(testData, function (err, result) {
@@ -207,10 +209,7 @@ describe("Test job scheduler", function () {
             JobManagementService.findJobByDataSource(dataSourceId, function (err, result) {
 
                 expect(err).to.be.null;
-
-                expect(result).to.not.be.undefined;
-                expect(result).to.be.number;
-                expect(result.length).to.equal(0);
+                expect(result).to.be.null;
                 done();
             });
         });
@@ -227,8 +226,7 @@ describe("Test job scheduler", function () {
                 'expiringToken' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5hbnRpZCI6ImV4dGVybmFsX3Rlc3RfdXNlciIsImFnZW50aWQiOiJ2YXJ1biB0ZXN0IGRhdGEwLjA1OTc1MDc1MzMyNzQ4NTkyIiwiaWF0IjoxNDg5MTU4MjIwLCJleHAiOjE0ODkxNTk3MjB9.KBh9xzRHG2BpYQUYwcSb2Haxrag4hu8YXuVoSNf9D1U'
             };
             JobManagementService.addJob(testJob, function (err) {
-                expect(err).to.not.null;
-
+                expect(err).to.be.null;
                 done();
             });
         });
@@ -251,51 +249,7 @@ describe("Test job scheduler", function () {
 
     });
 
-    describe ("Verify the added job is running", function () {
-        it('verifies we can set up a spy to test other cases', function (done) {
 
-            //create spy to see if API call management service is called
-            var req = {
-                'hi' : 'hello'
-            };
-            var spy = chai.spy(ApiCallService.log(req, function () {}));
-            expect(spy).to.be.spy;
-            spy.should.be.spy;
-            done();
-
-        });
-
-        it('ensure the Api call manamgenet is called after setting a task that should be called in 3 seconds ', function (done) {
-
-            //create spy to see if API call management service is called
-            var req = {
-                'hi' : 'hello'
-            };
-            var spy = chai.spy(ApiCallService.log(req, function () {}));
-            expect(spy).to.be.spy;
-            spy.should.be.spy;
-            done();
-
-            var testJob = {
-                'url': 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=ttc&r=32&t=1488819607',
-                'method': 'GET',
-                'dataSourceId': 'varun dave test data source',
-                'interval': 1,
-                'tenantId': 'varun_dlm_test',
-                'expiringToken' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5hbnRpZCI6ImV4dGVybmFsX3Rlc3RfdXNlciIsImFnZW50aWQiOiJ2YXJ1biB0ZXN0IGRhdGEwLjA1OTc1MDc1MzMyNzQ4NTkyIiwiaWF0IjoxNDg5MTU4MjIwLCJleHAiOjE0ODkxNTk3MjB9.KBh9xzRHG2BpYQUYwcSb2Haxrag4hu8YXuVoSNf9D1U'
-            };
-            JobManagementService.addJob(testJob, function (err) {
-                expect(err).to.not.null;
-
-                expect(spy).to.have.been.called();
-                spy.should.have.been.called();
-                done();
-            });
-
-
-        });
-
-    });
 
 
 });
