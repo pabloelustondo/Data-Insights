@@ -1,6 +1,6 @@
 import { DADPage } from './app.po';
 import {browser} from "protractor";
-import { DadChart, DadChartComponent } from "../src/app/dad/chart.component";
+import {DadChart, DadChartComponent } from "../src/app/dad/chart.component";
 import { DadWidget, DadWidgetComponent } from "../src/app/dad/widget.component";
 import { CHARTS } from "../src/app/dad/sample.charts";
 import { WIDGETS } from "../src/app/dad/sample.widgets";
@@ -30,7 +30,7 @@ describe('DAD elements', () => {
       console.log("There is/are" + " " + elements.length + " " + "widget(s) on the page.");
       done();
     });
-  });
+});
 
   it('should have the right number of charts on the page', (done) => {
     let numberOfChartsInConfig = PAGES[0].chartids;
@@ -69,7 +69,6 @@ describe('DAD elements', () => {
   it('should go to the charts page by clicking the number', (done) => {
     let widget = WIDGETS[0];
     let id = widget.id + '_0_value';
-    browser.sleep(1000);
     element.all(by.id(id)).then(function (elements) {
       elements[0].click().then(function() {
         browser.sleep(1000);
@@ -105,21 +104,68 @@ describe('Drill Charts', () => {
       done();
     });
   });
-});
 
-
-
-
-/*
-  it('should go to the tables page by clicking on the chart', (done) => {
+  it('should change the dimension', (done) => {
     let chart = CHARTS[3];
-    let id = chart.id + '_0_value';
+    let id = chart.id + '0' + '_dimension';
+    let chartRedDim = chart.reductions[1].dimension.name;
     element.all(by.id(id)).then(function (elements) {
-      elements[0].click().then(function() {
-        expect(browser.getCurrentUrl()).toContain('/drillcharts/chartbardrill/table/1/chartbardrill0/table1chartbardrill0metric');
+      elements[1].click().then(function () {
+        let elem = elements[1].getText();
+        expect(elem).toBe(chartRedDim);
+        console.log("First chart's dimension should be" + " " + chartRedDim);
+        sleep();
         done();
       });
     });
   });
+
+  it('should go to the tables by clicking the chart', (done) => {
+
+    element.all(by.css(".c3-event-rect-3")).then(function (elements) {
+      elements[0].click().then(function(event) {
+        console.log(elements[0].getInnerHtml());
+        browser.sleep(1000);
+        expect(browser.getCurrentUrl()).toContain('/table/1/chartbardrill0/table1chartbardrill0metric');
+        sleep();
+        done();
+      });
+    });
+  });
+
+/*
+  it('should go to the tables by clicking the chart', (done) => {
+    let chart = CHARTS[3];
+    element.all(by.css(".c3-event-rect-3")).then(function (elements) {
+      elements[0].click().then(function() {
+        browser.pause();
+        browser.sleep(1000);
+        expect(browser.getCurrentUrl()).toContain('drillcharts/chartbardrill/table/1/chartbardrill0/table1chartbardrill0metric');
+        browser.pause();
+        sleep();
+        done();
+      });
+    });
+  });
+*/
+});
+/*
+describe('Drill Tables', () => {
+  it('should have the right number of widgets on the page', (done) => {
+    let numberOfWidgetsInConfig = PAGES[0].widgetids;
+    DADPage.getWidgetsOnThePage().then(function (elements) {
+      expect(numberOfWidgetsInConfig.length).toBe(elements.length);
+      console.log("There is/are" + " " + elements.length + " " + "widget(s) on the page.");
+      done();
+    });
+  });
+
+
+
+
+
+
+
+});
 */
 
