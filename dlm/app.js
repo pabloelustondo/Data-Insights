@@ -215,5 +215,34 @@ app.post('/newUrlConfig', function (req, res) {
     }
 });
 
+app.post('/deleteDataSource', function (req, res) {
+    // disable any active service first
+        // get agent and job
+        // call service to disable job
+        JobManagementService.disableJob(req.query.agentId, function (err, _res) {
+            if (_res){
+                JobManagementService.removeJob(req.query.agentId, function (e, r) {
+                    if (e) {
+                        res.status(400).send("Error deleting this job");
+                    } else {
+                        res.status(200).send(r);
+                    }
+                })
+            }
+            if (err){
+                res.status(500).send(err.message);
+            }
+        });
+        console.log('hello');
+
+
+
+    // delete data source after
+
+        // remove the information from local storage
+        // call the agenda to delete the job
+
+    // call DDB to delete the configuration from overall all services
+});
 
 app.listen(config['port']);

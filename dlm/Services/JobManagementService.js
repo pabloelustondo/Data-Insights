@@ -41,7 +41,7 @@ JobManagementService = {
             'data.dataSourceId' : dataSourceId
         }, function (err, numRemoved) {
             if(err) {
-                callback(err);
+                callback(err, null);
             } else {
                 callback(null, numRemoved);
             }
@@ -91,12 +91,24 @@ JobManagementService = {
 
     },
 
-    removeJob: function(job, callback) {
-        job.remove(function(err) {
-            if(!err) {
-                console.log('successfully removed job from collection');
-                callback();
-            }
+    removeJob: function(dataSourceId, callback) {
+        if (!dataSourceId){
+            callback(new Error ('missing data source Id'), null);
+        }
+
+        agenda.jobs({
+            'data.dataSourceId' : dataSourceId
+        }, function ( err, job) {
+            job[0].remove(function (err) {
+                if (!err) {
+                    callback(null, {
+                        successful : true
+                    });
+                }
+                else {
+                    callback(err, null);
+                }
+            });
         });
     },
 
@@ -104,12 +116,39 @@ JobManagementService = {
         //TODO: implement
     },
 
-    enableJob: function(job, callback) {
-        job.enable();
+    enableJob: function(dataSourceId, callback) {
+        if (!dataSourceId){
+            callback(new Error ('missing data source Id'), null);
+        }
+
+        agenda.jobs({
+            'data.dataSourceId' : dataSourceId
+        }, function ( err, job) {
+            job[0].enable();
+            job[0].save();
+            callback(null, null);
+        });
     },
 
-    disableJob: function(job, callback) {
-        job.disableJob();
+    disableJob: function(dataSourceId, callback) {
+        if (!dataSourceId){
+            callback(new Error ('missing data source Id'), null);
+        }
+        else {
+            agenda.jobs({
+                'data.dataSourceId': dataSourceId
+            }, function (err, job) {
+                if (job.length == 0) {
+                    callback(new Error('no job to remove'), null);
+                } else {
+                    job[0].disable();
+                    job[0].save();
+                    callback(null, {
+                        successful : true
+                    });
+                }
+            });
+        }
     }
 
 };
