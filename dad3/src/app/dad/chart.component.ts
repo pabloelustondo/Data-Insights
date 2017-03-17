@@ -57,10 +57,10 @@ export class DadChart extends DadElement{
                            </select>  
                            
                            <div *ngIf="addDimension">
-                                    <form role="form" (submit)="search(querystr)">
-                                    <button class="glyphicons glyphicons-search" type="submit"></button>
-                                    <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
-                                    </form>                         
+                           <div></div>
+                           <div><input style="height:32px;" [(ngModel)]="newDimensionName"   type="text"   placeholder="Dimension Name"></div>
+                           <div><input style="height:32px;" [(ngModel)]="newDimensionAttribute"  type="text"   placeholder="Dimension Attribute"></div>
+                           <div><button (click)="addNewDimension()">Add New Dimension</button></div>                     
                            </div>
 
                         </div><br/><br/><br/> 
@@ -110,6 +110,8 @@ export class DadChartComponent implements OnInit {
     editMode:boolean = false;
     refreshMode:boolean = false;
     addDimension: boolean = false;
+    newDimensionName: string;
+    newDimensionAttribute: string;
 
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
@@ -118,7 +120,7 @@ export class DadChartComponent implements OnInit {
 
  selectDimension(d){
 
-   if (d>0) {
+   if (d>=0) {
      let newDimension = this.chart.dimensions[d];
      this.chart.reduction.dimension = newDimension;
      this.dadChartConfigsService.saveOne(this.chart);
@@ -130,6 +132,12 @@ export class DadChartComponent implements OnInit {
      this.addDimension = true;
 
    }
+ }
+
+ addNewDimension(){
+   this.addDimension = false;
+   this.chart.dimensions.push( { attribute: this.newDimensionAttribute, name: this.newDimensionName });
+   this.selectDimension(this.chart.dimensions.length-1);
  }
 
   selectMetric(d){
