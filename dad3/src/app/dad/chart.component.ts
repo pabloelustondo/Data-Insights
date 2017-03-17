@@ -29,7 +29,7 @@ export class DadChart extends DadElement{
     providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
 <div class="dadChart">
-    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
+    <div *ngIf=" chart.type!=='map' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
@@ -82,6 +82,9 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
+        <div *ngIf="chart.type==='map'" > <dadmap></dadmap></div>
+         
+        
 </div>
     `
 })

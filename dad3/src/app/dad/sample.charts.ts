@@ -303,7 +303,7 @@ export const CHARTS: DadChart[] = [
 
     {id: "ttcmap",
         name: 'TTC Bus Position',
-        type: "bar",
+        type: "map",
         endpoint: "AverageDischargeRate",
         a : 'countOfDevices',
         b : 'percentage',
