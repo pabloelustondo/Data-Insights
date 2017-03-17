@@ -390,7 +390,6 @@ if (chartConfig.regionM){
 
   goToTable(d,chart:DadChart,router,route, self){
     //create the table
-    alert('ggg');
     let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
     let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
     let count = chart.data.length;
