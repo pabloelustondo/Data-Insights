@@ -17,6 +17,7 @@ import { TimepickerModule }         from 'ng2-bootstrap/components/timepicker';
 import { DadParametersComponent } from "./parameters.component";
 import { DadBigChartComponent } from "./bigchart.component";
 import { DadDrillChartsComponent } from "./drillcharts.component";
+import { AgmCoreModule } from 'angular2-google-maps/core';
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthGuard } from './common/auth.guard';
@@ -38,7 +39,10 @@ let LocalStorageServiceConfig = {
         RouterModule,
         DropdownModule,
         DatepickerModule,
-        TimepickerModule
+        TimepickerModule,
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyDK7Z_arQKxXVf0ZiUDl4_yackjHiD9HNA'
+        })
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
         DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent, DadBigChartComponent, DadDrillChartsComponent ],
