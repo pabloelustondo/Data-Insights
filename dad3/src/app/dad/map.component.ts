@@ -1,15 +1,10 @@
 /**
  * Created by dister on 3/17/2017.
  */
+import { Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { AgmCoreModule } from 'angular2-google-maps/core';
-
-export class DadMap{
-    title: string = 'Maps';
-    lat: number = 51.678418;
-    lng: number = 7.809007;
-}
 
 @Component({
     selector: 'dadmap',
@@ -21,4 +16,9 @@ export class DadMap{
     `,
 })
 
+export class DadMap{
+    title: string = 'Maps';
+    lat: number = 51.678418;
+    lng: number = 7.809007;
+}
 
