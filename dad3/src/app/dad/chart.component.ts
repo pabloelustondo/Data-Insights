@@ -29,8 +29,7 @@ export class DadChart extends DadElement{
     providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
 <div class="dadChart">
-    <button (click)="test()">Test</button>
-    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
+    <div *ngIf=" chart.type!=='map' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
@@ -83,53 +82,44 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
+        <div *ngIf="chart.type==='map'" > <dadmap></dadmap></div>
+         
+        
 </div>
     `
 })
 export class DadChartComponent implements OnInit {
-  @Input()
-  chart: DadChart
-
-  @Input()
-  set data(d) {
-    this._data = d;
-    if (this.c3chart) {
+    @Input()
+    chart: DadChart
+    @Input()
+    set data(d){
+      this._data = d;
+      if (this.c3chart){
       let chartData = this.mapper.map(this.chart, this.data);
-      this.c3chart.load(chartData);
-    }
-  };
-
-  get data() {
-    return this._data;
-  };
-
-  _data;
-  mapper: Mapper = new Mapper();
-  colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
-  c3chart: any;
-  miniChartWidth: number = 275;
-  miniChartHeight: number = 200;
-  miniChartColor: any[] = ['#33526e'];
-  firstDate: any;
-  secondDate: any;
-  editMode: boolean = false;
-  refreshMode: boolean = false;
-  addDimension: boolean = false;
-  newDimensionName: string;
-  newDimensionAttribute: string;
+      this.c3chart.load(chartData);}
+    };
+    get data(){
+       return this._data;
+    };
+    _data;
+    mapper: Mapper = new Mapper();
+    colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
+    c3chart: any;
+    miniChartWidth: number = 275;
+    miniChartHeight: number = 200;
+    miniChartColor: any[] = ['#33526e'];
+    firstDate: any;
+    secondDate: any;
+    editMode:boolean = false;
+    refreshMode:boolean = false;
+    addDimension: boolean = false;
+    newDimensionName: string;
+    newDimensionAttribute: string;
 
   constructor(private dadChartDataService: DadElementDataService,
-              private dadTableConfigsService: DadTableConfigsService,
-              private dadChartConfigsService: DadChartConfigsService,
-              private router: Router, private route: ActivatedRoute) {
-  }
-
-  test() {
-    var selection = d3.select(".c3-event-rect-3");
-    selection[0][0].addEventListener("click", function(){
-      alert('Hi');
-    });
-  }
+              private dadTableConfigsService : DadTableConfigsService,
+              private dadChartConfigsService : DadChartConfigsService,
+              private router: Router, private route: ActivatedRoute) {}
 
  selectDimension(d){
 
