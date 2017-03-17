@@ -115,10 +115,8 @@ describe('Drill Charts', () => {
   });
 
   it('should go to the tables by clicking the chart', (done) => {
-
-    element.all(by.css(".c3-event-rect-3")).then(function (elements) {
-      elements[0].click().then(function(event) {
-        console.log(elements[0].getInnerHtml());
+    element.all(by.css('.c3-event-rect-3')).then(function (elements) {
+      elements[0].click().then(function() {
         browser.sleep(1000);
         expect(browser.getCurrentUrl()).toContain('/table/1/chartbardrill0/table1chartbardrill0metric');
         sleep();
@@ -126,23 +124,10 @@ describe('Drill Charts', () => {
       });
     });
   });
-
-/*
-  it('should go to the tables by clicking the chart', (done) => {
-    let chart = CHARTS[3];
-    element.all(by.css(".c3-event-rect-3")).then(function (elements) {
-      elements[0].click().then(function() {
-        browser.pause();
-        browser.sleep(1000);
-        expect(browser.getCurrentUrl()).toContain('drillcharts/chartbardrill/table/1/chartbardrill0/table1chartbardrill0metric');
-        browser.pause();
-        sleep();
-        done();
-      });
-    });
-  });
-*/
 });
+
+
+
 /*
 describe('Drill Tables', () => {
   it('should have the right number of widgets on the page', (done) => {
@@ -153,13 +138,6 @@ describe('Drill Tables', () => {
       done();
     });
   });
-
-
-
-
-
-
-
 });
 */
 
