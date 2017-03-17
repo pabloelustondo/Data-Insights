@@ -10,6 +10,7 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
     selector: 'dadmap',
     styleUrls: ['map.component.css'],
     template: `
+    {{title}}
         <sebm-google-map [latitude]="lat" [longitude]="lng">
         <sebm-google-map-marker [latitude]="lat" [longitude]="lng"></sebm-google-map-marker>
         </sebm-google-map>
@@ -17,8 +18,8 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
 })
 
 export class DadMap{
-    title: string = 'Maps';
-    lat: number = 51.678418;
-    lng: number = 7.809007;
+    title: string = 'Next Bus Maps';
+    lat: number = 43.6532;
+    lng: number = -79.3832;
 }
 
