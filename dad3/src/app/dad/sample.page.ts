@@ -12,9 +12,16 @@ export const PAGES: DadPage[] = [
     },
 
     {id:"deviceapps",
-        name: "Device Apps Usage Analytics",
+        name: "Device Apps Usage",
         widgetids:['widget_chart1', 'widget_chart2'],
         chartids: [],
+        tableids: []
+    },
+
+    {id:"ttc",
+        name: "TTC Vehicle Info",
+        widgetids:[],
+        chartids: ['ttcmap'],
         tableids: []
     }
 ];

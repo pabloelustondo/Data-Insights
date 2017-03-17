@@ -14,12 +14,6 @@ describe('SOTI DATA ANALYTICS DASHBOARD', () => {
   it('should see if the file is loaded and used', () => {
     expect(true).toBe(true);
   });
-
-  it('first page URL should be http://localhost:4200/#/dad/page/batstats', () => {
-    let url = 'http://localhost:4200/#/dad/page/batstats';
-    browser.get(url);
-    expect(browser.driver.getCurrentUrl()).toEqual(url);
-  });
 });
 
 describe('DAD elements', () => {
