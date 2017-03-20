@@ -3,6 +3,7 @@
  */
 import { DadChart } from './chart.component';
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
+import { DadMap } from './map.component';
 
 export const CHARTS: DadChart[] = [
     {id: "chartbar",
@@ -304,51 +305,13 @@ export const CHARTS: DadChart[] = [
     {id: "ttcmap",
         name: 'TTC Bus Position',
         type: "map",
-        endpoint: "AverageDischargeRate",
-        a : 'countOfDevices',
-        b : 'percentage',
-        aname : 'Count Of Devices',
-        bname : 'Percentage',
-        width: 475,
-        height: 400,
-        regionM: 30,
-        tableId: 'table2',
-        action: 'drill',
-        data: [{"countOfDevices":56,"percentage":5},{"countOfDevices":112,"percentage":10},
-            {"countOfDevices":20,"percentage":15},{"countOfDevices":6,"percentage":20},
-            {"countOfDevices":3,"percentage":25},{"countOfDevices":0,"percentage":30},
-            {"countOfDevices":1,"percentage":35},{"countOfDevices":1,"percentage":40},
-            {"countOfDevices":2,"percentage":45},{"countOfDevices":0,"percentage":50},
-            {"countOfDevices":0,"percentage":55},{"countOfDevices":0,"percentage":60},
-            {"countOfDevices":0,"percentage":65},{"countOfDevices":0,"percentage":70},
-            {"countOfDevices":0,"percentage":75},{"countOfDevices":0,"percentage":80},
-            {"countOfDevices":0,"percentage":85},{"countOfDevices":0,"percentage":90},
-            {"countOfDevices":0,"percentage":95},{"countOfDevices":0,"percentage":100}
-        ],
-        parameters: [
-            {
-                dateTo: "2016-08-25T20:30:21",
-                shiftStartDateTime: "2016-08-24T20:30:21",
-                shiftDuration: 8
-            }],
-        uiparameters: [
-            {
-                Type: DadParameterType.Date,
-                Name: "Date To",
-                DataSource: "dateTo"
-            },
-            {
-                Type: DadParameterType.DateTime,
-                Name: "Shift Start Date & Time",
-                DataSource: "shiftStartDateTime"
-            },
-            {
-                Type: DadParameterType.Duration,
-                Name: "Shift Duration",
-                DataSource: "shiftDuration"
-            },
-        ],
-    },
-
+        endpoint: "GetLocation",
+        lon: 'lon',
+        lat: 'lat',
+        dataElement: 'vehicle',
+        data: [{"id":"1049","lon":"-79.480515","routeTag":"79","predictable":"true","heading":"348","lat":"43.661732","secsSinceReport":"7850"},{"id":"8084","lon":"-79.566063","routeTag":"45","predictable":"true","heading":"161","lat":"43.710251","secsSinceReport":"7850"},{"id":"1406","lon":"-79.4149319","routeTag":"63","predictable":"true","heading":"350","lat":"43.641483","secsSinceReport":"7858"},{"id":"1344","lon":"-79.4412","routeTag":"109","predictable":"true","heading":"164","lat":"43.702301","secsSinceReport":"7853"},{"id":"8126","lon":"-79.290886","routeTag":"24","predictable":"true","heading":"340","lat":"43.697483","secsSinceReport":"7833"},{"id":"1600","lon":"-79.503036","routeTag":"52","predictable":"true","heading":"269","lat":"43.703049","secsSinceReport":"7857"},{"id":"4140","lon":"-79.467247","routeTag":"512","predictable":"true","heading":"253","lat":"43.6726","secsSinceReport":"7858"},{"id":"7698","lon":"-79.298103","routeTag":"43","predictable":"true","heading":"342","lat":"43.803902","secsSinceReport":"7852"},{"id":"4171","lon":"-79.451569","routeTag":"505","predictable":"true","heading":"281","lat":"43.653717","secsSinceReport":"7852"},{"id":"9102","lon":"-79.51825","routeTag":"36","predictable":"true","heading":"83","lat":"43.7570989","secsSinceReport":"7848"},{"id":"4023","lon":"-79.452385","routeTag":"505","predictable":"true","heading":"352","lat":"43.656067","secsSinceReport":"7856"},{"id":"1069","lon":"-79.257233","routeTag":"133","predictable":"true","heading":"216","lat":"43.774216","secsSinceReport":"7845"},{"id":"8555","lon":"-79.460503","routeTag":"84","predictable":"true","heading":"86","lat":"43.750751","secsSinceReport":"7866"},{"id":"7620","lon":"-79.290985","routeTag":"43","predictable":"true","heading":"163","lat":"43.789185","secsSinceReport":"7858"},{"id":"4078","lon":"-79.447037","routeTag":"504","predictable":"true","heading":"344","lat":"43.641033","secsSinceReport":"7859"},{"id":"7558","lon":"-79.323586","routeTag":"22","predictable":"true","heading":"343","lat":"43.683468","secsSinceReport":"7859"},{"id":"8604","lon":"-79.456863","routeTag":"84","predictable":"true","heading":"73","lat":"43.751549","secsSinceReport":"7864"}],
+        parameters: [],
+        uiparameters: [],
+    }
 ];
 

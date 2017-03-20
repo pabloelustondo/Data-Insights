@@ -6,6 +6,7 @@ import { DadReducer } from "../reducer";
 import { DadChart } from "../chart.component";
 import  { CHARTS } from "../sample.charts";
 import { Mapper } from "../mapper";
+import {DadMap} from "../map.component";
 
 
 describe('Mapper', () => {
@@ -50,4 +51,18 @@ describe('Mapper', () => {
         expect(result).toBeDefined();
         expect(result.columns.length).toBe(reducedData.length); //use better test
     });
+
+    it('should show the mapper maps correctly for maps', () => {
+        let chart:DadChart = CHARTS[5]; //this chart does not have any transformation spec
+        let mapper = new Mapper();
+        let reducer = new DadReducer();
+        let result = mapper.map(chart, chart.data);
+
+        let reducedData = reducer.reduce(chart, chart.data);
+
+        expect(result).toBeDefined();
+        expect(result.columns.length).toBe(reducedData.length); //use better test
+    });
+
+
 });

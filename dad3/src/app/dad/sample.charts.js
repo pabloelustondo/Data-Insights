@@ -144,17 +144,17 @@ exports.CHARTS = [
         type: "bar",
         endpoint: 'ListOfDevicesNotSurvivedShift',
         data: [
-            { DevId: 'vzfsvzfsvzfsvz0', LastBatteryStatus: 10, BatteryChargeHistory: JSON.stringify([5, 6, 5, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Fido" },
-            { DevId: 'vzfsvzfsvzfsvz1', LastBatteryStatus: 11, BatteryChargeHistory: JSON.stringify([5, 6, 6, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Rogers" },
-            { DevId: 'vzfsvzfsvzfsvz2', LastBatteryStatus: 9, BatteryChargeHistory: JSON.stringify([5, 6, 7, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Galaxy S7", carrier: "Fido" },
-            { DevId: 'vzfsvzfsvzfsvz3', LastBatteryStatus: 8, BatteryChargeHistory: JSON.stringify([5, 6, 8, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Note 7", carrier: "Wind" },
-            { DevId: 'vzfsvzfsvzfsvz4', LastBatteryStatus: 7, BatteryChargeHistory: JSON.stringify([5, 6, 9, 7, 8, 9]), os: 'Android', brand: 'Google', model: "Nexus 6", carrier: "Rogers" },
-            { DevId: 'vzfsvzfsvzfsvz5', LastBatteryStatus: 30, BatteryChargeHistory: JSON.stringify([5, 6, 10, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G5", carrier: "TELUS" },
-            { DevId: 'vzfsvzfsvzfsvz6', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 11, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G4", carrier: "Bell" },
-            { DevId: 'vzfsvzfsvzfsvz7', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 12, 7, 8, 9]), os: 'Android', brand: 'Motorola', model: "Z Force Droid", carrier: "Bell" },
-            { DevId: 'vzfsvzfsvzfsvz8', LastBatteryStatus: 50, BatteryChargeHistory: JSON.stringify([5, 6, 13, 7, 8, 9]), os: 'Android', brand: 'Blackberry', model: "Bold", carrier: "chatr" },
-            { DevId: 'vzfsvzfsvzfsvz9', LastBatteryStatus: 90, BatteryChargeHistory: JSON.stringify([5, 6, 14, 7, 8, 9]), os: 'Windows', brand: 'Nokia', model: "3310", carrier: "Sears Connect" },
-            { DevId: 'vzfsvzfsvzfsvz10', LastBatteryStatus: 95, BatteryChargeHistory: JSON.stringify([5, 6, 15, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "S5", carrier: "Sears Connect" }
+            { DevId: 'vzfsvzfsvzfsvz0', LastBatteryStatus: 10, BatteryChargeHistory: JSON.stringify([5, 6, 5, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Fido", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz1', LastBatteryStatus: 11, BatteryChargeHistory: JSON.stringify([5, 6, 6, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Rogers", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz2', LastBatteryStatus: 9, BatteryChargeHistory: JSON.stringify([5, 6, 7, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Galaxy S7", carrier: "Fido", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz3', LastBatteryStatus: 8, BatteryChargeHistory: JSON.stringify([5, 6, 8, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Note 7", carrier: "Wind", explodes: "yes" },
+            { DevId: 'vzfsvzfsvzfsvz4', LastBatteryStatus: 7, BatteryChargeHistory: JSON.stringify([5, 6, 9, 7, 8, 9]), os: 'Android', brand: 'Google', model: "Nexus 6", carrier: "Rogers", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz5', LastBatteryStatus: 30, BatteryChargeHistory: JSON.stringify([5, 6, 10, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G5", carrier: "TELUS", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz6', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 11, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G4", carrier: "Bell", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz7', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 12, 7, 8, 9]), os: 'Android', brand: 'Motorola', model: "Z Force Droid", carrier: "Bell", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz8', LastBatteryStatus: 50, BatteryChargeHistory: JSON.stringify([5, 6, 13, 7, 8, 9]), os: 'Android', brand: 'Blackberry', model: "Bold", carrier: "chatr", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz9', LastBatteryStatus: 90, BatteryChargeHistory: JSON.stringify([5, 6, 14, 7, 8, 9]), os: 'Windows', brand: 'Nokia', model: "3310", carrier: "Sears Connect", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz10', LastBatteryStatus: 95, BatteryChargeHistory: JSON.stringify([5, 6, 15, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "S5", carrier: "Sears Connect", explodes: "no" }
         ],
         reduction: {
             dimension: { attribute: 'os', name: 'OS' },
@@ -218,17 +218,17 @@ exports.CHARTS = [
         type: "pie",
         endpoint: 'ListOfDevicesNotSurvivedShift',
         data: [
-            { DevId: 'vzfsvzfsvzfsvz0', LastBatteryStatus: 10, BatteryChargeHistory: JSON.stringify([5, 6, 5, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Fido" },
-            { DevId: 'vzfsvzfsvzfsvz1', LastBatteryStatus: 11, BatteryChargeHistory: JSON.stringify([5, 6, 6, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Rogers" },
-            { DevId: 'vzfsvzfsvzfsvz2', LastBatteryStatus: 9, BatteryChargeHistory: JSON.stringify([5, 6, 7, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Galaxy S7", carrier: "Fido" },
-            { DevId: 'vzfsvzfsvzfsvz3', LastBatteryStatus: 8, BatteryChargeHistory: JSON.stringify([5, 6, 8, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Note 7", carrier: "Wind" },
-            { DevId: 'vzfsvzfsvzfsvz4', LastBatteryStatus: 7, BatteryChargeHistory: JSON.stringify([5, 6, 9, 7, 8, 9]), os: 'Android', brand: 'Google', model: "Nexus 6", carrier: "Rogers" },
-            { DevId: 'vzfsvzfsvzfsvz5', LastBatteryStatus: 30, BatteryChargeHistory: JSON.stringify([5, 6, 10, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G5", carrier: "TELUS" },
-            { DevId: 'vzfsvzfsvzfsvz6', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 11, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G4", carrier: "Bell" },
-            { DevId: 'vzfsvzfsvzfsvz7', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 12, 7, 8, 9]), os: 'Android', brand: 'Motorola', model: "Z Force Droid", carrier: "Bell" },
-            { DevId: 'vzfsvzfsvzfsvz8', LastBatteryStatus: 50, BatteryChargeHistory: JSON.stringify([5, 6, 13, 7, 8, 9]), os: 'Android', brand: 'Blackberry', model: "Bold", carrier: "chatr" },
-            { DevId: 'vzfsvzfsvzfsvz9', LastBatteryStatus: 90, BatteryChargeHistory: JSON.stringify([5, 6, 14, 7, 8, 9]), os: 'Windows', brand: 'Nokia', model: "3310", carrier: "Sears Connect" },
-            { DevId: 'vzfsvzfsvzfsvz10', LastBatteryStatus: 95, BatteryChargeHistory: JSON.stringify([5, 6, 15, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "S5", carrier: "Sears Connect" }
+            { DevId: 'vzfsvzfsvzfsvz0', LastBatteryStatus: 10, BatteryChargeHistory: JSON.stringify([5, 6, 5, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Fido", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz1', LastBatteryStatus: 11, BatteryChargeHistory: JSON.stringify([5, 6, 6, 7, 8, 9]), os: 'iOS', brand: 'Apple', model: "iPhone 6", carrier: "Rogers", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz2', LastBatteryStatus: 9, BatteryChargeHistory: JSON.stringify([5, 6, 7, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Galaxy S7", carrier: "Fido", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz3', LastBatteryStatus: 8, BatteryChargeHistory: JSON.stringify([5, 6, 8, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "Note 7", carrier: "Wind", explodes: "yes" },
+            { DevId: 'vzfsvzfsvzfsvz4', LastBatteryStatus: 7, BatteryChargeHistory: JSON.stringify([5, 6, 9, 7, 8, 9]), os: 'Android', brand: 'Google', model: "Nexus 6", carrier: "Rogers", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz5', LastBatteryStatus: 30, BatteryChargeHistory: JSON.stringify([5, 6, 10, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G5", carrier: "TELUS", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz6', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 11, 7, 8, 9]), os: 'Android', brand: 'LG', model: "G4", carrier: "Bell", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz7', LastBatteryStatus: 40, BatteryChargeHistory: JSON.stringify([5, 6, 12, 7, 8, 9]), os: 'Android', brand: 'Motorola', model: "Z Force Droid", carrier: "Bell", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz8', LastBatteryStatus: 50, BatteryChargeHistory: JSON.stringify([5, 6, 13, 7, 8, 9]), os: 'Android', brand: 'Blackberry', model: "Bold", carrier: "chatr", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz9', LastBatteryStatus: 90, BatteryChargeHistory: JSON.stringify([5, 6, 14, 7, 8, 9]), os: 'Windows', brand: 'Nokia', model: "3310", carrier: "Sears Connect", explodes: "no" },
+            { DevId: 'vzfsvzfsvzfsvz10', LastBatteryStatus: 95, BatteryChargeHistory: JSON.stringify([5, 6, 15, 7, 8, 9]), os: 'Android', brand: 'Samsung', model: "S5", carrier: "Sears Connect", explodes: "no" }
         ],
         reduction: {
             dimension: { attribute: 'os', name: 'OS' },
@@ -286,5 +286,53 @@ exports.CHARTS = [
                 DataSource: "minimumBatteryPercentageThreshold"
             }
         ]
-    }
+    },
+    { id: "ttcmap",
+        name: 'TTC Bus Position',
+        type: "map",
+        endpoint: "AverageDischargeRate",
+        a: 'countOfDevices',
+        b: 'percentage',
+        aname: 'Count Of Devices',
+        bname: 'Percentage',
+        width: 475,
+        height: 400,
+        regionM: 30,
+        tableId: 'table2',
+        action: 'drill',
+        data: [{ "countOfDevices": 56, "percentage": 5 }, { "countOfDevices": 112, "percentage": 10 },
+            { "countOfDevices": 20, "percentage": 15 }, { "countOfDevices": 6, "percentage": 20 },
+            { "countOfDevices": 3, "percentage": 25 }, { "countOfDevices": 0, "percentage": 30 },
+            { "countOfDevices": 1, "percentage": 35 }, { "countOfDevices": 1, "percentage": 40 },
+            { "countOfDevices": 2, "percentage": 45 }, { "countOfDevices": 0, "percentage": 50 },
+            { "countOfDevices": 0, "percentage": 55 }, { "countOfDevices": 0, "percentage": 60 },
+            { "countOfDevices": 0, "percentage": 65 }, { "countOfDevices": 0, "percentage": 70 },
+            { "countOfDevices": 0, "percentage": 75 }, { "countOfDevices": 0, "percentage": 80 },
+            { "countOfDevices": 0, "percentage": 85 }, { "countOfDevices": 0, "percentage": 90 },
+            { "countOfDevices": 0, "percentage": 95 }, { "countOfDevices": 0, "percentage": 100 }
+        ],
+        parameters: [
+            {
+                dateTo: "2016-08-25T20:30:21",
+                shiftStartDateTime: "2016-08-24T20:30:21",
+                shiftDuration: 8
+            }],
+        uiparameters: [
+            {
+                Type: dadmodels_1.DadParameterType.Date,
+                Name: "Date To",
+                DataSource: "dateTo"
+            },
+            {
+                Type: dadmodels_1.DadParameterType.DateTime,
+                Name: "Shift Start Date & Time",
+                DataSource: "shiftStartDateTime"
+            },
+            {
+                Type: dadmodels_1.DadParameterType.Duration,
+                Name: "Shift Duration",
+                DataSource: "shiftDuration"
+            },
+        ],
+    },
 ];

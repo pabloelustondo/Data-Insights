@@ -13,5 +13,6 @@ exports.config = {
     "BatteryMetrics": { url: "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/getMetrics", method: "post" },
     "AverageDischargeRate": "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/Summary/AverageDischargeRate",
     "ApplicationDeploymentCount": "https://dev2012r2-sk.sotidev.com:3002/Devices/Application/executionTime",
-    "NumberOfInstallations": "https://dev2012r2-sk.sotidev.com:3002/Devices/Application/numberOfInstallations"
+    "NumberOfInstallations": "https://dev2012r2-sk.sotidev.com:3002/Devices/Application/numberOfInstallations",
+    "GetLocation": "https://localhost:3002/Vehicles/Data/GetLocations "
 };

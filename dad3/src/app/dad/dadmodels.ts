@@ -16,6 +16,8 @@ export class DadElement {
   uiparameters?: DadParameter[];
   a?:string;
   b?:string;
+  lon?: string;
+  lat?: string;
   parameterMappers?:any[];
   endpoint?: string;
   metrics?: DadMetric[];
@@ -28,6 +30,7 @@ export class DadElement {
   reductions?:any[];
   filter?:any;
   search?:string;
+  dataElement?: string;
 }
 
 export class DadDateRange{
