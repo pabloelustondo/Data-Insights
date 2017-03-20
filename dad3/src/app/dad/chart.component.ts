@@ -29,7 +29,7 @@ export class DadChart extends DadElement{
     providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
 <div class="dadChart">
-    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
+    <div *ngIf=" chart.type!=='map' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
@@ -51,9 +51,17 @@ export class DadChart extends DadElement{
                                     <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
                            </select>  
                            by                       
-                           <select  (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
-                                    <option style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
+                           <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                                    <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
+                                    <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Custom Dimension</option>
                            </select>  
+                           
+                           <div *ngIf="addDimension">
+                           <div></div>
+                           <div><input style="height:32px;" [(ngModel)]="newDimensionName"   type="text"   placeholder="Dimension Name"></div>
+                           <div><input style="height:32px;" [(ngModel)]="newDimensionAttribute"  type="text"   placeholder="Dimension Attribute"></div>
+                           <div><button (click)="addNewDimension()">Add New Dimension</button></div>                     
+                           </div>
 
                         </div><br/><br/><br/> 
 
@@ -74,6 +82,9 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
+        <div *ngIf="chart.type==='map'" > <dadmap></dadmap></div>
+         
+        
 </div>
     `
 })
@@ -101,6 +112,9 @@ export class DadChartComponent implements OnInit {
     secondDate: any;
     editMode:boolean = false;
     refreshMode:boolean = false;
+    addDimension: boolean = false;
+    newDimensionName: string;
+    newDimensionAttribute: string;
 
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
@@ -109,12 +123,24 @@ export class DadChartComponent implements OnInit {
 
  selectDimension(d){
 
-   let newDimension = this.chart.dimensions[d];
-   this.chart.reduction.dimension = newDimension;
-   this.dadChartConfigsService.saveOne(this.chart);
-   let chartData = this.mapper.map(this.chart, this.data);
-   chartData.unload = true;
-   this.c3chart.load(chartData);
+   if (d>=0) {
+     let newDimension = this.chart.dimensions[d];
+     this.chart.reduction.dimension = newDimension;
+     this.dadChartConfigsService.saveOne(this.chart);
+     let chartData = this.mapper.map(this.chart, this.data);
+     chartData.unload = true;
+     this.c3chart.load(chartData);
+   } else {  //we have a new dimension
+
+     this.addDimension = true;
+
+   }
+ }
+
+ addNewDimension(){
+   this.addDimension = false;
+   this.chart.dimensions.push( { attribute: this.newDimensionAttribute, name: this.newDimensionName });
+   this.selectDimension(this.chart.dimensions.length-1);
  }
 
   selectMetric(d){
@@ -366,7 +392,6 @@ if (chartConfig.regionM){
   };
 
   goToTable(d,chart:DadChart,router,route, self){
-
     //create the table
     let table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
     let tableConfig = JSON.parse(JSON.stringify(table)); //to clone object

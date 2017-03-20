@@ -40,8 +40,7 @@ export class DadTable extends DadElement{
                        Number of Rows:{{count}}
                     <span *ngFor="let key of parameterKeys"> 
                        {{key}}:{{tableParameterValue(key)}}
-                    </span>
-                          
+                    </span>                         
                     <form role="form" (submit)="search(querystr)">
                     <button class="glyphicons glyphicons-search" type="submit"></button>
                     <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
