@@ -10,6 +10,7 @@ import './controllers/Lists/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
 import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
 import './controllers/applicationExecutionTime';
 import './controllers/numberOfApplicationInstalls';
+import './controllers/vehicles/ttcVehicleLocations';
 
 
 import * as winston from 'winston';
@@ -25,17 +26,20 @@ let localDynamo = require('local-dynamo');
 import {RegisterRoutes} from './routes';
 const expressWinston = require('express-winston');
 
+let helmet = require('helmet');
+
 let config = require('../appconfig.json');
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
 let httpsOptions = {
-    key: fs.readFileSync('./src/63663247-localhost_3002.key'),
-    cert: fs.readFileSync('./src/63663247-localhost_3002.cert')
+    key: fs.readFileSync(config['https-key-location']),
+    cert: fs.readFileSync(config['https-cert-location'])
 };
 
 exports.app = app;
 
+app.use(helmet());
 app.use('/docs', express.static(__dirname + '/swagger-ui'));
 app.use('/', express.static(__dirname + '/swagger-ui'));
 app.use('/swagger.json', (req, res) => {
