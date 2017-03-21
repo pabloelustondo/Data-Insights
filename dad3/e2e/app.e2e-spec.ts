@@ -116,12 +116,24 @@ describe('Drill Charts', () => {
 
   it('should go to the tables by clicking the chart', (done) => {
     element.all(by.css('.c3-event-rect-3')).then(function (elements) {
-      elements[0].click().then(function() {
+      elements[0].then(  element => {
+
+        element.click().then(function() {
+          browser.sleep(1000);
+          expect(browser.getCurrentUrl()).toContain('/table/1/chartbardrill0/table1chartbardrill0metric');
+          sleep();
+          done();
+        });
+
+      });
+
+
+      /*elements[0].click().then(function() {
         browser.sleep(1000);
         expect(browser.getCurrentUrl()).toContain('/table/1/chartbardrill0/table1chartbardrill0metric');
         sleep();
         done();
-      });
+      });*/
     });
   });
 });

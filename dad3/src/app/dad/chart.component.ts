@@ -23,6 +23,7 @@ export class DadChart extends DadElement{
     action?: String;
     widgetClickChart?: boolean = false;
     drillchart?:any;
+
 }
 @Component({
     selector: 'dadchart',
@@ -82,7 +83,7 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
-        <div *ngIf="chart.type==='map'" > <dadmap></dadmap></div>
+        <div *ngIf="chart.type==='map'" > <dadmap [map]="chart" [data]="data"></dadmap></div>
          
         
 </div>
@@ -654,12 +655,19 @@ if (chartConfig.regionM){
     this.c3chart = c3.generate(c3Config);
   };
 
+  drawMap(chartConfig, data) {
+
+    let mapData = this.mapper.map(chartConfig, data);
+    this.data = mapData;
+  }
+
   drawChart(chartConfig:DadChart, data) {
       if (chartConfig.type === 'bar') this.drawChartBar(chartConfig, data);
       if (chartConfig.type === 'pie') this.drawChartPie(chartConfig, data);
       if (chartConfig.type === 'dot') this.drawChartDot(chartConfig, data);
       if (chartConfig.type === 'spline') this.drawChartSpline(chartConfig, data);
       if (chartConfig.type === 'donut') this.drawChartDonut(chartConfig, data);
+      if (chartConfig.type === 'map') this.drawMap(chartConfig, data);
   }
 }
 

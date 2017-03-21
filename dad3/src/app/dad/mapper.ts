@@ -25,7 +25,8 @@ export class Mapper{
     let configa:string;
     let configb:string;
 
-    if (!config.a && !config.b) {
+
+    if (!config.a && !config.b && !config.lat && !config.lon) {
       configa = "a" ;
       configb = "b";
       chartData.Metric.push(configa);
@@ -36,7 +37,18 @@ export class Mapper{
         chartData.Metric.push(e);
       });
 
-    } else {
+    }
+    else if(config.lon && config.lat && !config.a && !config.b) {
+      chartData.Metric.push('lon');
+      chartData.Dimension.push('lat');
+
+      let mapData = data[config.dataElement];
+      mapData.forEach(function (e) {
+        chartData.Dimension.push(e['lat']);
+        chartData.Metric.push(e['lon']);
+      });
+    }
+   else {
       configa = config.a;
       configb = config.b;
 
@@ -68,6 +80,21 @@ export class Mapper{
       dataForChart.columns.push([chartData.Dimension[i], chartData.Metric[i]])
     }
   }
+
+
+  if( config.type === 'map') {
+    dataForChart = {
+      columns: [],
+      type: config.type
+    };
+    for(let i = 1; i < chartData.Dimension.length; i++){
+
+      dataForChart.columns.push([parseFloat(chartData.Dimension[i]) ,  parseFloat(chartData.Metric[i])]);
+    }
+
+  }
+
+
     let transformer = new DadTransformer();
     config.mappedData = transformer.transformAll(config, dataForChart);
 
