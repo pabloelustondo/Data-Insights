@@ -19,6 +19,7 @@ import { DadBigChartComponent } from "./bigchart.component";
 import { DadDrillChartsComponent } from "./drillcharts.component";
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { DadMap } from './map.component';
+import { DadMap2 } from './map2.component';
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthGuard } from './common/auth.guard';
@@ -46,7 +47,7 @@ let LocalStorageServiceConfig = {
         })
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
-        DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent, DadBigChartComponent, DadDrillChartsComponent, DadMap],
+        DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent, DadBigChartComponent, DadDrillChartsComponent, DadMap, DadMap2],
     providers: [
         AuthGuard, ...AUTH_PROVIDERS
     ]

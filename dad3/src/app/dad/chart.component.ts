@@ -31,7 +31,7 @@ export class DadChart extends DadElement{
     providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
 <div class="dadChart">
-    <div *ngIf=" chart.type!=='map' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
+    <div *ngIf=" chart.type!=='map' && chart.type!=='map2' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
@@ -84,7 +84,8 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
-        <div *ngIf="chart.type==='map'" > <dadmap [map]="chart" [data]="_data"></dadmap></div>
+        <div *ngIf="_data && chart.type==='map'" > <dadmap [map]="chart" [data]="_data"></dadmap></div>
+        <div *ngIf="_data && chart.type==='map2'" > <dadmap2 [map]="chart" [data]="_data"></dadmap2></div>
          
         
 </div>
@@ -121,6 +122,7 @@ export class DadChartComponent implements OnInit {
     newDimensionName: string;
     newDimensionAttribute: string;
     intervalId: any;
+
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
               private dadChartConfigsService : DadChartConfigsService,
@@ -692,6 +694,7 @@ if (chartConfig.regionM){
       if (chartConfig.type === 'spline') this.drawChartSpline(chartConfig, data);
       if (chartConfig.type === 'donut') this.drawChartDonut(chartConfig, data);
       if (chartConfig.type === 'map') this.drawMap(chartConfig, data);
+      if (chartConfig.type === 'map2') this.drawMap(chartConfig, data);
   }
 }
 
