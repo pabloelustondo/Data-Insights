@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
@@ -136,7 +136,7 @@ export class DadWidgetComponent implements OnInit {
     }
 
     changeData() {
-    this.dadWidgetDataService.getElementData(this.widget).then(
+    this.dadWidgetDataService.getElementData(this.widget).subscribe(
       data => {
         this.data = data.data;
           this.fixNullsInMetrics();
@@ -169,7 +169,7 @@ export class DadWidgetComponent implements OnInit {
       }
 
       if (!config.testing) {
-          this.dadWidgetDataService.getElementData(this.widget).then(
+          this.dadWidgetDataService.getElementData(this.widget).subscribe(
               data => {
                   this.data = data.data;
                   if (this.data.errorMessage != null) {
@@ -177,7 +177,7 @@ export class DadWidgetComponent implements OnInit {
                   }
                   this.fixNullsInMetrics();
               }
-          ).catch(err => console.log(err.toString()));
+          )//.catch(err => console.log(err.toString()));
       }
   }
 }

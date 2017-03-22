@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit  } from '@angular/core';
 import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { config } from "./appconfig";
 import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
 import { DadFilter } from "./filter";
+import {Observable} from "rxjs";
 
 declare var d3, c3: any;
 
@@ -195,25 +196,32 @@ export class DadChartComponent implements OnInit {
 
     if (!config.testing && this.chart.endpoint)
     { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
-      this.dadChartDataService.getElementData(this.chart).then(
+      this.dadChartDataService.getElementData(this.chart).subscribe(
         data => {
           this.data = data.data;
           //this.chart.data = data.data;
           this.drawChart(this.chart, this.data);
         }
-      ).catch(err => console.log(err.toString()));
+      )//.catch(err => console.log(err.toString()));
     }
-
   }
 
   changeConfig(){
-      this.dadChartDataService.getElementData(this.chart).then(
+      this.dadChartDataService.getElementData(this.chart).subscribe(
         data => {
           this.data = data.data;
           let chartData = this.mapper.map(this.chart, this.data);
           this.c3chart.load(chartData);
         }
       )
+    }
+
+    changeMapData() {
+        this.dadChartDataService.getElementData(this.chart).subscribe(
+            data => {
+              this.data = this.drawMap(this.chart, data);
+            }
+        )
     }
 
   onEdit(message:string):void{
@@ -656,7 +664,6 @@ if (chartConfig.regionM){
   };
 
   drawMap(chartConfig, data) {
-
     let mapData = this.mapper.map(chartConfig, data);
     this.data = mapData;
   }
