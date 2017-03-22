@@ -269,6 +269,37 @@ app.post('/updateDataSourceAws', function (req, res) {
 });
 
 
+app.post('/updateEnrollmentInformation', function (req, res) {
+
+    callDbAndRespond(req, res, function(req,res,db, next) {
+
+        var _tenantId = req.body.tenantId;
+        var temp = {};
+
+        for (var p in req.body.properties) {
+            if (req.body.properties.hasOwnProperty(p)) {
+                console.log(p + " -> " + req.body.properties[p] );
+                temp [p] = req.body.properties[p];
+
+            }
+        }
+
+        db.collection('enrollments').update(
+            {
+                tenantId: _tenantId
+            },
+            {
+                $set: temp
+            },
+            {
+                upsert: false
+            }, next);
+
+
+    });
+
+});
+
 //////
 //  All delete APIS
 //
@@ -299,12 +330,47 @@ app.delete('/deleteDataSource', function(req,res){
     var _agent = req.query.agentId;
     var _tenant = req.query.tenantId;
 
-    callDbAndRespond(req,res, function(req,res,db, next){
-        db.collection('dataSources').removeOne(
-        {
-           agentId : _agent
-        },next);
+    var user = getUser(req);
+    mongodb.connect(dbUrl + "udb_" + user,function(err,db){
+        if (err) {
+            console.log('err backing up object: ' + err);
+        }
+        else {
+            db.collection('dataSources').findOne({
+                agentId: _agent
+            }, function (err, doc) {
+
+                console.log('returned data = ' + JSON.stringify(doc));
+                if (doc !== null) {
+                    var metaData = {
+                        timeStamp : new Date().toString()
+                    };
+
+                    var document = {
+                        metaData : metaData,
+                        originalObject : doc
+                    };
+                    db.collection('deletedSources').insertOne(document, function (err, result) {
+                        db.close();
+                        if (!err) {
+                            callDbAndRespond(req, res, function (req, res, db, next) {
+                                db.collection('dataSources').removeOne(
+                                    {
+                                        agentId: _agent
+                                    }, next);
+                            });
+                        }
+                    });
+
+                }
+                else {
+                    console.log('no object returned: ' + err);
+                }
+
+            });
+        }
     });
+
 });
 
 
