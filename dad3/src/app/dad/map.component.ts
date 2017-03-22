@@ -1,7 +1,7 @@
 /**
  * Created by dister on 3/17/2017.
  */
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { AgmCoreModule } from 'angular2-google-maps/core';
@@ -29,7 +29,6 @@ export class DadMap{
             this._data = d.columns;
         }
     };
-
     title: string = 'Next Bus Maps';
 
 }

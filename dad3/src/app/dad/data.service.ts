@@ -23,7 +23,7 @@ export class DadElementDataService {
   /*getElementData(element:DadElement): Promise<any> {
     console.log("we got " + config["oda_dev_url"]); */
 
-  getElementData(element:DadElement): Observable<any> {
+  getElementData(element:DadElement, intervalTime): Observable<any> {
       console.log("we got " + config["oda_dev_url"]);
 
     let params: URLSearchParams = new URLSearchParams();
@@ -62,6 +62,7 @@ export class DadElementDataService {
             );
       } */
 
+
       if(endpoint0.method === "post"){
           let bodyString = JSON.stringify(['_body']);
           return this.http.post(endpoint0.url, data, headers)
@@ -76,6 +77,7 @@ export class DadElementDataService {
                           .map((res:Response) => res.json())
                           .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
       }
+
   }
 }
 

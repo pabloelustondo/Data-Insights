@@ -136,7 +136,7 @@ export class DadWidgetComponent implements OnInit {
     }
 
     changeData() {
-    this.dadWidgetDataService.getElementData(this.widget).subscribe(
+    this.dadWidgetDataService.getElementData(this.widget, null).subscribe(
       data => {
         this.data = data.data;
           this.fixNullsInMetrics();
@@ -169,7 +169,7 @@ export class DadWidgetComponent implements OnInit {
       }
 
       if (!config.testing) {
-          this.dadWidgetDataService.getElementData(this.widget).subscribe(
+          this.dadWidgetDataService.getElementData(this.widget, null).subscribe(
               data => {
                   this.data = data.data;
                   if (this.data.errorMessage != null) {

@@ -84,7 +84,7 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
-        <div *ngIf="chart.type==='map'" > <dadmap [map]="chart" [data]="data"></dadmap></div>
+        <div *ngIf="chart.type==='map'" > <dadmap [map]="chart" [data]="_data"></dadmap></div>
          
         
 </div>
@@ -95,6 +95,9 @@ export class DadChartComponent implements OnInit {
     chart: DadChart
     @Input()
     set data(d){
+      if (!d) {
+        return;
+      }
       this._data = d;
       if (this.c3chart){
       let chartData = this.mapper.map(this.chart, this.data);
@@ -117,7 +120,7 @@ export class DadChartComponent implements OnInit {
     addDimension: boolean = false;
     newDimensionName: string;
     newDimensionAttribute: string;
-
+    intervalId: any;
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
               private dadChartConfigsService : DadChartConfigsService,
@@ -181,6 +184,16 @@ export class DadChartComponent implements OnInit {
     this.miniChartWidth = this.chart.width;
     this.miniChartHeight = this.chart.height;
     console.log("CHART starts drawing ON INIT:" + this.chart.id);
+
+    this.intervalId = setInterval(() => {
+      this.changeMapData();
+    }, 5000);
+  }
+
+  ngOnDestroy(){
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   ngAfterViewInit() {
@@ -196,7 +209,7 @@ export class DadChartComponent implements OnInit {
 
     if (!config.testing && this.chart.endpoint)
     { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
-      this.dadChartDataService.getElementData(this.chart).subscribe(
+      this.dadChartDataService.getElementData(this.chart, null).subscribe(
         data => {
           this.data = data.data;
           //this.chart.data = data.data;
@@ -207,7 +220,7 @@ export class DadChartComponent implements OnInit {
   }
 
   changeConfig(){
-      this.dadChartDataService.getElementData(this.chart).subscribe(
+      this.dadChartDataService.getElementData(this.chart, null).subscribe(
         data => {
           this.data = data.data;
           let chartData = this.mapper.map(this.chart, this.data);
@@ -216,10 +229,14 @@ export class DadChartComponent implements OnInit {
       )
     }
 
+
     changeMapData() {
-        this.dadChartDataService.getElementData(this.chart).subscribe(
+
+        this.dadChartDataService.getElementData(this.chart,null).subscribe(
             data => {
-              this.data = this.drawMap(this.chart, data);
+              //this.data = data.data;
+              this.data = this.drawMap(this.chart, data.data);
+
             }
         )
     }
