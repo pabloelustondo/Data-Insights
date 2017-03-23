@@ -14,7 +14,7 @@ import { DadChart } from './chart.component';
     {{title}}
     <div *ngIf="_data">
         <sebm-google-map [latitude]="_data[0][0]" [longitude]="_data[0][1]">
-        <sebm-google-map-marker *ngFor="let item of _data" [latitude]="item[0]" [longitude]="item[1]"></sebm-google-map-marker>
+        <sebm-google-map-marker [iconUrl]="'../../img/bus_green.png'" *ngFor="let item of _data" [latitude]="item[0]" [longitude]="item[1]"></sebm-google-map-marker>
         </sebm-google-map>
     </div>
     `,
