@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit  } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit  } from '@angular/core';
 import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { config } from "./appconfig";
 import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
 import { DadFilter } from "./filter";
+import {Observable} from "rxjs";
 
 declare var d3, c3: any;
 
@@ -30,7 +31,7 @@ export class DadChart extends DadElement{
     providers:[DadElementDataService,DadTableConfigsService, DadChartConfigsService],
     template: `
 <div class="dadChart">
-    <div *ngIf=" chart.type!=='map' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
+    <div *ngIf=" chart.type!=='map' && chart.type!=='map2' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
@@ -83,7 +84,8 @@ export class DadChart extends DadElement{
     </div>
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
-        <div *ngIf="chart.type==='map'" > <dadmap [map]="chart" [data]="data"></dadmap></div>
+        <div *ngIf="_data && chart.type==='map'" > <dadmap [map]="chart" [data]="_data"></dadmap></div>
+        <div *ngIf="_data && chart.type==='map2'" > <dadmap2 [map]="chart" [data]="_data"></dadmap2></div>
          
         
 </div>
@@ -94,6 +96,9 @@ export class DadChartComponent implements OnInit {
     chart: DadChart
     @Input()
     set data(d){
+      if (!d) {
+        return;
+      }
       this._data = d;
       if (this.c3chart){
       let chartData = this.mapper.map(this.chart, this.data);
@@ -116,6 +121,7 @@ export class DadChartComponent implements OnInit {
     addDimension: boolean = false;
     newDimensionName: string;
     newDimensionAttribute: string;
+    intervalId: any;
 
   constructor(private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
@@ -180,6 +186,16 @@ export class DadChartComponent implements OnInit {
     this.miniChartWidth = this.chart.width;
     this.miniChartHeight = this.chart.height;
     console.log("CHART starts drawing ON INIT:" + this.chart.id);
+
+    this.intervalId = setInterval(() => {
+      this.changeMapData();
+    }, 5000);
+  }
+
+  ngOnDestroy(){
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   ngAfterViewInit() {
@@ -195,25 +211,36 @@ export class DadChartComponent implements OnInit {
 
     if (!config.testing && this.chart.endpoint)
     { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
-      this.dadChartDataService.getElementData(this.chart).then(
+      this.dadChartDataService.getElementData(this.chart, null).subscribe(
         data => {
           this.data = data.data;
           //this.chart.data = data.data;
           this.drawChart(this.chart, this.data);
         }
-      ).catch(err => console.log(err.toString()));
+      )//.catch(err => console.log(err.toString()));
     }
-
   }
 
   changeConfig(){
-      this.dadChartDataService.getElementData(this.chart).then(
+      this.dadChartDataService.getElementData(this.chart, null).subscribe(
         data => {
           this.data = data.data;
           let chartData = this.mapper.map(this.chart, this.data);
           this.c3chart.load(chartData);
         }
       )
+    }
+
+
+    changeMapData() {
+
+        this.dadChartDataService.getElementData(this.chart,null).subscribe(
+            data => {
+              //this.data = data.data;
+              this.data = this.drawMap(this.chart, data.data);
+
+            }
+        )
     }
 
   onEdit(message:string):void{
@@ -656,7 +683,6 @@ if (chartConfig.regionM){
   };
 
   drawMap(chartConfig, data) {
-
     let mapData = this.mapper.map(chartConfig, data);
     this.data = mapData;
   }
@@ -668,6 +694,7 @@ if (chartConfig.regionM){
       if (chartConfig.type === 'spline') this.drawChartSpline(chartConfig, data);
       if (chartConfig.type === 'donut') this.drawChartDonut(chartConfig, data);
       if (chartConfig.type === 'map') this.drawMap(chartConfig, data);
+      if (chartConfig.type === 'map2') this.drawMap(chartConfig, data);
   }
 }
 

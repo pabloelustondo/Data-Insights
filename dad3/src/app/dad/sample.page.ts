@@ -21,7 +21,7 @@ export const PAGES: DadPage[] = [
     {id:"ttc",
         name: "TTC Vehicle Info",
         widgetids:[],
-        chartids: ['ttcmap'],
+        chartids: ['ttcmap', 'ttcmap2'],
         tableids: []
     }
 ];

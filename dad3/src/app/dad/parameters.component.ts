@@ -76,7 +76,7 @@ export class DadParametersComponent implements OnInit {
 
     @Input()
     set onRefresh(value:boolean){
-        if(this.element.uiparameters[0].Value ) {
+        if(this.element.uiparameters &&  this.element.uiparameters.length > 0 && this.element.uiparameters[0].Value ) {
             this.mapParameters2model();
             this.mapParameters2ui();
             this.parametersChanged.emit(true);

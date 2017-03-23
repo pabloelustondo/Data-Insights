@@ -82,7 +82,7 @@ export class Mapper{
   }
 
 
-  if( config.type === 'map') {
+  if( config.type === 'map' || config.type === 'map2') {
     dataForChart = {
       columns: [],
       type: config.type
