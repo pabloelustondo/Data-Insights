@@ -10,6 +10,7 @@ var uuid = require('node-uuid');
 
 var request = require('request');
 var LocalStorage = require('node-localstorage').LocalStorage;
+var NextBusHelper = require ('./DataSourceHelpers/NextBusHelper');
 localStorage = new LocalStorage('./temp');
 
 var app = module.exports = express.Router();
@@ -387,34 +388,6 @@ app.post('/registerDataSource', function (req, res) {
       }
     });
   }
-  /*
-  request({
-    rejectUnauthorized: false,
-    url: config.ddbEndpointUrl + "/insertNewDataSource",
-    json : dataSource,
-    method: 'POST', //Specify the method
-    headers: { //We can define headers too
-      'Content-Type': 'application/json'
-    }
-  }, function(error, response, body){
-    if(error) {
-      console.log(error);
-      res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
-    } else {
-      console.log(response.statusCode, body);
-
-      if (response.statusCode === 200){
-
-
-        res.status(200).send({
-          message: 'added'
-        });
-      } else {
-        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
-      }
-    }
-  });
-  */
 
 });
 
@@ -717,39 +690,71 @@ app.post('/deleteDataSource', function (req, res) {
           return res.status(400).send (ErrorMsg.token_verification_failed);
         }
         if (success) {
-          var _tenantID = success.tenantId;
 
-          request({
-            rejectUnauthorized: false,
-            rejectUnauthorized: false,
-            url: config.ddbEndpointUrl + "/deleteDataSource",
-            method: 'Delete', //Specify the method
-            headers: { //We can define headers too
-              'Content-Type': 'application/json'
-            },
-            qs: { tenantId : _tenantID,
-                  agentId : req.body.agentid
-            }
-          }, function(error, response, body){
-            if(error) {
-              console.log(error);
-              res.status(400).send('Error in deleteing data source with database server error');
-            } else {
-              console.log(response.statusCode, body);
-
-              if (response.statusCode === 200){
-
-                var body = JSON.parse(response.body);
-                res.status(200).send(body);
-
-              } else if (response.statusCode === 404) {
-                res.status(404).send('Error with query and data soruce');
+          if (req.body.dataSourceType === 'NextBus') {
+            NextBusHelper.deleteDataSource(req, function (err, result){
+              if (err){
+                res.status(500).send('Invalid request, could not delete');
               }
               else {
-                res.status(400).send('Error with token');
+                var requestData = {
+                  queryParams :  {
+                    tenantId: _tenantID,
+                    agentId: req.body.agentid
+                  },
+                  method : 'Delete',
+                  url : config.ddbEndpointUrl + '/deleteDataSource',
+                  headers : { //We can define headers too
+                    'Content-Type': 'application/json'
+                  }
+                };
+
+                httpRequest(req, requestData, function (error, response) {
+                    if (error) {
+                      res.status(error.status).send('Error deleting from DSS source');
+                    }
+                    if (response) {
+                      res.status(response.status).send(response.body);
+                    }
+                } )
               }
-            }
-          });
+            });
+          } else {
+
+            var _tenantID = success.tenantId;
+
+            request({
+              rejectUnauthorized: false,
+              url: config.ddbEndpointUrl + '/deleteDataSource',
+              method: 'Delete', //Specify the method
+              headers: { //We can define headers too
+                'Content-Type': 'application/json'
+              },
+              qs: {
+                tenantId: _tenantID,
+                agentId: req.body.agentid
+              }
+            }, function (error, response, body) {
+              if (error) {
+                console.log(error);
+                res.status(400).send('Error in deleteing data source with database server error');
+              } else {
+                console.log(response.statusCode, body);
+
+                if (response.statusCode === 200) {
+
+                  var body = JSON.parse(response.body);
+                  res.status(200).send(body);
+
+                } else if (response.statusCode === 404) {
+                  res.status(404).send('Error with query and data soruce');
+                }
+                else {
+                  res.status(400).send('Error with token');
+                }
+              }
+            });
+          }
 
         }
       });
@@ -761,6 +766,37 @@ app.post('/deleteDataSource', function (req, res) {
     }
   }
 });
+
+function httpRequest(req, data, callback) {
+  request({
+    rejectUnauthorized: false,
+    url: data.url,
+    method: data.method, //Specify the method
+    headers: data.headers,
+    qs: data.queryParams
+  }, function(error, response, body) {
+    if (error) {
+      console.log(error);
+      callback({
+        status: 400
+      }, null);
+      //res.status(400).send('Error in deleteing data source with database server error');
+    } else {
+      console.log(response.statusCode, body);
+
+      if (response.statusCode === 200) {
+
+        var body = JSON.parse(response.body);
+        callback(null, {
+          status: response.statusCode,
+          body: body
+        });
+        // res.status(200).send(body);
+
+      }
+    }
+  });
+}
 
 app.get('/urlbydomainid', function(req, res) {
 //////// Parameters Checking /////////

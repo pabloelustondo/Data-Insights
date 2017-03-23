@@ -1,15 +1,23 @@
 var logger          = require('morgan'),
     cors            = require('cors'),
     http            = require('http'),
+    https           = require('https');
     express         = require('express'),
     errorhandler    = require('errorhandler'),
     dotenv          = require('dotenv'),
+      helmet        = require('helmet'),
+      fs            = require('fs'),
+      config        = require('./config.json'),
     bodyParser      = require('body-parser');
 
 var app = express();
 
 dotenv.load();
 
+var httpsOptions = {
+  key: fs.readFileSync(config['https-key-location'] ),
+  cert: fs.readFileSync(config['https-cert-location'] )
+};
 // Parsers
 // old version of line
 // app.use(bodyParser.urlencoded());
@@ -25,7 +33,7 @@ app.get('/test', function(req,res){
 app.get('/', function(req,res){
   res.sendfile('./public/testing/spec/SpecRunner.html');
 });
-
+app.use(helmet());
 
 app.use(function(err, req, res, next) {
   if (err.name === 'StatusError') {
@@ -50,9 +58,15 @@ app.use(function(req, res, next) {
   res.header('X-Content-Type-Option', 'nosniff');
   next();
 });
-var port = 3004;
 
+var httpsServer = https.createServer(httpsOptions, app);
+
+httpsServer.listen(config.port, function (){
+  console.log('Starting https server.. https://localhost:' + config.port + '/docs');
+});
+
+/*
 http.createServer(app).listen(port, function (err) {
   console.log('listening in http://localhost:' + port);
 });
-
+*/

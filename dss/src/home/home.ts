@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { AuthHttp } from 'angular2-jwt';
 import { contentHeaders } from '../common/headers';
 import * as FileSaver from 'file-saver';
+
 import { DadTable } from '../../../dad3/src/app/dad/table.component';
 
-
+const backendUrl = 'https://localhost:3004';
 const styles = require('./home.css');
 const template = require('./home.html');
 
@@ -67,11 +68,11 @@ export class Home {
   }
 
   callGetToken() {
-    this._callApi('Secured', 'http://localhost:3004/api/protected/token');
+    this._callApi('Secured', backendUrl+'/api/protected/token');
   }
 
   callGetDeviceGroups() {
-    this._callApi('Secured', 'http://localhost:3004/api/protected/devicegroups');
+    this._callApi('Secured', backendUrl + '/api/protected/devicegroups');
   }
 
   callGetEnrollments() {
@@ -80,7 +81,7 @@ export class Home {
       'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
     });
-    this.http.get('http://localhost:3004/api/myenrollments', { headers: headers })
+    this.http.get( backendUrl + '/api/myenrollments', { headers: headers })
       .subscribe(
         response => {
           let response_body = response['_body'];
@@ -98,9 +99,9 @@ export class Home {
 
   callDeleteAllEnrollments() {
     if (this.isSOTI) {
-      this._callApi('Secured', 'http://localhost:3004/delete_all');
+      this._callApi('Secured',  backendUrl + '/delete_all');
     } else {
-      this._callApi('Secured', 'http://localhost:3004/delete_all_mine');
+      this._callApi('Secured',  backendUrl + '/delete_all_mine');
     }
   }
 
@@ -120,7 +121,7 @@ export class Home {
       'Content-Type' : 'application/json',
       'x-access-token' : this.jwt
     });
-    this.http.get('http://localhost:3004/sourceCredentials/' + _agentId, { headers: headers })
+    this.http.get( backendUrl + '/sourceCredentials/' + _agentId, { headers: headers })
       .subscribe(
         response => {
           let response_body = response['_body'];
@@ -143,7 +144,7 @@ export class Home {
       'x-access-token' : this.jwt
     });
 
-    this.http.post('http://localhost:3004/resetCredentials/' + _agentId, { headers: headers })
+    this.http.post( backendUrl + '/resetCredentials/' + _agentId, { headers: headers })
       .subscribe(
         response => {
           alert('successfully reset, download new credentials');
@@ -164,7 +165,7 @@ export class Home {
       'x-access-token' : this.jwt
     });
 
-    this.http.get('http://localhost:3004/getDataSources', { headers: headers})
+    this.http.get( backendUrl + '/getDataSources', { headers: headers})
       .subscribe(
         response => {
           var data = JSON.parse(response['_body']);
@@ -179,11 +180,11 @@ export class Home {
       );
   }
 
-  deleteAgent (agentId: any) {
+  deleteAgent (agentId: any, dataSourceType: any) {
 
     let _agentId = agentId.innerHTML.trim();
     var agent = {
-      dataSourceType : this.dataSourceType,
+      dataSourceType : dataSourceType,
       agentid : _agentId
     };
 
@@ -194,7 +195,7 @@ export class Home {
 
 
     let body = JSON.stringify(agent);
-    this.http.post('http://localhost:3004/deleteDataSource', body, { headers: headers })
+    this.http.post( backendUrl + '/deleteDataSource', body, { headers: headers })
       .subscribe(
         response => {
           this.error = null;
@@ -235,7 +236,7 @@ export class Home {
     this.enrollStatus = null;
 
     let body = JSON.stringify(agent);
-    this.http.post('http://localhost:3004/registerDataSource', body, { headers: contentHeaders })
+    this.http.post( backendUrl + '/registerDataSource', body, { headers: contentHeaders })
       .subscribe(
         response => {
           this.error = null;
