@@ -88,21 +88,24 @@
 
       <br/>
     <pre *ngIf="dataSourceType === 'NextBus'">
-      <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
+      <div>Add new data Nextbus for tenant {{decodedJwt["tenantid"]}} </div>
 
       <form #nbForm (submit)="addSource(nbForm)">
+        <i>Provide the api address for Nextbus API that will return result in JSON format. Note: If
+          the api does not return data in JSON format it will not be persisted.</i>
       <table>
         <tr>
           <td style="width: 200px"> <label>Data source Name: </label>  </td>
           <td style="width: 300px"><input #nbname id="nextBusName" style="width:300px" placeholder="Enter preferred agent name"></td>
         </tr>
+
         <tr>
           <td style="width: 200px"> <label>Data source URL: </label>  </td>
           <td style="width: 300px"><input #nburl id="nextBusURL" style="width:300px" placeholder="Enter agent URL" type="url"></td>
         </tr>
         <tr>
-          <td style="width: 200px"> <label>Data source Frequency: </label>  </td>
-          <td style="width: 300px"><input type="number" #nbfrequency id="nextBusFrequency" style="width:300px" placeholder="Enter Frequency in seconds"></td>
+          <td style="width: 200px"> <label>Polling interval (seconds): </label>  </td>
+          <td style="width: 300px"><input type="number" #nbfrequency id="nextBusFrequency" style="width:300px" placeholder="Enter api polling in seconds"></td>
         </tr>
         <tr>
           <td> <button type="submit" class="btn btn-success">Add Source</button></td>
@@ -139,16 +142,16 @@
                       </td>
                       <td><a style="color:black;" class="btn btn" role="button" (click)="downloadCredentials(agentId)"><button>Download Credentials</button></a></td>
                       <td><a style="color:black;" class="btn btn" role="button" (click)="resetCredentials(agentId)"><button>Reset Credentials</button></a></td>
-                       <td>{{x.status}}<a style="color:black;" class="btn btn" role="button" (click)="resetCredentials(agentId)"> <button>Change Status</button></a></td>
-                     <td><a style="color:black;" class="btn btn" role="button" (click)="deleteAgent(agentId)"><button>Delete</button></a></td>
+                       <td>{{x.status}}</td>
+                     <td><a style="color:black;" class="btn btn" role="button" (click)="deleteAgent(agentId, x.dataSourceType)"><button>Delete</button></a></td>
                   </tr>
                 </tbody>
               </table>
               <ul class="pagination" style="cursor:pointer;">
-                        <span *ngFor="let page of pages">
-                            <li  *ngIf="page == currentPage" class="page-item active" ><a class="page-link" (click)=refresh(page) >{{page+1}}</a></li>
-                            <li  *ngIf="page != currentPage" class="page-item" ><a class="page-link" (click)=refresh(page) >{{page+1}} </a></li>
-                        </span>
+                  <span *ngFor="let page of pages">
+                      <li  *ngIf="page == currentPage" class="page-item active" ><a class="page-link" (click)=refresh(page) >{{page+1}}</a></li>
+                      <li  *ngIf="page != currentPage" class="page-item" ><a class="page-link" (click)=refresh(page) >{{page+1}} </a></li>
+            </span>
               </ul>
             </div>
           </div>

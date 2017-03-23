@@ -3,6 +3,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http } from '@angular/http';
 import { contentHeaders } from '../common/headers';
 
+
+const backendUrl = 'https://localhost:3004';
 const styles   = require('./login.css');
 const template = require('./login.html');
 
@@ -44,7 +46,7 @@ export class Login {
         let code = this.code;
         let domainid = this.domainid;
         let body = JSON.stringify({domainid, code});
-        this.http.post('http://localhost:3004/sessions/create', body, {headers: contentHeaders})
+        this.http.post(backendUrl + '/sessions/create', body, {headers: contentHeaders})
           .subscribe(
             response => {
               this.error = null;
@@ -85,7 +87,8 @@ export class Login {
 
       // we need to get the url for the domain id entered,
       // which by the way is a good way to verify the domain id
-      this.http.get('http://localhost:3004/urlbydomainid?domainid=' + domainid.value)
+      let url = backendUrl + '/urlbydomainid?domainid=' + domainid.value;
+      this.http.get(backendUrl + '/urlbydomainid?domainid=' + domainid.value)
         .subscribe(
           response => {
             let result = JSON.parse(response['_body']);
@@ -114,7 +117,7 @@ export class Login {
         username: username.value,
         password: password.value,
         code: code});
-      this.http.post('http://localhost:3004/sessions/create', body, { headers: contentHeaders })
+      this.http.post(backendUrl + '/sessions/create', body, { headers: contentHeaders })
         .subscribe(
           response => {
             this.error = null;

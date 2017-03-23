@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { contentHeaders } from '../common/headers';
 
+const backendUrl = 'https://localhost:3004';
 const styles   = require('./signup.css');
 const template = require('./signup.html');
 
@@ -41,7 +42,7 @@ export class Signup {
     event.preventDefault();
     let body = JSON.stringify({ accountid, mcurl, apikey, domainid, username, password,
       clientsecret, companyPhone, companyAddress, companyName});
-    this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
+    this.http.post( backendUrl + '/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {
           localStorage.setItem('id_token', response.json().id_token);
@@ -58,7 +59,7 @@ export class Signup {
   optional(event, companyname, companyaddress, phone) {
     event.preventDefault();
     let body = JSON.stringify({companyname, companyaddress, phone});
-    this.http.post('http://localhost:3004/enrollments', body, { headers: contentHeaders })
+    this.http.post(backendUrl + '/enrollments', body, { headers: contentHeaders })
       .subscribe(
         response => {
           localStorage.setItem('id_token', response.json().id_token);
