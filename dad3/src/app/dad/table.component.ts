@@ -198,12 +198,12 @@ export class DadTableComponent implements OnInit {
 
     this.currentPage = page;
     this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
-    this.dadTableDataService.getElementData(this.table).then(
+    this.dadTableDataService.getElementData(this.table).subscribe(
         data => {
           this.allData = data.data;
 
         }
-    ).catch(err => console.log(err.toString()));
+    )//.catch(err => console.log(err.toString()));
   }
 
   tableParameterKeys(){
@@ -286,7 +286,7 @@ export class DadTableComponent implements OnInit {
              }
 
             if (!config.testing) {
-                this.dadTableDataService.getElementData(this.table).then(
+                this.dadTableDataService.getElementData(this.table).subscribe(
                     data => {
                         this.allData = data.data;
                         this.data = filter.filter(this.table, this.allData);
@@ -298,7 +298,7 @@ export class DadTableComponent implements OnInit {
                             alert(this.data.errorMessage);
                         }
                     }
-                ).catch(err => console.log(err.toString()));
+                )//.catch(err => console.log(err.toString()));
             }
         });
   }

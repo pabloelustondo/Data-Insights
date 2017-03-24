@@ -23,7 +23,7 @@ export class DadElementDataService {
   /*getElementData(element:DadElement): Promise<any> {
     console.log("we got " + config["oda_dev_url"]); */
 
-  getElementData(element:DadElement, intervalTime): Observable<any> {
+  getElementData(element:DadElement): Observable<any> {
       console.log("we got " + config["oda_dev_url"]);
 
     let params: URLSearchParams = new URLSearchParams();

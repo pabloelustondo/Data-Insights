@@ -211,7 +211,7 @@ export class DadChartComponent implements OnInit {
 
     if (!config.testing && this.chart.endpoint)
     { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
-      this.dadChartDataService.getElementData(this.chart, null).subscribe(
+      this.dadChartDataService.getElementData(this.chart).subscribe(
         data => {
           this.data = data.data;
           //this.chart.data = data.data;
@@ -222,7 +222,7 @@ export class DadChartComponent implements OnInit {
   }
 
   changeConfig(){
-      this.dadChartDataService.getElementData(this.chart, null).subscribe(
+      this.dadChartDataService.getElementData(this.chart).subscribe(
         data => {
           this.data = data.data;
           let chartData = this.mapper.map(this.chart, this.data);
@@ -234,7 +234,7 @@ export class DadChartComponent implements OnInit {
 
     changeMapData() {
 
-        this.dadChartDataService.getElementData(this.chart,null).subscribe(
+        this.dadChartDataService.getElementData(this.chart).subscribe(
             data => {
               //this.data = data.data;
               this.data = this.drawMap(this.chart, data.data);
