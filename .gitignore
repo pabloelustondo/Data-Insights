@@ -1,12 +1,1 @@
-.idea/
-*/node_modules/
-*/node_modules/*
-*/node_modules/.staging
-*/dist
-*/ida/src/routes.ts
-*/oda/src/routes.ts
-*/oda/all-logs.log
-npm-debug.log
-bin/
-obj/
-config/
+//temporary change to be restored

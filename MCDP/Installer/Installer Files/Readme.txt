@@ -1,1 +1,0 @@
-MCDP - MobiControl Data Producer.
