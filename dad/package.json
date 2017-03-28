@@ -6,7 +6,7 @@
   "url": "https://genesisui.com",
   "copyright": "Copyright 2016 creativeLabs Łukasz Holeczek",
   "license": "MIT",
-  "angular-cli": {},
+  "angular-cli": "1.0.0-rc.4",
   "scripts": {
     "start": "ng serve --host 127.0.0.1 --port 443 --ssl 1 --ssl-key  \"C:/63663247-localhost_3002.key\"  --ssl-cert \"C:/63663247-localhost_3002.cert\" ",
     "start4test": "ng serve",
@@ -18,9 +18,9 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "2.2.3",
-    "@angular/compiler": "2.2.3",
-    "@angular/core": "2.2.3",
+    "@angular/common": "^2.4.0",
+    "@angular/compiler": "2.4.0",
+    "@angular/core": "2.4.0",
     "@angular/forms": "2.2.3",
     "@angular/http": "2.2.3",
     "@angular/platform-browser": "2.2.3",
