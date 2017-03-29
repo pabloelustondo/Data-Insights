@@ -20,9 +20,6 @@ export class DadElementDataService {
 
   constructor(private http: Http, private router: Router) { }
 
-  /*getElementData(element:DadElement): Promise<any> {
-    console.log("we got " + config["oda_dev_url"]); */
-
   getElementData(element:DadElement): Observable<any> {
       console.log("we got " + config["oda_dev_url"]);
 
@@ -36,32 +33,6 @@ export class DadElementDataService {
     let token = localStorage.getItem('id_token');
     let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : token});
     let data = {metricName:element.metricName, predicates:element.predicates, parameters:element.parameters[0]};
-
-      /* if(endpoint0.method === "post"){
-          return this.http.post(endpoint0.url, data, headers).toPromise().then(
-              response => JSON.parse(response['_body'])
-          ).catch(
-              err =>{
-                  console.log("we got " + err.json());
-              }
-          );
-      } *//*else{
-            return this.http.get(config[element.endpoint], {
-                search:params,
-                headers: headers
-            }).toPromise().then(
-                response => JSON.parse(response['_body'])
-            ).catch(
-                err =>{
-                    if (err.status === 500) {
-                        localStorage.removeItem('id_token');
-                        this.router.navigate(['/dad']);
-                    }
-                    console.log("we got " + err.json());
-                }
-            );
-      } */
-
 
       if(endpoint0.method === "post"){
           let bodyString = JSON.stringify(['_body']);

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit  } from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ChangeDetectorRef} from '@angular/core';
 import { DadElementDataService } from './data.service';
 import { Mapper } from "./mapper";
 import { DadElement } from "./dadmodels";
@@ -7,6 +7,7 @@ import { config } from "./appconfig";
 import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
 import { DadFilter } from "./filter";
 import {Observable} from "rxjs";
+import { DadMap2 } from './map2.component';
 
 declare var d3, c3: any;
 
@@ -123,7 +124,8 @@ export class DadChartComponent implements OnInit {
     newDimensionAttribute: string;
     intervalId: any;
 
-  constructor(private dadChartDataService: DadElementDataService,
+  constructor(private cdr: ChangeDetectorRef,
+      private dadChartDataService: DadElementDataService,
               private dadTableConfigsService : DadTableConfigsService,
               private dadChartConfigsService : DadChartConfigsService,
               private router: Router, private route: ActivatedRoute) {}
@@ -219,6 +221,8 @@ export class DadChartComponent implements OnInit {
         }
       )//.catch(err => console.log(err.toString()));
     }
+
+    this.cdr.detectChanges();
   }
 
   changeConfig(){
