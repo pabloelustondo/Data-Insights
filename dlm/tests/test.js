@@ -194,6 +194,7 @@ describe("Test IDA API service calls", function() {
 
 describe("Test job scheduler", function () {
     describe("Delete all existing jobs for a current data source", function () {
+
         it('calls delete jobs in Job Management Service', function (done) {
            var dataSourceId = 'varun dave test data source';
            JobManagementService.deleteJobsByDataSource(dataSourceId, function (err, result) {
@@ -206,6 +207,7 @@ describe("Test job scheduler", function () {
         });
         it('calls find jobs in Job Management Service', function (done) {
             var dataSourceId = 'varun dave test data source';
+
             JobManagementService.findJobByDataSource(dataSourceId, function (err, result) {
 
                 expect(err).to.be.null;
@@ -216,6 +218,7 @@ describe("Test job scheduler", function () {
     });
 
     describe("Add a new job to schedule for data source", function () {
+
         before( function (done) {
             var testJob = {
                 'url': 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=ttc&r=32&t=1488819607',
