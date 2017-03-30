@@ -56,7 +56,7 @@ export class ApplicationExecutionTime {
 
                     let minutes = (new Date).getTime();
 
-                    const getDBURL = config['db-address'] + '/getDBAccess/' + decodedToken.tenantId;
+                    const getDBURL = config['ddb'] + '/getDBAccess/' + decodedToken.tenantId;
 
                     const dboptions: rp.OptionsWithUrl = {
                         json: true,

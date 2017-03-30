@@ -1,7 +1,7 @@
 {
   "deployment_type":"dev",
   "port": 3002,
-  "db-address" : "http://localhost:8000",
+  "ddb": "http://localhost:8000",
   "aws-hostname" : "2vf2f8xp27.execute-api.us-east-1.amazonaws.com",
   "aws-x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
   "aws-accessKeyFileLocation": "C:/IDA_accessKeyID.txt",
