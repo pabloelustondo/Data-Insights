@@ -1,6 +1,8 @@
-Data Analytics Dashboard (DAD) preliminary code & experiments.
+Data Analytics Dashboard Service (DAS)
 
-This project is written using modern javascript and organized in modules that can be built, run and test independently. 
+NOTE: This readme file still contains some useful information but is OUTDATED.
+
+This project is written using modern javascript and organized in modules that can be built, run and test independently.
 Key technologies are: Node.js (7), Angular.js 2, Typescript 2 and nv23.js / D3.js (for charts). 
 
 To get and run this project 

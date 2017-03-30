@@ -1,9 +1,0 @@
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\bin\Debug\MobiControlDB_Archive.dacpac
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\bin\Debug\Soti.MobiControlDB_Archive.Database.Clr.dll
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\bin\Debug\Soti.MobiControlDB_Archive.Database.Clr.pdb
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\obj\Debug\Model.xml
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\obj\Debug\refactor.xml
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\obj\Debug\postdeploy.sql
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\obj\Debug\predeploy.sql
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\obj\Debug\Soti.MobiControlDB_Archive.Database.Clr.dll
-D:\Data\MC\MobiControl\Main\MobiControl\Database\MobiControlDB\MobiControlDB_Archive\obj\Debug\Soti.MobiControlDB_Archive.Database.Clr.pdb
