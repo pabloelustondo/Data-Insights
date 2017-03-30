@@ -1,14 +1,42 @@
 var express  = require('express');
 var app = express();
+var router = express.Router();
+var https = require('https');
+var fs = require('fs');
+var helmet = require('helmet');
 var bodyParser = require('body-parser');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var dbUrl ='mongodb://127.0.0.1:27017/';
+var config = require('./config.json');
+var mongoDbCreds = require(config['mongodb-config-location']);
+var Database = require('mongodb').Db;
+var Server = require('mongodb').Server;
 var path = require('path');
 
+var accessKey = (fs.readFileSync(config['accessKey-location'])).toString();
+var mongoInfo = {
+    uri : mongoDbCreds.uri
+};
+
+var Server = require('mongodb').Server;
+
+
+router.use(function (req, res, next) {
+    if (!req.headers['x-access-token']) {
+        res.status(401).send('unauthorized!');
+    }
+    if (req.headers['x-access-token'] === accessKey) {
+        next();
+    } else {
+        //next();
+        res.status(401).send('unauthorized!');
+    }
+});
+
 function callDbAndRespond(req,res,query){
-    var user = getUser(req);
-    mongodb.connect(dbUrl + "udb_" + user,function(err,db){
+    console.log(mongoInfo.uri);
+
+    mongodb.connect( mongoInfo.uri ,function(err,db){
         if (err) {
             res.send({data:null, status:err });
         }
@@ -24,12 +52,14 @@ function callDbAndRespond(req,res,query){
             db.close();
         });
     });
+
 }
 
 
 function getUser(req){
     var username = 'test'; var password;
     var auth = req.headers['authorization'];
+
     if (auth){
         var tmp = auth.split(' ');
         var buf = new Buffer(tmp[1], 'base64');
@@ -56,21 +86,29 @@ app.get('/', function(req,res){
     res.send("Jassplan TO-DO REST API Version 16");
 });
 
-app.get('/todo', function(req,res){
+router.get('/todo', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('todo').find({}).toArray(next);
     });
 });
 
+router.get('/remote', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+       // db.database('rawdata').collection('DeviceCustomData'.find({})).toArray(next);
 
-app.get('/todo/:id', function(req,res){
+        db.collection('tenants').find({}).toArray(next);
+    });
+});
+
+
+router.get('/todo/:id', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('todo').findOne({"_id":ObjectID(req.params.id)},next);
     });
 });
 
 
-app.get('/getDBAccess/:tenantID', function(req,res){
+router.get('/getDBAccess/:tenantID', function(req,res){
 
     var _tenantId = req.params.tenantID;
     callDbAndRespond(req,res, function(req,res,db, next){
@@ -81,7 +119,7 @@ app.get('/getDBAccess/:tenantID', function(req,res){
     });
 });
 
-app.get('/getEnrollment', function (req, res) {
+router.get('/getEnrollment', function (req, res) {
     var _tenantId = req.query.tenantId;
     callDbAndRespond(req,res, function(req,res,db, next){
         console.log(req.params.tenantID);
@@ -93,13 +131,13 @@ app.get('/getEnrollment', function (req, res) {
 });
 
 
-app.post('/todo', function(req,res){
+router.post('/todo', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('todo').insert(req.body,next);
     });
 });
 
-app.put('/todo', function(req,res){
+router.put('/todo', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         var _id = ObjectID(req.body._id);
         delete req.body._id;
@@ -107,21 +145,21 @@ app.put('/todo', function(req,res){
     });
 });
 
-app.post('/insertNewDataSource', function (req, res ) {
+router.post('/insertNewDataSource', function (req, res ) {
 
     callDbAndRespond(req, res, function (req,res, db, next ){
         db.collection('dataSources').insertOne(req.body, next);
     });
 });
 
-app.get('/dataSources', function (req, res) {
+router.get('/dataSources', function (req, res) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('dataSources').find({}).toArray(next);
     });
 });
 
 
-app.get('/getTenantUrl', function (req, res) {
+router.get('/getTenantUrl', function (req, res) {
     var _tenantId = req.query.tenantId;
     callDbAndRespond(req,res, function(req,res,db, next){
         console.log(req.params.tenantID);
@@ -137,33 +175,33 @@ app.get('/getTenantUrl', function (req, res) {
     });
 });
 
-app.post('/newEnrollment', function (req, res ) {
+router.post('/newEnrollment', function (req, res ) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('enrollments').insertOne(req.body, next);
     });
 });
 
-app.delete('/allEnrollments', function (req, res) {
+router.delete('/allEnrollments', function (req, res) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('enrollments').drop(next);
     });
 });
 
-app.get('/enrollments', function (req, res) {
+router.get('/enrollments', function (req, res) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('enrollments').find({}).toArray(next);
     });
 });
 
 // get all data sources attached to id
-app.get('/dataSources/:tenantId', function (req, res) {
+router.get('/dataSources/:tenantId', function (req, res) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('dataSources').find({"tenantId":req.params.tenantId}).toArray(next);
     });
 }) ;
 
 // get one specific data source
-app.get('/dataSource/:agentId', function (req, res) {
+router.get('/dataSource/:agentId', function (req, res) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('dataSources').find(
             {
@@ -176,7 +214,7 @@ app.get('/dataSource/:agentId', function (req, res) {
     });
 });
 
-app.get('/verifyDataSource', function (req, res) {
+router.get('/verifyDataSource', function (req, res) {
 
     console.log (req.query.tenantId);
     var _tenantId = req.query.tenantId;
@@ -198,7 +236,7 @@ app.get('/verifyDataSource', function (req, res) {
 //                   //
 //                   //
 ///////////////////////
-app.get('/getAgendas', function (req, res ) {
+router.get('/getAgendas', function (req, res ) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('jobs').find({}).toArray(next);
     });
@@ -206,7 +244,7 @@ app.get('/getAgendas', function (req, res ) {
 
 
 
-app.get('/dataSourceByType', function(req,res) {
+router.get('/dataSourceByType', function(req,res) {
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('dataSources').find({
             'dataSourceType' : req.query.dataSourceType
@@ -214,7 +252,7 @@ app.get('/dataSourceByType', function(req,res) {
     });
 });
 
-app.post('/updateDataSourceCredentials', function (req, res ) {
+router.post('/updateDataSourceCredentials', function (req, res ) {
 
     var _agentId = req.body.agentId;
     var _accessKey = req.body.activationKey;
@@ -242,7 +280,7 @@ app.post('/updateDataSourceCredentials', function (req, res ) {
 
 
 
-app.post('/updateDataSourceAws', function (req, res) {
+router.post('/updateDataSourceAws', function (req, res) {
 
  callDbAndRespond(req, res, function(req,res,db, next) {
 
@@ -269,7 +307,7 @@ app.post('/updateDataSourceAws', function (req, res) {
 });
 
 
-app.post('/updateEnrollmentInformation', function (req, res) {
+router.post('/updateEnrollmentInformation', function (req, res) {
 
     callDbAndRespond(req, res, function(req,res,db, next) {
 
@@ -306,26 +344,26 @@ app.post('/updateEnrollmentInformation', function (req, res) {
 ///////
 
 
-app.delete('/todo', function(req,res){
+router.delete('/todo', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('todo').drop(next);
     });
 });
 
-app.delete('/enrollments', function(req,res){
+router.delete('/enrollments', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('enrollments').drop(next);
     });
 });
 
 
-app.delete('/deleteAllDataSources', function(req,res){
+router.delete('/deleteAllDataSources', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         db.collection('dataSources').drop(next);
     });
 });
 
-app.delete('/deleteDataSource', function(req,res){
+router.delete('/deleteDataSource', function(req,res){
 
     var _agent = req.query.agentId;
     var _tenant = req.query.tenantId;
@@ -373,5 +411,25 @@ app.delete('/deleteDataSource', function(req,res){
 
 });
 
+var httpsOptions = {
+    key: fs.readFileSync(config['https-key-location'] ),
+    cert: fs.readFileSync(config['https-cert-location'] )
+};
 
-app.listen(8000);
+router.use(helmet());
+
+router.get('/router2', function (req, res) {
+    res.send('hello, user!')
+});
+
+
+app.use('/',router, function (req, res) {
+    res.sendStatus(404);
+});
+
+var httpsServer = https.createServer(httpsOptions, app);
+
+httpsServer.listen(config.port, function (){
+    console.log('Starting https server.. https://localhost:' + config.port + '/docs');
+});
+

@@ -7,7 +7,8 @@
     "express": "4.13.3",
     "jasmine-node": "^1.14.5",
     "mongodb": "2.0.46",
-    "request": "^2.65.0"
+    "request": "^2.65.0",
+    "helmet" : "^3.4.1"
   },
   "scripts": {
     "start" : "node app.js",

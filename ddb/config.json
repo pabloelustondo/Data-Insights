@@ -1,0 +1,10 @@
+{
+  "deployment_type":"dev",
+  "port": 8000,
+  "mongodb-table" : "configuration",
+  "https-key-location" : "C:/63663247-localhost_3002.key",
+  "https-cert-location" : "C:/63663247-localhost_3002.cert",
+  "mongodb-config-location" : "C:/mongodb_remote_credentials.json",
+  "accessKey-location" : "C:/accessKey",
+  "config-location": "./config.json"
+}
