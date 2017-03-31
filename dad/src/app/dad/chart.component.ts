@@ -25,7 +25,6 @@ export class DadChart extends DadElement{
     action?: String;
     widgetClickChart?: boolean = false;
     drillchart?:any;
-
 }
 @Component({
     selector: 'dadchart',
@@ -188,10 +187,10 @@ export class DadChartComponent implements OnInit {
     this.miniChartWidth = this.chart.width;
     this.miniChartHeight = this.chart.height;
     console.log("CHART starts drawing ON INIT:" + this.chart.id);
-
+    let timeInterval = this.chart.intervalTime;
     this.intervalId = setInterval(() => {
       this.changeMapData();
-    }, 5000);
+    }, timeInterval);
   }
 
   ngOnDestroy(){

@@ -31,6 +31,8 @@ export class DadElement {
   filter?:any;
   search?:string;
   dataElement?: string;
+  intervalTime?: number;
+  intervalRefreshOption: string;
 }
 
 export class DadDateRange{
