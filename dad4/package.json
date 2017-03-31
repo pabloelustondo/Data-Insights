@@ -9,7 +9,7 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port 3900",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

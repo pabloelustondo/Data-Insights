@@ -21,7 +21,7 @@ export class DadWidget extends DadElement{
   template: `   
 
 <div class="dadWidget">
-  <div class="col-sm-4 col-lg-3">  
+  <div class="col-sm-9 col-lg-12">  
      <div class="inside">
         <div class="content card card-inverse card-primary">
             <div class="card-block pb-0">
@@ -57,7 +57,7 @@ export class DadWidget extends DadElement{
                     <div>{{widget.metrics[2].Name}}</div> 
                     <div>{{data[0][widget.metrics[2].DataSource]}}</div> 
                     <div class="col-sm-6">
-                       <progress style="margin-left:-15px;" *ngIf="data" class="progress progress-xs progress-danger" value="{{data[0][widget.metrics[2].DataSource]}}" max="{{data[0][widget.metrics[1].DataSource]}}"></progress>
+                       <progress style="margin-left:-15px; color:#ffffff;"  *ngIf="data" class="progress progress-xs progress-danger" value="{{data[0][widget.metrics[2].DataSource]}}" max="{{data[0][widget.metrics[1].DataSource]}}"></progress>
                     </div><br/>            
                     <div *ngIf="moreDetails && data && widget.metrics.length>3">
                         <div>{{widget.metrics[3].Name}}</div> 

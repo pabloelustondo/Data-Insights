@@ -32,7 +32,7 @@ export class DadElement {
   search?:string;
   dataElement?: string;
   intervalTime?: number;
-  intervalRefreshOption: string;
+  intervalRefreshOption?: string;
 }
 
 export class DadDateRange{
