@@ -22,7 +22,7 @@ var Server = require('mongodb').Server;
 
 
 router.use(function (req, res, next) {
-    if (!req.headers['x-access-token']) {
+    /*if (!req.headers['x-access-token']) {
         res.status(401).send('unauthorized!');
     }
     if (req.headers['x-access-token'] === accessKey) {
@@ -30,7 +30,8 @@ router.use(function (req, res, next) {
     } else {
         //next();
         res.status(401).send('unauthorized!');
-    }
+    }*/
+    next();
 });
 
 function callDbAndRespond(req,res,query){
