@@ -5,7 +5,7 @@ import { AuthHttp } from 'angular2-jwt';
 import { contentHeaders } from '../common/headers';
 import * as FileSaver from 'file-saver';
 
-import { DadTable } from '../../../dad3/src/app/dad/table.component';
+// import { DadTable } from '../../../dad3/src/app/dad/table.component';
 
 const backendUrl = 'https://localhost:3004';
 const styles = require('./home.css');
@@ -68,7 +68,7 @@ export class Home {
   }
 
   callGetToken() {
-    this._callApi('Secured', backendUrl+'/api/protected/token');
+    this._callApi('Secured', backendUrl + '/api/protected/token');
   }
 
   callGetDeviceGroups() {

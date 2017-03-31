@@ -18,10 +18,7 @@ var httpsOptions = {
   key: fs.readFileSync(config['https-key-location'] ),
   cert: fs.readFileSync(config['https-cert-location'] )
 };
-// Parsers
-// old version of line
-// app.use(bodyParser.urlencoded());
-// new version of line
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());

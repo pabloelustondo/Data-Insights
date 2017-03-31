@@ -2,11 +2,11 @@
   "secret": "Data Analytics Team Rocks!",
   "port" : 3004,
   "expiringSecret" : "abcdefg9876543210",
-  "dadloginurl": "http://localhost:4200",
   "ddbEndpointUrl" : "https://localhost:8000",
   "dlmEndpointUrl" : "http://localhost:8002",
   "https-key-location" : "C:/63663247-localhost_3002.key",
   "https-cert-location" : "C:/63663247-localhost_3002.cert",
+  "ddb-accessKey" : "C:/AccessKey",
   "tempTokenExpiryTime" : 120000,
   "agentPermTokenExpiryTime": 6000000
 }
