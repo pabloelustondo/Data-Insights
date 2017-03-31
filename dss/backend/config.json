@@ -6,7 +6,7 @@
   "dlmEndpointUrl" : "http://localhost:8002",
   "https-key-location" : "C:/63663247-localhost_3002.key",
   "https-cert-location" : "C:/63663247-localhost_3002.cert",
-  "ddb-accessKey" : "C:/AccessKey",
+  "ddb-accessKey" : "C:/accessKey",
   "tempTokenExpiryTime" : 120000,
   "agentPermTokenExpiryTime": 6000000
 }
