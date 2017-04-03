@@ -34,7 +34,7 @@ export class DadMap2 implements OnInit {
         }
     };
 
-    title: string = 'Next Bus Map 2';
+    title: string = 'Next Bus Map';
 
     onTheMove() {
         let self = this;

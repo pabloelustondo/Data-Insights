@@ -187,10 +187,12 @@ export class DadChartComponent implements OnInit {
     this.miniChartWidth = this.chart.width;
     this.miniChartHeight = this.chart.height;
     console.log("CHART starts drawing ON INIT:" + this.chart.id);
-    let timeInterval = this.chart.intervalTime;
-    this.intervalId = setInterval(() => {
-      this.changeMapData();
-    }, timeInterval);
+    if(this.chart.intervalRefreshOption === true) {
+        let timeInterval = this.chart.intervalTime;
+        this.intervalId = setInterval(() => {
+            this.changeMapData();
+        }, timeInterval);
+    }
   }
 
   ngOnDestroy(){
@@ -236,14 +238,16 @@ export class DadChartComponent implements OnInit {
 
 
     changeMapData() {
+        if (!config.testing) {
 
-        this.dadChartDataService.getElementData(this.chart).subscribe(
-            data => {
-              //this.data = data.data;
-              this.data = this.drawMap(this.chart, data.data);
+            this.dadChartDataService.getElementData(this.chart).subscribe(
+                data => {
+                    //this.data = data.data;
+                    this.data = this.drawMap(this.chart, data.data);
 
-            }
-        )
+                }
+            )
+        }
     }
 
   onEdit(message:string):void{
