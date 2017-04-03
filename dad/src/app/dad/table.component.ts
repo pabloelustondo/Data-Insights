@@ -41,24 +41,12 @@ export class DadTable extends DadElement{
                     <span *ngFor="let key of parameterKeys"> 
                        {{key}}:{{tableParameterValue(key)}}
                     </span>
-                       
-                    <form role="form">      
-                        <button (click) ="addMonitor()" class="glyphicon glyphicon-plus" type="button">Add Monitor</button>
-                    </form>
                     
-                    <div *ngIf="addmonitor">
-                   <form role="form" (submit)="search(querystr)">
-                    <button class="glyphicons glyphicons-search" type="submit"></button>
-                    <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
-                    </form>
-                    </div>    
-                                    
-                    <!--
                     <form role="form" (submit)="search(querystr)">
                     <button class="glyphicons glyphicons-search" type="submit"></button>
                     <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
                     </form>
-                    -->
+                    
                 </div>
                 
                 <div class="card-block">
