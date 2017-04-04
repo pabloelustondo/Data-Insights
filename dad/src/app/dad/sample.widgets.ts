@@ -2,7 +2,7 @@
  * Created by 6pablo elustondo cd 201
  */
 import { DadWidget, DadWidgetType} from './widget.component';
-import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadFilter, DadFilterType, DadDimension, DadDimensionType} from "./dadmodels"
 import {TABLES} from './sample.tables'
 
 export const WIDGETS: DadWidget[] = [

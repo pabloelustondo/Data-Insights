@@ -2,7 +2,7 @@
  * Created by pablo elustondo on 2016-12-06.
  */
 import { DadChart } from './chart.component';
-import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadFilter, DadFilterType, DadDimension, DadDimensionType} from "./dadmodels"
 import { DadMap } from './map.component';
 
 export const CHARTS: DadChart[] = [
@@ -192,7 +192,8 @@ export const CHARTS: DadChart[] = [
         metrics:[
             {attribute:'DevId', op:'count', name:'Number of Devices'},
         ],
-        filters:[],
+        filters:[
+        ],
 
         a : 'countOfDevices',
         b : 'percentage',

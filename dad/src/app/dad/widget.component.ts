@@ -4,7 +4,7 @@ import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { Router, ActivatedRoute } from "@angular/router";
-import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadFilter, DadFilterType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
 import { config } from "./appconfig";
 
 export enum DadWidgetType { OneNumber, Chart };
