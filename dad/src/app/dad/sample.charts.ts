@@ -191,8 +191,9 @@ export const CHARTS: DadChart[] = [
         ],
         metrics:[
             {attribute:'DevId', op:'count', name:'Number of Devices'},
-            {attribute:'LastBatteryStatus', op:'avg', name:'Average Battery Status'}
         ],
+        filters:[],
+
         a : 'countOfDevices',
         b : 'percentage',
         aname : 'Count Of Devices',
