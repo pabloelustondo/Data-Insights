@@ -18,13 +18,19 @@ export class DadSearch{
     }
 
     readExpression(element:DadElement, data:any[]): any[] {
-        if(!element.readExpression) return data;
+        if(!element.newFilter.readExpression) return data;
 
         let result = [];
         data.forEach(function(d){
-            let ss = element.readExpression;
+            let ss = element.newFilter.readExpression;
             Object.keys(d).forEach( function(key){
-                ss = ss.replace(key, d[key]);
+                let value = d[key];
+                if(typeof value=="number") {
+                    ss = ss.replace(key, value);
+                }
+                if(typeof value=="string"){
+                    ss = ss.replace(key, "\'" + value + "\'");
+                }
             })
             if (eval(ss)) result.push(d);
         });

@@ -5,6 +5,7 @@ import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTransformer } from "./transformer";
 import {DadReducer } from "./reducer";
+import {DadFilter} from "./filter";
 
 export class ChartData{
   Dimension = [];
@@ -16,6 +17,11 @@ export class Mapper{
   var chartData = new ChartData();
   var dataForChart:any;
   var index=0;
+
+  if(config.newFilter){
+    let filter = new DadFilter();
+    data = filter.filter(config, data);
+  }
 
   if (config.reduction){
     let reducer = new DadReducer();

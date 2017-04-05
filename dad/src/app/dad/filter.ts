@@ -8,17 +8,25 @@ import * as _ from "lodash";
 export class DadFilter {
     filter(element:DadElement, data:any[]): any[] {
 
-        if(!element.filter){
-            return data;
+        if(element.filter){
+
+            let filteredData = _.filter(data, _.matches(element.filter));
+
+
+            let search = new DadSearch();
+
+            return search.search(element, filteredData);
+
         }
 
-        let filteredData = _.filter(data, _.matches(element.filter));
+        if(element.newFilter){
+
+            let search = new DadSearch();
+
+            return search.readExpression(element, data);
 
 
-        let search = new DadSearch();
-        return search.search(element, filteredData);
-
-        let attribute
+        }
     }
 }
 

@@ -155,11 +155,13 @@ export class DadChartComponent implements OnInit {
     filterBy(d){
         if (d >= 0){
             let newFilter = this.chart.filters[d];
-            this.chart.newFilter = newFilter;
+            if(!this.chart.newFilter) {
+                this.chart.newFilter = {};
+            }
+            this.chart.newFilter.readExpression = newFilter.attribute;
             this.dadChartConfigsService.saveOne(this.chart);
             let chartData = this.mapper.map(this.chart, this.data);
-            chartData.unload = true;
-            this.c3chart.load(chartData);
+                this.changeChartData(chartData);
         }
         else {
             this.addFilter = true;
@@ -274,6 +276,15 @@ export class DadChartComponent implements OnInit {
                 this.c3chart.load(chartData);
             }
         )
+    }
+
+    changeChartData(chartData){
+        if(this.chart.type === 'bar' || this.chart.type === 'pie') {
+            chartData.unload = true;
+            this.c3chart.load(chartData);
+        } else {
+            this.changeMapData();
+        }
     }
 
     changeMapData() {
