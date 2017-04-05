@@ -83,7 +83,7 @@ export class DadChart extends DadElement {
                    
                         <div *ngIf="chart.type!=='map2' && chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
                         <div *ngIf="chart.type!=='map2' && !chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
-                        <div *ngIf="_data && chart.type==='map2'" style="text-align:center; height:100%; width:100%;"  > <dadmap2 [map]="chart" [data]="_data"></dadmap2> </div>
+                        <div *ngIf="_data && chart.type==='map2'" style="text-align:center; height:100%; width:100%;"  > <dadmap2 [map]="chart" [data]="mapData"></dadmap2> </div>
                                                 
                         <div style="color:black;">
                             <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>
@@ -116,6 +116,11 @@ export class DadChartComponent implements OnInit {
             return;
         }
         this._data = d;
+
+        if (this.chart.type=='map2'){
+           this.mapData =this.mapper.map(this.chart, d);
+        }
+
         if (this.c3chart) {
             let chartData = this.mapper.map(this.chart, this.data);
             this.c3chart.load(chartData);
@@ -127,6 +132,7 @@ export class DadChartComponent implements OnInit {
     };
 
     _data;
+    mapData;
     mapper: Mapper = new Mapper();
     colorPalette: any[] = ['#33526e', '#618bb1', '#46c0ab', '#ff6b57', '#ff894c', '#62656a', '#f4d42f', '#60bd6e'];
     c3chart: any;
@@ -161,7 +167,8 @@ export class DadChartComponent implements OnInit {
             this.chart.newFilter.readExpression = newFilter.attribute;
             this.dadChartConfigsService.saveOne(this.chart);
             let chartData = this.mapper.map(this.chart, this.data);
-                this.changeChartData(chartData);
+            this.mapData = chartData;
+            this.changeChartData(chartData);
         }
         else {
             this.addFilter = true;
@@ -170,6 +177,9 @@ export class DadChartComponent implements OnInit {
 
     addNewFilter() {
         this.addFilter = false;
+        if(!this.chart.filters){
+            this.chart.filters = [];
+        }
         this.chart.filters.push({attribute: this.newFilterAttribute, name: this.newFilterName});
         this.filterBy(this.chart.filters.length - 1);
     }
@@ -246,20 +256,15 @@ export class DadChartComponent implements OnInit {
     ngAfterViewInit() {
         console.log("CHART starts drawing AFTER VIEW INIT :" + this.chart.id);
 
-        if (!this.data && this.chart.data && config.testing) {
-            this.data = this.chart.data;
-        }
 
         if (this.data) {
             this.drawChart(this.chart, this.data);
-        }
-        ;
+        };
 
-        if (!config.testing && this.chart.endpoint) { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
+        if (this.chart.endpoint) { //at this point we do not have this.data nor we have this.chart.date.. so we need to go to server
             this.dadChartDataService.getElementData(this.chart).subscribe(
                 data => {
-                    this.data = data.data;
-                    //this.chart.data = data.data;
+                    this.data = data;
                     this.drawChart(this.chart, this.data);
                 }
             )//.catch(err => console.log(err.toString()));
@@ -271,7 +276,7 @@ export class DadChartComponent implements OnInit {
     changeConfig() {
         this.dadChartDataService.getElementData(this.chart).subscribe(
             data => {
-                this.data = data.data;
+                this.data = data;
                 let chartData = this.mapper.map(this.chart, this.data);
                 this.c3chart.load(chartData);
             }
@@ -282,20 +287,15 @@ export class DadChartComponent implements OnInit {
         if(this.chart.type === 'bar' || this.chart.type === 'pie') {
             chartData.unload = true;
             this.c3chart.load(chartData);
-        } else {
-            this.changeMapData();
         }
     }
 
     changeMapData() {
-        if (!config.testing) {
             this.dadChartDataService.getElementData(this.chart).subscribe(
                 data => {
-                    //this.data = data.data;
-                    this.data = this.drawMap(this.chart, data.data);
+                    this.data = data;
                 }
             )
-        }
     }
 
     onEdit(message: string): void {
@@ -745,8 +745,7 @@ export class DadChartComponent implements OnInit {
     };
 
     drawMap(chartConfig, data) {
-            let mapData = this.mapper.map(chartConfig, data);
-            this.data = mapData;
+      //  this.data = this.mapper.map(chartConfig, data);
     }
 
     drawChart(chartConfig: DadChart, data) {

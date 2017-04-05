@@ -48,7 +48,7 @@ export class Mapper{
       chartData.Metric.push('lon');
       chartData.Dimension.push('lat');
 
-      let mapData = data[config.dataElement];
+      let mapData = data;
       mapData.forEach(function (e) {
         chartData.Dimension.push(e['lat']);
         chartData.Metric.push(e['lon']);
