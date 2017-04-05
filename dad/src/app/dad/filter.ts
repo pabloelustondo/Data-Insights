@@ -17,6 +17,8 @@ export class DadFilter {
 
         let search = new DadSearch();
         return search.search(element, filteredData);
+
+        let attribute
     }
 }
 

@@ -35,6 +35,7 @@ export class DadElement {
   dataElement?: string;
   intervalTime?: number;
   intervalRefreshOption?: boolean =false;
+  readExpression?: any;
 }
 
 export class DadDateRange{

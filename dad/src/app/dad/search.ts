@@ -16,4 +16,18 @@ export class DadSearch{
 
         return result;
     }
+
+    readExpression(element:DadElement, data:any[]): any[] {
+        if(!element.readExpression) return data;
+
+        let result = [];
+        data.forEach(function(d){
+            let ss = element.readExpression;
+            Object.keys(d).forEach( function(key){
+                ss = ss.replace(key, d[key]);
+            })
+            if (eval(ss)) result.push(d);
+        });
+        return result;
+    }
 }

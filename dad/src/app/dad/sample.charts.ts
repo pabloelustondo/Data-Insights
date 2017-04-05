@@ -192,8 +192,7 @@ export const CHARTS: DadChart[] = [
         metrics:[
             {attribute:'DevId', op:'count', name:'Number of Devices'},
         ],
-        filters:[
-        ],
+        filters:[],
 
         a : 'countOfDevices',
         b : 'percentage',

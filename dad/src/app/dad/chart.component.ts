@@ -31,7 +31,7 @@ export class DadChart extends DadElement {
     providers: [DadElementDataService, DadTableConfigsService, DadChartConfigsService],
     template: `
 <div class="dadChart">
-    <div *ngIf=" chart.type!=='map' && chart.type!=='map2' && !chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
+    <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
         <div class="inside">
           <div class="content card-inverse card-secondary">    
             <div class="card-block pb-0">
@@ -48,21 +48,21 @@ export class DadChart extends DadElement {
                     </div>
                     <div>
                         <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
-                        <div *ngIf="chart.reduction" style="color:black;">                      
-                           <select (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
+                        <div style="color:black;">  
+                           <select *ngIf="chart.reduction" (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
                                     <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
                            </select>  
-                           by                       
-                           <select (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                           by
+                           <select *ngIf="chart.reduction" (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                                     <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Dimension</option>
-                           </select>  
+                           </select>
                            filter by
                             <select (change)="filterBy($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option style="color:grey;" disabled selected>Select</option>
                                     <option [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}" [selected] ="chart.newFilter.name === fil.name" >{{fil.name}}</option>
                                     <option (click)='addFilterBut()' [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}" >Add Filter</option>
-                           </select> 
+                            </select> 
                             
                            <div *ngIf="addDimension">
                            <div></div>
@@ -79,9 +79,11 @@ export class DadChart extends DadElement {
                            </div>
 
                         </div><br/><br/><br/> 
-
-                        <div *ngIf="chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
-                        <div *ngIf="!chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
+                        
+                   
+                        <div *ngIf="chart.type!=='map2' && chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
+                        <div *ngIf="chart.type!=='map2' && !chart.big" style="text-align:center; height:100%; width:100%;" [id]="chart.id"></div>
+                        <div *ngIf="_data && chart.type==='map2'" style="text-align:center; height:100%; width:100%;"  > <dadmap2 [map]="chart" [data]="_data"></dadmap2> </div>
                                                 
                         <div style="color:black;">
                             <dadparameters [element]="chart" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeConfig()"></dadparameters>
@@ -98,7 +100,7 @@ export class DadChart extends DadElement {
         <div *ngIf="chart.mini" style="text-align:left; height:auto; width:auto;" [id]="chart.id"></div>
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
         <div *ngIf="_data && chart.type==='map'" > <dadmap [map]="chart" [data]="_data"></dadmap></div>
-        <div *ngIf="_data && chart.type==='map2'" > <dadmap2 [map]="chart" [data]="_data"></dadmap2></div>
+        <!--<div *ngIf="_data && chart.type==='map2'" > <dadmap2 [map]="chart" [data]="_data"></dadmap2></div>-->
          
         
 </div>
@@ -213,7 +215,7 @@ export class DadChartComponent implements OnInit {
     }
 
     chartClass() {
-        if (this.chart.big) {
+        if (this.chart.big || this.chart.type ==='map2') {
             return 'col-sm-12 col-lg-12';
         } else {
             return 'col-sm-8 col-lg-6';
