@@ -231,6 +231,23 @@ router.get('/verifyDataSource', function (req, res) {
 
 });
 
+//////////////////////////////////////
+// DDB External Usage related APIS  //
+//                                  //
+//                                  //
+//////////////////////////////////////
+router.get('/tenant/configuration', function(req,res){
+
+    var _tenantId = req.query.tenantId;
+    callDbAndRespond(req,res, function(req,res,db, next){
+        console.log(req.query.tenantId);
+        db.collection('enrollments').findOne({
+            "tenantId":req.query.tenantId
+        }, next);
+    });
+});
+
+
 
 ///////////////////////
 // DLM related APIS  //
@@ -424,7 +441,7 @@ router.get('/router2', function (req, res) {
 });
 
 
-app.use('/',router, function (req, res) {
+app.use('/', router, function (req, res) {
     res.sendStatus(404);
 });
 
