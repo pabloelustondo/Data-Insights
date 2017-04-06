@@ -31,6 +31,8 @@ export class DadElement {
   newFilter?: any;
   filter?:any;
   filters?: DadFilter[];
+  alert?:any;
+  alerts?: DadAlert[];
   search?:string;
   dataElement?: string;
   intervalTime?: number;
@@ -87,6 +89,10 @@ export enum DadFilterType {
   Number, String
 }
 
+export enum DadAlertType {
+  Number, String
+}
+
 export interface DadDimension{
   Type?: DadDimensionType,
   Name?: string,
@@ -98,6 +104,15 @@ export interface DadDimension{
 
 export interface DadFilter{
   Type?: DadFilterType,
+  Name?: string,
+  DataSource?: string,
+  Value?:any,
+  attribute?:string,
+  name?:string
+}
+
+export interface DadAlert{
+  Type?: DadAlertType,
   Name?: string,
   DataSource?: string,
   Value?:any,

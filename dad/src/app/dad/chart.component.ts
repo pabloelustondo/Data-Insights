@@ -49,33 +49,54 @@ export class DadChart extends DadElement {
                     <div>
                         <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
                         <div style="color:black;">  
+                        
                            <select *ngIf="chart.reduction" (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
-                                    <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
+                                    <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option> 
                            </select>  
-                           by
+                           
+                           <i *ngIf="chart.reduction">by</i>
+                           
                            <select *ngIf="chart.reduction" (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                                     <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Dimension</option>
                            </select>
-                           filter by
+                           
+                           <i>filter by</i>
+                           
                             <select (change)="filterBy($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option style="color:grey;" disabled selected>Select</option>
                                     <option [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}" [selected] ="chart.newFilter.name === fil.name" >{{fil.name}}</option>
-                                    <option (click)='addFilterBut()' [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}" >Add Filter</option>
+                                    <option [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}" >Add Filter</option>
+                            </select> 
+                            
+                            <i>alert when</i>
+                            
+                             <select (change)="alertWhen($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                                    <option style="color:grey;" disabled selected>Select</option>
+                                    <option [id]="chart.id + '_alertData'" style="color:black;" *ngFor="let alert of chart.alerts; let i=index" value="{{i}}" [selected] ="chart.alert.name === alert.name" >{{alert.name}}</option>
+                                    <option [id]="chart.id + '_newAlert'" style="color:black;" value="{{-1}}" >Add Alert</option>
                             </select> 
                             
                            <div *ngIf="addDimension">
-                           <div></div>
-                           <div><input style="height:32px;" [(ngModel)]="newDimensionName"   type="text"   placeholder="Dimension Name"></div>
-                           <div><input style="height:32px;" [(ngModel)]="newDimensionAttribute"  type="text"   placeholder="Dimension Attribute"></div>
-                           <div><button (click)="addNewDimension()">Add New Dimension</button></div>                     
+                               <div></div>
+                               <div><input style="height:32px;" [(ngModel)]="newDimensionName"   type="text"   placeholder="Dimension Name"></div>
+                               <div><input style="height:32px;" [(ngModel)]="newDimensionAttribute"  type="text"   placeholder="Dimension Attribute"></div>
+                               <div><button (click)="addNewDimension()">Add New Dimension</button></div>                     
                            </div>
                            
                            <div *ngIf="addFilter">
                            <div></div>
-                           <div><input style="height:32px;" [(ngModel)]="newFilterName"   type="text"   placeholder="Filter Name"></div>
-                           <div><input style="height:32px;" [(ngModel)]="newFilterAttribute"  type="text"   placeholder="Filter Attribute"></div>
-                           <div><button (click)="addNewFilter()">Add New Filter</button></div>                     
+                               <div><input style="height:32px;" [(ngModel)]="newFilterName" type="text" placeholder="Filter Name"></div>
+                               <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
+                               <div><button (click)="addNewFilter()">Add New Filter</button></div>                     
+                           </div>
+
+                           <div *ngIf="addAlert">
+                           <div></div>
+                               <div><input style="height:32px;" [(ngModel)]="newAlertName" type="text" placeholder="Alert Name"></div>
+                               <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
+                               <div><input style="height:32px;" [(ngModel)]="newAlertAttribute" type="text" placeholder="Alert Expression"></div>
+                               <div><button (click)="addNewAlert()">Add New Alert</button></div>                     
                            </div>
 
                         </div><br/><br/><br/> 
@@ -147,8 +168,11 @@ export class DadChartComponent implements OnInit {
     newDimensionName: string;
     newDimensionAttribute: string;
     addFilter: boolean = false;
+    addAlert: boolean = false;
     newFilterName: string;
     newFilterAttribute: string;
+    newAlertAttribute: string;
+    newAlertName: string;
     intervalId: any;
 
     constructor(private cdr: ChangeDetectorRef,
@@ -182,6 +206,32 @@ export class DadChartComponent implements OnInit {
         }
         this.chart.filters.push({attribute: this.newFilterAttribute, name: this.newFilterName});
         this.filterBy(this.chart.filters.length - 1);
+    }
+
+    alertWhen(d){
+        if (d >= 0){
+            let alert = this.chart.alerts[d];
+            if(!this.chart.alert) {
+                this.chart.alert = {};
+            }
+            this.chart.alert = alert.attribute;
+            this.dadChartConfigsService.saveOne(this.chart);
+            let chartData = this.mapper.map(this.chart, this.data);
+            this.mapData = chartData;
+            this.changeChartData(chartData);
+        }
+        else {
+            this.addAlert = true;
+        }
+    }
+
+    addNewAlert() {
+        this.addAlert = false;
+        if(!this.chart.alerts){
+            this.chart.alerts = [];
+        }
+        this.chart.alerts.push({attribute: this.newAlertAttribute, name: this.newAlertName});
+        this.alertWhen(this.chart.alerts.length - 1);
     }
 
     selectDimension(d) {
