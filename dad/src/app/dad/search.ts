@@ -13,7 +13,6 @@ export class DadSearch{
             let s = JSON.stringify(d);
             if (s.indexOf(element.search) > -1) result.push(d);
         });
-
         return result;
     }
 
@@ -37,7 +36,6 @@ export class DadSearch{
         return result;
     }
 
-
     alertExpression(element:DadElement, data:any[]): boolean {
         if(!element.alert.alertExpression) return false;
 
@@ -48,23 +46,5 @@ export class DadSearch{
             let res = sds;
             return ss;
         };
-
-
-            /*
-        let result = [];
-        data.forEach(function(d){
-            let ss = element.newFilter.readExpression;
-            Object.keys(d).forEach( function(key){
-                let value = d[key];
-                if(typeof value=="number") {
-                    ss = ss.replace(key, value);
-                }
-                if(typeof value=="string"){
-                    ss = ss.replace(key, "\'" + value + "\'");
-                }
-            })
-            if (eval(ss)) result.push(d);
-        });
-        return result;*/
     }
 }

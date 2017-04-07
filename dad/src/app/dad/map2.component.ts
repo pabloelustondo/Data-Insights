@@ -8,7 +8,7 @@ import { DadChart } from './chart.component';
     selector: 'dadmap2',
     styleUrls: ['map.component.css'],
     template: `
-    {{title}} <br/>
+
     <div id="mapid"></div>
 
     `,

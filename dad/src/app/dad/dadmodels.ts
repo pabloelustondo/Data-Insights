@@ -66,7 +66,6 @@ export enum DadMetricType {
   Number, String, Date, Time
 }
 
-
 export type MetricOperator = 'count' | 'sum' | 'avg';
 
 export interface DadMetric{
@@ -79,7 +78,6 @@ export interface DadMetric{
   name?:string;
   op?:MetricOperator
 }
-
 
 export enum DadDimensionType {
   Number, String, MiniChart

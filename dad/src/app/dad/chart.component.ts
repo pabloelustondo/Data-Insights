@@ -60,7 +60,7 @@ export class DadChart extends DadElement {
                                     <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                                     <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Dimension</option>
                            </select>
-                           
+                           <br/>
                            <i>filter by</i>
                            
                             <select (change)="filterBy($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
@@ -76,6 +76,12 @@ export class DadChart extends DadElement {
                                     <option [id]="chart.id + '_alertData'" style="color:black;" *ngFor="let alert of chart.alerts; let i=index" value="{{i}}" [selected] ="chart.alert.name === alert.name" >{{alert.name}}</option>
                                     <option [id]="chart.id + '_newAlert'" style="color:black;" value="{{-1}}" >Add Alert</option>
                             </select> 
+                            
+                            <label  class="switch switch-text switch-pill switch-success pull-right pb-1">
+                                <input type="checkbox" class="switch-input">
+                                <span class="switch-label" data-on="On" data-off="Off"></span>
+                                <span class="switch-handle"></span>
+                            </label>
                             
                            <div *ngIf="addDimension">
                                <div></div>
