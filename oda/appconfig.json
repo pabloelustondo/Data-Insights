@@ -17,5 +17,6 @@
   "aws-listAverageDischargeRate" : "/test/Device/Battery/List/AverageDischargeRate",
   "aws-listHighAverageDischargeRate" : "/test/Device/Battery/List/HighAverageDischargeRate",
   "aws-applicationExecutionTime" : "/test/Device/Application/ExecutionTime",
-  "aws-numberOfAppInstallations" : "/test/Device/Application/NumberOfInstallations"
+  "aws-numberOfAppInstallations" : "/test/Device/Application/NumberOfInstallations",
+  "ddb-accessKey" : "C:/accessKey"
  }

@@ -6,7 +6,7 @@ import { DadChart } from "./chart.component";
 import {DadElementDataService } from "./data.service";
 import {DadWidgetConfigsService, DadChartConfigsService} from './chart.service';
 import { Mapper } from "./mapper";
-import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement} from "./dadmodels"
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadFilterType, DadAlert, DadAlertType, DadFilter, DadDimension, DadDimensionType, DadElement} from "./dadmodels"
 import {DadWidget} from "./widget.component";
 
 @Component({

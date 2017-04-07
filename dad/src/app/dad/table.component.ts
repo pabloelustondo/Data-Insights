@@ -40,11 +40,13 @@ export class DadTable extends DadElement{
                        Number of Rows:{{count}}
                     <span *ngFor="let key of parameterKeys"> 
                        {{key}}:{{tableParameterValue(key)}}
-                    </span>                         
+                    </span>
+                    
                     <form role="form" (submit)="search(querystr)">
                     <button class="glyphicons glyphicons-search" type="submit"></button>
                     <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
                     </form>
+                    
                 </div>
                 
                 <div class="card-block">
@@ -114,6 +116,11 @@ export class DadTableComponent implements OnInit {
   parameterKeys: any[];
   miniChartD: any[];
   chartDataD: any[];
+  addmonitor: boolean = false;
+  searchTerm: any;
+  items: any;
+  itemsCopy:any;
+
 
   constructor(private dadTableDataService: DadElementDataService,
               private dadTableConfigsService: DadTableConfigsService,
@@ -193,6 +200,14 @@ export class DadTableComponent implements OnInit {
           }
       }
   }
+
+    addMonitor():void {
+        if (!this.addmonitor) {
+            this.addmonitor = true;
+        } else {
+            this.addmonitor = false;
+        }
+    }
 
   refresh(page:number){
 

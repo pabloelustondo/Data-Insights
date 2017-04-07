@@ -8,7 +8,7 @@ import { DadChart } from './chart.component';
     selector: 'dadmap2',
     styleUrls: ['map.component.css'],
     template: `
-    {{title}}
+    {{title}} <br/>
     <div id="mapid"></div>
 
     `,
@@ -34,7 +34,7 @@ export class DadMap2 implements OnInit {
         }
     };
 
-    title: string = 'Next Bus Map 2';
+    title: string = 'Next Bus Map';
 
     onTheMove() {
         let self = this;

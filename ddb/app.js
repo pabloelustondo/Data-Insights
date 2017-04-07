@@ -22,7 +22,7 @@ var Server = require('mongodb').Server;
 
 
 router.use(function (req, res, next) {
-    if (!req.headers['x-access-token']) {
+    /*if (!req.headers['x-access-token']) {
         res.status(401).send('unauthorized!');
     }
     if (req.headers['x-access-token'] === accessKey) {
@@ -30,7 +30,8 @@ router.use(function (req, res, next) {
     } else {
         //next();
         res.status(401).send('unauthorized!');
-    }
+    }*/
+    next();
 });
 
 function callDbAndRespond(req,res,query){
@@ -230,6 +231,23 @@ router.get('/verifyDataSource', function (req, res) {
 
 });
 
+//////////////////////////////////////
+// DDB External Usage related APIS  //
+//                                  //
+//                                  //
+//////////////////////////////////////
+router.get('/tenant/configuration', function(req,res){
+
+    var _tenantId = req.query.tenantId;
+    callDbAndRespond(req,res, function(req,res,db, next){
+        console.log(req.query.tenantId);
+        db.collection('enrollments').findOne({
+            "tenantId":req.query.tenantId
+        }, next);
+    });
+});
+
+
 
 ///////////////////////
 // DLM related APIS  //
@@ -423,7 +441,7 @@ router.get('/router2', function (req, res) {
 });
 
 
-app.use('/',router, function (req, res) {
+app.use('/', router, function (req, res) {
     res.sendStatus(404);
 });
 
