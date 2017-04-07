@@ -351,6 +351,31 @@ router.post('/updateEnrollmentInformation', function (req, res) {
 
 });
 
+//////////////////////////////////////
+// DDB External Usage related APIS  //
+//                                  //
+//                                  //
+//////////////////////////////////////
+
+router.get('/tenant/configuration', function(req,res){
+
+    var _tenantId = req.query.tenantId;
+    callDbAndRespond(req,res, function(req,res,db, next){
+        console.log(req.query.tenantId);
+        db.collection('enrollments').findOne({
+            "tenantId":req.query.tenantId
+        }, next);
+    });
+});
+
+//////////////////////////////////////
+// DDB External Usage related APIS  //
+//                                  //
+//                                  //
+//////////////////////////////////////
+
+
+
 //////
 //  All delete APIS??
 //
