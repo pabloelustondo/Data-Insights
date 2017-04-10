@@ -1,15 +1,18 @@
 from __future__ import print_function
 from pymongo import MongoClient
 from bson.code import Code
+from bson.json_util import dumps
+from bson.json_util import loads
 
 import boto3
 import urllib
 import logging
 import json
 
-from bson.json_util import dumps
-from bson.json_util import loads
+#addition library
+import requests
 
+#new
 logger = logging.getLogger()
 #Trace log info, in production mode, switch to logging.ERROR 
 logger.setLevel(logging.INFO)
@@ -23,30 +26,50 @@ def lambda_handler(event, context):
     #Should be save SOTI DB config in file??
     _soticonfserver = '34.206.170.83:5494'
     _soticonfdatabase = 'configuration'
-    _soticonfcollection = 'tenants'
+    _soticonfcollection = 'enrollments'
     
     _sotitenantid = event['tenantId']
     _sotiusername = 'sotiadmin'
     _sotipassword = 'eXtremely$tr0ngp@$$w0rd'
     
     logger.info('got event{}'.format(event))
-    #keep all Lambda function in one is better in performance and further charge
-    result = GetTenantInfo (_soticonfserver, _soticonfdatabase, _soticonfcollection, _sotitenantid, _sotiusername, _sotipassword)
+   
+    url = 'http://50.16.136.220:5495/tenant/configuration'
+    #headers = {'Content-Type':'application/json', 'x-access-token':'A3J9SyhuZ9TTyNdzCq5LPmNlHb32KasnRothKwnGyCegLvp9bCEMkhYbl51xPzUFK1jHUYh9EeQzqSu0464ZFCpaZ6zmiyXo3p98EbHSzPuFX1zTmX5c26vfpnl1G5khykf8dnloubXcul3T93M4jjLj1UJgnU0OwmjEH5ZA7GmHC0kKmO8gK6KCi9eDDDW6OaTOkoOm'}
+    #params = {'tenantId': 'test1'}
+    myResponse = requests.get(url, params={'tenantId': 'test1'}, headers={'Content-Type':'application/json', 'x-access-token':'A3J9SyhuZ9TTyNdzCq5LPmNlHb32KasnRothKwnGyCegLvp9bCEMkhYbl51xPzUFK1jHUYh9EeQzqSu0464ZFCpaZ6zmiyXo3p98EbHSzPuFX1zTmX5c26vfpnl1G5khykf8dnloubXcul3T93M4jjLj1UJgnU0OwmjEH5ZA7GmHC0kKmO8gK6KCi9eDDDW6OaTOkoOm'})
     
-    #Get tenant MongoDB intance configuration details
-    _connectionString = result['mongodbConnectionString']+':5494'
-    _userName = result['mongodbUsername']
-    _password = result['mongodbPassword']
-    _dbName = result['DBName']
+    #print('step 1: ' + str(myResponse.ok))
     
+    if(myResponse.ok):
+        result = json.loads(myResponse.content)
+        _connectionString = result['mongodbConnectionString']+':5494'
+        _userName = result['mongodbUsername']
+        _password = result['mongodbPassword']
+        _dbName = result['DBName']
+        #print('step 2.1: ' + _connectionString)
+        #print('step 2.2: ' + _userName)
+        #print('step 2.3: ' + _password)
+        #print('step 2.4: ' + _dbName)
+        
+        _collection = 'DeviceCustomData'
+        res = (AggregationQuery (_connectionString, _userName, _password, _dbName, _collection, event))
+        return (res)
+    else:
+        logger.error('call SOTI Mongodb Error.')
+        return
+    #replaced by dynamic call to DDB
+    #result = GetTenantInfo (_soticonfserver, _soticonfdatabase, _soticonfcollection, _sotitenantid, _sotiusername, _sotipassword)
+    #_connectionString = result['mongodbConnectionString']+':5494'
+    #_userName = result['mongodbUsername']
+    #_password = result['mongodbPassword']
+    #_dbName = result['DBName']
+    #end
+	
     #qry = qry.replace('$[vehicleId]', event['vehicleId'])
     #_collection = 'sessions'
     #res = MapReduceQuery (_connectionString, _userName, _password, _dbName, _collection)
-    
-    _collection = 'DeviceCustomData'
-    res = (AggregationQuery (_connectionString, _userName, _password, _dbName, _collection, event))
-    return (res)
-    
+	
 def GetTenantInfo (_serverAddress, _dbname, _collection, _tenantid, _username, _password):
     conn = MongoClient('mongodb://' +  _username + ':' +  urllib.quote(_password) + '@' + _serverAddress)
     db = conn[_dbname]
@@ -92,7 +115,8 @@ def AggregationQuery (_connectionString, _userName, _password, _dbName, _collect
                 _collection = 'VehicleInfo'
     else:
          logger.error('missing either devId or vehicleId as parameter')
-         
+    #print ('step 3.1: ' + _collection)
+    #print ('step 3.2: ' + str(pipeline))
     result = db[_collection].aggregate(pipeline)
     return(loads(dumps(result)))
 
