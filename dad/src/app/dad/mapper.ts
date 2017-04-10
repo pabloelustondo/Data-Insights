@@ -6,6 +6,8 @@ import {DadWidget} from "./widget.component";
 import {DadTransformer } from "./transformer";
 import {DadReducer } from "./reducer";
 import {DadFilter} from "./filter";
+import {DadSearch} from "./search";
+import { DadElement } from "./dadmodels";
 
 export class ChartData{
   Dimension = [];
@@ -22,6 +24,12 @@ export class Mapper{
     let filter = new DadFilter();
     data = filter.filter(config, data);
   }
+
+    if(config.alert){
+      let search = new DadSearch();
+      let alertResult = search.alertExpression(config, data);
+      if (alertResult) alert("warning warning : " + config.alert.expression);
+    }
 
   if (config.reduction){
     let reducer = new DadReducer();

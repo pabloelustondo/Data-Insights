@@ -38,6 +38,7 @@ export class DadElement {
   intervalTime?: number;
   intervalRefreshOption?: boolean =false;
   readExpression?: any;
+  alertExpression?: string;
 }
 
 export class DadDateRange{
@@ -114,7 +115,7 @@ export interface DadAlert{
   Name?: string,
   DataSource?: string,
   Value?:any,
-  attribute?:string,
+  expression?:string,
   name?:string
 }
 

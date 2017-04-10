@@ -37,14 +37,11 @@ export class DadSearch{
     }
 
     alertExpression(element:DadElement, data:any[]): boolean {
-        if(!element.alert.alertExpression) return false;
+        if(!element.alert.expression) return false;
 
-        let ss = function alertExp(){
-            let ds = [];
-            let sds = eval("ds.operation")
+        let ss = element.alert.expression;
+        let ds = data;
+        return eval(ss);
 
-            let res = sds;
-            return ss;
         };
     }
-}
