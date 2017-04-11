@@ -6,14 +6,17 @@ let appconfig = require("../../../appconfig.json");
 
 export const config = {
     "testing":appconfig.testingmode,
-    "authorizationserver":appconfig.dss,
-    "InitialChargeLevels":appconfig.oda + "/Devices/Battery/Summary/InitialChargeLevels",
-    "DischargeRate":appconfig.oda + "/Devices/Battery/Summary/DischargeRate",
-    "DevicesNotSurvivedShift": appconfig.oda +  "/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
-    "ListOfDevicesNotSurvivedShift": appconfig.oda + "/Devices/Battery/List/DevicesDidNotSurviveShift",
-    "BatteryMetrics": {url: appconfig.oda + "/Devices/Battery/getMetrics", method:"post"},
-    "AverageDischargeRate": appconfig.oda + "/Devices/Battery/Summary/AverageDischargeRate",
-    "ApplicationDeploymentCount": appconfig.oda + "/Devices/Application/executionTime",
-    "NumberOfInstallations": appconfig.oda + "/Devices/Application/numberOfInstallations",
-    "GetLocation": appconfig.oda + "/Vehicles/Data/GetLocations"
+    "dss_url":appconfig.dss_url,
+    "oda_url":appconfig.oda_url,
+    "ddb_url":appconfig.ddb_url,
+    "authorizationserver":appconfig.dss_url,
+    "InitialChargeLevels":appconfig.oda_url + "/Devices/Battery/Summary/InitialChargeLevels",
+    "DischargeRate":appconfig.oda_url + "/Devices/Battery/Summary/DischargeRate",
+    "DevicesNotSurvivedShift": appconfig.oda_url +  "/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
+    "ListOfDevicesNotSurvivedShift": appconfig.oda_url + "/Devices/Battery/List/DevicesDidNotSurviveShift",
+    "BatteryMetrics": {url: appconfig.oda_url + "/Devices/Battery/getMetrics", method:"post"},
+    "AverageDischargeRate": appconfig.oda_url + "/Devices/Battery/Summary/AverageDischargeRate",
+    "ApplicationDeploymentCount": appconfig.oda_url + "/Devices/Application/executionTime",
+    "NumberOfInstallations": appconfig.oda_url + "/Devices/Application/numberOfInstallations",
+    "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations"
 };

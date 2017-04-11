@@ -82,7 +82,7 @@ function getUser(req){
     return username;
 }
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use('/testing', express.static(path.join(__dirname + '/testing')));
 
 app.get('/test', function(req,res){
@@ -442,7 +442,7 @@ router.delete('/deleteDataSource', function(req,res){
 
 });
 
-router.use(helmet());
+//router.use(helmet());
 
 router.get('/router2', function (req, res) {
     res.send('hello, user!')
@@ -451,6 +451,15 @@ router.get('/router2', function (req, res) {
 
 app.use('/',router, function (req, res) {
     res.sendStatus(404);
+});
+
+
+
+router.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-access-token');
+    res.header('X-Content-Type-Option', 'nosniff');
+    next();
 });
 
 
