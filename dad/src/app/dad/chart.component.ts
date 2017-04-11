@@ -220,7 +220,7 @@ export class DadChartComponent implements OnInit {
             if(!this.chart.alert) {
                 this.chart.alert = {};
             }
-            this.chart.alert = alert.attribute;
+            this.chart.alert = alert.expression;
             this.dadChartConfigsService.saveOne(this.chart);
             let chartData = this.mapper.map(this.chart, this.data);
             this.mapData = chartData;
@@ -236,8 +236,9 @@ export class DadChartComponent implements OnInit {
         if(!this.chart.alerts){
             this.chart.alerts = [];
         }
-        this.chart.alerts.push({attribute: this.newAlertAttribute, name: this.newAlertName});
+        this.chart.alerts.push({expression: this.newAlertAttribute, name: this.newAlertName});
         this.alertWhen(this.chart.alerts.length - 1);
+       // this.changeMapData();
     }
 
     selectDimension(d) {
