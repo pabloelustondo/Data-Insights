@@ -37,7 +37,7 @@ def lambda_handler(event, context):
     url = 'http://50.16.136.220:5495/tenant/configuration'
     #headers = {'Content-Type':'application/json', 'x-access-token':'A3J9SyhuZ9TTyNdzCq5LPmNlHb32KasnRothKwnGyCegLvp9bCEMkhYbl51xPzUFK1jHUYh9EeQzqSu0464ZFCpaZ6zmiyXo3p98EbHSzPuFX1zTmX5c26vfpnl1G5khykf8dnloubXcul3T93M4jjLj1UJgnU0OwmjEH5ZA7GmHC0kKmO8gK6KCi9eDDDW6OaTOkoOm'}
     #params = {'tenantId': 'test1'}
-    myResponse = requests.get(url, params={'tenantId': 'test1'}, headers={'Content-Type':'application/json', 'x-access-token':'A3J9SyhuZ9TTyNdzCq5LPmNlHb32KasnRothKwnGyCegLvp9bCEMkhYbl51xPzUFK1jHUYh9EeQzqSu0464ZFCpaZ6zmiyXo3p98EbHSzPuFX1zTmX5c26vfpnl1G5khykf8dnloubXcul3T93M4jjLj1UJgnU0OwmjEH5ZA7GmHC0kKmO8gK6KCi9eDDDW6OaTOkoOm'})
+    myResponse = requests.get(url, params={'tenantId': _sotitenantid}, headers={'Content-Type':'application/json', 'x-access-token':'A3J9SyhuZ9TTyNdzCq5LPmNlHb32KasnRothKwnGyCegLvp9bCEMkhYbl51xPzUFK1jHUYh9EeQzqSu0464ZFCpaZ6zmiyXo3p98EbHSzPuFX1zTmX5c26vfpnl1G5khykf8dnloubXcul3T93M4jjLj1UJgnU0OwmjEH5ZA7GmHC0kKmO8gK6KCi9eDDDW6OaTOkoOm'})
     
     #print('step 1: ' + str(myResponse.ok))
     
