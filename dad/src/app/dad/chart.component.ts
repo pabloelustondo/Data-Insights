@@ -69,14 +69,14 @@ export class DadChart extends DadElement {
                                     <option [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}" >Add Filter</option>
                             </select> 
                             
-                            <i>alert when</i>
-                            
+                            <!-- <i>alert when</i>
+                           
                              <select (change)="alertWhen($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option style="color:grey;" disabled selected>Select</option>
                                     <option [id]="chart.id + '_alertData'" style="color:black;" *ngFor="let alert of chart.alerts; let i=index" value="{{i}}" [selected] ="chart.alert.name === alert.name" >{{alert.name}}</option>
                                     <option [id]="chart.id + '_newAlert'" style="color:black;" value="{{-1}}" >Add Alert</option>
                             </select> 
-                            
+                            -->
                             <label class="switch switch-text switch-pill switch-success pull-right pb-1">
                                 <input type="checkbox" class="switch-input" (click)="onRealDataMonitoring()">
                                 <span class="switch-label" data-on="On" data-off="Off"></span>
@@ -96,7 +96,7 @@ export class DadChart extends DadElement {
                                <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
                                <div><button (click)="addNewFilter()">Add New Filter</button></div>                     
                            </div>
-
+                        <!--
                            <div *ngIf="addAlert">
                            <div></div>
                                <div><input style="height:32px;" [(ngModel)]="newAlertName" type="text" placeholder="Alert Name"></div>
@@ -104,7 +104,7 @@ export class DadChart extends DadElement {
                                <div><input style="height:32px;" [(ngModel)]="newAlertAttribute" type="text" placeholder="Alert Expression"></div>
                                <div><button (click)="addNewAlert()">Add New Alert</button></div>                     
                            </div>
-
+                        -->
                         </div><br/><br/><br/> 
                         
                    
