@@ -215,7 +215,7 @@ export class DadTableComponent implements OnInit {
     this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
     this.dadTableDataService.getElementData(this.table).subscribe(
         data => {
-          this.allData = data.data;
+          this.allData = data;
 
         }
     )//.catch(err => console.log(err.toString()));
@@ -303,7 +303,7 @@ export class DadTableComponent implements OnInit {
             if (!config.testing) {
                 this.dadTableDataService.getElementData(this.table).subscribe(
                     data => {
-                        this.allData = data.data;
+                        this.allData = data;
                         this.data = filter.filter(this.table, this.allData);
                         this.preCalculateCharts();
                         this.addValues();

@@ -1,5 +1,5 @@
 {
   "testingmode":true,
-  "dss":"https://10.0.91.25:3013",
+  "dss":"https://dev2012r2-sk.sotidev.com:3003",
   "oda":"https://dev2012r2-sk.sotidev.com:3002"
 }

@@ -77,8 +77,8 @@ export class DadChart extends DadElement {
                                     <option [id]="chart.id + '_newAlert'" style="color:black;" value="{{-1}}" >Add Alert</option>
                             </select> 
                             
-                            <label  class="switch switch-text switch-pill switch-success pull-right pb-1">
-                                <input type="checkbox" class="switch-input">
+                            <label class="switch switch-text switch-pill switch-success pull-right pb-1">
+                                <input type="checkbox" class="switch-input" (click)="onRealDataMonitoring()">
                                 <span class="switch-label" data-on="On" data-off="Off"></span>
                                 <span class="switch-handle"></span>
                             </label>
@@ -291,17 +291,27 @@ export class DadChartComponent implements OnInit {
         }
     }
 
-    ngOnInit() {
-
-        this.miniChartWidth = this.chart.width;
-        this.miniChartHeight = this.chart.height;
-        console.log("CHART starts drawing ON INIT:" + this.chart.id);
+    realDataMonitoring() {
         if (this.chart.intervalRefreshOption === true) {
             let timeInterval = this.chart.intervalTime;
             this.intervalId = setInterval(() => {
                 this.changeMapData();
             }, timeInterval);
         }
+    }
+
+    onRealDataMonitoring(): void {
+       this.chart.intervalRefreshOption = !this.chart.intervalRefreshOption;
+       this.realDataMonitoring();
+       if(this.chart.intervalRefreshOption===false){this.ngOnDestroy()}
+    }
+
+    ngOnInit() {
+
+        this.miniChartWidth = this.chart.width;
+        this.miniChartHeight = this.chart.height;
+        console.log("CHART starts drawing ON INIT:" + this.chart.id);
+        this.realDataMonitoring();
     }
 
     ngOnDestroy() {

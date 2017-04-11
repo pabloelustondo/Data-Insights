@@ -40,17 +40,59 @@ describe('ReadExpression', () => {
 
     it('should read the expression', () => {
         let element: DadElement = CHARTS[6];
-        element.readExpression = "true";
+        element.newFilter = {}
+        element.newFilter.readExpression = "true";
         let search = new DadSearch();
-        var result = search.readExpression(element, element.data.vehicle);
-        expect(result.length).toBe(element.data.vehicle.length);
+        var result = search.readExpression(element, element.data);
+        expect(result.length).toBe(element.data.length);
     });
 
     it('should return empty list', () => {
         let element: DadElement = CHARTS[6];
-        element.readExpression = "false";
+        element.newFilter = {}
+        element.newFilter.readExpression = "false";
         let search = new DadSearch();
-        var result = search.readExpression(element, element.data.vehicle);
+        var result = search.readExpression(element, element.data);
+        expect(result.length).toBe(0);
+    });
+
+    it('key gets its value', () => {
+        let element: DadElement = CHARTS[6];
+        element.newFilter = {}
+        element.newFilter.readExpression = "id===1049";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data);
+        expect(result[0].id).toBe("1049");
+    });
+
+    it('key gets its value 2', () => {
+        let element: DadElement = CHARTS[6];
+        element.newFilter = {}
+        element.newFilter.readExpression = "routeTag===32";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data);
+        expect(result[0].routeTag).toBe("32");
+    });
+
+});
+
+describe('AlertExpression', () => {
+
+    it('should read the expression', () => {
+        let element: DadElement = CHARTS[6];
+        element.alertExpression = "true";
+        let search = new DadSearch();
+        var result = search.alertExpression(element, element.data);
+        expect(result).toBe(true);
+    });
+});
+
+/*
+    it('should return empty list', () => {
+        let element: DadElement = CHARTS[6];
+        element.alertExpression = "false";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data);
         expect(result.length).toBe(0);
     });
 
@@ -58,7 +100,7 @@ describe('ReadExpression', () => {
         let element: DadElement = CHARTS[6];
         element.readExpression = "id===1049";
         let search = new DadSearch();
-        var result = search.readExpression(element, element.data.vehicle);
+        var result = search.readExpression(element, element.data);
         expect(result[0].id).toBe("1049");
     });
 
@@ -70,4 +112,4 @@ describe('ReadExpression', () => {
         expect(result[0].routeTag).toBe("32");
     });
 
-});
+});*/

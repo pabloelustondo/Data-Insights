@@ -39,7 +39,7 @@ export class DadWidget extends DadElement{
                 </div>
                 
                 <label style="margin-right: 10px;" class="switch switch-text switch-pill switch-success pull-right pb-1">
-                    <input type="checkbox" class="switch-input">
+                    <input type="checkbox" class="switch-input" (click)="onRealDataMonitoring()">
                     <span class="switch-label" data-on="On" data-off="Off"></span>
                     <span class="switch-handle"></span>
                 </label>
@@ -108,6 +108,7 @@ export class DadWidgetComponent implements OnInit {
   editMode:boolean = false;
   moreDetails:boolean = false;
   refreshMode:boolean = false;
+  intervalId: any;
 
     constructor(private dadWidgetDataService: DadElementDataService,
                 private dadWidgetConfigsService: DadWidgetConfigsService,
@@ -144,7 +145,7 @@ export class DadWidgetComponent implements OnInit {
     changeData() {
     this.dadWidgetDataService.getElementData(this.widget).subscribe(
       data => {
-        this.data = data.data;
+        this.data = data;
           this.fixNullsInMetrics();
       }
     );
@@ -166,7 +167,37 @@ export class DadWidgetComponent implements OnInit {
         if (this.data[0][this.widget.metrics[i].DataSource] === null) this.data[0][this.widget.metrics[i].DataSource] = 0;
     }
 
-  ngOnInit() {
+    realDataMonitoring() {
+        if (this.widget.intervalRefreshOption === true) {
+            let timeInterval = this.widget.intervalTime;
+            this.intervalId = setInterval(() => {
+                this.changeWidgetData();
+            }, timeInterval);
+        }
+    }
+
+    onRealDataMonitoring(): void {
+        this.widget.intervalRefreshOption = !this.widget.intervalRefreshOption;
+        this.realDataMonitoring();
+        if(this.widget.intervalRefreshOption===false){this.ngOnDestroy()}
+    }
+
+    ngOnDestroy() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
+    }
+
+    changeWidgetData() {
+        this.dadWidgetDataService.getElementData(this.widget).subscribe(
+            data => {
+                this.data = data;
+            }
+        )
+    }
+
+
+    ngOnInit() {
     console.log("Widgets are loading... :" + this.widget.id);
      // this.mapParameters2ui();
 
@@ -177,7 +208,7 @@ export class DadWidgetComponent implements OnInit {
       if (!config.testing) {
           this.dadWidgetDataService.getElementData(this.widget).subscribe(
               data => {
-                  this.data = data.data;
+                  this.data = data;
                   if (this.data.errorMessage != null) {
                       alert(this.data.errorMessage);
                   }
@@ -185,5 +216,6 @@ export class DadWidgetComponent implements OnInit {
               }
           )
       }
+      this.realDataMonitoring();
   }
 }

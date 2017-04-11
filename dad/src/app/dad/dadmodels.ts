@@ -36,7 +36,7 @@ export class DadElement {
   search?:string;
   dataElement?: string;
   intervalTime?: number;
-  intervalRefreshOption?: boolean =false;
+  intervalRefreshOption?: boolean = false;
   readExpression?: any;
   alertExpression?: string;
 }
