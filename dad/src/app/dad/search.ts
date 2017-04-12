@@ -30,7 +30,7 @@ export class DadSearch{
                 if(typeof value=="string"){
                     ss = ss.replace(key, "\'" + value + "\'");
                 }
-            })
+            });
             if (eval(ss)) result.push(d);
         });
         return result;
