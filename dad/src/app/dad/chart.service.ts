@@ -37,7 +37,7 @@ export class DadChartConfigsService {
 
       let token = localStorage.getItem('id_token');
       let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : token});
-      let url = config.ddb_url+"/daduser/"+ daduserconfig.userid;
+      let url = config.dadback_url + "/daduser/"+ daduserconfig.userid;
       this.http.post(url, daduserconfig, headers).toPromise().then(
           (res:Response) => {
             console.log('configuration saved' + JSON.stringify(res));

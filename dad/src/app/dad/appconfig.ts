@@ -8,7 +8,7 @@ export const config = {
     "testing":appconfig.testingmode,
     "dss_url":appconfig.dss_url,
     "oda_url":appconfig.oda_url,
-    "ddb_url":appconfig.ddb_url,
+    "dadback_url":appconfig.dadback_url,
     "authorizationserver":appconfig.dss_url,
     "InitialChargeLevels":appconfig.oda_url + "/Devices/Battery/Summary/InitialChargeLevels",
     "DischargeRate":appconfig.oda_url + "/Devices/Battery/Summary/DischargeRate",

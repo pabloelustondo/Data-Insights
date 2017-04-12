@@ -15,6 +15,13 @@ var rp = require('request-promise');
 app.use(bodyParser.json({limit: '50mb'}));
 app.use('/testing', express.static(path.join(__dirname + '/testing')));
 
+router.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-access-token');
+    res.header('X-Content-Type-Option', 'nosniff');
+    next();
+});
+
 app.get('/test', function(req,res){
     res.sendFile(path.join(__dirname  + '/testing/spec/SpecRunner.html'));
 });
@@ -26,7 +33,7 @@ app.get('/', function(req,res){
 app.get('/daduser/:userid', function(req,res){
 
     var options = {
-        uri:"http://localhost:8000/daduser/testtenant-testuser",
+        uri:appconfig.oda_url + "/daduser/testtenant-testuser",
         method:"GET",
         contentType:"application/json"
     };
@@ -43,7 +50,7 @@ app.get('/daduser/:userid', function(req,res){
 
 app.post('/daduser/:userid', function(req,res){
     var options = {
-        uri:"http://localhost:8000/daduser/testtenant-testuser",
+        uri:appconfig.oda_url + "/daduser/testtenant-testuser",
         method:"POST",
         contentType:"application/json",
         body: req.body,

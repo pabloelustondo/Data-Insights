@@ -11,7 +11,6 @@ import { DadLoginComponent } from './login.component';
 import { DadComponent } from './dashboard.component';
 import { DadRoutingModule } from './dad-routing.module';
 import { CommonModule } from '@angular/common'; //<-- This one
-import { UiSwitchModule } from 'angular2-ui-switch'
 
 import {BrowserModule} from "@angular/platform-browser";
 
@@ -48,8 +47,7 @@ let LocalStorageServiceConfig = {
         TimepickerModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyDK7Z_arQKxXVf0ZiUDl4_yackjHiD9HNA'
-        }),
-        UiSwitchModule
+        })
     ],
     declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
         DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent, DadBigChartComponent, DadDrillChartsComponent, DadMap, DadMap2],
