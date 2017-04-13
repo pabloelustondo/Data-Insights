@@ -35,7 +35,7 @@ export class DadElementDataService {
     let data = {metricName:element.metricName, predicates:element.predicates, parameters:element.parameters[0]};
 
     let findData = function(data){
-        if (element.dataElement) return data[element.dataElement];
+        if (element.dataElement) return data.data[element.dataElement];
         return data.data;
       };
 
