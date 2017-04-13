@@ -12,7 +12,7 @@ describe("DAD Backend", function() {
 
 
     describe("GET /daduser/:userid", function() {
-        it("returns empty daduser after deleting it before", function(done) {
+        it("returns a configuration with the right test user id", function(done) {
             $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var resObj = JSON.parse(data)[0];
                 expect(resObj).toBeDefined();
@@ -23,7 +23,7 @@ describe("DAD Backend", function() {
     });
 
     describe("POST /daduser/:userid", function() {
-        it("post a new configuration for testuser", function(done) {
+        it("post a new configuration for the test user", function(done) {
             $.ajax({
                 url: "/daduser/testtenant-testuser",
                 type:"POST",
@@ -35,6 +35,49 @@ describe("DAD Backend", function() {
             });
         });
 
+    });
+
+    describe("GET /daduser/:userid", function() {
+        it("returns a configuration with the right test user id and configuration", function(done) {
+            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+                var resObj = JSON.parse(data)[0];
+                var configString = JSON.stringify(resObj.config);
+                var expectedConfigString = JSON.stringify({attribute:"nada"});
+                expect(resObj).toBeDefined();
+                expect(resObj.userid).toBe("testtenant-testuser");
+                expect(configString).toBe(expectedConfigString);
+                done();
+            });
+        });
+    });
+
+    describe("POST /daduser/:userid", function() {
+        it("post a new updated configuration for the test user", function(done) {
+            $.ajax({
+                url: "/daduser/testtenant-testuser",
+                type:"POST",
+                data: JSON.stringify({ userid:'testtenant-testuser', config:{attribute:"algo"}}),
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    expect(data).toBeDefined();
+                    done();}
+            });
+        });
+
+    });
+
+    describe("GET /daduser/:userid", function() {
+        it("returns the updated configuration with the right test user id and configuration", function(done) {
+            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+                var resObj = JSON.parse(data)[0];
+                var configString = JSON.stringify(resObj.config);
+                var expectedConfigString = JSON.stringify({attribute:"algo"});
+                expect(resObj).toBeDefined();
+                expect(resObj.userid).toBe("testtenant-testuser");
+                expect(configString).toBe(expectedConfigString);
+                done();
+            });
+        });
     });
 
     /*

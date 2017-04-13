@@ -11,10 +11,10 @@ app.post('/api/token', function(req,res) {
     return res.status(400).send("MC Mock: You must send the username and the password");
   }
 
-  if (req.body.username==="Administrator" && req.body.password==="1") {
+  if (req.body.password!=="wrongpassword") {
     res.status(200).send({token: 'test1234567890test1234567890test'});
   } else {
-    return res.status(400).send("MC Mock: You must send the username=Administrator and the password=1");
+    return res.status(400).send("MC Mock: You password is wrongpassword");
   }
 });
 

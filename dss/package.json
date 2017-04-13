@@ -1,30 +1,20 @@
 {
-  "name": "angular2-authentication-sample",
+  "name": "dss",
   "version": "0.0.1",
-  "description": "This is a sample that shows how to add authentication to an Angular 2 (ng2) app",
+  "description": "Data Analytics Service Security Service",
   "main": "",
   "angular-cli": {},
   "scripts": {
-    "server": "cd backend && npm i && node server.js",
-    "front-https" : "ng serve",
-    "front": "webpack-dev-server --https --cert \"C:/63663247-localhost_3002.cert\" --key \"C:/63663247-localhost_3002.key\" --inline -d --colors --display-error-details --display-cached --port 3003",
-    "start": "npm run front",
+    "startBackend": "cd backend && npm i && node server.js",
+    "start": "webpack-dev-server --port 3003 --inline -d --colors --display-error-details --display-cached",
+    "startSSL": "webpack-dev-server --port 3003 --https --cert \"C:/63663247-localhost_3002.cert\" --key \"C:/63663247-localhost_3002.key\" --inline -d --colors --display-error-details --display-cached",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/auth0/angular2-authentication-sample.git"
-  },
   "contributors": [
-    "Martin Gontovnikas (http://gon.to) <martin@gon.to>",
-    "PatrickJS <github@gdi2290.com>",
-    "Ryan Chenkie <ryanchenkie@gmail.com>"
+    "Pablo Elustondo",
+    "Varun Dave"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/auth0/angular2-authentication-sample/issues"
-  },
-  "homepage": "https://github.com/auth0/angular2-authentication-sample",
   "dependencies": {
     "@angular/common": "2.4.10",
     "@angular/compiler": "2.4.10",
