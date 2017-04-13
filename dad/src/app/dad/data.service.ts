@@ -39,7 +39,6 @@ export class DadElementDataService {
         return data.data;
       };
 
-
       if (config.testing) return Observable.of(element.data);
 
       if(endpoint0.method === "post"){
@@ -56,7 +55,6 @@ export class DadElementDataService {
                           .map((res:Response) => findData(res.json()))
                           .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
       }
-
   }
 }
 

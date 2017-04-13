@@ -6,7 +6,7 @@ import { DadPage } from './page.component';
 export const PAGES: DadPage[] = [
     {id:"batstats",
      name: "Battery Stats",
-     widgetids:[ "widget1","widget2","widget3", "widget4"],
+     widgetids:[ "widget1", "widget4"],
      chartids: ['chartbar'],
      tableids: ['table1', 'table2']
     },
@@ -21,7 +21,7 @@ export const PAGES: DadPage[] = [
     {id:"ttc",
         name: "TTC Vehicle Info",
         widgetids:[],
-        chartids: ['ttcmap2'], //'ttcmap'
+        chartids: ['ttcmap2'],
         tableids: []
     }
 ];
