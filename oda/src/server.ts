@@ -94,7 +94,7 @@ app.use(logger);
 // }));
 // console.log('Starting server.. http://localhost:' + config.port + '/docs');
 
-if (config.useSSL){
+if (config.useSSL) {
     let httpsOptions = {
         key: fs.readFileSync(config['https-key-location']),
         cert: fs.readFileSync(config['https-cert-location'])
