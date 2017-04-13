@@ -40,7 +40,7 @@ describe('ReadExpression', () => {
 
     it('should read the expression', () => {
         let element: DadElement = CHARTS[6];
-        element.newFilter = {}
+        element.newFilter = {};
         element.newFilter.readExpression = "true";
         let search = new DadSearch();
         var result = search.readExpression(element, element.data);
@@ -49,7 +49,7 @@ describe('ReadExpression', () => {
 
     it('should return empty list', () => {
         let element: DadElement = CHARTS[6];
-        element.newFilter = {}
+        element.newFilter = {};
         element.newFilter.readExpression = "false";
         let search = new DadSearch();
         var result = search.readExpression(element, element.data);
@@ -58,24 +58,24 @@ describe('ReadExpression', () => {
 
     it('key gets its value', () => {
         let element: DadElement = CHARTS[6];
-        element.newFilter = {}
+        element.newFilter = {};
         element.newFilter.readExpression = "id===1049";
         let search = new DadSearch();
-        var result = search.readExpression(element, element.data);
-        expect(result[0].id).toBe("1049");
+        let result = search.readExpression(element, element.data);
+        expect(result[0].vehicle[0].id).toBe("1049");
     });
 
     it('key gets its value 2', () => {
         let element: DadElement = CHARTS[6];
-        element.newFilter = {}
+        element.newFilter = {};
         element.newFilter.readExpression = "routeTag===32";
         let search = new DadSearch();
-        var result = search.readExpression(element, element.data);
+        let result = search.readExpression(element, element.data);
         expect(result[0].routeTag).toBe("32");
     });
 
 });
-
+/*
 describe('AlertExpression', () => {
 
     it('should read the expression', () => {
@@ -87,7 +87,6 @@ describe('AlertExpression', () => {
     });
 });
 
-/*
     it('should return empty list', () => {
         let element: DadElement = CHARTS[6];
         element.alertExpression = "false";
