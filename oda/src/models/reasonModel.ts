@@ -1,5 +1,5 @@
 import {Parameter} from './parameterModel';
-import {Predicates} from './Predicates';
+import {Predicates} from './predicates';
 import {Metrics} from './metrics';
 import {BatteryNotFullyChargedBeforeShiftParam} from './kpi/batteryNotFullyChargedBeforeShift';
 import {SampleAPI} from './kpi/PlaceHolderKPI';

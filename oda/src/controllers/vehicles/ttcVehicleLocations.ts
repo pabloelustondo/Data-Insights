@@ -2,12 +2,12 @@
  * Created by vdave on 3/20/2017.
  */
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
-import {SDS} from '../../models/user';
 // import * as https from 'https';
 const config = require('../../../appconfig.json');
 import * as querystring from 'querystring';
 
 import * as rp from 'request-promise';
+import {VehicleInfo} from '../../models/vehicleInfo';
 @Route('Vehicles')
 export class VehicleLocations {
     /**
@@ -33,16 +33,22 @@ export class VehicleLocations {
                 }
             ]}
     })
-    public async Get(): Promise<SDS> {
+    public async Get(): Promise<VehicleInfo> {
 
         const xqs = {command : 'vehicleLocations', a : 'ttc' };
         const xurl = 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=ttc';
 
+        const xurl2 = 'https://2vf2f8xp27.execute-api.us-east-1.amazonaws.com/test/Vehicle/Search?tenantId=test1';
+
+        const headersOptions = {
+            'x-api-key' : 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+        };
+
         const options: rp.OptionsWithUrl = {
             json: true,
             method: 'GET',
-
-            url: xurl
+            headers : headersOptions,
+            url: xurl2
         };
 
         let p = await rp(options); // request library used
@@ -50,10 +56,18 @@ export class VehicleLocations {
         'id, lon, routeTag, predictable, heading, lat, secsSinceReport' +
         ' } ]'];
 
-        const user: SDS = {
+        let xyz: any = [];
+
+        for (let vehicle in p) {
+            xyz.push(p[vehicle].Vehicle);
+        }
+        let returnData  = {
+            vehicle : xyz
+        };
+        const user: VehicleInfo = {
             createdAt: new Date(),
             metadata: mData,
-            data: p
+            data: returnData
         };
 
         return user;

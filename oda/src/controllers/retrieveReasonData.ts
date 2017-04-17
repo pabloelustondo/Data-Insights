@@ -4,7 +4,7 @@
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from '../models/user';
 import {CalculatePredicates} from '../models/reasonModel';
-import {Metrics} from '../models/Metrics';
+import {Metrics} from '../models/metrics';
 import * as rp from 'request-promise';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
