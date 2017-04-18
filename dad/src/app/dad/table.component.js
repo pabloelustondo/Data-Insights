@@ -13,18 +13,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 /**
  * Created by pablo elustodo on 12/14/2016.
  */
-var core_1 = require('@angular/core');
+var core_1 = require("@angular/core");
 var data_service_1 = require("./data.service");
 var dadmodels_1 = require("./dadmodels");
-var chart_service_1 = require('./chart.service');
-var chart_service_2 = require('./chart.service');
+var chart_service_1 = require("./chart.service");
+var chart_service_2 = require("./chart.service");
 var appconfig_1 = require("./appconfig");
-var filter_1 = require('./filter');
+var filter_1 = require("./filter");
 var _ = require("lodash");
 var DadTable = (function (_super) {
     __extends(DadTable, _super);
     function DadTable() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return DadTable;
 }(dadmodels_1.DadElement));
@@ -38,6 +38,7 @@ var DadTableComponent = (function () {
         this.dadChartConfigsService = dadChartConfigsService;
         this.count = 0;
         this.currentPage = 0;
+        this.addmonitor = false;
     }
     DadTableComponent.prototype.chartData = function (row, col) {
         return JSON.parse(row[col.DataSource]);
@@ -107,13 +108,21 @@ var DadTableComponent = (function () {
             }
         }
     };
+    DadTableComponent.prototype.addMonitor = function () {
+        if (!this.addmonitor) {
+            this.addmonitor = true;
+        }
+        else {
+            this.addmonitor = false;
+        }
+    };
     DadTableComponent.prototype.refresh = function (page) {
         var _this = this;
         this.currentPage = page;
         this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
-        this.dadTableDataService.getElementData(this.table).then(function (data) {
-            _this.allData = data.data;
-        }).catch(function (err) { return console.log(err.toString()); });
+        this.dadTableDataService.getElementData(this.table).subscribe(function (data) {
+            _this.allData = data;
+        }); //.catch(err => console.log(err.toString()));
     };
     DadTableComponent.prototype.tableParameterKeys = function () {
         var keys = Object.keys(this.table.parameters[0]);
@@ -151,26 +160,30 @@ var DadTableComponent = (function () {
             ;
             if (param['id'] !== undefined) {
                 _this.callerId = param['id'];
-                _this.callerElement = _this.dadWidgetConfigsService.getWidgetConfig(_this.callerId);
-                if (!_this.callerElement) {
-                    _this.callerElement = _this.dadChartConfigsService.getChartConfig(_this.callerId);
-                }
-                if (!_this.callerElement) {
-                    _this.callerElement = _this.dadTableConfigsService.getTableConfig(_this.callerId);
-                }
-                if (!tableId)
-                    tableId = _this.callerElement.tableId; //horrible code
-                if (!tableId)
-                    tableId = _this.callerId;
-                _this.table = _this.findTables(tableId);
-                var elementParameters = _this.callerElement.parameters[0];
-                var tableParameters = _this.table.parameters[0];
-                _this.parameterKeys = [];
-                for (var _i = 0, _a = Object.keys(elementParameters); _i < _a.length; _i++) {
-                    var param_1 = _a[_i];
-                    _this.parameterKeys.push(param_1);
-                    tableParameters[param_1] = elementParameters[param_1];
-                }
+                _this.dadWidgetConfigsService.getWidgetConfig(_this.callerId).then(function (widget) {
+                    _this.callerElement = widget;
+                    if (!_this.callerElement) {
+                        _this.dadChartConfigsService.getChartConfig(_this.callerId).then(function (chart) {
+                            _this.callerElement = chart;
+                            if (!_this.callerElement) {
+                                _this.callerElement = _this.dadTableConfigsService.getTableConfig(_this.callerId);
+                            }
+                            if (!tableId)
+                                tableId = _this.callerElement.tableId; //horrible code
+                            if (!tableId)
+                                tableId = _this.callerId;
+                            _this.table = _this.findTables(tableId);
+                            var elementParameters = _this.callerElement.parameters[0];
+                            var tableParameters = _this.table.parameters[0];
+                            _this.parameterKeys = [];
+                            for (var _i = 0, _a = Object.keys(elementParameters); _i < _a.length; _i++) {
+                                var param_1 = _a[_i];
+                                _this.parameterKeys.push(param_1);
+                                tableParameters[param_1] = elementParameters[param_1];
+                            }
+                        });
+                    }
+                });
             }
             console.log("Tables are loading... :" + _this.table.id);
             var filter = new filter_1.DadFilter();
@@ -181,28 +194,28 @@ var DadTableComponent = (function () {
                 _this.addValues();
             }
             if (!appconfig_1.config.testing) {
-                _this.dadTableDataService.getElementData(_this.table).then(function (data) {
-                    _this.allData = data.data;
+                _this.dadTableDataService.getElementData(_this.table).subscribe(function (data) {
+                    _this.allData = data;
                     _this.data = filter.filter(_this.table, _this.allData);
                     _this.preCalculateCharts();
                     _this.addValues();
                     if (_this.data.errorMessage != null) {
                         alert(_this.data.errorMessage);
                     }
-                }).catch(function (err) { return console.log(err.toString()); });
+                }); //.catch(err => console.log(err.toString()));
             }
         });
     };
-    __decorate([
-        core_1.Input()
-    ], DadTableComponent.prototype, "table", void 0);
-    DadTableComponent = __decorate([
-        core_1.Component({
-            selector: 'dadtable',
-            providers: [data_service_1.DadElementDataService, chart_service_1.DadTableConfigsService, chart_service_2.DadWidgetConfigsService, chart_service_1.DadChartConfigsService],
-            template: " \n    <div *ngIf=\"table && data\">\n        <div class=\"col-lg-10\">\n            <div class=\"card\">\n                <div class=\"card-header\">                    \n                    <h4>{{table.name}}</h4>\n                       Number of Rows:{{count}}\n                    <span *ngFor=\"let key of parameterKeys\"> \n                       {{key}}:{{tableParameterValue(key)}}\n                    </span>                         \n                    <form role=\"form\" (submit)=\"search(querystr)\">\n                    <button class=\"glyphicons glyphicons-search\" type=\"submit\"></button>\n                    <input style=\"height:32px;\" id=\"querystr\" type=\"text\" #querystr  placeholder=Search\u2026>\n                    </form>\n                </div>\n                \n                <div class=\"card-block\">\n                    <table class=\"table table-striped\">\n                        <thead>\n                            <tr>\n                                <th style=\"text-align:left;\" *ngFor=\"let col of table.columns\" >{{col.Name}}</th>\n                                \n                            </tr>  \n                        </thead>\n                        \n                        <tbody>\n                            <tr>     \n                               <td *ngFor=\"let col of table.columns\">\n                                <select *ngIf=\"!col.values\" class=\"form-control\">\n                                    <option disabled selected>Select</option>\n                                </select>  \n                                 <select (change)=\"select($event, col)\" *ngIf=\"col.Type==='Number' && col.values && col.Type!=='MiniChart'\" class=\"form-control\" data-dadtype=\"Number\">\n                                    <option value=\"$clear\">Select</option>\n                                    <option style=\"color:black;\" *ngFor=\"let val of col.values\" >{{val}}</option>\n                                </select> \n                                <select (change)=\"select($event, col)\" *ngIf=\"col.Type!=='Number' && col.values && col.Type!=='MiniChart'\" class=\"form-control\">\n                                    <option value=\"$clear\">Select</option>\n                                    <option style=\"color:black;\" *ngFor=\"let val of col.values\" >{{val}}</option>\n                                </select>  \n                               </td>\n                            </tr>\n                        \n                            <tr *ngFor=\"let row of data; let rowindex = index\">\n                                <td style=\"align-content: center;\" *ngFor=\"let col of table.columns; let colindex= index\">\n                                    <span *ngIf=\"!(col.Type === 'MiniChart')\"> {{row[col.DataSource]}}</span>\n                                 \n                                    <span *ngIf=\"col.Type === 'MiniChart' \"> \n                                        <dadchart [chart]=\"miniChartD[rowindex][colindex]\" [data]=\"chartDataD[rowindex][colindex]\"></dadchart>\n                                    </span>   \n                                </td>\n                            </tr>\n                        </tbody>\n                    </table>\n                    <!--<ul class=\"pagination\" style=\"cursor:pointer;\">\n                        <span *ngFor=\"let page of pages\">               \n                            <li  *ngIf=\"page == currentPage\" class=\"page-item active\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}}</a></li>\n                            <li  *ngIf=\"page != currentPage\" class=\"page-item\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}} </a></li>\n                        </span>\n                    </ul>-->\n                </div>\n            </div>\n        </div>\n\n    <!--  END CHART COMPONENT --></div>"
-        })
-    ], DadTableComponent);
     return DadTableComponent;
 }());
+__decorate([
+    core_1.Input()
+], DadTableComponent.prototype, "table");
+DadTableComponent = __decorate([
+    core_1.Component({
+        selector: 'dadtable',
+        providers: [data_service_1.DadElementDataService, chart_service_1.DadTableConfigsService, chart_service_2.DadWidgetConfigsService, chart_service_1.DadChartConfigsService],
+        template: " \n    <div *ngIf=\"table && data\">\n        <div class=\"col-lg-10\">\n            <div class=\"card\">\n                <div class=\"card-header\">                    \n                    <h4>{{table.name}}</h4>\n                       Number of Rows:{{count}}\n                    <span *ngFor=\"let key of parameterKeys\"> \n                       {{key}}:{{tableParameterValue(key)}}\n                    </span>\n                    \n                    <form role=\"form\" (submit)=\"search(querystr)\">\n                    <button class=\"glyphicons glyphicons-search\" type=\"submit\"></button>\n                    <input style=\"height:32px;\" id=\"querystr\" type=\"text\" #querystr  placeholder=Search\u2026>\n                    </form>\n                    \n                </div>\n                \n                <div class=\"card-block\">\n                    <table class=\"table table-striped\">\n                        <thead>\n                            <tr>\n                                <th style=\"text-align:left;\" *ngFor=\"let col of table.columns\" >{{col.Name}}</th>\n                                \n                            </tr>  \n                        </thead>\n                        \n                        <tbody>\n                            <tr>     \n                               <td *ngFor=\"let col of table.columns\">\n                                <select *ngIf=\"!col.values\" class=\"form-control\">\n                                    <option disabled selected>Select</option>\n                                </select>  \n                                 <select (change)=\"select($event, col)\" *ngIf=\"col.Type==='Number' && col.values && col.Type!=='MiniChart'\" class=\"form-control\" data-dadtype=\"Number\">\n                                    <option value=\"$clear\">Select</option>\n                                    <option style=\"color:black;\" *ngFor=\"let val of col.values\" >{{val}}</option>\n                                </select> \n                                <select (change)=\"select($event, col)\" *ngIf=\"col.Type!=='Number' && col.values && col.Type!=='MiniChart'\" class=\"form-control\">\n                                    <option value=\"$clear\">Select</option>\n                                    <option style=\"color:black;\" *ngFor=\"let val of col.values\" >{{val}}</option>\n                                </select>  \n                               </td>\n                            </tr>\n                        \n                            <tr *ngFor=\"let row of data; let rowindex = index\">\n                                <td style=\"align-content: center;\" *ngFor=\"let col of table.columns; let colindex= index\">\n                                    <span *ngIf=\"!(col.Type === 'MiniChart')\"> {{row[col.DataSource]}}</span>\n                                 \n                                    <span *ngIf=\"col.Type === 'MiniChart' \"> \n                                        <dadchart [chart]=\"miniChartD[rowindex][colindex]\" [data]=\"chartDataD[rowindex][colindex]\"></dadchart>\n                                    </span>   \n                                </td>\n                            </tr>\n                        </tbody>\n                    </table>\n                    <!--<ul class=\"pagination\" style=\"cursor:pointer;\">\n                        <span *ngFor=\"let page of pages\">               \n                            <li  *ngIf=\"page == currentPage\" class=\"page-item active\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}}</a></li>\n                            <li  *ngIf=\"page != currentPage\" class=\"page-item\" ><a class=\"page-link\" (click)=refresh(page) >{{page+1}} </a></li>\n                        </span>\n                    </ul>-->\n                </div>\n            </div>\n        </div>\n\n    <!--  END CHART COMPONENT --></div>"
+    })
+], DadTableComponent);
 exports.DadTableComponent = DadTableComponent;

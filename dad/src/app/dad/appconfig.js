@@ -2,17 +2,20 @@
  * Created by pelustondo on 11/23/2016.
  */
 "use strict";
+var appconfig = require("../../../appconfig.json");
 exports.config = {
-    "testing": true,
-    "authorizationserver": 'http://10.0.91.25:3013',
-    //"authorizationserver":'http://localhost:3003',
-    "InitialChargeLevels": "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/Summary/InitialChargeLevels",
-    "DischargeRate": "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/Summary/DischargeRate",
-    "DevicesNotSurvivedShift": "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
-    "ListOfDevicesNotSurvivedShift": "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/List/DevicesDidNotSurviveShift",
-    "BatteryMetrics": { url: "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/getMetrics", method: "post" },
-    "AverageDischargeRate": "https://dev2012r2-sk.sotidev.com:3002/Devices/Battery/Summary/AverageDischargeRate",
-    "ApplicationDeploymentCount": "https://dev2012r2-sk.sotidev.com:3002/Devices/Application/executionTime",
-    "NumberOfInstallations": "https://dev2012r2-sk.sotidev.com:3002/Devices/Application/numberOfInstallations",
-    "GetLocation": "https://localhost:3002/Vehicles/Data/GetLocations "
+    "testing": appconfig.testingmode,
+    "dss_url": appconfig.dss_url,
+    "oda_url": appconfig.oda_url,
+    "dadback_url": appconfig.dadback_url,
+    "authorizationserver": appconfig.dss_url,
+    "InitialChargeLevels": appconfig.oda_url + "/Devices/Battery/Summary/InitialChargeLevels",
+    "DischargeRate": appconfig.oda_url + "/Devices/Battery/Summary/DischargeRate",
+    "DevicesNotSurvivedShift": appconfig.oda_url + "/Devices/Battery/Summary/countOfDevicesDidNotSurviveShift",
+    "ListOfDevicesNotSurvivedShift": appconfig.oda_url + "/Devices/Battery/List/DevicesDidNotSurviveShift",
+    "BatteryMetrics": { url: appconfig.oda_url + "/Devices/Battery/getMetrics", method: "post" },
+    "AverageDischargeRate": appconfig.oda_url + "/Devices/Battery/Summary/AverageDischargeRate",
+    "ApplicationDeploymentCount": appconfig.oda_url + "/Devices/Application/executionTime",
+    "NumberOfInstallations": appconfig.oda_url + "/Devices/Application/numberOfInstallations",
+    "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations"
 };

@@ -62,7 +62,7 @@ describe('ReadExpression', () => {
         element.newFilter.readExpression = "id===1049";
         let search = new DadSearch();
         let result = search.readExpression(element, element.data);
-        expect(result[0].vehicle[0].id).toBe("1049");
+        expect(result[0].id).toBe("1049");
     });
 
     it('key gets its value 2', () => {
@@ -73,7 +73,16 @@ describe('ReadExpression', () => {
         let result = search.readExpression(element, element.data);
         expect(result[0].routeTag).toBe("32");
     });
-
+/*
+    it('key gets its value 2', () => {
+        let element: DadElement = CHARTS[6];
+        element.newFilter = {};
+        element.newFilter.readExpression = "routeTag===32" || "routeTag===60";
+        let search = new DadSearch();
+        let result = search.readExpression(element, element.data);
+        expect(result[0].length).toBe("32");
+    });
+    */
 });
 /*
 describe('AlertExpression', () => {

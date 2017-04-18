@@ -1,5 +1,5 @@
 {
   "testingmode":"false",
   "port": 4201,
-  "oda_url":"http://localhost:8000"
+  "ddb_url":"http://localhost:8000"
 }

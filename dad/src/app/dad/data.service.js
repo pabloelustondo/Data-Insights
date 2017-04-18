@@ -8,18 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 /**
  * Created by pabloelustondo on 2016-11-21.
  */
-var core_1 = require('@angular/core');
-var http_1 = require('@angular/http');
-require('rxjs/add/operator/toPromise');
+var core_1 = require("@angular/core");
+var http_1 = require("@angular/http");
 var appconfig_1 = require("./appconfig");
-require('rxjs/add/operator/map');
+require("rxjs/add/operator/map");
+require("rxjs/add/operator/toPromise");
+require("rxjs/add/operator/catch");
+var Rx_1 = require("rxjs/Rx");
 var DadElementDataService = (function () {
     function DadElementDataService(http, router) {
         this.http = http;
         this.router = router;
     }
     DadElementDataService.prototype.getElementData = function (element) {
-        var _this = this;
         console.log("we got " + appconfig_1.config["oda_dev_url"]);
         var params = new http_1.URLSearchParams();
         var parameters = element.parameters[0];
@@ -31,27 +32,29 @@ var DadElementDataService = (function () {
         var token = localStorage.getItem('id_token');
         var headers = new http_1.Headers({ 'Content-Type': 'application/json', 'x-access-token': token });
         var data = { metricName: element.metricName, predicates: element.predicates, parameters: element.parameters[0] };
+        var findData = function (data) {
+            if (element.dataElement)
+                return data[element.dataElement];
+            return data.data;
+        };
+        if (appconfig_1.config.testing || appconfig_1.config.oda_url == "")
+            return Rx_1.Observable.of(element.data);
         if (endpoint0.method === "post") {
-            return this.http.post(endpoint0.url, data, headers).toPromise().then(function (response) { return JSON.parse(response['_body']); }).catch(function (err) {
-                console.log("we got " + err.json());
-            });
+            var bodyString = JSON.stringify(['_body']);
+            return this.http.post(endpoint0.url, data, headers)
+                .map(function (res) { return findData(res.json()); })["catch"](function (error) { return Rx_1.Observable["throw"](error.json().error || 'Server error'); });
         }
         else {
             return this.http.get(appconfig_1.config[element.endpoint], {
                 search: params,
                 headers: headers
-            }).toPromise().then(function (response) { return JSON.parse(response['_body']); }).catch(function (err) {
-                if (err.status === 500) {
-                    localStorage.removeItem('id_token');
-                    _this.router.navigate(['/dad']);
-                }
-                console.log("we got " + err.json());
-            });
+            })
+                .map(function (res) { return findData(res.json()); })["catch"](function (error) { return Rx_1.Observable["throw"](error.json().error || 'Server error'); });
         }
     };
-    DadElementDataService = __decorate([
-        core_1.Injectable()
-    ], DadElementDataService);
     return DadElementDataService;
 }());
+DadElementDataService = __decorate([
+    core_1.Injectable()
+], DadElementDataService);
 exports.DadElementDataService = DadElementDataService;

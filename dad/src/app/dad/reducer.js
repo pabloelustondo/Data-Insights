@@ -38,10 +38,7 @@ var DadReducer = (function () {
                     map[dimensionPoint].push(data[i]);
                 }
             }
-            //reduce
-            //Reduces collection to a value which is the accumulated result of running each element in collection thru iteratee, where each successive invocation is supplied the return value of the previous. If accumulator is not given, the first element of collection is used as the initial value. The iteratee is invoked with four arguments:
-            //    (accumulator, value, index|key, collection).
-            var _loop_1 = function(key) {
+            var _loop_1 = function (key) {
                 var collection = map[key];
                 var initialValue = 0; // need to generalize this count and sum is fine...but.
                 var result = initialValue;
@@ -64,6 +61,9 @@ var DadReducer = (function () {
                 newElement[config.b] = key;
                 newData.push(newElement);
             };
+            //reduce
+            //Reduces collection to a value which is the accumulated result of running each element in collection thru iteratee, where each successive invocation is supplied the return value of the previous. If accumulator is not given, the first element of collection is used as the initial value. The iteratee is invoked with four arguments:
+            //    (accumulator, value, index|key, collection).
             for (var key in map) {
                 _loop_1(key);
             }

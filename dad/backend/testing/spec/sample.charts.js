@@ -1,6 +1,4 @@
-"use strict";
-//new version without enum types
-exports.CHARTS = [
+var CHARTS = [
     { id: "chartbar",
         name: 'Average Battery Discharge Rate',
         type: "bar",

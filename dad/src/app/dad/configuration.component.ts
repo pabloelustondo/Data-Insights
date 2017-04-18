@@ -7,6 +7,10 @@ import { DadWidget } from './widget.component';
 import { DadTable } from './table.component';
 import { DadPage } from './page.component';
 import { FormsModule } from '@angular/forms';
+import { CHARTS } from './sample.charts';
+import { WIDGETS } from './sample.widgets';
+import { TABLES } from './sample.tables';
+import { PAGES } from './sample.page';
 import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService, DadPageConfigsService } from './chart.service';
 
 declare var d3, c3: any;
@@ -237,6 +241,8 @@ export class DadConfigComponent implements  OnInit{
       this.dadWidgetConfigsService.save(this.widgets);
       this.dadTableConfigsService.save(this.tables);
       this.dirty=false; //mh... do it better
+        //I now this is weird...why only the charts... well beceuase we are going to refactor to only have on confioguratio service
+        this.dadChartConfigsService.saveUserConfigurationToDdb();
     }
 
   resetConfiguration(){
@@ -244,10 +250,20 @@ export class DadConfigComponent implements  OnInit{
     this.dadWidgetConfigsService.clearLocalCopy();
     this.dadTableConfigsService.clearLocalCopy();
     this.dadPageConfigsService.clearLocalCopy();
-    this.charts = this.dadChartConfigsService.getChartConfigs();
-    this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
-    this.tables = this.dadTableConfigsService.getTableConfigs();
-    this.pages = this.dadPageConfigsService.getPageConfigs();
+
+    this.charts = CHARTS;
+    this.widgets = WIDGETS;
+    this.tables = TABLES;
+    this.pages = PAGES;
+
+      this.dadChartConfigsService.save(CHARTS);
+      this.dadWidgetConfigsService.save(WIDGETS);
+      this.dadTableConfigsService.save(TABLES);
+      this.dadPageConfigsService.save(PAGES);
+
+      //I now this is weird...why only the charts... well beceuase we are going to refactor to only have on confioguratio service
+      this.dadChartConfigsService.saveUserConfigurationToDdb();
+
   }
 
     deleteChart(chart:DadChart){
@@ -269,8 +285,8 @@ export class DadConfigComponent implements  OnInit{
     }
 
     ngOnInit() {
-        this.charts = this.dadChartConfigsService.getChartConfigs();
-        this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
+        this.dadChartConfigsService.getChartConfigs().then((charts) => {this.charts = charts;});
+        this.dadWidgetConfigsService.getWidgetConfigs().then((widgets) => {this.widgets = widgets;});
         this.tables = this.dadTableConfigsService.getTableConfigs();
     }
 

@@ -30,9 +30,10 @@ export class DadBigChartComponent {
       this.subscription = this.activatedRoute.params.subscribe(
           (param: any) => {
               let chartid = param['id'];
-              this.chart = this.dadChartConfigsService.getChartConfig(chartid);
-              this.chart.big = true;
-              console.log("Charts are loading... :" + this.chart.id);
+              this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
+                  this.chart.big = true;
+                  console.log("Charts are loading... :" + this.chart.id);
+              });
           });
   }
 
