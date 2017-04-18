@@ -67,6 +67,7 @@ export class Login {
     });
   }
 
+  /*
   changeMethod( v ) {
     console.log( v );
     if (v === 'mcuser') {
@@ -75,7 +76,7 @@ export class Login {
       this.manualLogin = true;
     }
 
-  }
+  }*/
 
   login(event, loginmethod, domainid, username, password) {
 
@@ -84,7 +85,7 @@ export class Login {
       event.preventDefault();
     }
 
-    if (loginmethod.value === 'mcuser' && !this.code) {
+    if (!this.code) {
 
       // we need to get the url for the domain id entered,
       // which by the way is a good way to verify the domain id
