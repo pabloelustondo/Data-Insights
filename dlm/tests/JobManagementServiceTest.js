@@ -72,7 +72,7 @@ describe("Test external API service calls", function() {
             var req = {
                 attrs : {
                     data: {
-                        'url': 'http://webservices.nextbus.com/services/publicJSONFeed?command=vehicleLocations&a=ttc&r=32&t=1488819607',
+                        'url': 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=ttc&r=32&t=1488819607',
                         'method': 'GET',
                         'dataSourceId': 'varun dave test data source',
                         'interval': 1,

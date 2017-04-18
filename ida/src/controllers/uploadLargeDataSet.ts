@@ -92,13 +92,13 @@ export class UploadLargeDataSetController {
             let awsResponseCall = function (awsP: any) {
                 let promise = new Promise(function (resolve, reject) {
                     s3instance.bucket = config['aws-s3bucket']  + '/' + Math.floor(Math.random() * 15 ) + 1 ;
-                    let uploadParams = {Bucket: config['aws-s3bucket'] +  '/dlmTest', Key: '', Body: ''};
+                    let uploadParams = {Bucket: config['aws-s3bucket'] +  '/cb-31-Test/' + awsP.tenantid, Key: '', Body: ''};
                     let xyz = {
                         idaMetadata : {
                             referer : 'sampleRequestOriginInfo',
                             agentId:  awsP.agentid,
                             tenantId: awsP.tenantid,
-                            timeStamp: (new Date()).toISOString,
+                            timeStamp: (new Date()).toISOString(),
                         },
                         clientData : express.body
                     };
@@ -147,9 +147,13 @@ export class UploadLargeDataSetController {
 
             return p;
         } else {
+            const user: any = {
+                createdAt: new Date(),
+                metadata: 'ERROR',
+                data: 'Invalid Token or missing token'
+            };
+          // return user;
             throw new Error('invalid auth token');
         }
-
     }
-
 }

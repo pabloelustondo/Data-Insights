@@ -10,7 +10,7 @@
         "spec": ">=2.4.2 <3.0.0",
         "type": "range"
       },
-      "/Users/pabloelustondo/WORK/CustomerBI/dss/backend"
+      "/Users/vdave/WebstormProjects/Untitled/CustomerBI/dss/backend"
     ]
   ],
   "_from": "lodash@>=2.4.2 <3.0.0",
@@ -40,7 +40,7 @@
   "_shasum": "fadd834b9683073da179b3eae6d9c0d15053f73e",
   "_shrinkwrap": null,
   "_spec": "lodash@^2.4.2",
-  "_where": "/Users/pabloelustondo/WORK/CustomerBI/dss/backend",
+  "_where": "/Users/vdave/WebstormProjects/Untitled/CustomerBI/dss/backend",
   "author": {
     "name": "John-David Dalton",
     "email": "john.david.dalton@gmail.com",
