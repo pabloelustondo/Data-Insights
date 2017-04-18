@@ -2,7 +2,7 @@
  * Created by 6pablo elustondo cd 201
  */
 import { DadWidget, DadWidgetType} from './widget.component';
-import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType} from "./dadmodels"
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadAlert, DadAlertType, DadFilter, DadFilterType, DadDimension, DadDimensionType} from "./dadmodels"
 import {TABLES} from './sample.tables'
 
 export const WIDGETS: DadWidget[] = [
@@ -12,6 +12,7 @@ export const WIDGETS: DadWidget[] = [
     tableId: 'table1',
     endpoint:'DevicesNotSurvivedShift',
     drillTo: 'chartbardrill',
+    intervalTime: 5000,
     data:[{
       CountDevicesNotLastedShift:50,
       CountTotalActiveDevices: 100,
@@ -71,6 +72,7 @@ export const WIDGETS: DadWidget[] = [
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
     drillTo: 'chartpiedrill',
+    intervalTime: 5000,
     data:[{
       CountDevicesNotLastedShift:60,
       CountTotalActiveDevices: 120,
@@ -129,6 +131,7 @@ export const WIDGETS: DadWidget[] = [
     tableId: "table1",
     endpoint:'DevicesNotSurvivedShift',
     drillTo: 'chartpiedrill',
+    intervalTime: 5000,
     data:[{
       CountDevicesNotLastedShift:50,
       CountTotalActiveDevices: 90,
@@ -193,6 +196,7 @@ export const WIDGETS: DadWidget[] = [
     tableId: 'table1',
     endpoint:'BatteryMetrics',
     drillTo: 'chartpiedrill',
+    intervalTime: 5000,
     data:[{
       CountDevicesNotLastedShift:200,
       CountDevicesNotFullyCharged: 80,
@@ -246,6 +250,7 @@ export const WIDGETS: DadWidget[] = [
     name:'Application Count by Number of Devices',
     type: 1,
     endpoint: "ApplicationDeploymentCount",
+    intervalTime: 5000,
     data: [
       {
         "ExecutionTimeMinutes": 41628,
@@ -298,6 +303,7 @@ export const WIDGETS: DadWidget[] = [
     name:'Application Popularity',
     type: 1,
     endpoint: "NumberOfInstallations",
+    intervalTime: 5000,
     data: [
       {
         "NumberOfInstallations": 2923,

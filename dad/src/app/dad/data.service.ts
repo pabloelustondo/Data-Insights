@@ -34,10 +34,17 @@ export class DadElementDataService {
     let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : token});
     let data = {metricName:element.metricName, predicates:element.predicates, parameters:element.parameters[0]};
 
+    let findData = function(data){
+        if (element.dataElement) return data.data[element.dataElement];
+        return data.data;
+      };
+
+      if (config.testing) return Observable.of(element.data);
+
       if(endpoint0.method === "post"){
           let bodyString = JSON.stringify(['_body']);
           return this.http.post(endpoint0.url, data, headers)
-                          .map((res:Response) => res.json())
+                          .map((res:Response) => findData(res.json()))
                           .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
       }
       else{
@@ -45,10 +52,9 @@ export class DadElementDataService {
             search:params,
             headers:headers
           })
-                          .map((res:Response) => res.json())
+                          .map((res:Response) => findData(res.json()))
                           .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
       }
-
   }
 }
 

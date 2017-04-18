@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http } from '@angular/http';
 import { contentHeaders } from '../common/headers';
+let appconfig = require("../../appconfig.json");
 
 
-const backendUrl = 'https://localhost:3004';
+const backendUrl = appconfig.dssback_url;
 const styles   = require('./login.css');
 const template = require('./login.html');
 

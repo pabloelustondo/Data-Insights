@@ -10,7 +10,7 @@
   "aws-s3bucket": "da-s3-bucket/DataExchange",
   "aws-accessKeyFileLocation": "C:/IDA_accessKeyID.txt",
   "aws-secretKeyFileLocation": "C:/IDA_secretAccessKey.txt",
-  "ddb-accessKey" : "C:/AccessKey",
+  "ddb-accessKey" : "C:/accessKey",
   "https-key-location" : "C:/63663247-localhost_3002.key",
   "https-cert-location" : "C:/63663247-localhost_3002.cert",
   "mcdp-secret": "Data Analytics Team Rocks!",

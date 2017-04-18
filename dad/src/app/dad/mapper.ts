@@ -5,6 +5,9 @@ import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTransformer } from "./transformer";
 import {DadReducer } from "./reducer";
+import {DadFilter} from "./filter";
+import {DadSearch} from "./search";
+import { DadElement } from "./dadmodels";
 
 export class ChartData{
   Dimension = [];
@@ -16,6 +19,17 @@ export class Mapper{
   var chartData = new ChartData();
   var dataForChart:any;
   var index=0;
+
+  if(config.newFilter){
+    let filter = new DadFilter();
+    data = filter.filter(config, data);
+  }
+
+    if(config.alert){
+      let search = new DadSearch();
+      let alertResult = search.alertExpression(config, data);
+      if (alertResult) alert("warning warning : " + config.alert.expression);
+    }
 
   if (config.reduction){
     let reducer = new DadReducer();
@@ -42,7 +56,7 @@ export class Mapper{
       chartData.Metric.push('lon');
       chartData.Dimension.push('lat');
 
-      let mapData = data[config.dataElement];
+      let mapData = data;
       mapData.forEach(function (e) {
         chartData.Dimension.push(e['lat']);
         chartData.Metric.push(e['lon']);

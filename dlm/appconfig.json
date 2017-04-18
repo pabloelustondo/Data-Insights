@@ -7,7 +7,7 @@
   "ida_url_method" : "POST",
   "api_service_job_name" : "api_service_job",
   "secret": "abcdefg9876543210",
-  "ddb-accessKey" : "C:/AccessKey",
+  "ddb-accessKey" : "C:/accessKey",
   "nextBusSourceType" : "NextBus",
   "tempTokenExpiryTime" : 15
 }

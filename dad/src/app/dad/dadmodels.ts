@@ -28,9 +28,17 @@ export class DadElement {
   transformations?: any[];
   reduction?:any;
   reductions?:any[];
+  newFilter?: any;
   filter?:any;
+  filters?: DadFilter[];
+  alert?:any;
+  alerts?: DadAlert[];
   search?:string;
   dataElement?: string;
+  intervalTime?: number;
+  intervalRefreshOption?: boolean = false;
+  readExpression?: any;
+  alertExpression?: string;
 }
 
 export class DadDateRange{
@@ -59,7 +67,6 @@ export enum DadMetricType {
   Number, String, Date, Time
 }
 
-
 export type MetricOperator = 'count' | 'sum' | 'avg';
 
 export interface DadMetric{
@@ -73,9 +80,16 @@ export interface DadMetric{
   op?:MetricOperator
 }
 
-
 export enum DadDimensionType {
   Number, String, MiniChart
+}
+
+export enum DadFilterType {
+  Number, String
+}
+
+export enum DadAlertType {
+  Number, String
 }
 
 export interface DadDimension{
@@ -84,6 +98,24 @@ export interface DadDimension{
   DataSource?: string,
   Value?:any,
   attribute?:string,
+  name?:string
+}
+
+export interface DadFilter{
+  Type?: DadFilterType,
+  Name?: string,
+  DataSource?: string,
+  Value?:any,
+  attribute?:string,
+  name?:string
+}
+
+export interface DadAlert{
+  Type?: DadAlertType,
+  Name?: string,
+  DataSource?: string,
+  Value?:any,
+  expression?:string,
   name?:string
 }
 

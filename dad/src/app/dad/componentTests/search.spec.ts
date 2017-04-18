@@ -5,6 +5,7 @@ import { DadSearch} from "../search";
 import { TABLES} from "../sample.tables"
 import {DadTable} from "../table.component";
 import {DadElement} from "../dadmodels";
+import { CHARTS } from "../sample.charts";
 
 describe('DadSearch', () => {
     beforeEach(() => {
@@ -33,5 +34,81 @@ describe('DadSearch', () => {
         expect(result).toBeDefined();
         expect(result.length).toBe(8); //use better test
     });
+});
+
+describe('ReadExpression', () => {
+
+    it('should read the expression', () => {
+        let element: DadElement = CHARTS[6];
+        element.newFilter = {};
+        element.newFilter.readExpression = "true";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data);
+        expect(result.length).toBe(element.data.length);
+    });
+
+    it('should return empty list', () => {
+        let element: DadElement = CHARTS[6];
+        element.newFilter = {};
+        element.newFilter.readExpression = "false";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data);
+        expect(result.length).toBe(0);
+    });
+
+    it('key gets its value', () => {
+        let element: DadElement = CHARTS[6];
+        element.newFilter = {};
+        element.newFilter.readExpression = "id===1049";
+        let search = new DadSearch();
+        let result = search.readExpression(element, element.data);
+        expect(result[0].vehicle[0].id).toBe("1049");
+    });
+
+    it('key gets its value 2', () => {
+        let element: DadElement = CHARTS[6];
+        element.newFilter = {};
+        element.newFilter.readExpression = "routeTag===32";
+        let search = new DadSearch();
+        let result = search.readExpression(element, element.data);
+        expect(result[0].routeTag).toBe("32");
+    });
 
 });
+/*
+describe('AlertExpression', () => {
+
+    it('should read the expression', () => {
+        let element: DadElement = CHARTS[6];
+        element.alertExpression = "true";
+        let search = new DadSearch();
+        var result = search.alertExpression(element, element.data);
+        expect(result).toBe(true);
+    });
+});
+
+    it('should return empty list', () => {
+        let element: DadElement = CHARTS[6];
+        element.alertExpression = "false";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data);
+        expect(result.length).toBe(0);
+    });
+
+    it('key gets its value', () => {
+        let element: DadElement = CHARTS[6];
+        element.readExpression = "id===1049";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data);
+        expect(result[0].id).toBe("1049");
+    });
+
+    it('key gets its value 2', () => {
+        let element: DadElement = CHARTS[6];
+        element.readExpression = "routeTag===32";
+        let search = new DadSearch();
+        var result = search.readExpression(element, element.data.vehicle);
+        expect(result[0].routeTag).toBe("32");
+    });
+
+});*/

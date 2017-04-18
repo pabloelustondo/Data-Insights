@@ -32,10 +32,6 @@ let config = require('../appconfig.json');
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
-let httpsOptions = {
-    key: fs.readFileSync(config['https-key-location']),
-    cert: fs.readFileSync(config['https-cert-location'])
-};
 
 exports.app = app;
 
@@ -85,7 +81,7 @@ RegisterRoutes(app);
 app.use(logger);
 /* tslint:disable-next-line */
 
-let httpsServer = https.createServer(httpsOptions, app);
+
 // app.use(expressWinston.errorLogger({
 //     transports: [
 //         new winston.transports.Console({
@@ -98,9 +94,25 @@ let httpsServer = https.createServer(httpsOptions, app);
 // }));
 // console.log('Starting server.. http://localhost:' + config.port + '/docs');
 
-httpsServer.listen(config.port, function (){
-    console.log('Starting https server.. https://localhost:' + config.port + '/docs');
-});
+if (config.useSSL) {
+    let httpsOptions = {
+        key: fs.readFileSync(config['https-key-location']),
+        cert: fs.readFileSync(config['https-cert-location'])
+    };
+    let httpsServer = https.createServer(httpsOptions, app);
+    httpsServer.listen(config.port, function (){
+        console.log('Starting https server.. https://localhost:' + config.port + '/docs');
+    });
+} else {
+    let httpOptions = {
+    };
+
+    let httpServer = https.createServer(httpOptions, app);
+    httpServer.listen(config.port, function (){
+        console.log('Starting http server.. https://localhost:' + config.port + '/docs');
+    });
+
+}
 
 
 module.exports = logger;

@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { contentHeaders } from '../common/headers';
+let appconfig = require("../../appconfig.json");
 
-const backendUrl = 'https://localhost:3004';
+const backendUrl = appconfig.dssback_url;
 const styles   = require('./signup.css');
 const template = require('./signup.html');
 

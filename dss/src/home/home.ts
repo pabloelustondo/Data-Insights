@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { AuthHttp } from 'angular2-jwt';
 import { contentHeaders } from '../common/headers';
 import * as FileSaver from 'file-saver';
+let appconfig = require("../../appconfig.json");
 
 // import { DadTable } from '../../../dad3/src/app/dad/table.component';
 
-const backendUrl = 'https://localhost:3004';
+const backendUrl = appconfig.dssback_url;
 const styles = require('./home.css');
 const template = require('./home.html');
 

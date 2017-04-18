@@ -4,7 +4,7 @@ import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { Router, ActivatedRoute } from "@angular/router";
-import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
+import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadAlert, DadAlertType, DadFilter, DadFilterType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
 import { config } from "./appconfig";
 
 export enum DadWidgetType { OneNumber, Chart };
@@ -28,7 +28,8 @@ export class DadWidget extends DadElement{
                 <div class="btn-group float-xs-right" dropdown>
                     <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
                         <i class="icon-settings"></i>
-                    </button>                      
+                    </button>   
+
                     <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
@@ -37,6 +38,12 @@ export class DadWidget extends DadElement{
                     </div>
                 </div>
                 
+                <label style="margin-right: 10px;" class="switch switch-text switch-pill switch-success pull-right pb-1">
+                    <input type="checkbox" class="switch-input" (click)="onRealDataMonitoring()">
+                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                    <span class="switch-handle"></span>
+                </label>
+ 
                <div *ngIf="widget.type===0">
                 <div [id]="widget.id + '_0_name'" class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
                 <h3 *ngIf="data" class="mb-0">
@@ -74,7 +81,6 @@ export class DadWidget extends DadElement{
                 </div> 
                     <dadparameters [element]="widget" [editMode]="editMode" [onRefresh]="refreshMode" (parametersChanged)="changeData()"></dadparameters>   
                 </div>
-                             
 
                 <div *ngIf="data && widget.type===1" class="card-title m-l-5">{{widget.name}}</div>
                 <div *ngIf="data && widget.type===1" class="content card card-secondary"> 
@@ -102,6 +108,7 @@ export class DadWidgetComponent implements OnInit {
   editMode:boolean = false;
   moreDetails:boolean = false;
   refreshMode:boolean = false;
+  intervalId: any;
 
     constructor(private dadWidgetDataService: DadElementDataService,
                 private dadWidgetConfigsService: DadWidgetConfigsService,
@@ -138,7 +145,7 @@ export class DadWidgetComponent implements OnInit {
     changeData() {
     this.dadWidgetDataService.getElementData(this.widget).subscribe(
       data => {
-        this.data = data.data;
+        this.data = data;
           this.fixNullsInMetrics();
       }
     );
@@ -160,7 +167,37 @@ export class DadWidgetComponent implements OnInit {
         if (this.data[0][this.widget.metrics[i].DataSource] === null) this.data[0][this.widget.metrics[i].DataSource] = 0;
     }
 
-  ngOnInit() {
+    realDataMonitoring() {
+        if (this.widget.intervalRefreshOption === true) {
+            let timeInterval = this.widget.intervalTime;
+            this.intervalId = setInterval(() => {
+                this.changeWidgetData();
+            }, timeInterval);
+        }
+    }
+
+    onRealDataMonitoring(): void {
+        this.widget.intervalRefreshOption = !this.widget.intervalRefreshOption;
+        this.realDataMonitoring();
+        if(this.widget.intervalRefreshOption===false){this.ngOnDestroy()}
+    }
+
+    ngOnDestroy() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
+    }
+
+    changeWidgetData() {
+        this.dadWidgetDataService.getElementData(this.widget).subscribe(
+            data => {
+                this.data = data;
+            }
+        )
+    }
+
+
+    ngOnInit() {
     console.log("Widgets are loading... :" + this.widget.id);
      // this.mapParameters2ui();
 
@@ -171,13 +208,14 @@ export class DadWidgetComponent implements OnInit {
       if (!config.testing) {
           this.dadWidgetDataService.getElementData(this.widget).subscribe(
               data => {
-                  this.data = data.data;
+                  this.data = data;
                   if (this.data.errorMessage != null) {
                       alert(this.data.errorMessage);
                   }
                   this.fixNullsInMetrics();
               }
-          )//.catch(err => console.log(err.toString()));
+          )
       }
+      this.realDataMonitoring();
   }
 }

@@ -15,11 +15,11 @@
       <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID" required>
     </div>
 
-      <div  *ngIf="manualLogin" class="form-group">
+      <div [hidden]="!manualLogin" class="form-group">
         <label  for="username">Username</label>
         <input type="text" #username class="form-control" id="username" placeholder="Username">
       </div>
-      <div  *ngIf="manualLogin" class="form-group">
+      <div  [hidden]="!manualLogin" class="form-group">
         <label for="password">Password</label>
         <input type="password" #password class="form-control" id="password" placeholder="Password">
       </div>

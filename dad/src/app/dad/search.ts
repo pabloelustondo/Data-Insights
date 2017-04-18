@@ -13,7 +13,35 @@ export class DadSearch{
             let s = JSON.stringify(d);
             if (s.indexOf(element.search) > -1) result.push(d);
         });
-
         return result;
     }
-}
+
+    readExpression(element:DadElement, data:any[]): any[] {
+        if(!element.newFilter.readExpression) return data;
+
+        let result = [];
+        data.forEach(function(d){
+            let ss = element.newFilter.readExpression;
+            Object.keys(d).forEach( function(key){
+                let value = d[key];
+                if(typeof value=="number") {
+                    ss = ss.replace(key, value);
+                }
+                if(typeof value=="string"){
+                    ss = ss.replace(key, "\'" + value + "\'");
+                }
+            });
+            if (eval(ss)) result.push(d);
+        });
+        return result;
+    }
+
+    alertExpression(element:DadElement, data:any[]): boolean {
+        if(!element.alert.expression) return false;
+
+        let ss = element.alert.expression;
+        let ds = data;
+        return eval(ss);
+
+        };
+    }

@@ -11,9 +11,42 @@ import { WIDGETS } from "./sample.widgets";
 import { TABLES } from "./sample.tables";
 import { PAGES } from './sample.page';
 import * as _ from "lodash";
+import { Headers, Http,URLSearchParams, Response, RequestOptions } from '@angular/http';
+import { config } from "./appconfig";
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class DadChartConfigsService {
+
+    constructor(private http: Http) { }
+
+    public save2ddb(){
+      //this method will save the current configuration in local storage to the server
+      let charts = localStorage.getItem("chartdata");
+      let widgets = localStorage.getItem("widgetdata");
+      let tables = localStorage.getItem("tabledata");
+      let pages = localStorage.getItem("pagedata");
+      let timeStamp = Date.now().toString();
+      let daduserconfig = {
+        userid: 'dadtenant-daduser',
+        username: 'daduser',
+        tenantid: 'dadtenant',
+        config: { timeStamp: timeStamp,
+        charts: charts}
+      }
+
+      let token = localStorage.getItem('id_token');
+      let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : token});
+      let url = config.dadback_url + "/daduser/"+ daduserconfig.userid;
+      this.http.post(url, daduserconfig, headers).toPromise().then(
+          (res:Response) => {
+            console.log('configuration saved' + JSON.stringify(res));
+          }).catch(
+          (error) =>{
+            console.log('configuration failed to save')
+          }
+         );
+    }
 
     public clearLocalCopy(){
       localStorage.removeItem("chartdata");
@@ -22,6 +55,7 @@ export class DadChartConfigsService {
   public save(charts:DadChart[] ){
     let charts_string = JSON.stringify(charts);
     localStorage.setItem("chartdata",charts_string);
+    this.save2ddb();
   }
 
   public saveOne(chart:DadChart ){

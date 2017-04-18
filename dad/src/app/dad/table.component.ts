@@ -40,11 +40,13 @@ export class DadTable extends DadElement{
                        Number of Rows:{{count}}
                     <span *ngFor="let key of parameterKeys"> 
                        {{key}}:{{tableParameterValue(key)}}
-                    </span>                         
+                    </span>
+                    
                     <form role="form" (submit)="search(querystr)">
                     <button class="glyphicons glyphicons-search" type="submit"></button>
                     <input style="height:32px;" id="querystr" type="text" #querystr  placeholder=Search…>
                     </form>
+                    
                 </div>
                 
                 <div class="card-block">
@@ -114,6 +116,11 @@ export class DadTableComponent implements OnInit {
   parameterKeys: any[];
   miniChartD: any[];
   chartDataD: any[];
+  addmonitor: boolean = false;
+  searchTerm: any;
+  items: any;
+  itemsCopy:any;
+
 
   constructor(private dadTableDataService: DadElementDataService,
               private dadTableConfigsService: DadTableConfigsService,
@@ -194,13 +201,21 @@ export class DadTableComponent implements OnInit {
       }
   }
 
+    addMonitor():void {
+        if (!this.addmonitor) {
+            this.addmonitor = true;
+        } else {
+            this.addmonitor = false;
+        }
+    }
+
   refresh(page:number){
 
     this.currentPage = page;
     this.table.parameters[0].rowsSkip = page * this.table.parameters[0].rowsTake;
     this.dadTableDataService.getElementData(this.table).subscribe(
         data => {
-          this.allData = data.data;
+          this.allData = data;
 
         }
     )//.catch(err => console.log(err.toString()));
@@ -288,7 +303,7 @@ export class DadTableComponent implements OnInit {
             if (!config.testing) {
                 this.dadTableDataService.getElementData(this.table).subscribe(
                     data => {
-                        this.allData = data.data;
+                        this.allData = data;
                         this.data = filter.filter(this.table, this.allData);
                         this.preCalculateCharts();
                         this.addValues();

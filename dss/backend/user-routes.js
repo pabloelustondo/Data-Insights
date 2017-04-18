@@ -1,6 +1,7 @@
 var express = require('express'),
     _       = require('lodash'),
     config  = require('./config'),
+    appconfig  = require('./appconfig'),
     jwt     = require('jsonwebtoken');
 
 var  ErrorMsg = require('./error-messages');
@@ -17,11 +18,15 @@ var app = module.exports = express.Router();
 
 var SotiAdminAccount =
   {
-    accountid: "soti",
+    accountid: "test",
     mcurl: "http://localhost:3004",
     apikey:"112233445511223344",
-    domainid: "soti",
-    username: "Administrator"
+    domainid: "test",
+    username: "admin",
+    tenantId: "test",
+    companyname: "test",
+    companyaddress: "companyAddress",
+    companyphone: "4161111999"
   };
 
 var MyMCAccount =
@@ -79,7 +84,7 @@ app.post('/resetCredentials/:agentId', function (req, res) {
         var newActivationKey = uuid.v4();
         request({
           rejectUnauthorized: false,
-          url: config.ddbEndpointUrl + "/updateDataSourceCredentials",
+          url: appconfig.ddb_url + "/updateDataSourceCredentials",
           method: 'post', //Specify the method
           headers: { //We can define headers too
             'Content-Type': 'application/json'
@@ -140,7 +145,7 @@ app.get('/getAgentToken', function(req, res) {
 
         request({
           rejectUnauthorized: false,
-          url: config.ddbEndpointUrl + "/verifyDataSource",
+          url: appconfig.ddb_url + "/verifyDataSource",
           method: 'GET', //Specify the method
           headers: { //We can define headers too
             'Content-Type': 'application/json'
@@ -202,7 +207,7 @@ app.get('/sourceCredentials/:agentId', function (req, res) {
       if (success) {
         request({
           rejectUnauthorized: false,
-          url: config.ddbEndpointUrl + "/dataSource/"+ agentId,
+          url: appconfig.ddb_url + "/dataSource/"+ agentId,
           method: 'GET', //Specify the method
           headers: { //We can define headers too
             'Content-Type': 'application/json'
@@ -302,7 +307,7 @@ function registerDataSourceHelper (dataSource, callback) {
 
   request({
     rejectUnauthorized: false,
-    url: config.ddbEndpointUrl + "/insertNewDataSource",
+    url: appconfig.ddb_url + "/insertNewDataSource",
     json : dataSource,
     method: 'POST', //Specify the method
     headers: { //We can define headers too
@@ -410,7 +415,7 @@ app.get('/getDataSources', function(req, res) {
          request({
            rejectUnauthorized: false,
            rejectUnauthorized: false,
-           url: config.ddbEndpointUrl + "/dataSources/"+ success.tenantId,
+           url: appconfig.ddb_url + "/dataSources/"+ success.tenantId,
            method: 'GET', //Specify the method
            headers: { //We can define headers too
              'Content-Type': 'application/json'
@@ -475,8 +480,7 @@ app.post('/enrollments', function(req, res) {
   try {
     request({
       rejectUnauthorized: false,
-      rejectUnauthorized: false,
-      url: config.ddbEndpointUrl + "/getEnrollment",
+      url: appconfig.ddb_url + "/getEnrollment",
       method: 'GET', //Specify the method
       headers: { //We can define headers too
         'Content-Type': 'application/json'
@@ -510,7 +514,7 @@ app.post('/enrollments', function(req, res) {
 
                 request({
                   rejectUnauthorized: false,
-                  url: config.ddbEndpointUrl + "/newEnrollment",
+                  url: appconfig.ddb_url + "/newEnrollment",
                   json: {
                     'accountId': req.body.accountid,
                     'mcurl': req.body.mcurl,
@@ -608,8 +612,7 @@ app.get('/api/myenrollments', function(req, res){
 
         request({
           rejectUnauthorized: false,
-          rejectUnauthorized: false,
-          url: config.ddbEndpointUrl + "/getEnrollment",
+          url: appconfig.ddb_url + "/getEnrollment",
           method: 'GET', //Specify the method
           headers: { //We can define headers too
             'Content-Type': 'application/json'
@@ -703,7 +706,7 @@ app.post('/deleteDataSource', function (req, res) {
                     agentId: req.body.agentid
                   },
                   method : 'Delete',
-                  url : config.ddbEndpointUrl + '/deleteDataSource',
+                  url : appconfig.ddb_url + '/deleteDataSource',
                   headers : { //We can define headers too
                     'Content-Type': 'application/json'
                   }
@@ -725,7 +728,7 @@ app.post('/deleteDataSource', function (req, res) {
 
             request({
               rejectUnauthorized: false,
-              url: config.ddbEndpointUrl + '/deleteDataSource',
+              url: appconfig.ddb_url + '/deleteDataSource',
               method: 'Delete', //Specify the method
               headers: { //We can define headers too
                 'Content-Type': 'application/json'
@@ -804,10 +807,17 @@ app.get('/urlbydomainid', function(req, res) {
     return res.status(400).send( ErrorMsg.missing_domainid );
   }
 
+   var testEnrollment =_.find(enrollments, {domainid: req.query.domainid});
+   if (testEnrollment) {
+   res.status(200).send({
+     url: enrollment.mcurl
+   });
+   }
+
   request({
     rejectUnauthorized: false,
     rejectUnauthorized: false,
-    url: config.ddbEndpointUrl + "/getTenantUrl",
+    url: appconfig.ddb_url + "/getTenantUrl",
     method: 'GET', //Specify the method
     headers: { //We can define headers too
       'Content-Type': 'application/json'
@@ -839,17 +849,7 @@ app.get('/urlbydomainid', function(req, res) {
     }
   });
 
-  /*
-  var enrollment =_.find(enrollments, {domainid: req.query.domainid});
 
-  if (!enrollment) {
-    return res.status(400).send( ErrorMsg.not_found_domainid );
-  }else {
-    res.status(200).send({
-      url: enrollment.mcurl
-    });
-
-  }*/
 });
 /////*******************************************
 app.post('/sessions/create', function(req, res) {
@@ -877,7 +877,7 @@ app.post('/sessions/create', function(req, res) {
 
       request({
         rejectUnauthorized: false,
-        url: config.ddbEndpointUrl + "/getEnrollment",
+        url: appconfig.ddb_url + "/getEnrollment",
         method: 'GET', //Specify the method
         headers: { //We can define headers too
           'Content-Type': 'application/json'
@@ -983,26 +983,26 @@ app.post('/sessions/create', function(req, res) {
 
   }
   else {
-    res.status(400).send(ErrorMsg.session_missing_callback_token);
-    /*
+
     var enrollment = _.find(enrollments, {domainid: req.body.domainid});
 
-    if (!enrollment) {
-      return res.status(400).send( ErrorMsg.not_found_domainid );
+    if (enrollment) { //for predefined .. test accounts during the admin flow
+      var tokenpayload = {};
+      tokenpayload.username = req.body.username;
+      tokenpayload.accountid = enrollment.accountid;
+      tokenpayload.domainid = enrollment.domainid;
+      tokenpayload.tenantId = enrollment.tenantId;
+      tokenpayload.companyname = enrollment.companyname;
+      tokenpayload.companyaddress = enrollment.companyaddress;
+      tokenpayload.companyphone = enrollment.companyphone;
+
+      res.status(200).send({
+        id_token: createToken(tokenpayload)
+      });
     }
+    res.status(400).send(ErrorMsg.session_missing_callback_token);
 
-    user = {
-      username: req.body.username,
-      password: req.body.password
-    };
-
-    //var basicAuthorizationString = "Basic " + enrollment.apikey;
-
-    var apikey = enrollment.apikey;
-    var grant_type = "grant_type=password&username="+ user.username +"&password="+user.password;
-    */
   }
-
 
 });
 

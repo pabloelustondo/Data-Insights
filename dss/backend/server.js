@@ -8,16 +8,12 @@ var logger          = require('morgan'),
       helmet        = require('helmet'),
       fs            = require('fs'),
       config        = require('./config.json'),
+      appconfig        = require('./appconfig.json'),
     bodyParser      = require('body-parser');
 
 var app = express();
 
 dotenv.load();
-
-var httpsOptions = {
-  key: fs.readFileSync(config['https-key-location'] ),
-  cert: fs.readFileSync(config['https-cert-location'] )
-};
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -45,7 +41,6 @@ if (process.env.NODE_ENV === 'development') {
   app.use(errorhandler())
 }
 
-app.use(require('./anonymous-routes'));
 app.use(require('./protected-routes'));
 app.use(require('./user-routes'));
 app.use(require('./mcserver-mock'));
@@ -56,14 +51,23 @@ app.use(function(req, res, next) {
   next();
 });
 
+if (config.useSSL){
+
+  var httpsOptions = {
+    key: fs.readFileSync(config['https-key-location'] ),
+    cert: fs.readFileSync(config['https-cert-location'] )
+  };
+
 var httpsServer = https.createServer(httpsOptions, app);
 
-httpsServer.listen(config.port, function (){
+httpsServer.listen(appconfig.port, appconfig.hostname, function (){
   console.log('Starting https server.. https://localhost:' + config.port + '/docs');
 });
 
-/*
-http.createServer(app).listen(port, function (err) {
-  console.log('listening in http://localhost:' + port);
-});
-*/
+} else {
+
+   http.createServer(app).listen(appconfig.port, function (err) {
+   console.log("listening in " +appconfig.hostname  + ":" + appconfig.port);
+   });
+
+}
