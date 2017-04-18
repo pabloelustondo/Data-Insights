@@ -1,18 +1,11 @@
 <div class="login jumbotron center-block">
-  <h3>SOTI Data Analytics</h3>
-  <h1>Login</h1>
+  <h2>SOTI Insight</h2>
+  <h3>Single Sign-on via MobiControl</h3>
   <h2 *ngIf="error">{{error}}</h2>
   <form role="form" (submit)="login($event, loginmethod, domainid, username, password)">
     <div class="form-group">
-      <label for="loginmethod">Login Method</label>
-      <select (change)="changeMethod(loginmethod.value)" #loginmethod class="form-control" id="loginmethod" placeholder="LoginMethod">
-      <option value="mcuser">MobiControl User</option>
-        <option value="mcadmin">MobiControl Admin</option>
-      </select>
-    </div>
-    <div class="form-group">
       <label for="domainid">Tenant ID</label>
-      <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID" required>
+      <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID for SOTI Insight" required>
     </div>
 
       <div [hidden]="!manualLogin" class="form-group">
