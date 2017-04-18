@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { AuthHttp } from 'angular2-jwt';
 import { contentHeaders } from '../common/headers';
 import * as FileSaver from 'file-saver';
-let appconfig = require("../../appconfig.json");
+let appconfig = require('../../appconfig.json');
 
-// import { DadTable } from '../../../dad3/src/app/dad/table.component';
 
 const backendUrl = appconfig.dssback_url;
+const mcdpUrl = appconfig.mcdp_url;
 const styles = require('./home.css');
 const template = require('./home.html');
+
 
 export type DataSourceTypeOptions = 'Mobicontrol' | 'NextBus' | 'Other...';
 
@@ -37,11 +38,13 @@ export class Home {
   rowsTake = 10;
   options: any[] = [{'option': 'MobiControl'}, {'option': 'NextBus'}, {'option': 'Other...'}];
   dataSourceType: DataSourceTypeOptions;
+  mcdpUrl : string;
 
   constructor(public router: Router, public http: Http, public authHttp: AuthHttp) {
     this.jwt = localStorage.getItem('id_token');
     this.decodedJwt = this.jwt && window.jwt_decode(this.jwt);
     this.isSOTI = this.decodedJwt['domainid'] === 'soti';
+    this.mcdpUrl = appconfig.mcdp_url;
   }
 
   logout() {

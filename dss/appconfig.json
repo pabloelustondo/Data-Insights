@@ -2,5 +2,6 @@
   "testingmode":true,
   "useSSL":false,
   "userAccessKey":false,
-  "dssback_url":"http://localhost:3004"
+  "dssback_url":"http://localhost:3004",
+  "appconfig_url" : "http://dev2012r2-sk.sotidev.com:3004/public/MobiControlDataAdaptor.exe"
 }

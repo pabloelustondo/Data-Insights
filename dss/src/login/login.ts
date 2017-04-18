@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Http } from '@angular/http';
 import { contentHeaders } from '../common/headers';
-let appconfig = require("../../appconfig.json");
+let appconfig = require('../../appconfig.json');
 
 
 const backendUrl = appconfig.dssback_url;
