@@ -58,7 +58,7 @@ function callDbAndRespond(req,res,query){
                 res.status(200).send(doc);
             }
             else {
-                res.status(404).send();
+                res.status(404).send("No Results are returned");
             }
             db.close();
         });
@@ -175,7 +175,7 @@ router.get('/dataSources', function (req, res) {
 router.get('/getTenantUrl', function (req, res) {
     var _tenantId = req.query.tenantId;
     callDbAndRespond(req,res, function(req,res,db, next){
-        console.log(req.params.tenantID);
+        console.log(_tenantId);
         db.collection('enrollments').findOne({
                 "tenantId": _tenantId
             }
