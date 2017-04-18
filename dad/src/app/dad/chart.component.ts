@@ -63,9 +63,9 @@ export class DadChart extends DadElement {
                            <i>filter by</i>
                            
                             <select (change)="filterBy($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
-           
-                                    <option [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}" [selected] ="chart.newFilter.name === fil.name" >{{fil.name}}</option>
-                                    <option [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}" >Add Filter</option>
+                                    <option style="color:grey;">Select</option>
+                                    <option [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}" [selected] ="fil.name" >{{fil.name}}</option>
+                                    <option [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}">Add Filter</option>
                             </select> 
                             
                             <!-- <i>alert when</i>
