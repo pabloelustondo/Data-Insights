@@ -11,7 +11,8 @@ exports.MOCK_WIDGET_DATA = [
                     shiftStartDateTime: "2016-08-25T09:00:00",
                     shiftDuration: "12.5",
                     minimumBatteryPercentageThreshold: 20
-                }]
+                }
+            ]
         },
         response: [{
                 'CountDevicesLastedShift': '106',

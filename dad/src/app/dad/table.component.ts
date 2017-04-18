@@ -266,27 +266,32 @@ export class DadTableComponent implements OnInit {
           if (param['id'] !== undefined) {
               this.callerId = param['id'];
 
-              this.callerElement  = this.dadWidgetConfigsService.getWidgetConfig(this.callerId);
-              if (!this.callerElement){
-                  this.callerElement  = this.dadChartConfigsService.getChartConfig(this.callerId);
-              }
-              if (!this.callerElement) {
-                  this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
-              }
+              this.dadWidgetConfigsService.getWidgetConfig(this.callerId).then((widget)=> {
+                  this.callerElement = widget;
+                  if (!this.callerElement){
+                      this.dadChartConfigsService.getChartConfig(this.callerId).then((chart)=>{
+                          this.callerElement  = chart;
 
-              if (!tableId) tableId = this.callerElement.tableId; //horrible code
-              if (!tableId) tableId = this.callerId;
+                          if (!this.callerElement) {
+                              this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
+                          }
 
-              this.table  = this.findTables(tableId);
+                          if (!tableId) tableId = this.callerElement.tableId; //horrible code
+                          if (!tableId) tableId = this.callerId;
 
-              let elementParameters = this.callerElement.parameters[0];
-              let tableParameters = this.table.parameters[0];
+                          this.table  = this.findTables(tableId);
 
-              this.parameterKeys = [];
-              for (let param of Object.keys(elementParameters)) {
-                    this.parameterKeys.push(param);
-                  tableParameters[param] = elementParameters[param];
-              }
+                          let elementParameters = this.callerElement.parameters[0];
+                          let tableParameters = this.table.parameters[0];
+
+                          this.parameterKeys = [];
+                          for (let param of Object.keys(elementParameters)) {
+                              this.parameterKeys.push(param);
+                              tableParameters[param] = elementParameters[param];
+                          }
+                      })
+                  }
+              });
           }
 
           console.log("Tables are loading... :" + this.table.id);

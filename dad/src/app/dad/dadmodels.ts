@@ -5,6 +5,13 @@ import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTable} from "./table.component";
 
+
+export interface DadUser {
+  userid: string,
+  username: string,
+  tenantid: string
+}
+
 export class DadElement {
   id: string;
   name?: string;
@@ -46,9 +53,8 @@ export class DadDateRange{
   dateTo:string;
 }
 
-export enum DadParameterType {
-  Number, String, Date, Time, DateTime, Duration
-}
+export type DadParameterType = "Number" | "String" | "Date" | "Time" | "DateTime" | "Duration";
+
 
 export interface DadParameterMapper {
   map2model(v:any):any;
@@ -63,9 +69,7 @@ export interface DadParameter{
   Mapper?: DadParameterMapper
 }
 
-export enum DadMetricType {
-  Number, String, Date, Time
-}
+export type DadMetricType = "Number" | "String" | "Date" | "Time";
 
 export type MetricOperator = 'count' | 'sum' | 'avg';
 
@@ -80,17 +84,11 @@ export interface DadMetric{
   op?:MetricOperator
 }
 
-export enum DadDimensionType {
-  Number, String, MiniChart
-}
+export type DadDimensionType = 'Number' | 'String' | 'MiniChart';
 
-export enum DadFilterType {
-  Number, String
-}
+export type DadFilterType = 'Number' | 'String';
 
-export enum DadAlertType {
-  Number, String
-}
+export type DadAlertType = 'Number' | 'String';
 
 export interface DadDimension{
   Type?: DadDimensionType,

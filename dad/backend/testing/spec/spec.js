@@ -3,7 +3,7 @@ describe("DAD Backend", function() {
     describe("GET /", function() {
         it("returns Welcome to DDB - The Central Database API for The Data Analytics Server", function(done) {
             $.get("/", function(data, textStatus, jqXHR) {
-                expect(data).toBe("Welcome to DAD Backend - A Very Light Basic Backend API for DAD");
+                expect(data).toContain("Welcome to DAD Backend - A Very Light Basic Backend API for DAD");
                 done();
             });
         });
@@ -79,6 +79,36 @@ describe("DAD Backend", function() {
             });
         });
     });
+
+    describe("POST /daduser/:userid", function() {
+        it("post a new BIG updated configuration for the test user", function(done) {
+            $.ajax({
+                url: "/daduser/testtenant-testuser",
+                type:"POST",
+                data: JSON.stringify({ userid:'testtenant-testuser', config:[CHARTS,CHARTS,CHARTS,CHARTS] }),
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    expect(data).toBeDefined();
+                    done();}
+            });
+        });
+
+    });
+
+    describe("GET /daduser/:userid", function() {
+        it("returns the BIG updated configuration with the right test user id and configuration", function(done) {
+            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+                var resObj = JSON.parse(data)[0];
+                var configString = JSON.stringify(resObj.config);
+                var expectedConfigString = JSON.stringify([CHARTS,CHARTS,CHARTS,CHARTS]);
+                expect(resObj).toBeDefined();
+                expect(resObj.userid).toBe("testtenant-testuser");
+                expect(configString).toBe(expectedConfigString);
+                done();
+            });
+        });
+    });
+
 
     /*
     describe("POST /daduser/:userid", function() {

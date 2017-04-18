@@ -9,6 +9,8 @@ import { ActivatedRoute} from '@angular/router';
 import {DadWidget} from "./widget.component";
 import {DadChart} from "./chart.component";
 import {DadTable} from "./table.component";
+import { config } from "./appconfig";
+import { DadUser } from "./dadmodels";
 
 export class DadPage {
     id: string;
@@ -22,6 +24,7 @@ export class DadPage {
     tables?: DadTable[];
 }
 
+
 @Component({
     selector: 'dad',
     styles:['.row{overflow:hidden;}'],
@@ -30,7 +33,7 @@ export class DadPage {
    <div *ngIf="page" class="animated fadeIn">
         <div *ngIf="page.widgets" class="row">
             <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
-                <dadwidget [widget]="widget"></dadwidget>
+                <dadwidget [widget]="widget" [page]="page"></dadwidget>
             </div>
         </div>
         <div *ngIf="page.charts" class="row">
@@ -41,13 +44,13 @@ export class DadPage {
     </div>
     `
 })
-
 export class  DadPageComponent implements OnInit{
     public title = 'DAD 0.0';
     public data;
     private subscription: Subscription;
     page: DadPage;
     public id : string;
+    user: DadUser;
 
     constructor(private dadTableConfigsService: DadTableConfigsService,
                 private dadWidgetConfigsService: DadWidgetConfigsService,
@@ -58,9 +61,7 @@ export class  DadPageComponent implements OnInit{
 
     ngOnInit()  {
 
-        let tables = this.dadTableConfigsService.getTableConfigs();
-        let charts = this.dadChartConfigsService.getChartConfigs();
-        let widgets = this.dadWidgetConfigsService.getWidgetConfigs();
+        this.user = JSON.parse(localStorage.getItem('daduser'));
 
         this.subscription = this.activatedRoute.params.subscribe(
             (param: any) => {
@@ -69,12 +70,16 @@ export class  DadPageComponent implements OnInit{
 
                 this.page.charts = [];
                 for(let chartid of this.page.chartids){
-                    this.page.charts.push(this.dadChartConfigsService.getChartConfig(chartid));
+                    this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
+                    if (chart) this.page.charts.push(chart);
+                })
                 }
 
                 this.page.widgets = [];
                 for(let widgetid of this.page.widgetids){
-                    this.page.widgets.push(this.dadWidgetConfigsService.getWidgetConfig(widgetid));
+                    let widget = this.dadWidgetConfigsService.getWidgetConfig(widgetid).then((widget) =>{
+                    if (widget) this.page.widgets.push(widget);
+                });
                 }
             });
     }

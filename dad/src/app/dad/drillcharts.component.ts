@@ -44,13 +44,16 @@ export class DadDrillChartsComponent {
           (param: any) => {
               let chartid = param['id'];
               this.charts = [];
-              this.chart = this.dadChartConfigsService.getChartConfig(chartid);
-              for (let i=0; i<this.chart.reductions.length; i++) {
-                let drillchart = this.createDrillChart(this.chart,i);
-                  this.charts.push(drillchart);
-                  this.dadChartConfigsService.saveOne(drillchart);
-                  console.log("Charts are loading... :" + drillchart.id);
-              }
+              this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
+                  this.chart = chart;
+                  for (let i=0; i<this.chart.reductions.length; i++) {
+                      let drillchart = this.createDrillChart(this.chart,i);
+                      this.charts.push(drillchart);
+                      this.dadChartConfigsService.saveOne(drillchart);
+                      console.log("Charts are loading... :" + drillchart.id);
+                  }
+              });
+
           });
   }
 

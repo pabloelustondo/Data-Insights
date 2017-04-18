@@ -1,6 +1,7 @@
 import { Component, OnInit }            from '@angular/core';
 import { PAGES } from '../dad/sample.page'
 import { DadPage } from "../dad/page.component";
+import { DadUser } from "../dad/dadmodels";
 
 @Component({
     selector: 'app-dashboard',
@@ -8,7 +9,9 @@ import { DadPage } from "../dad/page.component";
 })
 export class FullLayoutComponent implements OnInit {
 
-    constructor() { }
+    user: DadUser;
+    constructor() {
+    }
 
     pagelinks: string[];
     pagenames: string[];
@@ -32,6 +35,7 @@ export class FullLayoutComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.user = JSON.parse(localStorage.getItem('daduser')) as DadUser;
         let pagelinks = this.pagelinks = [];
         let pagenames = this.pagenames = [];
         PAGES.forEach(function(page){

@@ -1,5 +1,4 @@
 "use strict";
-var dadmodels_1 = require("./dadmodels");
 exports.WIDGETS = [
     { id: 'widget1',
         name: 'Device battery during shift',
@@ -7,6 +6,7 @@ exports.WIDGETS = [
         tableId: 'table1',
         endpoint: 'DevicesNotSurvivedShift',
         drillTo: 'chartbardrill',
+        intervalTime: 5000,
         data: [{
                 CountDevicesNotLastedShift: 50,
                 CountTotalActiveDevices: 100,
@@ -15,22 +15,22 @@ exports.WIDGETS = [
             }],
         metrics: [
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Devices Not Lasted a Shift",
                 DataSource: "CountDevicesNotLastedShift"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Total Active",
                 DataSource: "CountTotalActiveDevices"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Device Lasted Shift",
                 DataSource: "CountDevicesLastedShift"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Device Charging Entire Shift",
                 DataSource: "CountDevicesChargingEntireShift"
             }
@@ -41,20 +41,21 @@ exports.WIDGETS = [
                 shiftStartDateTime: "2016-08-15T13:00:00.000Z",
                 shiftDuration: "8",
                 minimumBatteryPercentageThreshold: 20
-            }],
+            }
+        ],
         uiparameters: [
             {
-                Type: dadmodels_1.DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Shift Start Date & Time",
                 DataSource: "shiftStartDateTime"
             },
             {
-                Type: dadmodels_1.DadParameterType.Duration,
+                Type: 'Duration',
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Min Battery",
                 DataSource: "minimumBatteryPercentageThreshold"
             }
@@ -66,6 +67,7 @@ exports.WIDGETS = [
         tableId: "table1",
         endpoint: 'DevicesNotSurvivedShift',
         drillTo: 'chartpiedrill',
+        intervalTime: 5000,
         data: [{
                 CountDevicesNotLastedShift: 60,
                 CountTotalActiveDevices: 120,
@@ -74,22 +76,22 @@ exports.WIDGETS = [
             }],
         metrics: [
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Devices Not Lasted a Shift",
                 DataSource: "CountDevicesNotLastedShift"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Total Active",
                 DataSource: "CountTotalActiveDevices"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Device Lasted Shift",
                 DataSource: "CountDevicesLastedShift"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Device Charging Entire Shift",
                 DataSource: "CountDevicesChargingEntireShift"
             }
@@ -99,20 +101,21 @@ exports.WIDGETS = [
                 shiftStartDateTime: "2016-08-25T13:00:00.000Z",
                 shiftDuration: "8",
                 minimumBatteryPercentageThreshold: 20
-            }],
+            }
+        ],
         uiparameters: [
             {
-                Type: dadmodels_1.DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Shift Start",
                 DataSource: "shiftStartDateTime"
             },
             {
-                Type: dadmodels_1.DadParameterType.Duration,
+                Type: 'Duration',
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Min Battery",
                 DataSource: "minimumBatteryPercentageThreshold"
             }
@@ -124,6 +127,7 @@ exports.WIDGETS = [
         tableId: "table1",
         endpoint: 'DevicesNotSurvivedShift',
         drillTo: 'chartpiedrill',
+        intervalTime: 5000,
         data: [{
                 CountDevicesNotLastedShift: 50,
                 CountTotalActiveDevices: 90,
@@ -132,22 +136,22 @@ exports.WIDGETS = [
             }],
         metrics: [
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Devices Not Lasted Shift",
                 DataSource: "CountDevicesNotLastedShift"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Total Active",
                 DataSource: "CountTotalActiveDevices"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Device Lasted Shift",
                 DataSource: "CountDevicesLastedShift"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Device Charging Entire Shift",
                 DataSource: "CountDevicesChargingEntireShift"
             }
@@ -158,25 +162,26 @@ exports.WIDGETS = [
                 shiftStartDateTime: "2016-08-25T13:00:00.000Z",
                 shiftDuration: "8",
                 minimumBatteryPercentageThreshold: 20
-            }],
+            }
+        ],
         uiparameters: [
             {
-                Type: dadmodels_1.DadParameterType.String,
+                Type: 'String',
                 Name: "Date Time Type",
                 DataSource: "shiftStartDateTimeAuto"
             },
             {
-                Type: dadmodels_1.DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Shift Start",
                 DataSource: "shiftStartDateTime"
             },
             {
-                Type: dadmodels_1.DadParameterType.Duration,
+                Type: 'Duration',
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Min Battery",
                 DataSource: "minimumBatteryPercentageThreshold"
             }
@@ -188,18 +193,19 @@ exports.WIDGETS = [
         tableId: 'table1',
         endpoint: 'BatteryMetrics',
         drillTo: 'chartpiedrill',
+        intervalTime: 5000,
         data: [{
                 CountDevicesNotLastedShift: 200,
-                CountDevicesNotFullyCharged: 80,
+                CountDevicesNotFullyCharged: 80
             }],
         metrics: [
             {
-                Type: dadmodels_1.DadParameterType.String,
+                Type: 'String',
                 Name: "Devices Not Fully Charged",
                 DataSource: "CountDevicesNotFullyCharged"
             },
             {
-                Type: dadmodels_1.DadParameterType.String,
+                Type: 'String',
                 Name: "Total Devices Not Lasted Shift",
                 DataSource: "CountDevicesNotLastedShift"
             }
@@ -212,25 +218,26 @@ exports.WIDGETS = [
                 endDate: "2016-08-25T19:19:26.581",
                 shiftDuration: 8,
                 minimumBatteryPercentageThreshold: 20
-            }],
+            }
+        ],
         uiparameters: [
             {
-                Type: dadmodels_1.DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Shift Start Date & Time",
                 DataSource: "shiftStartDateTime"
             },
             {
-                Type: dadmodels_1.DadParameterType.Date,
+                Type: 'Date',
                 Name: "End Date",
                 DataSource: "endDate"
             },
             {
-                Type: dadmodels_1.DadParameterType.Duration,
+                Type: 'Duration',
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
             {
-                Type: dadmodels_1.DadParameterType.Number,
+                Type: 'Number',
                 Name: "Min Battery",
                 DataSource: "minimumBatteryPercentageThreshold"
             }
@@ -240,6 +247,7 @@ exports.WIDGETS = [
         name: 'Application Count by Number of Devices',
         type: 1,
         endpoint: "ApplicationDeploymentCount",
+        intervalTime: 5000,
         data: [
             {
                 "ExecutionTimeMinutes": 41628,
@@ -261,15 +269,16 @@ exports.WIDGETS = [
             {
                 dateFrom: "2017-01-24T20:30:21",
                 dateTo: "2017-01-25T20:30:21"
-            }],
+            }
+        ],
         uiparameters: [
             {
-                Type: dadmodels_1.DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Date From",
                 DataSource: "dateFrom"
             },
             {
-                Type: dadmodels_1.DadParameterType.Date,
+                Type: 'Date',
                 Name: "Date To",
                 DataSource: "dateTo"
             }
@@ -292,6 +301,7 @@ exports.WIDGETS = [
         name: 'Application Popularity',
         type: 1,
         endpoint: "NumberOfInstallations",
+        intervalTime: 5000,
         data: [
             {
                 "NumberOfInstallations": 2923,
@@ -310,15 +320,16 @@ exports.WIDGETS = [
             {
                 dateFrom: "2017-01-24T20:30:21",
                 dateTo: "2017-01-27T20:30:21"
-            }],
+            }
+        ],
         uiparameters: [
             {
-                Type: dadmodels_1.DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Date From",
                 DataSource: "dateFrom"
             },
             {
-                Type: dadmodels_1.DadParameterType.Date,
+                Type: 'Date',
                 Name: "Date To",
                 DataSource: "dateTo"
             }

@@ -344,7 +344,8 @@ export class DadChartComponent implements OnInit {
             data => {
                 this.data = data;
                 let chartData = this.mapper.map(this.chart, this.data);
-                this.c3chart.load(chartData);
+
+                if (this.c3chart) this.c3chart.load(chartData);
             }
         )
     }
