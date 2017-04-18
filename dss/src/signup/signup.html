@@ -1,60 +1,55 @@
 <div class="center-block jumbotron">
-  <h3>SOTI Data Analytics Service</h3>
-  <h3>Mobicontrol Instance Enrollment</h3>
+  <h3>SOTI Insight</h3>
+  <h3>Tenancy Enrollment</h3>
 
-  <small><i>As a MobiControl administrator, you can use this page to enroll an internet-exposed MobiControl instance into our Data Analytics service.
-    This enrollment serves two pourposes: 1) Allow valid mobicontrol user from that MobiControl instance to access our Data Analytics Dashboard and APIs.
-    2) Allows mobicontrol administrators to setup mobicontrol data extraction process that will populate your data analytics store.
+  <small><i>To establish your SOTI Insight tenancy and the initial administrator user, SOTI Insight uses a designated MobiControl instance for federated authentication.  Please make sure the following criteria are met: <br/>
+    1) Your company has subscribed to SOTI Insight where an account ID has been assigned <br/>
+    2) You are currently an administrator of one or more MobiControl instances <br/>
+    3) The one MobiControl instance designated for the federated authentication purpose must be accessible over the internet
   </i></small>
   <p></p>
 
   <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value, clientsecret.value, companyname.value, companyaddress.value, phone.value)">
     <div class="form-group">
-      <label for="accountid">Account ID (email) </label>
-      <input type="email" #accountid class="form-control" id="accountid" placeholder="myaccount@email.com">
-      <small><i>No account?, follow this <a href="https://www.soti.net/products/mobicontrol/trial/" target="_blank">link</a> to create one </i></small>
+      <label for="accountid">Account ID*</label>
+      <input type="email" #accountid class="form-control" id="accountid" placeholder="">
+      <small><i>Account ID assigned to your company</i></small>
     </div>
     <div class="form-group">
-      <label for="mcurl">Mobicontrol URL </label>
-      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="">
+      <label for="domainid">Tenancy ID*</label>
+      <input type="text" #domainid class="form-control" id="domainid" placeholder="Please pick a name and we will check for uniqueness"  >
     </div>
     <div class="form-group">
-      <label for="apikey">Client Id</label>
-      <input type="text" #apikey class="form-control" id="apikey" placeholder="Client ID Token for SOTI Analytics Services">
+      <label for="mcurl">MobiControl URL*</label>
+      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="Designated MobiControl Instance as the Identity Provider for Federated Authentication">
     </div>
     <div class="form-group">
-      <label for="apikey">Base 64 Encoded Client:Secret</label>
-      <input type="text" #clientsecret class="form-control" id="clientSecret" placeholder="Client secret for SOTI Analytics Services">
-      <small><i>
-        - Combine the “client ID” and “client secret” into a string separated by a colon. For example: "ClientID:ClientSecret". Note that these fields cannot otherwise contain a colon.
-        - Encode the resulting string using the RFC2045-MIME variant of Base64.</i></small>
+      <label for="apikey">MobiControl API Client ID*</label>
+      <input type="text" #apikey class="form-control" id="apikey" placeholder="">
     </div>
     <div class="form-group">
-      <label for="domainid">Short Unique Name</label>
-      <input type="text" #domainid class="form-control" id="domainid" placeholder=""  >
-      <small><i>Easy to remember identifier for this domain for user to log in. </i></small>
+      <label for="apikey">MobiControl API Secret*</label>
+      <input type="text" #clientsecret class="form-control" id="clientSecret" placeholder="">
     </div>
   <div class="form-group">
-    <label for="username">Administrator Username</label>
+    <label for="username">Administrator Username*</label>
     <input type="text" #username class="form-control" id="username" placeholder="Username">
   </div>
   <div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" #password class="form-control" id="password" placeholder="Password">
-    <small><i>Note: We are using the password to validate you against your MobiControl instance but we do not store this password.
-      Each time lo login to the dashboard you will be validated by your mobicontrol instance</i></small>
+    <label for="password">Password*</label>
+    <input type="password" #password class="form-control" id="password" placeholder="">
   </div>
   <div (optional)="optionalInfo($event, companyname.value, companyaddress.value, phone.value)">
     <div class="form-group">
-      <label for="companyname">Company Name</label>
-      <input type="text" #companyname class="form-control" id="companyname" placeholder="i.e: SOTI Inc."  >
+      <label for="companyname">Company Name</label><i>(optional)</i>
+      <input type="text" #companyname class="form-control" id="companyname" placeholder=""  >
     </div>
     <div class="form-group">
-      <label for="companyaddress">Company Address</label>
-      <input type="text" #companyaddress class="form-control" id="companyaddress" placeholder="i.e: 5770 Hurontario St #1100, Mississauga, ON L5R 3G5"  >
+      <label for="companyaddress">Company Address</label><i>(optional)</i>
+      <input type="text" #companyaddress class="form-control" id="companyaddress" placeholder=""  >
     </div>
     <div class="form-group">
-      <label for="phone">Phone Number</label>
+      <label for="phone">Phone Number</label><i>(optional)</i>
       <input type="tel" pattern="[\(]\d{3}[\)][\s]\d{3}[\-]\d{4}" #phone class="form-control" id="phone" placeholder="i.e: (905) 624-9828">
     </div>
   </div>
