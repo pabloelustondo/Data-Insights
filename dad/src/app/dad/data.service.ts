@@ -39,7 +39,8 @@ export class DadElementDataService {
         return data.data;
       };
 
-      if (config.testing) return Observable.of(element.data);
+
+      if (config.testing || config.oda_url == "") return Observable.of(element.data);
 
       if(endpoint0.method === "post"){
           let bodyString = JSON.stringify(['_body']);

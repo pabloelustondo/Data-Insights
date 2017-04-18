@@ -47,8 +47,8 @@ export class DadComponent implements  OnInit{
     }
 
     ngOnInit() {
-        this.charts = this.dadChartConfigsService.getChartConfigs();
-        this.widgets = this.dadWidgetConfigsService.getWidgetConfigs();
+        this.dadChartConfigsService.getChartConfigs().then((charts) => {this.charts = charts;});
+        this.dadWidgetConfigsService.getWidgetConfigs().then((widgets) => {this.widgets = widgets;});
         this.tables = this.dadTableConfigsService.getTableConfigs();
     }
 }

@@ -21,22 +21,22 @@ export const WIDGETS: DadWidget[] = [
     }],
     metrics:[
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Devices Not Lasted a Shift",
         DataSource: "CountDevicesNotLastedShift"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Total Active",
         DataSource: "CountTotalActiveDevices"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Device Lasted Shift",
         DataSource: "CountDevicesLastedShift"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Device Charging Entire Shift",
         DataSource: "CountDevicesChargingEntireShift"
       }
@@ -50,17 +50,17 @@ export const WIDGETS: DadWidget[] = [
   }],
   uiparameters: [
     {
-    Type: DadParameterType.DateTime,
+    Type: 'DateTime',
     Name: "Shift Start Date & Time",
     DataSource: "shiftStartDateTime"
     },
     {
-      Type: DadParameterType.Duration,
+      Type: 'Duration',
       Name: "Shift Duration",
       DataSource: "shiftDuration"
     },
     {
-      Type: DadParameterType.Number,
+      Type: 'Number',
       Name: "Min Battery",
       DataSource: "minimumBatteryPercentageThreshold"
     }
@@ -81,22 +81,22 @@ export const WIDGETS: DadWidget[] = [
     }],
     metrics:[
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Devices Not Lasted a Shift",
         DataSource: "CountDevicesNotLastedShift"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Total Active",
         DataSource: "CountTotalActiveDevices"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Device Lasted Shift",
         DataSource: "CountDevicesLastedShift"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Device Charging Entire Shift",
         DataSource: "CountDevicesChargingEntireShift"
       }
@@ -109,17 +109,17 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.DateTime,
+        Type: 'DateTime',
         Name: "Shift Start",
         DataSource: "shiftStartDateTime"
       },
       {
-        Type: DadParameterType.Duration,
+        Type: 'Duration',
         Name: "Shift Duration",
         DataSource: "shiftDuration"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Min Battery",
         DataSource: "minimumBatteryPercentageThreshold"
       }
@@ -140,22 +140,22 @@ export const WIDGETS: DadWidget[] = [
     }],
     metrics:[
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Devices Not Lasted Shift",
         DataSource: "CountDevicesNotLastedShift"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Total Active",
         DataSource: "CountTotalActiveDevices"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Device Lasted Shift",
         DataSource: "CountDevicesLastedShift"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Device Charging Entire Shift",
         DataSource: "CountDevicesChargingEntireShift"
       }
@@ -169,22 +169,22 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.String,
+        Type: 'String',
         Name: "Date Time Type",
         DataSource: "shiftStartDateTimeAuto"
       },
       {
-        Type: DadParameterType.DateTime,
+        Type: 'DateTime',
         Name: "Shift Start",
         DataSource: "shiftStartDateTime"
       },
       {
-        Type: DadParameterType.Duration,
+        Type: 'Duration',
         Name: "Shift Duration",
         DataSource: "shiftDuration"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Min Battery",
         DataSource: "minimumBatteryPercentageThreshold"
       }
@@ -203,12 +203,12 @@ export const WIDGETS: DadWidget[] = [
     }],
     metrics:[
       {
-        Type: DadParameterType.String,
+        Type: 'String',
         Name: "Devices Not Fully Charged",
         DataSource: "CountDevicesNotFullyCharged"
       },
       {
-        Type: DadParameterType.String,
+        Type: 'String',
         Name: "Total Devices Not Lasted Shift",
         DataSource: "CountDevicesNotLastedShift"
       }
@@ -225,22 +225,22 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.DateTime,
+        Type: 'DateTime',
         Name: "Shift Start Date & Time",
         DataSource: "shiftStartDateTime"
       },
       {
-        Type: DadParameterType.Date,
+        Type: 'Date',
         Name: "End Date",
         DataSource: "endDate"
       },
       {
-        Type: DadParameterType.Duration,
+        Type: 'Duration',
         Name: "Shift Duration",
         DataSource: "shiftDuration"
       },
       {
-        Type: DadParameterType.Number,
+        Type: 'Number',
         Name: "Min Battery",
         DataSource: "minimumBatteryPercentageThreshold"
       }
@@ -275,12 +275,12 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.DateTime,
+        Type: 'DateTime',
         Name: "Date From",
         DataSource: "dateFrom"
       },
       {
-        Type: DadParameterType.Date,
+        Type: 'Date',
         Name: "Date To",
         DataSource: "dateTo"
       }
@@ -325,12 +325,12 @@ export const WIDGETS: DadWidget[] = [
       }],
     uiparameters: [
       {
-        Type: DadParameterType.DateTime,
+        Type: 'DateTime',
         Name: "Date From",
         DataSource: "dateFrom"
       },
       {
-        Type: DadParameterType.Date,
+        Type: 'Date',
         Name: "Date To",
         DataSource: "dateTo"
       }

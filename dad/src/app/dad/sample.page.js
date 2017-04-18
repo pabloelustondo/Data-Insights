@@ -15,7 +15,7 @@ exports.PAGES = [
     { id: "ttc",
         name: "TTC Vehicle Info",
         widgetids: [],
-        chartids: ['ttcmap'],
+        chartids: ['ttcmap2'],
         tableids: []
     }
 ];

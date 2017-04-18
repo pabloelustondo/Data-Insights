@@ -1,7 +1,9 @@
 import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { DadChart } from "./chart.component";
+import { DadPage } from "./page.component";
 import { DadElementDataService } from "./data.service";
 import { DadWidgetConfigsService } from './chart.service';
+import { DadPageConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadAlert, DadAlertType, DadFilter, DadFilterType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
@@ -17,7 +19,7 @@ export class DadWidget extends DadElement{
 
 @Component({
   selector: 'dadwidget',
-  providers:[DadElementDataService, DadWidgetConfigsService],
+  providers:[DadElementDataService, DadWidgetConfigsService, DadPageConfigsService],
   template: `   
 
 <div class="dadWidget">
@@ -35,6 +37,7 @@ export class DadWidget extends DadElement{
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                         <button *ngIf="widget.type==0 && widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
+                        <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRemoveFromPage('lalal')">Remove From Page</div></button>            
                     </div>
                 </div>
                 
@@ -102,9 +105,10 @@ export class DadWidget extends DadElement{
 export class DadWidgetComponent implements OnInit {
   @Input()
   widget: DadWidget;
+  @Input()
+  page: DadPage;
   data;
   mapper: Mapper = new Mapper();
-  dadParameterType = DadParameterType;
   editMode:boolean = false;
   moreDetails:boolean = false;
   refreshMode:boolean = false;
@@ -112,6 +116,7 @@ export class DadWidgetComponent implements OnInit {
 
     constructor(private dadWidgetDataService: DadElementDataService,
                 private dadWidgetConfigsService: DadWidgetConfigsService,
+                private dadPageConfigsService: DadPageConfigsService,
                 private router: Router, private route: ActivatedRoute) {}
 
     onRefresh():void{
@@ -126,6 +131,21 @@ export class DadWidgetComponent implements OnInit {
     onEdit(message:string):void{
         if (!this.editMode) this.editMode = true;
         else this.editMode = false;
+    }
+
+    onRemoveFromPage():void{
+        alert(this.page.widgets.length);
+        let new_widgets = [];
+        let new_widgetids = [];
+        for(let w=0; w< this.page.widgetids.length; w++){
+            if (this.page.widgetids[w] !== this.widget.id){
+                new_widgetids.push(this.page.widgetids[w]);
+                new_widgets.push(this.page.widgets[w]);
+            }
+        }
+        this.page.widgets = new_widgets;
+        this.page.widgetids = new_widgetids;
+        this.dadPageConfigsService.saveOne(this.page);
     }
 
     onMoreDetails(message:string):void{

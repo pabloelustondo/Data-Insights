@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 /**
  * Created by dister on 2/2/2017.
  */
-var core_1 = require('@angular/core');
-var chart_service_1 = require('./chart.service');
+var core_1 = require("@angular/core");
+var chart_service_1 = require("./chart.service");
 var data_service_1 = require("./data.service");
 var DadPage = (function () {
     function DadPage() {
@@ -28,6 +28,7 @@ var DadPageComponent = (function () {
     }
     DadPageComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.user = JSON.parse(localStorage.getItem('daduser'));
         var tables = this.dadTableConfigsService.getTableConfigs();
         var charts = this.dadChartConfigsService.getChartConfigs();
         var widgets = this.dadWidgetConfigsService.getWidgetConfigs();
@@ -37,23 +38,29 @@ var DadPageComponent = (function () {
             _this.page.charts = [];
             for (var _i = 0, _a = _this.page.chartids; _i < _a.length; _i++) {
                 var chartid = _a[_i];
-                _this.page.charts.push(_this.dadChartConfigsService.getChartConfig(chartid));
+                _this.dadChartConfigsService.getChartConfig(chartid).then(function (chart) {
+                    if (chart)
+                        _this.page.charts.push(chart);
+                });
             }
             _this.page.widgets = [];
             for (var _b = 0, _c = _this.page.widgetids; _b < _c.length; _b++) {
                 var widgetid = _c[_b];
-                _this.page.widgets.push(_this.dadWidgetConfigsService.getWidgetConfig(widgetid));
+                var widget = _this.dadWidgetConfigsService.getWidgetConfig(widgetid).then(function (widget) {
+                    if (widget)
+                        _this.page.widgets.push(widget);
+                });
             }
         });
     };
-    DadPageComponent = __decorate([
-        core_1.Component({
-            selector: 'dad',
-            styles: ['.row{overflow:hidden;}'],
-            providers: [data_service_1.DadElementDataService, chart_service_1.DadTableConfigsService, chart_service_1.DadWidgetConfigsService, chart_service_1.DadChartConfigsService, chart_service_1.DadPageConfigsService],
-            template: "\n   <div *ngIf=\"page\" class=\"animated fadeIn\">\n        <div *ngIf=\"page.widgets\" class=\"row\">\n            <div class=\"col-m-12 row-sm-4\" *ngFor=\"let widget of page.widgets\">\n                <dadwidget [widget]=\"widget\"></dadwidget>\n            </div>\n        </div>\n        <div *ngIf=\"page.charts\" class=\"row\">\n            <div *ngFor=\"let chart of page.charts\">\n                <dadchart [chart]=\"chart\"></dadchart>\n            </div>\n        </div>\n    </div>\n    "
-        })
-    ], DadPageComponent);
     return DadPageComponent;
 }());
+DadPageComponent = __decorate([
+    core_1.Component({
+        selector: 'dad',
+        styles: ['.row{overflow:hidden;}'],
+        providers: [data_service_1.DadElementDataService, chart_service_1.DadTableConfigsService, chart_service_1.DadWidgetConfigsService, chart_service_1.DadChartConfigsService, chart_service_1.DadPageConfigsService],
+        template: "\n   <div *ngIf=\"page\" class=\"animated fadeIn\">\n        <div *ngIf=\"page.widgets\" class=\"row\">\n            <div class=\"col-m-12 row-sm-4\" *ngFor=\"let widget of page.widgets\">\n                <dadwidget [widget]=\"widget\"></dadwidget>\n            </div>\n        </div>\n        <div *ngIf=\"page.charts\" class=\"row\">\n            <div *ngFor=\"let chart of page.charts\">\n                <dadchart [chart]=\"chart\"></dadchart>\n            </div>\n        </div>\n    </div>\n    "
+    })
+], DadPageComponent);
 exports.DadPageComponent = DadPageComponent;

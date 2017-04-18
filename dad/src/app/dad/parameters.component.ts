@@ -3,11 +3,11 @@
  */
 import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { DadChart } from "./chart.component";
-import {DadElementDataService } from "./data.service";
-import {DadWidgetConfigsService, DadChartConfigsService} from './chart.service';
+import { DadElementDataService } from "./data.service";
+import { DadWidgetConfigsService, DadChartConfigsService } from './chart.service';
 import { Mapper } from "./mapper";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadFilterType, DadAlert, DadFilter, DadDimension, DadDimensionType, DadElement} from "./dadmodels"
-import {DadWidget} from "./widget.component";
+import { DadWidget } from "./widget.component";
 
 @Component({
     selector: 'dadparameters',
@@ -17,20 +17,20 @@ import {DadWidget} from "./widget.component";
         <div *ngIf="editMode">          
             <div *ngFor="let uiparam of element.uiparameters">
                 <div><label>{{uiparam.Name}}</label></div>
-                <div *ngIf="uiparam.Type == dadParameterType.Date">
+                <div *ngIf="uiparam.Type == 'Date'">
                     <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
                 </div>
                
-                <div *ngIf="uiparam.Type == dadParameterType.DateTime">
+                <div *ngIf="uiparam.Type == 'DateTime'">
                     <input type="date" [(ngModel)]="uiparam.Value['D']"/>       
                     <timepicker [(ngModel)]="uiparam.Value['T']" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>       
                 </div>
     
-                <div *ngIf="uiparam.Type == dadParameterType.Duration">
+                <div *ngIf="uiparam.Type == 'Duration'">
                     <timepicker [(ngModel)]="uiparam.Value" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]=false [readonlyInput]="false"></timepicker>
                 </div>
-                <div *ngIf="uiparam.Type == dadParameterType.Number"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>  
-                <div *ngIf="uiparam.Type == dadParameterType.String"><input type="text" [(ngModel)]="uiparam.Value" /></div>   
+                <div *ngIf="uiparam.Type == 'Number'"><input type="number" min="0" max="100" [(ngModel)]="uiparam.Value" /></div>  
+                <div *ngIf="uiparam.Type == 'String'"><input type="text" [(ngModel)]="uiparam.Value" /></div>   
             </div>
             <!--refresh button here-->
             <br/>
@@ -54,10 +54,10 @@ import {DadWidget} from "./widget.component";
     <div class="row">
         <div *ngIf="!editMode">          
             <span *ngFor="let uiparam of element.uiparameters">
-                <span *ngIf="uiparam.Type == dadParameterType.DateTime">
+                <span *ngIf="uiparam.Type == 'DateTime'">
                     {{uiparam.Value['D']  }} {{addingZero(uiparam.Value['T'].getHours())}}:{{addingZero(uiparam.Value['T'].getMinutes())}}                        
                 </span>
-                 <span *ngIf="uiparam.Type == dadParameterType.String && uiparam.Value!='custom'">({{uiparam.Value}})</span> 
+                 <span *ngIf="uiparam.Type == 'String' && uiparam.Value!='custom'">({{uiparam.Value}})</span> 
             </span>      
         </div>
     </div>
@@ -69,7 +69,6 @@ export class DadParametersComponent implements OnInit {
     element: DadElement;
     data;
     mapper: Mapper = new Mapper();
-    dadParameterType = DadParameterType;
     @Input()
     editMode:boolean = false;
     refreshMode:boolean = false;
@@ -110,21 +109,30 @@ export class DadParametersComponent implements OnInit {
         }
         for (let uiparam of this.element.uiparameters) {
 
-            if (uiparam.Type === this.dadParameterType.DateTime || uiparam.Type === this.dadParameterType.Date) {
+            if (uiparam.Type === 'DateTime' || uiparam.Type === 'Date') {
 
                 let datetime:Date = new Date(uiparam.Value['D']);
                 let time:Date = uiparam.Value['T'];
+                if (typeof time === 'string'){
+                    time = new Date(time);
+                    uiparam.Value['T'] = time;
+                }
                 datetime.setUTCHours(time.getUTCHours(), time.getUTCMinutes());
                 parameters[uiparam.DataSource] = datetime.toISOString();
 
             }
-            if (uiparam.Type === this.dadParameterType.Number) {
+            if (uiparam.Type === 'Number') {
                 parameters[uiparam.DataSource] = uiparam.Value;
             }
-            if (uiparam.Type === this.dadParameterType.String) {
+            if (uiparam.Type === 'String') {
                 parameters[uiparam.DataSource] = uiparam.Value;
             }
-            if (uiparam.Type === this.dadParameterType.Duration) {
+            if (uiparam.Type === 'Duration') {
+
+                let time:Date = uiparam.Value;
+                if (typeof time === 'string'){
+                    uiparam.Value = new Date(time);
+                }
                 parameters[uiparam.DataSource] = this.mapDate2LongDuration(uiparam.Value);
             }
         }
@@ -137,7 +145,7 @@ export class DadParametersComponent implements OnInit {
             return;
         }
         for (let uiparam of this.element.uiparameters) {
-            if (uiparam.Type === this.dadParameterType.DateTime || uiparam.Type === this.dadParameterType.Date) {
+            if (uiparam.Type === 'DateTime' || uiparam.Type === 'Date') {
                 let d: Date;
                 if (parameters[uiparam.DataSource+"Auto"]=="yesterday"){
                     let dold = new Date(parameters[uiparam.DataSource]);
@@ -160,13 +168,13 @@ export class DadParametersComponent implements OnInit {
                 uiparam.Value['T'] = d;
             }
 
-            if (uiparam.Type === this.dadParameterType.Number) {
+            if (uiparam.Type === 'Number') {
                 uiparam.Value = parameters[uiparam.DataSource];
             }
-            if (uiparam.Type === this.dadParameterType.String) {
+            if (uiparam.Type === 'String') {
                 uiparam.Value = parameters[uiparam.DataSource];
             }
-            if (uiparam.Type === this.dadParameterType.Duration) {
+            if (uiparam.Type === 'Duration') {
                 let Iduration: number = parameters[uiparam.DataSource];
                 let Tduration = this.mapLongDuration2Date(Iduration);
                 uiparam.Value = Tduration;

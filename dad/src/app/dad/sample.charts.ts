@@ -4,7 +4,7 @@
 import { DadChart } from './chart.component';
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadAlert, DadAlertType, DadFilter, DadFilterType, DadDimension, DadDimensionType} from "./dadmodels"
 import { DadMap } from './map.component';
-
+//new version without enum types
 export const CHARTS: DadChart[] = [
     {id: "chartbar",
         name: 'Average Battery Discharge Rate',
@@ -40,17 +40,17 @@ export const CHARTS: DadChart[] = [
             }],
         uiparameters: [
             {
-                Type: DadParameterType.Date,
+                Type: 'Date',
                 Name: "Date To",
                 DataSource: "dateTo"
             },
             {
-                Type: DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Shift Start Date & Time",
                 DataSource: "shiftStartDateTime"
             },
             {
-                Type: DadParameterType.Duration,
+                Type: 'Duration',
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
@@ -93,12 +93,12 @@ export const CHARTS: DadChart[] = [
             }],
         uiparameters: [
             {
-                Type: DadParameterType.Date,
+                Type: 'Date',
                 Name: "Date From",
                 DataSource: "dateFrom"
             },
             {
-                Type: DadParameterType.Date,
+                Type: 'Date',
                 Name: "Date To",
                 DataSource: "dateTo"
             }
@@ -141,12 +141,12 @@ export const CHARTS: DadChart[] = [
             }],
         uiparameters: [
             {
-                Type: DadParameterType.Date,
+                Type: 'Date',
                 Name: "Date From",
                 DataSource: "dateFrom"
             },
             {
-                Type: DadParameterType.Date,
+                Type: 'Date',
                 Name: "Date To",
                 DataSource: "dateTo"
             }
@@ -218,17 +218,17 @@ export const CHARTS: DadChart[] = [
             }],
         uiparameters: [
             {
-                Type: DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Shift Start Date & Time",
                 DataSource: "shiftStartDateTime"
             },
             {
-                Type: DadParameterType.Duration,
+                Type: 'Duration',
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
             {
-                Type: DadParameterType.Number,
+                Type: 'Number',
                 Name: "Min Battery",
                 DataSource: "minimumBatteryPercentageThreshold"
             }
@@ -298,17 +298,17 @@ export const CHARTS: DadChart[] = [
             }],
         uiparameters: [
             {
-                Type: DadParameterType.DateTime,
+                Type: 'DateTime',
                 Name: "Shift Start Date & Time",
                 DataSource: "shiftStartDateTime"
             },
             {
-                Type: DadParameterType.Duration,
+                Type: 'Duration',
                 Name: "Shift Duration",
                 DataSource: "shiftDuration"
             },
             {
-                Type: DadParameterType.Number,
+                Type: 'Number',
                 Name: "Min Battery",
                 DataSource: "minimumBatteryPercentageThreshold"
             }
