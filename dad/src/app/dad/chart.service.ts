@@ -152,10 +152,10 @@ export class DadChartConfigsService {
   public getChartConfig(id:string): Promise<DadChart> {
     return this.getChartConfigs().then((charts:DadChart[]) =>{
       let chartIndex = _.findIndex(charts, function(w) { return w.id == id; });
-      return Promise.resolve(charts[chartIndex]);}
-    );
+      if (chartIndex>-1) return Promise.resolve(charts[chartIndex]);
+      else return Promise.resolve(null);
+    });
   }
-
 }
 
 @Injectable()
@@ -258,8 +258,10 @@ public save(widgets:DadWidget[] ){
 
 public getWidgetConfig(id:string): Promise<DadWidget> {
     return this.getWidgetConfigs().then((widgets:DadWidget[]) =>{
-    let widgetIndex = _.findIndex(widgets, function(w) { return w.id == id; });
-    return Promise.resolve(widgets[widgetIndex]);}
+      let widgetIndex = _.findIndex(widgets, function(w) { return w.id == id; });
+      if (widgetIndex>-1) return Promise.resolve(widgets[widgetIndex]);
+      else return Promise.resolve(null);
+    }
 );
 }
 

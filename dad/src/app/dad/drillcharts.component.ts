@@ -32,10 +32,26 @@ export class DadDrillChartsComponent {
 
 
     createDrillChart(chart:DadChart, rowindex:number){
-        let chartConfig = JSON.parse(JSON.stringify(chart)); //to clone object
-        chartConfig.id += rowindex;
-        chartConfig.reduction = chartConfig.reductions[rowindex];
-        return chartConfig;
+        let  newid =  chart.id + rowindex;
+        //try to find this in the configuration
+        return this.dadChartConfigsService.getChartConfig(newid).then(
+            (data)=>{
+                    let drillChart:DadChart;
+                    if (!data){
+                        let chartConfig = JSON.parse(JSON.stringify(chart)); //to clone object
+                        chartConfig.id += rowindex;
+                        chartConfig.reduction = chartConfig.reductions[rowindex];
+                        drillChart = chartConfig;
+                        this.dadChartConfigsService.saveOne(drillChart);
+                    }else {
+                        drillChart = data;
+                    }
+                this.charts.push(drillChart);
+            },
+            (error) => {
+                //?
+            });
+
     }
 
   ngAfterViewInit(){
@@ -47,13 +63,9 @@ export class DadDrillChartsComponent {
               this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
                   this.chart = chart;
                   for (let i=0; i<this.chart.reductions.length; i++) {
-                      let drillchart = this.createDrillChart(this.chart,i);
-                      this.charts.push(drillchart);
-                      this.dadChartConfigsService.saveOne(drillchart);
-                      console.log("Charts are loading... :" + drillchart.id);
+                      this.createDrillChart(this.chart,i);
                   }
               });
-
           });
   }
 
