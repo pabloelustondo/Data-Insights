@@ -1,0 +1,5 @@
+{
+  "testingmode":"false",
+  "port": 4201,
+  "ddb_url":"http://localhost:8000"
+}

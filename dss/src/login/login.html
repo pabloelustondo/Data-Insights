@@ -1,16 +1,32 @@
 <div class="login jumbotron center-block">
-  <h2>SOTI Insight</h2>
-  <h3>Single Sign-on via MobiControl</h3>
+  <h3>SOTI Insights</h3>
+  <h1>Login</h1>
   <h2 *ngIf="error">{{error}}</h2>
-  <form role="form" (submit)="login($event, loginmethod, domainid)">
+  <form role="form" (submit)="login($event, loginmethod, domainid, username, password)">
+    <div class="form-group">
+      <label for="loginmethod">Login Method</label>
+      <select (change)="changeMethod(loginmethod.value)" #loginmethod class="form-control" id="loginmethod" placeholder="LoginMethod">
+        <option value="mcuser">MobiControl User</option>
+        <option value="mcadmin">MobiControl Admin</option>
+      </select>
+    </div>
     <div class="form-group">
       <label for="domainid">Tenant ID</label>
-      <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID for SOTI Insight" required>
+      <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID" required>
     </div>
 
-  <button type="submit" class="btn btn-default">Login</button>
+    <div [hidden]="!manualLogin" class="form-group">
+      <label  for="username">Username</label>
+      <input type="text" #username class="form-control" id="username" placeholder="Username">
+    </div>
+    <div  [hidden]="!manualLogin" class="form-group">
+      <label for="password">Password</label>
+      <input type="password" #password class="form-control" id="password" placeholder="Password">
+    </div>
+
+    <button type="submit" class="btn btn-default">Login</button>
     <div style="height: 40px"></div>
     <a [routerLink]="['/signup']"><h4>Click here to Enroll</h4></a>
 
-</form>
+  </form>
 </div>
