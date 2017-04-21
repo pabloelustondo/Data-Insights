@@ -807,12 +807,16 @@ app.get('/urlbydomainid', function(req, res) {
     return res.status(400).send( ErrorMsg.missing_domainid );
   }
 
-   var testEnrollment =_.find(enrollments, {domainid: req.query.domainid});
-   if (testEnrollment) {
+   var enrollment =_.find(enrollments, {domainid: req.query.domainid});
+   if (enrollment) {
    res.status(200).send({
-     url: enrollment.mcurl
+     url: enrollment.mcurl,
+     tenant: enrollment.domainid
    });
+   return;
    }
+///So... maybe in the future we can go back to use enrollments as a cache...
+//this is a small object... even if we have thousands of tenants... a samll object we can cache.
 
   request({
     rejectUnauthorized: false,
@@ -871,10 +875,25 @@ app.post('/sessions/create', function(req, res) {
     var fullState = _reqBody.split('?');
     var _tenantID = fullState[0];
 
+    var enrollment =_.find(enrollments, {domainid: req.body.domainid});
+    if (enrollment) { //is we are here we are in a test domain.
+        var tokenpayload = {};
+        tokenpayload.username = req.body.username;
+        tokenpayload.accountid = enrollment.accountid;
+        tokenpayload.domainid = enrollment.domainid;
+        tokenpayload.tenantId = enrollment.tenantId;
+        tokenpayload.companyname = enrollment.companyname;
+        tokenpayload.companyaddress = enrollment.companyaddress;
+        tokenpayload.companyphone = enrollment.companyphone;
+
+        res.status(200).send({
+          id_token: createToken(tokenpayload)
+        });
+      return;
+      }
+
     try {
-
-
-
+      //this foe is pretty much unmantainable
       request({
         rejectUnauthorized: false,
         url: appconfig.ddb_url + "/getEnrollment",

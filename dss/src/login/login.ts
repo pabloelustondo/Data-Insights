@@ -67,7 +67,7 @@ export class Login {
     });
   }
 
-  /*
+
   changeMethod( v ) {
     console.log( v );
     if (v === 'mcuser') {
@@ -76,7 +76,7 @@ export class Login {
       this.manualLogin = true;
     }
 
-  }*/
+  }
 
   login(event, loginmethod, domainid, username, password) {
 
