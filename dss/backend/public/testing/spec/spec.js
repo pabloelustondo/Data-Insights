@@ -15,7 +15,7 @@ ErrorMsg =
     "login_failed_authentication": "Failed to login due to MobiControl authentication failure",
     "session_missing_callback_token" : "Redirect mechanism did not provide auth Token.",
     "db_connection_not_establish" : "Could not connect to DB. Please contact SOTI support",
-    "tenantid_not_registered": "System could not find IDP for provided tenantID",
+    "tenantid_not_registered": "System could not find IDP for provided tenantID"
   }
 ;
 
