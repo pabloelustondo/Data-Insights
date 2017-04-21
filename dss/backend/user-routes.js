@@ -478,6 +478,8 @@ app.post('/enrollments', function(req, res) {
   var _tenantID = req.body.domainid;
 
   try {
+
+    // check if a tenant with provided id is already registed
     request({
       rejectUnauthorized: false,
       url: appconfig.ddb_url + "/getEnrollment",
@@ -491,8 +493,11 @@ app.post('/enrollments', function(req, res) {
         console.log(error);
         res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
       } else {
-        if (response.statusMessage === 'Not Found') {
-
+        if (response.statusCode === 404 && response.statusMessage === 'Not Found') {
+          // try to verify the user with MobiControl instance by making an api call to MC instance
+          var encodeString = req.body.apikey+':'+req.body.clientsecret;
+          var apiClientSecretBuffer =  new Buffer(encodeString);
+          var encodedBase64ApiClientSecret = apiClientSecretBuffer.toString('base64');
 
           request({
             rejectUnauthorized: false,
@@ -500,18 +505,22 @@ app.post('/enrollments', function(req, res) {
             method: 'POST', //Specify the method
             headers: { //We can define headers too
               'Content-Type': 'application/x-www-form-urlencoded',
-              'Authorization': "Basic " + req.body.clientsecret
+              'Authorization': "Basic " + encodedBase64ApiClientSecret
             },
             body: "grant_type=password&username=" + req.body.username + "&password=" + req.body.password
           }, function (error, response, body) {
             if (error) {
               console.log(error);
               res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
-            } else {
+            } else if (response.statusCode === 400 ) {
+                res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+            } else if ( response.statusCode === 404 && response.statusMessage === 'Not Found' ) {
+                res.status(404).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+            }
+            else {
               console.log(response.statusCode, body);
 
-              if (response.statusCode === 200) {
-
+             // if (response.statusCode === 200) {
                 request({
                   rejectUnauthorized: false,
                   url: appconfig.ddb_url + "/newEnrollment",
@@ -522,7 +531,7 @@ app.post('/enrollments', function(req, res) {
                     'domainId': req.body.domainid,
                     'Status': 'new',
                     "clientid": req.body.apikey,
-                    "clientsecret": req.body.clientsecret,
+                    "clientsecret": encodedBase64ApiClientSecret,
                     "companyName": req.body.companyName,
                     "companyAddress": req.body.companyAddress,
                     "companyPhone": req.body.companyPhone
@@ -556,11 +565,6 @@ app.post('/enrollments', function(req, res) {
                     });
                   }
                 });
-
-
-              } else {
-                res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
-              }
             }
           });
         } else {
@@ -807,16 +811,12 @@ app.get('/urlbydomainid', function(req, res) {
     return res.status(400).send( ErrorMsg.missing_domainid );
   }
 
-   var enrollment =_.find(enrollments, {domainid: req.query.domainid});
-   if (enrollment) {
+   var testEnrollment =_.find(enrollments, {domainid: req.query.domainid});
+   if (testEnrollment) {
    res.status(200).send({
-     url: enrollment.mcurl,
-     tenant: enrollment.domainid
+     url: enrollment.mcurl
    });
-   return;
    }
-///So... maybe in the future we can go back to use enrollments as a cache...
-//this is a small object... even if we have thousands of tenants... a samll object we can cache.
 
   request({
     rejectUnauthorized: false,
@@ -861,6 +861,9 @@ app.post('/sessions/create', function(req, res) {
   if (!req.body.domainid) {
     return res.status(400).send( ErrorMsg.missing_domainid );
   }
+  if (!req.body.code) {
+    return res.status(401).send( ErrorMsg.unauthorized_and_missing_idp_code);
+  }
   if (!req.body.code && !req.body.username) {
     return res.status(400).send( ErrorMsg.missing_username );
   }
@@ -868,159 +871,108 @@ app.post('/sessions/create', function(req, res) {
     return res.status(400).send( ErrorMsg.missing_password );
   }
 //////////////////////////////////////////////////
+  // ensure user has an authorized code to log in. Otherwise reject
+
+  var _reqBody = req.body.domainid;
+  var fullState = _reqBody.split('?');
+  var _tenantID = fullState[0];
+
+  try {
+    request({
+      rejectUnauthorized: false,
+      url: appconfig.ddb_url + "/getEnrollment",
+      method: 'GET', //Specify the method
+      headers: { //We can define headers too
+        'Content-Type': 'application/json'
+      },
+      qs: {tenantId: _tenantID}
+    }, function (error, response, body) {
+      if (error) {
+        console.log(error);
+        res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+      } else {
+        console.log(response.statusCode, body);
+
+        if (response.statusCode === 200) {
+          try {
+
+            grant_type = "grant_type=authorization_code&code=" + req.body.code;
+            var jsonBody = JSON.parse(response.body);
+            request({
+              rejectUnauthorized: false, //need to improve this ..related with ssl certificate
+              url:   jsonBody.mcurl + "/api/token",
+              method: 'POST', //Specify the method
+              headers: { //We can define headers too
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': "Basic " + jsonBody.clientsecret
+              },
+              body: grant_type
+            }, function(error, response, _body){
+              if(error) {
+                console.log(error);
+                res.status(400).send(ErrorMsg.login_failed_authentication);
+              } else {
+                console.log(response.statusCode, body);
+                if (response.statusCode === 200){
+
+                  _body = JSON.parse(_body);
+
+                  request({
+                    "rejectUnauthorized": false,
+                    url: jsonBody.mcurl + '/api/security/users/Administrator/groups',
+                    method: 'GET', //Specify the method
+                    headers: { //We can define headers too
+                      'Authorization': 'bearer ' + _body.access_token
+                    }
+                  }, function(error, response, __body){
+                    if(error) {
+                      console.log(error);
+                      res.status(200).send("hi from modulus error:" + error);
+                    } else {
+                      console.log(response.statusCode, body);
+                      var mbuser = JSON.parse(__body);
+                      if (mbuser[0].Name === 'MobiControl Administrators') {
+
+                        tokenpayload = {};
+                        tokenpayload.username = body.tenantId;
+                        tokenpayload.accountid = body.accountId;
+                        tokenpayload.domainid = body.domainId;
+                        tokenpayload.tenantId = body.tenantId;
+                        tokenpayload.companyname = body.companyName;
+                        tokenpayload.companyaddress = body.companyAddress;
+                        tokenpayload.companyphone = body.companyPhone;
 
 
-  if (req.body.code){
-    var _reqBody = req.body.domainid;
-    var fullState = _reqBody.split('?');
-    var _tenantID = fullState[0];
+                        res.status(200).send({
+                          id_token: createToken(tokenpayload)
+                        });
+                      }
+                    }
+                  });
 
-    var enrollment =_.find(enrollments, {domainid: req.body.domainid});
-    if (enrollment) { //is we are here we are in a test domain.
-        var tokenpayload = {};
-        tokenpayload.username = req.body.username;
-        tokenpayload.accountid = enrollment.accountid;
-        tokenpayload.domainid = enrollment.domainid;
-        tokenpayload.tenantId = enrollment.tenantId;
-        tokenpayload.companyname = enrollment.companyname;
-        tokenpayload.companyaddress = enrollment.companyaddress;
-        tokenpayload.companyphone = enrollment.companyphone;
-
-        res.status(200).send({
-          id_token: createToken(tokenpayload)
-        });
-      return;
-      }
-
-    try {
-      //this foe is pretty much unmantainable
-      request({
-        rejectUnauthorized: false,
-        url: appconfig.ddb_url + "/getEnrollment",
-        method: 'GET', //Specify the method
-        headers: { //We can define headers too
-          'Content-Type': 'application/json'
-        },
-        qs: {tenantId: _tenantID}
-      }, function (error, response, body) {
-        if (error) {
-          console.log(error);
-          res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
-        } else {
-          console.log(response.statusCode, body);
-
-          if (response.statusCode === 200) {
-
-
-            try {
-
-              grant_type = "grant_type=authorization_code&code=" + req.body.code;
-              var jsonBody = JSON.parse(response.body);
-              request({
-                rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-                url:   jsonBody.mcurl + "/api/token",
-                method: 'POST', //Specify the method
-                headers: { //We can define headers too
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                  'Authorization': "Basic " + jsonBody.clientsecret
-                },
-                body: grant_type
-              }, function(error, response, _body){
-                if(error) {
-                  console.log(error);
-                  res.status(400).send(ErrorMsg.login_failed_authentication);
                 } else {
-                  console.log(response.statusCode, body);
-                  if (response.statusCode === 200){
-
-                    _body = JSON.parse(_body);
-
-                    request({
-                      "rejectUnauthorized": false,
-                      url: jsonBody.mcurl + '/api/security/users/Administrator/groups',
-                      method: 'GET', //Specify the method
-                      headers: { //We can define headers too
-                        'Authorization': 'bearer ' + _body.access_token
-                      }
-                    }, function(error, response, __body){
-                      if(error) {
-                        console.log(error);
-                        res.status(200).send("hi from modulus error:" + error);
-                      } else {
-                        console.log(response.statusCode, body);
-                        var mbuser = JSON.parse(__body);
-                        if (mbuser[0].Name === 'MobiControl Administrators') {
-
-                          tokenpayload = {};
-                          tokenpayload.username = body.tenantId;
-                          tokenpayload.accountid = body.accountId;
-                          tokenpayload.domainid = body.domainId;
-                          tokenpayload.tenantId = body.tenantId;
-                          tokenpayload.companyname = body.companyName;
-                          tokenpayload.companyaddress = body.companyAddress;
-                          tokenpayload.companyphone = body.companyPhone;
-
-
-                          res.status(200).send({
-                            id_token: createToken(tokenpayload)
-                          });
-                        }
-                      }
-                    });
-
-
-                  } else {
-                    res.status(400).send(ErrorMsg.login_failed_authentication);
-                  }
+                  res.status(400).send(ErrorMsg.login_failed_authentication);
                 }
-              });
+              }
+            });
 
-              var body = JSON.parse(response.body);
-
-            } catch (e){
-              console.log(e);
-              return res.status(400).send (ErrorMsg.token_verification_failed);
-            }
-
-
-
-          } else if (response.statusCode === 404) {
-            res.status(404).send(ErrorMsg.token_verification_failed);
+          } catch (e){
+            console.log(e);
+            return res.status(400).send (ErrorMsg.token_verification_failed);
           }
-          else {
-            res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
-          }
+
+        } else if (response.statusCode === 404) {
+          res.status(404).send(ErrorMsg.token_verification_failed);
         }
-      });
-    }
-    catch (e) {
-      console.log(e);
-      return res.status(400).send (ErrorMsg.token_verification_failed);
-    }
-
-
-
+        else {
+          res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
+        }
+      }
+    });
   }
-  else {
-
-    var enrollment = _.find(enrollments, {domainid: req.body.domainid});
-
-    if (enrollment) { //for predefined .. test accounts during the admin flow
-      var tokenpayload = {};
-      tokenpayload.username = req.body.username;
-      tokenpayload.accountid = enrollment.accountid;
-      tokenpayload.domainid = enrollment.domainid;
-      tokenpayload.tenantId = enrollment.tenantId;
-      tokenpayload.companyname = enrollment.companyname;
-      tokenpayload.companyaddress = enrollment.companyaddress;
-      tokenpayload.companyphone = enrollment.companyphone;
-
-      res.status(200).send({
-        id_token: createToken(tokenpayload)
-      });
-    }
-    res.status(400).send(ErrorMsg.session_missing_callback_token);
-
+  catch (e) {
+    console.log(e);
+    return res.status(400).send (ErrorMsg.token_verification_failed);
   }
 
 });

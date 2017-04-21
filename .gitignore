@@ -6,6 +6,10 @@
 */ida/src/routes.ts
 */oda/src/routes.ts
 */oda/all-logs.log
+*.log
+ida/src/routes.ts
+oda/src/routes.ts
+dad/backend/node_modules/
 npm-debug.log
 bin/
 obj/

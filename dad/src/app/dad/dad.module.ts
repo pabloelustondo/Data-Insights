@@ -11,10 +11,7 @@ import { DadLoginComponent } from './login.component';
 import { DadComponent } from './dashboard.component';
 import { DadRoutingModule } from './dad-routing.module';
 import { CommonModule } from '@angular/common'; //<-- This one
-<<<<<<< HEAD
-=======
 
->>>>>>> c7e542179a44809c459b6fcf2de7580d526c9b5d
 import {BrowserModule} from "@angular/platform-browser";
 import { DropdownModule } from 'ng2-bootstrap';
 import { DatepickerModule } from 'ng2-bootstrap/components/datepicker';

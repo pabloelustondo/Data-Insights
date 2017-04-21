@@ -11,32 +11,34 @@
 
   <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value, clientsecret.value, companyname.value, companyaddress.value, phone.value)">
     <div class="form-group">
-      <label for="accountid">Account ID*</label>
+      <label for="accountid">Account ID</label>
       <input type="email" #accountid class="form-control" id="accountid" placeholder="">
       <small><i>Account ID assigned to your company</i></small>
     </div>
     <div class="form-group">
-      <label for="domainid">Tenancy ID*</label>
-      <input type="text" #domainid class="form-control" id="domainid" placeholder="Please pick a name and we will check for uniqueness"  >
+      <label for="domainid">Tenancy ID</label>
+      <input type="text" #domainid class="form-control" id="domainid" placeholder=""  >
+      <small><i>Please pick a name and we will check for uniqueness</i></small>
     </div>
     <div class="form-group">
-      <label for="mcurl">MobiControl URL*</label>
-      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="Designated MobiControl Instance as the Identity Provider for Federated Authentication">
+      <label for="mcurl">MobiControl URL</label>
+      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="">
+      <small><i>Designated MobiControl Instance as the Identity Provider for federated authentication</i></small>
     </div>
     <div class="form-group">
-      <label for="apikey">MobiControl API Client ID*</label>
+      <label for="apikey">MobiControl API Client ID</label>
       <input type="text" #apikey class="form-control" id="apikey" placeholder="">
     </div>
     <div class="form-group">
-      <label for="apikey">MobiControl API Secret*</label>
-      <input type="text" #clientsecret class="form-control" id="clientSecret" placeholder="">
+      <label for="apikey">MobiControl API Secret</label>
+      <input type="password" #clientsecret class="form-control" id="clientSecret" placeholder="">
     </div>
   <div class="form-group">
-    <label for="username">Administrator Username*</label>
-    <input type="text" #username class="form-control" id="username" placeholder="Username">
+    <label for="username">Administrator Username</label>
+    <input type="text" #username class="form-control" id="username" placeholder="">
   </div>
   <div class="form-group">
-    <label for="password">Password*</label>
+    <label for="password">Password</label>
     <input type="password" #password class="form-control" id="password" placeholder="">
   </div>
   <div (optional)="optionalInfo($event, companyname.value, companyaddress.value, phone.value)">

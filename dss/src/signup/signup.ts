@@ -56,7 +56,6 @@ export class Signup {
       );
   }
 
-
   optional(event, companyname, companyaddress, phone) {
     event.preventDefault();
     let body = JSON.stringify({companyname, companyaddress, phone});
