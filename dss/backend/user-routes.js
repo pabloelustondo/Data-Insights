@@ -565,10 +565,6 @@ app.post('/enrollments', function(req, res) {
                     });
                   }
                 });
-              // }
-              /*else  {
-                res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
-              }*/
             }
           });
         } else {
