@@ -1,4 +1,5 @@
 {
+  "max":1000,
   "useSSL":false,
   "userAccessKey":false,
   "mongodb-config-location" : null,

@@ -1,5 +1,5 @@
 {
   "testingmode":"true",
-  "port": 8000,
+  "port": 8001,
   "mongodb_url" : "mongodb://localhost:27017"
 }
