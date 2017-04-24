@@ -105,7 +105,7 @@ export interface DadFilter{
   DataSource?: string,
   Value?:any,
   attribute?:any,
-  name?:string
+  name?:any
 }
 
 export interface DadAlert{

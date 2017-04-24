@@ -61,16 +61,18 @@ export class DadChart extends DadElement {
                            </select>
                            <br/>
                            <i>filter by</i>
+                            
+                            <!-- carrier==='Fido' -->
+                            
+                           <input *ngIf="chart.newFilter" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name" (click)="select()" />
                            
-                           <input *ngIf="chart.newFilter" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name"/>  
-                           <div (click)="select()">Add/Choose Filter</div> 
-                           <ul *ngIf="showFilters">
-                                    <li style="color:grey;">Select</li>
-                                    <li (click)="select()" [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}">{{fil.name}}
+                           <ul *ngIf="showFilters" style="list-style-type:none; cursor:pointer;">
+                                    <li (click)="filterBy($event.target.value)" [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}">{{fil.name}}
              
-                                    <div (click)="removeItem(fil)">Remove Filter Permanently</div>
+                                    <span class="glyphicons glyphicons-pencil" (click)="editItem(fil)"></span>
+                                    <span class="glyphicons glyphicons-bin" (click)="removeItem(fil)"></span>
                                     </li>
-                                    <li (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}">Add Filter</li> 
+                                    <li class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}"></li>
                            </ul>   
                             
                             
@@ -226,27 +228,49 @@ export class DadChartComponent implements OnInit {
         else this.showFilters = false;
     }
 
-    removeItem(item: DadFilter) {
-        let index = this.chart.filters.indexOf(item);
-        this.chart.filters.splice(index, 1);
-        this.clearFilter();
-        this.clearLocalCopy();
+    clearFilter() {
+        this.chart.newFilter = {name: 'Add a Filter', attribute: true};
+    }
+
+    edit() {
+        if (!this.showFilters) this.showFilters = false;
+        else this.showFilters = true;
+    }
+
+    /*
+     carrier
+     carrier=='Fido'
+     */
+
+    editItem(updatedName: string, updatedAttribute: string){
+        this.edit();
+        this.chart.newFilter.name = updatedName;
+        this.chart.newFilter.attribute = updatedAttribute;
+
+        this.dadChartConfigsService.saveOne(this.chart);
         let chartData = this.mapper.map(this.chart, this.data);
         this.changeMapData();
         this.changeChartData(chartData);
     }
 
+    removeItem(item: DadFilter) {
+        let index = this.chart.filters.indexOf(item);
+        this.chart.filters.splice(index, 1);
+        this.clearFilter();
+        let chartData = this.mapper.map(this.chart, this.data);
+        this.changeMapData();
+        this.changeChartData(chartData);
+    }
+
+
+
+/*
+*note to myself(DOGA)
+* consider after backend discussion
     public clearLocalCopy(){
         localStorage.removeItem("chartdata");
     }
-
-    clearFilter() {
-        this.chart.newFilter = {name: 'Add a Filter', attribute: true};
-        /*this.chart.filters.push({attribute: true, name: ''});
-        this.filterBy(this.chart.filters.length - 1);
-        this.showFilters = false;*/
-
-    }
+*/
 
     alertWhen(d){
         if (d >= 0){
