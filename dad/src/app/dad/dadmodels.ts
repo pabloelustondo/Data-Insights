@@ -104,7 +104,7 @@ export interface DadFilter{
   Name?: string,
   DataSource?: string,
   Value?:any,
-  attribute?:string,
+  attribute?:any,
   name?:string
 }
 

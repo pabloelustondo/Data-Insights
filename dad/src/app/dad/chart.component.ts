@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ChangeDetectorRef, Compiler} from '@angular/core';
 import {DadElementDataService} from './data.service';
 import {Mapper} from "./mapper";
 import {DadElement} from "./dadmodels";
@@ -63,12 +63,12 @@ export class DadChart extends DadElement {
                            <i>filter by</i>
                            
                            <input *ngIf="chart.newFilter" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name"/>  
-                           <div (click)="select()">O</div> 
+                           <div (click)="select()">Add/Choose Filter</div> 
                            <ul *ngIf="showFilters">
                                     <li style="color:grey;">Select</li>
-                                    <li [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}" >{{fil.name}}
-                                    
-                                    <div (click)="removeItem(fil)">jjjjj</div>
+                                    <li (click)="select()" [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}">{{fil.name}}
+             
+                                    <div (click)="removeItem(fil)">Remove Filter Permanently</div>
                                     </li>
                                     <li (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}">Add Filter</li> 
                            </ul>   
@@ -191,8 +191,7 @@ export class DadChartComponent implements OnInit {
                 private dadChartDataService: DadElementDataService,
                 private dadTableConfigsService: DadTableConfigsService,
                 private dadChartConfigsService: DadChartConfigsService,
-                private router: Router, private route: ActivatedRoute) {
-    }
+                private router: Router, private route: ActivatedRoute,) {}
 
     filterBy(d){
         if (d >= 0){
@@ -231,11 +230,22 @@ export class DadChartComponent implements OnInit {
         let index = this.chart.filters.indexOf(item);
         this.chart.filters.splice(index, 1);
         this.clearFilter();
-        this.filterBy(-1);
+        this.clearLocalCopy();
+        let chartData = this.mapper.map(this.chart, this.data);
+        this.changeMapData();
+        this.changeChartData(chartData);
+    }
+
+    public clearLocalCopy(){
+        localStorage.removeItem("chartdata");
     }
 
     clearFilter() {
         this.chart.newFilter = {name: 'Add a Filter', attribute: true};
+        /*this.chart.filters.push({attribute: true, name: ''});
+        this.filterBy(this.chart.filters.length - 1);
+        this.showFilters = false;*/
+
     }
 
     alertWhen(d){
