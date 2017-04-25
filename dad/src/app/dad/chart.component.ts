@@ -64,8 +64,12 @@ export class DadChart extends DadElement {
                             
                             <!-- carrier==='Fido' -->
                             
-                           <input *ngIf="chart.newFilter" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name" (click)="select()" />
-                           
+                           <input readonly="readonly" *ngIf="chart.newFilter" class="form-control" [id]="chart.id + '_newfilteredData'" style="display: inline-block; background-color:white; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name" />
+                          
+                           <div class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" ></div>
+                           <div style="cursor:pointer;" class="glyphicons glyphicons-list" (click)="select()" ></div>
+                           <div style="cursor:pointer;" class="glyphicons glyphicons-filter-remove" (click)="removeFilter()"></div>
+
                            <ul *ngIf="showFilters" style="list-style-type:none; cursor:pointer;">
                                     <li (click)="filterBy($event.target.value)" [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}">{{fil.name}}
              
@@ -262,6 +266,13 @@ export class DadChartComponent implements OnInit {
         this.changeChartData(chartData);
     }
 
+    removeFilter() {
+        this.clearFilter();
+        let chartData = this.mapper.map(this.chart, this.data);
+        this.changeMapData();
+        this.changeChartData(chartData);
+    }
+
 
 
 /*
@@ -371,7 +382,7 @@ export class DadChartComponent implements OnInit {
         console.log("CHART starts drawing ON INIT:" + this.chart.id);
         this.realDataMonitoring();
         if(!this.chart.newFilter) {
-            this.chart.newFilter = {name: 'Add a Filter' };
+            this.chart.newFilter = {name:'Add a Filter'};
         }
     }
 
