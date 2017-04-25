@@ -1,7 +1,7 @@
 /**
  * Created by dister on 2/2/2017.
  */
-import { Component,OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { DadTableConfigsService, DadChartConfigsService,DadWidgetConfigsService ,DadPageConfigsService } from './chart.service';
 import { DadElementDataService } from "./data.service";
 import {Subscription } from 'rxjs';
@@ -26,7 +26,7 @@ export class DadPage {
 
 
 @Component({
-    selector: 'dad',
+    selector: 'dadpage',
     styles:['.row{overflow:hidden;}'],
     providers: [DadElementDataService, DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService, DadPageConfigsService],
     template: `
@@ -48,6 +48,7 @@ export class  DadPageComponent implements OnInit{
     public title = 'DAD 0.0';
     public data;
     private subscription: Subscription;
+    @Input()
     page: DadPage;
     public id : string;
     user: DadUser;
@@ -62,26 +63,27 @@ export class  DadPageComponent implements OnInit{
     ngOnInit()  {
 
         this.user = JSON.parse(localStorage.getItem('daduser'));
+        if (!this.page) {
+            this.subscription = this.activatedRoute.params.subscribe(
+                (param: any) => {
+                    let callerPageId = param['id'];
+                    this.page = this.dadPageConfigsService.getPageConfig(callerPageId);
 
-        this.subscription = this.activatedRoute.params.subscribe(
-            (param: any) => {
-                let callerPageId = param['id'];
-                this.page = this.dadPageConfigsService.getPageConfig(callerPageId);
+                    this.page.charts = [];
+                    for (let chartid of this.page.chartids) {
+                        this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
+                            if (chart) this.page.charts.push(chart);
+                        })
+                    }
 
-                this.page.charts = [];
-                for(let chartid of this.page.chartids){
-                    this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
-                    if (chart) this.page.charts.push(chart);
-                })
-                }
-
-                this.page.widgets = [];
-                for(let widgetid of this.page.widgetids){
-                    let widget = this.dadWidgetConfigsService.getWidgetConfig(widgetid).then((widget) =>{
-                    if (widget) this.page.widgets.push(widget);
+                    this.page.widgets = [];
+                    for (let widgetid of this.page.widgetids) {
+                        let widget = this.dadWidgetConfigsService.getWidgetConfig(widgetid).then((widget) => {
+                            if (widget) this.page.widgets.push(widget);
+                        });
+                    }
                 });
-                }
-            });
+        }
     }
 
 }

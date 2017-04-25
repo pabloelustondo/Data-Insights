@@ -134,7 +134,6 @@ export class DadWidgetComponent implements OnInit {
     }
 
     onRemoveFromPage():void{
-        alert(this.page.widgets.length);
         let new_widgets = [];
         let new_widgetids = [];
         for(let w=0; w< this.page.widgetids.length; w++){

@@ -1,8 +1,6 @@
 import { NgModule }             from '@angular/core';
 import { Routes,
          RouterModule }         from '@angular/router';
-
-import { DadComponent }   from './dashboard.component';
 import { DadConfigComponent }   from './configuration.component';
 import { DadLoginComponent }   from './login.component';
 import { DadTableComponent }   from './table.component';
