@@ -73,7 +73,7 @@ export class DadChart extends DadElement {
                            <ul *ngIf="showFilters" style="list-style-type:none; cursor:pointer;">
                                     <li (click)="filterBy($event.target.value)" [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}">{{fil.name}}
              
-                                    <span class="glyphicons glyphicons-pencil" (click)="editItem(fil)"></span>
+                                    <span class="glyphicons glyphicons-pencil" (click)="editItem()"></span>
                                     <span class="glyphicons glyphicons-bin" (click)="removeItem(fil)"></span>
                                     </li>
                                     <li class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}"></li>
@@ -98,15 +98,23 @@ export class DadChart extends DadElement {
                                <div></div>
                                <div><input style="height:32px;" [(ngModel)]="newDimensionName"   type="text"   placeholder="Dimension Name"></div>
                                <div><input style="height:32px;" [(ngModel)]="newDimensionAttribute"  type="text"   placeholder="Dimension Attribute"></div>
-                               <div><button (click)="addNewDimension()">Add New Dimension</button></div>                     
+                               <div><button (click)="addNewDimension()">Add New Dimension</button></div>     
                            </div>
                            
                            <div *ngIf="addFilter">
                            <div></div>
                                <div><input style="height:32px;" [(ngModel)]="newFilterName" type="text" placeholder="Filter Name"></div>
                                <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
-                               <div><button (click)="addNewFilter()">Add New Filter</button></div>                     
-                           </div>
+                               <div><button (click)="addNewFilter()">Add New Filter</button></div>    
+                            </div>
+     
+                        <div *ngIf="editExpression">
+                           <div></div>
+                               <div><input style="height:32px;" [(ngModel)]="updatedFilterName" type="text" placeholder="Filter Name"></div>
+                               <div><input style="height:32px;" [(ngModel)]="updatedFilterAttribute" type="text" placeholder="Filter Expression"></div>
+                               <div><button (click)="editFilter()">Update</button></div>    
+     
+     
                         <!--
                            <div *ngIf="addAlert">
                            <div></div>
@@ -185,10 +193,14 @@ export class DadChartComponent implements OnInit {
     newDimensionName: string;
     newDimensionAttribute: string;
     addFilter: boolean = false;
+    editTheFilter: boolean = false;
     addAlert: boolean = false;
     showFilters: boolean = false;
+    editExpression: boolean = false;
     newFilterName: string;
     newFilterAttribute: string;
+    updatedFilterName: string;
+    updatedFilterAttribute: string;
     newAlertAttribute: string;
     newAlertName: string;
     intervalId: any;
@@ -236,25 +248,15 @@ export class DadChartComponent implements OnInit {
         this.chart.newFilter = {name: 'Add a Filter', attribute: true};
     }
 
-    edit() {
-        if (!this.showFilters) this.showFilters = false;
-        else this.showFilters = true;
+    editFilter(f){
+        this.editTheFilter = false;
+        this.filterBy(this.chart.filters.length - 1);
+        this.showFilters = false;
     }
 
-    /*
-     carrier
-     carrier=='Fido'
-     */
-
-    editItem(updatedName: string, updatedAttribute: string){
-        this.edit();
-        this.chart.newFilter.name = updatedName;
-        this.chart.newFilter.attribute = updatedAttribute;
-
-        this.dadChartConfigsService.saveOne(this.chart);
-        let chartData = this.mapper.map(this.chart, this.data);
-        this.changeMapData();
-        this.changeChartData(chartData);
+    editItem() {
+        if (!this.editExpression) this.editExpression = true;
+        else this.editExpression = false;
     }
 
     removeItem(item: DadFilter) {
