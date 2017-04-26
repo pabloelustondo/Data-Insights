@@ -102,18 +102,18 @@ export class DadChart extends DadElement {
                            </div>
                            
                            <div *ngIf="addFilter">
-                           <div></div>
-                               <div><input style="height:32px;" [(ngModel)]="newFilterName" type="text" placeholder="Filter Name"></div>
-                               <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
+                               <div></div>
+                                   <div><input style="height:32px;" [(ngModel)]="newFilterName" type="text" placeholder="Filter Name"></div>
+                                   <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
                                <div><button (click)="addNewFilter()">Add New Filter</button></div>    
                             </div>
-     
+     </div>
                         <div *ngIf="editExpression">
                            <div></div>
                                <div><input style="height:32px;" [(ngModel)]="updatedFilterName" type="text" placeholder="Filter Name"></div>
                                <div><input style="height:32px;" [(ngModel)]="updatedFilterAttribute" type="text" placeholder="Filter Expression"></div>
                                <div><button (click)="editFilter()">Update</button></div>    
-     
+                        </div>         
      
                         <!--
                            <div *ngIf="addAlert">
@@ -124,7 +124,7 @@ export class DadChart extends DadElement {
                                <div><button (click)="addNewAlert()">Add New Alert</button></div>                     
                            </div>
                         -->
-                        </div><br/><br/><br/> 
+                        <br/><br/><br/> 
                         
                    
                         <div *ngIf="chart.type!=='map2' && chart.big" style="text-align:center; padding-bottom:70%; height:50%; width:100%;" [id]="chart.id"></div>
@@ -192,8 +192,8 @@ export class DadChartComponent implements OnInit {
     addDimension: boolean = false;
     newDimensionName: string;
     newDimensionAttribute: string;
-    addFilter: boolean = false;
-    editTheFilter: boolean = false;
+    addFilter?: boolean = false;
+    editTheFilter?: boolean = false
     addAlert: boolean = false;
     showFilters: boolean = false;
     editExpression: boolean = false;
@@ -229,10 +229,6 @@ export class DadChartComponent implements OnInit {
         }
     }
 
-    /*
-     carrier==='Fido'
-    */
-
     addNewFilter() {
         this.addFilter = false;
         if(!this.chart.filters){
@@ -242,14 +238,13 @@ export class DadChartComponent implements OnInit {
         this.filterBy(this.chart.filters.length - 1);
         this.showFilters = false;
     }
-
+//brand==='Apple'
     editFilter(f){
         this.editTheFilter = false;
         this.removeItem(this.chart.newFilter);
-/*        this.chart.newFilter.name = f.name;
-        this.chart.newFilter.attribute = f.attribute;*/
         this.chart.filters.push({attribute: this.updatedFilterAttribute, name: this.updatedFilterName});
         this.filterBy(this.chart.filters.length - 1);
+        this.editExpression = false;
         this.showFilters = false;
     }
 
@@ -263,6 +258,7 @@ export class DadChartComponent implements OnInit {
     }
 
     editItem() {
+        this.addFilter = false;
         if (!this.editExpression) this.editExpression = true;
         else this.editExpression = false;
     }
@@ -274,6 +270,8 @@ export class DadChartComponent implements OnInit {
         let chartData = this.mapper.map(this.chart, this.data);
         this.changeMapData();
         this.changeChartData(chartData);
+        this.addFilter = false;
+
     }
 
     removeFilter() {
@@ -281,17 +279,8 @@ export class DadChartComponent implements OnInit {
         let chartData = this.mapper.map(this.chart, this.data);
         this.changeMapData();
         this.changeChartData(chartData);
+        this.addFilter = false;
     }
-
-
-
-/*
-*note to myself(DOGA)
-* consider after backend discussion
-    public clearLocalCopy(){
-        localStorage.removeItem("chartdata");
-    }
-*/
 
     alertWhen(d){
         if (d >= 0){

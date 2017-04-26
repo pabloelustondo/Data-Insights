@@ -286,7 +286,7 @@ export const WIDGETS: DadWidget[] = [
       }
     ],
     chart:{id: "charthorizontal",
-      type: "bar",
+      type: "pie",
       a : 'ExecutionTimeMinutes',
       b : 'AppId',
       aname : 'Execution Minutes',
@@ -336,7 +336,7 @@ export const WIDGETS: DadWidget[] = [
       }
     ],
     chart:{id: "charthorizontal2",
-      type: "bar",
+      type: "pie",
       a : 'NumberOfInstallations',
       b : 'AppId',
       aname : 'Number Of Installations',
