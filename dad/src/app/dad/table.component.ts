@@ -158,6 +158,7 @@ export class DadTableComponent implements OnInit {
   }
 
   addValues(){
+      if (!this.data) return;
       for(let c=0; c<this.table.columns.length; c++){
           let column =  this.table.columns[c];
           column.values = [];
@@ -186,6 +187,7 @@ export class DadTableComponent implements OnInit {
   }
 
   preCalculateCharts(){
+      if (!this.data) return;  //TODO THIS CODE SHOULD NOT EXECUTE IF NO MINICHART
       this.miniChartD = [];
       this.chartDataD = [];
       for (let d=0; d<this.data.length; d++){
@@ -242,6 +244,57 @@ export class DadTableComponent implements OnInit {
         return null;
     }
 
+    loadTable(tableId, caller){
+        this.callerElement  = caller;
+
+        if (!this.callerElement) {
+            this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
+        }
+
+        if (!tableId) tableId = this.callerElement.tableId; //horrible code
+        if (!tableId) tableId = this.callerId;
+
+        this.table  = this.findTables(tableId);
+
+        let elementParameters = this.callerElement.parameters[0];
+        let tableParameters = this.table.parameters[0];
+
+        this.parameterKeys = [];
+        for (let param of Object.keys(elementParameters)) {
+            this.parameterKeys.push(param);
+            tableParameters[param] = elementParameters[param];
+        }
+
+        if (this.table) {console.log("Tables are loading... :" + this.table.id)} else alert("table undefined");
+
+        let filter = new DadFilter();
+
+        if (!this.data && this.table.data && config.testing){
+            this.allData = this.table.data;
+            this.data = filter.filter(this.table, this.allData);
+            this.preCalculateCharts();
+            this.addValues();
+        }
+
+        if (!config.testing) {
+            this.dadTableDataService.getElementData(this.table).subscribe(
+                data => {
+                    this.allData = data;
+                    this.data = filter.filter(this.table, this.allData);
+                    this.preCalculateCharts();
+                    this.addValues();
+
+
+                    if (this.data.errorMessage != null) {
+                        alert(this.data.errorMessage);
+                    }
+                }
+            )//.catch(err => console.log(err.toString()));
+        }
+
+
+    }
+
     ngOnInit(){
 
       this.allData = this.data;
@@ -270,56 +323,15 @@ export class DadTableComponent implements OnInit {
                   this.callerElement = widget;
                   if (!this.callerElement){
                       this.dadChartConfigsService.getChartConfig(this.callerId).then((chart)=>{
-                          this.callerElement  = chart;
+                          this.callerElement = chart;
+                          this.loadTable(tableId,  this.callerElement);
 
-                          if (!this.callerElement) {
-                              this.callerElement = this.dadTableConfigsService.getTableConfig(this.callerId);
-                          }
-
-                          if (!tableId) tableId = this.callerElement.tableId; //horrible code
-                          if (!tableId) tableId = this.callerId;
-
-                          this.table  = this.findTables(tableId);
-
-                          let elementParameters = this.callerElement.parameters[0];
-                          let tableParameters = this.table.parameters[0];
-
-                          this.parameterKeys = [];
-                          for (let param of Object.keys(elementParameters)) {
-                              this.parameterKeys.push(param);
-                              tableParameters[param] = elementParameters[param];
-                          }
-                      })
+                      }, (error) => { alert("table component failed to get widget configuration")}  );
+                  } else {
+                      this.loadTable(tableId, this.callerElement);
                   }
-              });
+              },(error) => { alert("table component failed to get widget configuration")});
           }
-
-          console.log("Tables are loading... :" + this.table.id);
-
-            let filter = new DadFilter();
-
-            if (!this.data && this.table.data && config.testing){
-                this.allData = this.table.data;
-                this.data = filter.filter(this.table, this.allData);
-                this.preCalculateCharts();
-                this.addValues();
-             }
-
-            if (!config.testing) {
-                this.dadTableDataService.getElementData(this.table).subscribe(
-                    data => {
-                        this.allData = data;
-                        this.data = filter.filter(this.table, this.allData);
-                        this.preCalculateCharts();
-                        this.addValues();
-
-
-                        if (this.data.errorMessage != null) {
-                            alert(this.data.errorMessage);
-                        }
-                    }
-                )//.catch(err => console.log(err.toString()));
-            }
         });
   }
 }

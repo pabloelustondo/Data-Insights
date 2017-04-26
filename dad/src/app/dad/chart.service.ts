@@ -1,5 +1,7 @@
 /**
  * Created by pabloelustondo on 2016-11-21.
+ * TODO: This code needs urgent refactor to avoid the same code repeated 4 times!!!!!!
+ * we need to create one
  */
 import { Injectable } from '@angular/core';
 import { CHARTS } from './sample.charts';
@@ -86,7 +88,7 @@ export class DadChartConfigsService {
   public save(charts:DadChart[] ){
     let charts_string = JSON.stringify(charts);
     localStorage.setItem("chartdata",charts_string);
-    this.saveUserConfigurationToDdb();
+    if (!config.testing) this.saveUserConfigurationToDdb();
   }
 
   public saveOne(chart:DadChart ){
@@ -115,7 +117,7 @@ export class DadChartConfigsService {
 
       let charts_string = localStorage.getItem("chartdata");
 
-      if (charts_string != null){
+      if (charts_string != null || config.testing){
         let charts_obj = JSON.parse(charts_string);
         let DATA = charts_obj as DadChart[];
         return Promise.resolve(DATA);
@@ -233,7 +235,7 @@ export class DadWidgetConfigsService {
 
   public clearLocalCopy(){
     localStorage.removeItem("widgetdata");
-}
+  }
 
   public saveOne(widget:DadWidget ){
     let widgets:DadWidget[];
@@ -254,6 +256,7 @@ export class DadWidgetConfigsService {
 public save(widgets:DadWidget[] ){
   let widgets_string = JSON.stringify(widgets);
   localStorage.setItem("widgetdata",widgets_string);
+  if (!config.testing) this.saveUserConfigurationToDdb();
 }
 
 public getWidgetConfig(id:string): Promise<DadWidget> {
@@ -274,7 +277,7 @@ public getWidgetConfig(id:string): Promise<DadWidget> {
 
     let widgets_string = localStorage.getItem("widgetdata");
 
-    if (widgets_string != null){
+    if (widgets_string != null || config.testing){
       let widgets_obj = JSON.parse(widgets_string);
       let DATA = widgets_obj as DadWidget[];
       return Promise.resolve(DATA);
@@ -302,6 +305,76 @@ public getWidgetConfig(id:string): Promise<DadWidget> {
 @Injectable()
 export class DadTableConfigsService {
 
+  user:DadUser;
+  token: string;
+  jwtHelper = new JwtHelper();
+
+  constructor(private http: Http) {
+    if (config.testing){
+      this.user = {username:"user", tenantid:"test", userid:"test-user"};
+    } else {
+      let token = localStorage.getItem('id_token');
+      let u =  this.jwtHelper.decodeToken(token);
+      let username = u.username;
+      let tenantid = u.tenantId;
+      let userid = tenantid + "-" + username;
+      this.user = {username:username, tenantid:tenantid, userid:userid};
+    }
+
+    localStorage.setItem('daduser',JSON.stringify(this.user));
+  }
+
+  public getUserConfigurationFromDdb(): Promise<any>{
+    //this method will get the current configuration from server and store it in local storage
+
+    let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : this.token});
+    let url = config.dadback_url + "/daduser/"+ this.user.userid;
+    return this.http.get(url).toPromise();
+  }
+
+  public saveUserConfigurationToDdb(){
+    //this method will save the current configuration in local storage to the server
+    let charts = localStorage.getItem("chartdata");
+    let widgets = localStorage.getItem("widgetdata");
+    let tables = localStorage.getItem("tabledata");
+    let pages = localStorage.getItem("pagedata");
+    let timeStamp = Date.now().toString();
+    let daduserconfig = {
+      userid: this.user.userid,
+      username: this.user.username,
+      tenantid: this.user.tenantid,
+      config: { timeStamp: timeStamp,
+        charts: charts,
+        widgets: widgets,
+        tables:tables,
+        pages:pages}
+    }
+
+    let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : this.token});
+    let url = config.dadback_url + "/daduser/"+ daduserconfig.userid;
+    this.http.post(url, daduserconfig).toPromise().then(
+        (res:Response) => {
+          console.log('configuration saved' + JSON.stringify(res));
+        }).catch(
+        (error) =>{
+          console.log('configuration failed to save')
+        }
+    );
+  }
+
+  public saveConfigFromDb(data){
+    let charts = data.config.charts;
+    let widgets = data.config.widgets;
+    let tables = data.config.tables;
+    let pages = data.config.pages;
+
+    //comment: for some reason charts, widgets...etc.. are already JSON...why?
+    localStorage.setItem("chartdata", charts);
+    localStorage.setItem("widgetdata", widgets);
+    localStorage.setItem("tabledata", tables);
+    localStorage.setItem("pagedata", pages);
+  }
+
   public clearLocalCopy(){
     localStorage.removeItem("tabledata");
   }
@@ -309,6 +382,8 @@ export class DadTableConfigsService {
   public save(tables:DadTable[] ){
     let tables_string = JSON.stringify(tables);
     localStorage.setItem("tabledata",tables_string);
+    if (!config.testing) this.saveUserConfigurationToDdb();
+
   }
 
   public saveOne(table:DadTable ){
@@ -337,7 +412,7 @@ export class DadTableConfigsService {
 
     let tables_string = localStorage.getItem("tabledata");
 
-    if (tables_string != null){
+    if (tables_string != null || config.testing){
       let table_obj = JSON.parse(tables_string);
       let DATA = table_obj as DadTable[];
       return DATA;
@@ -430,6 +505,7 @@ export class DadPageConfigsService {
   public save(pages:DadPage[] ){
     let pages_string = JSON.stringify(pages);
     localStorage.setItem("pagedata",pages_string);
+    if (!config.testing) this.saveUserConfigurationToDdb();
   }
 
   public saveOne(page:DadPage ){
@@ -453,7 +529,7 @@ export class DadPageConfigsService {
 
     let pages_string = localStorage.getItem("pagedata");
 
-    if (pages_string != null){
+    if (pages_string != null || config.testing){
       let page_obj = JSON.parse(pages_string);
       let DATA = page_obj as DadPage[];
       return DATA;

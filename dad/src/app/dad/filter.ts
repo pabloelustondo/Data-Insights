@@ -8,6 +8,8 @@ import * as _ from "lodash";
 export class DadFilter {
     filter(element:DadElement, data:any[]): any[] {
 
+        if (!element.filter && !element.newFilter) return data;
+
         if(element.filter){
 
             let filteredData = _.filter(data, _.matches(element.filter));
