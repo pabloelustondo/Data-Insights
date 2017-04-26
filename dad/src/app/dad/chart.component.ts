@@ -66,7 +66,7 @@ export class DadChart extends DadElement {
                             
                            <input readonly="readonly" *ngIf="chart.newFilter" class="form-control" [id]="chart.id + '_newfilteredData'" style="display: inline-block; background-color:white; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name" />
                           
-                           <div class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" ></div>
+                           <div class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black; cursor:pointer;" ></div>
                            <div style="cursor:pointer;" class="glyphicons glyphicons-list" (click)="select()" ></div>
                            <div style="cursor:pointer;" class="glyphicons glyphicons-filter-remove" (click)="removeFilter()"></div>
 
@@ -229,12 +229,26 @@ export class DadChartComponent implements OnInit {
         }
     }
 
+    /*
+     carrier==='Fido'
+    */
+
     addNewFilter() {
         this.addFilter = false;
         if(!this.chart.filters){
             this.chart.filters = [];
         }
         this.chart.filters.push({attribute: this.newFilterAttribute, name: this.newFilterName});
+        this.filterBy(this.chart.filters.length - 1);
+        this.showFilters = false;
+    }
+
+    editFilter(f){
+        this.editTheFilter = false;
+        this.removeItem(this.chart.newFilter);
+/*        this.chart.newFilter.name = f.name;
+        this.chart.newFilter.attribute = f.attribute;*/
+        this.chart.filters.push({attribute: this.updatedFilterAttribute, name: this.updatedFilterName});
         this.filterBy(this.chart.filters.length - 1);
         this.showFilters = false;
     }
@@ -246,12 +260,6 @@ export class DadChartComponent implements OnInit {
 
     clearFilter() {
         this.chart.newFilter = {name: 'Add a Filter', attribute: true};
-    }
-
-    editFilter(f){
-        this.editTheFilter = false;
-        this.filterBy(this.chart.filters.length - 1);
-        this.showFilters = false;
     }
 
     editItem() {
