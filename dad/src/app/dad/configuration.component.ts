@@ -20,6 +20,12 @@ declare var d3, c3: any;
     providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService, DadPageConfigsService],
     template: `
 
+
+   <div *ngIf="showPage" style="width:100%; display:inline-block;  vertical-align:top; border: solid;" > 
+    <h2>{{showPage.name}}</h2>  
+        <dadpage [page]="showPage"></dadpage>
+    </div>
+
     <div *ngIf="showTable" style="width:100%; display:inline-block;  vertical-align:top; border: solid;" > 
     <h2>{{showTable.name}}</h2>  
         <dadtable [table]="showTable"></dadtable>
@@ -37,6 +43,16 @@ declare var d3, c3: any;
 
      <div style="width:30%; display:inline-block;  vertical-align:top;"> 
      <button *ngIf="dirty"(click)="saveConfiguration()">Save Changes</button> <button (click)="resetConfiguration()">Reset to Factory Settings</button>
+      <div>
+        <h2>Pages Configuration </h2> 
+        <table>
+        <tr *ngFor="let page of pages">  
+         <td> {{ page.name }} </td>
+          <a (click)="selectPage(page)" class="btn btn-sm glyphicons glyphicons-pencil x1"></a>
+          <a (click)="showThisPage(page)" class="btn btn-sm glyphicons glyphicons-eye-open x1"></a>
+        </tr>
+        </table>
+    </div> 
      <div>
         <h2>Widgets Configuration </h2> 
         <table>
@@ -167,6 +183,18 @@ declare var d3, c3: any;
        <br><a (click)="deleteTable()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
     </div>
     
+    
+    <div *ngIf="selectedPage" style="width:60%; display:inline-block;  vertical-align:top; border: solid;" > 
+    <h2>Edit Page Configuration {{selectedPage.name}}</h2>
+    <table>
+       <tr><td><label>name: </label></td><td style="width:300px"><input style="width:300px" [(ngModel)]="selectedPage.name" placeholder="name"></td></tr>
+       <tr><td><label>id: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.id" placeholder="id"></td></tr>
+       <tr><td><label>widgetids: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.widgetids" placeholder="id"></td></tr>   
+       <tr><td><label>chartids: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.chartids" placeholder="id"></td></tr>   
+       <tr><td><label>tableids: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.widgetids" placeholder="id"></td></tr>   
+     </table> 
+       <br><a (click)="deleteTable()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
+    </div>
     `
 })
 
@@ -179,9 +207,11 @@ export class DadConfigComponent implements  OnInit{
     public selectedChart: DadChart;
     public selectedWidget: DadWidget;
     public selectedTable: DadTable;
+    public selectedPage: DadPage;
     public showChart: DadChart;
     public showWidget: DadWidget;
     public showTable: DadTable;
+    public showPage: DadPage;
     public dirty:boolean = false;
 
     constructor(
@@ -195,9 +225,11 @@ export class DadConfigComponent implements  OnInit{
       this.selectedChart = null;
       this.selectedWidget = null;
       this.selectedTable = null;
+      this.selectedPage = null;
       this.showChart = null;
       this.showWidget = null;
       this.showTable = null;
+      this.showPage = null;
     }
 
     selectChart(chart:DadChart){
@@ -212,7 +244,19 @@ export class DadConfigComponent implements  OnInit{
     this.dirty=true; //mh... do it better
   }
 
-  showThisTable(table:DadTable){
+    selectTable(table:DadTable){
+        this.unselect();
+        this.selectedTable = table;
+        this.dirty=true; //mh... do it better
+    }
+
+    selectPage(page:DadPage){
+        this.unselect();
+        this.selectedPage = page;
+        this.dirty=true; //mh... do it better
+    }
+
+    showThisTable(table:DadTable){
     var show = this.showTable;
     this.unselect();
     if (!show) this.showTable = table;
@@ -228,18 +272,18 @@ export class DadConfigComponent implements  OnInit{
     var show = this.showWidget;
     this.unselect();
     if (!show) this.showWidget = widget;
-  }
-
-  selectTable(table:DadTable){
-    this.unselect();
-    this.selectedTable = table;
-    this.dirty=true; //mh... do it better
-  }
+    }
+    showThisPage(page:DadPage){
+        var show = this.showPage;
+        this.unselect();
+        if (!show) this.showPage = page;
+    }
 
     saveConfiguration(){
       this.dadChartConfigsService.save(this.charts);
       this.dadWidgetConfigsService.save(this.widgets);
       this.dadTableConfigsService.save(this.tables);
+      this.dadPageConfigsService.save(this.pages);
       this.dirty=false; //mh... do it better
         //I now this is weird...why only the charts... well beceuase we are going to refactor to only have on confioguratio service
         this.dadChartConfigsService.saveUserConfigurationToDdb();
@@ -284,10 +328,18 @@ export class DadConfigComponent implements  OnInit{
         this.selectedTable = null;
     }
 
+    deletePage(page:DadPage){
+        this.pages = this.pages.filter(value => value.id!=this.selectedPage.id);
+        this.dirty=true; //mh... do it better
+        this.selectedPage = null;
+    }
+
+
     ngOnInit() {
         this.dadChartConfigsService.getChartConfigs().then((charts) => {this.charts = charts;});
         this.dadWidgetConfigsService.getWidgetConfigs().then((widgets) => {this.widgets = widgets;});
         this.tables = this.dadTableConfigsService.getTableConfigs();
+        this.pages = this.dadPageConfigsService.getPageConfigs();
     }
 
 }

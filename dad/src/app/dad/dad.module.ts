@@ -8,7 +8,6 @@ import { DadWidgetComponent } from "./widget.component";
 import { DadConfigComponent } from './configuration.component';
 import { DadTableComponent } from './table.component';
 import { DadLoginComponent } from './login.component';
-import { DadComponent } from './dashboard.component';
 import { DadRoutingModule } from './dad-routing.module';
 import { CommonModule } from '@angular/common'; //<-- This one
 
@@ -48,7 +47,7 @@ let LocalStorageServiceConfig = {
             apiKey: 'AIzaSyDK7Z_arQKxXVf0ZiUDl4_yackjHiD9HNA'
         })
     ],
-    declarations: [ DadComponent, DadChartComponent, DadConfigComponent,
+    declarations: [DadChartComponent, DadConfigComponent,
         DadWidgetComponent, DadTableComponent, DadParametersComponent, DadLoginComponent, DadPageComponent, DadBigChartComponent, DadDrillChartsComponent, DadMap, DadMap2],
     providers: [
         AuthGuard, ...AUTH_PROVIDERS
