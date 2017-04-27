@@ -271,7 +271,7 @@ export class DadChartComponent implements OnInit {
         this.changeMapData();
         this.changeChartData(chartData);
         this.addFilter = false;
-
+        this.editExpression = false;
     }
 
     removeFilter() {

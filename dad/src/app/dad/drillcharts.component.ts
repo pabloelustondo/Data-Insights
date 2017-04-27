@@ -32,26 +32,19 @@ export class DadDrillChartsComponent {
 
 
     createDrillChart(chart:DadChart, rowindex:number){
-        let  newid =  chart.id + rowindex;
-        //try to find this in the configuration
-        return this.dadChartConfigsService.getChartConfig(newid).then(
-            (data)=>{
-                    let drillChart:DadChart;
-                    if (!data){
+
                         let chartConfig = JSON.parse(JSON.stringify(chart)); //to clone object
                         chartConfig.id += rowindex;
-                        chartConfig.reduction = chartConfig.reductions[rowindex];
-                        drillChart = chartConfig;
-                        this.dadChartConfigsService.saveOne(drillChart);
-                    }else {
-                        drillChart = data;
-                    }
-                this.charts.push(drillChart);
-            },
-            (error) => {
-                //?
-            });
+                        this.dadChartConfigsService.getChartConfig(chartConfig.id).then((drillChart) => {
 
+                            if(!drillChart) {
+                                chartConfig.reduction = chartConfig.reductions[rowindex];
+                                chartConfig.filter = chartConfig.filters[rowindex]
+                                drillChart = chartConfig;
+                                this.dadChartConfigsService.saveOne(drillChart);
+                            }
+                            this.charts.push(drillChart);
+                        })
     }
 
   ngAfterViewInit(){

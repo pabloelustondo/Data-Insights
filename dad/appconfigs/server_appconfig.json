@@ -1,0 +1,8 @@
+{
+  "testingmode":false,
+  "port":4201,
+  "hostname": "dev2012r2-sk.sotidev.com",
+  "dss_url":"https://dev2012r2-sk.sotidev.com:3003",
+  "oda_url":"http://dev2012r2-sk.sotidev.com:3002",
+  "dadback_url":"http://localhhost:4201"
+}

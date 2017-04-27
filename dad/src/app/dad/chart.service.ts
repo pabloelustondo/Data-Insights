@@ -110,11 +110,6 @@ export class DadChartConfigsService {
 
     public getChartConfigs(): Promise<any> {
 
-      if (config.testing){
-        localStorage.setItem("chartdata", JSON.stringify(CHARTS));
-        return Promise.resolve(CHARTS);
-      }
-
       let charts_string = localStorage.getItem("chartdata");
 
       if (charts_string != null || config.testing){
