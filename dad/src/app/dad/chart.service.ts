@@ -109,10 +109,16 @@ export class DadChartConfigsService {
   }
 
     public getChartConfigs(): Promise<any> {
-
       let charts_string = localStorage.getItem("chartdata");
 
-      if (charts_string != null || config.testing){
+      if (charts_string == null && config.testing){
+        localStorage.setItem("chartdata", JSON.stringify(CHARTS));
+        return Promise.resolve(CHARTS);
+      }
+
+
+
+      if (charts_string != null || !config.testing){
         let charts_obj = JSON.parse(charts_string);
         let DATA = charts_obj as DadChart[];
         return Promise.resolve(DATA);
@@ -264,15 +270,15 @@ public getWidgetConfig(id:string): Promise<DadWidget> {
 }
 
   public getWidgetConfigs(): Promise<any> {
+    let widgets_string = localStorage.getItem("widgetdata");
 
-    if (config.testing){
+    if (widgets_string==null && config.testing){
       localStorage.setItem("widgetdata", JSON.stringify(WIDGETS));
       return Promise.resolve(WIDGETS);
     }
 
-    let widgets_string = localStorage.getItem("widgetdata");
 
-    if (widgets_string != null || config.testing){
+    if (widgets_string != null || !config.testing){
       let widgets_obj = JSON.parse(widgets_string);
       let DATA = widgets_obj as DadWidget[];
       return Promise.resolve(DATA);
@@ -399,15 +405,15 @@ export class DadTableConfigsService {
   }
 
   public getTableConfigs(): DadTable[] {
+    let tables_string = localStorage.getItem("tabledata");
 
-    if (config.testing) {
+    if (tables_string == null && config.testing) {
       localStorage.setItem("tabledata", JSON.stringify(TABLES));
       return TABLES;
     }
 
-    let tables_string = localStorage.getItem("tabledata");
 
-    if (tables_string != null || config.testing){
+    if (tables_string != null || !config.testing){
       let table_obj = JSON.parse(tables_string);
       let DATA = table_obj as DadTable[];
       return DATA;
@@ -524,7 +530,7 @@ export class DadPageConfigsService {
 
     let pages_string = localStorage.getItem("pagedata");
 
-    if (pages_string != null || config.testing){
+    if (pages_string != null || !config.testing){
       let page_obj = JSON.parse(pages_string);
       let DATA = page_obj as DadPage[];
       return DATA;
