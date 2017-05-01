@@ -118,7 +118,7 @@ export class DadChartConfigsService {
 
 
 
-      if (charts_string != null || !config.testing){
+      if (charts_string != null){
         let charts_obj = JSON.parse(charts_string);
         let DATA = charts_obj as DadChart[];
         return Promise.resolve(DATA);
@@ -278,7 +278,7 @@ public getWidgetConfig(id:string): Promise<DadWidget> {
     }
 
 
-    if (widgets_string != null || !config.testing){
+    if (widgets_string != null){
       let widgets_obj = JSON.parse(widgets_string);
       let DATA = widgets_obj as DadWidget[];
       return Promise.resolve(DATA);
@@ -413,7 +413,7 @@ export class DadTableConfigsService {
     }
 
 
-    if (tables_string != null || !config.testing){
+    if (tables_string != null){
       let table_obj = JSON.parse(tables_string);
       let DATA = table_obj as DadTable[];
       return DATA;
@@ -503,43 +503,68 @@ export class DadPageConfigsService {
     localStorage.removeItem("pagedata");
   }
 
+  public saveOne(page:DadPage ){
+    let pages:DadPage[];
+
+    this.getPageConfigs().then((pages:DadPage[]) =>{
+
+          let pageIndex = _.findIndex(pages, function(w) { return w.id == page.id; });
+          if(pageIndex === -1){
+            pages.push(page);
+          } else {
+            pages.splice(pageIndex, 1, page);
+          }
+          this.save(pages);
+        }
+    );
+  }
+
   public save(pages:DadPage[] ){
     let pages_string = JSON.stringify(pages);
     localStorage.setItem("pagedata",pages_string);
     if (!config.testing) this.saveUserConfigurationToDdb();
   }
 
-  public saveOne(page:DadPage ){
-    let pages:DadPage[] = this.getPageConfigs();
-    let pageIndex = _.findIndex(pages, function(w) { return w.id == page.id; });
-    if(pageIndex === -1){
-      pages.push(page);
-    } else {
-      pages.splice(pageIndex, 1, page);
-    }
-    this.save(pages);
+  public getPageConfig(id:string): Promise<DadPage> {
+    return this.getPageConfigs().then((pages:DadPage[]) =>{
+          let pageIndex = _.findIndex(pages, function(w) { return w.id == id; });
+          if (pageIndex>-1) return Promise.resolve(pages[pageIndex]);
+          else return Promise.resolve(null);
+        }
+    );
   }
 
-  public getPageConfig(id:string): DadPage {
-    let pages = this.getPageConfigs();
-    let pageIndex = _.findIndex(pages, function(w) { return w.id == id; });
-    return pages[pageIndex];
-  }
-
-  public getPageConfigs(): DadPage[] {
-
+  public getPageConfigs(): Promise<any> {
     let pages_string = localStorage.getItem("pagedata");
 
-    if (pages_string != null || !config.testing){
-      let page_obj = JSON.parse(pages_string);
-      let DATA = page_obj as DadPage[];
-      return DATA;
+    if (pages_string==null && config.testing){
+      localStorage.setItem("pagedata", JSON.stringify(PAGES));
+      return Promise.resolve(PAGES);
+    }
+
+
+    if (pages_string != null){
+      let pages_obj = JSON.parse(pages_string);
+      let DATA = pages_obj as DadPage[];
+      return Promise.resolve(DATA);
     }
     else {
-      let pages_string = JSON.stringify(PAGES);
-      localStorage.setItem("pagedata",pages_string);
-      return PAGES;
+      return this.getUserConfigurationFromDdb().then(
+          (data) => {
+            let dataObj = JSON.parse(data._body)[0];
+            this.saveConfigFromDb(dataObj);
+            let pagesString = localStorage.getItem("pagedata");
+            let pages = JSON.parse(pagesString);
+            return Promise.resolve(pages);
+          },
+          (error) => {
+            console.log(error);
+          }
+      );
     }
   }
+
+
+
 }
 
