@@ -1,4 +1,4 @@
-import './controllers/multiplePosts';
+// import './controllers/multiplePosts';
 import './controllers/getAuthorizationToken';
 import './controllers/uploadLargeDataSet';
 
@@ -7,6 +7,7 @@ import * as winston from 'winston';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as https from 'https';
+import * as http from 'http';
 import * as fs from 'fs';
 import * as methodOverride from 'method-override';
 const morgan = require('morgan');
@@ -16,15 +17,18 @@ const expressWinston = require('express-winston');
 import {RegisterRoutes} from './routes';
 
 let helmet = require('helmet');
-let config = require('../appconfig.json');
+let appconfig = require('../appconfig.json');
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
-let httpsOptions = {
-    key: fs.readFileSync(config['https-key-location'] ),
-    cert: fs.readFileSync(config['https-cert-location'] )
-};
+if (!fs.existsSync( appconfig.logDir)) {
 
+    fs.mkdir((appconfig.logDir), function (err: any) {
+        if (err) {
+           // console.log( err);
+        }
+    });
+}
 
 exports.app = app;
 app.use(helmet());
@@ -79,7 +83,7 @@ const errorLogger = expressWinston.errorLogger({
     transports: [
         new winston.transports.File({
             name: 'vverboseLog',
-            filename: './logs/error-verbose-ida-logs.log',
+            filename: appconfig.logDir + '/error-verbose-ida-logs.log',
             json: true,
             colorize: true,
             maxsize: 5242880,
@@ -90,7 +94,7 @@ const errorLogger = expressWinston.errorLogger({
         }),
         new winston.transports.File({
             name: 'iinfoLog',
-            filename: './logs/error-info-ida-logs.log',
+            filename: appconfig.logDir + '/error-info-ida-logs.log',
             json: true,
             colorize: true,
             maxsize: 5242880,
@@ -99,7 +103,7 @@ const errorLogger = expressWinston.errorLogger({
         }),
         new winston.transports.File({
             name: 'ddebugLog',
-            filename: './logs/error-debug-ida-logs.log',
+            filename: appconfig.logDir + 'logs/error-debug-ida-logs.log',
             json: true,
             colorize: true,
             maxsize: 5242880,
@@ -108,7 +112,7 @@ const errorLogger = expressWinston.errorLogger({
         }),
         new winston.transports.File({
             name: 'eerrorLog',
-            filename: './logs/error-error-ida-logs.log',
+            filename: appconfig.logDir + '/error-error-ida-logs.log',
             json: true,
             colorize: true,
             maxsize: 5242880,
@@ -150,11 +154,26 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 RegisterRoutes(app);
 
-let httpsServer = https.createServer(httpsOptions, app);
+if (appconfig.useSSL) {
+
+    let httpsOptions = {
+        key: fs.readFileSync(appconfig['https-key-location'] ),
+        cert: fs.readFileSync(appconfig['https-cert-location'] )
+    };
+
+    let httpsServer = https.createServer(httpsOptions, app);
+    httpsServer.listen(appconfig.port, function (){
+        console.log('Starting https server.. https://localhost:' + appconfig.port + '/docs');
+    });
+} else {
+    let httpServer = http.createServer(app);
+
+    httpServer.listen(appconfig.port, function () {
+        console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
+    });
+}
+
 
 app.use(errorLogger);
 
-httpsServer.listen(config.port, function (){
-    console.log('Starting https server.. https://localhost:' + config.port + '/docs');
-});
 

@@ -62,8 +62,7 @@ export class UploadLargeDataSetController {
 
 
         let req = express;
-        let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress ||
-        req.socket.remoteAddress ;
+        let ip = req.headers['x-forwarded-for'] ;
         let token = req.headers['x-access-token'];
         let contentType = req.headers['content-type'];
 
