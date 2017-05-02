@@ -339,7 +339,7 @@ export class DadConfigComponent implements  OnInit{
         this.dadChartConfigsService.getChartConfigs().then((charts) => {this.charts = charts;});
         this.dadWidgetConfigsService.getWidgetConfigs().then((widgets) => {this.widgets = widgets;});
         this.tables = this.dadTableConfigsService.getTableConfigs();
-        this.pages = this.dadPageConfigsService.getPageConfigs();
+        this.dadPageConfigsService.getPageConfigs().then((pages) => {this.pages = pages;});
     }
 
 }

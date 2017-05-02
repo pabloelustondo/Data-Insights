@@ -67,21 +67,26 @@ export class  DadPageComponent implements OnInit{
             this.subscription = this.activatedRoute.params.subscribe(
                 (param: any) => {
                     let callerPageId = param['id'];
-                    this.page = this.dadPageConfigsService.getPageConfig(callerPageId);
+                    this.dadPageConfigsService.getPageConfig(callerPageId).then((page) => {
+                        this.page = page;
 
-                    this.page.charts = [];
-                    for (let chartid of this.page.chartids) {
-                        this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
-                            if (chart) this.page.charts.push(chart);
-                        })
-                    }
+                        this.page.charts = [];
+                        for (let chartid of this.page.chartids) {
+                            this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
+                              //  let chart = element as DadChart;
+                                if (chart) this.page.charts.push(chart);
+                            })
+                        }
 
-                    this.page.widgets = [];
-                    for (let widgetid of this.page.widgetids) {
-                        let widget = this.dadWidgetConfigsService.getWidgetConfig(widgetid).then((widget) => {
-                            if (widget) this.page.widgets.push(widget);
-                        });
-                    }
+                        this.page.widgets = [];
+                        for (let widgetid of this.page.widgetids) {
+                            this.dadWidgetConfigsService.getWidgetConfig(widgetid).then((widget) => {
+                                if (widget) this.page.widgets.push(widget);
+                            });
+                        }
+                    });
+
+
                 });
         }
     }
