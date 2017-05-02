@@ -1,6 +1,8 @@
 {
   "deployment_type":"dev",
   "port": 3010,
+  "useSSL" : false,
+  "logDir" : "./logs",
   "db-address" : "http://localhost:8000",
   "aws-hostname" : "2vf2f8xp27.execute-api.us-east-1.amazonaws.com",
   "aws-x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
