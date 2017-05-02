@@ -25,7 +25,7 @@ if (!fs.existsSync( appconfig.logDir)) {
 
     fs.mkdir((appconfig.logDir), function (err: any) {
         if (err) {
-           // console.log( err);
+           console.log( err);
         }
     });
 }
