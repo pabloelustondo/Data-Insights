@@ -24,6 +24,8 @@ export class DadConfigService {
     user:DadUser;
     token: string;
     jwtHelper = new JwtHelper();
+    element_config;
+    elements_string;
 
     constructor(private http: Http) {
         if (config.testing){
@@ -48,15 +50,15 @@ export class DadConfigService {
         return this.http.get(url).toPromise();
     }
 
-    public saveUserConfigurationToDdb(data){
+    public saveUserConfigurationToDdb(){
         //this method will save the current configuration in local storage to the server
+        let charts = localStorage.getItem("chartdata");
+        let widgets = localStorage.getItem("widgetdata");
+        let tables = localStorage.getItem("tabledata");
+        let pages = localStorage.getItem("pagedata");
         let timeStamp = Date.now().toString();
-        let charts = data.config.charts;
-        let widgets = data.config.widgets;
-        let tables = data.config.tables;
-        let pages = data.config.pages;
 
-        let config = { timeStamp: timeStamp,
+         this.element_config = { timeStamp: timeStamp,
             charts: charts,
             widgets: widgets,
             tables:tables,
@@ -110,35 +112,37 @@ export class DadConfigService {
     }
 
     public getChartConfigs(): Promise<any> {
-        if (elements_string == null && config.testing){
+        this.elements_string = localStorage.getItem("element_config");
+
+        if (this.elements_string == null && config.testing){
             localStorage.setItem("chartdata", JSON.stringify(CHARTS));
             return Promise.resolve(CHARTS);
         }
-        return  Promise.resolve(config.charts as DadChart);
+        return  Promise.resolve(this.element_config.charts as DadChart);
     }
 
     public getWidgetConfigs(): Promise<any> {
-        if (elements_string == null && config.testing) {
+        if (this.elements_string == null && config.testing) {
             localStorage.setItem("widgetdata", JSON.stringify(WIDGETS));
             return Promise.resolve(WIDGETS);
         }
-        return  Promise.resolve(config.charts as DadWidget);
+        return  Promise.resolve(this.element_config.widgets as DadWidget);
     }
 
     public getTableConfigs(): Promise<any> {
-        if (elements_string == null && config.testing){
+        if (this.elements_string == null && config.testing){
             localStorage.setItem("tabledata", JSON.stringify(TABLES));
             return Promise.resolve(TABLES);
         }
-        return  Promise.resolve(config.tables as DadTable);
+        return  Promise.resolve(this.element_config.tables as DadTable);
     }
 
     public getPageConfigs(): Promise<any> {
-        if (elements_string == null && config.testing){
+        if (this.elements_string == null && config.testing){
             localStorage.setItem("pagedata", JSON.stringify(PAGES));
             return Promise.resolve(PAGES);
         }
-        return  Promise.resolve(config.pages as DadPage);
+        return  Promise.resolve(this.element_config.pages as DadPage);
     }
 
     public getConfigs(): Promise<any> {
