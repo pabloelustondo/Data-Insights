@@ -147,8 +147,6 @@ export class DadConfigService {
 
     public getConfigs(): Promise<any> {
         let elements_string = localStorage.getItem("elementdata");
-//cast here
-
 
         if (elements_string != null){
             let elements_obj = JSON.parse(elements_string);

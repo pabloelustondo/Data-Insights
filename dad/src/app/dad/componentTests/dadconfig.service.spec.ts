@@ -2,6 +2,7 @@ import  {DadConfigService} from '../DadConfig.service';
 import { TestBed, inject, async } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import {HttpModule, Http, Response, ResponseOptions, BaseRequestOptions, XHRBackend} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 describe('DadConfigComponent', () => {
   beforeEach(() => {
