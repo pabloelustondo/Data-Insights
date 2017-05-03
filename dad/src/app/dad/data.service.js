@@ -8,13 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 /**
  * Created by pabloelustondo on 2016-11-21.
  */
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
+var core_1 = require('@angular/core');
+var http_1 = require('@angular/http');
 var appconfig_1 = require("./appconfig");
-require("rxjs/add/operator/map");
-require("rxjs/add/operator/toPromise");
-require("rxjs/add/operator/catch");
-var Rx_1 = require("rxjs/Rx");
+require('rxjs/add/operator/map');
+require('rxjs/add/operator/toPromise');
+require('rxjs/add/operator/catch');
+var Rx_1 = require('rxjs/Rx');
 var DadElementDataService = (function () {
     function DadElementDataService(http, router) {
         this.http = http;
@@ -34,7 +34,7 @@ var DadElementDataService = (function () {
         var data = { metricName: element.metricName, predicates: element.predicates, parameters: element.parameters[0] };
         var findData = function (data) {
             if (element.dataElement)
-                return data[element.dataElement];
+                return data.data[element.dataElement];
             return data.data;
         };
         if (appconfig_1.config.testing || appconfig_1.config.oda_url == "")
@@ -42,19 +42,21 @@ var DadElementDataService = (function () {
         if (endpoint0.method === "post") {
             var bodyString = JSON.stringify(['_body']);
             return this.http.post(endpoint0.url, data, headers)
-                .map(function (res) { return findData(res.json()); })["catch"](function (error) { return Rx_1.Observable["throw"](error.json().error || 'Server error'); });
+                .map(function (res) { return findData(res.json()); })
+                .catch(function (error) { return Rx_1.Observable.throw(error.json().error || 'Server error'); });
         }
         else {
             return this.http.get(appconfig_1.config[element.endpoint], {
                 search: params,
                 headers: headers
             })
-                .map(function (res) { return findData(res.json()); })["catch"](function (error) { return Rx_1.Observable["throw"](error.json().error || 'Server error'); });
+                .map(function (res) { return findData(res.json()); })
+                .catch(function (error) { return Rx_1.Observable.throw(error.json().error || 'Server error'); });
         }
     };
+    DadElementDataService = __decorate([
+        core_1.Injectable()
+    ], DadElementDataService);
     return DadElementDataService;
 }());
-DadElementDataService = __decorate([
-    core_1.Injectable()
-], DadElementDataService);
 exports.DadElementDataService = DadElementDataService;

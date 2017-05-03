@@ -2,7 +2,7 @@
 exports.PAGES = [
     { id: "batstats",
         name: "Battery Stats",
-        widgetids: ["widget1", "widget2", "widget3", "widget4"],
+        widgetids: ["widget1", "widget4"],
         chartids: ['chartbar'],
         tableids: ['table1', 'table2']
     },

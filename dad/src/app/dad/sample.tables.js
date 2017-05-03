@@ -23,8 +23,7 @@ exports.TABLES = [
                 rowsTake: 1000,
                 shiftStartDateTime: "2016-08-25",
                 minimumBatteryPercentageThreshold: 20
-            }
-        ],
+            }],
         columns: [
             {
                 Type: "String",
@@ -49,12 +48,12 @@ exports.TABLES = [
             {
                 Type: "String",
                 Name: "OS",
-                DataSource: "os"
+                DataSource: "os",
             },
             {
                 Type: "String",
                 Name: "Carrier Network",
-                DataSource: "carrier"
+                DataSource: "carrier",
             },
             {
                 Type: "MiniChart",
@@ -93,8 +92,7 @@ exports.TABLES = [
                 rowsTake: 1000,
                 shiftStartDateTime: "2016-08-25T08:00",
                 minimumBatteryPercentageThreshold: 30
-            }
-        ],
+            }],
         columns: [
             {
                 Type: "String",

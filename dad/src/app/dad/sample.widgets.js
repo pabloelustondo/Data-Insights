@@ -41,8 +41,7 @@ exports.WIDGETS = [
                 shiftStartDateTime: "2016-08-15T13:00:00.000Z",
                 shiftDuration: "8",
                 minimumBatteryPercentageThreshold: 20
-            }
-        ],
+            }],
         uiparameters: [
             {
                 Type: 'DateTime',
@@ -101,8 +100,7 @@ exports.WIDGETS = [
                 shiftStartDateTime: "2016-08-25T13:00:00.000Z",
                 shiftDuration: "8",
                 minimumBatteryPercentageThreshold: 20
-            }
-        ],
+            }],
         uiparameters: [
             {
                 Type: 'DateTime',
@@ -162,8 +160,7 @@ exports.WIDGETS = [
                 shiftStartDateTime: "2016-08-25T13:00:00.000Z",
                 shiftDuration: "8",
                 minimumBatteryPercentageThreshold: 20
-            }
-        ],
+            }],
         uiparameters: [
             {
                 Type: 'String',
@@ -196,7 +193,7 @@ exports.WIDGETS = [
         intervalTime: 5000,
         data: [{
                 CountDevicesNotLastedShift: 200,
-                CountDevicesNotFullyCharged: 80
+                CountDevicesNotFullyCharged: 80,
             }],
         metrics: [
             {
@@ -218,8 +215,7 @@ exports.WIDGETS = [
                 endDate: "2016-08-25T19:19:26.581",
                 shiftDuration: 8,
                 minimumBatteryPercentageThreshold: 20
-            }
-        ],
+            }],
         uiparameters: [
             {
                 Type: 'DateTime',
@@ -269,8 +265,7 @@ exports.WIDGETS = [
             {
                 dateFrom: "2017-01-24T20:30:21",
                 dateTo: "2017-01-25T20:30:21"
-            }
-        ],
+            }],
         uiparameters: [
             {
                 Type: 'DateTime',
@@ -284,7 +279,7 @@ exports.WIDGETS = [
             }
         ],
         chart: { id: "charthorizontal",
-            type: "bar",
+            type: "pie",
             a: 'ExecutionTimeMinutes',
             b: 'AppId',
             aname: 'Execution Minutes',
@@ -320,8 +315,7 @@ exports.WIDGETS = [
             {
                 dateFrom: "2017-01-24T20:30:21",
                 dateTo: "2017-01-27T20:30:21"
-            }
-        ],
+            }],
         uiparameters: [
             {
                 Type: 'DateTime',
@@ -335,7 +329,7 @@ exports.WIDGETS = [
             }
         ],
         chart: { id: "charthorizontal2",
-            type: "bar",
+            type: "pie",
             a: 'NumberOfInstallations',
             b: 'AppId',
             aname: 'Number Of Installations',

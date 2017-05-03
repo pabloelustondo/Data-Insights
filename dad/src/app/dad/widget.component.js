@@ -10,30 +10,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var core_1 = require("@angular/core");
+var core_1 = require('@angular/core');
 var data_service_1 = require("./data.service");
-var chart_service_1 = require("./chart.service");
+var chart_service_1 = require('./chart.service');
+var chart_service_2 = require('./chart.service');
 var mapper_1 = require("./mapper");
 var dadmodels_1 = require("./dadmodels");
 var appconfig_1 = require("./appconfig");
-var DadWidgetType;
 (function (DadWidgetType) {
     DadWidgetType[DadWidgetType["OneNumber"] = 0] = "OneNumber";
     DadWidgetType[DadWidgetType["Chart"] = 1] = "Chart";
-})(DadWidgetType = exports.DadWidgetType || (exports.DadWidgetType = {}));
+})(exports.DadWidgetType || (exports.DadWidgetType = {}));
+var DadWidgetType = exports.DadWidgetType;
 ;
 var DadWidget = (function (_super) {
     __extends(DadWidget, _super);
     function DadWidget() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     return DadWidget;
 }(dadmodels_1.DadElement));
 exports.DadWidget = DadWidget;
 var DadWidgetComponent = (function () {
-    function DadWidgetComponent(dadWidgetDataService, dadWidgetConfigsService, router, route) {
+    function DadWidgetComponent(dadWidgetDataService, dadWidgetConfigsService, dadPageConfigsService, router, route) {
         this.dadWidgetDataService = dadWidgetDataService;
         this.dadWidgetConfigsService = dadWidgetConfigsService;
+        this.dadPageConfigsService = dadPageConfigsService;
         this.router = router;
         this.route = route;
         this.mapper = new mapper_1.Mapper();
@@ -55,6 +57,19 @@ var DadWidgetComponent = (function () {
             this.editMode = true;
         else
             this.editMode = false;
+    };
+    DadWidgetComponent.prototype.onRemoveFromPage = function () {
+        var new_widgets = [];
+        var new_widgetids = [];
+        for (var w = 0; w < this.page.widgetids.length; w++) {
+            if (this.page.widgetids[w] !== this.widget.id) {
+                new_widgetids.push(this.page.widgetids[w]);
+                new_widgets.push(this.page.widgets[w]);
+            }
+        }
+        this.page.widgets = new_widgets;
+        this.page.widgetids = new_widgetids;
+        this.dadPageConfigsService.saveOne(this.page);
     };
     DadWidgetComponent.prototype.onMoreDetails = function (message) {
         if (!this.moreDetails)
@@ -137,16 +152,19 @@ var DadWidgetComponent = (function () {
         }
         this.realDataMonitoring();
     };
+    __decorate([
+        core_1.Input()
+    ], DadWidgetComponent.prototype, "widget", void 0);
+    __decorate([
+        core_1.Input()
+    ], DadWidgetComponent.prototype, "page", void 0);
+    DadWidgetComponent = __decorate([
+        core_1.Component({
+            selector: 'dadwidget',
+            providers: [data_service_1.DadElementDataService, chart_service_1.DadWidgetConfigsService, chart_service_2.DadPageConfigsService],
+            template: "   \n\n<div class=\"dadWidget\">\n  <div class=\"col-sm-4 col-lg-3\">  \n     <div class=\"inside\">\n        <div class=\"content card card-inverse card-primary\">\n            <div class=\"card-block pb-0\">\n                <div class=\"btn-group float-xs-right\" dropdown>\n                    <button type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                        <i class=\"icon-settings\"></i>\n                    </button>   \n\n                    <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                        <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('lalal')\">Edit</div></button>\n                        <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRawData()\">See raw fact data</div></button>\n                        <button *ngIf=\"widget.type==0 && widget.metrics.length>2\" class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onMoreDetails('lalal')\">More Details</div></button>\n                        <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n                        <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRemoveFromPage('lalal')\">Remove From Page</div></button>            \n                    </div>\n                </div>\n                \n                <label style=\"margin-right: 10px;\" class=\"switch switch-text switch-pill switch-success pull-right pb-1\">\n                    <input type=\"checkbox\" class=\"switch-input\" (click)=\"onRealDataMonitoring()\">\n                    <span class=\"switch-label\" data-on=\"On\" data-off=\"Off\"></span>\n                    <span class=\"switch-handle\"></span>\n                </label>\n \n               <div *ngIf=\"widget.type===0\">\n                <div [id]=\"widget.id + '_0_name'\" class=\"card-title m-l-5\">{{widget.metrics[0].Name}}</div>\n                <h3 *ngIf=\"data\" class=\"mb-0\">\n                    <div style=\"cursor:pointer;\" *ngIf=\"!(data[0][widget.metrics[0].DataSource]===0)\" (click)=\"onDrill('lalala')\">\n                        <span [id]=\"widget.id + '_0_value'\" style=\"font-size: 140px; color:white;\">{{data[0][widget.metrics[0].DataSource]}} </span>\n                    </div>\n                    <a *ngIf=\"(data[0][widget.metrics[0].DataSource]===0)\">\n                        <span style=\"font-size: 140px; color:white;\">{{data[0][widget.metrics[0].DataSource]}} </span>\n                    </a>\n                    <br/>out of {{data[0][widget.metrics[1].DataSource]}} \n                </h3><br/>\n                <div *ngIf=\"data\" class=\"col-sm-6\">\n                   <progress style=\" display:inline-block; margin-bottom: -.5px; margin-left: -15px;\" class=\"progress progress-xs progress-danger pull-md-left\" value=\"{{data[0][widget.metrics[0].DataSource]}}\" max=\"{{data[0][widget.metrics[1].DataSource]}}\"></progress>                                                          \n                </div>\n                <div *ngIf=\"data\">{{percentageOfTotal()}}%</div>     \n                <br/><br/>\n                <div *ngIf=\"moreDetails && data && widget.metrics.length>2\">\n                    <div>{{widget.metrics[2].Name}}</div> \n                    <div>{{data[0][widget.metrics[2].DataSource]}}</div> \n                    <div class=\"col-sm-6\">\n                       <progress style=\"margin-left:-15px;\" *ngIf=\"data\" class=\"progress progress-xs progress-danger\" value=\"{{data[0][widget.metrics[2].DataSource]}}\" max=\"{{data[0][widget.metrics[1].DataSource]}}\"></progress>\n                    </div><br/>            \n                    <div *ngIf=\"moreDetails && data && widget.metrics.length>3\">\n                        <div>{{widget.metrics[3].Name}}</div> \n                        <div>{{data[0][widget.metrics[3].DataSource]}}</div> \n                        <div class=\"col-sm-6\">\n                            <progress style=\"margin-left:-15px;\" *ngIf=\"data\" class=\"progress progress-xs progress-danger\" value=\"{{data[0][widget.metrics[3].DataSource]}}\" max=\"{{data[0][widget.metrics[1].DataSource]}}\"></progress>\n                        </div><br/>\n                    </div>  \n                    <div *ngIf=\"moreDetails && data\" class=\"col-sm-9 \">\n                        <button (click)=\"onMoreDetails()\" type=\"button\" class=\"btn btn-secondary pull-right\">\n                            <span class=\"glyphicons glyphicons-chevron-up\"></span>                        \n                        </button><br/><br/><br/>\n                    </div>\n                </div> \n                    <dadparameters [element]=\"widget\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeData()\"></dadparameters>   \n                </div>\n\n                <div *ngIf=\"data && widget.type===1\" class=\"card-title m-l-5\">{{widget.name}}</div>\n                <div *ngIf=\"data && widget.type===1\" class=\"content card card-secondary\"> \n                    <div class=\"content card card-secondary\"><br/><br/>\n                        <dadchart [chart]=\"widget.chart\" [data]=\"data\"></dadchart>\n                    </div>\n                </div>  \n                <dadparameters *ngIf=\"data && widget.type===1\" [element]=\"widget\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeData()\"></dadparameters>\n            </div>  \n        </div>\n     </div>\n  </div>\n</div>\n  \n   \n  "
+        })
+    ], DadWidgetComponent);
     return DadWidgetComponent;
 }());
-__decorate([
-    core_1.Input()
-], DadWidgetComponent.prototype, "widget");
-DadWidgetComponent = __decorate([
-    core_1.Component({
-        selector: 'dadwidget',
-        providers: [data_service_1.DadElementDataService, chart_service_1.DadWidgetConfigsService],
-        template: "   \n\n<div class=\"dadWidget\">\n  <div class=\"col-sm-4 col-lg-3\">  \n     <div class=\"inside\">\n        <div class=\"content card card-inverse card-primary\">\n            <div class=\"card-block pb-0\">\n                <div class=\"btn-group float-xs-right\" dropdown>\n                    <button type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                        <i class=\"icon-settings\"></i>\n                    </button>   \n\n                    <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                        <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('lalal')\">Edit</div></button>\n                        <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRawData()\">See raw fact data</div></button>\n                        <button *ngIf=\"widget.type==0 && widget.metrics.length>2\" class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onMoreDetails('lalal')\">More Details</div></button>\n                        <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n                    </div>\n                </div>\n                \n                <label style=\"margin-right: 10px;\" class=\"switch switch-text switch-pill switch-success pull-right pb-1\">\n                    <input type=\"checkbox\" class=\"switch-input\" (click)=\"onRealDataMonitoring()\">\n                    <span class=\"switch-label\" data-on=\"On\" data-off=\"Off\"></span>\n                    <span class=\"switch-handle\"></span>\n                </label>\n \n               <div *ngIf=\"widget.type===0\">\n                <div [id]=\"widget.id + '_0_name'\" class=\"card-title m-l-5\">{{widget.metrics[0].Name}}</div>\n                <h3 *ngIf=\"data\" class=\"mb-0\">\n                    <div style=\"cursor:pointer;\" *ngIf=\"!(data[0][widget.metrics[0].DataSource]===0)\" (click)=\"onDrill('lalala')\">\n                        <span [id]=\"widget.id + '_0_value'\" style=\"font-size: 140px; color:white;\">{{data[0][widget.metrics[0].DataSource]}} </span>\n                    </div>\n                    <a *ngIf=\"(data[0][widget.metrics[0].DataSource]===0)\">\n                        <span style=\"font-size: 140px; color:white;\">{{data[0][widget.metrics[0].DataSource]}} </span>\n                    </a>\n                    <br/>out of {{data[0][widget.metrics[1].DataSource]}} \n                </h3><br/>\n                <div *ngIf=\"data\" class=\"col-sm-6\">\n                   <progress style=\" display:inline-block; margin-bottom: -.5px; margin-left: -15px;\" class=\"progress progress-xs progress-danger pull-md-left\" value=\"{{data[0][widget.metrics[0].DataSource]}}\" max=\"{{data[0][widget.metrics[1].DataSource]}}\"></progress>                                                          \n                </div>\n                <div *ngIf=\"data\">{{percentageOfTotal()}}%</div>     \n                <br/><br/>\n                <div *ngIf=\"moreDetails && data && widget.metrics.length>2\">\n                    <div>{{widget.metrics[2].Name}}</div> \n                    <div>{{data[0][widget.metrics[2].DataSource]}}</div> \n                    <div class=\"col-sm-6\">\n                       <progress style=\"margin-left:-15px;\" *ngIf=\"data\" class=\"progress progress-xs progress-danger\" value=\"{{data[0][widget.metrics[2].DataSource]}}\" max=\"{{data[0][widget.metrics[1].DataSource]}}\"></progress>\n                    </div><br/>            \n                    <div *ngIf=\"moreDetails && data && widget.metrics.length>3\">\n                        <div>{{widget.metrics[3].Name}}</div> \n                        <div>{{data[0][widget.metrics[3].DataSource]}}</div> \n                        <div class=\"col-sm-6\">\n                            <progress style=\"margin-left:-15px;\" *ngIf=\"data\" class=\"progress progress-xs progress-danger\" value=\"{{data[0][widget.metrics[3].DataSource]}}\" max=\"{{data[0][widget.metrics[1].DataSource]}}\"></progress>\n                        </div><br/>\n                    </div>  \n                    <div *ngIf=\"moreDetails && data\" class=\"col-sm-9 \">\n                        <button (click)=\"onMoreDetails()\" type=\"button\" class=\"btn btn-secondary pull-right\">\n                            <span class=\"glyphicons glyphicons-chevron-up\"></span>                        \n                        </button><br/><br/><br/>\n                    </div>\n                </div> \n                    <dadparameters [element]=\"widget\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeData()\"></dadparameters>   \n                </div>\n\n                <div *ngIf=\"data && widget.type===1\" class=\"card-title m-l-5\">{{widget.name}}</div>\n                <div *ngIf=\"data && widget.type===1\" class=\"content card card-secondary\"> \n                    <div class=\"content card card-secondary\"><br/><br/>\n                        <dadchart [chart]=\"widget.chart\" [data]=\"data\"></dadchart>\n                    </div>\n                </div>  \n                <dadparameters *ngIf=\"data && widget.type===1\" [element]=\"widget\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeData()\"></dadparameters>\n            </div>  \n        </div>\n     </div>\n  </div>\n</div>\n  \n   \n  "
-    })
-], DadWidgetComponent);
 exports.DadWidgetComponent = DadWidgetComponent;

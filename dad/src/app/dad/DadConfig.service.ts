@@ -114,7 +114,32 @@ export class DadConfigService {
             localStorage.setItem("chartdata", JSON.stringify(CHARTS));
             return Promise.resolve(CHARTS);
         }
-        return  Promise.resolve(config.charts as DadChart); }
+        return  Promise.resolve(config.charts as DadChart);
+    }
+
+    public getWidgetConfigs(): Promise<any> {
+        if (elements_string == null && config.testing) {
+            localStorage.setItem("widgetdata", JSON.stringify(WIDGETS));
+            return Promise.resolve(WIDGETS);
+        }
+        return  Promise.resolve(config.charts as DadWidget);
+    }
+
+    public getTableConfigs(): Promise<any> {
+        if (elements_string == null && config.testing){
+            localStorage.setItem("tabledata", JSON.stringify(TABLES));
+            return Promise.resolve(TABLES);
+        }
+        return  Promise.resolve(config.tables as DadTable);
+    }
+
+    public getPageConfigs(): Promise<any> {
+        if (elements_string == null && config.testing){
+            localStorage.setItem("pagedata", JSON.stringify(PAGES));
+            return Promise.resolve(PAGES);
+        }
+        return  Promise.resolve(config.pages as DadPage);
+    }
 
     public getConfigs(): Promise<any> {
         let elements_string = localStorage.getItem("elementdata");

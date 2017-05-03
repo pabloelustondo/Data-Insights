@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 /**
  * Created by dister on 3/17/2017.
  */
-var core_1 = require("@angular/core");
+var core_1 = require('@angular/core');
 var DadMap = (function () {
     function DadMap() {
         this.title = 'Next Bus Maps';
@@ -23,19 +23,19 @@ var DadMap = (function () {
         configurable: true
     });
     ;
+    __decorate([
+        core_1.Input()
+    ], DadMap.prototype, "map", void 0);
+    __decorate([
+        core_1.Input()
+    ], DadMap.prototype, "data", null);
+    DadMap = __decorate([
+        core_1.Component({
+            selector: 'dadmap',
+            styleUrls: ['map.component.css'],
+            template: "\n    {{title}}\n    <div *ngIf=\"_data\">\n        <sebm-google-map [latitude]=\"_data[0][0]\" [longitude]=\"_data[0][1]\">\n        <sebm-google-map-marker [iconUrl]=\"'../../img/bus_green.png'\" *ngFor=\"let item of _data\" [latitude]=\"item[0]\" [longitude]=\"item[1]\"></sebm-google-map-marker>\n        </sebm-google-map>\n    </div>\n    ",
+        })
+    ], DadMap);
     return DadMap;
 }());
-__decorate([
-    core_1.Input()
-], DadMap.prototype, "map");
-__decorate([
-    core_1.Input()
-], DadMap.prototype, "data");
-DadMap = __decorate([
-    core_1.Component({
-        selector: 'dadmap',
-        styleUrls: ['map.component.css'],
-        template: "\n    {{title}}\n    <div *ngIf=\"_data\">\n        <sebm-google-map [latitude]=\"_data[0][0]\" [longitude]=\"_data[0][1]\">\n        <sebm-google-map-marker [iconUrl]=\"'../../img/bus_green.png'\" *ngFor=\"let item of _data\" [latitude]=\"item[0]\" [longitude]=\"item[1]\"></sebm-google-map-marker>\n        </sebm-google-map>\n    </div>\n    "
-    })
-], DadMap);
 exports.DadMap = DadMap;
