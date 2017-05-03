@@ -5,6 +5,7 @@
   "main": "",
   "angular-cli": {},
   "scripts": {
+    "install":"npm install",
     "startBackend": "cd backend && npm i && node server.js",
     "start": "webpack-dev-server --port 3003 --inline -d --colors --display-error-details --display-cached",
     "startSSL": "webpack-dev-server --port 3003 --https --cert \"C:/63663247-localhost_3002.cert\" --key \"C:/63663247-localhost_3002.key\" --inline -d --colors --display-error-details --display-cached",

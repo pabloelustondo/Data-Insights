@@ -193,15 +193,10 @@ export class DadWidgetConfigsService {
 
   public saveUserConfigurationToDdb(){
     //this method will save the current configuration in local storage to the server
-
-    let config = { timeStamp: timeStamp,
-        charts: charts,
-        widgets: widgets,
-        tables:tables,
-        pages:pages}
-  }
-    let charts = localStorage.getItem("confga");
-
+    let charts = localStorage.getItem("chartdata");
+    let widgets = localStorage.getItem("widgetdata");
+    let tables = localStorage.getItem("tabledata");
+    let pages = localStorage.getItem("pagedata");
     let timeStamp = Date.now().toString();
     let daduserconfig = {
       userid: this.user.userid,
