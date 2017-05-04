@@ -50,7 +50,7 @@ export class DadConfigService {
         return this.http.get(url).toPromise();
     }
 
-    public saveUserConfigurationToDdb(){
+    private saveUserConfigurationToDdb(){
         //this method will save the current configuration in local storage to the server
         let charts = localStorage.getItem("chartdata");
         let widgets = localStorage.getItem("widgetdata");
