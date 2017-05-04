@@ -4,6 +4,7 @@ import { MockBackend } from '@angular/http/testing';
 import {HttpModule, Http, Response, ResponseOptions, BaseRequestOptions, XHRBackend} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {config} from "../appconfig";
+import {CHARTS} from "../sample.charts";
 
 describe('DadConfigComponent', () => {
   beforeEach(() => {
@@ -37,27 +38,6 @@ describe('DadConfigComponent', () => {
         });
       }));
 
-    it('should get the URL and the headers',
-        async(inject([DadConfigService, MockBackend], (dadConfig, mockBackend) => {
-
-            const mockResponse = {
-                data: [
-                    {tellMe: 'Service is created'},
-                ]
-            };
-
-            mockBackend.connections.subscribe((connection) => {
-                connection.mockRespond(new Response(new ResponseOptions({
-                    body: JSON.stringify(mockResponse)
-                })));
-            });
-
-            dadConfig.getUserConfigurationFromDdb().then((config) => {
-                expect(config).toBe(dadConfig.url);
-            });
-
-        })) );
-
     it('should clear the local storage',
         inject([DadConfigService, MockBackend], (dadConfig, mockBackend) => {
 
@@ -73,9 +53,30 @@ describe('DadConfigComponent', () => {
                 })));
             });
 
-            dadConfig.clearLocalCopy("chartdata");
-            let ls = localStorage.getItem("chartdata");
+            dadConfig.clearLocalCopy("elementdata");
+            let ls = localStorage.getItem("elementdata");
             expect(ls).toBe(null);
+        }));
+
+    it('should save',
+        inject([DadConfigService, MockBackend], (dadConfig, mockBackend) => {
+
+            const mockResponse = {
+                data: [
+                    {tellMe: 'Service is created'},
+                ]
+            };
+
+            mockBackend.connections.subscribe((connection) => {
+                connection.mockRespond(new Response(new ResponseOptions({
+                    body: JSON.stringify(mockResponse)
+                })));
+            });
+
+            dadConfig.save(CHARTS);
+            let ls = localStorage.getItem("elementdata");
+            let parsed = JSON.parse(ls);
+            expect(parsed.length).toBe(CHARTS.length);
         }));
 });
 

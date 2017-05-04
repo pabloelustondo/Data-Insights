@@ -26,6 +26,7 @@ export class DadConfigService {
     jwtHelper = new JwtHelper();
     element_config;
     elements_string;
+    localkey = "elementdata";
 
     constructor(private http: Http) {
         if (config.testing){
@@ -52,17 +53,16 @@ export class DadConfigService {
 
     private saveUserConfigurationToDdb(){
         //this method will save the current configuration in local storage to the server
-        let charts = localStorage.getItem("chartdata");
-        let widgets = localStorage.getItem("widgetdata");
-        let tables = localStorage.getItem("tabledata");
-        let pages = localStorage.getItem("pagedata");
+
+        let element = localStorage.getItem(this.localkey);
+        let ls = JSON.parse(element);
         let timeStamp = Date.now().toString();
 
          this.element_config = { timeStamp: timeStamp,
-            charts: charts,
-            widgets: widgets,
-            tables:tables,
-            pages:pages};
+            charts: ls.charts,
+            widgets: ls.widgets,
+            tables: ls.tables,
+            pages: ls.pages};
 
         let elements = localStorage.getItem("config");
 
