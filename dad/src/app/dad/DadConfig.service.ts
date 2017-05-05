@@ -27,6 +27,7 @@ export class DadConfigService {
     element_config;
     elements_string;
     localkey = "elementdata";
+    config = config;
 
     constructor(private http: Http) {
         if (config.testing){
@@ -74,6 +75,7 @@ export class DadConfigService {
 
         let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : this.token});
         let url = config.dadback_url + "/daduser/"+ daduserconfig.userid;
+        console.log('call in http');
         this.http.post(url, daduserconfig).toPromise().then(
             (res:Response) => {
                 console.log('configuration saved' + JSON.stringify(res));
@@ -83,17 +85,19 @@ export class DadConfigService {
             }
         );
     }
+/* Everything is same */
 
+//This is tested and works
     public clearLocalCopy(){
-        localStorage.removeItem("elementdata");
+        localStorage.removeItem(this.localkey);
     }
-
+//This is tested and works
     public save(elements:DadElement[] ){
-        let elements_string = JSON.stringify(elements);
-        localStorage.setItem("elementdata",elements_string);
-        if (!config.testing) this.saveUserConfigurationToDdb();
+        this.elements_string = JSON.stringify(elements);
+        localStorage.setItem(this.localkey,this.elements_string);
+        if (!this.config.testing) this.saveUserConfigurationToDdb();
     }
-
+//Under test config
     public saveOne(element:DadElement ){
         let elements:DadElement[];
 
@@ -110,7 +114,9 @@ export class DadConfigService {
         );
 
     }
-
+/*This part is created because functions are used in the other components but service will be working under one name
+ * since names are casted.
+ */
     public getChartConfigs(): Promise<any> {
         this.elements_string = localStorage.getItem("element_config");
 
@@ -144,7 +150,9 @@ export class DadConfigService {
         }
         return  Promise.resolve(this.element_config.pages as DadPage);
     }
+///////////////////////////////////////////////////////////////////////
 
+    //next test
     public getConfigs(): Promise<any> {
         let elements_string = localStorage.getItem("elementdata");
 
