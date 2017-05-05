@@ -8,9 +8,10 @@ var logger          = require('morgan'),
       helmet        = require('helmet'),
       fs            = require('fs'),
       config        = require('./config.json'),
-      appconfig        = require('./appconfig.json'),
+      appconfig  = require('./appconfig.json'),
     bodyParser      = require('body-parser');
 
+global.appconfig = appconfig;
 var app = express();
 
 dotenv.load();
@@ -23,6 +24,23 @@ app.use('/public', express.static(__dirname + '/public'));
 app.get('/test', function(req,res){
   res.sendfile('./public/testing/spec/SpecRunner.html');
 });
+
+app.get('/status', function(req,res){
+  if (req.query["secret"] !== appconfig.secret) res.send("wrong key");
+
+  var report = {};
+  Object.keys(appconfig).forEach(function(key){
+    if (key!== "secret") {
+      if (req.query[key]){
+        appconfig[key] = req.query[key];
+      }
+      report[key]=appconfig[key];
+    }
+  });
+  return res.send(report);
+});
+
+
 app.get('/', function(req,res){
   res.sendfile('./public/testing/spec/SpecRunner.html');
 });

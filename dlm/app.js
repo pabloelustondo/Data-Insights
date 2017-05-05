@@ -23,26 +23,6 @@ var agenda = require('./Services/Agenda');
 
 
 
-// define job processor
-/*
-agenda.define('say hello', function (job) {
-    ApiService.log(job.attrs.data.url, function(err, result) {
-        if(err) {
-            done(err);
-        } else {
-            done();
-        }
-    });
-});
-
-
-agenda.define(config['api_service_job_name'], function (job) {
-    ApiCallService.log(job, function () {
-        console.log('done');
-    })
-});
-
-*/
 /*
 setInterval(function() {
     var jobData = {

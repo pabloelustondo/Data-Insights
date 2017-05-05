@@ -4,6 +4,7 @@
   "description": "SOTI Data Analytics Service",
   "main": "--",
   "scripts": {
+    "install": "npm install & npm run installdad & npm run installdss",
     "installdad":"cd dad && npm install && cd backend && npm install && cd ../../",
     "installdss":"cd dss && npm install && cd backend && npm install && cd ../../"
   },

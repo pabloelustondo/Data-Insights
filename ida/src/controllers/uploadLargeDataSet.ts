@@ -127,8 +127,7 @@ export class UploadLargeDataSetController {
             let responseData = function (awsRes: any) {
                 let promise = new Promise(function (resolve, reject) {
 
-                  //  console.log('upload success', awsRes.Location);
-                    let mData = ['awsResponse : boolean'];
+                    let mData = ['Warning this API will be deprecated effective Jun 30, 2017', 'awsResponse : boolean'];
 
                     const user: any = {
                         createdAt: new Date(),
@@ -148,7 +147,7 @@ export class UploadLargeDataSetController {
         } else {
             const user: any = {
                 createdAt: new Date(),
-                metadata: 'ERROR',
+                metadata: 'ERROR -- Warning this API will be deprecated effective Jun 30, 2017',
                 data: 'Invalid Token or missing token'
             };
           // return user;

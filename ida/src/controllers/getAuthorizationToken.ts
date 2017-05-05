@@ -71,7 +71,7 @@ export class GetAuthorizationToken {
             let callDss = function (decodedToken: any) {
                 let promise = new Promise(function (resolve, reject) {
 
-                    const dssEndpoint = 'http://localhost:3004/getAgentToken';
+                    const dssEndpoint = config['dss-address'] + '/getAgentToken';
 
                     const optionsTest: rp.OptionsWithUrl = {
                         json: true,

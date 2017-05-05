@@ -1,10 +1,10 @@
 var express = require('express'),
     _       = require('lodash'),
     config  = require('./config'),
-    appconfig  = require('./appconfig'),
+    appconfig  = global.appconfig,
     jwt     = require('jsonwebtoken');
 
-var  ErrorMsg = require('./error-messages');
+var ErrorMsg = require('./error-messages');
 var querystring = require('querystring');
 var https = require('https');
 var uuid = require('node-uuid');
@@ -16,7 +16,20 @@ localStorage = new LocalStorage('./temp');
 
 var app = module.exports = express.Router();
 
-var SotiAdminAccount =
+var SOTITenant =
+  {
+    accountid: "soti",
+    mcurl: "http://localhost:3004",
+    apikey:"112233445511223344",
+    domainid: "soti",
+    username: "admin",
+    tenantId: "soti",
+    companyname: "soti",
+    companyaddress: "SotiAddress",
+    companyphone: "SotiPhone"
+  };
+
+var TestTenant =
   {
     accountid: "test",
     mcurl: "http://localhost:3004",
@@ -26,22 +39,11 @@ var SotiAdminAccount =
     tenantId: "test",
     companyname: "test",
     companyaddress: "companyAddress",
-    companyphone: "4161111999"
+    companyphone: "111 111 1111"
   };
 
-var MyMCAccount =
-  {
-    accountid: "pablo.elustonso@gmail.com",
-    mcurl: "https://cad059.corp.soti.net/MobiControl",
-    apikey:"NTUwYmMyNDU3MWRhNGI1NmIxMWM3NGM5YjM5NGZhMjc6REFEU2VjcmV0",
-    apikey2:"NmExMDY5ODhiODFjNDM0OTllYTA0ZTk2OTQzZTA1YzE6ZGFkc2VjcmV0",
-    clientId2:"6a106988b81c43499ea04e96943e05c1",
-    domainid: "pme",
-    tenantid: "pme",
-    username: "Administrator"
-  };
 
-var enrollments = [SotiAdminAccount, MyMCAccount];
+var enrollments = [SOTITenant, TestTenant];
 
 function createToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: config['agentPermTokenExpiryTime'] });
@@ -58,15 +60,11 @@ function readToken(token, callback) {  //Bearer
 
 app.get('/api/enrollments', function(req, res){
   res.status(200).send(enrollments);
-
-
 });
 
 app.get('/enrollments2', function(req, res) {
   var d = new Date();
   res.status(200).send('Hi from the DSS Anonymous Route at + ' + d.toISOString());
-
-
 });
 
 app.post('/resetCredentials/:agentId', function (req, res) {
@@ -413,7 +411,6 @@ app.get('/getDataSources', function(req, res) {
          var _tenantID = success.tenantId;
 
          request({
-           rejectUnauthorized: false,
            rejectUnauthorized: false,
            url: appconfig.ddb_url + "/dataSources/"+ success.tenantId,
            method: 'GET', //Specify the method
@@ -811,13 +808,16 @@ app.get('/urlbydomainid', function(req, res) {
     return res.status(400).send( ErrorMsg.missing_domainid );
   }
 
-   var testEnrollment =_.find(enrollments, {domainid: req.query.domainid});
-   if (testEnrollment) {
+  //if the enrollment has been cache we just return it and that is it
+   var enrollment =_.find(enrollments, {domainid: req.query.domainid});
+   if (enrollment) {
    res.status(200).send({
      url: enrollment.mcurl
    });
+   return;
    }
 
+  //if the enrollment has NOT been cache we will have to find it in the database.....
   request({
     rejectUnauthorized: false,
     rejectUnauthorized: false,
