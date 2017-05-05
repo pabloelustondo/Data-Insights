@@ -9,9 +9,9 @@ export interface DasDataSet {
     dsname?: string;
     data?: any[];
     
-    datasourceid?: string, //id of the data soruce this data source feeds from. for example nexbus. 
-    parameters?: DasParameter[], //paraemters to be applied to the data source ... kind oof filter.
-    merge?: DasDataSetMerge; //merge datasource with other datasourcves
+    dataSourceId?: string, //id of the data source this data source feeds from. for example nexbus.
+    parameters?: DasParameter[], //parameters to be applied to the data source ... kind oof filter.
+    merge?: DasDataSetMerge; //merge datasource with other data sources
 
 //draft ported from UI
     transformation?: any;
@@ -26,8 +26,29 @@ export interface DasDataSet {
     search?:string;
 }
 
+
+export interface ExtensibleDasDataSet {
+    dsName: string,
+    dsId: string,
+    persist: boolean,
+    relationships: DasRelationship[]
+}
+export interface DasRelationship {
+    operations  : DasOperation []
+}
+
+export interface DasOperation {
+    type: string,
+    dataSets : DasDataSetFields []
+}
+
+export interface DasDataSetFields {
+    dataSourceId : string,
+    fields: string[]
+}
+
 export interface DasDataSetMerge {
-    datasourceid?: string;
+    dsid?: string;
     commonFeature: string;  // common feature that will be used to create the join
 }
 
@@ -86,3 +107,4 @@ export interface DasAlert{
     expression?:string,
     name?:string
 }
+

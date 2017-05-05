@@ -1,6 +1,7 @@
 // import './controllers/multiplePosts';
 import './controllers/getAuthorizationToken';
 import './controllers/uploadLargeDataSet';
+import './controllers/finalUploadEndpoint';
 
 import * as winston from 'winston';
 
@@ -144,8 +145,6 @@ app.use(bodyParser.json({
         limit: '500mb'
 }
 ));
-
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
