@@ -1,7 +1,7 @@
 var express = require('express'),
     _       = require('lodash'),
     config  = require('./config');
-    appconfig  = require('./appconfig');
+    appconfig  = global.appconfig;
 var querystring = require('querystring');
 
 var app = module.exports = express.Router();

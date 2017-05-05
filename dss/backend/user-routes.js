@@ -1,7 +1,7 @@
 var express = require('express'),
     _       = require('lodash'),
     config  = require('./config'),
-    appconfig  = require('./appconfig'),
+    appconfig  = global.appconfig,
     jwt     = require('jsonwebtoken');
 
 var ErrorMsg = require('./error-messages');
