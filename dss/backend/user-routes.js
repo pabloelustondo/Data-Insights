@@ -495,7 +495,7 @@ app.post('/enrollments', function(req, res) {
           var encodeString = req.body.apikey+':'+req.body.clientsecret;
           var apiClientSecretBuffer =  new Buffer(encodeString);
           var encodedBase64ApiClientSecret = apiClientSecretBuffer.toString('base64');
-
+          //AT THIS POINT WE KNOW THAT TENANT IS NOT REGISTERED AND NOW WE WANT TO AKS HIM TO LOG IN
           request({
             rejectUnauthorized: false,
             url: req.body.mcurl + "/api/token",
@@ -516,7 +516,7 @@ app.post('/enrollments', function(req, res) {
             }
             else {
               console.log(response.statusCode, body);
-
+             //YES!, WE GOT THE TOKEN BACK SO THE USER IS AUTHORIZED ... NOW WE ARE GOING TO SAVE TO DB
              // if (response.statusCode === 200) {
                 request({
                   rejectUnauthorized: false,
@@ -554,6 +554,21 @@ app.post('/enrollments', function(req, res) {
                     tokenpayload.companyphone = req.body.companyPhone;
 
                     var token = createToken(tokenpayload);
+
+                    enrollments.push(
+                      {
+                        'accountId': req.body.accountid,
+                        'mcurl': req.body.mcurl,
+                        'tenantId': req.body.domainid,
+                        'domainId': req.body.domainid,
+                        'Status': 'new',
+                        "clientid": req.body.apikey,
+                        "clientsecret": encodedBase64ApiClientSecret,
+                        "companyName": req.body.companyName,
+                        "companyAddress": req.body.companyAddress,
+                        "companyPhone": req.body.companyPhone
+                      }
+                    );
 
                     sendEmail2(tokenpayload, token);
 
