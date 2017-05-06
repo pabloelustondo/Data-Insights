@@ -1,5 +1,5 @@
 import  {DadConfigService} from '../DadConfig.service';
-import { TestBed, inject, async } from '@angular/core/testing';
+import {TestBed, inject, async, fakeAsync, tick} from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import {HttpModule, Http, Response, ResponseOptions, BaseRequestOptions, XHRBackend} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
@@ -58,7 +58,7 @@ describe('DadConfigComponent', () => {
             expect(ls).toBe(null);
         }));
 
-    it('should save',
+    it('should save to local storage',
         inject([DadConfigService, MockBackend], (dadConfig, mockBackend) => {
 
             const mockResponse = {
@@ -78,8 +78,28 @@ describe('DadConfigComponent', () => {
             let parsed = JSON.parse(ls);
             expect(parsed.length).toBe(CHARTS.length);
         }));
-});
 
+    it('should save to server',
+        inject([DadConfigService, MockBackend], fakeAsync((dadConfig, mockBackend) => {
+
+            const mockResponse = {
+                data: [
+                    {tellMe: 'Service is created'},
+                ]
+            };
+            mockBackend.connections.subscribe((connection) => {
+                connection.mockRespond(new Response(new ResponseOptions({
+                    body: JSON.stringify(mockResponse)
+                })));
+            });
+
+            dadConfig.config.testing = false;
+            dadConfig.save(CHARTS);
+            let ss = dadConfig.elements_string;
+            let parsed = JSON.parse(ss);
+            expect(parsed.length).toBe(CHARTS.length);
+        })));
+});
 
 
 
