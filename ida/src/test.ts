@@ -5,6 +5,7 @@ import { suite, test, slow, timeout, skip, only } from 'mocha-typescript';
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from './models/user';
 const config = require('../appconfig.json');
+let jwt  = require('jsonwebtoken');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('./server');
@@ -148,7 +149,7 @@ const testData =  {
 
     */
 
-    @test('put json data in aws in large file')
+    @test('put json data in aws in large file. It makes a call with a test tenant, test data source and self-signed jwt')
     public test_put_large_json_file(done: Function) {
 
         const testData = {
@@ -156,7 +157,7 @@ const testData =  {
         };
         console.log('testing');
         chai.use(chaiHttp);
-        chai.request('https://localhost:3010')
+        chai.request('http://localhost:3010')
             .post('/Data/LargeDataSets')
             .set('x-access-token', testToken )
             .set('Content-Type', 'application/json')
@@ -166,6 +167,42 @@ const testData =  {
                 expect(err).to.be.null;
                 expect(res).to.be.json;
                 expect(res).to.have.status(200);
+                done();
+            });
+    }
+
+    @test('make call to DPS to process data')
+    public call_dps_from_ida(done: Function) {
+        var testData = {
+            metadata  : {
+                dataSetId : 'idaSampleId',
+                projections: ['']
+            },
+            data: {
+                sensorId : '123',
+                sensorValue: ""
+            }
+        };
+
+        var jwt_payload = {
+            tenantId: 'unitTestTenantIda',
+            dataSourceId: 'unitTestIdaDataSource'
+        };
+        var token = jwt.sign(jwt_payload, config['expiring-secret'], {expiresIn: 15});
+
+        chai.use(chaiHttp);
+        chai.request(server.app)
+            .post('/data/input')
+            .set('x-access-token', token)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .send(testData)
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(200);
+                var responseFileLocation = JSON.parse(res.text).data ;
+                var expectedFileLocationPrefix = 'https://s3.amazonaws.com/da-s3-bucket%2FDataExchange%2F' 
+                    + 'unitTestTenantIda';
+                expect(responseFileLocation.substring(0, expectedFileLocationPrefix.length)).to.be.equal(expectedFileLocationPrefix);
                 done();
             });
     }

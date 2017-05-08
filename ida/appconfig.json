@@ -4,7 +4,7 @@
   "useSSL" : false,
   "logDir" : "./logs",
   "inputQue-address" : "http://localhost:6000",
-  "queue-address" : "http://localhost:6000",
+  "queue_address" : "http://localhost:8002/data/request",
   "dss-address" : "http://localhost:3004",
   "db-address" : "http://localhost:8000",
   "aws-hostname" : "2vf2f8xp27.execute-api.us-east-1.amazonaws.com",
