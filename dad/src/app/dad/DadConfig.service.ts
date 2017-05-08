@@ -122,7 +122,7 @@ export class DadConfigService {
         this.elements_string = localStorage.getItem("element_config");
 
         if (this.elements_string == null && config.testing){
-            localStorage.setItem("chartdata", JSON.stringify(CHARTS));
+            localStorage.setItem("elementdata", JSON.stringify(CHARTS));
             return Promise.resolve(CHARTS);
         }
         return  Promise.resolve(this.element_config.charts as DadChart);
@@ -130,7 +130,7 @@ export class DadConfigService {
 
     public getWidgetConfigs(): Promise<any> {
         if (this.elements_string == null && config.testing) {
-            localStorage.setItem("widgetdata", JSON.stringify(WIDGETS));
+            localStorage.setItem("elementdata", JSON.stringify(WIDGETS));
             return Promise.resolve(WIDGETS);
         }
         return  Promise.resolve(this.element_config.widgets as DadWidget);
@@ -138,7 +138,7 @@ export class DadConfigService {
 
     public getTableConfigs(): Promise<any> {
         if (this.elements_string == null && config.testing){
-            localStorage.setItem("tabledata", JSON.stringify(TABLES));
+            localStorage.setItem("elementdata", JSON.stringify(TABLES));
             return Promise.resolve(TABLES);
         }
         return  Promise.resolve(this.element_config.tables as DadTable);
@@ -146,7 +146,7 @@ export class DadConfigService {
 
     public getPageConfigs(): Promise<any> {
         if (this.elements_string == null && config.testing){
-            localStorage.setItem("pagedata", JSON.stringify(PAGES));
+            localStorage.setItem("elementdata", JSON.stringify(PAGES));
             return Promise.resolve(PAGES);
         }
         return  Promise.resolve(this.element_config.pages as DadPage);
@@ -157,10 +157,11 @@ export class DadConfigService {
     public getConfigs(): Promise<any> {
         let elements_string = localStorage.getItem("elementdata");
 
-        if (elements_string == null){
-            localStorage.setItem("elemendata", JSON.stringify(CHARTS));
-            return Promise.resolve(CHARTS);
-        }
+         if (elements_string != null){
+             let elements_obj = JSON.parse(elements_string);
+             let DATA = elements_obj as DadElement[];
+             return Promise.resolve(DATA);
+         }
 
         if (elements_string != null){
             let charts_obj = JSON.parse(elements_string);
@@ -190,10 +191,10 @@ export class DadConfigService {
             let tables = data.config.tables;
             let pages = data.config.pages;
         //comment: for some reason charts, widgets...etc.. are already JSON...why?
-            localStorage.setItem("chartdata", charts);
-            localStorage.setItem("widgetdata", widgets);
-            localStorage.setItem("tabledata", tables);
-            localStorage.setItem("pagedata", pages);
+            localStorage.setItem("elementdata", charts);
+            localStorage.setItem("elementdata", widgets);
+            localStorage.setItem("elementdata", tables);
+            localStorage.setItem("elementdata", pages);
     }
 
     public getConfig(id:string): Promise<any> {
