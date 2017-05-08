@@ -6,6 +6,8 @@ var querystring = require('querystring');
 
 var app = module.exports = express.Router();
 
+var username;
+
 var TestTenant =
   {
     accountid: "test",
@@ -24,6 +26,7 @@ var TestTenant =
 app.post('/api/token', function(req,res) {
 
   if (req.body.code) {
+    username = req.body.code;
     return res.status(200).send({token: 'test1234567890test1234567890test'});
   }
 
@@ -43,6 +46,8 @@ app.get('/oauth/authorize', function(req,res) {
   //
   var tenantid = req.params['state'];
   tenantid = 'test'; //why is not coming in params?
+
+  username = req.params['code'];  //this is a trick to be able to simulate mobicontrol... username
 
   res.status(200).send("<html>" +
     "<script>function submit(){ " +
@@ -70,13 +75,10 @@ app.get('/getEnrollment', function(req,res) {
   res.status(200).send(TestTenant);
 });
 
+// /oauth/userinfo
+// var mbuser = JSON.parse(__body);
+//if (mbuser.Name) {
 
-///api/security/users/Administrator/groups
-
-app.get('/getEnrollment', function(req,res) {
-  //      this.url = params['url'];
-  //      this.code = params['code'];
-  //      this.domainid = params['state'];
-
-  res.status(200).send(TestTenant);
+app.get('/oauth/userinfo', function(req,res) {
+  res.status(200).send({Name:username});
 });

@@ -104,8 +104,11 @@ function checkDadUserRequest(req, res){
     if (req.params.userid !== req.body.userid )
     {
         res.status(400).send("url userid different from body userid");
+        return false;
     }
+    return true;
 }
+
 
 router.get('/dadusers/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
@@ -121,11 +124,11 @@ router.get('/daduser/:userid', function(req,res){
 });
 
 router.post('/daduser/:userid', function(req,res){
-    checkDadUserRequest(req,res);
-    callDbAndRespond(req,res, function(req,res,db, next){
-        db.collection('daduser').replaceOne({"userid":req.params.userid}, req.body, {upsert:true}, next);
-    });
-
+    if (checkDadUserRequest(req,res)) {
+        callDbAndRespond(req, res, function (req, res, db, next) {
+            db.collection('daduser').replaceOne({"userid": req.params.userid}, req.body, {upsert: true}, next);
+        });
+    }
 });
 
 router.delete('/daduser/:userid', function(req,res){

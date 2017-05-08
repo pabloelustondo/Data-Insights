@@ -891,6 +891,10 @@ app.post('/sessions/create', function(req, res) {
   var _reqBody = req.body.domainid;
   var fullState = _reqBody.split('?');
   var _tenantID = fullState[0];
+  var enrollment = {};
+
+  if (req.query.domainid) enrollment =_.find(enrollments, {domainid: req.query.domainid});
+  if (_tenantID) enrollment =_.find(enrollments, {domainid: _tenantID});
 
   try {
     request({
@@ -907,19 +911,18 @@ app.post('/sessions/create', function(req, res) {
         res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
       } else {
         console.log(response.statusCode, body);
-
-        if (response.statusCode === 200) {
+        try { enrollment = JSON.parse(body);} catch(e) {};   //if not valid enrollment is comming we may keep the one from cache
+        if ( enrollment.domainid  || response.statusCode === 200) {
           try {
 
             grant_type = "grant_type=authorization_code&code=" + req.body.code;
-            var jsonBody = JSON.parse(response.body);
             request({
               rejectUnauthorized: false, //need to improve this ..related with ssl certificate
-              url:   jsonBody.mcurl + "/api/token",
+              url:   enrollment.mcurl + "/api/token",
               method: 'POST', //Specify the method
               headers: { //We can define headers too
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': "Basic " + jsonBody.clientsecret
+                'Authorization': "Basic " + enrollment.clientsecret
               },
               body: grant_type
             }, function(error, response, _body){
@@ -934,7 +937,7 @@ app.post('/sessions/create', function(req, res) {
 
                   request({
                     "rejectUnauthorized": false,
-                    url: jsonBody.mcurl + '/api/security/users/Administrator/groups',
+                    url: enrollment.mcurl + '/oauth/userinfo',
                     method: 'GET', //Specify the method
                     headers: { //We can define headers too
                       'Authorization': 'bearer ' + _body.access_token
@@ -946,18 +949,11 @@ app.post('/sessions/create', function(req, res) {
                     } else {
                       console.log(response.statusCode, body);
                       var mbuser = JSON.parse(__body);
-                      if (mbuser[0].Name === 'MobiControl Administrators') {
-
+                      if (mbuser.Name) {
                         tokenpayload = {};
-                        tokenpayload.username = body.tenantId;
-                        tokenpayload.accountid = body.accountId;
-                        tokenpayload.domainid = body.domainId;
-                        tokenpayload.tenantId = body.tenantId;
-                        tokenpayload.companyname = body.companyName;
-                        tokenpayload.companyaddress = body.companyAddress;
-                        tokenpayload.companyphone = body.companyPhone;
-
-
+                        tokenpayload.username = mbuser.Name;
+                        tokenpayload.domainid = enrollment.domainId;
+                        tokenpayload.tenantId = enrollment.tenantId;
                         res.status(200).send({
                           id_token: createToken(tokenpayload)
                         });
