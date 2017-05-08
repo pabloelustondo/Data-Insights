@@ -13,7 +13,7 @@
     "copy-swagger-ui": "ncp ./src/swagger-ui ./dist/swagger-ui",
     "tsoa": "tsoa",
     "dev-test-watch": "mocha-typescript-watch",
-    "test": "tsc -p . "
+    "test": "tsc -p . && cd dist && mocha"
   },
   "authors": [{
       "name" : "Pablo Elustondo",
