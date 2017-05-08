@@ -131,47 +131,48 @@ export class UploadDataSetController {
 
 
         let sendToQueue = function (jwtDecodedToken: any) {
+           // let promise = new Promise(function (resolve, reject) {
+                let data = {
+                    idaMetadata: {
+                        referer: 'sampleRequestOriginInfo',
+                        dataSourceId: jwtDecodedToken.dataSourceId,
+                        tenantId: jwtDecodedToken.tenantId,
+                        timeStamp: (new Date()).toISOString()
+                    },
+                    clientData: express.body
+                };
+                const headersOptions = {
+                    'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+                };
 
-            let addedMetadata = {
-                idaMetadata : {
-                    referer : 'sampleRequestOriginInfo',
-                    agentId:  jwtDecodedToken.agentid,
-                    tenantId: jwtDecodedToken.tenantid,
-                    timeStamp: (new Date()).toISOString(),
-                },
-                clientData : express.body
-            };
-            const headersOptions = {
-                'x-api-key' : 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
-            };
-
-            const options: rp.OptionsWithUrl = {
-                json: true,
-                method: 'POST',
-                headers: headersOptions,
-                url : config['queue-address'],
-                body : addedMetadata
-            };
-            rp(options);
+                const options: rp.OptionsWithUrl = {
+                    json: true,
+                    method: 'POST',
+                    headers: headersOptions,
+                    url: config['queue_address'],
+                    body: data
+                };
+                return rp(options);
         };
 
-        let responseData = function (awsRes: any) {
+        let responseData = function (dpsResponse: any) {
             let promise = new Promise(function (resolve, reject) {
 
-                let mData = ['awsResponse : boolean'];
+                if (dpsResponse['status'] === 200) {
+                    let mData = ['awsResponse : boolean'];
 
-                const user: any = {
-                    createdAt: new Date(),
-                    metadata: mData,
-                    data: awsRes.Location
-                };
-                resolve(user);
+                    const user: any = {
+                        createdAt: new Date(),
+                        metadata: mData,
+                        data: dpsResponse.response
+                    };
+                    resolve(user);
+
+                } else {
+                    reject('rejected');
+                }
             });
             return promise;
-        };
-
-        let finalFunction = function (response: any) {
-            return response;
         };
 
 
