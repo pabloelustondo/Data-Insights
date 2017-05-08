@@ -10,10 +10,10 @@ export interface TenantMetadata {
     dataLakeInformation: DataLakeInformation;
 }
 
-interface DataSource{
+interface DataSource {
     dataSourceId: string;
     dataSourceType: string;
-    dataSourceProperties : DataSourceProperty[];
+    dataSourceProperties: DataSourceProperty[];
     metaData: DataSourceMetadata;
 }
 
@@ -23,12 +23,12 @@ interface DataSourceProperty {
     value: string;
 }
 
-interface Stream{
+interface Stream {
     dataSource: DataSource;
     streamId: string;
 }
 
-interface DataLakeInformation{
+interface DataLakeInformation {
     connectionString: string;
 }
 
@@ -42,17 +42,17 @@ interface TenantInformation {
     companyAddress: string;
     companyName: string;
     companyPhone: string;
-    idps: IDP[];
+    userIdentityProvider: UserIDP[];
 
 }
 
-interface IDP {
+interface UserIDP {
     name: string;
     destination: string;
     additionalFields?: any;
 }
 
-interface DataSourceMetadata{
+interface DataSourceMetadata {
     dataSetId: string;
     projections: string[];
 }
