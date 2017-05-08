@@ -4,7 +4,8 @@ import {Mapper} from "./mapper";
 import {DadElement} from "./dadmodels";
 import {Router, ActivatedRoute} from "@angular/router";
 import {config} from "./appconfig";
-import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
+//import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
+import { DadConfigService } from './DadConfig.service';
 import {DadFilter} from "./filter";
 import {Observable} from "rxjs";
 import {DadMap2} from './map2.component';
@@ -28,7 +29,7 @@ export class DadChart extends DadElement {
 }
 @Component({
     selector: 'dadchart',
-    providers: [DadElementDataService, DadTableConfigsService, DadChartConfigsService],
+    providers: [DadElementDataService, DadConfigService],
     template: `
 <div class="dadChart">
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
@@ -207,8 +208,8 @@ export class DadChartComponent implements OnInit {
 
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
-                private dadTableConfigsService: DadTableConfigsService,
-                private dadChartConfigsService: DadChartConfigsService,
+               // private dadTableConfigsService: DadTableConfigsService,
+                private dadChartConfigsService: DadConfigService,
                 private router: Router, private route: ActivatedRoute,) {}
 
     filterBy(d){

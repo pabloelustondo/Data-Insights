@@ -65,12 +65,13 @@ export class DadConfigService {
             tables: ls.tables,
             pages: ls.pages};
 
-        let elements = localStorage.getItem("config");
+        let elements = localStorage.getItem("element_config");
 
         let daduserconfig = {
             userid: this.user.userid,
             username: this.user.username,
             tenantid: this.user.tenantid,
+            element_config: this.element_config
         }
 
         let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : this.token});
@@ -103,11 +104,11 @@ export class DadConfigService {
 
         this.getConfigs().then((elements:DadElement[]) =>{
 
-                let chartIndex = _.findIndex(elements, function(w) { return w.id == element.id; });
-                if(chartIndex === -1){
+                let elementIndex = _.findIndex(elements, function(w) { return w.id == element.id; });
+                if(elementIndex === -1){
                     elements.push(element);
                 } else {
-                    elements.splice(chartIndex, 1, element);
+                    elements.splice(elementIndex, 1, element);
                 }
                 this.save(elements);
             }
@@ -115,7 +116,7 @@ export class DadConfigService {
 
     }
 /*This part is created because functions are used in the other components but service will be working under one name
- * since names are casted.
+ * since names are casted. DON'T CHANGE!
  */
     public getChartConfigs(): Promise<any> {
         this.elements_string = localStorage.getItem("element_config");
@@ -156,17 +157,23 @@ export class DadConfigService {
     public getConfigs(): Promise<any> {
         let elements_string = localStorage.getItem("elementdata");
 
+        if (elements_string == null){
+            localStorage.setItem("elemendata", JSON.stringify(CHARTS));
+            return Promise.resolve(CHARTS);
+        }
+
         if (elements_string != null){
-            let elements_obj = JSON.parse(elements_string);
-            let DATA = elements_obj as DadElement[];
+            let charts_obj = JSON.parse(elements_string);
+            let DATA = charts_obj as DadElement[];
             return Promise.resolve(DATA);
         }
+
         else {
             return this.getUserConfigurationFromDdb().then(
                 (data) => {
                     let dataObj = JSON.parse(data._body)[0];
                     this.saveConfigFromDb(dataObj);
-                    let chartsString = localStorage.getItem("config");
+                    let chartsString = localStorage.getItem("elementdata");
                     let charts = JSON.parse(chartsString);
                     return Promise.resolve(charts as DadChart);
                 },
@@ -189,11 +196,35 @@ export class DadConfigService {
             localStorage.setItem("pagedata", pages);
     }
 
-    public getConfig(id:string): Promise<DadChart> {
-        return this.getConfigs().then((charts:DadChart[]) =>{
-            let chartIndex = _.findIndex(charts, function(w) { return w.id == id; });
-            if (chartIndex>-1) return Promise.resolve(charts[chartIndex]);
-            else return Promise.resolve(null);
-        });
+    public getConfig(id:string): Promise<any> {
+        if(this.element_config.charts){
+            return this.getChartConfigs().then((charts:DadChart[]) =>{
+                let chartIndex = _.findIndex(charts, function(w) { return w.id == id; });
+                if (chartIndex>-1) return Promise.resolve(charts[chartIndex]);
+                else return Promise.resolve(null);
+            });
+        }
+        if(this.element_config.widgets){
+            return this.getWidgetConfigs().then((widgets:DadWidget[]) =>{
+                let widgetIndex = _.findIndex(widgets, function(w) { return w.id == id; });
+                if (widgetIndex>-1) return Promise.resolve(widgets[widgetIndex]);
+                else return Promise.resolve(null);
+            });
+        }
+        if(this.element_config.tables){
+            return this.getTableConfigs().then((tables: DadTable[]) => {
+                let tableIndex = _.findIndex(tables, function(w) { return w.id == id; });
+                if (tableIndex>-1) return Promise.resolve(tables[tableIndex]);
+                else return Promise.resolve(null);
+            });
+        }
+        if(this.element_config.pages){
+            return this.getPageConfigs().then((pages: DadPage[]) => {
+                let pageIndex = _.findIndex(pages, function(w) { return w.id == id; });
+                if (pageIndex>-1) return Promise.resolve(pages[pageIndex]);
+                else return Promise.resolve(null);
+            });
+        }
+
     }
 }
