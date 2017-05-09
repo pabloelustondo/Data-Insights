@@ -20,7 +20,7 @@ describe('DadTransformer', () => {
         expect(transformer).toBeTruthy();
     });
 
-    it('should return the same data if not trasnformation configuration provided', () => {
+    it('should return the same data if not transformation configuration provided', () => {
         let chart:DadChart = CHARTS[0]; //this chart does not have any transformation spec
         let chartData = [
             ['a', 0, 1, 2],

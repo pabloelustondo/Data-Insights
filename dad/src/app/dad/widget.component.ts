@@ -49,12 +49,12 @@ export class DadWidget extends DadElement{
  
                <div *ngIf="widget.type===0">
                 <div [id]="widget.id + '_0_name'" class="card-title m-l-5">{{widget.metrics[0].Name}}</div>
-                <h3 *ngIf="data" class="mb-0">
+                <h3 id="mrbs" *ngIf="data" class="mb-0">
                     <div style="cursor:pointer;" *ngIf="!(data[0][widget.metrics[0].DataSource]===0)" (click)="onDrill('lalala')">
-                        <span [id]="widget.id + '_0_value'" style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
+                        <span [id]="widget.id + '_0_value'" style="font-size: 7.5vw; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
                     </div>
                     <a *ngIf="(data[0][widget.metrics[0].DataSource]===0)">
-                        <span style="font-size: 140px; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
+                        <span style="font-size: 7.5vw; color:white;">{{data[0][widget.metrics[0].DataSource]}} </span>
                     </a>
                     <br/>out of {{data[0][widget.metrics[1].DataSource]}} 
                 </h3><br/>
