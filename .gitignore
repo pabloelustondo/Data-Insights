@@ -6,6 +6,9 @@
 */ida/src/routes.ts
 */oda/src/routes.ts
 */oda/all-logs.log
+*/ida/src/*.js
+*/dps/server.js
+*/dps/services/*.js
 *.log
 ida/src/routes.ts
 oda/src/routes.ts
