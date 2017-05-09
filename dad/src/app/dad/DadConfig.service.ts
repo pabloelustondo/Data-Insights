@@ -135,22 +135,24 @@ export class DadConfigService {
         })
     }
 
-    public getWidgetConfigs(): Promise<DadChart[]> {
-        let userconfig:DadUserConfig  = JSON.parse(localStorage.getItem(this.localkey));
-        return  Promise.resolve(userconfig.configs.widgets as DadWidget[]);
+    public getWidgetConfigs(): Promise<DadWidget[]> {
+        return this.getConfigs().then( (config)  => {
+            return Promise.resolve(config.configs.widgets as DadWidget[]);
+        })
     }
 
-    public getTableConfigs(): Promise<DadChart[]> {
-        let userconfig:DadUserConfig  = JSON.parse(localStorage.getItem(this.localkey));
-        return  Promise.resolve(userconfig.configs.tables as DadTable[]);
+    public getTableConfigs(): Promise<DadTable[]> {
+        return this.getConfigs().then( (config)  => {
+            return Promise.resolve(config.configs.tables as DadTable[]);
+        })
     }
 
 
-    public getPageConfigs(): Promise<DadChart[]> {
-        let userconfig:DadUserConfig  = JSON.parse(localStorage.getItem(this.localkey));
-        return  Promise.resolve(userconfig.configs.pages as DadPage[]);
+    public getPageConfigs(): Promise<DadPage[]> {
+        return this.getConfigs().then( (config)  => {
+            return Promise.resolve(config.configs.pages as DadPage[]);
+        })
     }
-
 ///////////////////////////////////////////////////////////////////////
 
     //next test
@@ -159,20 +161,13 @@ export class DadConfigService {
         //if not we are going to get this from DB. IF we are in test mode we will get it from test data.
         let userconfigString = localStorage.getItem(this.localkey);
         if (userconfigString != null){
-            let userconfig = JSON.parse(userconfigString
-            return Promise
-
+            let userconfig = JSON.parse(userconfigString);
+            return Promise.resolve(userconfig);
         }
 
-         if (elements_string != null){
-             let elements_obj = JSON.parse(elements_string);
-             let DATA = elements_obj as DadElement[];
-             return Promise.resolve(DATA);
-         }
-
-        if (elements_string != null){
-            let charts_obj = JSON.parse(elements_string);
-            let DATA = charts_obj as DadElement[];
+        if (userconfigString === null){
+            let element_object = JSON.parse(userconfigString);
+            let DATA = element_object as DadElement[];
             return Promise.resolve(DATA);
         }
 
