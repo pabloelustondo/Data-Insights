@@ -49,11 +49,17 @@ app.use(cors());
 app.post('/ds/:tenantid/putdata', function(req,res){
     console.log('request came in');
     callDbAndRespond(req,res, function(req,res,db, next){
-        var dsdef = req.body; //this query is a qeury written in our metadata
-        var dsid = dsdef["dsid"];
-        var data = dsdef["data"];
+
+        var reqBody = req.body;
+        let tenantId = req.params.tenantid;
+        var data ={
+            timeStamp: (new Date()).toISOString(),
+            data: req.body.data
+        };
+        var dataSetId = reqBody.collectionName;
+
         //check parameters
-        db.collection(dsid).insertOne(data, next);
+        db.collection(dataSetId).insertOne(data, next);
     });
 });
 
@@ -167,11 +173,15 @@ if (config['mongodb-config-location']) {
 }
 
 function tenantDbUri(req) { //
+
+    return mongoInfo.uri + "/cdl_" + req.params.tenantid;
+    /*
     if (appconfig.testingmode) {
         return mongoInfo.uri + "/udb_test?socketTimeoutMS=900000";
     } else {
         return mongoInfo.uri + "/tdb_" + req.params.tenantid;
     }
+    */
 }
 
 function callDbAndRespond(req,res,query){

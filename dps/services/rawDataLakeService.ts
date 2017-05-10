@@ -32,7 +32,7 @@ const s3instance = new AWS.S3({
     bucket: config['aws_s3bucket']
 });
 
-export function uploadDataToLake(tenantId: string, dataSourceId: string, clientData: ClientData) {
+export function uploadRawData(tenantId: string, dataSourceId: string, clientData: ClientData) {
     let uploadParams = {Bucket: config['aws_s3bucket']  + '/' + tenantId, Key: '', Body: ''};
     uploadParams.Body = JSON.stringify(clientData);
     uploadParams.Key = path.basename(tenantId + '.' + dataSourceId + '.' + (new Date()).toISOString() + '.json');
@@ -54,6 +54,30 @@ export function uploadDataToLake(tenantId: string, dataSourceId: string, clientD
 
     console.timeEnd('awsCallLarge');
     return promise;
+}
+
+export function uploadModifiedData(tenantId: string, dataSetName: string, clientData: any) {
+
+    let endpoint = appconfig['cdl_address'] + tenantId + config['cdl_put_endpoint'] ;
+
+    const headerOptions = {
+        'x-access-token' : config['access_token']
+    };
+
+    let body = {
+        tenantId: tenantId,
+        collectionName: dataSetName,
+        data: clientData
+    };
+
+    const options: rp.OptionsWithUrl = {
+        json: true,
+        method: 'POST',
+        headers: headerOptions,
+        url: endpoint,
+        body: body
+    };
+    return rp(options);
 }
 
 

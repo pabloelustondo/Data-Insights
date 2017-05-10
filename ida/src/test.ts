@@ -173,22 +173,22 @@ const testData =  {
 
     @test('make call to DPS to process data')
     public call_dps_from_ida(done: Function) {
-        var testData = {
+        let testData = {
             metadata  : {
                 dataSetId : 'idaSampleId',
                 projections: ['']
             },
             data: {
                 sensorId : '123',
-                sensorValue: ""
+                sensorValue: ''
             }
         };
 
-        var jwt_payload = {
+        let jwtPayload = {
             tenantId: 'unitTestTenantIda',
             dataSourceId: 'unitTestIdaDataSource'
         };
-        var token = jwt.sign(jwt_payload, config['expiring-secret'], {expiresIn: 15});
+        let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
 
         chai.use(chaiHttp);
         chai.request(server.app)
@@ -199,9 +199,44 @@ const testData =  {
             .send(testData)
             .end((err: any, res: any) => {
                 expect(res).to.have.status(200);
-                var responseFileLocation = JSON.parse(res.text).data ;
-                var expectedFileLocationPrefix = 'https://s3.amazonaws.com/da-s3-bucket%2FDataExchange%2F' 
+                let responseFileLocation = JSON.parse(res.text).data ;
+                let expectedFileLocationPrefix = 'https://s3.amazonaws.com/da-s3-bucket%2FDataExchange%2F'
                     + 'unitTestTenantIda';
+                expect(responseFileLocation.substring(0, expectedFileLocationPrefix.length)).to.be.equal(expectedFileLocationPrefix);
+                done();
+            });
+    }
+    @test('make call to DPS to process data as a different tenant')
+    public call_dps_from_ida_different_tenant(done: Function) {
+        let testData = {
+            metadata  : {
+                dataSetId : 'idaSampleId2',
+                projections: ['']
+            },
+            data: {
+                sensorId : '123',
+                sensorValue: ''
+            }
+        };
+
+        let jwtPayload = {
+            tenantId: 'unitTestTenantIda2',
+            dataSourceId: 'unitTestIdaDataSource2'
+        };
+        let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
+
+        chai.use(chaiHttp);
+        chai.request(server.app)
+            .post('/data/input')
+            .set('x-access-token', token)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+            .send(testData)
+            .end((err: any, res: any) => {
+                expect(res).to.have.status(200);
+                let responseFileLocation = JSON.parse(res.text).data ;
+                let expectedFileLocationPrefix = 'https://s3.amazonaws.com/da-s3-bucket%2FDataExchange%2F'
+                    + 'unitTestTenantIda2';
                 expect(responseFileLocation.substring(0, expectedFileLocationPrefix.length)).to.be.equal(expectedFileLocationPrefix);
                 done();
             });

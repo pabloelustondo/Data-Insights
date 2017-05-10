@@ -7,12 +7,13 @@ import * as http from "http";
 import * as https from "https";
 import * as helmet from "helmet";
 import {MongoClient, Db} from "mongodb";
+let _ = require('lodash');
 let config = require('./config.json');
 let appconfig = require('./appconfig.json');
 let app = express();
 var mongodb = require('mongodb').MongoClient;
 
-import {uploadDataToLake} from './services/rawDataLakeService';
+import {uploadRawData, uploadModifiedData} from './services/rawDataLakeService';
 import {DatabaseService} from  './services/databaseService';
 import {User} from "./models/user";
 
@@ -20,6 +21,9 @@ import {User} from "./models/user";
 // Express stuff
 
 let db = new DatabaseService(appconfig.ddb_address);
+//db.start();
+
+app.set('db', db);
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use('/testing', express.static(path.join(__dirname + '/testing')));
@@ -56,10 +60,17 @@ app.post('/data/request', function(req,res) {
 
     // send data to s3 without a lot of fuss
     let idaMetadata = req.body.idaMetadata;
-    if (idaMetadata) {
+    let clientMetadata = req.body.clientMetadata;
+    if (!idaMetadata) {
+        res.status(400).send('Missing idaMetadata field');
+    } else if (!clientMetadata) {
+        res.status(400).send('Missing clientMetadata field');
+    }
+    else {
         let tenantId = req.body.idaMetadata.tenantId;
         let dataSourceId = req.body.idaMetadata.dataSourceId;
-        uploadDataToLake(tenantId, dataSourceId, req.body).then(function (awsResponse: any) {
+        uploadRawData(tenantId, dataSourceId, req.body).then(function (awsResponse: any) {
+             console.log(awsResponse.Location);
                 res.status(200).send({
                     status: 200,
                     response: awsResponse.Location
@@ -68,53 +79,32 @@ app.post('/data/request', function(req,res) {
                 res.status(500).send('you failed.' + error);
             }
         );
-    } else {
-        res.status(400).send('Missing idaMetadata field');
+
+        // massage and clean up data before sending to database layer
+        let tenant = db.getTenant(req.body.idaMetadata.tenantId);
+        if(tenant) {
+            let dataSource = _.find(tenant.dataSources, ['dataSourceId', req.body.idaMetadata.dataSourceId]);
+            let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
+            let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
+
+            let inputData: any = { };
+
+            if (projections.length > 0) {
+                projections.forEach((item, index) => {
+                    inputData[item] = req.body.clientData[item];
+                });
+            } else {
+                inputData = req.body.clientData;
+            }
+
+            uploadModifiedData(tenant.tenantId, dataSetId, inputData).then(function(response) {
+               console.log(JSON.stringify(response));
+            });
+        }
     }
-
-    // massage and clean up data before sending to database layer
-
-
 
 });
 
-////////////////////////////
-//Finding mongodb credentials TODO: where are the credentials?
-let mongoInfo = {uri: appconfig.mongodb_url};
-if (config['mongodb_config_location']) {
-    var mongoDbCreds = require(config['mongodb_config_location']);
-    mongoInfo = { uri: mongoDbCreds.uri };
-}
-
-function tenantDbUri(req) { //
-    if (appconfig.testingmode) {
-        return mongoInfo.uri + "/udb_test?socketTimeoutMS=900000";
-    } else {
-        return mongoInfo.uri + "/tdb_" + req.params.tenantid;
-    }
-}
-
-function callDbAndRespond(req,res,query){
-    //this function opens a connection to the tenant db and calls the specific query.
-    //when this is do it returns the http response.
-    //the inout parameter query contains the actual query to be executed against to db
-    var uri = tenantDbUri(req); // one database per tenant
-    //check uri and make sure we have rights
-    mongodb.connect(uri,function(err,db:Db){
-        if (err) {
-            res.send({data:null, status:err });
-        }
-        else query(req,res,db,function(err,doc){
-            if (doc !== null) {
-                res.status(200).send(doc);
-            }
-            else {
-                res.status(404).send("No Results are returned");
-            }
-            db.close();
-        });
-    });
-}
 
 
 if (config.useSSL) {

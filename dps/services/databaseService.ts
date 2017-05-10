@@ -5,7 +5,9 @@ import {MongoClient, Db} from "mongodb";
 var mongodb = require('mongodb').MongoClient;
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
-
+let sampletenants = require('../testing/sampleTenants.json');
+let _ = require('lodash');
+import * as rp from 'request-promise';
 
 export class DatabaseService {
 
@@ -15,10 +17,44 @@ export class DatabaseService {
 
     constructor(ddbUrl: string) {
 
+        if (appconfig.testingmode) {
+            this.tenants = sampletenants.tenants;
+
+        }
+    }
+
+    public start (){
+
+        if (appconfig.testing) {
+            this.tenants = sampletenants;
+        } else {
+            //TODO: provide proper DDB fix
+            const headersOptions = {
+                'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+            };
+
+            const options: rp.OptionsWithUrl = {
+                json: true,
+                method: 'get',
+                headers: headersOptions,
+                url: 'http://localhost:8000/getAllTenants',
+            };
+            let data = rp(options);
+            this.tenants = [];
+        }
     }
 
     public getTenant(tenantId: string) {
+        let value =  _.find(this.tenants, ['tenantId', tenantId]);
+        return value;
+        /*
+            return _.find(this.tenants, function(element: any) {
+                return element.tenantId == tenantId;
+            })*/
+    }
 
+    public findProperty(propertyName: string, propertyValue: string) {
+        return _.find(this.tenants, [propertyName, propertyValue]);
     }
 
     public getUserInfo(userId: string) {

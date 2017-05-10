@@ -14,7 +14,7 @@ interface DataSource {
     dataSourceId: string;
     dataSourceType: string;
     dataSourceProperties: DataSourceProperty[];
-    metaData: DataSourceMetadata;
+    metaData: DataSourceMetadata[];
 }
 
 
@@ -30,6 +30,11 @@ interface Stream {
 
 interface DataLakeInformation {
     connectionString: string;
+}
+
+interface DataSourceMetadata {
+    dataSetId: string;
+    projections: string[];
 }
 
 interface TenantInformation {
@@ -50,9 +55,4 @@ interface UserIDP {
     name: string;
     destination: string;
     additionalFields?: any;
-}
-
-interface DataSourceMetadata {
-    dataSetId: string;
-    projections: string[];
 }

@@ -119,10 +119,7 @@ export class UploadDataSetController {
 
         }
 
-
-
-
-        let getCustomerID = function () {
+        let verifyAndDecodeJwt = function () {
             let promise = new Promise(function (resolve, reject) {
                 resolve(jwt.verify(token, config['expiring-secret']));
             });
@@ -135,8 +132,8 @@ export class UploadDataSetController {
                 let data = {
                     idaMetadata: {
                         referer: 'sampleRequestOriginInfo',
-                        dataSourceId: jwtDecodedToken.dataSourceId,
-                        tenantId: jwtDecodedToken.tenantId,
+                        dataSourceId: jwtDecodedToken.agentid,
+                        tenantId: jwtDecodedToken.tenantid,
                         timeStamp: (new Date()).toISOString()
                     },
                     clientData: express.body
@@ -176,7 +173,7 @@ export class UploadDataSetController {
         };
 
 
-        let finalResponse: any = await getCustomerID().then(sendToQueue).then(responseData);
+        let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData);
         return finalResponse;
 
     }
