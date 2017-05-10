@@ -89,7 +89,7 @@ and do this process module by module for 3 reasons:
      you should see something like this:
      {"name":"DAD_Backend","testingmode":"false","port":4201,"ddb_url":"http://localhost:8000"}
 
-  3.2) DAD Front End  (In testing / development mode   we will see production mode next)
+  3.2) DAD Front End  (Development Mode)
 
            open a new terminal
            cd CustomerBI/dad
