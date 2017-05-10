@@ -1,0 +1,6 @@
+{
+  "testingmode":"true",
+  "port": 8002,
+  "cdl_address" : "http://localhost:8001/ds/",
+  "ddb_address" : "http://localhost:8000/"
+}

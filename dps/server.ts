@@ -70,22 +70,25 @@ app.post('/data/request', function(req,res) {
         let tenantId = req.body.idaMetadata.tenantId;
         let dataSourceId = req.body.idaMetadata.dataSourceId;
         uploadRawData(tenantId, dataSourceId, req.body).then(function (awsResponse: any) {
-             console.log(awsResponse.Location);
+             console.log(awsResponse);
                 res.status(200).send({
                     status: 200,
-                    response: awsResponse.Location
+                    response: awsResponse
                 });
             }, function (error: any) {
-                res.status(500).send('you failed.' + error);
+                console.log(error);
+                res.status(500).send(error);
             }
         );
 
         // massage and clean up data before sending to database layer
         let tenant = db.getTenant(req.body.idaMetadata.tenantId);
         if(tenant) {
+
             let dataSource = _.find(tenant.dataSources, ['dataSourceId', req.body.idaMetadata.dataSourceId]);
             let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
             let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
+            let collectionName = dataSetId + '.' + dataSource['dataSourceId'];
 
             let inputData: any = { };
 
@@ -97,8 +100,10 @@ app.post('/data/request', function(req,res) {
                 inputData = req.body.clientData;
             }
 
-            uploadModifiedData(tenant.tenantId, dataSetId, inputData).then(function(response) {
+            uploadModifiedData(tenant.tenantId, collectionName, inputData).then(function(response) {
                console.log(JSON.stringify(response));
+            }, function (error) {
+                console.log(error);
             });
         }
     }
