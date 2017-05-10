@@ -135,22 +135,24 @@ export class DadConfigService {
         })
     }
 
-    public getWidgetConfigs(): Promise<DadChart[]> {
-        let userconfig:DadUserConfig  = JSON.parse(localStorage.getItem(this.localkey));
-        return  Promise.resolve(userconfig.configs.widgets as DadWidget[]);
+    public getWidgetConfigs(): Promise<DadWidget[]> {
+        return this.getConfigs().then( (config)  => {
+            return Promise.resolve(config.configs.widgets as DadWidget[]);
+        })
     }
 
-    public getTableConfigs(): Promise<DadChart[]> {
-        let userconfig:DadUserConfig  = JSON.parse(localStorage.getItem(this.localkey));
-        return  Promise.resolve(userconfig.configs.tables as DadTable[]);
+    public getTableConfigs(): Promise<DadTable[]> {
+        return this.getConfigs().then( (config)  => {
+            return Promise.resolve(config.configs.tables as DadTable[]);
+        })
     }
 
 
-    public getPageConfigs(): Promise<DadChart[]> {
-        let userconfig:DadUserConfig  = JSON.parse(localStorage.getItem(this.localkey));
-        return  Promise.resolve(userconfig.configs.pages as DadPage[]);
+    public getPageConfigs(): Promise<DadPage[]> {
+        return this.getConfigs().then( (config)  => {
+            return Promise.resolve(config.configs.pages as DadPage[]);
+        })
     }
-
 ///////////////////////////////////////////////////////////////////////
 
     //next test
@@ -159,21 +161,8 @@ export class DadConfigService {
         //if not we are going to get this from DB. IF we are in test mode we will get it from test data.
         let userconfigString = localStorage.getItem(this.localkey);
         if (userconfigString != null){
-            let userconfig = JSON.parse(userconfigString
-            return Promise
-
-        }
-
-         if (elements_string != null){
-             let elements_obj = JSON.parse(elements_string);
-             let DATA = elements_obj as DadElement[];
-             return Promise.resolve(DATA);
-         }
-
-        if (elements_string != null){
-            let charts_obj = JSON.parse(elements_string);
-            let DATA = charts_obj as DadElement[];
-            return Promise.resolve(DATA);
+            let userconfig = JSON.parse(userconfigString);
+            return Promise.resolve(userconfig);
         }
 
         else {
@@ -181,9 +170,9 @@ export class DadConfigService {
                 (data) => {
                     let dataObj = JSON.parse(data._body)[0];
                     this.saveConfigFromDb(dataObj);
-                    let chartsString = localStorage.getItem("elementdata");
-                    let charts = JSON.parse(chartsString);
-                    return Promise.resolve(charts as DadChart);
+                    let userconfigString = localStorage.getItem(this.localkey);
+                    let userconfig = JSON.parse(userconfigString);
+                    return Promise.resolve(userconfig as DadElement);
                 },
                 (error) => {
                     console.log(error);
@@ -198,35 +187,35 @@ export class DadConfigService {
             let tables = data.config.tables;
             let pages = data.config.pages;
         //comment: for some reason charts, widgets...etc.. are already JSON...why?
-            localStorage.setItem("elementdata", charts);
-            localStorage.setItem("elementdata", widgets);
-            localStorage.setItem("elementdata", tables);
-            localStorage.setItem("elementdata", pages);
+            localStorage.setItem(this.localkey, charts);
+            localStorage.setItem(this.localkey, widgets);
+            localStorage.setItem(this.localkey, tables);
+            localStorage.setItem(this.localkey, pages);
     }
 
     public getConfig(id:string): Promise<any> {
-        if(this.element_config.charts){
+        if(this.getChartConfigs()){
             return this.getChartConfigs().then((charts:DadChart[]) =>{
                 let chartIndex = _.findIndex(charts, function(w) { return w.id == id; });
                 if (chartIndex>-1) return Promise.resolve(charts[chartIndex]);
                 else return Promise.resolve(null);
             });
         }
-        if(this.element_config.widgets){
+        if(this.getWidgetConfigs()){
             return this.getWidgetConfigs().then((widgets:DadWidget[]) =>{
                 let widgetIndex = _.findIndex(widgets, function(w) { return w.id == id; });
                 if (widgetIndex>-1) return Promise.resolve(widgets[widgetIndex]);
                 else return Promise.resolve(null);
             });
         }
-        if(this.element_config.tables){
+        if(this.getTableConfigs()){
             return this.getTableConfigs().then((tables: DadTable[]) => {
                 let tableIndex = _.findIndex(tables, function(w) { return w.id == id; });
                 if (tableIndex>-1) return Promise.resolve(tables[tableIndex]);
                 else return Promise.resolve(null);
             });
         }
-        if(this.element_config.pages){
+        if(this.getPageConfigs()){
             return this.getPageConfigs().then((pages: DadPage[]) => {
                 let pageIndex = _.findIndex(pages, function(w) { return w.id == id; });
                 if (pageIndex>-1) return Promise.resolve(pages[pageIndex]);
