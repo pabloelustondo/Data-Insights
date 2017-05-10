@@ -4,7 +4,7 @@ var express = require('express'),
     appconfig  = global.appconfig,
     jwt     = require('jsonwebtoken');
 
-var ErrorMsg = require('./error-messages');
+require('./error-messages.js');
 var querystring = require('querystring');
 var https = require('https');
 var uuid = require('node-uuid');
@@ -508,10 +508,10 @@ app.post('/enrollments', function(req, res) {
           }, function (error, response, body) {
             if (error) {
               console.log(error);
-              res.status(400).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
+              res.status(404).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
             } else if (response.statusCode === 400 ) {
                 res.status(400).send(ErrorMsg.mcurl_enrollement_failed_authentication);
-            } else if ( response.statusCode === 404 && response.statusMessage === 'Not Found' ) {
+            } else if ( response.statusCode === 404 && response.statusMessage === 'Lala' ) {
                 res.status(404).send(ErrorMsg.mcurl_enrollement_failed_url_not_reachable);
             }
             else {
@@ -580,7 +580,13 @@ app.post('/enrollments', function(req, res) {
             }
           });
         } else {
-          res.status(500).send('Tenant Already Registered. Provide a new Unique name');
+
+          if (response.statusCode === 200){
+            res.status(400).send(ErrorMsg.domainid_already_enrolled);}
+          else {
+            res.status(500).send(ErrorMsg.system_error);
+          }
+
         }
       }
     });
@@ -592,7 +598,21 @@ app.post('/enrollments', function(req, res) {
 
 app.post('/delete_test_domains', function(req, res) {
    _.remove(enrollments, function(enrollment){ return (enrollment.domainid === "utest");} );
-  res.status(200).send({});
+   //need to remove test domains in database
+
+  request({
+    rejectUnauthorized: false,
+    url: appconfig.ddb_url + "/testenrollments",
+    method: 'DELETE', //Specify the method
+    headers: { //We can define headers too
+      'Content-Type': 'application/json'
+    }
+  }, function (error, response, body) {
+    if (error){
+      console.log("FAILED TO DELETE TEST ENROLLMENTS");
+      };
+  });
+  return res.status(200).send({});
 });
 
 app.get('/delete_all', function(req, res) {   //for now for testing...
@@ -874,27 +894,30 @@ app.get('/urlbydomainid', function(req, res) {
 app.post('/sessions/create', function(req, res) {
 //////// Parameters Checking /////////
   if (!req.body.domainid) {
-    return res.status(400).send( ErrorMsg.missing_domainid );
+    return res.status(400).send(ErrorMsg.missing_domainid);
   }
-  if (!req.body.code) {
-    return res.status(401).send( ErrorMsg.unauthorized_and_missing_idp_code);
-  }
+
   if (!req.body.code && !req.body.username) {
-    return res.status(400).send( ErrorMsg.missing_username );
+    return res.status(400).send(ErrorMsg.missing_username);
   }
   if (!req.body.code && !req.body.password) {
-    return res.status(400).send( ErrorMsg.missing_password );
+    return res.status(400).send(ErrorMsg.missing_password);
   }
+  if (!req.body.code && !req.body.username && !req.body.password) {
+    return res.status(401).send(ErrorMsg.unauthorized_and_missing_idp_code);
+  }
+
 //////////////////////////////////////////////////
   // ensure user has an authorized code to log in. Otherwise reject
 
   var _reqBody = req.body.domainid;
   var fullState = _reqBody.split('?');
   var _tenantID = fullState[0];
-  var enrollment = {};
+  var enrollment;
 
   if (req.query.domainid) enrollment =_.find(enrollments, {domainid: req.query.domainid});
   if (_tenantID) enrollment =_.find(enrollments, {domainid: _tenantID});
+  if (!enrollment) {enrollment = {};}
 
   try {
     request({

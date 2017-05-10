@@ -1,5 +1,4 @@
 {
-  "testingmode":true,
   "useSSL":false,
   "userAccessKey":false,
   "dssback_url":"http://localhost:3004",

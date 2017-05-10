@@ -1,9 +1,9 @@
 {
   "name":"DSS_Backend",
   "testingmode" : true,
+  "secret"  : "1234",
   "port" : 3004,
   "hostname": "localhost",
   "ddb_url" : "http://localhost:8000",
   "dlm_url" : "http://localhost:3004",
-  "secret"  : "1234"
 }

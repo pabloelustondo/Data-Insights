@@ -1,63 +1,102 @@
 Welcome to SOTI Insights
 
-SOTI Insights is a distributed application to allow customers to consolidate, store, transform and consume information insights
-from its internal or external data sources. SOTI Insights is intended to be run on a cloud environment and is
-composed by various modules (or microservices) that run independently and communicate to each other to accomplish the general
-goals.
+This README is only about how to install and run this application from the source code in one machine for testing/development,
+Please read the included PDF for a conceptual introduction to what is this as we will assume you did it.
 
-The application has been written in node.js and most modules only rely on that. Only our database APIS rely on mongodb
-and other cloud resoures. So to install and run this application your need:
+The application has been written in Node.js. Some modules also depend on MongoDb and Apache Kafka.
 
-Node.js 7.0+ and Mongodb 3.4+. By default it assume that mongodb runs on the standard port.
+Although everything we do in this readme can be automated with a script, we think is better for you to understand
+and do this process module by module for two reasons:
 
-to install and run the whole application you can just do
+ - you will understand better how the application and the components play together
+ - the final goal is to deploy/matain this application to the cloud module by module. So, this way is more realistic.
 
-npm install (it will taka few minutes go for coffee)
-npm start   (you will see other starts for non default configurations)
+ YOU CAN INSTALL AND RUN THE MODULES IN ANY ORDER but we suggest here a way that goes from simple to complex
 
-or , if you just want to see specific modules do:
+ Ok, let get started from simple to complex
 
-cd folder
-npm install
-npm start  (you will see other starts for non default configurations)
 
-Thi will run the application in testing mode. For running in a more realistic mode read how to set the configuration
-parameters, We discuss this at the end of this document.
+ 0) Make sure you have Node.js (+7.5.0), Npm (+4.1.2) and Mongodb (+3.0.7)
+    Make sure mongodb is running in the url specified in appconfig "mongodb_url"
 
-Every module is in a specific folder of the same name. Here a quick overview of the modules and what they do:
+ 1) DDB - SOTI Insights Database, here we store tenants, users, system information)
 
-DAD is a client side application that allows customer to consume data set by displaying charts, alerts, tables..etc.
-Client side applications such as DAD also have a corresponding 'backend' module.
+    open a new terminal     (all modules run independently..so you will need lots of terminals)
+    cd CustomerBI/ddb
+    npm install
+    npm start
+    hit http://localhost:8000/e2etest, you should see various test passing in green
+    hit http://localhost:8000/status?secret=1234, you see the status of the service and its configuration
+    you should see something like this
+    {"name":"DDB","testingmode":true,"port":8000,"mongodb_url":"mongodb://localhost:27017/udb_test"}
 
-DSS is another client side application to allow administrators with a valid SOTI account to create a 'tenant' and define
-an external method for the users to login. (for now only Mobicontrol IDP is supported).
-DSS is in charge of allowing user to login by generating JWT tokens they use to exchange for inforamtion.
+    troubleshooting: do you have mongod running in the url specified in appconfig "mongodb_url"?.
 
-TMM is used by administrators to create the metadata taht defined the tenant data lake. Metadata specifies which data sources,
-dataset and processed that the tenant will have in his data lake.
+  2) DSS - SOTI Insights Security System - Enrollment, Login (and add data sources for now, to be moved to TMM)
 
-ODA is the API conterpart of DAD an allow user that prefer to access our information directly and use their own dashboard applicaations.
+  2.1) DSS Back End
 
-IDA is the API for anybody, customets and us, to input data into the data lake.
+     open a new terminal     (all modules run independently..so you will need lots of terminals)
+     cd CustomerBI/dss/backend
+     npm install
+     npm start
+     hit http://localhost:3004/e2etest, you should see various test passing in green
+     hit http://localhost:3004/status?secret=1234, you see the status of the service and its configuration
 
-DDB and CDL are our database / datalake APIs.
+     you should see something like this:
+     {"name":"DSS_Backend","testingmode":true,"port":3004,"hostname":"localhost","ddb_url":"http://localhost:8000","dlm_url":"http://localhost:3004"}
 
-DDB wraps the SOTI database that we use to store customer tenant information.
-This is general a small size database and we use mongo DB for it.
+  2.2) DSS Front End
 
-CDL is our customer data lake interface and is in charge to interpret metadata.
+    open a new terminal
+    cd CustomerBI/dss
+    npm install
+    npm start
+    hit http://localhost:3003, you should see DSS login screen
 
-MCDP and DLM are data collection modules.
+    The login screen is asking you for a tenantid which you have not create at this point.
+    But, you can always use the "test" tenantid.
+    So, login with "test" tenant id and provide any user and password in the simulated IDP screen.
 
-MCDP is a specific data collection agent to collect data from mobicontrol.
+    If all went well, you should see a page that says that you
+    You are logged in and your JWT is:
+    .....code.....
+    {
+      "username": "useryouentered",
+      "tenantId": "test",
+      "iat": 1494389546,
+      "exp": 1500389546
+    }
 
-DLM is a data collection server that pulls data from.
+  3) DAD - SOTI Data Analytics Dashboard - Pages, Charts, Widgets,..etc.. you can see data
 
-AWS is a folder that temporarily contains code that runs on aws but will be deprecated.
+  3.1) DAD Backend
 
-Please read the SOTI Insights Introduction for further explanations.
+     open a new terminal
+     cd CustomerBI/dad/backend
+     npm install
+     npm start
+     hit http://localhost:4201/e2etest, you should see various test passing in green
+     hit http://localhost:4201/status?secret=1234, you see the status of the service and its configuration
 
----- Setting for running in production and other modes -----
+     you should see something like this:
+     {"name":"DAD_Backend","testingmode":"false","port":4201,"ddb_url":"http://localhost:8000"}
+
+  3.2) DAD Front End  (In testing / development mode   we will see production mode next)
+
+           open a new terminal
+           cd CustomerBI/dad
+           npm install
+           npm start
+           hit http://localhost:4200, you should see  dashbaord with some widgets and charts
+
+
+.....to be continued
+
+
+
+
+
 
 
 
