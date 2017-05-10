@@ -2,22 +2,24 @@ Welcome to SOTI Insights
 
 This README is only about how to install and run this application from the source code in one machine for testing/development,
 Please read the included PDF for a conceptual introduction to what is this as we will assume you did it.
+Another document will explain how to deploy this application to the target cloud environment.
 
-The application has been written in Node.js. Some modules also depend on MongoDb and Apache Kafka.
+The application has been written in Node.js. Some modules also depend on MongoDb and Apache Kafka (comming soon).
 
 Although everything we do in this readme can be automated with a script, we think is better for you to understand
-and do this process module by module for two reasons:
+and do this process module by module for 3 reasons:
 
  - you will understand better how the application and the components play together
- - the final goal is to deploy/matain this application to the cloud module by module. So, this way is more realistic.
+ - the final goal is to deploy / mantain this application to the cloud module by module. So, this way is more realistic.
+ - as a developer you should work module by module in isolation. Code changes are supposed to be tested without dependnecies.
 
  YOU CAN INSTALL AND RUN THE MODULES IN ANY ORDER but we suggest here a way that goes from simple to complex
 
  Ok, let get started from simple to complex
 
 
- 0) Make sure you have Node.js (+7.5.0), Npm (+4.1.2) and Mongodb (+3.0.7)
-    Make sure mongodb is running in the url specified in appconfig "mongodb_url"
+ 0) Make sure you have Node.js (+7.5.0), Npm (+4.1.2) and Mongodb (+3.0.7). You can find the code at https://nodejs.org and https://www.mongodb.com
+    Make sure mongodb is running in the url specified in appconfig "mongodb_url" (by default mongodb://localhost:27017)
 
  1) DDB - SOTI Insights Database, here we store tenants, users, system information)
 
@@ -57,6 +59,7 @@ and do this process module by module for two reasons:
     The login screen is asking you for a tenantid which you have not create at this point.
     But, you can always use the "test" tenantid.
     So, login with "test" tenant id and provide any user and password in the simulated IDP screen.
+    user and password is arbitrary... but try to use something unique that you can remember as this username will be used to store a user based configuration.
 
     If all went well, you should see a page that says that you
     You are logged in and your JWT is:
@@ -90,8 +93,11 @@ and do this process module by module for two reasons:
            npm start
            hit http://localhost:4200, you should see  dashbaord with some widgets and charts
 
+           if all went well, you wil lsee a dashboard with some pages and charts. This is running in test mode.
+           we will run for real when we install ODA which provides data to the dashboard. 
 
-.....to be continued
+
+
 
 
 

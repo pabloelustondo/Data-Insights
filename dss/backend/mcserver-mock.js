@@ -53,7 +53,6 @@ app.get('/oauth/authorize', function(req,res) {
     "<script>function submit(){ " +
     "var username = document.getElementById('username').value;" +
     "var url = 'http://localhost:3003/#/?code=' + username + '&state=test'; " +
-    "alert(url);" +
     "window.location.href =  url;  } " +
     "</script> " +
     "This is a simulated IDP (Identity Provider) used for testing purposes. Properly configured tenants will be redirected to the proper IDP </br>" +
