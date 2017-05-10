@@ -25,40 +25,16 @@ const options = ({
 
 const creds = new AWS.Credentials(options);
 
-
-const s3instance = new AWS.S3({
+let s3instance = new AWS.S3({
     region : config['aws_region'] ,
     credentials : creds,
     bucket: config['aws_s3bucket']
 });
 
 export function uploadRawData(tenantId: string, dataSourceId: string, clientData: ClientData) {
-    let uploadParams = {Bucket: config['aws_s3bucket']  + '/' + tenantId, Key: '', Body: ''};
-    uploadParams.Body = JSON.stringify(clientData);
-    uploadParams.Key = path.basename(tenantId + '.' + dataSourceId + '.' + (new Date()).toISOString() + '.json');
 
 
-    console.time('awsCallLarge');
-    let promise = new Promise(function (resolve, reject) {
-        s3instance.upload(uploadParams, function (err: any, data: any) {
-            if (err) {
-                err.code = 'External Error, contact SOTI support with code 0001';
-                reject(err.code);
-            }
-            if (data) {
-                resolve(data);
-
-            }
-        });
-    });
-
-    console.timeEnd('awsCallLarge');
-    return promise;
-}
-
-export function uploadModifiedData(tenantId: string, dataSetName: string, clientData: any) {
-
-    let endpoint = appconfig['cdl_address'] + tenantId + config['cdl_put_endpoint'] ;
+    let endpoint = appconfig['cdl_transLog_address'] + tenantId + '/data' ;
 
     const headerOptions = {
         'x-access-token' : config['access_token']
@@ -66,7 +42,31 @@ export function uploadModifiedData(tenantId: string, dataSetName: string, client
 
     let body = {
         tenantId: tenantId,
-        collectionName: dataSetName,
+        dataSourceId: dataSourceId,
+        clientData: clientData
+    };
+
+    const options: rp.OptionsWithUrl = {
+        json: true,
+        method: 'POST',
+        headers: headerOptions,
+        url: endpoint,
+        body: body
+    };
+    return rp(options);
+}
+
+export function uploadModifiedData(tenantId: string, collectionName: string, clientData: any) {
+
+    let endpoint = appconfig['cdl_ds_address'] + tenantId + config['cdl_put_endpoint'] ;
+
+    const headerOptions = {
+        'x-access-token' : config['access_token']
+    };
+
+    let body = {
+        tenantId: tenantId,
+        collectionName: collectionName,
         data: clientData
     };
 

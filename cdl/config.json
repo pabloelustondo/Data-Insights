@@ -6,5 +6,9 @@
   "mongodb-table" : "configuration",
   "https-key-location" : "../certificate.key",
   "https-cert-location" : "../certificate.cert",
-  "accessKey-location" : "./accessKey"
+  "accessKey-location" : "./accessKey",
+  "aws_region": "us-east-1",
+  "aws_s3bucket": "da-s3-bucket/DataExchange",
+  "aws_accessKeyFileLocation": "C:/IDA_accessKeyID.txt",
+  "aws_secretKeyFileLocation": "C:/IDA_secretAccessKey.txt"
 }
