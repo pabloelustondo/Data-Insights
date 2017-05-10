@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var bodyParser = require("body-parser");
 var express = require("express");
 var path = require("path");
@@ -12,7 +11,7 @@ var config = require('./config.json');
 var appconfig = require('./appconfig.json');
 var app = express();
 var mongodb = require('mongodb').MongoClient;
-var getdata_1 = require("./getdata");
+var getdata_1 = require('./getdata');
 ////////////////////////
 // Express stuff
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -41,11 +40,15 @@ app.use(cors());
 app.post('/ds/:tenantid/putdata', function (req, res) {
     console.log('request came in');
     callDbAndRespond(req, res, function (req, res, db, next) {
-        var dsdef = req.body; //this query is a qeury written in our metadata
-        var dsid = dsdef["dsid"];
-        var data = dsdef["data"];
+        var reqBody = req.body;
+        var tenantId = req.params.tenantid;
+        var data = {
+            timeStamp: (new Date()).toISOString(),
+            data: req.body.data
+        };
+        var dataSetId = reqBody.collectionName;
         //check parameters
-        db.collection(dsid).insertOne(data, next);
+        db.collection(dataSetId).insertOne(data, next);
     });
 });
 /// This
@@ -144,12 +147,14 @@ if (config['mongodb-config-location']) {
     mongoInfo = { uri: mongoDbCreds.uri };
 }
 function tenantDbUri(req) {
+    return mongoInfo.uri + "/cdl_" + req.params.tenantid;
+    /*
     if (appconfig.testingmode) {
         return mongoInfo.uri + "/udb_test?socketTimeoutMS=900000";
-    }
-    else {
+    } else {
         return mongoInfo.uri + "/tdb_" + req.params.tenantid;
     }
+    */
 }
 function callDbAndRespond(req, res, query) {
     //this function opens a connection to the tenant db and calls the specific query.
