@@ -15,7 +15,11 @@ and do this process module by module for 3 reasons:
 
  YOU CAN INSTALL AND RUN THE MODULES IN ANY ORDER but we suggest here a way that goes from simple to complex
 
- Ok, let get started from simple to complex
+ Ok, let get started from simple to complex.
+ This readme assumes that you got the code doing
+ git clone -b stable http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
+
+ If you got your copy form the master/head there is more chances that you wil lhave a problem
 
 
  0) Make sure you have Node.js (+7.5.0), Npm (+4.1.2) and Mongodb (+3.0.7). You can find the code at https://nodejs.org and https://www.mongodb.com
