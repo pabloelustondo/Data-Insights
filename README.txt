@@ -59,6 +59,7 @@ and do this process module by module for 3 reasons:
     The login screen is asking you for a tenantid which you have not create at this point.
     But, you can always use the "test" tenantid.
     So, login with "test" tenant id and provide any user and password in the simulated IDP screen.
+    user and password is arbitrary... but try to use something unique that you can remember as this username will be used to store a user based configuration.
 
     If all went well, you should see a page that says that you
     You are logged in and your JWT is:
