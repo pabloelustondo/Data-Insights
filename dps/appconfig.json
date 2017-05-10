@@ -1,5 +1,5 @@
 {
-  "testingmode":"true",
+  "testingmode": true,
   "port": 8002,
   "cdl_ds_address" : "http://localhost:8001/ds/",
   "cdl_transLog_address" : "http://localhost:8001/transactionLog/"

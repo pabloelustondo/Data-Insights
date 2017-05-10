@@ -13,6 +13,7 @@ var appconfigfile = require('./appconfig.json');
 var Database = require('mongodb').Db;
 var Server = require('mongodb').Server;
 var path = require('path');
+var testTenants = require('./testing/sampleTenants.json');
 
 global.appconfig = appconfigfile;
 
@@ -284,6 +285,12 @@ router.get('/getAgendas', function (req, res ) {
     });
 });
 
+
+router.get('/getAllTenants', function (req, res) {
+
+    //TODO: Provide DDB gix
+    res.status(200).send(testTenants);
+});
 
 
 router.get('/dataSourceByType', function(req,res) {

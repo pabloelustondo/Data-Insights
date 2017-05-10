@@ -19,7 +19,9 @@ export class DatabaseService {
 
         if (appconfig.testingmode) {
             this.tenants = sampletenants.tenants;
-
+        } else {
+            //TODO: call DDB for this but for now just return  test data
+            this.tenants = sampletenants.tenants;
         }
     }
 
