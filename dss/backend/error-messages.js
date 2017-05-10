@@ -1,4 +1,5 @@
-{
+ErrorMsg = {
+  "system_error": "System Error",
   "missing_accountid": "Missing AccountID",
   "missing_domainid": "Missing DomainID",
   "not_found_domainid": "DomainID was not found",
@@ -7,7 +8,7 @@
   "missing_mcurl": "Missing MobiControl Url",
   "missing_apikey": "Missing API key",
   "mcurl_already_enrolled": "Url already enrolled",
-  "domainid_already_enrolled": "Domain ID already enrolled",
+  "domainid_already_enrolled": "Tenant ID already enrolled",
   "mcurl_enrollement_failed_authentication": "Failed to enroll due to IDP authentication failure.",
   "mcurl_enrollement_failed_url_not_reachable": "Failed to enroll. IDP url not reachable",
   "login_failed_authentication": "Failed to login due to authentication failure",

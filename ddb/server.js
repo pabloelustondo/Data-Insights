@@ -9,10 +9,12 @@ var bodyParser = require('body-parser');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var config = require('./config.json');
-var appconfig = require('./appconfig.json');
+var appconfigfile = require('./appconfig.json');
 var Database = require('mongodb').Db;
 var Server = require('mongodb').Server;
 var path = require('path');
+
+global.appconfig = appconfigfile;
 
 
 if(config.userAccessKey) {
@@ -85,7 +87,7 @@ function getUser(req){
 app.use(bodyParser.json({limit: '50mb'}));
 app.use('/testing', express.static(path.join(__dirname + '/testing')));
 
-app.get('/test', function(req,res){
+app.get('/e2etest', function(req,res){
     res.sendFile(path.join(__dirname  + '/testing/spec/SpecRunner.html'));
 });
 
@@ -93,6 +95,20 @@ app.get('/', function(req,res){
     res.send("Welcome to DDB - The Central Database API for The Data Analytics Server");
 });
 
+app.get('/status', function(req,res){
+    if (req.query["secret"] !== appconfig.secret) res.send("wrong secret");
+
+    var report = {};
+    Object.keys(appconfig).forEach(function(key){
+        if (key!== "secret") {
+            if (req.query[key]){
+                appconfig[key] = req.query[key];
+            }
+            report[key]=appconfig[key];
+        }
+    });
+    return res.send(report);
+});
 ////////////////////////////
 // DAD USER related APIS  //
 // BEGIN                  //
@@ -400,6 +416,12 @@ router.delete('/enrollments', function(req,res){
     });
 });
 
+router.delete('/testenrollments', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('enrollments').removeMany({tenantId:'test2'});
+    });
+});
+
 
 router.delete('/deleteAllDataSources', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
@@ -485,13 +507,13 @@ if (config.useSSL) {
     var httpsServer = https.createServer(httpsOptions, app);
 
     httpsServer.listen(appconfig.port, function () {
-        console.log('Starting https server.. https://localhost:' + appconfig.port + '/test');
+        console.log('Starting https server.. https://localhost:' + appconfig.port + '/e2etest');
     });
 } else {
     var httpServer = http.createServer(app);
 
     httpServer.listen(appconfig.port, function () {
-        console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
+        console.log('Starting http server.. http://localhost:' + appconfig.port + '/e2etest');
     });
 
 }

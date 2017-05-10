@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/public', express.static(__dirname + '/public'));
-app.get('/test', function(req,res){
+app.get('/e2etest', function(req,res){
   res.sendfile('./public/testing/spec/SpecRunner.html');
 });
 
@@ -39,7 +39,6 @@ app.get('/status', function(req,res){
   });
   return res.send(report);
 });
-
 
 app.get('/', function(req,res){
   res.sendfile('./public/testing/spec/SpecRunner.html');
@@ -79,13 +78,13 @@ if (config.useSSL){
 var httpsServer = https.createServer(httpsOptions, app);
 
 httpsServer.listen(appconfig.port, appconfig.hostname, function (){
-  console.log('Starting https server.. https://localhost:' + config.port + '/docs');
+  console.log('Starting https server.. https://localhost:' + config.port );
+  console.log("Tests at " + appconfig.hostname  + ":" + appconfig.port + '/e2etest');
 });
 
 } else {
-
    http.createServer(app).listen(appconfig.port, function (err) {
    console.log("listening in " +appconfig.hostname  + ":" + appconfig.port);
+   console.log("Tests at " + appconfig.hostname  + ":" + appconfig.port + '/e2etest');
    });
-
 }

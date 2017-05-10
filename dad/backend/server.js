@@ -7,11 +7,13 @@ var fs = require('fs');
 var helmet = require('helmet');
 var bodyParser = require('body-parser');
 var config = require('./config.json');
-var appconfig = require('./appconfig.json');
+var appconfigfile = require('./appconfig.json');
 var path = require('path');
 var rp = require('request-promise');
 var cors = require('cors');
 var io = require('socket.io')(http);
+
+global.appconfig = appconfigfile;
 
 
 io.on('connection', function(socket){
@@ -45,6 +47,21 @@ app.get('/test', function(req,res){
 
 app.get('/', function(req,res){
     res.sendFile(path.join(__dirname  + '/index.html'));
+});
+
+app.get('/status', function(req,res){
+    if (req.query["secret"] !== appconfig.secret) res.send("wrong key");
+
+    var report = {};
+    Object.keys(appconfig).forEach(function(key){
+        if (key!== "secret") {
+            if (req.query[key]){
+                appconfig[key] = req.query[key];
+            }
+            report[key]=appconfig[key];
+        }
+    });
+    return res.send(report);
 });
 
 app.get('/daduser/:userid', function(req,res){

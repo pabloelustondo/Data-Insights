@@ -1,7 +1,7 @@
 describe("DAD Backend", function() {
 
     describe("GET /", function() {
-        it("returns Welcome to DDB - The Central Database API for The Data Analytics Server", function(done) {
+        it("returns Welcome to DAD Backend - The backend for the Data Analytics Dashboard", function(done) {
             $.get("/", function(data, textStatus, jqXHR) {
                 expect(data).toContain("Welcome to DAD Backend - A Very Light Basic Backend API for DAD");
                 done();

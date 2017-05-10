@@ -1,0 +1,23 @@
+ErrorMsg = {
+  "system_error": "System Error",
+  "missing_accountid": "Missing AccountID",
+  "missing_domainid": "Missing DomainID",
+  "not_found_domainid": "DomainID was not found",
+  "missing_username": "Missing Username",
+  "missing_password": "Missing Password",
+  "missing_mcurl": "Missing MobiControl Url",
+  "missing_apikey": "Missing API key",
+  "mcurl_already_enrolled": "Url already enrolled",
+  "domainid_already_enrolled": "Tenant ID already enrolled",
+  "mcurl_enrollement_failed_authentication": "Failed to enroll due to IDP authentication failure.",
+  "mcurl_enrollement_failed_url_not_reachable": "Failed to enroll. IDP url not reachable",
+  "login_failed_authentication": "Failed to login due to authentication failure",
+  "token_verification_failed" : "Failed to verify the token, please consult your administrator",
+  "token_activationKey_failed": "Activation key is not valid. Please consult with your administrator",
+  "tenantid_not_registered": "System could not find IDP for provided tenantID",
+  "session_missing_callback_token" : "Redirect mechanism did not provide auth Token.",
+  "db_connection_not_establish" : "Could not connect to DB. Please contact SOTI support",
+  "missing_dataSourceType" : "A data source type was not provided in the request. Please contact SOTI support",
+  "dlm_generic_error" : "There is an issue enrolling the nextBus data Source. Please contact SOTI support.",
+  "unauthorized_and_missing_idp_code" : "User is unauthorized. IDP access code invalid or missing. Please contact SOTI support."
+}

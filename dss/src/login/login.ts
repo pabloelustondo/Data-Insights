@@ -106,7 +106,7 @@ export class Login {
 
           },
           error => {
-            alert('the provided domain id could not be found');
+            alert('System error: We could not communicate with DSS server');
             console.log(error.text());
           }
         );
