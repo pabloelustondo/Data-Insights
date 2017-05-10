@@ -93,8 +93,11 @@ and do this process module by module for 3 reasons:
            npm start
            hit http://localhost:4200, you should see  dashbaord with some widgets and charts
 
+           if all went well, you wil lsee a dashboard with some pages and charts. This is running in test mode.
+           we will run for real when we install ODA which provides data to the dashboard. 
 
-.....to be continued
+
+
 
 
 
