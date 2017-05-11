@@ -171,25 +171,28 @@ const testData =  {
             });
     }
 
-    @test('make call to DPS to process data')
+    @test('make one call to DPS to process data')
     public call_dps_from_ida(done: Function) {
+
+        let projections: any[] = ['sensorValue'];
         let testData = {
             metadata  : {
-                dataSetId : 'idaSampleId',
-                projections: ['']
+                dataSetId : 'idaSampleId2',
+                projections: projections
             },
             data: {
                 sensorId : '123',
-                sensorValue: ''
+                sensorValue: '45648946'
             }
         };
 
+        let tenantId = 'varun_test';
         let jwtPayload = {
-            tenantId: 'unitTestTenantIda',
-            dataSourceId: 'unitTestIdaDataSource'
+            tenantid: tenantId,
+            agentid: '12345678901234567890'
         };
         let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
-
+        console.log(JSON.stringify(token));
         chai.use(chaiHttp);
         chai.request(server.app)
             .post('/data/input')
@@ -198,14 +201,17 @@ const testData =  {
             .set('Accept', 'application/json')
             .send(testData)
             .end((err: any, res: any) => {
+                console.log(JSON.stringify(res));
                 expect(res).to.have.status(200);
-                let responseFileLocation = JSON.parse(res.text).data ;
-                let expectedFileLocationPrefix = 'https://s3.amazonaws.com/da-s3-bucket%2FDataExchange%2F'
-                    + 'unitTestTenantIda';
-                expect(responseFileLocation.substring(0, expectedFileLocationPrefix.length)).to.be.equal(expectedFileLocationPrefix);
+                let response = JSON.parse(res.text);
+                let expectedFileLocationPrefix = 'https://s3.amazonaws.com/da-s3-bucket%2FDataExchange%2F' + tenantId;
+                let fileLocation = response.data.substr(0, expectedFileLocationPrefix.length);
+                expect(fileLocation).to.be.equal(expectedFileLocationPrefix);
                 done();
             });
     }
+
+    /*
     @test('make call to DPS to process data as a different tenant')
     public call_dps_from_ida_different_tenant(done: Function) {
         let testData = {
@@ -219,9 +225,10 @@ const testData =  {
             }
         };
 
+        let tenantId = 'varun_test';
         let jwtPayload = {
-            tenantId: 'unitTestTenantIda2',
-            dataSourceId: 'unitTestIdaDataSource2'
+            tenantid:  tenantId,
+            agentid: '12345678901234567890'
         };
         let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
 
@@ -241,7 +248,7 @@ const testData =  {
                 done();
             });
     }
-
+*/
 }
 /**
  * Created by vdave on 12/5/2016.

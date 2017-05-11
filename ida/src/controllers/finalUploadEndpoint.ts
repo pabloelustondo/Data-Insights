@@ -129,6 +129,9 @@ export class UploadDataSetController {
 
         let sendToQueue = function (jwtDecodedToken: any) {
            // let promise = new Promise(function (resolve, reject) {
+
+                let metadata = (!express.body.metadata) ? {} : express.body.metadata;
+
                 let data = {
                     idaMetadata: {
                         referer: 'sampleRequestOriginInfo',
@@ -136,7 +139,8 @@ export class UploadDataSetController {
                         tenantId: jwtDecodedToken.tenantid,
                         timeStamp: (new Date()).toISOString()
                     },
-                    clientData: express.body
+                    clientMetadata: metadata,
+                    clientData: express.body.data
                 };
                 const headersOptions = {
                     'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
