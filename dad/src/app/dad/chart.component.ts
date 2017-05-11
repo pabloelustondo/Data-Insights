@@ -4,8 +4,8 @@ import {Mapper} from "./mapper";
 import {DadElement} from "./dadmodels";
 import {Router, ActivatedRoute} from "@angular/router";
 import {config} from "./appconfig";
-//import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
-import { DadConfigService } from './DadConfig.service';
+import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
+//import { DadConfigService } from './DadConfig.service';
 import {DadFilter} from "./filter";
 import {Observable} from "rxjs";
 import {DadMap2} from './map2.component';
@@ -29,7 +29,7 @@ export class DadChart extends DadElement {
 }
 @Component({
     selector: 'dadchart',
-    providers: [DadElementDataService, DadConfigService],
+    providers: [DadElementDataService, DadTableConfigsService, DadChartConfigsService],
     template: `
 <div class="dadChart">
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
@@ -101,14 +101,16 @@ export class DadChart extends DadElement {
                                <div><input style="height:32px;" [(ngModel)]="newDimensionAttribute"  type="text"   placeholder="Dimension Attribute"></div>
                                <div><button (click)="addNewDimension()">Add New Dimension</button></div>     
                            </div>
-                           
-                           <div *ngIf="addFilter">
+                      
+     </div>
+          
+                           <div *ngIf="addFilter && !editExpression">
                                <div></div>
                                    <div><input style="height:32px;" [(ngModel)]="newFilterName" type="text" placeholder="Filter Name"></div>
                                    <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
                                <div><button (click)="addNewFilter()">Add New Filter</button></div>    
                             </div>
-     </div>
+                            
                         <div *ngIf="editExpression">
                            <div></div>
                                <div><input style="height:32px;" [(ngModel)]="updatedFilterName" type="text" placeholder="Filter Name"></div>
@@ -208,8 +210,8 @@ export class DadChartComponent implements OnInit {
 
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
-               // private dadTableConfigsService: DadTableConfigsService,
-                private dadChartConfigsService: DadConfigService,
+                private dadTableConfigsService: DadTableConfigsService,
+                private dadChartConfigsService: DadChartConfigsService,
                 private router: Router, private route: ActivatedRoute,) {}
 
     filterBy(d){
@@ -259,7 +261,6 @@ export class DadChartComponent implements OnInit {
     }
 
     editItem() {
-        this.addFilter = false;
         if (!this.editExpression) this.editExpression = true;
         else this.editExpression = false;
     }
