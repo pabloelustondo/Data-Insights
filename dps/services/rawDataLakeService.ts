@@ -58,7 +58,7 @@ export function uploadModifiedData(tenantId: string, collectionName: string, cli
 
         let body = {
             tenantId: tenantId,
-            collectionName: collectionName,
+            dsId: collectionName,
             data: clientData
         };
 

@@ -73,11 +73,11 @@ app.post('/ds/:tenantid/putdata', function(req,res){
 
         var reqBody = req.body;
         let tenantId = req.params.tenantid;
-        var data ={
+        var data = {
             timeStamp: (new Date()).toISOString(),
             data: req.body.data
         };
-        var collectionName = reqBody.collectionName;
+        var collectionName = reqBody.dsId;
 
         //check parameters
         db.collection(collectionName).insertOne(data, next);
@@ -122,7 +122,10 @@ app.post('/ds/:tenantid/getdata', function(req,res){
     console.log('enter post get data for tenant');
     var collectionName = req.body.collectionName; //this query is a qeury written in our metadata
     callDbAndRespond(req,res, function(req,res,db, next){
-            db.collection(collectionName).find().toArray(next);
+            db.collection(collectionName).find({},{
+                data: 1,
+                _id : 0
+            }).toArray(next);
 
     });
 });
@@ -144,7 +147,12 @@ app.get('/ds/:tenantid/:dsid/:n', function(req,res){
         let collectionName = req.params.dsid;
         var n = req.params.dsid;
         //check parameters
-        db.collection(collectionName).find().skip(db.collection(collectionName).count() - n).toArray(next);
+        db.collection(collectionName).find({},
+            {
+                data: 1,
+                _id : 0
+            }
+        ).skip(db.collection(collectionName).count() - n).toArray(next);
     });
 });
 
