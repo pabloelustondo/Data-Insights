@@ -10,13 +10,14 @@
     "jasmine-node": "^1.14.5",
     "mongodb": "2.0.46",
     "request": "^2.65.0",
-    "helmet" : "^3.4.1"
+    "helmet" : "^3.4.1",
+    "cp-cli": "1.0.2"
   },
   "scripts": {
     "postinstall": "npm test",
-    "start" : "node server.js",
-    "debugwin": "node %NODE_DEBUG_OPTION% server.js",
-    "debugmac": "node $NODE_DEBUG_OPTION server.js",
+    "start" : "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node server.js",
+    "debugwin": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node %NODE_DEBUG_OPTION% server.js",
+    "debugmac": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node $NODE_DEBUG_OPTION server.js",
     "test": "echo unit tests not implemented for now"
   }
 }
