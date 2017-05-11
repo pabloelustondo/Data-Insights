@@ -68,7 +68,7 @@ export class DadConfigService {
         return this.http.get(url).toPromise();
     }
 
-    private saveUserConfigurationToDdb(){
+    public saveUserConfigurationToDdb(){
         //this method will save the current configuration in local storage to the server
 
         let userconfig = JSON.parse(localStorage.getItem(this.localkey));
@@ -193,35 +193,42 @@ export class DadConfigService {
             localStorage.setItem(this.localkey, pages);
     }
 
-    public getConfig(id:string): Promise<any> {
-        if(this.getChartConfigs()){
-            return this.getChartConfigs().then((charts:DadChart[]) =>{
-                let chartIndex = _.findIndex(charts, function(w) { return w.id == id; });
-                if (chartIndex>-1) return Promise.resolve(charts[chartIndex]);
-                else return Promise.resolve(null);
+    public getChartConfig(id:string): Promise<any> {
+        return this.getChartConfigs().then((charts: DadChart[]) => {
+            let chartIndex = _.findIndex(charts, function (w) {
+                return w.id == id;
             });
-        }
-        if(this.getWidgetConfigs()){
-            return this.getWidgetConfigs().then((widgets:DadWidget[]) =>{
-                let widgetIndex = _.findIndex(widgets, function(w) { return w.id == id; });
-                if (widgetIndex>-1) return Promise.resolve(widgets[widgetIndex]);
-                else return Promise.resolve(null);
-            });
-        }
-        if(this.getTableConfigs()){
-            return this.getTableConfigs().then((tables: DadTable[]) => {
-                let tableIndex = _.findIndex(tables, function(w) { return w.id == id; });
-                if (tableIndex>-1) return Promise.resolve(tables[tableIndex]);
-                else return Promise.resolve(null);
-            });
-        }
-        if(this.getPageConfigs()){
-            return this.getPageConfigs().then((pages: DadPage[]) => {
-                let pageIndex = _.findIndex(pages, function(w) { return w.id == id; });
-                if (pageIndex>-1) return Promise.resolve(pages[pageIndex]);
-                else return Promise.resolve(null);
-            });
-        }
-
+            if (chartIndex > -1) return Promise.resolve(charts[chartIndex]);
+            else return Promise.resolve(null);
+        });
     }
+
+    public getWidgetConfig(id:string): Promise<any> {
+        return this.getWidgetConfigs().then((elements: DadWidget[]) => {
+            let index = _.findIndex(elements, function (w) {
+                return w.id == id;
+            });
+            if (index > -1) return Promise.resolve(elements[index]);
+            else return Promise.resolve(null);
+        });
+    }
+    public getTableConfig(id:string): Promise<any> {
+        return this.getTableConfigs().then((elements: DadTable[]) => {
+            let index = _.findIndex(elements, function (w) {
+                return w.id == id;
+            });
+            if (index > -1) return Promise.resolve(elements[index]);
+            else return Promise.resolve(null);
+        });
+    }
+    public getPageConfig(id:string): Promise<any> {
+        return this.getPageConfigs().then((elements: DadPage[]) => {
+            let index = _.findIndex(elements, function (w) {
+                return w.id == id;
+            });
+            if (index > -1) return Promise.resolve(elements[index]);
+            else return Promise.resolve(null);
+        });
+    }
+
 }

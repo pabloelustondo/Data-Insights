@@ -2,7 +2,7 @@
  * Created by dister on 2/2/2017.
  */
 import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
-import { DadTableConfigsService, DadChartConfigsService,DadWidgetConfigsService ,DadPageConfigsService } from './chart.service';
+import { DadConfigService } from './dadconfig.service';
 import { DadElementDataService } from "./data.service";
 import {Subscription } from 'rxjs';
 import { ActivatedRoute} from '@angular/router';
@@ -28,7 +28,7 @@ export class DadPage {
 @Component({
     selector: 'dadpage',
     styles:['.row{overflow:hidden;}'],
-    providers: [DadElementDataService, DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService, DadPageConfigsService],
+    providers: [DadElementDataService, DadConfigService],
     template: `
    <div *ngIf="page" class="animated fadeIn">
         <div *ngIf="page.widgets" class="row">
@@ -53,10 +53,7 @@ export class  DadPageComponent implements OnInit{
     public id : string;
     user: DadUser;
 
-    constructor(private dadTableConfigsService: DadTableConfigsService,
-                private dadWidgetConfigsService: DadWidgetConfigsService,
-                private dadPageConfigsService: DadPageConfigsService,
-                private dadChartConfigsService: DadChartConfigsService,
+    constructor(private dadConfigService: DadConfigService,
                 private activatedRoute: ActivatedRoute
     ) { }
 
@@ -67,12 +64,12 @@ export class  DadPageComponent implements OnInit{
             this.subscription = this.activatedRoute.params.subscribe(
                 (param: any) => {
                     let callerPageId = param['id'];
-                    this.dadPageConfigsService.getPageConfig(callerPageId).then((page) => {
+                    this.dadConfigService.getPageConfig(callerPageId).then((page) => {
                         this.page = page;
 
                         this.page.charts = [];
                         for (let chartid of this.page.chartids) {
-                            this.dadChartConfigsService.getChartConfig(chartid).then((chart) => {
+                            this.dadConfigService.getChartConfig(chartid).then((chart) => {
                               //  let chart = element as DadChart;
                                 if (chart) this.page.charts.push(chart);
                             })
@@ -80,7 +77,7 @@ export class  DadPageComponent implements OnInit{
 
                         this.page.widgets = [];
                         for (let widgetid of this.page.widgetids) {
-                            this.dadWidgetConfigsService.getWidgetConfig(widgetid).then((widget) => {
+                            this.dadConfigService.getWidgetConfig(widgetid).then((widget) => {
                                 if (widget) this.page.widgets.push(widget);
                             });
                         }

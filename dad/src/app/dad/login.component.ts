@@ -4,7 +4,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DadChart } from './chart.component';
-import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService } from './chart.service';
+import { DadConfigService } from './dadconfig.service';
 import { DadWidget } from "./widget.component";
 import { DadTable } from "./table.component";
 
@@ -13,7 +13,7 @@ declare var d3, c3: any;
 @Component({
     selector: 'dadlogin',
     styles:['.row{overflow:hidden;}'],
-    providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService],
+    providers: [DadConfigService],
     template: `
 Hello Login
     `

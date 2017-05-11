@@ -2,8 +2,7 @@ import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@
 import { DadChart } from "./chart.component";
 import { DadPage } from "./page.component";
 import { DadElementDataService } from "./data.service";
-import { DadWidgetConfigsService } from './chart.service';
-import { DadPageConfigsService } from './chart.service';
+import { DadConfigService } from './dadconfig.service';
 import { Mapper } from "./mapper";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadAlert, DadAlertType, DadFilter, DadFilterType, DadDimension, DadDimensionType, DadElement } from "./dadmodels"
@@ -19,7 +18,7 @@ export class DadWidget extends DadElement{
 
 @Component({
   selector: 'dadwidget',
-  providers:[DadElementDataService, DadWidgetConfigsService, DadPageConfigsService],
+  providers:[DadElementDataService, DadConfigService],
   template: `   
 
 <div class="dadWidget">
@@ -115,8 +114,7 @@ export class DadWidgetComponent implements OnInit {
   intervalId: any;
 
     constructor(private dadWidgetDataService: DadElementDataService,
-                private dadWidgetConfigsService: DadWidgetConfigsService,
-                private dadPageConfigsService: DadPageConfigsService,
+                private dadConfigService: DadConfigService,
                 private router: Router, private route: ActivatedRoute) {}
 
     onRefresh():void{
@@ -144,7 +142,7 @@ export class DadWidgetComponent implements OnInit {
         }
         this.page.widgets = new_widgets;
         this.page.widgetids = new_widgetids;
-        this.dadPageConfigsService.saveOne(this.page);
+        this.dadConfigService.saveOne(this.page);
     }
 
     onMoreDetails(message:string):void{
