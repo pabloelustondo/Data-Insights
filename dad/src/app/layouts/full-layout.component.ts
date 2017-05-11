@@ -2,6 +2,7 @@ import { Component, OnInit }            from '@angular/core';
 import { PAGES } from '../dad/sample.page'
 import { DadPage } from "../dad/page.component";
 import { DadUser } from "../dad/dadmodels";
+let appconfig = require("../../../appconfig.json");
 
 @Component({
     selector: 'app-dashboard',
@@ -10,6 +11,7 @@ import { DadUser } from "../dad/dadmodels";
 export class FullLayoutComponent implements OnInit {
 
     user: DadUser;
+    testingmode:boolean;
     constructor() {
     }
 
@@ -44,6 +46,6 @@ export class FullLayoutComponent implements OnInit {
             pagenames.push(page.name);
         });
 
-
+        this.testingmode = appconfig.testingmode;
     }
 }

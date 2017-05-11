@@ -22,7 +22,7 @@ and do this process module by module for 3 reasons:
  If you got your copy form the master/head there is more chances that you wil lhave a problem
 
 
- 0) Make sure you have Node.js (+7.5.0), Npm (+4.1.2) and Mongodb (+3.0.7). You can find the code at https://nodejs.org and https://www.mongodb.com
+ 0) Make sure you have Node.js (+7.7.4), Npm (+4.4.4) and Mongodb (+3.0.7). You can find the code at https://nodejs.org and https://www.mongodb.com
     Make sure mongodb is running in the url specified in appconfig "mongodb_url" (by default mongodb://localhost:27017)
 
  1) DDB - SOTI Insights Database, here we store tenants, users, system information)
@@ -35,7 +35,7 @@ and do this process module by module for 3 reasons:
     hit http://localhost:8000/status?secret=1234, you see the status of the service and its configuration
     you should see something like this
     {"name":"DDB","testingmode":true,"port":8000,"mongodb_url":"mongodb://localhost:27017/udb_test"}
-
+npm start
     troubleshooting: do you have mongod running in the url specified in appconfig "mongodb_url"?.
 
   2) DSS - SOTI Insights Security System - Enrollment, Login (and add data sources for now, to be moved to TMM)
@@ -89,7 +89,7 @@ and do this process module by module for 3 reasons:
      you should see something like this:
      {"name":"DAD_Backend","testingmode":"false","port":4201,"ddb_url":"http://localhost:8000"}
 
-  3.2) DAD Front End  (Development Mode)
+  3.2) DAD Front End  (Development Mode - Test Mode)
 
            open a new terminal
            cd CustomerBI/dad
@@ -97,8 +97,15 @@ and do this process module by module for 3 reasons:
            npm start
            hit http://localhost:4200, you should see  dashbaord with some widgets and charts
 
-           if all went well, you wil lsee a dashboard with some pages and charts. This is running in test mode.
+           if all went well, you will see a dashboard with some pages and charts. This is running in test mode,
+           data is comming from a sample user using sample configuration and sample data. This is how normally we develop.
+           We avoid calling real dependencies while developing visual components.
            we will run for real when we install ODA which provides data to the dashboard. 
+
+   3.3) DAD Front End  (Development Mode - Real Mode calling Devependecies)
+
+           npm run startdev
+
 
 
 
