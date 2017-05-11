@@ -85,7 +85,7 @@ app.post('/ds/:tenantid/putdata', function(req,res){
 });
 
 // Store data to transacation log interface
-app.post('/transacationLog/:tenantid/data', function(req, res) {
+app.post('/transactionLog/:tenantid/data', function(req, res) {
 
     console.log('placing data in s3 for now');
     let tenantId = req.params.tenantid;

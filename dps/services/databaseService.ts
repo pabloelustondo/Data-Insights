@@ -21,8 +21,45 @@ export class DatabaseService {
             this.tenants = sampletenants.tenants;
         } else {
             //TODO: call DDB for this but for now just return  test data
-            this.tenants = sampletenants.tenants;
+          //  this.tenants = sampletenants.tenants;
+            // this.loadTenants();
+
+            const headersOptions = {
+                'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+            };
+
+            const options: rp.OptionsWithUrl = {
+                json: true,
+                method: 'get',
+                headers: headersOptions,
+                url: 'http://localhost:8000/getAllTenants',
+            };
+            rp(options).then(data => this.tenants = data);
         }
+    }
+
+    public loadTenants () {
+
+            const headersOptions = {
+                'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+            };
+
+            const options: rp.OptionsWithUrl = {
+                json: true,
+                method: 'get',
+                headers: headersOptions,
+                url: 'http://localhost:8000/getAllTenants',
+            };
+            rp(options).then(data => this.tenants = data.tenants);
+
+    }
+
+    public setTenants(data: any) {
+        this.tenants = data;
+    }
+
+    public getTenants() {
+        return this.tenants;
     }
 
     public start (){
