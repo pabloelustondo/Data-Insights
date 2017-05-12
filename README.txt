@@ -19,8 +19,10 @@ and do this process module by module for 3 reasons:
  This readme assumes that you got the code doing
  git clone -b stable http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
 
- If you got your copy form the master/head there is more chances that you wil lhave a problem
+ If you got your copy form the master/head there is more chances that you will have a problem
 
+ Anyway, if you already understood the architecture and modules well and your are getting tired of doing cd ..npm install by hand ... use the 'install.bat'.
+ Thenm yiou can run all your modules from Webstorm so you do not need to open so many terminal (this is what I do).
 
  0) Make sure you have Node.js (+7.7.4), Npm (+4.4.4) and Mongodb (+3.0.7). You can find the code at https://nodejs.org and https://www.mongodb.com
     Make sure mongodb is running in the url specified in appconfig "mongodb_url" (by default mongodb://localhost:27017)

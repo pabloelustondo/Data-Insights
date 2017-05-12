@@ -24,7 +24,15 @@ export class DadUserConfig {
     username: string;
     tenantid: string;
     timeStamp: string;
-    configs: DadElement[]
+    configs: DadElement[];
+
+    constructor(user:DadUser){
+        this.username = user.username;
+        this.tenantid = user.tenantid;
+        this.userid = user.userid;
+        this.timeStamp = new Date().toDateString();
+        this.configs = [];
+    }
 }
 
 
@@ -95,6 +103,7 @@ export class DadConfigService {
 //Under test config
     public save(elements:DadElement[] ){
         let daduserconfig = JSON.parse(localStorage.getItem(this.localkey)) as DadUserConfig;
+        if (!daduserconfig) daduserconfig = new DadUserConfig(this.user);
         let configs = daduserconfig.configs;
 
         elements.forEach((element) => {
@@ -131,12 +140,7 @@ export class DadConfigService {
                         return Promise.resolve(userConfig as DadUserConfig);
                     } else {
                         //create brand new configuration
-                        let newUserConfig = new DadUserConfig();
-                        newUserConfig.username = this.user.username;
-                        newUserConfig.tenantid = this.user.tenantid;
-                        newUserConfig.userid = this.user.userid;
-                        newUserConfig.timeStamp = new Date().toDateString();
-                        newUserConfig.configs = [];
+                        let newUserConfig = new DadUserConfig(this.user);
                         CHARTS.forEach((e) => {
                             e.elementType = 'chart'
                             newUserConfig.configs.push(e);});
@@ -154,7 +158,7 @@ export class DadConfigService {
                             newUserConfig.configs.push(e);});
 
                         localStorage.setItem(this.localkey,JSON.stringify(newUserConfig));
-                        Promise.resolve();
+                        Promise.resolve(newUserConfig);
                     }
                 },
                 (error) => {
