@@ -18,17 +18,13 @@ import { Observable } from 'rxjs/Rx';
 import { DadUser } from "./dadmodels";
 import { JwtHelper } from 'angular2-jwt';
 
-export interface DadUserConfig {
+export class DadUserConfig {
  //put in dad models
     userid: string;
     username: string;
     tenantid: string;
-    configs: { timeStamp: string,
-        charts: DadChart[],
-        widgets: DadWidget[],
-        tables: DadTable[],
-        pages: DadPage[]
-    }
+    timeStamp: string;
+    configs: DadElement[]
 }
 
 
@@ -61,8 +57,6 @@ export class DadConfigService {
     }
 
     public getUserConfigurationFromDdb(): Promise<any>{
-        //this method will get the current configuration from server and store it in local storage
-
         let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : this.token});
         let url = config.dadback_url + "/daduser/"+ this.user.userid;
         return this.http.get(url).toPromise();
@@ -71,29 +65,18 @@ export class DadConfigService {
     public saveUserConfigurationToDdb(){
         //this method will save the current configuration in local storage to the server
 
-        let userconfig = JSON.parse(localStorage.getItem(this.localkey));
+        let daduserconfig = JSON.parse(localStorage.getItem(this.localkey)) as DadUserConfig;
         let timeStamp = Date.now().toString();
-
-        let daduserconfig:DadUserConfig = {
-            userid: this.user.userid,
-            username: this.user.username,
-            tenantid: this.user.tenantid,
-            configs: { timeStamp: timeStamp,
-                charts: userconfig.charts,
-                widgets: userconfig.widgets,
-                tables: userconfig.tables,
-                pages: userconfig.pages
-            }
-        };
 
         let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : this.token});
         let url = config.dadback_url + "/daduser/"+ daduserconfig.userid;
-        console.log('call in http');
+
         this.http.post(url, daduserconfig).toPromise().then(
             (res:Response) => {
                 console.log('configuration saved' + JSON.stringify(res));
             }).catch(
             (error) =>{
+                alert("Failed to save configuration to database " + error);
                 console.log('configuration failed to save')
             }
         );
@@ -105,74 +88,74 @@ export class DadConfigService {
         localStorage.removeItem(this.localkey);
     }
 //This is tested and works
-    public save(elements:DadElement[] ){
-        let userconfigJson = JSON.stringify(elements);
-        localStorage.setItem(this.localkey,userconfigJson);
-        if (!this.config.testing) this.saveUserConfigurationToDdb();
-    }
-//Under test config
     public saveOne(element:DadElement ){
-        let elements:DadElement[];
+        this.save([element]);
+    }
 
-        this.getConfigs().then((elements:DadElement[]) =>{
+//Under test config
+    public save(elements:DadElement[] ){
+        let daduserconfig = JSON.parse(localStorage.getItem(this.localkey)) as DadUserConfig;
+        let configs = daduserconfig.configs;
 
-                let elementIndex = _.findIndex(elements, function(w) { return w.id == element.id; });
-                if(elementIndex === -1){
-                    elements.push(element);
-                } else {
-                    elements.splice(elementIndex, 1, element);
-                }
-                this.save(elements);
+        elements.forEach((element) => {
+            let elementIndex = _.findIndex(configs, function(w) { return w.id == element.id; });
+
+            if(elementIndex === -1){
+                configs.push(element);
+            } else {
+                configs.splice(elementIndex, 1, element);
             }
-        );
-    }
-/*This part is created because functions are used in the other components but service will be working under one name
- * since names are casted. DON'T CHANGE!
- */
-    public getChartConfigs(): Promise<DadChart[]> {
-        return this.getConfigs().then( (config)  => {
-            return Promise.resolve(config.configs.charts as DadChart[]);
-        })
-    }
+        });
 
-    public getWidgetConfigs(): Promise<DadWidget[]> {
-        return this.getConfigs().then( (config)  => {
-            return Promise.resolve(config.configs.widgets as DadWidget[]);
-        })
-    }
+        localStorage.setItem(this.localkey,JSON.stringify(daduserconfig));
+        this.saveUserConfigurationToDdb();
 
-    public getTableConfigs(): Promise<DadTable[]> {
-        return this.getConfigs().then( (config)  => {
-            return Promise.resolve(config.configs.tables as DadTable[]);
-        })
     }
-
-
-    public getPageConfigs(): Promise<DadPage[]> {
-        return this.getConfigs().then( (config)  => {
-            return Promise.resolve(config.configs.pages as DadPage[]);
-        })
-    }
-///////////////////////////////////////////////////////////////////////
 
     //next test
-    public getConfigs(): Promise<any> {
+    public getConfig(): Promise<DadUserConfig> {
         //this method will return the configuration that are expected to be in the local storage.
         //if not we are going to get this from DB. IF we are in test mode we will get it from test data.
         let userconfigString = localStorage.getItem(this.localkey);
         if (userconfigString != null){
-            let userconfig = JSON.parse(userconfigString);
+            let userconfig = JSON.parse(userconfigString) as DadUserConfig;
             return Promise.resolve(userconfig);
         }
 
         else {
             return this.getUserConfigurationFromDdb().then(
                 (data) => {
-                    let dataObj = JSON.parse(data._body)[0];
-                    this.saveConfigFromDb(dataObj);
-                    let userconfigString = localStorage.getItem(this.localkey);
-                    let userconfig = JSON.parse(userconfigString);
-                    return Promise.resolve(userconfig as DadElement);
+                    let userConfig = JSON.parse(data._body)[0];
+                    if (userConfig){
+                        localStorage.setItem(this.localkey, JSON.stringify(userConfig));
+                        return Promise.resolve(userConfig as DadUserConfig);
+                    } else {
+                        //create brand new configuration
+                        let newUserConfig = new DadUserConfig();
+                        newUserConfig.username = this.user.username;
+                        newUserConfig.tenantid = this.user.tenantid;
+                        newUserConfig.userid = this.user.userid;
+                        newUserConfig.timeStamp = new Date().toDateString();
+                        newUserConfig.configs = [];
+                        CHARTS.forEach((e) => {
+                            e.elementType = 'chart'
+                            newUserConfig.configs.push(e);});
+
+                        WIDGETS.forEach((e) => {
+                            e.elementType = 'widget'
+                            newUserConfig.configs.push(e);});
+
+                        TABLES.forEach((e) => {
+                            e.elementType = 'table'
+                            newUserConfig.configs.push(e);});
+
+                        PAGES.forEach((e) => {
+                            e.elementType = 'page'
+                            newUserConfig.configs.push(e);});
+
+                        localStorage.setItem(this.localkey,JSON.stringify(newUserConfig));
+                        Promise.resolve();
+                    }
                 },
                 (error) => {
                     console.log(error);
@@ -181,54 +164,66 @@ export class DadConfigService {
         }
     }
 
-    public saveConfigFromDb(data){
-            let charts = data.config.charts;
-            let widgets = data.config.widgets;
-            let tables = data.config.tables;
-            let pages = data.config.pages;
-        //comment: for some reason charts, widgets...etc.. are already JSON...why?
-            localStorage.setItem(this.localkey, charts);
-            localStorage.setItem(this.localkey, widgets);
-            localStorage.setItem(this.localkey, tables);
-            localStorage.setItem(this.localkey, pages);
+
+    /*This part is created because functions are used in the other components but service will be working under one name
+     * since names are casted. DON'T CHANGE!
+     */
+    public getChartConfigs(): Promise<DadChart[]> {
+        return this.getConfig().then( (config)  => {
+            let charts = _.filter(config.configs, (config) => config.elementType=='chart');
+            return Promise.resolve(charts as DadChart[]);
+        })
     }
 
-    public getChartConfig(id:string): Promise<any> {
-        return this.getChartConfigs().then((charts: DadChart[]) => {
-            let chartIndex = _.findIndex(charts, function (w) {
-                return w.id == id;
-            });
-            if (chartIndex > -1) return Promise.resolve(charts[chartIndex]);
-            else return Promise.resolve(null);
-        });
+    public getWidgetConfigs(): Promise<DadWidget[]> {
+        return this.getConfig().then( (config)  => {
+            let elements = _.filter(config.configs, (config) => config.elementType=='widget');
+            return Promise.resolve(elements as DadWidget[]);
+        })
     }
 
-    public getWidgetConfig(id:string): Promise<any> {
-        return this.getWidgetConfigs().then((elements: DadWidget[]) => {
-            let index = _.findIndex(elements, function (w) {
-                return w.id == id;
-            });
-            if (index > -1) return Promise.resolve(elements[index]);
-            else return Promise.resolve(null);
-        });
+    public getTableConfigs(): Promise<DadTable[]> {
+        return this.getConfig().then( (config)  => {
+            let elements = _.filter(config.configs, (config) => config.elementType=='table');
+            return Promise.resolve(elements as DadTable[]);
+        })
     }
-    public getTableConfig(id:string): Promise<any> {
-        return this.getTableConfigs().then((elements: DadTable[]) => {
-            let index = _.findIndex(elements, function (w) {
-                return w.id == id;
-            });
-            if (index > -1) return Promise.resolve(elements[index]);
-            else return Promise.resolve(null);
-        });
+
+
+    public getPageConfigs(): Promise<DadPage[]> {
+        return this.getConfig().then( (config)  => {
+            let elements = _.filter(config.configs, (config) => config.elementType=='page');
+            return Promise.resolve(elements as DadPage[]);
+        })
     }
-    public getPageConfig(id:string): Promise<any> {
-        return this.getPageConfigs().then((elements: DadPage[]) => {
-            let index = _.findIndex(elements, function (w) {
-                return w.id == id;
-            });
-            if (index > -1) return Promise.resolve(elements[index]);
-            else return Promise.resolve(null);
-        });
+
+    public getChartConfig(id:string): Promise<DadChart> {
+        return this.getConfig().then( (config)  => {
+            let charts = _.filter(config.configs, (config) => config.elementType=='chart' && config.id==id);
+            return Promise.resolve(charts[0] as DadChart);
+        })
+    }
+
+    public getWidgetConfig(id:string): Promise<DadWidget> {
+        return this.getConfig().then( (config)  => {
+            let elements = _.filter(config.configs, (config) => config.elementType=='widget' && config.id==id);
+            return Promise.resolve(elements[0] as DadWidget);
+        })
+    }
+
+    public getTableConfig(id:string): Promise<DadTable> {
+        return this.getConfig().then( (config)  => {
+            let elements = _.filter(config.configs, (config) => config.elementType=='table' && config.id==id);
+            return Promise.resolve(elements[0] as DadTable);
+        })
+    }
+
+
+    public getPageConfig(id:string): Promise<DadPage> {
+        return this.getConfig().then( (config)  => {
+            let elements = _.filter(config.configs, (config) => config.elementType=='page' && config.id==id);
+            return Promise.resolve(elements[0] as DadPage);
+        })
     }
 
 }

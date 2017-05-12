@@ -12,8 +12,11 @@ export interface DadUser {
   tenantid: string
 }
 
+export type DadElementType = "chart" | "widget" | "table" | "page";
+
 export class DadElement {
   id: string;
+  elementType?: DadElementType;
   name?: string;
   data?: any;
   mappedData?: any;

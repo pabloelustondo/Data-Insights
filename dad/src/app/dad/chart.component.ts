@@ -5,7 +5,7 @@ import {DadElement} from "./dadmodels";
 import {Router, ActivatedRoute} from "@angular/router";
 import {config} from "./appconfig";
 //import {DadTableConfigsService, DadChartConfigsService} from "./chart.service";
-import { DadConfigService } from './DadConfig.service';
+import { DadConfigService } from './dadconfig.service';
 import {DadFilter} from "./filter";
 import {Observable} from "rxjs";
 import {DadMap2} from './map2.component';

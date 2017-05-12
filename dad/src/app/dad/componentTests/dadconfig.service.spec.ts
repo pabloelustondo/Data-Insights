@@ -1,4 +1,4 @@
-import  {DadConfigService} from '../DadConfig.service';
+import  {DadConfigService} from '../dadconfig.service';
 import {TestBed, inject, async, fakeAsync, tick} from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import {HttpModule, Http, Response, ResponseOptions, BaseRequestOptions, XHRBackend} from '@angular/http';

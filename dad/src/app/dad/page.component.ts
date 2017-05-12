@@ -10,10 +10,11 @@ import {DadWidget} from "./widget.component";
 import {DadChart} from "./chart.component";
 import {DadTable} from "./table.component";
 import { config } from "./appconfig";
-import { DadUser } from "./dadmodels";
+import { DadUser, DadElementType } from "./dadmodels";
 
 export class DadPage {
     id: string;
+    elementType?:DadElementType;
     name: string;
     type?: string;
     widgetids: string[];
