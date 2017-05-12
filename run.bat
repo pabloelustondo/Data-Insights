@@ -4,44 +4,19 @@
 ::WARNING WARNING we recomend newcomers read README and do this installation/run module by module.
 @echo off
 
-SET installdir=D:\BI\BI\
+SET installdir= %cd%
 cd %installdir%
 
-::Install Everything
-
-cd %installdir%\ddb
-call npm install
-cd %installdir%\oda
-call npm install
-cd %installdir%\dss\backend
-call npm install
-cd %installdir%\dss\
-call npm install
-cd %installdir%\ida\
-call npm install
-cd %installdir%\dad3\
-call npm install
-
-::Its Mongo Time
-start cmd.exe /k 
+:: Its Mongo Time 2.0
 mkdir data_folder
-mongod -dbpath ./
+start call mongod -dbpath ./data_folder 
+start call mongo
 
 ::Start Everything
-start cmd.exe /k 
-cd %installdir%\ddb & start call npm start
-start cmd.exe /k 
+ cd %installdir%\ddb & start call npm start
  cd %installdir%\oda & start call npm start
-start cmd.exe /k 
  cd %installdir%\dss\backend & start call npm start
-start cmd.exe /k 
  cd %installdir%\dss & start call npm start
-start cmd.exe /k 
  cd %installdir%\ida & start call npm start
-start cmd.exe /k 
- cd %installdir%\dad3 & start call npm start
-start cmd.exe /k 
+ cd %installdir%\dad & start call npm start
  cd %installdir%\dlm & start call npm start
-start cmd.exe /k 
-
-exit
