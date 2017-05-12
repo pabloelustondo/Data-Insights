@@ -150,8 +150,8 @@ export class UploadLargeDataSetController {
                 metadata: 'ERROR -- Warning this API will be deprecated effective Jun 30, 2017',
                 data: 'Invalid Token or missing token'
             };
-          // return user;
-            throw new Error('invalid auth token');
+             return user;
+            // throw new Error('invalid auth token');
         }
     }
 }

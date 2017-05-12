@@ -15,7 +15,7 @@ export function DataProjections(data: any, projections: string[]) {
      return new Promise((resolve, reject) => {
         let _data: any = {};
 
-        if (projections.length > 0) {
+        if (projections.length > 0 && projections[0] !== '') {
             projections.forEach((item, index) => {
                 _data[item] = data[item];
             });
