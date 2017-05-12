@@ -97,7 +97,13 @@ export class GetAuthorizationToken {
             console.log( JSON.stringify(p));
             return p;
         } else {
-            throw new Error('invalid auth token');
+            const user: any = {
+                createdAt: new Date(),
+                metadata: 'ERROR',
+                data: 'Invalid Token or missing token'
+            };
+            return user;
+           // throw new Error('invalid auth token');
         }
     }
 }
