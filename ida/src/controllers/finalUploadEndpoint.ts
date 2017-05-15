@@ -46,7 +46,7 @@ export class UploadDataSetController {
      * Post a unit of data to be stored in the cloud analytics database
      */
 
-    @Post('input')
+    @Post('')
     @Example<any>({
         headers: {
             'x-access-token': 'Future Private Access Key',
@@ -177,7 +177,9 @@ export class UploadDataSetController {
         };
 
 
-        let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData);
+        let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData, function (err) {
+            console.log(err);
+        });
         return finalResponse;
 
     }

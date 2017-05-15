@@ -195,7 +195,7 @@ const testData =  {
         console.log(JSON.stringify(token));
         chai.use(chaiHttp);
         chai.request(server.app)
-            .post('/data/input')
+            .post('/data')
             .set('x-access-token', token)
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
