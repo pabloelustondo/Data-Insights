@@ -107,7 +107,9 @@ export class GetAuthorizationToken {
                     metadata: 'ERROR',
                     data: 'Could not verify token ' + error
                 };
-                return user;
+                // return user;
+
+                throw new Error('Could not verify token');
             });
 
             console.log( JSON.stringify(p));
@@ -118,8 +120,13 @@ export class GetAuthorizationToken {
                 metadata: 'ERROR',
                 data: 'Invalid Token or missing token'
             };
-            return user;
-           // throw new Error('invalid auth token');
+           // return user;
+
+            throw {
+                message: 'error thrown',
+                status: 500
+            };
+            // throw new Error('invalid auth token');
         }
     }
 }
