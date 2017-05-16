@@ -33,6 +33,24 @@ export class DadUserConfig {
         this.timeStamp = new Date().toDateString();
         this.configs = [];
     }
+
+    addDefaultConfiguration(){
+        CHARTS.forEach((e) => {
+            e.elementType = 'chart'
+            this.configs.push(e);});
+
+        WIDGETS.forEach((e) => {
+            e.elementType = 'widget'
+            this.configs.push(e);});
+
+        TABLES.forEach((e) => {
+            e.elementType = 'table'
+            this.configs.push(e);});
+
+        PAGES.forEach((e) => {
+            e.elementType = 'page'
+            this.configs.push(e);});
+    }
 }
 
 
@@ -129,8 +147,14 @@ export class DadConfigService {
         if (userconfigString != null){
             let userconfig = JSON.parse(userconfigString) as DadUserConfig;
             return Promise.resolve(userconfig);
-        }
+        };
 
+        if (config.testing){
+            let newUserConfig = new DadUserConfig(this.user);
+            newUserConfig.addDefaultConfiguration();
+            localStorage.setItem(this.localkey,JSON.stringify(newUserConfig));
+            return Promise.resolve(newUserConfig);
+        }
         else {
             return this.getUserConfigurationFromDdb().then(
                 (data) => {
@@ -141,28 +165,14 @@ export class DadConfigService {
                     } else {
                         //create brand new configuration
                         let newUserConfig = new DadUserConfig(this.user);
-                        CHARTS.forEach((e) => {
-                            e.elementType = 'chart'
-                            newUserConfig.configs.push(e);});
-
-                        WIDGETS.forEach((e) => {
-                            e.elementType = 'widget'
-                            newUserConfig.configs.push(e);});
-
-                        TABLES.forEach((e) => {
-                            e.elementType = 'table'
-                            newUserConfig.configs.push(e);});
-
-                        PAGES.forEach((e) => {
-                            e.elementType = 'page'
-                            newUserConfig.configs.push(e);});
-
+                        newUserConfig.addDefaultConfiguration();
                         localStorage.setItem(this.localkey,JSON.stringify(newUserConfig));
-                        Promise.resolve(newUserConfig);
+                        return Promise.resolve(newUserConfig);
                     }
                 },
                 (error) => {
-                    console.log(error);
+                    alert("error in getConfig()" + error.toString());
+                    return Promise.resolve({}); //TO-DO fix this not sure what to do in case of error
                 }
             );
         }

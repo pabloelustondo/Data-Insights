@@ -39,7 +39,6 @@ export class DadDrillChartsComponent {
 
                             if(!drillChart) {
                                 chartConfig.reduction = chartConfig.reductions[rowindex];
-                                chartConfig.filter = chartConfig.filters[rowindex]
                                 drillChart = chartConfig;
                                 this.dadChartConfigsService.saveOne(drillChart);
                             }
