@@ -129,7 +129,7 @@ const errorLogger = expressWinston.errorLogger({
 
 
 // app.use(morgan('dev'));
-app.use(logger);
+// app.use(logger);
 app.use('/docs', express.static(__dirname + '/swagger-ui'));
 app.use('/', express.static(__dirname + '/swagger-ui'));
 app.use('/swagger.json', (req, res) => {
@@ -153,6 +153,13 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 RegisterRoutes(app);
 
+/*
+app.use(function (err: any, req: any, res:any, next:any) {
+    console.error(err.stack);
+    res.status(500).send(err);
+});
+*/
+
 if (appconfig.useSSL) {
 
     let httpsOptions = {
@@ -173,6 +180,6 @@ if (appconfig.useSSL) {
 }
 
 
-app.use(errorLogger);
+// app.use(errorLogger);
 
 
