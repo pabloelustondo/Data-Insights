@@ -40,6 +40,9 @@ app.use(cors());
 ////////////////////////////
 // CUSTOMER TENANT DATA API
 ////////////////////////////
+function x() {
+    return 'x';
+}
 // Puts a data point into a tenant datasets.
 app.post('/data/request', function (req, res) {
     console.log('request came in');
@@ -80,6 +83,20 @@ app.post('/data/request', function (req, res) {
                 });
             });
         }
+    }
+});
+app.post('/data/outGoingRequest', function (req, res) {
+    // TODO: process metadata to figure out the request
+    var metadata = req.body.metadata;
+    if (metadata) {
+        res.status(200).send({
+            message: 'Placeholder response: still needs to be implemented.'
+        });
+    }
+    else {
+        res.status(400).send({
+            message: 'No metadata field present in request body.'
+        });
     }
 });
 if (config.useSSL) {
