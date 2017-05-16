@@ -1,6 +1,4 @@
-// import './controllers/multiplePosts';
 import './controllers/getAuthorizationToken';
-import './controllers/uploadLargeDataSet';
 import './controllers/finalUploadEndpoint';
 
 import * as winston from 'winston';
