@@ -156,7 +156,7 @@ export class DadWidgetComponent implements OnInit {
     }
 
     onRawData(message:string):void{
-            this.router.navigate(['table', this.data[0][this.widget.metrics[0].DataSource], this.widget.id], { relativeTo: this.route});
+            this.router.navigate(['table', this.data[0][this.widget.metrics[0].DataSource], this.widget.id, this.widget.tableId], { relativeTo: this.route});
     }
 
     changeData() {

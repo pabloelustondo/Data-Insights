@@ -91,6 +91,8 @@ export class DadConfigService {
     public saveUserConfigurationToDdb(){
         //this method will save the current configuration in local storage to the server
 
+        if (config.testing) return;
+
         let daduserconfig = JSON.parse(localStorage.getItem(this.localkey)) as DadUserConfig;
         let timeStamp = Date.now().toString();
 

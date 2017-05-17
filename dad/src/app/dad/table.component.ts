@@ -276,6 +276,8 @@ export class DadTableComponent implements OnInit {
 
     ngOnInit(){
 
+        //THIS CODE HIS HORRIBLE!!! WE NEED TO REFACTOR URGENTLY
+
       this.allData = this.data;
 
       this.subscription = this.activatedRoute.params.subscribe(
@@ -289,37 +291,42 @@ export class DadTableComponent implements OnInit {
 
           if (tableId){
               this.dadConfigService.getTableConfig(tableId).then( (table )=> {
+                  this.table = table;
                   numberOfPages = this.count/this.table.parameters[0].rowsTake;
                   this.pages = [];
                   for(var i=0;i<numberOfPages;i++){ this.pages.push(i);};
+
+
+
+                  if (param['id'] !== undefined) {
+                      this.callerId = param['id'];
+
+                      this.dadConfigService.getWidgetConfig(this.callerId).then((widget)=> {
+                          this.callerElement = widget;
+                          if (!this.callerElement){
+                              this.dadConfigService.getChartConfig(this.callerId).then((chart)=>{
+                                  this.callerElement = chart;
+                                  this.loadTable(table,  this.callerElement);
+
+                              }, (error) => { alert("table component failed to get widget configuration")}  );
+                          } else {
+
+                              if (!this.callerElement) {
+                                  this.dadConfigService.getTableConfig(this.callerId).then((table) => {
+                                      this.callerElement = table;
+                                      this.loadTable(table, this.callerElement);
+                                  });
+                              }else{
+                                  this.loadTable(table, this.callerElement);
+                              }
+                          }
+                      },(error) => { alert("table component failed to get widget configuration")});
+                  }
               });
           }
 
 
-          if (param['id'] !== undefined) {
-              this.callerId = param['id'];
 
-              this.dadConfigService.getWidgetConfig(this.callerId).then((widget)=> {
-                  this.callerElement = widget;
-                  if (!this.callerElement){
-                      this.dadConfigService.getChartConfig(this.callerId).then((chart)=>{
-                          this.callerElement = chart;
-                          this.loadTable(tableId,  this.callerElement);
-
-                      }, (error) => { alert("table component failed to get widget configuration")}  );
-                  } else {
-
-                      if (!this.callerElement) {
-                          this.dadConfigService.getTableConfig(this.callerId).then((table) => {
-                              this.callerElement = table;
-                              this.loadTable(table, this.callerElement);
-                          });
-                      }else{
-                          this.loadTable(tableId, this.callerElement);
-                      }
-                  }
-              },(error) => { alert("table component failed to get widget configuration")});
-          }
         });
   }
 }
