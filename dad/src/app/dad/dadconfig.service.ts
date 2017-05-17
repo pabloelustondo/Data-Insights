@@ -112,6 +112,14 @@ export class DadConfigService {
 /* Everything is same */
 
 //This is tested and works
+
+    public resetToDefaultConfiguration(){
+        let newUserConfig = new DadUserConfig(this.user);
+        newUserConfig.addDefaultConfiguration();
+        localStorage.setItem(this.localkey,JSON.stringify(newUserConfig));
+        this.saveUserConfigurationToDdb();
+    }
+
     public clearLocalCopy(){
         localStorage.removeItem(this.localkey);
     }

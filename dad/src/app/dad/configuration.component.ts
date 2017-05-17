@@ -42,7 +42,7 @@ declare var d3, c3: any;
     </div>
 
      <div style="width:30%; display:inline-block;  vertical-align:top;"> 
-     <button *ngIf="dirty"(click)="saveConfiguration()">Save Changes</button> <button (click)="resetConfiguration()">Reset to Factory Settings</button>
+     <button *ngIf="dirty"(click)="saveConfiguration()">Save Changes</button> <button (click)="resetConfiguration()">Reset to Default Tenant Configuration</button>
       <div>
         <h2>Pages Configuration </h2> 
         <table>
@@ -277,6 +277,7 @@ export class DadConfigComponent implements  OnInit{
     }
 
     saveConfiguration(){
+        //refactor this ...one call is enough
       this.dadConfigService.save(this.charts);
       this.dadConfigService.save(this.widgets);
       this.dadConfigService.save(this.tables);
@@ -287,24 +288,7 @@ export class DadConfigComponent implements  OnInit{
     }
 
   resetConfiguration(){
-    this.dadConfigService.clearLocalCopy();
-    this.dadConfigService.clearLocalCopy();
-    this.dadConfigService.clearLocalCopy();
-    this.dadConfigService.clearLocalCopy();
-
-    this.charts = CHARTS;
-    this.widgets = WIDGETS;
-    this.tables = TABLES;
-    this.pages = PAGES;
-
-      this.dadConfigService.save(CHARTS);
-      this.dadConfigService.save(WIDGETS);
-      this.dadConfigService.save(TABLES);
-      this.dadConfigService.save(PAGES);
-
-      //I now this is weird...why only the charts... well beceuase we are going to refactor to only have on confioguratio service
-      this.dadConfigService.saveUserConfigurationToDdb();
-
+       this.dadConfigService.resetToDefaultConfiguration();
   }
 
     deleteChart(chart:DadChart){
