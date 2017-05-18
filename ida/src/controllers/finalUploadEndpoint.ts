@@ -46,7 +46,7 @@ export class UploadDataSetController {
      * Post a unit of data to be stored in the cloud analytics database
      */
 
-    @Post('input')
+    @Post('')
     @Example<any>({
         headers: {
             'x-access-token': 'Future Private Access Key',
@@ -129,31 +129,38 @@ export class UploadDataSetController {
 
         let sendToQueue = function (jwtDecodedToken: any) {
            // let promise = new Promise(function (resolve, reject) {
-                let data = {
-                    idaMetadata: {
-                        referer: 'sampleRequestOriginInfo',
-                        dataSourceId: jwtDecodedToken.agentid,
-                        tenantId: jwtDecodedToken.tenantid,
-                        timeStamp: (new Date()).toISOString()
-                    },
-                    clientData: express.body
-                };
-                const headersOptions = {
-                    'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
-                };
 
-                const options: rp.OptionsWithUrl = {
-                    json: true,
-                    method: 'POST',
-                    headers: headersOptions,
-                    url: config['queue_address'],
-                    body: data
-                };
-                return rp(options);
+
+            let metadata = (!express.body.metadata) ? {} : express.body.metadata;
+
+            let data = {
+                idaMetadata: {
+                    referer: 'sampleRequestOriginInfo',
+                    dataSourceId: jwtDecodedToken.agentid,
+                    tenantId: jwtDecodedToken.tenantid,
+                    timeStamp: (new Date()).toISOString()
+                },
+                clientMetadata: metadata,
+                clientData: express.body.data
+            };
+            const headersOptions = {
+                'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+            };
+
+            const options: rp.OptionsWithUrl = {
+                json: true,
+                method: 'POST',
+                headers: headersOptions,
+                url: config['queue_address'],
+                body: data
+            };
+            return rp(options);
+
         };
 
         let responseData = function (dpsResponse: any) {
             let promise = new Promise(function (resolve, reject) {
+
 
                 if (dpsResponse['status'] === 200) {
                     let mData = ['awsResponse : boolean'];
@@ -173,7 +180,9 @@ export class UploadDataSetController {
         };
 
 
-        let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData);
+        let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData, function (err) {
+            console.log(err);
+        });
         return finalResponse;
 
     }

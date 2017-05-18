@@ -71,33 +71,62 @@ export class GetAuthorizationToken {
             let callDss = function (decodedToken: any) {
                 let promise = new Promise(function (resolve, reject) {
 
-                    const dssEndpoint = config['dss-address'] + '/getAgentToken';
+                    if (decodedToken) {
+                        const dssEndpoint = config['dss-address'] + '/getAgentToken';
 
-                    const optionsTest: rp.OptionsWithUrl = {
-                        json: true,
-                        method: 'GET',
-                        url: dssEndpoint,
-                        headers: {
-                            'x-access-token': token
-                        }
-                    };
-                    resolve(rp(optionsTest));
+                        const optionsTest: rp.OptionsWithUrl = {
+                            json: true,
+                            method: 'GET',
+                            url: dssEndpoint,
+                            headers: {
+                                'x-access-token': token
+                            }
+                        };
+                        resolve(rp(optionsTest));
+                    } else {
+                        reject('Invalid token');
+                    }
                 });
                 return promise;
             };
 
             let responseData = function (dssResponse: any) {
                 let promise = new Promise(function (resolve, reject) {
-                   resolve(dssResponse);
+                    if (dssResponse) {
+                        resolve(dssResponse);
+                    } else {
+                        reject('Dss error response');
+                    }
+
                 });
                 return promise;
             };
-            let p: any = await verifyToken().then(callDss).then(responseData);
+            let p: any = await verifyToken().then(callDss).then(responseData, function(error) {
+                const user: any = {
+                    createdAt: new Date(),
+                    metadata: 'ERROR',
+                    data: 'Could not verify token ' + error
+                };
+                // return user;
+
+                throw new Error('Could not verify token');
+            });
 
             console.log( JSON.stringify(p));
             return p;
         } else {
-            throw new Error('invalid auth token');
+            const user: any = {
+                createdAt: new Date(),
+                metadata: 'ERROR',
+                data: 'Invalid Token or missing token'
+            };
+           // return user;
+
+            throw {
+                message: 'error thrown',
+                status: 500
+            };
+            // throw new Error('invalid auth token');
         }
     }
 }

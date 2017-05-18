@@ -15,7 +15,9 @@ var mongodb = require('mongodb').MongoClient;
 
 import {uploadRawData, uploadModifiedData} from './services/rawDataLakeService';
 import {DatabaseService} from  './services/databaseService';
+import {DataProjections} from './services/projection';
 import {User} from "./models/user";
+import {accessSync} from "fs";
 
 ////////////////////////
 // Express stuff
@@ -36,11 +38,11 @@ app.use(bodyParser.json({
 ));
 
 
-if (appconfig.testingmode) {
-    app.get('/test', function (req, res) {
-        res.sendFile(path.join(__dirname + '/testing/spec/SpecRunner.html'));
-    });
-}
+
+app.get('/test', function (req, res) {
+    res.sendFile(path.join(__dirname + '/testing/spec/SpecRunner.html'));
+});
+
 
 app.get('/', function(req,res){
     res.send("DPS");
@@ -53,7 +55,9 @@ app.use(cors());
 ////////////////////////////
 // CUSTOMER TENANT DATA API
 ////////////////////////////
-
+function x () {
+    return 'x';
+}
 // Puts a data point into a tenant datasets.
 app.post('/data/request', function(req,res) {
     console.log('request came in');
@@ -70,7 +74,7 @@ app.post('/data/request', function(req,res) {
         let tenantId = req.body.idaMetadata.tenantId;
         let dataSourceId = req.body.idaMetadata.dataSourceId;
         uploadRawData(tenantId, dataSourceId, req.body).then(function (awsResponse: any) {
-             console.log(awsResponse);
+                console.log(awsResponse);
                 res.status(200).send({
                     status: 200,
                     response: awsResponse
@@ -90,27 +94,38 @@ app.post('/data/request', function(req,res) {
             let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
             let collectionName = dataSetId + '.' + dataSource['dataSourceId'];
 
-            let inputData: any = { };
 
-            if (projections.length > 0) {
-                projections.forEach((item, index) => {
-                    inputData[item] = req.body.clientData[item];
+            DataProjections(req.body.clientData, projections).then(function (data) {
+                uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
+                    console.log('Final response' + JSON.stringify(response));
+                }, function (error) {
+                    console.log(error);
                 });
-            } else {
-                inputData = req.body.clientData;
-            }
-
-            uploadModifiedData(tenant.tenantId, collectionName, inputData).then(function(response) {
-               console.log(JSON.stringify(response));
-            }, function (error) {
-                console.log(error);
             });
         }
     }
 
 });
 
+app.post('/data/outGoingRequest', function(req, res) {
 
+    // TODO: process metadata to figure out the request
+
+    let metadata = req.body.metadata;
+
+    if (metadata) {
+
+        res.status(200).send( {
+            message: 'Placeholder response: still needs to be implemented.'
+        });
+    } else {
+        res.status(400).send ({
+            message: 'No metadata field present in request body.'
+        })
+    }
+
+
+} );
 
 if (config.useSSL) {
     var httpsOptions = {

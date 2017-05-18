@@ -11,6 +11,7 @@ describe("Data Analytics Service - CDL", function() {
 
 
     describe("POST /data/request", function() {
+
         it("It places an item to S3. " +
             "This function will be used by IDA to insert records", function(done) {
             $.ajax(
@@ -179,10 +180,8 @@ describe("Data Analytics Service - CDL", function() {
                     ),
                     success:function(data, textStatus, jqXHR) {
                         var response = data.response;
-                        var testValue = 'Missing idaMetadata field';
-
-                        expect(data).toBe(undefined);
-                        expect(response).toBe(undefined);
+                        var expectedValue = '';
+                        expect(textStatus).toBe('success');
                         done();
                     },
                     error: function(request, textStatus, errorThrown) {

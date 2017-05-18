@@ -1,6 +1,6 @@
 {
   "deployment_type":"dev",
-  "port": 8002,
+  "port": 8003,
   "ida_token" : "x-access-token",
   "ddbUrlGetDataSources" : "http://localhost:8000/dataSourceByType",
   "ida_url" : "https://localhost:3010/Data/LargeDataSets",

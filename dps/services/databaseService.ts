@@ -19,16 +19,11 @@ export class DatabaseService {
 
         if (appconfig.testingmode) {
             this.tenants = sampletenants.tenants;
-
-        }
-    }
-
-    public start (){
-
-        if (appconfig.testing) {
-            this.tenants = sampletenants;
         } else {
-            //TODO: provide proper DDB fix
+            //TODO: call DDB for this but for now just return  test data
+          //  this.tenants = sampletenants.tenants;
+            // this.loadTenants();
+
             const headersOptions = {
                 'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
             };
@@ -39,10 +34,10 @@ export class DatabaseService {
                 headers: headersOptions,
                 url: 'http://localhost:8000/getAllTenants',
             };
-            let data = rp(options);
-            this.tenants = [];
+            rp(options).then(data => this.tenants = data.tenants);
         }
     }
+
 
     public getTenant(tenantId: string) {
         let value =  _.find(this.tenants, ['tenantId', tenantId]);
