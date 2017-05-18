@@ -49,12 +49,11 @@ export class DadChart extends DadElement {
                     <div>
                         <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
                         <div style="color:black;">  
-                        
-                           <div *ngIf="chart.reduction" (change)="selectMetric($event.target.value)" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
-                                    <option style="color:black; font-weight: bold;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>                 </div>  
-                           
-                           <i *ngIf="chart.reduction">by</i>
-                           
+                                     
+                           <select *ngIf="chart.reduction" (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
+                                    <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
+                           </select>  
+                           by                          
                            <select *ngIf="chart.reduction" (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                                     <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Dimension</option>

@@ -17,10 +17,118 @@ var _ = require("lodash");
 var http_1 = require('@angular/http');
 var appconfig_1 = require("./appconfig");
 var angular2_jwt_1 = require('angular2-jwt');
+var DadUserConfig = (function () {
+    function DadUserConfig(user) {
+        this.username = user.username;
+        this.tenantid = user.tenantid;
+        this.userid = user.userid;
+        this.timeStamp = new Date().toDateString();
+        this.configs = [];
+    }
+    DadUserConfig.prototype.addDefaultConfiguration = function () {
+        var _this = this;
+        alert("A default configuration for tenant " + this.tenantid + " will be created");
+        sample_charts_1.CHARTS.forEach(function (e) {
+            e.elementType = 'chart';
+            _this.configs.push(e);
+        });
+        sample_widgets_1.WIDGETS.forEach(function (e) {
+            e.elementType = 'widget';
+            _this.configs.push(e);
+        });
+        sample_tables_1.TABLES.forEach(function (e) {
+            e.elementType = 'table';
+            _this.configs.push(e);
+        });
+        sample_page_1.PAGES.forEach(function (e) {
+            e.elementType = 'page';
+            _this.configs.push(e);
+        });
+    };
+    return DadUserConfig;
+}());
+exports.DadUserConfig = DadUserConfig;
 var DadConfigService = (function () {
-    function DadConfigService(http) {
+    function DadConfigService(http, activatedRoute) {
         this.http = http;
+        this.activatedRoute = activatedRoute;
         this.jwtHelper = new angular2_jwt_1.JwtHelper();
+        this.localkeyPrefix = "userconfig"; //
+        this.config = appconfig_1.config;
+    }
+    DadConfigService.prototype.ngOnInit = function () {
+        this.activatedRoute.queryParams.subscribe(function (params) {
+            var id_token = params['id_token'];
+            localStorage.setItem('id_token', id_token);
+            window.location.href = window.location.protocol + '//' + window.location.host;
+        });
+    };
+    DadConfigService.prototype.getUserConfigurationFromDdb = function () {
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json', 'x-access-token': this.token });
+        var url = appconfig_1.config.dadback_url + "/daduser/" + this.user.userid;
+        return this.http.get(url).toPromise();
+    };
+    DadConfigService.prototype.saveUserConfigurationToDdb = function () {
+        //this method will save the current configuration in local storage to the server
+        if (appconfig_1.config.testing)
+            return;
+        var daduserconfig = JSON.parse(localStorage.getItem(this.localkey));
+        var timeStamp = Date.now().toString();
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json', 'x-access-token': this.token });
+        var url = appconfig_1.config.dadback_url + "/daduser/" + daduserconfig.userid;
+        this.http.post(url, daduserconfig).toPromise().then(function (res) {
+            console.log('configuration saved' + JSON.stringify(res));
+        }).catch(function (error) {
+            alert("Failed to save configuration to database " + error);
+            console.log('configuration failed to save');
+        });
+    };
+    /* Everything is same */
+    //This is tested and works
+    DadConfigService.prototype.resetToDefaultConfiguration = function () {
+        var newUserConfig = new DadUserConfig(this.user);
+        newUserConfig.addDefaultConfiguration();
+        localStorage.setItem(this.localkey, JSON.stringify(newUserConfig));
+        this.saveUserConfigurationToDdb();
+    };
+    DadConfigService.prototype.clearLocalCopy = function () {
+        localStorage.removeItem(this.localkey);
+    };
+    //This is tested and works
+    DadConfigService.prototype.saveOne = function (element) {
+        this.save([element]);
+    };
+    DadConfigService.prototype.deleteOne = function (element) {
+        if (!this.user)
+            this.getUser();
+        var daduserconfig = JSON.parse(localStorage.getItem(this.localkey));
+        if (!daduserconfig)
+            daduserconfig = new DadUserConfig(this.user);
+        daduserconfig.configs = daduserconfig.configs.filter(function (config) { return config.id !== element.id; });
+        localStorage.setItem(this.localkey, JSON.stringify(daduserconfig));
+        this.saveUserConfigurationToDdb();
+    };
+    //Under test config
+    DadConfigService.prototype.save = function (elements) {
+        if (!this.user)
+            this.getUser();
+        var daduserconfig = JSON.parse(localStorage.getItem(this.localkey));
+        if (!daduserconfig)
+            daduserconfig = new DadUserConfig(this.user);
+        var configs = daduserconfig.configs;
+        elements.forEach(function (element) {
+            var elementIndex = _.findIndex(configs, function (w) { return w.id == element.id; });
+            if (elementIndex === -1) {
+                configs.push(element);
+            }
+            else {
+                configs.splice(elementIndex, 1, element);
+            }
+        });
+        localStorage.setItem(this.localkey, JSON.stringify(daduserconfig));
+        this.saveUserConfigurationToDdb();
+    };
+    DadConfigService.prototype.getUser = function () {
         if (appconfig_1.config.testing) {
             this.user = { username: "user", tenantid: "test", userid: "test-user" };
         }
@@ -33,129 +141,97 @@ var DadConfigService = (function () {
             this.user = { username: username, tenantid: tenantid, userid: userid };
         }
         localStorage.setItem('daduser', JSON.stringify(this.user));
-    }
-    DadConfigService.prototype.getUserConfigurationFromDdb = function () {
-        //this method will get the current configuration from server and store it in local storage
-        var headers = new http_1.Headers({ 'Content-Type': 'application/json', 'x-access-token': this.token });
-        var url = appconfig_1.config.dadback_url + "/daduser/" + this.user.userid;
-        return this.http.get(url).toPromise();
+        this.localkey = this.user.tenantid + '_' + this.user.username + '_' + this.localkeyPrefix;
     };
-    DadConfigService.prototype.saveUserConfigurationToDdb = function (data) {
-        //this method will save the current configuration in local storage to the server
-        var timeStamp = Date.now().toString();
-        var charts = data.config.charts;
-        var widgets = data.config.widgets;
-        var tables = data.config.tables;
-        var pages = data.config.pages;
-        var config = { timeStamp: timeStamp,
-            charts: charts,
-            widgets: widgets,
-            tables: tables,
-            pages: pages };
-        var elements = localStorage.getItem("config");
-        var daduserconfig = {
-            userid: this.user.userid,
-            username: this.user.username,
-            tenantid: this.user.tenantid,
-        };
-        var headers = new http_1.Headers({ 'Content-Type': 'application/json', 'x-access-token': this.token });
-        var url = config.dadback_url + "/daduser/" + daduserconfig.userid;
-        this.http.post(url, daduserconfig).toPromise().then(function (res) {
-            console.log('configuration saved' + JSON.stringify(res));
-        }).catch(function (error) {
-            console.log('configuration failed to save');
-        });
-    };
-    DadConfigService.prototype.clearLocalCopy = function () {
-        localStorage.removeItem("elementdata");
-    };
-    DadConfigService.prototype.save = function (elements) {
-        var elements_string = JSON.stringify(elements);
-        localStorage.setItem("elementdata", elements_string);
-        if (!appconfig_1.config.testing)
-            this.saveUserConfigurationToDdb();
-    };
-    DadConfigService.prototype.saveOne = function (element) {
+    //next test
+    DadConfigService.prototype.getConfig = function () {
+        //this method will return the configuration that are expected to be in the local storage.
+        //if not we are going to get this from DB. IF we are in test mode we will get it from test data.
         var _this = this;
-        var elements;
-        this.getConfigs().then(function (elements) {
-            var chartIndex = _.findIndex(elements, function (w) { return w.id == element.id; });
-            if (chartIndex === -1) {
-                elements.push(element);
-            }
-            else {
-                elements.splice(chartIndex, 1, element);
-            }
-            _this.save(elements);
-        });
-    };
-    DadConfigService.prototype.getChartConfigs = function () {
-        if (elements_string == null && appconfig_1.config.testing) {
-            localStorage.setItem("chartdata", JSON.stringify(sample_charts_1.CHARTS));
-            return Promise.resolve(sample_charts_1.CHARTS);
+        if (!this.user)
+            this.getUser();
+        var userconfigString = localStorage.getItem(this.localkey);
+        if (userconfigString != null) {
+            var userconfig = JSON.parse(userconfigString);
+            return Promise.resolve(userconfig);
         }
-        return Promise.resolve(appconfig_1.config.charts);
-    };
-    DadConfigService.prototype.getWidgetConfigs = function () {
-        if (elements_string == null && appconfig_1.config.testing) {
-            localStorage.setItem("widgetdata", JSON.stringify(sample_widgets_1.WIDGETS));
-            return Promise.resolve(sample_widgets_1.WIDGETS);
-        }
-        return Promise.resolve(appconfig_1.config.charts);
-    };
-    DadConfigService.prototype.getTableConfigs = function () {
-        if (elements_string == null && appconfig_1.config.testing) {
-            localStorage.setItem("tabledata", JSON.stringify(sample_tables_1.TABLES));
-            return Promise.resolve(sample_tables_1.TABLES);
-        }
-        return Promise.resolve(appconfig_1.config.tables);
-    };
-    DadConfigService.prototype.getPageConfigs = function () {
-        if (elements_string == null && appconfig_1.config.testing) {
-            localStorage.setItem("pagedata", JSON.stringify(sample_page_1.PAGES));
-            return Promise.resolve(sample_page_1.PAGES);
-        }
-        return Promise.resolve(appconfig_1.config.pages);
-    };
-    DadConfigService.prototype.getConfigs = function () {
-        var _this = this;
-        var elements_string = localStorage.getItem("elementdata");
-        //cast here
-        if (elements_string != null) {
-            var elements_obj = JSON.parse(elements_string);
-            var DATA = elements_obj;
-            return Promise.resolve(DATA);
+        ;
+        //at this point we do not have some configuration in local storage so we need to find some in db or create a new
+        if (appconfig_1.config.testing) {
+            var newUserConfig = new DadUserConfig(this.user);
+            newUserConfig.addDefaultConfiguration();
+            localStorage.setItem(this.localkey, JSON.stringify(newUserConfig));
+            return Promise.resolve(newUserConfig);
         }
         else {
             return this.getUserConfigurationFromDdb().then(function (data) {
-                var dataObj = JSON.parse(data._body)[0];
-                _this.saveConfigFromDb(dataObj);
-                var chartsString = localStorage.getItem("config");
-                var charts = JSON.parse(chartsString);
-                return Promise.resolve(charts);
+                var userConfig = JSON.parse(data._body)[0];
+                if (userConfig) {
+                    localStorage.setItem(_this.localkey, JSON.stringify(userConfig));
+                    return Promise.resolve(userConfig);
+                }
+                else {
+                    //create brand new configuration
+                    var newUserConfig = new DadUserConfig(_this.user);
+                    newUserConfig.addDefaultConfiguration();
+                    localStorage.setItem(_this.localkey, JSON.stringify(newUserConfig));
+                    return Promise.resolve(newUserConfig);
+                }
             }, function (error) {
-                console.log(error);
+                alert("error in getConfig()" + error.toString());
+                return Promise.resolve({}); //TO-DO fix this not sure what to do in case of error
             });
         }
     };
-    DadConfigService.prototype.saveConfigFromDb = function (data) {
-        var charts = data.config.charts;
-        var widgets = data.config.widgets;
-        var tables = data.config.tables;
-        var pages = data.config.pages;
-        //comment: for some reason charts, widgets...etc.. are already JSON...why?
-        localStorage.setItem("chartdata", charts);
-        localStorage.setItem("widgetdata", widgets);
-        localStorage.setItem("tabledata", tables);
-        localStorage.setItem("pagedata", pages);
+    /*This part is created because functions are used in the other components but service will be working under one name
+     * since names are casted. DON'T CHANGE!
+     */
+    DadConfigService.prototype.getChartConfigs = function () {
+        return this.getConfig().then(function (config) {
+            var charts = _.filter(config.configs, function (config) { return config.elementType == 'chart'; });
+            return Promise.resolve(charts);
+        });
     };
-    DadConfigService.prototype.getConfig = function (id) {
-        return this.getConfigs().then(function (charts) {
-            var chartIndex = _.findIndex(charts, function (w) { return w.id == id; });
-            if (chartIndex > -1)
-                return Promise.resolve(charts[chartIndex]);
-            else
-                return Promise.resolve(null);
+    DadConfigService.prototype.getWidgetConfigs = function () {
+        return this.getConfig().then(function (config) {
+            var elements = _.filter(config.configs, function (config) { return config.elementType == 'widget'; });
+            return Promise.resolve(elements);
+        });
+    };
+    DadConfigService.prototype.getTableConfigs = function () {
+        return this.getConfig().then(function (config) {
+            var elements = _.filter(config.configs, function (config) { return config.elementType == 'table'; });
+            return Promise.resolve(elements);
+        });
+    };
+    DadConfigService.prototype.getPageConfigs = function () {
+        return this.getConfig().then(function (config) {
+            var elements = _.filter(config.configs, function (config) { return config.elementType == 'page'; });
+            return Promise.resolve(elements);
+        });
+    };
+    DadConfigService.prototype.getChartConfig = function (id) {
+        return this.getConfig().then(function (config) {
+            var charts = _.filter(config.configs, function (config) { return config.elementType == 'chart' && config.id == id; });
+            return Promise.resolve(charts[0]);
+        });
+    };
+    DadConfigService.prototype.getWidgetConfig = function (id) {
+        return this.getConfig().then(function (config) {
+            var elements = _.filter(config.configs, function (config) { return config.elementType == 'widget' && config.id == id; });
+            return Promise.resolve(elements[0]);
+        });
+    };
+    DadConfigService.prototype.getTableConfig = function (id) {
+        return this.getConfig().then(function (config) {
+            var elements = _.filter(config.configs, function (config) { return config.elementType == 'table' && config.id == id; });
+            return Promise.resolve(elements[0]);
+        });
+    };
+    DadConfigService.prototype.getPageConfig = function (id) {
+        return this.getConfig().then(function (config) {
+            var elements = _.filter(config.configs, function (config) { return config.elementType == 'page' && config.id == id; });
+            return Promise.resolve(elements[0]);
         });
     };
     DadConfigService = __decorate([
