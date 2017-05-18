@@ -36,7 +36,7 @@ export class DadUserConfig {
     }
 
     addDefaultConfiguration(){
-        alert("We could not find a configuration for the current user; a default configuration will be created ");
+        alert("A default configuration for tenant " + this.tenantid + " will be created");
         CHARTS.forEach((e) => {
             e.elementType = 'chart'
             this.configs.push(e);});
@@ -126,6 +126,16 @@ export class DadConfigService {
     public saveOne(element:DadElement ){
         this.save([element]);
     }
+
+    public deleteOne(element:DadElement ){
+        if (!this.user) this.getUser();
+        let daduserconfig = JSON.parse(localStorage.getItem(this.localkey)) as DadUserConfig;
+        if (!daduserconfig) daduserconfig = new DadUserConfig(this.user);
+        daduserconfig.configs = daduserconfig.configs.filter( (config) => config.id!==element.id);
+        localStorage.setItem(this.localkey,JSON.stringify(daduserconfig));
+        this.saveUserConfigurationToDdb();
+    }
+
 
 //Under test config
     public save(elements:DadElement[] ){
