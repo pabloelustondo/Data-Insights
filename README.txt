@@ -104,9 +104,13 @@ npm start
            We avoid calling real dependencies while developing visual components.
            we will run for real when we install ODA which provides data to the dashboard. 
 
-   3.3) DAD Front End  (Development Mode - Real Mode calling Devependecies)
+   3.3) DAD Front End  (Production Mode - Calling real DSS and DAD Backend dependencies)
+            (NOTE: We are NOT calling ODA for now as it is being refactor)
 
-           npm run startdev
+           stop the previous process or command prompt (otherwise you will have a port conflict)
+           npm run startprod
+           hit http://localhost:4200, you should be redirected to DSS login page
+
 
 
 
