@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     var authurl = config.authorizationserver + "/#/login?url=" + window.location.href;
+    alert(authurl);
     window.location.href=authurl;
     return false;
   }

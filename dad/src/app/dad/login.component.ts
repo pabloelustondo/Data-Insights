@@ -14,9 +14,7 @@ declare var d3, c3: any;
     selector: 'dadlogin',
     styles:['.row{overflow:hidden;}'],
     providers: [DadConfigService],
-    template: `
-Hello Login
-    `
+    template: ''
 })
 
 export class DadLoginComponent implements  OnInit{

@@ -193,7 +193,7 @@ declare var d3, c3: any;
        <tr><td><label>chartids: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.chartids" placeholder="id"></td></tr>   
        <tr><td><label>tableids: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.widgetids" placeholder="id"></td></tr>   
      </table> 
-       <br><a (click)="deleteTable()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
+       <br><a (click)="deletePage()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
     </div>
     `
 })

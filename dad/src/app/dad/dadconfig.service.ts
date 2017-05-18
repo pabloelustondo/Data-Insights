@@ -17,6 +17,7 @@ import { config } from "./appconfig";
 import { Observable } from 'rxjs/Rx';
 import { DadUser } from "./dadmodels";
 import { JwtHelper } from 'angular2-jwt';
+import { ActivatedRoute, Params} from '@angular/router';
 
 export class DadUserConfig {
  //put in dad models
@@ -35,6 +36,7 @@ export class DadUserConfig {
     }
 
     addDefaultConfiguration(){
+        alert("We could not find a configuration for the current user; a default configuration will be created ");
         CHARTS.forEach((e) => {
             e.elementType = 'chart'
             this.configs.push(e);});
@@ -67,19 +69,16 @@ export class DadConfigService {
     localkey;  //the user configuratino will be saved in local storage with the key 'tenanid_username_<localkeyPrefix>'
     config = config;
 
-    constructor(private http: Http) {
-        if (config.testing){
-            this.user = {username:"user", tenantid:"test", userid:"test-user"};
-        } else {
-            let token = localStorage.getItem('id_token');
-            let u =  this.jwtHelper.decodeToken(token);
-            let username = u.username;
-            let tenantid = u.tenantId;
-            let userid = tenantid + "-" + username;
-            this.user = {username:username, tenantid:tenantid, userid:userid};
-        }
-        localStorage.setItem('daduser',JSON.stringify(this.user));
-        this.localkey = this.user.username + '_' + this.user.username +'_'+ this.localkeyPrefix;
+    constructor(private http: Http,private activatedRoute: ActivatedRoute) {
+
+    }
+
+    ngOnInit() {
+        this.activatedRoute.queryParams.subscribe((params: Params) => {
+            let id_token = params['id_token'];
+            localStorage.setItem('id_token', id_token);
+            window.location.href = window.location.protocol + '//' + window.location.host
+        });
     }
 
     public getUserConfigurationFromDdb(): Promise<any>{
@@ -130,6 +129,7 @@ export class DadConfigService {
 
 //Under test config
     public save(elements:DadElement[] ){
+        if (!this.user) this.getUser();
         let daduserconfig = JSON.parse(localStorage.getItem(this.localkey)) as DadUserConfig;
         if (!daduserconfig) daduserconfig = new DadUserConfig(this.user);
         let configs = daduserconfig.configs;
@@ -149,16 +149,34 @@ export class DadConfigService {
 
     }
 
+    public getUser(){
+        if (config.testing){
+            this.user = {username:"user", tenantid:"test", userid:"test-user"};
+        } else {
+            let token = localStorage.getItem('id_token');
+            let u =  this.jwtHelper.decodeToken(token);
+            let username = u.username;
+            let tenantid = u.tenantId;
+            let userid = tenantid + "-" + username;
+            this.user = {username:username, tenantid:tenantid, userid:userid};
+        }
+        localStorage.setItem('daduser',JSON.stringify(this.user));
+        this.localkey = this.user.tenantid + '_' + this.user.username +'_'+ this.localkeyPrefix;
+    }
+
     //next test
     public getConfig(): Promise<DadUserConfig> {
         //this method will return the configuration that are expected to be in the local storage.
         //if not we are going to get this from DB. IF we are in test mode we will get it from test data.
+
+        if (!this.user) this.getUser();
+
         let userconfigString = localStorage.getItem(this.localkey);
         if (userconfigString != null){
             let userconfig = JSON.parse(userconfigString) as DadUserConfig;
             return Promise.resolve(userconfig);
         };
-
+//at this point we do not have some configuration in local storage so we need to find some in db or create a new
         if (config.testing){
             let newUserConfig = new DadUserConfig(this.user);
             newUserConfig.addDefaultConfiguration();
