@@ -40,7 +40,7 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'page/:id/table/:count/:id',
+                path: 'page/:id/table/:count/:id/:tableid',
                 component: DadTableComponent,
                 canActivate: [AuthGuard],
                 data: {

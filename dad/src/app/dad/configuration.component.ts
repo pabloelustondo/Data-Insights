@@ -11,13 +11,13 @@ import { CHARTS } from './sample.charts';
 import { WIDGETS } from './sample.widgets';
 import { TABLES } from './sample.tables';
 import { PAGES } from './sample.page';
-import { DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService, DadPageConfigsService } from './chart.service';
+import { DadConfigService } from './dadconfig.service';
 
 declare var d3, c3: any;
 
 @Component({
     selector: 'dadconfig',
-    providers: [DadChartConfigsService, DadWidgetConfigsService, DadTableConfigsService, DadPageConfigsService],
+    providers: [DadConfigService],
     template: `
 
 
@@ -42,7 +42,7 @@ declare var d3, c3: any;
     </div>
 
      <div style="width:30%; display:inline-block;  vertical-align:top;"> 
-     <button *ngIf="dirty"(click)="saveConfiguration()">Save Changes</button> <button (click)="resetConfiguration()">Reset to Factory Settings</button>
+     <button *ngIf="dirty"(click)="saveConfiguration()">Save Changes</button> <button (click)="resetConfiguration()">Reset to Default Tenant Configuration</button>
       <div>
         <h2>Pages Configuration </h2> 
         <table>
@@ -113,7 +113,7 @@ declare var d3, c3: any;
        <tr *ngIf="selectedWidget.uiparameters.length>2"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedWidget.uiparameters[2].DataSource" placeholder="DataSource"></td></tr>  
     
      </table> 
-      <br><a (click)="deleteWidget()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>
+      <br><a (click)="deleteWidget(selectedWidget)" class="btn btn-sm glyphicons glyphicons-bin x1"></a>
     </div>
     
     
@@ -133,7 +133,7 @@ declare var d3, c3: any;
        <tr><td><label>dateTo: </label></td><td><input style="width:300px" [(ngModel)]="selectedChart.parameters[0].dateTo" placeholder="dateTo"></td></tr>
        <tr><td><label>is Mini?: </label></td><td><input type="checkbox" [(ngModel)]="selectedChart.mini"/></td></tr>
      </table> 
-       <br><a (click)="deleteChart()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>   
+       <br><a (click)="deleteChart(selectedChart)" class="btn btn-sm glyphicons glyphicons-bin x1"></a>   
     </div>
     
         <div *ngIf="selectedTable" style="width:60%; display:inline-block;  vertical-align:top; border: solid;" > 
@@ -180,7 +180,7 @@ declare var d3, c3: any;
        <tr *ngIf="selectedTable.columns.length>5"><td><label>DataSource: </label></td><td><input style="width:300px" [(ngModel)]="selectedTable.columns[5].DataSource" placeholder="DataSource"></td></tr>
       
      </table> 
-       <br><a (click)="deleteTable()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
+       <br><a (click)="deleteTable(selectedTable)" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
     </div>
     
     
@@ -193,7 +193,7 @@ declare var d3, c3: any;
        <tr><td><label>chartids: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.chartids" placeholder="id"></td></tr>   
        <tr><td><label>tableids: </label></td><td><input style="width:300px" [(ngModel)]="selectedPage.widgetids" placeholder="id"></td></tr>   
      </table> 
-       <br><a (click)="deleteTable()" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
+       <br><a (click)="deletePage(selectedPage)" class="btn btn-sm glyphicons glyphicons-bin x1"></a>  
     </div>
     `
 })
@@ -215,10 +215,7 @@ export class DadConfigComponent implements  OnInit{
     public dirty:boolean = false;
 
     constructor(
-      private dadChartConfigsService: DadChartConfigsService,
-      private dadWidgetConfigsService: DadWidgetConfigsService,
-      private dadTableConfigsService: DadTableConfigsService,
-      private dadPageConfigsService: DadPageConfigsService
+      private dadConfigService: DadConfigService
     ) { }
 
     unselect(){
@@ -280,66 +277,55 @@ export class DadConfigComponent implements  OnInit{
     }
 
     saveConfiguration(){
-      this.dadChartConfigsService.save(this.charts);
-      this.dadWidgetConfigsService.save(this.widgets);
-      this.dadTableConfigsService.save(this.tables);
-      this.dadPageConfigsService.save(this.pages);
+        //refactor this ...one call is enough
+      this.dadConfigService.save(this.charts);
+      this.dadConfigService.save(this.widgets);
+      this.dadConfigService.save(this.tables);
+      this.dadConfigService.save(this.pages);
       this.dirty=false; //mh... do it better
         //I now this is weird...why only the charts... well beceuase we are going to refactor to only have on confioguratio service
-        this.dadChartConfigsService.saveUserConfigurationToDdb();
+        this.dadConfigService.saveUserConfigurationToDdb();
+        window.location.reload();
     }
 
   resetConfiguration(){
-    this.dadChartConfigsService.clearLocalCopy();
-    this.dadWidgetConfigsService.clearLocalCopy();
-    this.dadTableConfigsService.clearLocalCopy();
-    this.dadPageConfigsService.clearLocalCopy();
-
-    this.charts = CHARTS;
-    this.widgets = WIDGETS;
-    this.tables = TABLES;
-    this.pages = PAGES;
-
-      this.dadChartConfigsService.save(CHARTS);
-      this.dadWidgetConfigsService.save(WIDGETS);
-      this.dadTableConfigsService.save(TABLES);
-      this.dadPageConfigsService.save(PAGES);
-
-      //I now this is weird...why only the charts... well beceuase we are going to refactor to only have on confioguratio service
-      this.dadChartConfigsService.saveUserConfigurationToDdb();
-
+       this.dadConfigService.resetToDefaultConfiguration();
+      window.location.reload();
   }
 
     deleteChart(chart:DadChart){
       this.charts = this.charts.filter(value => value.id!=this.selectedChart.id);
+      this.dadConfigService.deleteOne(chart);
       this.dirty=true; //mh... do it better
       this.selectedChart = null;
     }
 
   deleteWidget(widget:DadWidget){
     this.widgets = this.widgets.filter(value => value.id!=this.selectedWidget.id);
+      this.dadConfigService.deleteOne(widget);
     this.dirty=true; //mh... do it better
     this.selectedWidget = null;
   }
 
     deleteTable(table:DadTable){
         this.tables = this.tables.filter(value => value.id!=this.selectedTable.id);
+        this.dadConfigService.deleteOne(table);
         this.dirty=true; //mh... do it better
         this.selectedTable = null;
     }
 
     deletePage(page:DadPage){
         this.pages = this.pages.filter(value => value.id!=this.selectedPage.id);
+        this.dadConfigService.deleteOne(page);
         this.dirty=true; //mh... do it better
         this.selectedPage = null;
     }
 
-
     ngOnInit() {
-        this.dadChartConfigsService.getChartConfigs().then((charts) => {this.charts = charts;});
-        this.dadWidgetConfigsService.getWidgetConfigs().then((widgets) => {this.widgets = widgets;});
-        this.tables = this.dadTableConfigsService.getTableConfigs();
-        this.dadPageConfigsService.getPageConfigs().then((pages) => {this.pages = pages;});
+        this.dadConfigService.getChartConfigs().then((charts) => {this.charts = charts;});
+        this.dadConfigService.getWidgetConfigs().then((widgets) => {this.widgets = widgets;});
+        this.dadConfigService.getTableConfigs().then((tables) => {this.tables = tables;});
+        this.dadConfigService.getPageConfigs().then((pages) => {this.pages = pages;});
     }
 
 }

@@ -35,12 +35,15 @@ export class Login {
       this.url = params['url'];
       this.code = params['code'];
       this.domainid = params['state'];
+      this.redirectUrl = params['redirectUrl'];
       if (this.domainid) {
 
         if (this.domainid.indexOf('?redirectUrl=') !== -1) {
           this.url = this.domainid.substring(this.domainid.indexOf('?redirectUrl=') + 13);
         }
       }
+
+      if (!this.url) this.url = this.redirectUrl;  //Obviously we need to review this..why?
 
       if (this.code && this.domainid) {
 

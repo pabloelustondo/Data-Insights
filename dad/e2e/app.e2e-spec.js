@@ -10,6 +10,17 @@ describe('SOTI DATA ANALYTICS DASHBOARD', function () {
     it('should see if the file is loaded and used', function () {
         expect(true).toBe(true);
     });
+    it("title is SOTI Data Analytics Dashboard", function () {
+        protractor_1.browser.get('http://localhost:4200/#/dad/page/batstats');
+        expect(protractor_1.browser.getTitle()).toEqual('SOTI Data Analytics Dashboard');
+    });
+    it("it should have 4 widgets", function (done) {
+        protractor_1.browser.get('http://localhost:4200/#/dad/page/batstats');
+        protractor_2.element.all(protractor_2.by.css('dadWidget')).then(function (elements) {
+            expect(elements.length).toBe(4);
+            done();
+        });
+    });
 });
 describe('DAD elements', function () {
     it('should have the right number of widgets on the page', function (done) {

@@ -4,14 +4,14 @@
 import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
 import { DadChart } from "./chart.component";
 import { DadElementDataService } from "./data.service";
-import { DadWidgetConfigsService, DadChartConfigsService } from './chart.service';
+import { DadConfigService } from './dadconfig.service';
 import { Mapper } from "./mapper";
 import { DadParameter, DadParameterType, DadMetric, DadMetricType, DadFilterType, DadAlert, DadFilter, DadDimension, DadDimensionType, DadElement} from "./dadmodels"
 import { DadWidget } from "./widget.component";
 
 @Component({
     selector: 'dadparameters',
-    providers: [DadElementDataService, DadWidgetConfigsService, DadChartConfigsService],
+    providers: [DadElementDataService, DadConfigService],
     template: `
     <div class="row">
         <div *ngIf="editMode">          
@@ -85,7 +85,7 @@ export class DadParametersComponent implements OnInit {
     @Output() parametersChanged = new EventEmitter();
 
         constructor(private dadElementDataService: DadElementDataService,
-                private dadWidgetConfigsService: DadWidgetConfigsService) {}
+                private dadConfigService: DadConfigService) {}
 
     ngOnInit() {
         this.mapParameters2ui();
