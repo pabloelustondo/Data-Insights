@@ -33,7 +33,7 @@ export class DadTable extends DadElement{
   providers:[DadElementDataService,DadTableConfigsService,DadWidgetConfigsService, DadChartConfigsService],
   template: ` 
     <div *ngIf="table && data">
-        <div class="col-lg-10">
+        <div>
             <div class="card">
                 <div class="card-header">                    
                     <h4>{{table.name}}</h4>
@@ -50,8 +50,8 @@ export class DadTable extends DadElement{
                 </div>
                 
                 <div class="card-block">
-                    <table class="table table-striped">
-                        <thead>
+                    <table class="table table-striped table-sm">
+                        <thead class="hidden-sm-down">
                             <tr>
                                 <th style="text-align:left;" *ngFor="let col of table.columns" >{{col.Name}}</th>
                                 
@@ -66,11 +66,11 @@ export class DadTable extends DadElement{
                                 </select>  
                                  <select (change)="select($event, col)" *ngIf="col.Type==='Number' && col.values && col.Type!=='MiniChart'" class="form-control" data-dadtype="Number">
                                     <option value="$clear">Select</option>
-                                    <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
+                                    <option class="hidden-sm-down" style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
                                 </select> 
                                 <select (change)="select($event, col)" *ngIf="col.Type!=='Number' && col.values && col.Type!=='MiniChart'" class="form-control">
                                     <option value="$clear">Select</option>
-                                    <option style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
+                                    <option class="hidden-sm-down" style="color:black;" *ngFor="let val of col.values" >{{val}}</option>
                                 </select>  
                                </td>
                             </tr>
@@ -79,7 +79,7 @@ export class DadTable extends DadElement{
                                 <td style="align-content: center;" *ngFor="let col of table.columns; let colindex= index">
                                     <span *ngIf="!(col.Type === 'MiniChart')"> {{row[col.DataSource]}}</span>
                                  
-                                    <span *ngIf="col.Type === 'MiniChart' "> 
+                                    <span class="hidden-sm-down" *ngIf="col.Type === 'MiniChart' "> 
                                         <dadchart [chart]="miniChartD[rowindex][colindex]" [data]="chartDataD[rowindex][colindex]"></dadchart>
                                     </span>   
                                 </td>
