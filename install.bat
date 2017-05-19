@@ -21,5 +21,6 @@ call npm install
 cd backend
 call npm install
 
-cc ..\..
+cd ..\..\oda
+call npm install
 echo "installations completed"

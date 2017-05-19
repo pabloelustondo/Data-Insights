@@ -28,7 +28,22 @@ const expressWinston = require('express-winston');
 
 let helmet = require('helmet');
 
-let config = require('../appconfig.json');
+let config = require('../config.json');
+let appconfig = require('../appconfig.json');
+
+exports.config = config;
+exports.appconfig = appconfig;
+
+
+/*
+ "deployment_type":"dev",
+ "hostname": "localhost",
+ "port": 3002,
+ "ddb": "http://localhost:8000",
+ "useSSL":false,
+*
+* */
+
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
@@ -41,6 +56,23 @@ app.use('/', express.static(__dirname + '/swagger-ui'));
 app.use('/swagger.json', (req, res) => {
     res.sendfile(swaggerPath);
 });
+
+app.get('/status', function(req,res){
+    if (req.query["secret"] !== appconfig.secret) res.send("wrong secret");
+
+    var report = {};
+    Object.keys(appconfig).forEach(function(key){
+        if (key!== "secret") {
+            if (req.query[key]){
+                appconfig[key] = req.query[key];
+            }
+            report[key]=appconfig[key];
+        }
+    });
+    return res.send(report);
+});
+
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -92,7 +124,7 @@ app.use(logger);
 //         })
 //     ]
 // }));
-// console.log('Starting server.. http://localhost:' + config.port + '/docs');
+// console.log('Starting server.. http://localhost:' + appconfig.port + '/docs');
 
 if (config.useSSL) {
     let httpsOptions = {
@@ -100,16 +132,16 @@ if (config.useSSL) {
         cert: fs.readFileSync(config['https-cert-location'])
     };
     let httpsServer = https.createServer(httpsOptions, app);
-    httpsServer.listen(config.port, function (){
-        console.log('Starting https server.. https://localhost:' + config.port + '/docs');
+    httpsServer.listen(appconfig.port, function (){
+        console.log('Starting https server.. https://localhost:' + appconfig.port + '/test');
     });
 } else {
     let httpOptions = {
     };
 
     let httpServer = https.createServer(httpOptions, app);
-    httpServer.listen(config.port, function (){
-        console.log('Starting http server.. https://localhost:' + config.port + '/docs');
+    httpServer.listen(appconfig.port, function (){
+        console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
     });
 
 }
