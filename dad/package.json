@@ -8,8 +8,8 @@
   "license": "MIT",
   "angular-cli": "1.0.0-rc.4",
   "scripts": {
-    "start": "cp-cli ./appconfigs/default.json ./appconfig.json & ng serve",
-    "startprod": "cp-cli ./appconfigs/defaultprod.json ./appconfig.json & ng serve",
+    "start": "cp-cli ../appconfigs/default.json ./appconfig.json & ng serve",
+    "startprod": "cp-cli ../defaultconfig.json ./appconfig.json & ng serve --host 0.0.0.0",
     "start_from_server": "cp-cli ./appconfigs/server.json ./appconfig.json & ng serve",
     "startSSL": "ng serve --host 127.0.0.1 --port 4200 --ssl 1 --ssl-key  \"C:/63663247-localhost_3002.key\"  --ssl-cert \"C:/63663247-localhost_3002.cert\" ",
     "lint": "tslint \"src/**/*.ts\"",

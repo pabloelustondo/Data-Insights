@@ -10,12 +10,15 @@ var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var config = require('./config.json');
 var appconfigfile = require('./appconfig.json');
+var defaultconfig = require('./defaultconfig.json');
 var Database = require('mongodb').Db;
 var Server = require('mongodb').Server;
 var path = require('path');
 var testTenants = require('./testing/sampleTenants.json');
 
 global.appconfig = appconfigfile;
+
+
 
 
 if(config.userAccessKey) {

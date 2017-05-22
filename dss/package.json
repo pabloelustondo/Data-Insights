@@ -6,8 +6,8 @@
   "angular-cli": {},
   "scripts": {
     "startBackend": "cd backend && npm i && node server.js",
-    "start": "cp-cli ./appconfigs/default.json ./appconfig.json & webpack-dev-server --port 3003 --inline -d --colors --display-error-details --display-cached",
-    "startSSL": "cp-cli ./appconfigs/default.json ./appconfig.json & webpack-dev-server --port 3003 --https --cert \"C:/63663247-localhost_3002.cert\" --key \"C:/63663247-localhost_3002.key\" --inline -d --colors --display-error-details --display-cached",
+    "start": "cp-cli ./appconfigs/default.json ./appconfig.json & webpack-dev-server --host 0.0.0.0  --port 3003 --inline -d --colors --display-error-details --display-cached",
+    "startSSL": "cp-cli ./appconfigs/default.json ./appconfig.json & webpack-dev-server --host 0.0.0.0 --port 3003 --https --cert \"C:/63663247-localhost_3002.cert\" --key \"C:/63663247-localhost_3002.key\" --inline -d --colors --display-error-details --display-cached",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "contributors": [

@@ -15,9 +15,10 @@
   },
   "scripts": {
     "postinstall": "npm test",
-    "start" : "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node server.js",
-    "debugwin": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node %NODE_DEBUG_OPTION% server.js",
-    "debugmac": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node $NODE_DEBUG_OPTION server.js",
+    "start" : "npm run copyfiles & node server.js",
+    "debugwin": "npm run copyfiles & node %NODE_DEBUG_OPTION% server.js",
+    "debugmac": "npm run copyfiles & node $NODE_DEBUG_OPTION server.js",
+    "copyfiles":  "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & cp-cli ../defaultconfig.json ./defaultconfig.json",
     "test": "echo unit tests not implemented for now"
   }
 }
