@@ -1,10 +1,10 @@
 ::Start Everything
+start cmd.exe /k mongod
+
+start cmd.exe /k cd %installdir%\ddb & call npm start
+
 start cmd.exe /k
-mongod
-start cmd.exe /k
-cd %installdir%\ddb & start call npm start
-start cmd.exe /k
- cd %installdir%\oda & start call npm start
+ cd %installdir%\oda  start call npm start
 start cmd.exe /k
  cd %installdir%\dss\backend & start call npm start
 start cmd.exe /k
