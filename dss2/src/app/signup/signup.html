@@ -1,0 +1,60 @@
+<div class="center-block jumbotron">
+  <h3>SOTI Insight</h3>
+  <h3>Tenancy Enrollment</h3>
+
+  <small><i>To establish your SOTI Insight tenancy and the initial administrator user, SOTI Insight uses a designated MobiControl instance for federated authentication.  Please make sure the following criteria are met: <br/>
+    1) Your company has subscribed to SOTI Insight where an account ID has been assigned <br/>
+    2) You are currently an administrator of one or more MobiControl instances <br/>
+    3) The one MobiControl instance designated for the federated authentication purpose must be accessible over the internet
+  </i></small>
+  <p></p>
+
+  <form role="form" (submit)="signup($event, accountid.value, mcurl.value, apikey.value, domainid.value, username.value, password.value, clientsecret.value, companyname.value, companyaddress.value, phone.value)">
+    <div class="form-group">
+      <label for="accountid">Account ID</label>
+      <input type="email" #accountid class="form-control" id="accountid" placeholder="">
+      <small><i>Account ID assigned to your company</i></small>
+    </div>
+    <div class="form-group">
+      <label for="domainid">Tenancy ID</label>
+      <input type="text" #domainid class="form-control" id="domainid" placeholder=""  >
+      <small><i>Please pick a name and we will check for uniqueness</i></small>
+    </div>
+    <div class="form-group">
+      <label for="mcurl">MobiControl URL</label>
+      <input type="text" #mcurl class="form-control" id="mcurl" placeholder="">
+      <small><i>Designated MobiControl Instance as the Identity Provider for federated authentication</i></small>
+    </div>
+    <div class="form-group">
+      <label for="apikey">MobiControl API Client ID</label>
+      <input type="text" #apikey class="form-control" id="apikey" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="apikey">MobiControl API Secret</label>
+      <input type="password" #clientsecret class="form-control" id="clientSecret" placeholder="">
+    </div>
+  <div class="form-group">
+    <label for="username">Administrator Username</label>
+    <input type="text" #username class="form-control" id="username" placeholder="">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" #password class="form-control" id="password" placeholder="">
+  </div>
+  <div (optional)="optionalInfo($event, companyname.value, companyaddress.value, phone.value)">
+    <div class="form-group">
+      <label for="companyname">Company Name</label> <i>(optional)</i>
+      <input type="text" #companyname class="form-control" id="companyname" placeholder=""  >
+    </div>
+    <div class="form-group">
+      <label for="companyaddress">Company Address</label> <i>(optional)</i>
+      <input type="text" #companyaddress class="form-control" id="companyaddress" placeholder=""  >
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone Number</label> <i>(optional)</i>
+      <input type="tel" pattern="[\(]\d{3}[\)][\s]\d{3}[\-]\d{4}" #phone class="form-control" id="phone" placeholder="(905) 624-9828">
+    </div>
+  </div>
+    <button type="submit" class="btn btn-default">Enroll</button>
+  </form>
+</div>
