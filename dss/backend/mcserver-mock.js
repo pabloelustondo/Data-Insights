@@ -11,7 +11,7 @@ var username;
 var TestTenant =
   {
     accountid: "test",
-    mcurl: "http://localhost:3004",
+    mcurl: appconfig.dssback_url,
     apikey:"112233445511223344",
     domainid: "test",
     username: "admin",
@@ -54,7 +54,7 @@ app.get('/oauth/authorize', function(req,res) {
   res.status(200).send("<html>" +
     "<script>function submit(){ " +
     "var username = document.getElementById('username').value;" +
-    "var url = 'http://localhost:3003/#/?code=' + username + '&state=" + state + "';" +
+    "var url = '" +  appconfig.dss_url + "/#/?code=' + username + '&state=" + state + "';" +
  //   "alert(url);" +
     "window.location.href =  url;  } " +
     "</script> " +

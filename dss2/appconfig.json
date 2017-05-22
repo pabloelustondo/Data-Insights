@@ -2,6 +2,6 @@
   "testingmode":true,
   "useSSL":false,
   "userAccessKey":false,
-  "dssback_url":"http://localhost:3004",
-  "mcdp_url" : "http://localhost:3004/public/MobiControlDataAdaptor.exe"
+  "dssback_url":"http://dasdev3264.cloudapp.net:3004",
+  "mcdp_url" : "http://dasdev3264.cloudapp.net:3004/public/MobiControlDataAdaptor.exe"
 }
