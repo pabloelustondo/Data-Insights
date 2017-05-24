@@ -80,7 +80,7 @@ export class DadChart extends DadElement {
                             
                              <i>new filter by</i>
                              <div *ngIf="chart.filters">
-                             <dadcrud [model]='chart.filters' ></dadcrud>
+                                 <dadcrud [model]='chart.filters'></dadcrud>
                              </div>
                             
                             <!-- <i>alert when</i>
