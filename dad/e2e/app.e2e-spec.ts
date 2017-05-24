@@ -68,13 +68,12 @@ describe('should login to the page', () => {
     browser.sleep(1000);
     expect(browser.getCurrentUrl()).toEqual("http://localhost:3003/#/home");
   });
-
+/*
   it("should come to the DAD", function (){
-    browser.get('http://localhost:4200/#/dad/page/batstats');
-    browser.sleep(2000);
     expect(browser.getCurrentUrl).toEqual('http://localhost:4200/#/dad/page/batstats');
     browser.sleep(2000);
   });
+*/
 
 });
 
