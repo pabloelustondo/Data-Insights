@@ -18,7 +18,7 @@ import * as winston from 'winston';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as methodOverride from 'method-override';
-import * as http from 'http';
+
 import * as https from 'https';
 import * as fs from 'fs';
 let localDynamo = require('local-dynamo');
@@ -28,6 +28,13 @@ const expressWinston = require('express-winston');
 
 let helmet = require('helmet');
 
+
+const app = express();
+const swaggerPath =  __dirname + '/swagger.json';
+
+var http = require('http').Server(app);
+
+var path = require('path');
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
 
@@ -35,17 +42,27 @@ exports.config = config;
 exports.appconfig = appconfig;
 
 
-/*
- "deployment_type":"dev",
- "hostname": "localhost",
- "port": 3002,
- "ddb": "http://localhost:8000",
- "useSSL":false,
-*
-* */
+var io = require('socket.io')(http);
 
-const app = express();
-const swaggerPath =  __dirname + '/swagger.json';
+io.on('connection', function(socket:any){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+});
+
+io.on('connection', function(socket:any){
+    socket.on('chat message', function(msg:any){
+        console.log('message: ' + msg);
+    });
+});
+io.on('connection', function(socket:any){
+    socket.on('chat message', function(msg:any){
+        io.emit('chat message', msg);
+    });
+});
+
+
 
 
 exports.app = app;
@@ -57,10 +74,21 @@ app.use('/swagger.json', (req, res) => {
     res.sendfile(swaggerPath);
 });
 
+app.use('/testing', express.static(path.join(__dirname + '/../testing')));
+app.use('/src', express.static(path.join(__dirname + '/../src')));
+
+app.get('/test', function(req,res){
+    res.sendFile(path.join(__dirname  + '/../testing/spec/SpecRunner.html'));
+});
+
+app.get('/chat', function(req,res){
+    res.sendFile(path.join(__dirname  + '/../src/index.html'));
+});
+
 app.get('/status', function(req,res){
     if (req.query["secret"] !== appconfig.secret) res.send("wrong secret");
 
-    var report = {};
+    var report:any = {};
     Object.keys(appconfig).forEach(function(key){
         if (key!== "secret") {
             if (req.query[key]){
@@ -139,8 +167,8 @@ if (config.useSSL) {
     let httpOptions = {
     };
 
-    let httpServer = https.createServer(httpOptions, app);
-    httpServer.listen(appconfig.port, function (){
+   // let httpServer = http.createServer(app);
+    http.listen(appconfig.port, function (){
         console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
     });
 

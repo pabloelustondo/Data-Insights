@@ -23,23 +23,25 @@
   "dependencies": {
     "@types/request": "0.0.36",
     "@types/request-promise": "4.1.33",
+    "@types/socket.io": "^1.4.29",
+    "aws-sdk": "2.9.0",
     "body-parser": "1.15.2",
-    "helmet" : "3.4.1",
+    "chai": "3.5.0",
+    "dynalite": "1.1.0",
     "express": "4.14.0",
+    "express-winston": "2.1.2",
+    "helmet": "3.4.1",
+    "jsonwebtoken": "7.2.1",
+    "local-dynamo": "0.4.1",
     "method-override": "2.3.6",
+    "mocha-typescript": "1.0.11",
     "querystring": "0.2.0",
     "request": "2.79.0",
-    "winston": "2.3.0",
-    "express-winston": "2.1.2",
     "request-promise": "4.1.1",
+    "socket.io": "^2.0.1",
     "tsoa": "1.0.14",
-    "chai": "3.5.0",
-    "mocha-typescript": "1.0.11",
     "winser": "1.0.2",
-    "local-dynamo": "0.4.1",
-    "dynalite": "1.1.0",
-    "aws-sdk": "2.9.0",
-    "jsonwebtoken" : "7.2.1"
+    "winston": "2.3.0"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.30",
@@ -54,7 +56,7 @@
     "mocha": "3.2.0",
     "describe": "1.2.0",
     "chai-http": "3.0.0",
-    "minimatch" : "3.0.2"
+    "minimatch": "3.0.2"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,5 @@
-{
+
+export const appconfig = {
   "testingmode":false,
   "useSSL":false,
   "ddb_url":"http://dasdev3264.cloudapp.net:8000",
