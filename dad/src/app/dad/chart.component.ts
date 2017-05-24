@@ -78,6 +78,10 @@ export class DadChart extends DadElement {
                                     <li class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}"></li>
                            </ul>   
                             
+                             <i>new filter by</i>
+                             <div *ngIf="chart.filters">
+                             <dadcrud [model]='chart.filters' ></dadcrud>
+                             </div>
                             
                             <!-- <i>alert when</i>
                            
