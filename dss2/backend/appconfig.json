@@ -1,0 +1,5 @@
+{
+  "id":"dssback",
+  "name":"DSS Backend",
+  "dependencies":["ddb","dlm"]
+}

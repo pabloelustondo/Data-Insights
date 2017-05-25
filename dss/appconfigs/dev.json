@@ -1,7 +1,0 @@
-{
-  "testingmode":true,
-  "useSSL":false,
-  "userAccessKey":false,
-  "dssback_url":"http://localhost:3004",
-  "mcdp_url" : "http://dev2012r2-sk.sotidev.com:3004/public/MobiControlDataAdaptor.exe"
-}

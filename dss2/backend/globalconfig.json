@@ -1,0 +1,13 @@
+{
+  "testingmode":false,
+  "useSSL":false,
+  "userAccessKey":false,
+  "ddb_url":"http://localhost:8000",
+  "dss_url":"http://localhost:3003",
+  "dssback_url":"http://localhost:3004",
+  "dad_url":"http://localhost:4200",
+  "dadback_url":"http://localhost:4201",
+  "oda_url":"http://localhost:8001",
+  "dlm_url" : "http://localhost:8003",
+  "mcdp_url" : "http://localhost:3004/public/MobiControlDataAdaptor.exe"
+}

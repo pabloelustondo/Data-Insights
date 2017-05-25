@@ -7,6 +7,13 @@ import * as FileSaver from 'file-saver';
 declare var require: any;
 declare var window: any;
 let appconfig = require('../../../appconfig.json');
+let globalconfig = require('../../../globalconfig.json');
+
+Object.keys(appconfig).forEach(function(key){
+  globalconfig[key] = appconfig[key];
+})
+appconfig = globalconfig;
+
 
 
 const backendUrl = appconfig.dssback_url;
