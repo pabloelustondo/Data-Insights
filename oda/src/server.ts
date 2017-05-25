@@ -1,16 +1,5 @@
 
-import './controllers/intialChargeLevelController';
-import './controllers/dischargeRateController';
-import './controllers/devicesDidNotSurviveShift';
-import './controllers/retrieveReasonData';
-import './controllers/averageDischargeRateController';
-import './controllers/Lists/listOfDevicesDidNotSurviveShift';
-import './controllers/Lists/deviceList';
-import './controllers/Lists/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
-import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
-import './controllers/applicationExecutionTime';
-import './controllers/numberOfApplicationInstalls';
-import './controllers/vehicles/ttcVehicleLocations';
+import './controllers/queryController';
 
 
 import * as winston from 'winston';
@@ -104,13 +93,13 @@ if (config.useSSL) {
         console.log('Starting https server.. https://localhost:' + config.port + '/docs');
     });
 } else {
-    let httpOptions = {
-    };
 
-    let httpServer = https.createServer(httpOptions, app);
-    httpServer.listen(config.port, function (){
-        console.log('Starting http server.. https://localhost:' + config.port + '/docs');
+    let httpServer = http.createServer(app);
+
+    httpServer.listen(config.port, function () {
+        console.log('Starting no SSL http server.. http://localhost:' + config.port + '/docs');
     });
+
 
 }
 

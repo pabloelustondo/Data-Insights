@@ -11,7 +11,9 @@ import {VehicleInfo} from '../../models/vehicleInfo';
 @Route('Vehicles')
 export class VehicleLocations {
     /**
-     * A DischargeRate represents how quickly the battery is losing the charge per hour.
+     * NOTE: THIS API IS DEPRECATED
+     *
+     *  A DischargeRate represents how quickly the battery is losing the charge per hour.
      * This data is retrieved every hour for a given day.
      * A date range is required to get the information.
      */

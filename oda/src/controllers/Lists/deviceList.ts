@@ -9,6 +9,8 @@ const config = require('../../../appconfig.json');
 @Route('Devices')
 export class DeviceInformation {
     /**
+     * NOTE: THIS API IS DEPRECATED
+     *
      * This API provides information related to a device. The consumer of the API must provide a list of attributes
      * related to the device. The API returns values of the attributes requested.
      *

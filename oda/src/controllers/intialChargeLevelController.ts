@@ -9,6 +9,9 @@ import * as rp from 'request-promise';
 export class SDSController {
 
     /**
+     *
+     * NOTE: THIS API IS DEPRECATED
+     *
      * An InitialChargeLevel represent the battery charge level at the moment where a device is taken from the charger.
      * This event may happen many times during the specified time period and
      * this data set provides the count of how many times this event happen for a given battery level range.

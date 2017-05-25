@@ -13,6 +13,8 @@ const config = require('../../appconfig.json');
 export class MultiplePostsController {
 
     /**
+     * NOTE: THIS API IS DEPRECATED
+     *
      * This api can be used to retrieve data related to possible reasons for device not lasting shift.
      * To use:
      * Provide the reasonId and the associated parameters with it.

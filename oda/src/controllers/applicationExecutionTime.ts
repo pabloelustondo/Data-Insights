@@ -13,6 +13,9 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class ApplicationExecutionTime {
     /**
+     *
+     * NOTE: THIS API IS DEPRECATED
+     *
      * This API returns:
      *  a list of apps and the total time they were used for all devices for a given time range
      */

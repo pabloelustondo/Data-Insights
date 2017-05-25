@@ -12,6 +12,10 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class CountDevicesNotSurvivedShiftController {
     /**
+     *
+     * NOTE: THIS API IS DEPRECATED
+     *
+     *
      * This API returns:
      *  1. CountDevicesLastedShift - the number of devices which lasted the full shift. A device is considered to be have
      *     survived the shift if:

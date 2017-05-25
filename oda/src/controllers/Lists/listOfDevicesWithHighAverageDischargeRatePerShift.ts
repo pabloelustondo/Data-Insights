@@ -10,6 +10,8 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class ListOfDevicesWithHighAverageDischargeRatePerShift {
 /**
+ * NOTE: THIS API IS DEPRECATED
+ *
  * List of all devices that had high average discharge rate per shift. The devices
  *
  * The API returns a list of devices specified using the rowsSkip and rowsTake parameters. The complete list

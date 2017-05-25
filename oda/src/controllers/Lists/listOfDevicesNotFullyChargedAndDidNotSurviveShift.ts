@@ -10,6 +10,8 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class ListDevicesNotFullyChargedAndNotSurvivedShiftController {
     /**
+     * NOTE: THIS API IS DEPRECATED
+     *
      * List of all devices that were not fully charged and may have not lasted the full shift for a given shift
      * date-time, shift duration, and the battery level the device must fall under.
      *
