@@ -28,3 +28,6 @@ cd ..\dos
 call npm install
 
 echo "installations completed"
+
+
+
