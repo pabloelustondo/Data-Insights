@@ -1,6 +1,10 @@
 Welcome to SOTI Insights
 
 SHORT STORY (Windows)
+make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka)
+(follow official websites)
+make sure you have two scripts to start kafka "startkafka"  "startzoo" (for zookeper) that can run anywhere.
+also make sure you can run mongod from anywhere, you have in your path.
 
 git clone
 install   (takes a few minutes, get a coffee)
