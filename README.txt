@@ -1,12 +1,19 @@
 Welcome to SOTI Insights
 
-SHORT STORY (windows machine)
+SHORT STORY (Windows)
 
-git clone -b stable http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
-install (wait 5 minutes or more)
-run  (this will run on localhost)
-run <config_version> will pick up the desired configuration from folder app config.
+git clone
+install   (takes a few minutes, get a coffee)
+run     (by default will run on localhost)
+http://localhost:5000
 
+run config  for specific configuration ...
+for example
+"dev" is for sotiinsights.clooudapp.net
+
+default configurations are in the globalconfigs folder.
+each microservice is able to overwrite the global configuration.....for that you need to go into each service folder.
+(in vanilla deployments you do not need that)
 
 LONG STORY
 
