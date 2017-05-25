@@ -1,5 +1,15 @@
 Welcome to SOTI Insights
 
+SHORT STORY (windows machine)
+
+git clone -b stable http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
+install (wait 5 minutes or more)
+run  (this will run on localhost)
+run <config_version> will pick up the desired configuration from folder app config.
+
+
+LONG STORY
+
 This README is only about how to install and run this application from the source code in one machine for testing/development,
 Please read the included PDF for a conceptual introduction to what is this as we will assume you did it.
 Another document will explain how to deploy this application to the target cloud environment.
