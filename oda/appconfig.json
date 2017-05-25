@@ -1,9 +1,6 @@
 {
+  "id":"oda",
   "name":"ODA",
-  "testingmode" : true,
-  "secret"  : "1234",
-  "port": 8001,
-  "hostname": "localhost",
-  "ddb_url": "http://localhost:8000",
-  "useSSL":false
- }
+  "dependencies":["ddb","kafka","dps"],
+  "secret"  : "1234"
+}
