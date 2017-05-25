@@ -1,5 +1,6 @@
 {
-  "testingmode":"false",
-  "port": 4201,
-  "ddb_url":"http://localhost:8000"
+  "id":"dos",
+  "name":"DOS Administration and Monitoring",
+  "dependencies":[],
+  "secret"  : "1234"
 }

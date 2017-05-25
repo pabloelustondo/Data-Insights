@@ -9,16 +9,27 @@ var bodyParser = require('body-parser');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var config = require('./config.json');
-var appconfigfile = require('./appconfig.json');
-var defaultconfig = require('./defaultconfig.json');
+var appconfig = require('./appconfig.json');
+var globalconfig = require('./globalconfig.json');
 var Database = require('mongodb').Db;
 var Server = require('mongodb').Server;
 var path = require('path');
+var cors = require('cors');
 var testTenants = require('./testing/sampleTenants.json');
 
-global.appconfig = appconfigfile;
 
+globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function(key){
+    globalconfig[key] = appconfig[key];
+})
+globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
 
+appconfig = globalconfig;
+global.appconfig = appconfig;
+
+console.log("configuration");
+console.log(appconfig);
 
 
 if(config.userAccessKey) {
@@ -89,9 +100,10 @@ function getUser(req){
 }
 
 app.use(bodyParser.json({limit: '50mb'}));
+app.use(cors());
 app.use('/testing', express.static(path.join(__dirname + '/testing')));
 
-app.get('/e2etest', function(req,res){
+app.get('/test', function(req,res){
     res.sendFile(path.join(__dirname  + '/testing/spec/SpecRunner.html'));
 });
 
@@ -516,13 +528,13 @@ if (config.useSSL) {
     var httpsServer = https.createServer(httpsOptions, app);
 
     httpsServer.listen(appconfig.port, function () {
-        console.log('Starting https server.. https://localhost:' + appconfig.port + '/e2etest');
+        console.log('Starting https server.. https://localhost:' + appconfig.port + '/test');
     });
 } else {
     var httpServer = http.createServer(app);
 
     httpServer.listen(appconfig.port, function () {
-        console.log('Starting http server.. http://localhost:' + appconfig.port + '/e2etest');
+        console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
     });
 
 }

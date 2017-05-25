@@ -14,9 +14,10 @@
     "cp-cli": "1.0.2"
   },
   "scripts": {
-    "start" : "node server.js",
-    "debugwin": "npm run copyfiles & node %NODE_DEBUG_OPTION% server.js",
-    "debugmac": "npm run copyfiles & node $NODE_DEBUG_OPTION server.js",
-    "test": "echo unit tests not implemented for now"
+    "start" : "npm run getConfigs & node server.js",
+    "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
+    "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
+    "test": "echo unit tests not implemented for now",
+    "getConfigs":  "cp-cli ../globalconfig.json ./globalconfig.json"
   }
 }

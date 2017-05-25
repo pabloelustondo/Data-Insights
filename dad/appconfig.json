@@ -2,5 +2,6 @@
   "id":"dad",
   "name":"DAD Backend",
   "dependencies":["ddb","dss","oda"],
-  "secret"  : "1234"
+  "secret"  : "1234",
+  "oda_url":""
 }

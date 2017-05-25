@@ -6,14 +6,17 @@ import {appconfig}  from "../../appconfig";
   selector: 'app-root',
   providers: [ DosStatusService ],
   template: `
-        <div>SOTI Insights Administration and Monitoring Service</div>
+        <div style="font-weight: bold; text-align: center;">SOTI Insights Administration and Monitoring Service</div>
+        <br/>
         <table>
-        <tr><td>Service</td><td>Status</td><td>Go 2 BDD Test</td><td>Go 2 Page</td></tr>    
+        <tr>
+        <td style="width: 200px"> Service       </td>
+        <td style="width: 200px"> Status (comming soon...)   </td>
+        <td style="width: 200px"> Go to page or Test </td> 
          <tr *ngFor="let item of statusReport">
          <td>{{item.name}}</td>
          <td>{{item.status}}</td>
-         <td><a [href]="item.url + '/e2etest'">{{item.name}}</a></td>
-         <td><a [href]="item.url">{{item.name}}</a></td>
+         <td><a [href]="item.url + '/test'">{{item.name}}</a></td>
          </tr>
         </table>        
     `,
@@ -28,7 +31,7 @@ export class AppComponent implements OnInit  {
 
 
   isDosService(configItem:string):boolean{
-    return configItem.toString().indexOf("url") > 0;
+    return (configItem.toString().indexOf("url") > 0) && (configItem.toString().indexOf("mongodb") < 0);
   }
 
   dasServicesList(appconfig:any): {name:string, url:string}[] {

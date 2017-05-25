@@ -8,6 +8,5 @@
   "dad_url":"http://localhost:4200",
   "dadback_url":"http://localhost:4201",
   "oda_url":"http://localhost:8001",
-  "dlm_url" : "http://localhost:8003",
-  "mcdp_url" : "http://localhost:3004/public/MobiControlDataAdaptor.exe"
+  "mongodb_url" : "mongodb://localhost:27017/udb_test"
 }
