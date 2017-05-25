@@ -57,3 +57,17 @@ D:\BI\BI\MCDP\MCDP\obj\Debug\Soti.MCDP.MCDP.resources
 D:\BI\BI\MCDP\MCDP\obj\Debug\MCDP.csproj.GenerateResource.Cache
 D:\BI\BI\MCDP\MCDP\obj\Debug\MCDP.exe
 D:\BI\BI\MCDP\MCDP\obj\Debug\MCDP.pdb
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\MCDP.exe.config
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\MCDP.exe
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\MCDP.pdb
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\Database.dll
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\DataProcess.dll
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\Newtonsoft.Json.dll
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\Database.pdb
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\DataProcess.pdb
+D:\BI_May\BI_May25\mcdp\MCDP\bin\Debug\Newtonsoft.Json.xml
+D:\BI_May\BI_May25\mcdp\MCDP\obj\Debug\MCDP.csprojResolveAssemblyReference.cache
+D:\BI_May\BI_May25\mcdp\MCDP\obj\Debug\Soti.MCDP.MCDP.resources
+D:\BI_May\BI_May25\mcdp\MCDP\obj\Debug\MCDP.csproj.GenerateResource.Cache
+D:\BI_May\BI_May25\mcdp\MCDP\obj\Debug\MCDP.exe
+D:\BI_May\BI_May25\mcdp\MCDP\obj\Debug\MCDP.pdb
