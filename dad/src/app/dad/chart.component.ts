@@ -80,7 +80,7 @@ export class DadChart extends DadElement {
                             
                              <i>new filter by</i>
                              <div *ngIf="chart.filters">
-                                 <dadcrud [model]='chart.filters'></dadcrud>
+                                 <dadcrud [model]='chart.filters' (optionChanged)='filterBy(value)'></dadcrud>
                              </div>
                             
                             <!-- <i>alert when</i>
@@ -195,8 +195,8 @@ export class DadChartComponent implements OnInit {
     addDimension: boolean = false;
     newDimensionName: string;
     newDimensionAttribute: string;
-    addFilter?: boolean = false;
-    editTheFilter?: boolean = false
+  //  addFilter?: boolean = false;
+    editTheFilter?: boolean = false;
     addAlert: boolean = false;
     showFilters: boolean = false;
     editExpression: boolean = false;
@@ -226,13 +226,11 @@ export class DadChartComponent implements OnInit {
             this.mapData = chartData;
             this.changeChartData(chartData);
         }
-        else {
-            this.addFilter = true;
-        }
+    else{}
     }
 
     addNewFilter() {
-        this.addFilter = false;
+//        this.addFilter = false;
         if(!this.chart.filters){
             this.chart.filters = [];
         }
@@ -260,7 +258,7 @@ export class DadChartComponent implements OnInit {
     }
 
     editItem() {
-        this.addFilter = false;
+       // this.addFilter = false;
         if (!this.editExpression) this.editExpression = true;
         else this.editExpression = false;
     }
@@ -272,7 +270,7 @@ export class DadChartComponent implements OnInit {
         let chartData = this.mapper.map(this.chart, this.data);
         this.changeMapData();
         this.changeChartData(chartData);
-        this.addFilter = false;
+     //   this.addFilter = false;
         this.editExpression = false;
     }
 
@@ -281,7 +279,7 @@ export class DadChartComponent implements OnInit {
         let chartData = this.mapper.map(this.chart, this.data);
         this.changeMapData();
         this.changeChartData(chartData);
-        this.addFilter = false;
+      //  this.addFilter = false;
     }
 
     alertWhen(d){

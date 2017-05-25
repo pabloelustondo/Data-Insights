@@ -2,7 +2,7 @@
  * Created by dister on 5/11/2017.
  */
 
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DadChart } from './chart.component';
 import { DadSearch } from "./search";
 
@@ -54,6 +54,10 @@ export class DadCrudComponent {
   @Input()
     model: any;
 
+  //@Input()
+    //set
+  @Output() optionChanged = new EventEmitter();
+
     constructor() {}
 
     addNewOption(event) {
@@ -66,6 +70,8 @@ export class DadCrudComponent {
       };
       this.model.options.push(this.model.option);
       this.addValue = false;
+      this.optionChanged.emit(event);
+
     }
 
     updateSelected(selected_option) {
@@ -86,6 +92,7 @@ export class DadCrudComponent {
         if (!this.addValue) this.addValue = true;
         else this.addValue = false;
       }
+      this.optionChanged.emit(value);
     }
 
     deleteOption(selected_option) {
