@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "debugmac": "node $NODE_DEBUG_OPTION server.js",
-    "debugwin": "node %NODE_DEBUG_OPTION% server.js"
+    "debugwin": "node %NODE_DEBUG_OPTION% server.js",
+    "getConfigs":  "cp-cli ../defaultconfig.json ./appconfig.json"
   },
   "repository": {
     "type": "git",

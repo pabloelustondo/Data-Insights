@@ -1,5 +1,5 @@
 {
-  "name": "DDB",
+  "name": "DAD_Backend",
   "contributors": "Pablo, Varun, Nathan ",
   "description": "DAS Central Database, here we store, tenants, users,..etc",
   "version": "1.0.0",
@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "debugwin": "node %NODE_DEBUG_OPTION% server.js",
+    "debugwin": "node --inspect server.js",
     "debugmac": "node $NODE_DEBUG_OPTION server.js",
     "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js"
   }

@@ -5,6 +5,12 @@ import { contentHeaders } from '../common/headers';
 declare var require: any;
 declare var window: any;
 let appconfig = require('../../../appconfig.json');
+let globalconfig = require('../../../globalconfig.json');
+
+Object.keys(appconfig).forEach(function(key){
+  globalconfig[key] = appconfig[key];
+})
+appconfig = globalconfig;
 
 const backendUrl = appconfig.dssback_url;
 const styles   = require('./signup.css');

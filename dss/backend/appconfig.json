@@ -1,11 +1,5 @@
 {
-  "name":"DSS_Backend",
-  "testingmode" : true,
-  "secret"  : "1234",
-  "port" : 3004,
-  "hostname": "localhost",
-  "dssback_url":"http://dasdev3264.cloudapp.net:3004",
-  "dss_url":"http://dasdev3264.cloudapp.net:3003",
-  "ddb_url" : "http://localhost:8000",
-  "dlm_url" : "http://localhost:8003"
+  "id":"dssback",
+  "name":"DSS Backend",
+  "dependencies":["ddb","dlm"]
 }
