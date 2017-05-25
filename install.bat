@@ -24,4 +24,7 @@ call npm install
 cd ..\..\oda
 call npm install
 
+cd ..\dos
+call npm install
+
 echo "installations completed"

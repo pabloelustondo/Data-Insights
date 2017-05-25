@@ -2,6 +2,8 @@
  * Created by pelustondo on 11/23/2016.
  */
 
+declare var require;
+
 let appconfig = require("../../../appconfig.json");
 let globalconfig = require("../../../globalconfig.json");
 
@@ -10,6 +12,7 @@ Object.keys(appconfig).forEach(function(key){
 })
 appconfig = globalconfig;
 
+console.log(appconfig);
 
 export const config = {
     "testing":appconfig.testingmode,

@@ -21,4 +21,7 @@ start cmd.exe /k "cd %installdir%\dad & call npm run startprod"
 echo "starting dad backend"
 start cmd.exe /k "cd %installdir%\dad\backend & call npm run start"
 
+echo "starting dos"
+start cmd.exe /k "cd %installdir%\dos & call npm run start"
+
 exit

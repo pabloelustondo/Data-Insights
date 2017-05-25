@@ -9,16 +9,23 @@ var bodyParser = require('body-parser');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var config = require('./config.json');
-var appconfigfile = require('./appconfig.json');
-var defaultconfig = require('./defaultconfig.json');
+var appconfig = require('./appconfig.json');
+var globalconfig = require('./globalconfig.json');
 var Database = require('mongodb').Db;
 var Server = require('mongodb').Server;
 var path = require('path');
 var testTenants = require('./testing/sampleTenants.json');
 
-global.appconfig = appconfigfile;
+globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function(key){
+    globalconfig[key] = appconfig[key];
+})
+globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
 
+global.appconfig = globalconfig;
 
+console.log(appconfig);
 
 
 if(config.userAccessKey) {

@@ -1,7 +1,5 @@
 {
+  "id":"ddb",
   "name":"DDB",
-  "testingmode" : true,
-  "secret"  : "1234",
-  "port": 8000,
-  "mongodb_url" : "mongodb://localhost:27017/udb_test"
+  "dependencies":["mongodb"]
 }
