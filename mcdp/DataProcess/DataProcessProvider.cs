@@ -341,11 +341,12 @@ namespace Soti.MCDP.DataProcess
         private void SendData2Ida(string ida4Data, string tableName)
         {
             var json = new StringBuilder();
-            json.Append("{\"AgentMetadata\": { \"tableName\": \"");
+            json.Append("{\"metadata\": { \"dataSetId\": \"");
             json.Append(tableName);
-            json.Append("\"}, \"Data\": ");
+            json.Append("\", \"projections\": []},");
+            json.Append("\"data\": {");
             json.Append(ida4Data);
-            json.Append("}");
+            json.Append("}};");
 
             var url = _idaUrl;
 
