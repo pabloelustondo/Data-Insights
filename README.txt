@@ -1,5 +1,22 @@
 Welcome to SOTI Insights
 
+SHORT STORY (Windows)
+
+git clone
+install   (takes a few minutes, get a coffee)
+run     (by default will run on localhost)
+http://localhost:5000
+
+run config  for specific configuration ...
+for example
+"dev" is for sotiinsights.clooudapp.net
+
+default configurations are in the globalconfigs folder.
+each microservice is able to overwrite the global configuration.....for that you need to go into each service folder.
+(in vanilla deployments you do not need that)
+
+LONG STORY
+
 This README is only about how to install and run this application from the source code in one machine for testing/development,
 Please read the included PDF for a conceptual introduction to what is this as we will assume you did it.
 Another document will explain how to deploy this application to the target cloud environment.
