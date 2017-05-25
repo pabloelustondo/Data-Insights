@@ -8,5 +8,9 @@
   "dad_url":"http://sotiinsights.cloudapp.net:4200",
   "dadback_url":"http://sotiinsights.cloudapp.net:4201",
   "oda_url":"http://sotiinsights.cloudapp.net:8001",
+  "dps_url":"http://sotiinsights.cloudapp.net:6000",
+  "dos_url":"http://sotiinsights.cloudapp.net:5000",
+  "dosback_url":"http://sotiinsights.cloudapp.net:5001",
+  "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017/udb_test"
 }

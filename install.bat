@@ -27,6 +27,11 @@ call npm install
 cd ..\dos
 call npm install
 
+cd backend
+call npm install
+
+cd ..\..
+
 echo "installations completed"
 
 

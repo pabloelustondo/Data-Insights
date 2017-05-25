@@ -1,6 +1,6 @@
 {
-  "id":"dadback",
-  "name":"DAD Backend",
-  "dependencies":["ddb"],
+  "id":"dosback",
+  "name":"DOS Backend",
+  "dependencies":[],
   "secret"  : "1234"
 }

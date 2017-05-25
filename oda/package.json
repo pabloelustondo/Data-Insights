@@ -6,7 +6,7 @@
     "start": "npm run getConfigs & npm run build && node ./dist/server.js",
     "startdebug": "npm run getConfigs & npm run build && node %NODE_DEBUG_OPTION% ./dist/server.js",
     "startmac": "npm run getConfigs & npm run build && node $NODE_DEBUG_OPTION ./dist/server.js",
-    "build": "npm run clean && npm run lint && npm run swagger-gen && npm run routes-gen && tsc && npm run copy-swagger-ui",
+    "build": "npm run clean  && npm run swagger-gen && npm run routes-gen && tsc && npm run copy-swagger-ui",
     "lint": "tslint ./src/**/*.ts",
     "clean": "rimraf dist",
     "swagger-gen": "tsoa swagger",

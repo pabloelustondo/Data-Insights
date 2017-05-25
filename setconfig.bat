@@ -20,5 +20,3 @@ echo configfile %configfile%
 
 echo copying globalconfig for %1   %configfile%
 copy globalconfigs\%configfile% .\globalconfig.json
-
-pause

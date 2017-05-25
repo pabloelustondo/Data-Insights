@@ -9,6 +9,8 @@
   "dadback_url":"http://localhost:4201",
   "oda_url":"http://localhost:8001",
   "dps_url":"http://localhost:6000",
+  "dos_url":"http://localhostt:5000",
+  "dosback_url":"http://localhost:5001",
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017/udb_test"
 }
