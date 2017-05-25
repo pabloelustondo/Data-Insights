@@ -8,7 +8,7 @@
     "start": "npm run getConfigs & node server.js",
     "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
     "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
-    "getConfigs":  "cp-cli ../globalconfig.json ./globalconfig.json"
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",
     "cors": "^2.7.1",
+    "cp-cli": "^1.0.2",
     "dotenv": "^0.4.0",
     "errorhandler": "^1.4.3",
     "express": "^4.13.4",

@@ -7,5 +7,6 @@
   "dssback_url":"http://cad059.corp.soti.net:3004",
   "dad_url":"http://cad059.corp.soti.net:4200",
   "dadback_url":"http://cad059.corp.soti.net:4201",
-  "oda_url":"http://cad059.corp.soti.net:8001"
+  "oda_url":"http://cad059.corp.soti.net:8001",
+  "mongodb_url" : "mongodb://localhost:27017/udb_test"
 }
