@@ -1,8 +1,9 @@
 ::Start Everything
 
+call setconfig %1
+
 SET installdir= %cd%
 cd %installdir%
-
 
 echo "starting mongo"
 start cmd.exe /k mongod
@@ -27,5 +28,3 @@ start cmd.exe /k "cd %installdir%\oda & call npm run start"
 
 echo "starting dos"
 start cmd.exe /k "cd %installdir%\dos & call npm run start"
-
-exit
