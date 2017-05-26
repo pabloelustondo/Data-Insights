@@ -28,17 +28,48 @@ export class QueryController {
 
 
         if (request.from[0] === 'vehicleInfo') {
+
             let mData = [
                 'dataSets : ["ttcMaps", "deviceInfo"]'];
+
+
+
+            const options: rp.OptionsWithUrl = {
+                headers: {
+                    'x-api-key': config['aws-x-api-key']
+                },
+                json: true,
+                method: 'POST',
+                body: {
+                    metadata : {
+                        'filterProperty' : 'prop1',
+                        'value' : '3',
+                        'queryId' : 'ttc'
+                    }
+                },
+                url: 'http://localhost:8002/data/outGoingRequest'
+            };
+            console.time('deviceNotSurviveShift: aws call');
+
+            let p = await rp(options); // request library used
 
             // returns test data for now
             const user: any = {
                 createdAt: new Date(),
                 metadata: mData,
-                data: [
-                    {'ttcMaps' : [
-                        {
-                            data : [{
+                data: p
+            };
+            return user;
+        } else {
+            let mData = ['Query Not supported, returning sample test data for ttc vehicle and device together'];
+
+            const user: any = {
+                createdAt: new Date(),
+                metadata: mData,
+                data:
+                    {
+                        'result' : [
+                            {
                                 'id' : '1551',
                                 'lon' : '-79.493118',
                                 'routeTag' : '32',
@@ -46,7 +77,11 @@ export class QueryController {
                                 'dirTag' : '32_0_mp32sch',
                                 'heading' : '216',
                                 'lat' : '43.688217',
-                                'secsSinceReport' : '19'
+                                'secsSinceReport' : '19',
+                                'deviceId': '123456789',
+                                'flag': 0,
+                                'Name': 'VehicleID',
+                                'Value': 1151
                             }, {
                                 'id' : '1552',
                                 'lon' : '-79.473118',
@@ -74,7 +109,11 @@ export class QueryController {
                                 'dirTag' : '32_0_32D',
                                 'heading' : '74',
                                 'lat' : '43.697884',
-                                'secsSinceReport' : '11'
+                                'secsSinceReport' : '11',
+                                'deviceId': '{10101010-1010-1010-1010-101010101010}',
+                                'flag': 0,
+                                'Name': 'VehicleID',
+                                'Value': 1073
                             },
                             {
                                 'id' : '1548',
@@ -96,60 +135,12 @@ export class QueryController {
                                 'lat' : '43.689983',
                                 'secsSinceReport' : '12'
                             }
-                            ]
-                        }
-                    ]}, {
-                        'customData' : [
-                            {
-                                data : [
-                                    {
-                                        busId : 1151,
-                                        deviceId : '0001',
-                                        name : 'device1'
-                                    },
-                                    {
-                                        busId : 1151,
-                                        deviceId : '0002',
-                                        name : 'device2'
-                                    },
-                                    {
-                                        busId : 1151,
-                                        deviceId : '0003',
-                                        name : 'device3'
-                                    },
-                                    {
-                                        busId : 1073,
-                                        deviceId : '0004',
-                                        name : 'device1'
-                                    },
-                                    {
-                                        busId : 1073,
-                                        deviceId : '0005',
-                                        name : 'device2'
-                                    },
-                                    {
-                                        busId : 1073,
-                                        deviceId : '0006',
-                                        name : 'device4'
-                                    }
-                                ]
-                            }
                         ]
                     }
-                ]
+
             };
             return user;
-        } else {
-            let mData = ['Query Not supported'];
 
-
-            const user: SDS = {
-                createdAt: new Date(),
-                metadata: mData,
-                data: ['query not supported']
-            };
-
-            return user;
         }
 
 
