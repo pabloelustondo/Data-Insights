@@ -19,3 +19,10 @@ D:\BI\BI\MCDP\Database\bin\Debug\Newtonsoft.Json.xml
 D:\BI\BI\MCDP\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache
 D:\BI\BI\MCDP\Database\obj\Debug\Database.dll
 D:\BI\BI\MCDP\Database\obj\Debug\Database.pdb
+D:\BI_May\BI_May25\mcdp\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache
+D:\BI_May\BI_May25\mcdp\Database\obj\Debug\Database.dll
+D:\BI_May\BI_May25\mcdp\Database\obj\Debug\Database.pdb
+D:\BI_May\BI_May25\mcdp\Database\bin\Debug\Database.dll
+D:\BI_May\BI_May25\mcdp\Database\bin\Debug\Database.pdb
+D:\BI_May\BI_May25\mcdp\Database\bin\Debug\Newtonsoft.Json.dll
+D:\BI_May\BI_May25\mcdp\Database\bin\Debug\Newtonsoft.Json.xml
