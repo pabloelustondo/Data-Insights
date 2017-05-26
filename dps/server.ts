@@ -16,6 +16,7 @@ var mongodb = require('mongodb').MongoClient;
 import {uploadRawData, uploadModifiedData} from './services/rawDataLakeService';
 import {DatabaseService} from  './services/databaseService';
 import {DataProjections} from './services/projection';
+import {processRequest} from './services/dataService';
 import {User} from "./models/user";
 import {accessSync} from "fs";
 
@@ -55,9 +56,7 @@ app.use(cors());
 ////////////////////////////
 // CUSTOMER TENANT DATA API
 ////////////////////////////
-function x () {
-    return 'x';
-}
+
 // Puts a data point into a tenant datasets.
 app.post('/data/request', function(req,res) {
     console.log('request came in');
@@ -110,14 +109,10 @@ app.post('/data/request', function(req,res) {
 app.post('/data/outGoingRequest', function(req, res) {
 
     // TODO: process metadata to figure out the request
-
     let metadata = req.body.metadata;
 
     if (metadata) {
-
-        res.status(200).send( {
-            message: 'Placeholder response: still needs to be implemented.'
-        });
+        processRequest(metadata, res);
     } else {
         res.status(400).send ({
             message: 'No metadata field present in request body.'

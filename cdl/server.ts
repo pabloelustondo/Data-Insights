@@ -119,13 +119,26 @@ app.post('/transactionLog/:tenantid/data', function(req, res) {
 app.post('/ds/:tenantid/getdata', function(req,res){
     //check parameters
     //TODO
-    console.log('enter post get data for tenant');
+    console.log('enter post get data for tenant '+ req.body.collectionName);
     var collectionName = req.body.collectionName; //this query is a qeury written in our metadata
     callDbAndRespond(req,res, function(req,res,db, next){
             db.collection(collectionName).find({},{
                 data: 1,
                 _id : 0
             }).toArray(next);
+
+    });
+});
+
+app.post('/ds/:tenantid/getdata/query', function(req,res){
+    //check parameters
+    //TODO this api allows a consumer of this api to write a mongodb aggregate query
+    console.log('enter post query data for tenant with aggregation');
+    var collectionName = req.body.collectionName; //this is the collection name to qeury from
+
+    var filter = req.body.aggregation || {};
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection(collectionName).aggregate(filter, next);
 
     });
 });
