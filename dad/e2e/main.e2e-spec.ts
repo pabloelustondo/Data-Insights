@@ -10,7 +10,7 @@ import { WIDGETS } from "../src/app/dad/sample.widgets";
 import { PAGES } from "../src/app/dad/sample.page";
 import { DadPage, DadPageComponent } from "../src/app/dad/page.component";
 import { protractor, element, by } from 'protractor';
-
+/*
 let sleep = function(){browser.sleep(3000)};
 
 describe('SOTI DATA ANALYTICS DASHBOARD', () => {
@@ -142,7 +142,7 @@ describe('SOTI DATA ANALYTICS DASHBOARD', () => {
      });
  });
 
-
+*/
 /*elements[0].click().then(function() {
  browser.sleep(1000);
  expect(browser.getCurrentUrl()).toContain('/table/1/chartbardrill0/table1chartbardrill0metric');

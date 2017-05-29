@@ -40,6 +40,7 @@ export class DadElement {
   reduction?:any;
   reductions?:any[];
   newFilter?: any;
+  f?: any;
   filter?:any;
   filters?: DadFilter[];
   alert?:any;

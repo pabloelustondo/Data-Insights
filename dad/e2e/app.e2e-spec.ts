@@ -70,6 +70,13 @@ describe('should login to the page', () => {
   });
 /*
   it("should come to the DAD", function (){
+
+    browser.sleep(10000).then(() => {
+      browser.getCurrentUrl().then(url => {
+        expect(url).toEqual('http://localhost:4200/#/dad/page/batstats');
+      });
+    })
+
     expect(browser.getCurrentUrl).toEqual('http://localhost:4200/#/dad/page/batstats');
     browser.sleep(2000);
   });

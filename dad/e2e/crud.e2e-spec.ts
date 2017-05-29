@@ -14,7 +14,7 @@ describe('Crud Component', function() {
   });
 
   it("Should navigate to the right URL", (done) => {
-    browser.get('http://localhost:5000');
+    browser.get('http://localhost:5500');
     console.log("I just want to make sure this test passes so, I know that Protractor is able to start the browser");
     done();
   });
@@ -23,13 +23,13 @@ describe('Crud Component', function() {
 describe('Crud Elements', () => {
 
   it('Should see if the Add Option button is there', () => {
-    browser.get('http://localhost:5000');
+    browser.get('http://localhost:5500');
     expect(element(by.id('selection')).getText()).toEqual('Add Option');
     browser.sleep(2000);
   });
 
   it('Should choose the Add Option', () => {
-    browser.get('http://localhost:5000');
+    browser.get('http://localhost:5500');
     let optionNum = 1;
     if(optionNum){
       let options = element.all(by.tagName('option')).then(function(options) {

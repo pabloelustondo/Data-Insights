@@ -80,7 +80,7 @@ export class DadChart extends DadElement {
                             
                              <i>new filter by</i>
                              <div *ngIf="chart.filters">
-                                 <dadcrud [model]='chart.filters' (optionChanged)='filterBy(value)'></dadcrud>
+                                 <dadcrud [model]='chart.filters'  ></dadcrud> <!--(optionChanged)='()'-->
                              </div>
                             
                             <!-- <i>alert when</i>
@@ -254,7 +254,7 @@ export class DadChartComponent implements OnInit {
     }
 
     clearFilter() {
-        this.chart.newFilter = {name: 'Add a Filter', attribute: true};
+     //   this.chart.newFilter = {name: 'Add a Filter', attribute: true};
     }
 
     editItem() {

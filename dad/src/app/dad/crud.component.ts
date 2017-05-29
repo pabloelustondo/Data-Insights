@@ -58,7 +58,9 @@ export class DadCrudComponent {
     //set
   @Output() optionChanged = new EventEmitter();
 
-    constructor() {}
+    constructor() {
+        this.optionChanged.emit(event);
+    }
 
     addNewOption(event) {
       if(!this.model.options){
