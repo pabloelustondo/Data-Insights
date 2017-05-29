@@ -16,6 +16,7 @@ var mongodb = require('mongodb').MongoClient;
 var rawDataLakeService_1 = require("./services/rawDataLakeService");
 var databaseService_1 = require("./services/databaseService");
 var projection_1 = require("./services/projection");
+var dataService_1 = require("./services/dataService");
 ////////////////////////
 // Express stuff
 var db = new databaseService_1.DatabaseService(appconfig.ddb_address);
@@ -40,9 +41,6 @@ app.use(cors());
 ////////////////////////////
 // CUSTOMER TENANT DATA API
 ////////////////////////////
-function x() {
-    return 'x';
-}
 // Puts a data point into a tenant datasets.
 app.post('/data/request', function (req, res) {
     console.log('request came in');
@@ -89,9 +87,7 @@ app.post('/data/outGoingRequest', function (req, res) {
     // TODO: process metadata to figure out the request
     var metadata = req.body.metadata;
     if (metadata) {
-        res.status(200).send({
-            message: 'Placeholder response: still needs to be implemented.'
-        });
+        dataService_1.processRequest(metadata, res);
     }
     else {
         res.status(400).send({

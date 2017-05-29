@@ -15,6 +15,8 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class AverageDischargeRateController {
     /**
+     * NOTE: THIS API IS DEPRECATED
+     *
      * The AverageDischargeRate represents how quickly the battery is losing the charge per hour over the specified
      * number of days.
      *

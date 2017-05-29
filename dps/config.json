@@ -6,6 +6,7 @@
   "https_cert_location" : "../certificate.cert",
   "accessKey_location" : "./accessKey",
   "cdl_put_endpoint" : "/putdata",
+  "cdl_get_endpoint" : "/getData",
   "aws_region": "us-east-1",
   "aws_s3bucket": "da-s3-bucket/DataExchange",
   "aws_accessKeyFileLocation": "C:/IDA_accessKeyID.txt",

@@ -11,6 +11,8 @@ import * as rp from 'request-promise';
 @Route('Devices')
 export class DischargeRateController {
     /**
+     * NOTE: THIS API IS DEPRECATED
+     *
      * A DischargeRate represents how quickly the battery is losing the charge per hour.
      * This data is retrieved every hour for a given day.
      * A date range is required to get the information.

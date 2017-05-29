@@ -12,6 +12,8 @@ let jwt  = require('jsonwebtoken');
 export class NumberOfApplicationInstalls {
 
     /**
+     * NOTE: THIS API IS DEPRECATED
+     *
      * This api is used to provide a snapshot of number of application installs across all devices
      *
      * To use:

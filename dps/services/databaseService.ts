@@ -34,7 +34,9 @@ export class DatabaseService {
                 headers: headersOptions,
                 url: 'http://localhost:8000/getAllTenants',
             };
-            rp(options).then(data => this.tenants = data.tenants);
+            rp(options).then(data => this.tenants = data.tenants).catch(function(err) {
+                console.log(err);
+            });
         }
     }
 

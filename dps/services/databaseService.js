@@ -25,7 +25,9 @@ var DatabaseService = (function () {
                 headers: headersOptions,
                 url: 'http://localhost:8000/getAllTenants',
             };
-            rp(options).then(function (data) { return _this.tenants = data.tenants; });
+            rp(options).then(function (data) { return _this.tenants = data.tenants; }).catch(function (err) {
+                console.log(err);
+            });
         }
     }
     DatabaseService.prototype.getTenant = function (tenantId) {
