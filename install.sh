@@ -13,5 +13,17 @@ npm install
 cd backend
 npm install
 
-cc ../..
+cd ../../oda
+npm install
+
+cd ../dos
+npm install
+
+cd backend
+npm install
+
+cd ../../cdl
+npm install
+
+cd ..
 echo "installations completed"

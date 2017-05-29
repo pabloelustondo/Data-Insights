@@ -51,6 +51,10 @@ var mongoInfo = {
     uri: appconfig.mongodb_url
 };
 
+function tenantDbUri(req) { //
+    return mongoInfo.uri + "/ddb";
+}
+
 if (config['mongodb-config-location']) {
     var mongoDbCreds = require(config['mongodb-config-location']);
     mongoInfo = {

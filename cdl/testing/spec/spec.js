@@ -3,7 +3,7 @@ describe("Data Analytics Service - CDL", function() {
     describe("GET /", function() {
         it("server runs at least ...", function(done) {
             $.get("/", function(data, textStatus, jqXHR) {
-                expect(data).toBe("CDB");
+                expect(data).toBe("CDL");
                 done();
             });
         });
