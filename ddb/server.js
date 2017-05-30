@@ -112,7 +112,7 @@ app.get('/test', function(req,res){
 });
 
 app.get('/', function(req,res){
-    res.send("Welcome to DDB - The Central Database API for The Data Analytics Server");
+    res.sendFile(path.join(__dirname  + '/testing/spec/SpecRunner.html'));
 });
 
 app.get('/status', function(req,res){

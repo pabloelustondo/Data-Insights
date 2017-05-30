@@ -17,7 +17,8 @@ import {appconfig}  from "../../appconfig";
          <tr  *ngFor="let item of statusReport">
          <td [class]="item.status" >{{item.status}}</td>
            <td > &nbsp; &nbsp;  </td>
-         <td ><a [href]="item.url + '/test'">{{item.name}}</a></td>
+         <td *ngIf="item.name!=='dad'"><a [href]="item.url + '/test'">{{item.name}}</a></td>
+         <td *ngIf="item.name==='dad'"><a [href]="item.url">{{item.name}}</a></td>
          </tr>
         </table> 
 </span>

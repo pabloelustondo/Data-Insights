@@ -36,22 +36,20 @@ console.log(appconfig);
 
 let s3instance:any;
 
-if(appconfig.s3_url==='usemock') {  //REFACTOR THIS OVING AWAY FROM DEPOENDENCIES AS URL.. etc
+if(appconfig.logtype==='file') {  //REFACTOR THIS OVING AWAY FROM DEPOENDENCIES AS URL.. etc
     //we are going to save transactions logs in file system for testing pourposes
     //content will be deleted every time we re-start to keep file system clean.
     var logsFilePath = "./transactionlogs.json";
     try{fs.unlinkSync(logsFilePath)} catch(e){};
-}
-else{
+} else
+if (appconfig.logtype==='s3') {
     try {
         let accessKeyIdFile = fs.readFileSync(config['aws_accessKeyFileLocation'], 'utf8');
         let secretAccessKeyFile = fs.readFileSync(config['aws_secretKeyFileLocation'], 'utf8');
-
         const options = ({
             accessKeyId: accessKeyIdFile,
             secretAccessKey: secretAccessKeyFile
         });
-
         const creds = new AWS.Credentials(options);
 
         s3instance = new AWS.S3({
@@ -59,12 +57,9 @@ else{
             credentials : creds,
             bucket: config['aws_s3bucket']
         });
-
     } catch (e){
         console.log("could not find accessKey and secret or some other aws s3 config error");
     }
-
-
 }
 
 
