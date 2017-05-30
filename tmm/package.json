@@ -5,7 +5,7 @@
   "scripts": {
     "install":"npm install",
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port 8027",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

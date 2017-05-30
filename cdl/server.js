@@ -26,7 +26,7 @@ global.appconfig = appconfig;
 console.log("configuration");
 console.log(appconfig);
 var s3instance;
-if (appconfig.s3_url === 'usemock') {
+if (appconfig.logtype === 'file') {
     //we are going to save transactions logs in file system for testing pourposes
     //content will be deleted every time we re-start to keep file system clean.
     var logsFilePath = "./transactionlogs.json";
@@ -36,7 +36,7 @@ if (appconfig.s3_url === 'usemock') {
     catch (e) { }
     ;
 }
-else {
+else if (appconfig.logtype === 's3') {
     try {
         var accessKeyIdFile = fs.readFileSync(config['aws_accessKeyFileLocation'], 'utf8');
         var secretAccessKeyFile = fs.readFileSync(config['aws_secretKeyFileLocation'], 'utf8');
