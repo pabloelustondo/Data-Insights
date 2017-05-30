@@ -5,6 +5,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DadChart } from './chart.component';
 import { DadSearch } from "./search";
+import {DadConfigService} from "./dadconfig.service";
 
 @Component({
     selector: 'dadcrud',
@@ -54,13 +55,9 @@ export class DadCrudComponent {
   @Input()
     model: any;
 
-  //@Input()
-    //set
   @Output() optionChanged = new EventEmitter();
 
-    constructor() {
-        this.optionChanged.emit(event);
-    }
+    constructor() {}
 
     addNewOption(event) {
       if(!this.model.options){
@@ -73,7 +70,6 @@ export class DadCrudComponent {
       this.model.options.push(this.model.option);
       this.addValue = false;
       this.optionChanged.emit(event);
-
     }
 
     updateSelected(selected_option) {

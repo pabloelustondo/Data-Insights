@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ChangeDetectorRef, Compiler} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef, Compiler} from '@angular/core';
 import {DadElementDataService} from './data.service';
 import {Mapper} from "./mapper";
 import {DadElement} from "./dadmodels";
@@ -8,6 +8,7 @@ import { DadConfigService } from './dadconfig.service';
 import {DadFilter} from "./filter";
 import {Observable} from "rxjs";
 import {DadMap2} from './map2.component';
+import { DadCrudComponent } from './crud.component';
 
 declare var d3, c3: any;
 
@@ -61,7 +62,7 @@ export class DadChart extends DadElement {
                            <br/>
                            <i>filter by</i>
                             
-                            <!-- carrier==='Fido' -->
+                            <!-- carrier==='Fido' 
                             
                            <input readonly="readonly" *ngIf="chart.newFilter" class="form-control" [id]="chart.id + '_newfilteredData'" style="display: inline-block; background-color:white; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name" />
                           
@@ -77,10 +78,11 @@ export class DadChart extends DadElement {
                                     </li>
                                     <li class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}"></li>
                            </ul>   
+                           -->
                             
-                             <i>new filter by</i>
+                          
                              <div *ngIf="chart.filters">
-                                 <dadcrud [model]='chart.filters'  ></dadcrud> <!--(optionChanged)='()'-->
+                                 <dadcrud [model]='chart.filters' (optionChanged)='optionChanged()'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
                              </div>
                             
                             <!-- <i>alert when</i>
@@ -195,7 +197,7 @@ export class DadChartComponent implements OnInit {
     addDimension: boolean = false;
     newDimensionName: string;
     newDimensionAttribute: string;
-  //  addFilter?: boolean = false;
+    addFilter?: boolean = false;
     editTheFilter?: boolean = false;
     addAlert: boolean = false;
     showFilters: boolean = false;
@@ -213,6 +215,25 @@ export class DadChartComponent implements OnInit {
                 private dadConfigsService: DadConfigService,
                 private router: Router, private route: ActivatedRoute,) {}
 
+
+    optionChanged() {
+        if (this.chart.filters['options']){
+            let current = this.chart.filters['options'].length - 1;
+            let newFilter = this.chart.filters['options'][current];
+            if(!this.chart.newFilter) {
+                this.chart.newFilter = {};
+            }
+            this.chart.newFilter.readExpression = newFilter.attribute;
+            this.chart.newFilter.name = newFilter.name;
+            this.dadConfigsService.saveOne(this.chart.filters['options']);
+            this.dadConfigsService.saveOne(this.chart);
+            let chartData = this.mapper.map(this.chart, this.data);
+            this.mapData = chartData;
+            this.changeChartData(chartData);
+        }
+    }
+
+/*
     filterBy(d){
         if (d >= 0){
             let newFilter = this.chart.filters[d];
@@ -226,7 +247,10 @@ export class DadChartComponent implements OnInit {
             this.mapData = chartData;
             this.changeChartData(chartData);
         }
-    else{}
+    else{
+            this.addFilter = false;
+
+        }
     }
 
     addNewFilter() {
@@ -308,6 +332,7 @@ export class DadChartComponent implements OnInit {
         this.alertWhen(this.chart.alerts.length - 1);
        // this.changeMapData();
     }
+    */
 
     selectDimension(d) {
 
