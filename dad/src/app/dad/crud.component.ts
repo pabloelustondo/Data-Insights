@@ -57,7 +57,7 @@ export class DadCrudComponent {
   @Input()
     options:any;
   @Input()
-    option: any;
+    option: any = {name:'doga', attribute:'blah'};
 
   @Output() optionChanged = new EventEmitter();
 
@@ -73,7 +73,7 @@ export class DadCrudComponent {
       };
       this.options.push(this.option);
       this.addValue = false;
-      this.optionChanged.emit(event);
+      this.optionChanged.emit(this.options.length -1);
     }
 
     updateSelected(selected_option) {
@@ -88,15 +88,13 @@ export class DadCrudComponent {
       else this.updateValue = false;
     }
 
-    add(value, selected_option){
+    add(value){
       if(value == -2) {}
       if(value == -1){
         if (!this.addValue) this.addValue = true;
         else this.addValue = false;
       }
-      if(value>=0 && !selected_option){
-          this.optionChanged.emit(event);
-      }
+      this.optionChanged.emit(value);
     }
 
     deleteOption(selected_option) {

@@ -63,7 +63,7 @@ export class DadChart extends DadElement {
                            <i>filter by</i>
                     
                              <div *ngIf="chart.filters">
-                                 <dadcrud [options]='chart.filters' [option]='chart.newFilter' (optionChanged)='optionChanged()'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
+                                 <dadcrud [options]='chart.filters' [option]='chart.newFilter' (optionChanged)='optionChanged($event)'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
                              </div>
                             
                             <!-- <i>alert when</i>
@@ -176,15 +176,16 @@ export class DadChartComponent implements OnInit {
                 private router: Router, private route: ActivatedRoute,) {}
 
 
-    optionChanged() {
-        if (this.chart.filters){
-            let current = this.chart.filters.length - 1;
-            let newFilter = this.chart.filters[current];
-            if(!this.chart.newFilter) {
-                this.chart.newFilter = {};
+    optionChanged(v) {
+        if(!this.chart.newFilter) {
+            this.chart.newFilter = {};
+        }
+        if (this.chart.filters && this.chart.filters.length>0){
+            if(v>=0) {
+                let newFilter = this.chart.filters[v];
+                this.chart.newFilter.readExpression = newFilter.attribute;
+                this.chart.newFilter.name = newFilter.name;
             }
-            this.chart.newFilter.readExpression = newFilter.attribute;
-            this.chart.newFilter.name = newFilter.name;
             this.dadConfigsService.saveOne(this.chart);
             let chartData = this.mapper.map(this.chart, this.data);
             this.mapData = chartData;
