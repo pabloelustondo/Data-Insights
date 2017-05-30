@@ -6,7 +6,7 @@ SET installdir= %cd%
 cd %installdir%
 
 echo "starting kafka zoo"
-start cmd.exe /k startzoo >
+start cmd.exe /k startzoo
 
 echo "starting kafka"
 start cmd.exe /k startkafka

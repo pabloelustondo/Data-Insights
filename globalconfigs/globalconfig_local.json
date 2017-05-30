@@ -3,15 +3,14 @@
   "useSSL":false,
   "userAccessKey":false,
   "ddb_url":"http://localhost:8000",
-  "dss_url":"http://localhost:3003",
-  "dssback_url":"http://localhost:3004",
-  "dad_url":"http://localhost:4200",
-  "dadback_url":"http://localhost:4201",
-  "oda_url":"http://localhost:8001",
-  "cdl_url":"http://localhost:8020",
+  "dss_url":"http://localhost:8023",
+  "dssback_url":"http://localhost:8024",
+  "dad_url":"http://localhost:8020",
+  "dadback_url":"http://localhost:8021",
+  "oda_url":"http://localhost:8022",
+  "cdl_url":"http://localhost:8025",
   "dos_url":"http://localhost:5000",
   "dosback_url":"http://localhost:5001",
   "kafka_url":"localhost:2181",
-  "mongodb_url" : "mongodb://localhost:27017",
-  "s3_url":"http://localhost:8020/tests3"
+  "mongodb_url" : "mongodb://localhost:27017"
 }
