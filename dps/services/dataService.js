@@ -154,9 +154,6 @@ function processRequest(metadata, res) {
                     return t;
                 });
                 var merge = _.map(a, function (item) {
-                    //  console.log ( JSON.stringify( item.Value ));
-                    //  console.log ( '--- \t\t' + _.find(a, { 'id' : item.Value }));
-                    // console.log( _.merge(item, _.find(a, { 'id' : item.Value })));
                     return _.merge(item, _.find(b_1, { 'Value': parseInt(item.id) }));
                 });
                 res.status(200).send({
