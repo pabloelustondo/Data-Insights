@@ -12,6 +12,7 @@ import './controllers/applicationExecutionTime';
 import './controllers/numberOfApplicationInstalls';
 import './controllers/vehicles/ttcVehicleLocations';
 import './controllers/queryController';
+import './controllers/topicsController';
 
 
 import * as winston from 'winston';
@@ -222,7 +223,12 @@ app.use(logger);
 // }));
 
 RegisterRoutes(app);
+app.use( (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.status(err.status || 500).send(err.message || 'An error occurred during the request.');
+});
 app.use(logger);
+
+
 /* tslint:disable-next-line */
 
 
