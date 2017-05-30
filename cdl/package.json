@@ -1,33 +1,35 @@
 {
-  "name": "DDB",
+  "name": "CDL",
   "contributors": "Pablo, Varun, Nathan ",
-  "description": "DAS Central Database, here we store, tenants, users,..etc",
+  "description": "Cenrtal Customer Database",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
     "@types/body-parser": "1.16.3",
+    "@types/core-js": "0.9.41",
     "@types/cors": "2.8.1",
     "@types/express": "4.0.35",
     "@types/helmet": "0.0.34",
     "@types/mongodb": "2.2.2",
-    "@types/request-promise": "4.1.33",
-    "@types/core-js": "0.9.41",
+    "@types/node": "6.0.33",
     "@types/request": "0.0.36",
-    "@types/node" : "6.0.33",
+    "@types/request-promise": "4.1.33",
+    "aws-sdk": "2.7.11",
     "body-parser": "1.14.1",
     "cors": "2.8.3",
+    "cp-cli": "^1.0.2",
     "express": "4.15.2",
     "helmet": "3.6.0",
     "mongodb": "2.2.19",
     "request": "2.81.0",
-    "aws-sdk": "2.7.11",
     "request-promise": "4.1.1"
   },
   "scripts": {
-    "start": "node server.js",
-    "debugwin": "node %NODE_DEBUG_OPTION% server.js",
-    "debugmac": "node $NODE_DEBUG_OPTION server.js",
-    "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js"
+    "start": "npm run getConfigs & node server.js",
+    "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
+    "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
+    "test": "echo unit tests not implemented for now",
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
   },
   "devDependencies": {
     "typescript": "2.3.2"

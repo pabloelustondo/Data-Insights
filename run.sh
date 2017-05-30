@@ -1,44 +1,48 @@
-::Start Everything
+#!/bin/bash          
+ echo "Run SOTI Insights"
+ D="$(pwd)"
+ echo "Current Folder:  ${D}"
+ echo "Parameter: $1"
+ if [ -z "$1" ] 
+ then 
+   echo "Using Local Config (pass parameter for specific config)"
+   C="local"
+ else 
+   C="$1"
+ fi
+ CF="globalconfig_${C}.json"
+ echo "Copying Config: ${CF}"
+ cp "./globalconfigs/${CF}" "./globalconfig.json"
 
-call setconfig %1
+ echo "starting mongo"
+ sudo mongod > ./dos/logs/mongod.log&
 
-SET installdir= %cd%
-cd %installdir%
+ echo "starting zoo"
+ sudo startzoo > ./dos/logs/zoo.log&
 
-echo "starting kafka zoo"
-start cmd.exe /k startzoo
+ echo "starting kafka"
+ sudo startkafka > ./dos/logs/kafka.log&
 
-sleep 2
-
-echo "starting kafka"
-start cmd.exe /k startkafka
-
-echo "starting mongo"
-start cmd.exe /k mongod
-
-echo "starting ddb"
-start cmd.exe /k "cd %installdir%\ddb & call npm start"
-
-ehoc "starting dss"
-start cmd.exe /k "cd %installdir%\dss & call npm start"
-
-echo "starting dss backend"
-start cmd.exe /k "cd %installdir%\dss\backend & call npm start"
-
-echo "starting dad"
-start cmd.exe /k "cd %installdir%\dad & call npm run start"
-
-echo "starting dad backend"
-start cmd.exe /k "cd %installdir%\dad\backend & call npm run start"
-
-echo "starting oda"
-start cmd.exe /k "cd %installdir%\oda & call npm run start"
-
-echo "starting dos"
-start cmd.exe /k "cd %installdir%\dos & call npm run start"
-
-echo "starting dos backend"
-start cmd.exe /k "cd %installdir%\dos\backend & call npm run start"
-
-echo "starting cdl"
-start cmd.exe /k "cd %installdir%\cdl & call npm run start"
+ cd dos
+ npm start > ../dos/logs/dos.log&
+ cd backend
+ npm start > ../../dos/logs/dosback.log&
+ cd ../..
+ cd ddb
+ npm start > ../dos/logs/ddb.log&
+ cd ..
+ cd dss
+ npm start > ../dos/logs/dss.log&
+ cd backend
+ npm start > ../../dos/logs/dssback.log&
+ cd ../..
+ cd dad
+ npm start > ../dos/logs/dad.log&
+ cd backend
+ npm start > ../../dos/logs/dadback.log&
+ cd ../..
+ cd oda
+ npm start > ../dos/logs/oda.log&
+ cd ..
+ cd cdl
+ npm start > ../dos/logs/cdl.log&

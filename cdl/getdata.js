@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var config = require('./config.json');
 var appconfig = require('./appconfig.json');
 var aggreagateFunction = function () {

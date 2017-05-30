@@ -11,6 +11,7 @@ import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
 import './controllers/applicationExecutionTime';
 import './controllers/numberOfApplicationInstalls';
 import './controllers/vehicles/ttcVehicleLocations';
+import './controllers/queryController';
 
 
 import * as winston from 'winston';
@@ -69,8 +70,8 @@ var kafkaClient = new kafka.Client(appconfig.kafka_url);
 
 var payloads =  [{ topic: 'demo', partition: 0 }];
 var options = { autoCommit: false};
-
-var kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
+try {
+    var kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
     /*
      Consumer(client, payloads, options)
      client: client which keeps a connection with the Kafka server. Note: it's recommend that create new client for different consumers.
@@ -114,10 +115,16 @@ var kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
      */
 
 
-kafkaConsumer.on('message', function (message:any) {
-    console.log(message);
-    if (io) io.emit('chat message', message.value);
-});
+    kafkaConsumer.on('message', function (message: any) {
+        console.log(message);
+        if (io) io.emit('chat message', message.value);
+    });
+
+} catch(e){
+    console.log("ODA could not start kafka consumer");
+
+}
+
 
 var io = require('socket.io')(http);
 

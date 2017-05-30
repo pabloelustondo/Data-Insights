@@ -30,7 +30,10 @@ call npm install
 cd backend
 call npm install
 
-cd ..\..
+cd ..\..\cdl
+npm install
+
+cd ..
 
 echo "installations completed"
 
