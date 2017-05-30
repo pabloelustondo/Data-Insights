@@ -64,7 +64,7 @@ export class TopicsController {
             return user;
         } else {
 
-            //TODO: Implement correct error handling. Look at IDA's implementation using TSOA library
+            // TODO: Implement correct error handling. Look at IDA's implementation using TSOA library
             throw new Error ('Missing token');
         }
 
