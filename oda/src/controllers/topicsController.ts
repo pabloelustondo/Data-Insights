@@ -40,28 +40,49 @@ export class TopicsController {
 
             let mData = ['topics : string [] '];
 
+            if (config.testingMode) {
 
-            let client = kafka.getClient('tenantId'); // pass in tenantId to get client for a tenant (R
+                let testData = ['vehicleInfo', 'customTopic'];
+                // returns test data for now
+                 const user: any = {
+                    createdAt: new Date(),
+                    metadata: mData,
+                    data: testData
+                };
+                return user;
+            } else {
 
-            /*
-            client.once('connect', function () {
-                client.loadMetadataForTopics([], function (error: any, results: any) {
-                    if (error) {
-                        return console.error(error);
-                    }
-                    console.log('%j', _.get(results, '1.metadata'));
-                });
-            });
-            */
-            let testData = ['vehicleInfo', 'customTopic'];
-            // returns test data for now
+                // call dps to get metadata for a tenant
 
-            const user: any = {
-                createdAt: new Date(),
-                metadata: mData,
-                data: testData
-            };
-            return user;
+                let testData = ['vehicleInfo', 'customTopic'];
+                // returns test data for now
+
+                let xqs = {tenantId: 'test'};
+                const xurl = 'https://' + config['dps_address'] + '/getMetadata';
+
+                const options: rp.OptionsWithUrl = {
+                    headers: {
+                        'x-api-key': config['aws-x-api-key']
+                    },
+                    json: true,
+                    method: 'GET',
+                    qs: xqs,
+                    url: xurl
+                };
+
+                let p = await rp(options);
+                let mData = ['Description of discharge rate', 'NumberOfDevices', 'Rng', 'Percentage'];
+
+
+                const user: SDS = {
+                    createdAt: new Date(),
+                    metadata: mData,
+                    data: p
+                };
+
+                return user;
+
+            }
         } else {
 
             // TODO: Implement correct error handling. Look at IDA's implementation using TSOA library
