@@ -61,28 +61,9 @@ export class DadChart extends DadElement {
                            </select>
                            <br/>
                            <i>filter by</i>
-                            
-                            <!-- carrier==='Fido' 
-                            
-                           <input readonly="readonly" *ngIf="chart.newFilter" class="form-control" [id]="chart.id + '_newfilteredData'" style="display: inline-block; background-color:white; color:black; font-weight: bold; max-width:150px;" [value]="chart.newFilter.name" />
-                          
-                           <div class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black; cursor:pointer;" ></div>
-                           <div style="cursor:pointer;" class="glyphicons glyphicons-list" (click)="select()" ></div>
-                           <div style="cursor:pointer;" class="glyphicons glyphicons-filter-remove" (click)="removeFilter()"></div>
-
-                           <ul *ngIf="showFilters" style="list-style-type:none; cursor:pointer;">
-                                    <li (click)="filterBy($event.target.value)" [id]="chart.id + '_filteredData'" style="color:black;" *ngFor="let fil of chart.filters; let i=index" value="{{i}}">{{fil.name}}
-             
-                                    <span class="glyphicons glyphicons-pencil" (click)="editItem()"></span>
-                                    <span class="glyphicons glyphicons-bin" (click)="removeItem(fil)"></span>
-                                    </li>
-                                    <li class="glyphicons glyphicons-plus-sign" (click)="filterBy($event.target.value)" [id]="chart.id + '_newfilteredData'" style="color:black;" value="{{-1}}"></li>
-                           </ul>   
-                           -->
-                            
-                          
+                    
                              <div *ngIf="chart.filters">
-                                 <dadcrud [model]='chart.filters' (optionChanged)='optionChanged()'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
+                                 <dadcrud [options]='chart.filters' [option]='chart.newFilter' (optionChanged)='optionChanged()'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
                              </div>
                             
                             <!-- <i>alert when</i>
@@ -105,20 +86,8 @@ export class DadChart extends DadElement {
                                <div><input style="height:32px;" [(ngModel)]="newDimensionAttribute"  type="text"   placeholder="Dimension Attribute"></div>
                                <div><button (click)="addNewDimension()">Add New Dimension</button></div>     
                            </div>
-                           
-                           <div *ngIf="addFilter">
-                               <div></div>
-                                   <div><input style="height:32px;" [(ngModel)]="newFilterName" type="text" placeholder="Filter Name"></div>
-                                   <div><input style="height:32px;" [(ngModel)]="newFilterAttribute" type="text" placeholder="Filter Expression"></div>
-                               <div><button (click)="addNewFilter()">Add New Filter</button></div>    
-                            </div>
      </div>
-                        <div *ngIf="editExpression">
-                           <div></div>
-                               <div><input style="height:32px;" [(ngModel)]="updatedFilterName" type="text" placeholder="Filter Name"></div>
-                               <div><input style="height:32px;" [(ngModel)]="updatedFilterAttribute" type="text" placeholder="Filter Expression"></div>
-                               <div><button (click)="editFilter()">Update</button></div>    
-                        </div>         
+                            
      
                         <!--
                            <div *ngIf="addAlert">
@@ -197,15 +166,6 @@ export class DadChartComponent implements OnInit {
     addDimension: boolean = false;
     newDimensionName: string;
     newDimensionAttribute: string;
-    addFilter?: boolean = false;
-    editTheFilter?: boolean = false;
-    addAlert: boolean = false;
-    showFilters: boolean = false;
-    editExpression: boolean = false;
-    newFilterName: string;
-    newFilterAttribute: string;
-    updatedFilterName: string;
-    updatedFilterAttribute: string;
     newAlertAttribute: string;
     newAlertName: string;
     intervalId: any;
@@ -217,26 +177,9 @@ export class DadChartComponent implements OnInit {
 
 
     optionChanged() {
-        if (this.chart.filters['options']){
-            let current = this.chart.filters['options'].length - 1;
-            let newFilter = this.chart.filters['options'][current];
-            if(!this.chart.newFilter) {
-                this.chart.newFilter = {};
-            }
-            this.chart.newFilter.readExpression = newFilter.attribute;
-            this.chart.newFilter.name = newFilter.name;
-            this.dadConfigsService.saveOne(this.chart.filters['options']);
-            this.dadConfigsService.saveOne(this.chart);
-            let chartData = this.mapper.map(this.chart, this.data);
-            this.mapData = chartData;
-            this.changeChartData(chartData);
-        }
-    }
-
-/*
-    filterBy(d){
-        if (d >= 0){
-            let newFilter = this.chart.filters[d];
+        if (this.chart.filters){
+            let current = this.chart.filters.length - 1;
+            let newFilter = this.chart.filters[current];
             if(!this.chart.newFilter) {
                 this.chart.newFilter = {};
             }
@@ -247,92 +190,7 @@ export class DadChartComponent implements OnInit {
             this.mapData = chartData;
             this.changeChartData(chartData);
         }
-    else{
-            this.addFilter = false;
-
-        }
     }
-
-    addNewFilter() {
-//        this.addFilter = false;
-        if(!this.chart.filters){
-            this.chart.filters = [];
-        }
-        this.chart.filters.push({attribute: this.newFilterAttribute, name: this.newFilterName});
-        this.filterBy(this.chart.filters.length - 1);
-        this.showFilters = false;
-    }
-//brand==='Apple'
-    editFilter(f){
-        this.editTheFilter = false;
-        this.removeItem(this.chart.newFilter);
-        this.chart.filters.push({attribute: this.updatedFilterAttribute, name: this.updatedFilterName});
-        this.filterBy(this.chart.filters.length - 1);
-        this.editExpression = false;
-        this.showFilters = false;
-    }
-
-    select() {
-        if (!this.showFilters) this.showFilters = true;
-        else this.showFilters = false;
-    }
-
-    clearFilter() {
-     //   this.chart.newFilter = {name: 'Add a Filter', attribute: true};
-    }
-
-    editItem() {
-       // this.addFilter = false;
-        if (!this.editExpression) this.editExpression = true;
-        else this.editExpression = false;
-    }
-
-    removeItem(item: DadFilter) {
-        let index = this.chart.filters.indexOf(item);
-        this.chart.filters.splice(index, 1);
-        this.clearFilter();
-        let chartData = this.mapper.map(this.chart, this.data);
-        this.changeMapData();
-        this.changeChartData(chartData);
-     //   this.addFilter = false;
-        this.editExpression = false;
-    }
-
-    removeFilter() {
-        this.clearFilter();
-        let chartData = this.mapper.map(this.chart, this.data);
-        this.changeMapData();
-        this.changeChartData(chartData);
-      //  this.addFilter = false;
-    }
-
-    alertWhen(d){
-        if (d >= 0){
-            let alert = this.chart.alerts[d];
-            if(!this.chart.alert) {
-                this.chart.alert = {};
-            }
-            this.chart.alert = alert.expression;
-            this.dadConfigsService.saveOne(this.chart);
-            let chartData = this.mapper.map(this.chart, this.data);
-            this.mapData = chartData;
-            this.changeChartData(chartData);
-        }
-        else {
-            this.addAlert = true;
-        }
-    }
-
-    addNewAlert() {
-        this.addAlert = false;
-        if(!this.chart.alerts){
-            this.chart.alerts = [];
-        }
-        this.chart.alerts.push({expression: this.newAlertAttribute, name: this.newAlertName});
-        this.alertWhen(this.chart.alerts.length - 1);
-       // this.changeMapData();
-    }
-    */
 
     selectDimension(d) {
 
@@ -405,9 +263,6 @@ export class DadChartComponent implements OnInit {
         this.miniChartHeight = this.chart.height;
         console.log("CHART starts drawing ON INIT:" + this.chart.id);
         this.realDataMonitoring();
-        if(!this.chart.newFilter) {
-            this.chart.newFilter = {name:'Add a Filter'};
-        }
     }
 
     ngOnDestroy() {

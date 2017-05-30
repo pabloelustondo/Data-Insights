@@ -4,6 +4,7 @@
 import {DadChart} from "./chart.component";
 import {DadWidget} from "./widget.component";
 import {DadTable} from "./table.component";
+import {DadCrudComponent} from "./crud.component";
 
 
 export class DadUser {

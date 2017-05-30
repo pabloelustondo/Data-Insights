@@ -15,7 +15,7 @@ import {DadConfigService} from "./dadconfig.service";
           <div class="hidden-div" id="hidden-div">
 
           <select #selectedOption (change)="add($event.target.value);" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
-             <option id="created" style="color:black;" *ngFor="let option of model.options; let i=index" value="{{i}}" [selected]="option.name" >{{ option.name }}</option>
+             <option id="created" style="color:black;" *ngFor="let option of options; let i=index" value="{{i}}" [selected]="option.name" >{{ option.name }}</option>
              <option style="color:black;" value="{{-2}}">No Filter Applied</option>
              <option  id="selection" style="color:black;" value="{{-1}}" >Add Option</option> 
           </select>     
@@ -33,10 +33,10 @@ import {DadConfigService} from "./dadconfig.service";
             <div><input id="updatedOptionAttribute" style="height:32px;" [(ngModel)]="updatedOptionAttribute" type="text" placeholder="New Option Expression"></div>
             <span id='apply' class="glyphicons glyphicons-ok" (click)="updateSelected(selectedOption.value)"></span>
             <span id='delete' class="glyphicons glyphicons-bin" (click)="deleteOption(selectedOption.value)"></span>
-            <span id='cancel' onclick="getElementById('edit').style.display = '';" class="glyphicons glyphicons-remove" (click)="update()"></span>
+            <span id='cancel' class="glyphicons glyphicons-remove" (click)="update()"></span>
           </div>
           
-           <span id="edit" onclick="getElementById('hidden-div').style.display = 'block'; this.style.display = 'none'" class="glyphicons glyphicons-pencil" (click)="update()"></span>
+           <span id="edit" class="glyphicons glyphicons-pencil" (click)="update()"></span>
            
       </div>
     `,
@@ -54,28 +54,32 @@ export class DadCrudComponent {
 
   @Input()
     model: any;
+  @Input()
+    options:any;
+  @Input()
+    option: any;
 
   @Output() optionChanged = new EventEmitter();
 
     constructor() {}
 
     addNewOption(event) {
-      if(!this.model.options){
-        this.model.options=[];
+      if(!this.options){
+        this.options=[];
       }
-      this.model.option = {
+      this.option = {
         name: this.optionName,
         attribute: this.optionAttribute
       };
-      this.model.options.push(this.model.option);
+      this.options.push(this.option);
       this.addValue = false;
       this.optionChanged.emit(event);
     }
 
     updateSelected(selected_option) {
       this.updateValue;
-      this.model.options[selected_option].name = this.updatedOptionName;
-      this.model.options[selected_option].attribute = this.updatedOptionAttribute;
+      this.options[selected_option].name = this.updatedOptionName;
+      this.options[selected_option].attribute = this.updatedOptionAttribute;
       this.updateValue = false;
     }
 
@@ -84,17 +88,19 @@ export class DadCrudComponent {
       else this.updateValue = false;
     }
 
-    add(value){
+    add(value, selected_option){
       if(value == -2) {}
       if(value == -1){
         if (!this.addValue) this.addValue = true;
         else this.addValue = false;
       }
-      this.optionChanged.emit(value);
+      if(value>=0 && !selected_option){
+          this.optionChanged.emit(event);
+      }
     }
 
     deleteOption(selected_option) {
-      this.model.options.splice(selected_option, 1);
+      this.options.splice(selected_option, 1);
       this.updateValue = false;
     }
 }
