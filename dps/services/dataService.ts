@@ -178,11 +178,7 @@ export function processRequest (metadata: any, res) {
 
                 let merge = _.map(a, function(item) {
 
-                  //  console.log ( JSON.stringify( item.Value ));
-                  //  console.log ( '--- \t\t' + _.find(a, { 'id' : item.Value }));
-                   // console.log( _.merge(item, _.find(a, { 'id' : item.Value })));
-
-                    return _.merge(item,  _.find(b, { 'Value' : parseInt(item.id) }));
+                return _.merge(item,  _.find(b, { 'Value' : parseInt(item.id) }));
                 });
 
                res.status(200).send({
