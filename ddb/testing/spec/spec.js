@@ -5,7 +5,7 @@ describe("Data Analytics Service - DDB", function() {
     describe("GET /", function() {
         it("returns Welcome to DDB - The Central Database API for The Data Analytics Server", function(done) {
             $.get("/", function(data, textStatus, jqXHR) {
-                expect(data).toBe("Welcome to DDB - The Central Database API for The Data Analytics Server");
+                expect(data).toBe("DDB");
                 done();
             });
         });
