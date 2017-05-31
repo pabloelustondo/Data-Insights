@@ -6,14 +6,18 @@ import {DadWidget} from "./widget.component";
 import {DadTable} from "./table.component";
 
 
-export interface DadUser {
-  userid: string,
-  username: string,
-  tenantid: string
+export class DadUser {
+
+  userid: string;
+  username: string;
+  tenantid: string;
 }
+
+export type DadElementType = "chart" | "widget" | "table" | "page";
 
 export class DadElement {
   id: string;
+  elementType?: DadElementType;
   name?: string;
   data?: any;
   mappedData?: any;

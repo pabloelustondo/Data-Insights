@@ -1,0 +1,6 @@
+{
+  "id":"dosback",
+  "name":"DOS Backend",
+  "dependencies":[],
+  "secret"  : "1234"
+}

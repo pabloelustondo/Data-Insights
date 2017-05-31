@@ -1,4 +1,10 @@
 "use strict";
+var DadUser = (function () {
+    function DadUser() {
+    }
+    return DadUser;
+}());
+exports.DadUser = DadUser;
 var DadElement = (function () {
     function DadElement() {
         this.intervalRefreshOption = false;

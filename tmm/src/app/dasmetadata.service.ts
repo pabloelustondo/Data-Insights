@@ -4,7 +4,7 @@
 
 import { Injectable }    from '@angular/core';
 import { Headers, Http } from '@angular/http';
-let appconfig = require("../../../appconfig.json");
+let appconfig = require("../../../defaultconfig.json");
 import 'rxjs/add/operator/toPromise';
 
 import { DasMetadata } from '../model/dasmetadata';

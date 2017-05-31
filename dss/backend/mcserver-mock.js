@@ -11,7 +11,7 @@ var username;
 var TestTenant =
   {
     accountid: "test",
-    mcurl: "http://localhost:3004",
+    mcurl: appconfig.dssback_url,
     apikey:"112233445511223344",
     domainid: "test",
     username: "admin",
@@ -47,12 +47,15 @@ app.get('/oauth/authorize', function(req,res) {
   var tenantid = req.params['state'];
   tenantid = 'test'; //why is not coming in params?
 
+  var state = req.query['state'].replace("?","&");
+
   username = req.params['code'];  //this is a trick to be able to simulate mobicontrol... username
 
   res.status(200).send("<html>" +
     "<script>function submit(){ " +
     "var username = document.getElementById('username').value;" +
-    "var url = 'http://localhost:3003/#/?code=' + username + '&state=test'; " +
+    "var url = '" +  appconfig.dss_url + "/#/?code=' + username + '&state=" + state + "';" +
+ //   "alert(url);" +
     "window.location.href =  url;  } " +
     "</script> " +
     "This is a simulated IDP (Identity Provider) used for testing purposes. Properly configured tenants will be redirected to the proper IDP </br>" +

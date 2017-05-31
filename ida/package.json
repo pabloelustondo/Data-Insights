@@ -34,7 +34,7 @@
     "querystring": "0.2.0",
     "request": "2.79.0",
     "request-promise": "4.1.1",
-    "tsoa": "1.0.9",
+    "tsoa": "1.1.8",
     "chai": "3.5.0",
     "mocha-typescript": "1.0.11",
     "winser": "1.0.2",

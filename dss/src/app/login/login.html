@@ -1,0 +1,16 @@
+<div class="login jumbotron center-block">
+  <h2 id="title">SOTI Insight</h2>
+  <h3>Single Sign-on via MobiControl</h3>
+  <h2 *ngIf="error">{{error}}</h2>
+  <form role="form" (submit)="login($event, loginmethod, domainid)">
+    <div class="form-group">
+      <label for="domainid">Tenant ID</label>
+      <input type="text" #domainid class="form-control" id="domainid" placeholder="Tenant ID for SOTI Insight" required>
+    </div>
+
+  <button type="submit" class="btn btn-default">Login</button>
+    <div style="height: 40px"></div>
+    <a [routerLink]="['/signup']"><h4>Click here to Enroll</h4></a>
+
+</form>
+</div>

@@ -1,22 +1,42 @@
-::Script presumes the presence of IDA_accessKeyID.txt & IDA_secretAccessKey.txt at root of C:\ . They can be blank.
-::Change Installdir to your own install
-::USE AS IS. Only works on windows. Contact Peter Maney.
-::WARNING WARNING we recomend newcomers read README and do this installation/run module by module.
-@echo off
+::Start Everything
+
+call setconfig %1
 
 SET installdir= %cd%
 cd %installdir%
 
-:: Its Mongo Time 2.0
-mkdir data_folder
-start call mongod -dbpath ./data_folder 
-start call mongo
+echo "starting kafka zoo"
+start cmd.exe /k startzoo
 
-::Start Everything
- cd %installdir%\ddb & start call npm start
- cd %installdir%\oda & start call npm start
- cd %installdir%\dss\backend & start call npm start
- cd %installdir%\dss & start call npm start
- cd %installdir%\ida & start call npm start
- cd %installdir%\dad & start call npm start
- cd %installdir%\dlm & start call npm start
+echo "starting kafka"
+start cmd.exe /k startkafka
+
+echo "starting mongo"
+start cmd.exe /k mongod
+
+echo "starting ddb"
+start cmd.exe /k "cd %installdir%\ddb & call npm start"
+
+ehoc "starting dss"
+start cmd.exe /k "cd %installdir%\dss & call npm start"
+
+echo "starting dss backend"
+start cmd.exe /k "cd %installdir%\dss\backend & call npm start"
+
+echo "starting dad"
+start cmd.exe /k "cd %installdir%\dad & call npm run start"
+
+echo "starting dad backend"
+start cmd.exe /k "cd %installdir%\dad\backend & call npm run start"
+
+echo "starting oda"
+start cmd.exe /k "cd %installdir%\oda & call npm run start"
+
+echo "starting dos"
+start cmd.exe /k "cd %installdir%\dos & call npm run start"
+
+echo "starting dos backend"
+start cmd.exe /k "cd %installdir%\dos\backend & call npm run start"
+
+echo "starting cdl"
+start cmd.exe /k "cd %installdir%\cdl & call npm run start"

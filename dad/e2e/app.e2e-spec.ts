@@ -8,13 +8,60 @@ import { PAGES } from "../src/app/dad/sample.page";
 import { DadPage, DadPageComponent } from "../src/app/dad/page.component";
 import { protractor, element, by } from 'protractor';
 
-let sleep = function(){browser.sleep(1000)};
+let sleep = function(){browser.sleep(3000)};
 
-describe('SOTI DATA ANALYTICS DASHBOARD', () => {
+describe('SOTI DATA ANALYTICS LOGIN PAGE', () => {
+
+  beforeEach(() => {
+    browser.get('http://localhost:3003');
+  });
+
   it('should see if the file is loaded and used', () => {
     expect(true).toBe(true);
   });
 
+  sleep();
+
+  it("title is SOTI Insight", function() {
+    let title = element(by.id('title'));
+    expect(title.getText()).toBe('SOTI Insight');
+  });
+
+  sleep();
+
+  it("it should have 1 login button", function(done) {
+    element.all(by.tagName('button')).then(function (button) {
+      expect(button.length).toBe(1);
+      done();
+    });
+  });
+});
+
+describe('should login to the page', () => {
+
+  beforeEach(() => {
+    browser.get('http://localhost:3003');
+  });
+
+  it("should ()put the user's tenant ID('test') and hit the login button", function() {
+    let tenantID = element(by.id('domainid'));
+    let button = element(by.className('btn btn-default'));
+    tenantID.sendKeys('test');
+    sleep();
+    button.click()
+    browser.ignoreSynchronization = true;
+    browser.waitForAngular();
+    browser.sleep(3000);
+    expect(browser.getCurrentUrl()).toEqual('http://localhost:3004/oauth/authorize?response_type=code&client_id=undefined&state=test');
+    sleep();
+  });
+
+});
+
+
+
+
+/*
   it("title is SOTI Data Analytics Dashboard", function() {
     browser.get('http://localhost:4200/#/dad/page/batstats');
     expect(browser.getTitle()).toEqual('SOTI Data Analytics Dashboard');
@@ -23,7 +70,7 @@ describe('SOTI DATA ANALYTICS DASHBOARD', () => {
   it("it should have 4 widgets", function(done) {
     browser.get('http://localhost:4200/#/dad/page/batstats');
     element.all(by.css('dadWidget')).then(function (elements) {
-      expect(elements.length).toBe(4);
+      expect(elements.length).toBe(2);
       done();
     });
   });
@@ -139,7 +186,10 @@ describe('Drill Charts', () => {
         });
 
       });
-
+    });
+  });
+});
+*/
 
       /*elements[0].click().then(function() {
         browser.sleep(1000);
@@ -147,9 +197,7 @@ describe('Drill Charts', () => {
         sleep();
         done();
       });*/
-    });
-  });
-});
+
 
 
 

@@ -14,7 +14,7 @@ var core_1 = require('@angular/core');
 var data_service_1 = require('./data.service');
 var mapper_1 = require("./mapper");
 var dadmodels_1 = require("./dadmodels");
-var chart_service_1 = require("./chart.service");
+var dadconfig_service_1 = require('./dadconfig.service');
 var filter_1 = require("./filter");
 var DadChart = (function (_super) {
     __extends(DadChart, _super);
@@ -30,11 +30,10 @@ var DadChart = (function (_super) {
 }(dadmodels_1.DadElement));
 exports.DadChart = DadChart;
 var DadChartComponent = (function () {
-    function DadChartComponent(cdr, dadChartDataService, dadTableConfigsService, dadChartConfigsService, router, route) {
+    function DadChartComponent(cdr, dadChartDataService, dadConfigsService, router, route) {
         this.cdr = cdr;
         this.dadChartDataService = dadChartDataService;
-        this.dadTableConfigsService = dadTableConfigsService;
-        this.dadChartConfigsService = dadChartConfigsService;
+        this.dadConfigsService = dadConfigsService;
         this.router = router;
         this.route = route;
         this.mapper = new mapper_1.Mapper();
@@ -81,7 +80,7 @@ var DadChartComponent = (function () {
             }
             this.chart.newFilter.readExpression = newFilter.attribute;
             this.chart.newFilter.name = newFilter.name;
-            this.dadChartConfigsService.saveOne(this.chart);
+            this.dadConfigsService.saveOne(this.chart);
             var chartData = this.mapper.map(this.chart, this.data);
             this.mapData = chartData;
             this.changeChartData(chartData);
@@ -148,7 +147,7 @@ var DadChartComponent = (function () {
                 this.chart.alert = {};
             }
             this.chart.alert = alert_1.expression;
-            this.dadChartConfigsService.saveOne(this.chart);
+            this.dadConfigsService.saveOne(this.chart);
             var chartData = this.mapper.map(this.chart, this.data);
             this.mapData = chartData;
             this.changeChartData(chartData);
@@ -170,7 +169,7 @@ var DadChartComponent = (function () {
         if (d >= 0) {
             var newDimension = this.chart.dimensions[d];
             this.chart.reduction.dimension = newDimension;
-            this.dadChartConfigsService.saveOne(this.chart);
+            this.dadConfigsService.saveOne(this.chart);
             var chartData = this.mapper.map(this.chart, this.data);
             chartData.unload = true;
             this.c3chart.load(chartData);
@@ -187,7 +186,7 @@ var DadChartComponent = (function () {
     DadChartComponent.prototype.selectMetric = function (d) {
         var newMetric = this.chart.metrics[d];
         this.chart.reduction.metric = newMetric;
-        this.dadChartConfigsService.saveOne(this.chart);
+        this.dadConfigsService.saveOne(this.chart);
         var chartData = this.mapper.map(this.chart, this.data);
         chartData.unload = true;
         this.c3chart.load(chartData);
@@ -196,7 +195,7 @@ var DadChartComponent = (function () {
         console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     };
     DadChartComponent.prototype.onRawData = function (message) {
-        this.router.navigate(['table', 100, this.chart.id], { relativeTo: this.route });
+        this.router.navigate(['table', 100, this.chart.id, this.chart.tableId], { relativeTo: this.route });
     };
     DadChartComponent.prototype.onRefresh = function () {
         if (!this.refreshMode)
@@ -443,33 +442,34 @@ var DadChartComponent = (function () {
     ;
     DadChartComponent.prototype.goToTable = function (d, chart, router, route, self) {
         //create the table
-        var table = self.dadTableConfigsService.getTableConfig(self.chart.tableId);
-        var tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
-        var count = chart.data.length;
-        //let find the attribute   come in the reducer dimensin
-        if (chart.reduction) {
-            tableConfig.id += self.chart.id + ((d) ? d.id : "");
-            tableConfig.filter = {};
-            var attribute = chart.reduction.dimension.attribute;
-            var value = void 0;
-            if (chart.type === 'pie') {
-                value = d.id;
+        self.dadConfigsService.getTableConfig(self.chart.tableId).then(function (table) {
+            var tableConfig = JSON.parse(JSON.stringify(table)); //to clone object
+            var count = chart.data.length;
+            //let find the attribute   come in the reducer dimensin
+            if (chart.reduction) {
+                tableConfig.id += self.chart.id + ((d) ? d.id : "");
+                tableConfig.filter = {};
+                var attribute = chart.reduction.dimension.attribute;
+                var value = void 0;
+                if (chart.type === 'pie') {
+                    value = d.id;
+                }
+                if (chart.type === 'bar') {
+                    value = chart.mappedData.columns[0][d.x + 1];
+                }
+                tableConfig.filter[attribute] = value;
+                var filter = new filter_1.DadFilter();
+                var filteredData = filter.filter(tableConfig, chart.data);
+                count = filteredData.length;
             }
-            if (chart.type === 'bar') {
-                value = chart.mappedData.columns[0][d.x + 1];
+            self.dadConfigsService.saveOne(tableConfig);
+            if (chart.action === 'drillFromElement') {
+                router.navigate(['table', count, chart.id, tableConfig.id], { relativeTo: route });
             }
-            tableConfig.filter[attribute] = value;
-            var filter = new filter_1.DadFilter();
-            var filteredData = filter.filter(tableConfig, chart.data);
-            count = filteredData.length;
-        }
-        self.dadTableConfigsService.saveOne(tableConfig);
-        if (chart.action === 'drillFromElement') {
-            router.navigate(['table', count, chart.id, tableConfig.id], { relativeTo: route });
-        }
-        else {
-            router.navigate(['table', count, tableConfig.id], { relativeTo: route });
-        }
+            else {
+                router.navigate(['table', count, tableConfig.id], { relativeTo: route });
+            }
+        });
     };
     ;
     //mini applied
@@ -717,8 +717,8 @@ var DadChartComponent = (function () {
     DadChartComponent = __decorate([
         core_1.Component({
             selector: 'dadchart',
-            providers: [data_service_1.DadElementDataService, chart_service_1.DadTableConfigsService, chart_service_1.DadChartConfigsService],
-            template: "\n<div class=\"dadChart\">\n    <div *ngIf=\"!chart.mini && !chart.embeddedChart\" [ngClass]=\"chartClass()\">  \n        <div class=\"inside\">\n          <div class=\"content card-inverse card-secondary\">    \n            <div class=\"card-block pb-0\">\n                <div class=\"content card card-secondary\">   \n                    <div class=\"btn-group float-xs-right\" dropdown>\n                        <button style=\"color:black;\" type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                            <i class=\"icon-settings\"></i>\n                        </button>\n                        <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('')\">Edit</div></button>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRawData()\">See raw fact data</div></button>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n                        </div>\n                    </div>\n                    <div>\n                        <div *ngIf=\"!chart.reduction\" style=\"color:black;\">{{chart.name}}</div>  \n                        <div style=\"color:black;\">  \n                        \n                           <div *ngIf=\"chart.reduction\" (change)=\"selectMetric($event.target.value)\" style=\"display: inline-block; color:black; font-weight: bold; max-width:250px;\" >\n                                    <option style=\"color:black; font-weight: bold;\" *ngFor=\"let met of chart.metrics; let i=index\" value=\"{{i}}\" [selected] = \"met.name === chart.reduction.metric.name\">{{met.name}}</option>                 </div>  \n                           \n                           <i *ngIf=\"chart.reduction\">by</i>\n                           \n                           <select *ngIf=\"chart.reduction\" (change)=\"selectDimension($event.target.value)\" class=\"form-control\" style=\"display: inline-block; color:black; font-weight: bold; max-width:150px;\" >\n                                    <option [id]=\"chart.id + '_dimension'\" style=\"color:black;\" *ngFor=\"let dim of chart.dimensions; let i=index\" value=\"{{i}}\" [selected] = \"chart.reduction.dimension.name === dim.name\" >{{dim.name}}</option>\n                                    <option [id]=\"chart.id + '_newdimension'\" style=\"color:black;\" value=\"{{-1}}\" >Add Dimension</option>\n                           </select>\n                           <br/>\n                           <i>filter by</i>\n                            \n                            <!-- carrier==='Fido' -->\n                            \n                           <input readonly=\"readonly\" *ngIf=\"chart.newFilter\" class=\"form-control\" [id]=\"chart.id + '_newfilteredData'\" style=\"display: inline-block; background-color:white; color:black; font-weight: bold; max-width:150px;\" [value]=\"chart.newFilter.name\" />\n                          \n                           <div class=\"glyphicons glyphicons-plus-sign\" (click)=\"filterBy($event.target.value)\" [id]=\"chart.id + '_newfilteredData'\" style=\"color:black; cursor:pointer;\" ></div>\n                           <div style=\"cursor:pointer;\" class=\"glyphicons glyphicons-list\" (click)=\"select()\" ></div>\n                           <div style=\"cursor:pointer;\" class=\"glyphicons glyphicons-filter-remove\" (click)=\"removeFilter()\"></div>\n\n                           <ul *ngIf=\"showFilters\" style=\"list-style-type:none; cursor:pointer;\">\n                                    <li (click)=\"filterBy($event.target.value)\" [id]=\"chart.id + '_filteredData'\" style=\"color:black;\" *ngFor=\"let fil of chart.filters; let i=index\" value=\"{{i}}\">{{fil.name}}\n             \n                                    <span class=\"glyphicons glyphicons-pencil\" (click)=\"editItem()\"></span>\n                                    <span class=\"glyphicons glyphicons-bin\" (click)=\"removeItem(fil)\"></span>\n                                    </li>\n                                    <li class=\"glyphicons glyphicons-plus-sign\" (click)=\"filterBy($event.target.value)\" [id]=\"chart.id + '_newfilteredData'\" style=\"color:black;\" value=\"{{-1}}\"></li>\n                           </ul>   \n                            \n                            \n                            <!-- <i>alert when</i>\n                           \n                             <select (change)=\"alertWhen($event.target.value)\" class=\"form-control\" style=\"display: inline-block; color:black; font-weight: bold; max-width:150px;\" >\n                                    <option style=\"color:grey;\" disabled selected>Select</option>\n                                    <option [id]=\"chart.id + '_alertData'\" style=\"color:black;\" *ngFor=\"let alert of chart.alerts; let i=index\" value=\"{{i}}\" [selected] =\"chart.alert.name === alert.name\" >{{alert.name}}</option>\n                                    <option [id]=\"chart.id + '_newAlert'\" style=\"color:black;\" value=\"{{-1}}\" >Add Alert</option>\n                            </select> \n                            -->\n                            <label class=\"switch switch-text switch-pill switch-success pull-right pb-1\">\n                                <input type=\"checkbox\" class=\"switch-input\" (click)=\"onRealDataMonitoring()\">\n                                <span class=\"switch-label\" data-on=\"On\" data-off=\"Off\"></span>\n                                <span class=\"switch-handle\"></span>\n                            </label>\n                            \n                           <div *ngIf=\"addDimension\">\n                               <div></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newDimensionName\"   type=\"text\"   placeholder=\"Dimension Name\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newDimensionAttribute\"  type=\"text\"   placeholder=\"Dimension Attribute\"></div>\n                               <div><button (click)=\"addNewDimension()\">Add New Dimension</button></div>     \n                           </div>\n                           \n                           <div *ngIf=\"addFilter\">\n                               <div></div>\n                                   <div><input style=\"height:32px;\" [(ngModel)]=\"newFilterName\" type=\"text\" placeholder=\"Filter Name\"></div>\n                                   <div><input style=\"height:32px;\" [(ngModel)]=\"newFilterAttribute\" type=\"text\" placeholder=\"Filter Expression\"></div>\n                               <div><button (click)=\"addNewFilter()\">Add New Filter</button></div>    \n                            </div>\n     </div>\n                        <div *ngIf=\"editExpression\">\n                           <div></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"updatedFilterName\" type=\"text\" placeholder=\"Filter Name\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"updatedFilterAttribute\" type=\"text\" placeholder=\"Filter Expression\"></div>\n                               <div><button (click)=\"editFilter()\">Update</button></div>    \n                        </div>         \n     \n                        <!--\n                           <div *ngIf=\"addAlert\">\n                           <div></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newAlertName\" type=\"text\" placeholder=\"Alert Name\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newFilterAttribute\" type=\"text\" placeholder=\"Filter Expression\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newAlertAttribute\" type=\"text\" placeholder=\"Alert Expression\"></div>\n                               <div><button (click)=\"addNewAlert()\">Add New Alert</button></div>                     \n                           </div>\n                        -->\n                        <br/><br/><br/> \n                        \n                   \n                        <div *ngIf=\"chart.type!=='map2' && chart.big\" style=\"text-align:center; padding-bottom:70%; height:50%; width:100%;\" [id]=\"chart.id\"></div>\n                        <div *ngIf=\"chart.type!=='map2' && !chart.big\" style=\"text-align:center; height:100%; width:100%;\" [id]=\"chart.id\"></div>\n                        <div *ngIf=\"_data && chart.type==='map2'\" style=\"text-align:center; height:100%; width:100%;\"  > <dadmap2 [map]=\"chart\" [data]=\"mapData\"></dadmap2> </div>\n                                                \n                        <div style=\"color:black;\">\n                            <dadparameters [element]=\"chart\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeConfig()\"></dadparameters>\n                        </div>\n                        <br/>\n                    </div>\n                </div>\n            </div>\n          </div>\n          <!--If it is mini chart -->\n         \n        </div>\n    </div>\n        <div *ngIf=\"chart.mini\" style=\"text-align:left; height:auto; width:auto;\" [id]=\"chart.id\"></div>\n        <div *ngIf=\"chart.embeddedChart\"  style=\"text-align:left; width:auto;\" [id]=\"chart.id\"></div>\n        <div *ngIf=\"_data && chart.type==='map'\" > <dadmap [map]=\"chart\" [data]=\"_data\"></dadmap></div>\n        <!--<div *ngIf=\"_data && chart.type==='map2'\" > <dadmap2 [map]=\"chart\" [data]=\"_data\"></dadmap2></div>-->\n         \n        \n</div>\n    "
+            providers: [data_service_1.DadElementDataService, dadconfig_service_1.DadConfigService],
+            template: "\n<div class=\"dadChart\">\n    <div *ngIf=\"!chart.mini && !chart.embeddedChart\" [ngClass]=\"chartClass()\">  \n        <div class=\"inside\">\n          <div class=\"content card-inverse card-secondary\">    \n            <div class=\"card-block pb-0\">\n                <div class=\"content card card-secondary\">   \n                    <div class=\"btn-group float-xs-right\" dropdown>\n                        <button style=\"color:black;\" type=\"button\" class=\"btn btn-transparent dropdown-toggle p-0\" dropdownToggle>\n                            <i class=\"icon-settings\"></i>\n                        </button>\n                        <div class=\"dropdown-menu dropdown-menu-right\" dropdownMenu>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onEdit('')\">Edit</div></button>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRawData()\">See raw fact data</div></button>\n                           <button class=\"dropdown-item\" style=\"cursor:pointer;\"> <div (click)=\"onRefresh()\">Refresh</div></button>\n                        </div>\n                    </div>\n                    <div>\n                        <div *ngIf=\"!chart.reduction\" style=\"color:black;\">{{chart.name}}</div>  \n                        <div style=\"color:black;\">  \n                                     \n                           <select *ngIf=\"chart.reduction\" (change)=\"selectMetric($event.target.value)\" class=\"form-control\" style=\"display: inline-block; color:black; font-weight: bold; max-width:250px;\" >\n                                    <option style=\"color:black;\" *ngFor=\"let met of chart.metrics; let i=index\" value=\"{{i}}\" [selected] = \"met.name === chart.reduction.metric.name\">{{met.name}}</option>\n                           </select>  \n                           by                          \n                           <select *ngIf=\"chart.reduction\" (change)=\"selectDimension($event.target.value)\" class=\"form-control\" style=\"display: inline-block; color:black; font-weight: bold; max-width:150px;\" >\n                                    <option [id]=\"chart.id + '_dimension'\" style=\"color:black;\" *ngFor=\"let dim of chart.dimensions; let i=index\" value=\"{{i}}\" [selected] = \"chart.reduction.dimension.name === dim.name\" >{{dim.name}}</option>\n                                    <option [id]=\"chart.id + '_newdimension'\" style=\"color:black;\" value=\"{{-1}}\" >Add Dimension</option>\n                           </select>\n                           <br/>\n                           <i>filter by</i>\n                            \n                            <!-- carrier==='Fido' -->\n                            \n                           <input readonly=\"readonly\" *ngIf=\"chart.newFilter\" class=\"form-control\" [id]=\"chart.id + '_newfilteredData'\" style=\"display: inline-block; background-color:white; color:black; font-weight: bold; max-width:150px;\" [value]=\"chart.newFilter.name\" />\n                          \n                           <div class=\"glyphicons glyphicons-plus-sign\" (click)=\"filterBy($event.target.value)\" [id]=\"chart.id + '_newfilteredData'\" style=\"color:black; cursor:pointer;\" ></div>\n                           <div style=\"cursor:pointer;\" class=\"glyphicons glyphicons-list\" (click)=\"select()\" ></div>\n                           <div style=\"cursor:pointer;\" class=\"glyphicons glyphicons-filter-remove\" (click)=\"removeFilter()\"></div>\n\n                           <ul *ngIf=\"showFilters\" style=\"list-style-type:none; cursor:pointer;\">\n                                    <li (click)=\"filterBy($event.target.value)\" [id]=\"chart.id + '_filteredData'\" style=\"color:black;\" *ngFor=\"let fil of chart.filters; let i=index\" value=\"{{i}}\">{{fil.name}}\n             \n                                    <span class=\"glyphicons glyphicons-pencil\" (click)=\"editItem()\"></span>\n                                    <span class=\"glyphicons glyphicons-bin\" (click)=\"removeItem(fil)\"></span>\n                                    </li>\n                                    <li class=\"glyphicons glyphicons-plus-sign\" (click)=\"filterBy($event.target.value)\" [id]=\"chart.id + '_newfilteredData'\" style=\"color:black;\" value=\"{{-1}}\"></li>\n                           </ul>   \n                            \n                            \n                            <!-- <i>alert when</i>\n                           \n                             <select (change)=\"alertWhen($event.target.value)\" class=\"form-control\" style=\"display: inline-block; color:black; font-weight: bold; max-width:150px;\" >\n                                    <option style=\"color:grey;\" disabled selected>Select</option>\n                                    <option [id]=\"chart.id + '_alertData'\" style=\"color:black;\" *ngFor=\"let alert of chart.alerts; let i=index\" value=\"{{i}}\" [selected] =\"chart.alert.name === alert.name\" >{{alert.name}}</option>\n                                    <option [id]=\"chart.id + '_newAlert'\" style=\"color:black;\" value=\"{{-1}}\" >Add Alert</option>\n                            </select> \n                            -->\n                            <label class=\"switch switch-text switch-pill switch-success pull-right pb-1\">\n                                <input type=\"checkbox\" class=\"switch-input\" (click)=\"onRealDataMonitoring()\">\n                                <span class=\"switch-label\" data-on=\"On\" data-off=\"Off\"></span>\n                                <span class=\"switch-handle\"></span>\n                            </label>\n                            \n                           <div *ngIf=\"addDimension\">\n                               <div></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newDimensionName\"   type=\"text\"   placeholder=\"Dimension Name\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newDimensionAttribute\"  type=\"text\"   placeholder=\"Dimension Attribute\"></div>\n                               <div><button (click)=\"addNewDimension()\">Add New Dimension</button></div>     \n                           </div>\n                           \n                           <div *ngIf=\"addFilter\">\n                               <div></div>\n                                   <div><input style=\"height:32px;\" [(ngModel)]=\"newFilterName\" type=\"text\" placeholder=\"Filter Name\"></div>\n                                   <div><input style=\"height:32px;\" [(ngModel)]=\"newFilterAttribute\" type=\"text\" placeholder=\"Filter Expression\"></div>\n                               <div><button (click)=\"addNewFilter()\">Add New Filter</button></div>    \n                            </div>\n     </div>\n                        <div *ngIf=\"editExpression\">\n                           <div></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"updatedFilterName\" type=\"text\" placeholder=\"Filter Name\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"updatedFilterAttribute\" type=\"text\" placeholder=\"Filter Expression\"></div>\n                               <div><button (click)=\"editFilter()\">Update</button></div>    \n                        </div>         \n     \n                        <!--\n                           <div *ngIf=\"addAlert\">\n                           <div></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newAlertName\" type=\"text\" placeholder=\"Alert Name\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newFilterAttribute\" type=\"text\" placeholder=\"Filter Expression\"></div>\n                               <div><input style=\"height:32px;\" [(ngModel)]=\"newAlertAttribute\" type=\"text\" placeholder=\"Alert Expression\"></div>\n                               <div><button (click)=\"addNewAlert()\">Add New Alert</button></div>                     \n                           </div>\n                        -->\n                        <br/><br/><br/> \n                        \n                   \n                        <div *ngIf=\"chart.type!=='map2' && chart.big\" style=\"text-align:center; padding-bottom:70%; height:50%; width:100%;\" [id]=\"chart.id\"></div>\n                        <div *ngIf=\"chart.type!=='map2' && !chart.big\" style=\"text-align:center; height:100%; width:100%;\" [id]=\"chart.id\"></div>\n                        <div *ngIf=\"_data && chart.type==='map2'\" style=\"text-align:center; height:100%; width:100%;\"  > <dadmap2 [map]=\"chart\" [data]=\"mapData\"></dadmap2> </div>\n                                                \n                        <div style=\"color:black;\">\n                            <dadparameters [element]=\"chart\" [editMode]=\"editMode\" [onRefresh]=\"refreshMode\" (parametersChanged)=\"changeConfig()\"></dadparameters>\n                        </div>\n                        <br/>\n                    </div>\n                </div>\n            </div>\n          </div>\n          <!--If it is mini chart -->\n         \n        </div>\n    </div>\n        <div *ngIf=\"chart.mini\" style=\"text-align:left; height:auto; width:auto;\" [id]=\"chart.id\"></div>\n        <div *ngIf=\"chart.embeddedChart\"  style=\"text-align:left; width:auto;\" [id]=\"chart.id\"></div>\n        <div *ngIf=\"_data && chart.type==='map'\" > <dadmap [map]=\"chart\" [data]=\"_data\"></dadmap></div>\n        <!--<div *ngIf=\"_data && chart.type==='map2'\" > <dadmap2 [map]=\"chart\" [data]=\"_data\"></dadmap2></div>-->\n         \n        \n</div>\n    "
         })
     ], DadChartComponent);
     return DadChartComponent;

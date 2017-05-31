@@ -10,6 +10,7 @@ import * as rp from 'request-promise';
 import {MongoClient, Db} from "mongodb";
 let config = require('./config.json');
 let appconfig = require('./appconfig.json');
+let globalconfig = require('./globalconfig.json');
 let app = express();
 const AWS = require('aws-sdk');
 var mongodb = require('mongodb').MongoClient;
@@ -19,24 +20,49 @@ import {getData, getExtensibleData} from './getdata';
 ////////////////////////
 // Express stuff
 
+globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function(key){
+    globalconfig[key] = appconfig[key];
+})
+globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
+
+appconfig = globalconfig;
+declare var global:any;
+global.appconfig = appconfig;
+
+console.log("configuration");
+console.log(appconfig);
+
+let s3instance:any;
+
+if(appconfig.logtype==='file') {  //REFACTOR THIS OVING AWAY FROM DEPOENDENCIES AS URL.. etc
+    //we are going to save transactions logs in file system for testing pourposes
+    //content will be deleted every time we re-start to keep file system clean.
+    var logsFilePath = "./transactionlogs.json";
+    try{fs.unlinkSync(logsFilePath)} catch(e){};
+} else
+if (appconfig.logtype==='s3') {
+    try {
+        let accessKeyIdFile = fs.readFileSync(config['aws_accessKeyFileLocation'], 'utf8');
+        let secretAccessKeyFile = fs.readFileSync(config['aws_secretKeyFileLocation'], 'utf8');
+        const options = ({
+            accessKeyId: accessKeyIdFile,
+            secretAccessKey: secretAccessKeyFile
+        });
+        const creds = new AWS.Credentials(options);
+
+        s3instance = new AWS.S3({
+            region : config['aws_region'] ,
+            credentials : creds,
+            bucket: config['aws_s3bucket']
+        });
+    } catch (e){
+        console.log("could not find accessKey and secret or some other aws s3 config error");
+    }
+}
 
 
-
-let accessKeyIdFile = fs.readFileSync(config['aws_accessKeyFileLocation'], 'utf8');
-let secretAccessKeyFile = fs.readFileSync(config['aws_secretKeyFileLocation'], 'utf8');
-
-const options = ({
-    accessKeyId: accessKeyIdFile,
-    secretAccessKey: secretAccessKeyFile
-});
-
-const creds = new AWS.Credentials(options);
-
-let s3instance = new AWS.S3({
-    region : config['aws_region'] ,
-    credentials : creds,
-    bucket: config['aws_s3bucket']
-});
 
 
 app.use(bodyParser.json({limit: '50mb'}));
@@ -54,12 +80,27 @@ app.get('/test', function(req,res){
 });
 
 app.get('/', function(req,res){
-    res.send("CDB");
+    res.send("CDL");
 });
 
 app.use(helmet());
 
 app.use(cors());
+
+app.get('/status', function(req,res){
+    if (req.query["secret"] !== appconfig.secret) res.send("wrong secret");
+
+    var report = {};
+    Object.keys(appconfig).forEach(function(key){
+        if (key!== "secret") {
+            if (req.query[key]){
+                appconfig[key] = req.query[key];
+            }
+            report[key]=appconfig[key];
+        }
+    });
+    return res.send(report);
+});
 
 ////////////////////////////
 // CUSTOMER TENANT DATA API
@@ -87,28 +128,42 @@ app.post('/ds/:tenantid/putdata', function(req,res){
 // Store data to transacation log interface
 app.post('/transactionLog/:tenantid/data', function(req, res) {
 
-    console.log('placing data in s3 for now');
     let tenantId = req.params.tenantid;
     let clientData = req.body.clientData;
     let dataSourceId = req.body.dataSourceId;
 
-    let uploadParams = {Bucket: config['aws_s3bucket']  + '/' + tenantId, Key: '', Body: ''};
-    uploadParams.Body = JSON.stringify(clientData);
-    uploadParams.Key = path.basename(tenantId + '.' + dataSourceId + '.' + (new Date()).toISOString() + '.json');
+    if(appconfig.s3_url==='usemock') {
+        const content = JSON.stringify({tenantid:tenantId, clientData:clientData, dataSourceId:dataSourceId});
+
+        fs.writeFile(logsFilePath, content, 'utf8', function (err) {
+            if (err) {
+                return console.log("Error while writing to transactions logs: " + err);
+            }
+        });
+    }
+    else{
+        try {
+            console.log('placing data in s3 for now');
+            let uploadParams = {Bucket: config['aws_s3bucket'] + '/' + tenantId, Key: '', Body: ''};
+            uploadParams.Body = JSON.stringify(clientData);
+            uploadParams.Key = path.basename(tenantId + '.' + dataSourceId + '.' + (new Date()).toISOString() + '.json');
 
 
-    console.time('awsCallLarge');
+            console.time('awsCallLarge');
 
-    s3instance.upload(uploadParams, function (err: any, data: any) {
-        console.timeEnd('awsCallLarge');
-        if (err) {
-            err.code = 'External Error, contact SOTI support with code 0001';
-            res.status(500).send(err.code);
-        }
-        if (data) {
-            res.status(200).send(data.Location);
-        }
-    });
+            s3instance.upload(uploadParams, function (err: any, data: any) {
+                console.timeEnd('awsCallLarge');
+                if (err) {
+                    err.code = 'External Error, contact SOTI support with code 0001';
+                    res.status(500).send(err.code);
+                }
+                if (data) {
+                    res.status(200).send(data.Location);
+                }
+            });
+        } catch(e){
+            console.log("failed to write to transaction log");
+        }}
 });
 
 // THIS IS THE MOST INTERESTING FUNCTION WHERE WE ACTUALLY USE METADATA
@@ -205,7 +260,7 @@ function callDbAndRespond(req,res,query){
 }
 
 
-if (config.useSSL) {
+if (appconfig.useSSL) {
     var httpsOptions = {
         key: fs.readFileSync(config['https-key-location'] ),
         cert: fs.readFileSync(config['https-cert-location'] )

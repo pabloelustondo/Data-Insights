@@ -1,7 +1,7 @@
 var express = require('express'),
     _       = require('lodash'),
     config  = require('./config'),
-    appconfig  = global.appconfig,
+    c  = global.appconfig,
     jwt     = require('jsonwebtoken');
 
 require('./error-messages.js');
@@ -19,7 +19,7 @@ var app = module.exports = express.Router();
 var SOTITenant =
   {
     accountid: "soti",
-    mcurl: "http://localhost:3004",
+    mcurl: appconfig.dssback_url,
     apikey:"112233445511223344",
     domainid: "soti",
     username: "admin",
@@ -32,7 +32,7 @@ var SOTITenant =
 var TestTenant =
   {
     accountid: "test",
-    mcurl: "http://localhost:3004",
+    mcurl: appconfig.dssback_url,
     apikey:"112233445511223344",
     domainid: "test",
     username: "admin",

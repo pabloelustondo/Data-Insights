@@ -1,5 +1,7 @@
 {
-  "testingmode":"true",
-  "port": 8001,
-  "mongodb_url" : "mongodb://localhost:27017"
+  "id" : "cdl",
+  "name" : "CDL",
+  "secret"  : "1234",
+  "dependencies" : ["mongodb","s3"],
+  "logtype":"file"
 }

@@ -7,14 +7,24 @@ var fs = require('fs');
 var helmet = require('helmet');
 var bodyParser = require('body-parser');
 var config = require('./config.json');
-var appconfigfile = require('./appconfig.json');
+var appconfig = require('./appconfig.json');
+var globalconfig = require('./globalconfig.json');
 var path = require('path');
 var rp = require('request-promise');
 var cors = require('cors');
 var io = require('socket.io')(http);
 
-global.appconfig = appconfigfile;
+globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function(key){
+    globalconfig[key] = appconfig[key];
+})
+globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
 
+appconfig = globalconfig;
+
+console.log("configuration");
+console.log(appconfig);
 
 io.on('connection', function(socket){
     console.log('a user connected');

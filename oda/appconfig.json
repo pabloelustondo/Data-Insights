@@ -1,26 +1,6 @@
 {
-  "deployment_type":"dev",
-  "hostname": "localhost",
-  "port": 3002,
-  "ddb": "http://localhost:8000",
-  "testingMode" : true,
-  "useSSL":false,
-  "dps_address" : "http://localhost:8002/",
-  "aws-hostname" : "2vf2f8xp27.execute-api.us-east-1.amazonaws.com",
-  "aws-x-api-key": "DiGyphaBjj10CbsNpqBAM2kLGfRAXRob9XYEchxm",
-  "aws-accessKeyFileLocation": "C:/IDA_accessKeyID.txt",
-  "aws-secretKeyFileLocation": "C:/IDA_secretAccessKey.txt",
-  "https-key-location" : "C:/63663247-localhost_3002.key",
-  "https-cert-location" : "C:/63663247-localhost_3002.cert",
-  "aws-path":  "/test/function_one",
-  "aws-discharge" : "/test/dischargeratedistribution",
-  "aws-deviceNotLasted" : "/test/countOfDevicesDidNotSurviveShift",
-  "aws-listDeviceNotLasted" : "/test/listOfDevicesDidNotSurviveShift",
-  "aws-batteryNotFullyCharged" : "/test/countOfDevicesDidNotSurviveShift/BatteryNotFullyCharged",
-  "aws-listNotSurvivedBatteryNotFullyCharged" : "/test/Device/Battery/List/NotSurvivedShiftNotFullyCharged",
-  "aws-listAverageDischargeRate" : "/test/Device/Battery/List/AverageDischargeRate",
-  "aws-listHighAverageDischargeRate" : "/test/Device/Battery/List/HighAverageDischargeRate",
-  "aws-applicationExecutionTime" : "/test/Device/Application/ExecutionTime",
-  "aws-numberOfAppInstallations" : "/test/Device/Application/NumberOfInstallations",
-  "ddb-accessKey" : "C:/accessKey"
- }
+  "id":"oda",
+  "name":"ODA",
+  "dependencies":["ddb","kafka","dps"],
+  "secret"  : "1234"
+}

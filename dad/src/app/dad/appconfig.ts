@@ -3,6 +3,13 @@
  */
 
 let appconfig = require("../../../appconfig.json");
+let globalconfig = require("../../../globalconfig.json");
+
+Object.keys(appconfig).forEach(function(key){
+    globalconfig[key] = appconfig[key];
+})
+appconfig = globalconfig;
+console.log(appconfig);
 
 export const config = {
     "testing":appconfig.testingmode,
@@ -20,3 +27,4 @@ export const config = {
     "NumberOfInstallations": appconfig.oda_url + "/Devices/Application/numberOfInstallations",
     "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations"
 };
+

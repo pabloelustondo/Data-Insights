@@ -1,8 +1,6 @@
 {
-  "name":"DAD_Backend",
-  "testingmode" : true,
-  "secret"  : "1234",
-  "testingmode":"false",
-  "port": 4201,
-  "ddb_url":"http://localhost:8000"
+  "id":"dadback",
+  "name":"DAD Backend",
+  "dependencies":["ddb"],
+  "secret"  : "1234"
 }

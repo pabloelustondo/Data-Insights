@@ -5,16 +5,15 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "debugmac": "node $NODE_DEBUG_OPTION server.js",
-    "debugwin": "node %NODE_DEBUG_OPTION% server.js"
+    "start": "npm run getConfigs & node server.js",
+    "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
+    "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
   },
-
   "repository": {
     "type": "git",
     "url": "sample_gitUrl"
   },
-
   "keywords": [
     "jwt",
     "auth0"
@@ -25,18 +24,20 @@
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",
     "cors": "^2.7.1",
+    "cp-cli": "^1.0.2",
     "dotenv": "^0.4.0",
     "errorhandler": "^1.4.3",
     "express": "^4.13.4",
+    "express-jwt": "^5.1.0",
+    "helmet": "^3.4.1",
     "jsonwebtoken": "^7.3.0",
-    "express-jwt" : "^5.1.0",
     "lodash": "^2.4.2",
     "morgan": "^1.7.0",
-    "uuid": "3.0.1",
     "node-localstorage": "^0.6.0",
+    "node-uuid": "^1.4.8",
     "nodemailer": "^3.0.0",
     "request": "^2.67.0",
-    "helmet" : "^3.4.1",
-    "sendmail": "^1.1.1"
+    "sendmail": "^1.1.1",
+    "uuid": "3.0.1"
   }
 }

@@ -3,13 +3,13 @@
  */
 import { Component, Input } from '@angular/core';
 import { DadChart } from "./chart.component";
-import { DadChartConfigsService} from './chart.service';
+import { DadConfigService} from './dadconfig.service';
 import { Router, ActivatedRoute} from '@angular/router';
 import {Subscription } from 'rxjs';
 
 @Component({
   selector: 'drillcharts',
-  providers:[DadChartConfigsService],
+  providers:[DadConfigService],
   template: `
         <div *ngIf="chart && charts" class="card-block pb-0">
         <h1>{{chart.name}}</h1>
@@ -27,7 +27,7 @@ export class DadDrillChartsComponent {
   private subscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private dadChartConfigsService: DadChartConfigsService
+              private dadChartConfigsService: DadConfigService
   ) { }
 
 
@@ -39,7 +39,6 @@ export class DadDrillChartsComponent {
 
                             if(!drillChart) {
                                 chartConfig.reduction = chartConfig.reductions[rowindex];
-                                chartConfig.filter = chartConfig.filters[rowindex]
                                 drillChart = chartConfig;
                                 this.dadChartConfigsService.saveOne(drillChart);
                             }

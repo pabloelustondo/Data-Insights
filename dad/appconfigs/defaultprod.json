@@ -1,0 +1,8 @@
+{
+  "testingmode":false,
+  "port":4201,
+  "hostname": "localhost",
+  "dss_url":"http://localhost:3003",
+  "oda_url":"",
+  "dadback_url":"http://localhost:4201"
+}
