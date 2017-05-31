@@ -5,7 +5,7 @@
 let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 const path = require('path');
-const config = require('../../appconfig.json');
+const config = require('../../config.json');
 import * as rp from 'request-promise';
 
 

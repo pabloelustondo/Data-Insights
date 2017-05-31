@@ -9,7 +9,7 @@ import {ListBatteryStats} from '../models/listBatteryStats';
 let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 const path = require('path');
-const config = require('../../appconfig.json');
+const config = require('../../config.json');
 const AWS = require('aws-sdk');
 
 import {verifyToken} from '../services/jwtService';

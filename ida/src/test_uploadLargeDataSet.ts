@@ -4,7 +4,7 @@
 import { suite, test, slow, timeout, skip, only } from 'mocha-typescript';
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from './models/user';
-const config = require('../appconfig.json');
+const config = require('../config.json');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('./server');

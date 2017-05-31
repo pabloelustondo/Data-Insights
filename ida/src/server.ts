@@ -16,13 +16,30 @@ const expressWinston = require('express-winston');
 import {RegisterRoutes} from './routes';
 
 let helmet = require('helmet');
-let appconfig = require('../appconfig.json');
+let config = require('../config.json');
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
-if (!fs.existsSync( appconfig.logDir)) {
+var path = require('path');
+let appconfig = require('../appconfig.json');
+let globalconfig = require('../globalconfig.json');
 
-    fs.mkdir((appconfig.logDir), function (err: any) {
+globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function(key){
+    globalconfig[key] = appconfig[key];
+});
+globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
+console.log("configuration");
+console.log(appconfig);
+
+exports.config = config;
+exports.appconfig = appconfig;
+
+appconfig = globalconfig;
+
+if (!fs.existsSync( config.logDir)) {
+    fs.mkdir((config.logDir), function (err: any) {
         if (err) {
            console.log( err);
         }
@@ -147,7 +164,21 @@ app.use(bodyParser.json({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+app.get('/status', function(req,res){
+    if (req.query["secret"] !== appconfig.secret) return res.send("wrong secret");
+
+    var report:any = {};
+    Object.keys(appconfig).forEach(function(key){
+        if (key!== "secret") {
+            if (req.query[key]){
+                appconfig[key] = req.query[key];
+            }
+            report[key]=appconfig[key];
+        }
+    });
+    return res.send(report);
+});
+
 
 RegisterRoutes(app);
 
@@ -156,25 +187,26 @@ app.use( (err: any, req: express.Request, res: express.Response, next: express.N
 });
 
 if (appconfig.useSSL) {
-
     let httpsOptions = {
         key: fs.readFileSync(appconfig['https-key-location'] ),
         cert: fs.readFileSync(appconfig['https-cert-location'] )
     };
-
     let httpsServer = https.createServer(httpsOptions, app);
     httpsServer.listen(appconfig.port, function (){
         console.log('Starting https server.. https://localhost:' + appconfig.port + '/docs');
     });
 } else {
     let httpServer = http.createServer(app);
-
     httpServer.listen(appconfig.port, function () {
         console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
     });
 }
 
-
 // app.use(errorLogger);
 
-
+module.exports = logger;
+module.exports.stream = {
+    write: function(message: any, encoding: any){
+        logger.info(message);
+    }
+};

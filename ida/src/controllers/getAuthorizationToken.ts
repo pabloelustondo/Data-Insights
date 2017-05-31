@@ -6,7 +6,7 @@ import {Route, Get, Post, Delete, Patch, Example, Request} from 'tsoa';
 let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 
-const config = require('../../appconfig.json');
+const config = require('../../config.json');
 const AWS      = require('aws-sdk');
 import * as fs from 'fs';
 import * as querystring from 'querystring';
