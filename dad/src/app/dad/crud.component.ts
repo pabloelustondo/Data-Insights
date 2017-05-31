@@ -57,7 +57,7 @@ export class DadCrudComponent {
   @Input()
     options:any;
   @Input()
-    option: any = {name:'doga', attribute:'blah'};
+    option: any;
 
   @Output() optionChanged = new EventEmitter();
 
@@ -81,6 +81,7 @@ export class DadCrudComponent {
       this.options[selected_option].name = this.updatedOptionName;
       this.options[selected_option].attribute = this.updatedOptionAttribute;
       this.updateValue = false;
+      this.optionChanged.emit(selected_option);
     }
 
     update(){
@@ -100,5 +101,6 @@ export class DadCrudComponent {
     deleteOption(selected_option) {
       this.options.splice(selected_option, 1);
       this.updateValue = false;
+      this.optionChanged.emit(selected_option);
     }
 }
