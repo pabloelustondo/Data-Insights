@@ -11,6 +11,7 @@
   "cdl_url":"http://cad059.corp.soti.net:8025",
   "dos_url":"http://cad059.corp.soti.net:5000",
   "dosback_url":"http://cad059.corp.soti.net:5001",
+  "ida_url":"http://cad059.corp.soti.net:8023",
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017"
 }

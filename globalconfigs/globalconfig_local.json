@@ -11,6 +11,7 @@
   "cdl_url":"http://localhost:8020",
   "dos_url":"http://localhost:5000",
   "dosback_url":"http://localhost:5001",
+  "ida_url":"http://localhost:8023",
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017"
 }

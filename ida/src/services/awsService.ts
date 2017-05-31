@@ -3,7 +3,7 @@
  */
 import * as express from '@types/express';
 const path = require('path');
-const config = require('../../appconfig.json');
+const config = require('../../config.json');
 const AWS      = require('aws-sdk');
 
 const jwtSerivce = require('../services/jwtService');
