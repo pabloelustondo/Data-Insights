@@ -3,13 +3,13 @@
  */
 import { Component, Input } from '@angular/core';
 import { DadChart } from "./chart.component";
-import { DadChartConfigsService} from './chart.service';
+import { DadConfigService} from './dadconfig.service';
 import { Router, ActivatedRoute} from '@angular/router';
 import {Subscription } from 'rxjs';
 
 @Component({
   selector: 'bigchart',
-  providers:[DadChartConfigsService],
+  providers:[DadConfigService],
   template: `
   <div style="min-width: 800px" *ngIf = "chart">
     <dadchart [chart]="chart"></dadchart>
@@ -22,7 +22,7 @@ export class DadBigChartComponent {
   private subscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private dadChartConfigsService: DadChartConfigsService
+              private dadChartConfigsService: DadConfigService
   ) { }
 
   ngAfterViewInit(){

@@ -8,10 +8,21 @@ var logger          = require('morgan'),
       helmet        = require('helmet'),
       fs            = require('fs'),
       config        = require('./config.json'),
+      globalconfig  = require('./globalconfig.json'),
       appconfig  = require('./appconfig.json'),
     bodyParser      = require('body-parser');
 
-global.appconfig = appconfig;
+globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function(key){
+  globalconfig[key] = appconfig[key];
+})
+globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
+
+global.appconfig = globalconfig;
+
+
+
 var app = express();
 
 dotenv.load();
@@ -21,7 +32,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/public', express.static(__dirname + '/public'));
-app.get('/e2etest', function(req,res){
+app.get('/test', function(req,res){
   res.sendfile('./public/testing/spec/SpecRunner.html');
 });
 
@@ -79,12 +90,12 @@ var httpsServer = https.createServer(httpsOptions, app);
 
 httpsServer.listen(appconfig.port, appconfig.hostname, function (){
   console.log('Starting https server.. https://localhost:' + config.port );
-  console.log("Tests at " + appconfig.hostname  + ":" + appconfig.port + '/e2etest');
+  console.log("Tests at " + appconfig.hostname  + ":" + appconfig.port + '/test');
 });
 
 } else {
    http.createServer(app).listen(appconfig.port, function (err) {
    console.log("listening in " +appconfig.hostname  + ":" + appconfig.port);
-   console.log("Tests at " + appconfig.hostname  + ":" + appconfig.port + '/e2etest');
+   console.log("Tests at " + appconfig.hostname  + ":" + appconfig.port + '/test');
    });
 }

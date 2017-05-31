@@ -1,0 +1,1185 @@
+[
+  {
+    "keyword": "Feature",
+    "line": 1,
+    "name": "DSS API Tests",
+    "tags": [],
+    "uri": "D:\\Shared\\TestingSuite\\features\\DSS.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "Enroll a MobiControl data source using an invalid x-access-token",
+        "tags": [],
+        "id": "dss-api-tests;enroll-a-mobicontrol-data-source-using-an-invalid-x-access-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set invalid header and body for external_user",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 4,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST :3004 with endpoint \"registerDataSource\"",
+            "result": {
+              "status": "passed",
+              "duration": 42
+            },
+            "line": 5,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:71"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 6,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:167"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 8,
+        "name": "Delete a data source and invalid x-access-token",
+        "tags": [],
+        "id": "dss-api-tests;delete-a-data-source-and-invalid-x-access-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set invalid header and body for external_user for delete",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 9,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:97"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST :3004 with endpoint \"deleteDataSource\"",
+            "result": {
+              "status": "passed",
+              "duration": 11
+            },
+            "line": 10,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:71"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 11,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:167"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 13,
+        "name": "Delete a data source with a valid x-access-token",
+        "tags": [],
+        "id": "dss-api-tests;delete-a-data-source-with-a-valid-x-access-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set valid header and body for external_user for delete",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 14,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:103"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST :3004 with endpoint \"deleteDataSource\"",
+            "result": {
+              "status": "passed",
+              "duration": 52
+            },
+            "line": 15,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:71"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code should be 200",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: Response should be :200, Got:400\n    at World.<anonymous> (D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:169:19)"
+            },
+            "line": 16,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:167"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 18,
+        "name": "Get temp authorizationToken from IDA with reset Data source",
+        "tags": [],
+        "id": "dss-api-tests;get-temp-authorizationtoken-from-ida-with-reset-data-source",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set head and body for handling credentials",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 19,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:123"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I GET :3004 with endpoint \"sourceCredentials\" to download credentials",
+            "result": {
+              "status": "passed",
+              "duration": 30
+            },
+            "line": 20,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:109"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I set head and body for handling credentials",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 21,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:123"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I POST :3004 with endpoint \"resetCredentials\" to reset credentials",
+            "result": {
+              "status": "passed",
+              "duration": 25
+            },
+            "line": 22,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:144"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I GET :3010 with old credentials and endpoint \"Security/GetAuthorizationToken\"",
+            "result": {
+              "status": "passed",
+              "duration": 14
+            },
+            "line": 23,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:129"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "response body contain some sort of error",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 24,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-shirley.js:159"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 27,
+        "name": "Complete POST SignUp Form Submission Previously Enrolled Values",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-previously-enrolled-values",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit using previously enrolled values",
+            "result": {
+              "status": "passed",
+              "duration": 83
+            },
+            "line": 28,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:75"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 29,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Tenant ID already enrolled'",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 30,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 39,
+        "name": "Incomplete POST SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with missing domainid",
+            "result": {
+              "status": "passed",
+              "duration": 8
+            },
+            "line": 33,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:88"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 34,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing DomainID'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 35,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 40,
+        "name": "Incomplete POST SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with missing mcurl",
+            "result": {
+              "status": "passed",
+              "duration": 15
+            },
+            "line": 33,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:88"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 34,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing MobiControl Url'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 35,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 41,
+        "name": "Incomplete POST SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with missing apikey",
+            "result": {
+              "status": "passed",
+              "duration": 12
+            },
+            "line": 33,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:88"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 34,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing API key'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 35,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 42,
+        "name": "Incomplete POST SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with missing clientsecret",
+            "result": {
+              "status": "passed",
+              "duration": 174
+            },
+            "line": 33,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:88"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 34,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing API Password'",
+            "result": {
+              "status": "failed",
+              "duration": 5003,
+              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (D:\\Shared\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:380:14)\n    at tryOnTimeout (timers.js:244:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+            },
+            "line": 35,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 43,
+        "name": "Incomplete POST SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with missing username",
+            "result": {
+              "status": "passed",
+              "duration": 8
+            },
+            "line": 33,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:88"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 34,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing Username'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 35,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 44,
+        "name": "Incomplete POST SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with missing password",
+            "result": {
+              "status": "passed",
+              "duration": 6
+            },
+            "line": 33,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:88"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 34,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing Password'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 35,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 45,
+        "name": "Incomplete POST SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with missing accountid",
+            "result": {
+              "status": "passed",
+              "duration": 10
+            },
+            "line": 33,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:88"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 34,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing AccountID'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 35,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 55,
+        "name": "Complete POST SignUp Form Submission with Invalid Values",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-with-invalid-values",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with invalid TenantID value: _____+_+.A",
+            "result": {
+              "status": "passed",
+              "duration": 501
+            },
+            "line": 49,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:102"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 50,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Invalid TenantID Provided'",
+            "result": {
+              "status": "failed",
+              "duration": 5000,
+              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (D:\\Shared\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:380:14)\n    at tryOnTimeout (timers.js:244:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+            },
+            "line": 51,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 56,
+        "name": "Complete POST SignUp Form Submission with Invalid Values",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-with-invalid-values",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with invalid MobiURL value: http://google.com/r/Android",
+            "result": {
+              "status": "passed",
+              "duration": 139
+            },
+            "line": 49,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:102"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 50,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Invalid MobiControl URL Provided'",
+            "result": {
+              "status": "failed",
+              "duration": 5004,
+              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (D:\\Shared\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:380:14)\n    at tryOnTimeout (timers.js:244:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+            },
+            "line": 51,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 57,
+        "name": "Complete POST SignUp Form Submission with Invalid Values",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-with-invalid-values",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with invalid ClientID value: _!+!+@_#+$_%+!@+#_",
+            "result": {
+              "status": "passed",
+              "duration": 115
+            },
+            "line": 49,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:102"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 50,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Client ID Cannot Contain Special Characters'",
+            "result": {
+              "status": "failed",
+              "duration": 5000,
+              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (D:\\Shared\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:380:14)\n    at tryOnTimeout (timers.js:244:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+            },
+            "line": 51,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 58,
+        "name": "Complete POST SignUp Form Submission with Invalid Values",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-with-invalid-values",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with invalid ClientSecret value: *",
+            "result": {
+              "status": "passed",
+              "duration": 67
+            },
+            "line": 49,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:102"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 50,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Client Secret Cannot Be Less Than 8 Characters'",
+            "result": {
+              "status": "failed",
+              "duration": 5004,
+              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (D:\\Shared\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:380:14)\n    at tryOnTimeout (timers.js:244:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+            },
+            "line": 51,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 59,
+        "name": "Complete POST SignUp Form Submission with Invalid Values",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-with-invalid-values",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with invalid Username value: ^!^#^^^#^^#^#^^#",
+            "result": {
+              "status": "passed",
+              "duration": 231
+            },
+            "line": 49,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:102"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 50,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Username Cannot Contain Special Characters'",
+            "result": {
+              "status": "failed",
+              "duration": 5000,
+              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (D:\\Shared\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:380:14)\n    at tryOnTimeout (timers.js:244:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+            },
+            "line": 51,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 60,
+        "name": "Complete POST SignUp Form Submission with Invalid Values",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-with-invalid-values",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I submit with invalid Password value: 12",
+            "result": {
+              "status": "passed",
+              "duration": 63
+            },
+            "line": 49,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:102"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 50,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Password Cannot Be Less Than 8 Characters'",
+            "result": {
+              "status": "failed",
+              "duration": 5000,
+              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (D:\\Shared\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:380:14)\n    at tryOnTimeout (timers.js:244:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+            },
+            "line": 51,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 62,
+        "name": "Complete POST SignUp Form Submission with Response Token",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-signup-form-submission-with-response-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I do a 'POST' request with valid values",
+            "result": {
+              "status": "passed",
+              "duration": 142
+            },
+            "line": 63,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:116"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 200",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 64,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response's id_token should be valid",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 65,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:146"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 67,
+        "name": "Complete GET SignUp Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;complete-get-signup-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I do a 'GET' request with valid values",
+            "result": {
+              "status": "passed",
+              "duration": 14
+            },
+            "line": 68,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:116"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 69,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should be a HTML Document -> features/assets/dss_cannot_get.html",
+            "result": {
+              "status": "passed",
+              "duration": 3
+            },
+            "line": 70,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:132"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 72,
+        "name": "Incomplete POST Login Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;incomplete-post-login-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I do a 'POST' request with no login values",
+            "result": {
+              "status": "passed",
+              "duration": 12
+            },
+            "line": 73,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:170"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 74,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Missing AccountID'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 75,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:53"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 77,
+        "name": "Invalid GET Login Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;invalid-get-login-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I do a 'GET' request with no login values",
+            "result": {
+              "status": "passed",
+              "duration": 10
+            },
+            "line": 78,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:170"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 79,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should be a HTML Document -> features/assets/dss_cannot_get.html",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 80,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:132"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 82,
+        "name": "Complete POST Login Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;complete-post-login-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I do a 'POST' request with valid login values",
+            "result": {
+              "status": "passed",
+              "duration": 10
+            },
+            "line": 83,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:154"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 200",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 84,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 86,
+        "name": "Complete GET Login Form Submission",
+        "tags": [],
+        "id": "dss-api-tests;complete-get-login-form-submission",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I do a 'GET' request with valid login values",
+            "result": {
+              "status": "passed",
+              "duration": 11
+            },
+            "line": 87,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:154"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 88,
+            "match": {
+              "location": "D:\\Shared\\TestingSuite\\features\\step_definitions\\dss-steps-ray.js:43"
+            }
+          }
+        ]
+      }
+    ],
+    "id": "dss-api-tests"
+  }
+]

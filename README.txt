@@ -1,5 +1,26 @@
 Welcome to SOTI Insights
 
+SHORT STORY (Windows)
+make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka)
+(follow official websites)
+make sure you have two scripts to start kafka "startkafka"  "startzoo" (for zookeper) that can run anywhere.
+also make sure you can run mongod from anywhere, you have in your path.
+
+git clone
+install   (takes a few minutes, get a coffee)
+run     (by default will run on localhost)
+http://localhost:5000
+
+run config  for specific configuration ...
+for example
+"dev" is for sotiinsights.clooudapp.net
+
+default configurations are in the globalconfigs folder.
+each microservice is able to overwrite the global configuration.....for that you need to go into each service folder.
+(in vanilla deployments you do not need that)
+
+LONG STORY
+
 This README is only about how to install and run this application from the source code in one machine for testing/development,
 Please read the included PDF for a conceptual introduction to what is this as we will assume you did it.
 Another document will explain how to deploy this application to the target cloud environment.
@@ -15,10 +36,16 @@ and do this process module by module for 3 reasons:
 
  YOU CAN INSTALL AND RUN THE MODULES IN ANY ORDER but we suggest here a way that goes from simple to complex
 
- Ok, let get started from simple to complex
+ Ok, let get started from simple to complex.
+ This readme assumes that you got the code doing
+ git clone -b stable http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
 
+ If you got your copy form the master/head there is more chances that you will have a problem
 
- 0) Make sure you have Node.js (+7.5.0), Npm (+4.1.2) and Mongodb (+3.0.7). You can find the code at https://nodejs.org and https://www.mongodb.com
+ Anyway, if you already understood the architecture and modules well and your are getting tired of doing cd ..npm install by hand ... use the 'install.bat'.
+ Thenm yiou can run all your modules from Webstorm so you do not need to open so many terminal (this is what I do).
+
+ 0) Make sure you have Node.js (+7.7.4), Npm (+4.4.4) and Mongodb (+3.0.7). You can find the code at https://nodejs.org and https://www.mongodb.com
     Make sure mongodb is running in the url specified in appconfig "mongodb_url" (by default mongodb://localhost:27017)
 
  1) DDB - SOTI Insights Database, here we store tenants, users, system information)
@@ -31,7 +58,7 @@ and do this process module by module for 3 reasons:
     hit http://localhost:8000/status?secret=1234, you see the status of the service and its configuration
     you should see something like this
     {"name":"DDB","testingmode":true,"port":8000,"mongodb_url":"mongodb://localhost:27017/udb_test"}
-
+npm start
     troubleshooting: do you have mongod running in the url specified in appconfig "mongodb_url"?.
 
   2) DSS - SOTI Insights Security System - Enrollment, Login (and add data sources for now, to be moved to TMM)
@@ -85,7 +112,7 @@ and do this process module by module for 3 reasons:
      you should see something like this:
      {"name":"DAD_Backend","testingmode":"false","port":4201,"ddb_url":"http://localhost:8000"}
 
-  3.2) DAD Front End  (In testing / development mode   we will see production mode next)
+  3.2) DAD Front End  (Development Mode - Test Mode)
 
            open a new terminal
            cd CustomerBI/dad
@@ -93,8 +120,19 @@ and do this process module by module for 3 reasons:
            npm start
            hit http://localhost:4200, you should see  dashbaord with some widgets and charts
 
-           if all went well, you wil lsee a dashboard with some pages and charts. This is running in test mode.
+           if all went well, you will see a dashboard with some pages and charts. This is running in test mode,
+           data is comming from a sample user using sample configuration and sample data. This is how normally we develop.
+           We avoid calling real dependencies while developing visual components.
            we will run for real when we install ODA which provides data to the dashboard. 
+
+   3.3) DAD Front End  (Production Mode - Calling real DSS and DAD Backend dependencies)
+            (NOTE: We are NOT calling ODA for now as it is being refactor)
+
+           stop the previous process or command prompt (otherwise you will have a port conflict)
+           npm run startprod
+           hit http://localhost:4200, you should be redirected to DSS login page
+
+
 
 
 

@@ -1,7 +1,5 @@
 {
-  "testingmode":true,
-  "useSSL":false,
-  "userAccessKey":false,
-  "dssback_url":"http://localhost:3004",
-  "mcdp_url" : "http://localhost:3004/public/MobiControlDataAdaptor.exe"
+  "id":"dss",
+  "name":"DSS",
+  "dependencies":["dssback"]
 }

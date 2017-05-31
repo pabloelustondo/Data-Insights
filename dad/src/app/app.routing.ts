@@ -24,6 +24,10 @@ export const routes: Routes = [
                 loadChildren: 'app/dad/dad.module#DadModule'
             },
             {
+                path: 'login',
+                loadChildren: 'app/dad/dad.module#LoginComponent'
+            },
+            {
                 path: 'dashboard',
                 loadChildren: 'app/dashboard/dashboard.module#DashboardModule'
             },

@@ -12,6 +12,7 @@ import { SIDEBAR_TOGGLE_DIRECTIVES }    from './shared/sidebar.directive';
 import { AsideToggleDirective }         from './shared/aside.directive';
 import { BreadcrumbsComponent }         from './shared/breadcrumb.component';
 import { SmartResizeDirective }         from './shared/smart-resize.directive';
+import { HttpModule } from '@angular/http';
 
 // Routing Module
 import { AppRoutingModule }             from './app.routing';
@@ -27,7 +28,8 @@ import { SimpleLayoutComponent }        from './layouts/simple-layout.component'
         BrowserModule,
         AppRoutingModule,
         Ng2BootstrapModule,
-        ChartsModule
+        ChartsModule,
+        HttpModule
     ],
     declarations: [
         AppComponent,
