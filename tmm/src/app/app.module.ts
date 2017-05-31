@@ -2,20 +2,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import {DasMetadataService} from "./dasmetadata.service";
-
 import { AppComponent } from './app.component';
+import { UserInput } from './components/layout/UserInput/UserInput.component';
+import {RouterModule} from "@angular/router";
+
+
+const routes = [
+  { path: '**', component: UserInput },
+];
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UserInput
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [DasMetadataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

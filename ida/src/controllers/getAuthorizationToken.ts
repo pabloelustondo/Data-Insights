@@ -62,7 +62,12 @@ export class GetAuthorizationToken {
              */
             let verifyToken = function () {
                 let promise = new Promise(function (resolve, reject) {
-                    resolve(jwt.verify(token, config['mcdp-secret']));
+                    try {
+                        resolve(jwt.verify(token, config['mcdp-secret']));
+                    } catch (err) {
+                        console.log('could not verify token');
+                        reject(err);
+                    }
                 });
                 return promise;
             };
@@ -84,7 +89,10 @@ export class GetAuthorizationToken {
                         };
                         resolve(rp(optionsTest));
                     } else {
-                        reject('Invalid token');
+                        reject( {
+                            message: 'Invalid token',
+                            status: 400
+                        });
                     }
                 });
                 return promise;
@@ -95,37 +103,34 @@ export class GetAuthorizationToken {
                     if (dssResponse) {
                         resolve(dssResponse);
                     } else {
-                        reject('Dss error response');
+                        reject( {
+                            message : 'Dss error response',
+                            status : 500
+                        });
                     }
 
                 });
                 return promise;
             };
             let p: any = await verifyToken().then(callDss).then(responseData, function(error) {
-                const user: any = {
-                    createdAt: new Date(),
-                    metadata: 'ERROR',
-                    data: 'Could not verify token ' + error
-                };
-                // return user;
 
-                throw new Error('Could not verify token');
+                return Promise.reject (
+                    {
+                        message : error.message,
+                        status : error.status
+                    }
+                );
             });
 
             console.log( JSON.stringify(p));
             return p;
         } else {
-            const user: any = {
-                createdAt: new Date(),
-                metadata: 'ERROR',
-                data: 'Invalid Token or missing token'
-            };
-           // return user;
 
-            throw {
-                message: 'error thrown',
-                status: 500
-            };
+            return Promise.reject({
+                message : 'missing token',
+                status : '400'
+            });
+
             // throw new Error('invalid auth token');
         }
     }
