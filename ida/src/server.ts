@@ -151,12 +151,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 RegisterRoutes(app);
 
-/*
-app.use(function (err: any, req: any, res:any, next:any) {
-    console.error(err.stack);
-    res.status(500).send(err);
+app.use( (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.status(err.status || 500).send(err.message || 'An error occurred during the request.');
 });
-*/
 
 if (appconfig.useSSL) {
 
