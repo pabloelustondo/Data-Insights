@@ -113,6 +113,8 @@ app.get('/test', function(req,res){
 
 app.get('/', function(req,res){
     res.sendFile(path.join(__dirname  + '/testing/spec/SpecRunner.html'));
+    //"DDB"
+    return res.send("DDB");
 });
 
 app.get('/status', function(req,res){

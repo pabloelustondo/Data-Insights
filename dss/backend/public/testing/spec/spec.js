@@ -217,7 +217,7 @@ describe("SOTI Data Analytics Security Service (DSS)", function() {
           done();},
         error: function( jqXHR, textStatus, errorThrown){
           expect(textStatus).toBe("error");
-          expect(errorThrown).toBe("Bad Request");
+          expect(errorThrown).toBe("Not Found");
       //    expect(jqXHR.responseText).toBe(ErrorMsg.mcurl_enrollement_failed_authentication);
           done();
         }
