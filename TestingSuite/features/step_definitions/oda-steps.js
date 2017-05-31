@@ -45,4 +45,14 @@ Cucumber.defineSupportCode(function(context) {
             console.log("Error:" + error);
         });
     });
+
+    Given('I make a GET request to ~/query/topics', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        callback();
+    });
+
+    Given('a POST submission with the following request paramaters {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        callback();
+    });
 });
