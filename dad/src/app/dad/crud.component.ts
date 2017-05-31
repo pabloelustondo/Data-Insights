@@ -12,8 +12,6 @@ import {DadConfigService} from "./dadconfig.service";
     template: `
       <div class="combobox">
 
-          <div class="hidden-div" id="hidden-div">
-
           <select #selectedOption (change)="add($event.target.value);" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
              <option id="created" style="color:black;" *ngFor="let option of options; let i=index" value="{{i}}" [selected]="option.name" >{{ option.name }}</option>
              <option style="color:black;" value="{{-2}}">No Filter Applied</option>
@@ -23,9 +21,9 @@ import {DadConfigService} from "./dadconfig.service";
           
           <div *ngIf="addValue">
             <div><input id="optionName" style="height:32px;" [(ngModel)]="optionName" type="text" placeholder="Option Name"></div>
-            <div><input id="optionAttribute" style="height:32px;" [(ngModel)]="optionAttribute" type="text" placeholder="Option Expression"></div>
+            <div><input id="optionAttribute"  style="height:32px;" [(ngModel)]="optionAttribute" type="text" placeholder="Option Expression"></div>
             <span id="addNewOption" class="glyphicons glyphicons-ok" (click)="addNewOption($event)"></span> 
-            <span  class="glyphicons glyphicons-remove" (click)="add(-1)"></span>
+            <span class="glyphicons glyphicons-remove" (click)="add(-1)"></span>
           </div>     
           
           <div *ngIf="updateValue">
@@ -82,6 +80,7 @@ export class DadCrudComponent {
       this.options[selected_option].attribute = this.updatedOptionAttribute;
       this.updateValue = false;
       this.optionChanged.emit(selected_option);
+      this.clearFields();
     }
 
     update(){
@@ -96,11 +95,21 @@ export class DadCrudComponent {
         else this.addValue = false;
       }
       this.optionChanged.emit(value);
+      this.clearFields();
     }
 
     deleteOption(selected_option) {
-      this.options.splice(selected_option, 1);
+      let parsed: any = parseInt(selected_option);
+      this.options.splice(parsed, 1);
+      this.optionChanged.emit(-2);
+      this.add(selected)
       this.updateValue = false;
-      this.optionChanged.emit(selected_option);
+    }
+
+    clearFields(){
+      this.optionName ="";
+      this.optionAttribute="";
+      this.updatedOptionName="";
+      this.updatedOptionAttribute="";
     }
 }

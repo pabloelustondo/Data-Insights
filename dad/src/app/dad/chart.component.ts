@@ -186,6 +186,10 @@ export class DadChartComponent implements OnInit {
                 this.chart.newFilter.readExpression = newFilter.attribute;
                 this.chart.newFilter.name = newFilter.name;
             }
+            if(v == -2) {
+                this.chart.newFilter.attribute = true;
+                this.chart.newFilter.readExpression = '';
+            }
             this.dadConfigsService.saveOne(this.chart);
             let chartData = this.mapper.map(this.chart, this.data);
             this.mapData = chartData;
