@@ -40,3 +40,6 @@ start cmd.exe /k "cd %installdir%\dos\backend & call npm run start"
 
 echo "starting cdl"
 start cmd.exe /k "cd %installdir%\cdl & call npm run start"
+
+echo "starting ida"
+start cmd.exe /k "cd %installdir%\ida & call npm run start"

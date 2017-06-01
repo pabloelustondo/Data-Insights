@@ -13,6 +13,9 @@ import * as querystring from 'querystring';
 import * as rp from 'request-promise';
 
 import {SDSBattery} from '../models/batteryData';
+
+
+/*
 const awsPush = require('../awsPush');
 
 let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');
@@ -30,6 +33,7 @@ const firehose = new AWS.Firehose(
         credentials : creds
     });
 
+*/
 
 @Route('Security')
 export class GetAuthorizationToken {
