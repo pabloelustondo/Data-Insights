@@ -25,7 +25,7 @@ Cucumber.defineSupportCode(function(context) {
     var responseCode = 0;
     var responseData = 0;
     var portnumber = 0;
-
+    var appconfig = require(process.cwd()+'/../globalconfig.json');
     // Request Structure
     var options  = {
         "method": "",
@@ -44,7 +44,6 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('grab IDA port number', function (callback) {
         // Write code here that turns the phrase above into concrete actions
-        var appconfig = require('C:/Users/sxia/Desktop/CustomerBI/globalconfigs/globalconfig_local.json');
         var ida_url = appconfig.ida_url;
         if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
         var port_str = ida_url.match("[0-9]+")[0];

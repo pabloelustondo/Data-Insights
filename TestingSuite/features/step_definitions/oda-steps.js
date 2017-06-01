@@ -20,6 +20,7 @@ Cucumber.defineSupportCode(function(context) {
     var portNumber = 0;
     var responseCode = 0;
     var responseData = '';
+    var appconfig = require(process.cwd()+'/../globalconfig.json');
     // Configure Client
     var options  = {
         "method": "",
@@ -37,7 +38,7 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('grab ODA port number', function (callback) {
         // Write code here that turns the phrase above into concrete actions
-        var appconfig = require('C:/Users/sxia/Desktop/CustomerBI/globalconfigs/globalconfig_local.json');
+
         var oda_url = appconfig.oda_url;
         if(oda_url == "" || oda_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
         var port_str = oda_url.match("[0-9]+")[0];
