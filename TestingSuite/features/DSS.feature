@@ -2,26 +2,31 @@ Feature: DSS API Tests
 
   Scenario: Enroll a MobiControl data source using an invalid x-access-token
     Given I set invalid header and body for external_user
-    When I POST :3004 with endpoint "registerDataSource"
+    And grab DSS port number
+    When I POST :portnumber with endpoint "registerDataSource"
     Then response code should be 400
 
   Scenario: Delete a data source and invalid x-access-token
     Given I set invalid header and body for external_user for delete
-    When I POST :3004 with endpoint "deleteDataSource"
+    And grab DSS port number
+    When I POST :portnumber with endpoint "deleteDataSource"
     Then response code should be 400
 
     # This is not implemented yet
   Scenario: Delete a data source with a valid x-access-token
     Given I set valid header and body for external_user for delete
-    When I POST :3004 with endpoint "deleteDataSource"
+    And grab DSS port number
+    When I POST :portnumber with endpoint "deleteDataSource"
     Then response code should be 400
 
   Scenario: Get temp authorizationToken from IDA with reset Data source
     Given I set head and body for handling credentials
-    When I GET :3004 with endpoint "sourceCredentials" to download credentials
+    And grab DSS port number
+    When I GET :portnumber with endpoint "sourceCredentials" to download credentials
     Then I set head and body for handling credentials
-    Then I POST :3004 with endpoint "resetCredentials" to reset credentials
-    Then I GET :3010 with old credentials and endpoint "Security/GetAuthorizationToken"
+    Then I POST :portnumber with endpoint "resetCredentials" to reset credentials
+    And grab IDA's port number
+    Then I GET :idaportnumber with old credentials and endpoint "Security/GetAuthorizationToken"
     And response body contain some sort of error
 
   # GUI Enrollment & Login

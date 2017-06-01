@@ -24,7 +24,8 @@ Cucumber.defineSupportCode(function(context) {
     var authorizationToken = '';
     var responseCode = 0;
     var responseData = 0;
-
+    var portnumber = 0;
+    var appconfig = require(process.cwd()+'/../globalconfig.json');
     // Request Structure
     var options  = {
         "method": "",
@@ -41,6 +42,19 @@ Cucumber.defineSupportCode(function(context) {
         "postambleCRLF": true
     };
 
+    Given('grab IDA port number', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var ida_url = appconfig.ida_url;
+        if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
+        var port_str = ida_url.match("[0-9]+")[0];
+        if(isNaN(port_str)){
+            throw new Error('Cannot get port: invalid global config file');
+        }else{
+            portnumber = parseInt(port_str);
+            callback();
+        }
+    });
+
     //Retrieve permanent access token from file
     Given(/^I set the xaccesskey$/, function (callback) {
         FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
@@ -52,8 +66,8 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //make get request to IDA with permanent token to retrieve temporary token
-    When(/^I Get :(\d+)$/, function (arg1, callback) {
-        options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + arg1;
+    When(/^I Get :portnumber$/, function (callback) {
+        options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portnumber;
         options.url = '/Security/getAuthorizationToken';
         options.headers['x-access-token'] = accessToken;
 
@@ -79,8 +93,9 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
-    When('I Post :{int} with example data', function (arg1, callback) {
-        options.preambleCRLF = options.postabmelCRLF = true;
+    When('I Post :portnumber with example data', function (callback) {
+        options.preambleCRLF = options.postambleCRLF = true;
+        options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portnumber;
         options.url = '/data';
         options.headers['x-access-token'] = authorizationToken;
         options.headers['content-type'] = 'application/json';
