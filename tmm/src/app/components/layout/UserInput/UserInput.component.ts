@@ -1,6 +1,5 @@
 ///<reference path="../../models/fakeData.ts"/>
 import { Component, OnInit } from '@angular/core';
-import { fakeData } from  '../../models/fakeData';
 
 @Component({
   templateUrl: './UserInput.component.html',
