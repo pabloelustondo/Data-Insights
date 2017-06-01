@@ -33,7 +33,8 @@ call npm install
 cd ..\..\cdl
 npm install
 
-cd ..
+cd ..\ida
+npm install
 
 echo "installations completed"
 
