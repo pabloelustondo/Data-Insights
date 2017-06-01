@@ -20,17 +20,17 @@ let config = require('../config.json');
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
-var path = require('path');
+let path = require('path');
 let appconfig = require('../appconfig.json');
 let globalconfig = require('../globalconfig.json');
 
-globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
-//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+globalconfig.hostname = 'localhost';  // this can be overwritten by app config if necessary
+// our app config will be the result of taking all global configurations and overwritting them with the local configurations
 Object.keys(appconfig).forEach(function(key){
     globalconfig[key] = appconfig[key];
 });
-globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
-console.log("configuration");
+globalconfig.port = globalconfig[globalconfig.id + '_url'].split(':')[2];
+console.log('configuration');
 console.log(appconfig);
 
 exports.config = config;
@@ -164,16 +164,17 @@ app.use(bodyParser.json({
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 
-app.get('/status', function(req,res){
-    if (req.query["secret"] !== appconfig.secret) return res.send("wrong secret");
-
-    var report:any = {};
-    Object.keys(appconfig).forEach(function(key){
-        if (key!== "secret") {
-            if (req.query[key]){
+app.get('/status', function(req, res) {
+    if (req.query['secret'] !== appconfig.secret) {
+        return res.send('wrong secret');
+    }
+    let report: any = {};
+    Object.keys(appconfig).forEach(function(key) {
+        if (key !== 'secret') {
+            if (req.query[key]) {
                 appconfig[key] = req.query[key];
             }
-            report[key]=appconfig[key];
+            report[key] = appconfig[key];
         }
     });
     return res.send(report);
