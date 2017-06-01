@@ -10,12 +10,8 @@ let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 const path = require('path');
 const config = require('../../config.json');
-const AWS = require('aws-sdk');
 
-import {verifyToken} from '../services/jwtService';
-import {uploadDataToS3} from '../services/awsService';
-
-import * as fs from 'fs';
+let kafka = require('kafka-node');
 import * as rp from 'request-promise';
 
 
@@ -87,6 +83,8 @@ export class UploadDataSetController {
         let ip = req.headers['x-forwarded-for'] ;
         let token = req.headers['x-access-token'];
         let contentType = req.headers['content-type'];
+
+
 
 
         if (!token) {
@@ -168,7 +166,30 @@ export class UploadDataSetController {
                     url: config['queue_address'],
                     body: data
                 };
-                return rp(options);
+                let kafkaClient = new kafka.Client(config.kafka_url);
+                let payloads =  [
+                    {
+                        topic: jwtDecodedToken.tenantId,
+                        partition: 0,
+                        messages: [data]
+                    }];
+                let kafkaOptions = { autoCommit: false};
+                try {
+                  //  let Producer = ;
+                    let producer = new kafka.Producer(kafkaClient);
+
+                    producer.on('ready', function (message: any) {
+                        console.log(message);
+                        producer.send(payloads, function (err: any, data: any) {
+                            console.log(data);
+                            return Promise.resolve(data);
+                        });
+                    });
+
+                } catch (e) {
+                    console.log('IDA could not communicate with kafka producer');
+                }
+                // return rp(options);
             } else {
                 return new Error('invalid auth token');
             }

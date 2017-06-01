@@ -17,38 +17,39 @@
     "startdebug": "npm run getConfigs && npm run build && node %NODE_DEBUG_OPTION% ./dist/server.js",
     "startdebugmac": "npm run getConfigs && npm run build && node $NODE_DEBUG_OPTION ./dist/server.js"
   },
-  "authors": [
-    {
-      "name": "Pablo Elustondo",
-      "email": "Pablo.Elustondo@soti.net"
+  "authors": [{
+      "name" : "Pablo Elustondo",
+      "email" : "Pablo.Elustondo@soti.net"
     },
     {
-      "name": "Varun Dave",
-      "email": "varun.dave@soti.net"
+      "name" : "Varun Dave",
+      "email" : "varun.dave@soti.net"
     }
   ],
   "license": "MIT",
   "dependencies": {
     "@types/request": "0.0.36",
     "@types/request-promise": "4.1.33",
-    "aws-iot-device-sdk": "1.0.13",
-    "aws-sdk": "2.7.11",
     "body-parser": "1.15.2",
-    "chai": "3.5.0",
-    "cp-cli": "^1.0.2",
     "express": "4.14.0",
-    "express-winston": "2.1.2",
-    "helmet": "3.4.1",
-    "jsonwebtoken": "7.2.1",
     "method-override": "2.3.6",
-    "mocha-typescript": "1.0.11",
-    "morgan": "1.8.1",
     "querystring": "0.2.0",
     "request": "2.79.0",
     "request-promise": "4.1.1",
     "tsoa": "1.1.8",
+    "chai": "3.5.0",
+    "mocha-typescript": "1.0.11",
     "winser": "1.0.2",
-    "winston": "2.3.0"
+    "cp-cli": "1.0.2",
+    "winston": "2.3.0",
+    "express-winston": "2.1.2",
+	"aws-iot-device-sdk": "1.0.13",
+    "aws-sdk": "2.7.11",
+    "helmet" : "3.4.1",
+    "jsonwebtoken" : "7.2.1",
+    "morgan" : "1.8.1",
+    "kafka-node": "1.6.2",
+    "local-dynamo": "0.4.1"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.30",

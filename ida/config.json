@@ -3,6 +3,7 @@
   "port": 3010,
   "useSSL" : false,
   "logDir" : "./logs",
+  "kakfa_url" : "localhost:2181",
   "inputQue-address" : "http://localhost:6000",
   "queue_address" : "http://localhost:8002/data/request",
   "dss-address" : "http://localhost:3004",
