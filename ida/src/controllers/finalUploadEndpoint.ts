@@ -10,13 +10,8 @@ let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 const path = require('path');
 const config = require('../../config.json');
-const AWS = require('aws-sdk');
+
 let kafka = require('kafka-node');
-
-import {verifyToken} from '../services/jwtService';
-import {uploadDataToS3} from '../services/awsService';
-
-import * as fs from 'fs';
 import * as rp from 'request-promise';
 
 
