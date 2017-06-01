@@ -25,6 +25,9 @@ Cucumber.defineSupportCode(function(context) {
     var delAgentId1 = "42734935-57d8-4a1d-a2d4-0fd3e98bf4b3";
     var delAgentId2 = "6f3702e2-b3a5-4b09-8d5d-af7928da15dc";
     var devServer = 'https://dev2012r2-sk.sotidev.com:';
+    var portnumber = 0;
+    var idaportnumber = 0;
+    var appconfig = require(process.cwd()+'/../globalconfig.json');
     var options  = {
         'url': '',
         'baseUrl': 'https://dev2012r2-sk.sotidev.com:',
@@ -54,6 +57,33 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
+    Given("grab IDA's port number", function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var ida_url = appconfig.ida_url;
+        if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
+        var port_str = ida_url.match("[0-9]+")[0];
+        if(isNaN(port_str)){
+            throw new Error('Cannot get port: invalid global config file');
+        }else{
+            idaportnumber = parseInt(port_str);
+            callback();
+        }
+    });
+    Given('grab DSS port number', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var appconfig = require('C:/Users/sxia/Desktop/CustomerBI/globalconfigs/globalconfig_local.json');
+        var dss_url = appconfig.dss_url;
+        if(dss_url == "" || dss_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
+        var port_str = dss_url.match("[0-9]+")[0];
+        if(isNaN(port_str)){
+            throw new Error('Cannot get port: invalid global config file');
+        }else{
+            portnumber = parseInt(port_str);
+            callback();
+        }
+    });
+
+
     Given('I set valid header and body for external_user', function (callback) {
         options.headers['x-access-token'] = invalidToken;
         options.body = {
@@ -68,8 +98,8 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I POST :{int} with endpoint {stringInDoubleQuotes}', function (int, stringInDoubleQuotes, callback) {
-        options.baseUrl = devServer + int;
+    When('I POST :portnumber with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        options.baseUrl = devServer + portnumber;
         options.url = stringInDoubleQuotes;
         Request.post(options, function (error, response, body) {
             if (error) {
@@ -106,8 +136,8 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I GET :{int} with endpoint {stringInDoubleQuotes} to download credentials', function (int, stringInDoubleQuotes, callback) {
-        options.baseUrl = devServer + int;
+    When('I GET :portnumber with endpoint {stringInDoubleQuotes} to download credentials', function (stringInDoubleQuotes, callback) {
+        options.baseUrl = devServer + portnumber;
         options.url = stringInDoubleQuotes + '/' + downAgentId;
         options.preambleCRLF = options.postambleCRLF = true;
         Request.get(options, function (error, response, body) {
@@ -126,11 +156,11 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Then('I GET :{int} with old credentials and endpoint {stringInDoubleQuotes}', function (int, stringInDoubleQuotes, callback) {
+    Then('I GET :idaportnumber with old credentials and endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         options.preambleCRLF = options.postambleCRLF = true;
         options.url = stringInDoubleQuotes;
         options.headers['x-access-token'] = oldauthorizationToken;
-
+        options.baseUrl = devServer + idaportnumber;
         Request.get(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:', error);
@@ -141,7 +171,7 @@ Cucumber.defineSupportCode(function(context) {
         })
     });
 
-    Then('I POST :{int} with endpoint {stringInDoubleQuotes} to reset credentials', function (int, stringInDoubleQuotes, callback) {
+    Then('I POST :portnumber with endpoint {stringInDoubleQuotes} to reset credentials', function (int, stringInDoubleQuotes, callback) {
         options.preambleCRLF = options.postambleCRLF = true;
         options.url = stringInDoubleQuotes + '/' + downAgentId;
         options.headers['x-access-token'] = oldauthorizationToken;

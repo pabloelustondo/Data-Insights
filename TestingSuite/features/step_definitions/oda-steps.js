@@ -17,32 +17,95 @@ Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
     var When = context.When;
     var Then = context.Then;
-
+    var portNumber = 0;
+    var responseCode = 0;
+    var responseData = '';
+    var appconfig = require(process.cwd()+'/../globalconfig.json');
     // Configure Client
     var options  = {
-        url: '',
-        'baseUrl': 'https://dev2012r2-sk.sotidev.com:3002',
-        'rejectUnauthorized': false,
-        'headers' : {
-            'Content-Type': 'application/json',
-            'Keep-Alive': true
-        }
+        "method": "",
+        "url": "",
+        "rejectUnauthorized": false,
+        "headers": {},
+        "json": true,
+        "body": {},
+        "preambleCRLF": true,
+        "postambleCRLF": true
     };
 
     // Step Definitions
     // Scenario: Initial Charge Levels
-    Given(/^I Make a GET Call to ~\/Devices\/Battery\/Summary\/InitialChargeLevels$/, function (callback) {
-        options.url = '/Devices/Battery/Summary/InitialChargeLevels?dateFrom=2016-01-01&dateTo=2016-12-31';
-        Request(options, function  (error, response, body) {
-            console.log("Data: " + body);
-            console.log("Response: " + JSON.stringify(response));
-            if(response.hasOwnProperty('statusCode') && response.statusCode == 200){
-                callback();
-            } else {
-                console.log("Error: " + body('statusCode'));
+
+    Given('grab ODA port number', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+
+        var oda_url = appconfig.oda_url;
+        if(oda_url == "" || oda_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
+        var port_str = oda_url.match("[0-9]+")[0];
+        if(isNaN(port_str)){
+            throw new Error('Cannot get port: invalid global config file');
+        }else{
+            portNumber = parseInt(port_str);
+            callback();
+        }
+    });
+
+    Given('I set request header and body to query {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.preambleCRLF = options.postambleCRLF = true;
+        options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portNumber;
+        options.headers['content-type'] = 'application/json';
+        options.body = {
+            "dataSetId": "string",
+            "from": [
+                stringInDoubleQuotes
+            ]
+        };
+        callback();
+    });
+
+    Given('I make a POST call to ~/query', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.url = '/query';
+        Request.post(options, function (error, response, body) {
+            if (error) {
+                throw new Error('upload failed:'+ error);
             }
-        }).on('error', function (error) {
-            console.log("Error:" + error);
+            responseData = body;
+            responseCode = response.statusCode;
+            callback();
         });
     });
+
+    Then('response code is :{int}', function (int, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        if (parseInt(int) != parseInt(responseCode))
+            throw new Error('Response should be ' + response +' but is ' + responseCode);
+        callback();
+    });
+
+    Given('I make a GET request to ~/query/topics', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        callback();
+    });
+
+    Then('The response message should not include {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var resString = JSON.stringify(responseData).toLowerCase();
+        if (resString.includes(stringInDoubleQuote))
+            throw new Error("response message includes: " + stringInDoubleQuote);
+        callback();
+    });
+
+    Then('The response message should include {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var resString = JSON.stringify(responseData).toLowerCase();
+        if (!resString.includes(stringInDoubleQuote))
+            throw new Error("response message did not includes: " + stringInDoubleQuote);
+        callback();
+    });
+
+
+
+
 });
