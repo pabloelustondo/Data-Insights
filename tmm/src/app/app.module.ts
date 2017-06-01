@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { UserInput } from './components/layout/UserInput/UserInput.component';
 import {RouterModule} from "@angular/router";
 
-
 const routes = [
   { path: '**', component: UserInput },
 ];
@@ -20,7 +19,7 @@ const routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
   bootstrap: [AppComponent]
 })
