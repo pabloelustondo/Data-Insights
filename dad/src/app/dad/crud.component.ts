@@ -102,7 +102,6 @@ export class DadCrudComponent {
       let parsed: any = parseInt(selected_option);
       this.options.splice(parsed, 1);
       this.optionChanged.emit(-2);
-      this.add(selected)
       this.updateValue = false;
     }
 
