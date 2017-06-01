@@ -10,10 +10,10 @@ let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 const path = require('path');
 const config = require('../../config.json');
+import {appconfig} from '../server';
 
 let kafka = require('kafka-node');
 import * as rp from 'request-promise';
-
 
 @Route('data')
 export class UploadDataSetController {
@@ -166,7 +166,7 @@ export class UploadDataSetController {
                     url: config['queue_address'],
                     body: data
                 };
-                let kafkaClient = new kafka.Client(config.kafka_url);
+                let kafkaClient = new kafka.Client(appconfig.kafka_url);
                 let payloads =  [
                     {
                         topic: jwtDecodedToken.tenantId,

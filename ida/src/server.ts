@@ -21,7 +21,7 @@ const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
 let path = require('path');
-let appconfig = require('../appconfig.json');
+export var appconfig = require('../appconfig.json');
 let globalconfig = require('../globalconfig.json');
 
 globalconfig.hostname = 'localhost';  // this can be overwritten by app config if necessary
@@ -33,9 +33,6 @@ globalconfig.port = globalconfig[globalconfig.id + '_url'].split(':')[2];
 console.log('configuration');
 console.log(appconfig);
 
-exports.config = config;
-exports.appconfig = appconfig;
-
 appconfig = globalconfig;
 
 if (!fs.existsSync( config.logDir)) {
@@ -46,7 +43,6 @@ if (!fs.existsSync( config.logDir)) {
     });
 }
 
-exports.app = app;
 app.use(helmet());
 /*
 const logger = expressWinston.logger({
