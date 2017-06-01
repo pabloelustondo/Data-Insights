@@ -54,7 +54,6 @@ Cucumber.defineSupportCode(function(context) {
         // Write code here that turns the phrase above into concrete actions
         options.preambleCRLF = options.postambleCRLF = true;
         options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portNumber;
-        options.url = '/query';
         options.headers['content-type'] = 'application/json';
         options.body = {
             "dataSetId": "string",
@@ -67,6 +66,7 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('I make a POST call to ~/query', function (callback) {
         // Write code here that turns the phrase above into concrete actions
+        options.url = '/query';
         Request.post(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
