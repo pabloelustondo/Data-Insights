@@ -193,7 +193,6 @@ export class UploadDataSetController {
 
                 } catch (e) {
                     console.log('IDA could not communicate with kafka producer');
-
                 }
                 // return rp(options);
             } else {

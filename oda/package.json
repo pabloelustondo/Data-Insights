@@ -28,7 +28,7 @@
     "aws-sdk": "2.9.0",
     "body-parser": "1.15.2",
     "chai": "3.5.0",
-    "cp-cli": "^1.0.2",
+    "cp-cli": "1.0.2",
     "dynalite": "1.1.0",
     "express": "4.14.0",
     "express-winston": "2.1.2",
@@ -41,7 +41,7 @@
     "querystring": "0.2.0",
     "request": "2.79.0",
     "request-promise": "4.1.1",
-    "socket.io": "^2.0.1",
+    "socket.io": "2.0.1",
     "tsoa": "1.0.14",
     "winser": "1.0.2",
     "winston": "2.3.0"
