@@ -95,7 +95,7 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
     When('I Post :portnumber with example data', function (callback) {
-        options.preambleCRLF = options.postabmelCRLF = true;
+        options.preambleCRLF = options.postambleCRLF = true;
         options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portnumber;
         options.url = '/data';
         options.headers['x-access-token'] = authorizationToken;

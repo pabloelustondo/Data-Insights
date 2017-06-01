@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "npm install -g cucumber && npm install",
-    "test": "./node_modules/.bin/cucumberjs -f pretty  features/IDA.feature",
+    "test": "./node_modules/.bin/cucumberjs -f pretty  features/oda_backend_tests.feature",
     "report": "./node_modules/.bin/cucumberjs -f json features/DSS.feature > ./features/ReportingBDD.json"
   },
   "author": "",
