@@ -180,8 +180,8 @@ export class DadChartComponent implements OnInit {
         if(!this.chart.newFilter) {
             this.chart.newFilter = {};
         }
-        if (this.chart.filters && this.chart.filters.length>0){
-            if(v>=0) {
+        if (this.chart.filters && this.chart.filters.length >=0){
+            if(v >= 0) {
                 let newFilter = this.chart.filters[v];
                 this.chart.newFilter.readExpression = newFilter.attribute;
                 this.chart.newFilter.name = newFilter.name;

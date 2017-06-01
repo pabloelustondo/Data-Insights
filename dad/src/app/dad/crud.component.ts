@@ -12,12 +12,11 @@ import {DadConfigService} from "./dadconfig.service";
     template: `
       <div class="combobox">
 
-          <select #selectedOption (change)="add($event.target.value);" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+          <select [(ngModel)]="selectedValue" #selectedOption (change)="add($event.target.value);" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
              <option id="created" style="color:black;" *ngFor="let option of options; let i=index" value="{{i}}" [selected]="option.name" >{{ option.name }}</option>
              <option style="color:black;" value="{{-2}}">No Filter Applied</option>
              <option  id="selection" style="color:black;" value="{{-1}}" >Add Option</option> 
-          </select>     
-
+          </select>
           
           <div *ngIf="addValue">
             <div><input id="optionName" style="height:32px;" [(ngModel)]="optionName" type="text" placeholder="Option Name"></div>
@@ -34,8 +33,7 @@ import {DadConfigService} from "./dadconfig.service";
             <span id='cancel' class="glyphicons glyphicons-remove" (click)="update()"></span>
           </div>
           
-           <span id="edit" class="glyphicons glyphicons-pencil" (click)="update()"></span>
-           
+          <span *ngIf="selectedValue != -2" id="edit" class="glyphicons glyphicons-pencil" (click)="update()"></span>
       </div>
     `,
 })
@@ -49,6 +47,7 @@ export class DadCrudComponent {
     updatedOptionAttribute?:any;
     updateValue: boolean = false;
     addValue: boolean = false;
+    selectedValue: number = -2;
 
   @Input()
     model: any;
@@ -72,6 +71,8 @@ export class DadCrudComponent {
       this.options.push(this.option);
       this.addValue = false;
       this.optionChanged.emit(this.options.length -1);
+      this.selectedValue = -2;
+
     }
 
     updateSelected(selected_option) {
@@ -100,9 +101,14 @@ export class DadCrudComponent {
 
     deleteOption(selected_option) {
       let parsed: any = parseInt(selected_option);
-      this.options.splice(parsed, 1);
+      if(parsed == this.options.length -1) {
+          this.options.pop();
+      } else {
+          this.options.splice(parsed, 1);
+      }
       this.optionChanged.emit(-2);
       this.updateValue = false;
+      this.selectedValue = -2;
     }
 
     clearFields(){
@@ -111,4 +117,5 @@ export class DadCrudComponent {
       this.updatedOptionName="";
       this.updatedOptionAttribute="";
     }
+
 }
