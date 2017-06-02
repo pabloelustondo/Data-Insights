@@ -2,16 +2,15 @@ Welcome to SOTI Insights
 
 SHORT STORY (Windows)
 make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka)
-(follow official websites)
-make sure you have two scripts to start kafka "startkafka"  "startzoo" (for zookeper) that can run anywhere.
-also make sure you can run mongod from anywhere, you have in your path.
+we assume mongodb installed in C:\mongodb and kafka in c:\kafka. (if not please modify folder in 'run' script.
 
-git clone
-install   (takes a few minutes, get a coffee)
-run     (by default will run on localhost)
-http://localhost:5000
+> git clone
+> install   (takes a few minutes, get a, good, coffee)
+> run     (by default will run on localhost)
+> http://localhost:5000
 
-run config  for specific configuration ...
+
+to run usign a specific configuration do  => run config
 for example
 "dev" is for sotiinsights.clooudapp.net
 
