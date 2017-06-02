@@ -9,9 +9,9 @@ import * as https from 'https';
 import * as http from 'http';
 import * as fs from 'fs';
 import * as methodOverride from 'method-override';
-const morgan = require('morgan');
+//const morgan = require('morgan');
 
-const expressWinston = require('express-winston');
+//const expressWinston = require('express-winston');
 
 import {RegisterRoutes} from './routes';
 
@@ -21,7 +21,7 @@ const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
 let path = require('path');
-let appconfig = require('../appconfig.json');
+export var appconfig = require('../appconfig.json');
 let globalconfig = require('../globalconfig.json');
 
 globalconfig.hostname = 'localhost';  // this can be overwritten by app config if necessary
@@ -33,9 +33,6 @@ globalconfig.port = globalconfig[globalconfig.id + '_url'].split(':')[2];
 console.log('configuration');
 console.log(appconfig);
 
-exports.config = config;
-exports.appconfig = appconfig;
-
 appconfig = globalconfig;
 
 if (!fs.existsSync( config.logDir)) {
@@ -46,8 +43,8 @@ if (!fs.existsSync( config.logDir)) {
     });
 }
 
-exports.app = app;
 app.use(helmet());
+/*
 const logger = expressWinston.logger({
     transports: [
         new winston.transports.File({
@@ -141,7 +138,7 @@ const errorLogger = expressWinston.errorLogger({
     exitOnError: false
 });
 
-
+*/
 
 // app.use(morgan('dev'));
 // app.use(logger);
@@ -150,6 +147,14 @@ app.use('/', express.static(__dirname + '/swagger-ui'));
 app.use('/swagger.json', (req, res) => {
     res.sendfile(swaggerPath);
 });
+
+app.use('/testing', express.static(path.join(__dirname + '/../testing')));
+app.use('/src', express.static(path.join(__dirname + '/../src')));
+
+app.get('/test', function(req,res){
+    res.sendFile(path.join(__dirname  + '/../testing/spec/SpecRunner.html'));
+});
+
 app.use(bodyParser.json({limit: '500mb'}));
 app.use(bodyParser.urlencoded({limit: '500mb', extended: true}));
 
@@ -205,9 +210,12 @@ if (appconfig.useSSL) {
 
 // app.use(errorLogger);
 
+/*
 module.exports = logger;
 module.exports.stream = {
     write: function(message: any, encoding: any){
         logger.info(message);
     }
 };
+
+    */

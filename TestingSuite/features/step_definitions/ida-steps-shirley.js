@@ -25,7 +25,7 @@ Cucumber.defineSupportCode(function(context) {
     var responseCode = 0;
     var responseData = 0;
     var portnumber = 0;
-    var appconfig = require(process.cwd()+'/../globalconfig.json');
+    var appconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
     // Request Structure
     var options  = {
         "method": "",

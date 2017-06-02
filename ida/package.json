@@ -14,7 +14,8 @@
     "test": "tsc -p . && cd dist && mocha",
     "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json",
     "start": "npm run getConfigs && npm run build && node ./dist/server.js",
-    "startdebug" : "npm run getConfigs && npm run build && node %NODE_DEBUG_OPTION% ./dist/server.js"
+    "startdebug": "npm run getConfigs && npm run build && node %NODE_DEBUG_OPTION% ./dist/server.js",
+    "startdebugmac": "npm run getConfigs && npm run build && node $NODE_DEBUG_OPTION ./dist/server.js"
   },
   "authors": [{
       "name" : "Pablo Elustondo",
