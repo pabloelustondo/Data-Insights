@@ -35,7 +35,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     `,
 })
 
-export class DadCrudComponent {
+export class CrudComponent {
 
     addOption?: boolean = false;
     optionName?: any;
