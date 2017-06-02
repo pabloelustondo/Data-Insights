@@ -155,36 +155,40 @@ export class UploadDataSetController {
                     clientMetadata: metadata,
                     clientData: express.body.data
                 };
-                const headersOptions = {
-                    'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
-                };
+                // create
 
-                const options: rp.OptionsWithUrl = {
-                    json: true,
-                    method: 'POST',
-                    headers: headersOptions,
-                    url: config['queue_address'],
-                    body: data
-                };
                 let kafkaClient = new kafka.Client(config.kafka_url);
-                let payloads =  [
-                    {
-                        topic: jwtDecodedToken.tenantId,
-                        partition: 0,
-                        messages: [data]
-                    }];
-                let kafkaOptions = { autoCommit: false};
                 try {
                   //  let Producer = ;
                     let producer = new kafka.Producer(kafkaClient);
 
+
                     producer.on('ready', function (message: any) {
-                        console.log(message);
+                        let payloads: any =  [
+                            {
+                                topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetdId,
+                                partition: 0,
+                                messages: data
+                            }];
                         producer.send(payloads, function (err: any, data: any) {
                             console.log(data);
                             return Promise.resolve(data);
                         });
+                        let transactionLogPayloads: any =  [
+                            {
+                                topic: jwtDecodedToken.tenatid + 'transactionLog',
+                                partition: 0,
+                                messages: JSON.stringify(data)
+                            }];
+                        producer.send(transactionLogPayloads, function (err: any, data: any) {
+                            console.log(data);
+                           // return Promise.resolve(data);
+                        });
                     });
+                    producer.on('error', function (error: any) {
+                        console.log(error);
+                    });
+
 
                 } catch (e) {
                     console.log('IDA could not communicate with kafka producer');
