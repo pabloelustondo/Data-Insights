@@ -2,16 +2,16 @@
 
 call setconfig %1
 
-SET kafkadir= 'C:\kafka\kafka'
+SET kafkadir=C:\kafka
 
 SET installdir= %cd%
 cd %installdir%
 
 echo "starting kafka zoo"
-start cmd.exe /k  %kafkadir%\bin\windows\zookeeper-server-start.bat %kafkadir%\config\zookeeper.properties
+start cmd.exe /k  "%kafkadir%\bin\windows\zookeeper-server-start.bat %kafkadir%\config\zookeeper.properties"
 
 echo "starting kafka"
-start cmd.exe /k  %kafkadir%\bin\windows\kafka-server-start.bat %kafkadir%\config\server.properties
+start cmd.exe /k  "%kafkadir%\bin\windows\kafka-server-start.bat %kafkadir%\config\server.properties"
 
 echo "starting mongo"
 start cmd.exe /k mongod

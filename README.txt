@@ -10,13 +10,17 @@ we assume mongodb installed in C:\mongodb and kafka in c:\kafka. (if not please 
 > http://localhost:5000
 
 
-to run usign a specific configuration do  => run config
-for example
-"dev" is for sotiinsights.clooudapp.net
-
+to run usign a specific configuration do for example "run dev"
 default configurations are in the globalconfigs folder.
-each microservice is able to overwrite the global configuration.....for that you need to go into each service folder.
-(in vanilla deployments you do not need that)
+Note: if you need to overwrite some configuration in a specific module, you can use the appconfig.json.
+each microservice appconfig.json will overwrite the globalconfig.json.
+
+
+
+
+
+
+
 
 LONG STORY
 
