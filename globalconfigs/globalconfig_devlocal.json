@@ -11,7 +11,7 @@
   "cdl_url":"http://sotiinsights.cloudapp.net:8025",
   "dos_url":"http://sotiinsights.cloudapp.net:5000",
   "dosback_url":"http://sotiinsights.cloudapp.net:5001",
-  "ida_url":"http://sotiinsights.cloudapp.net:8023",
+  "ida_url":"http://sotiinsights.cloudapp.net:8027",
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017"
 }
