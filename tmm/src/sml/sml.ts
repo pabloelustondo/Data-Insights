@@ -1,20 +1,25 @@
-/**
+0/**
  * Created by dister on 6/1/2017.
  */
+
 export class SmlTenantMetadata {
 
   id: string;  //id of the metadata
   name: string;
-  dataSets: any[];
-  dataSource: any[];
-  users: any[];
   tenantId: string;
-  idpInformation: any[];
+  dataSets: SmlDataSet[];
+  dataSource: SmlDataSource[];
+  users: SmlUsers[];
+  idpInformation: SmlIdpInformation[];
 }
 
 export class SmlElement{
   id: string;
   name: string;
+
+  validate(){
+    return (this.id !== undefined && this.name !== undefined)
+  }
 }
 
 export class SmlDataSource extends SmlElement{

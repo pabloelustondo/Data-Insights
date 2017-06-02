@@ -1,9 +1,10 @@
 ///<reference path="../../models/fakeData.ts"/>
 import { Component, OnInit } from '@angular/core';
+//import { DadCrud } from '../../../../../../dad/src/app/dad/crud.component';
 
 @Component({
   template: `<div class="row">
-  <div class="large-3 columns">
+  <div class="col-md-4">
     <ul>
       <li *ngFor="let item of fakeDataPhoneModels">
         <a (click)="selectJSON(item)">
@@ -12,16 +13,20 @@ import { Component, OnInit } from '@angular/core';
       </li>
     </ul>
   </div>
-  <div class="col-xs-5">
+  <div class="col-md-8">
     <form (submit)="onSubmitValidateJSON()">
       <label> {{ toDisplay.name }}
-        <textarea autofocus rows="20vh">
+        <textarea autofocus cols="100%" rows="10">  
          {{toDisplay | json }}
         </textarea>
       </label>
-      <button type="button" class="btn btn-primary">Clear</button>
     </form>
   </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <span class="glyphicons glyphicons-plus"></span>
+    </div>
 </div>
  `
 })
@@ -64,5 +69,9 @@ export class UserInput implements OnInit {
 
   selectJSON(item) {
     this.toDisplay = item;
+  }
+
+  isEmpty(item) {
+    return (item == null);
   }
 }
