@@ -20,7 +20,9 @@ Cucumber.defineSupportCode(function(context) {
     var portNumber = 0;
     var responseCode = 0;
     var responseData = '';
-    var appconfig = require(process.cwd()+'/../globalconfig.json');
+    var appconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
+    var accessToken='';
+    const FS = require('fs');
     // Configure Client
     var options  = {
         "method": "",
@@ -36,7 +38,7 @@ Cucumber.defineSupportCode(function(context) {
     // Step Definitions
     // Scenario: Initial Charge Levels
 
-    Given('grab ODA port number from globalconfig.json', function (callback) {
+    Given('I grab ODA port number from globalconfig.json', function (callback) {
         //I get ODA's port number from the url in config json file using REGEX
         var oda_url = appconfig.oda_url;
         if(oda_url == "" || oda_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
@@ -49,7 +51,18 @@ Cucumber.defineSupportCode(function(context) {
         }
     });
 
-    Given('I set valid request header and body for POST call to ~/query', function (stringInDoubleQuotes, callback) {
+    Given(/^I set the xaccesskey for ODA$/, function (callback) {
+        FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
+            if (err) return console.log(err);
+            accessToken = contents;
+            callback();
+        });
+
+    });
+
+
+
+    Given('I set valid request header and body for POST call to ~/query', function (callback) {
         //prepare header and body for posting to IDA query endpoint
         options.preambleCRLF = options.postambleCRLF = true;
         options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portNumber;
@@ -63,7 +76,24 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set invalid request header and body for POST call to ~/query', function (stringInDoubleQuotes, callback) {
+    When('I GET topics', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        resetOptions();
+        options.url = '/query/topics';
+        options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portNumber;
+        options.headers['content-type'] = 'application/json';
+        options.headers['x-access-token'] = accessToken;
+        Request.get(options, function (error, response, body) {
+            if (error) {
+                throw new Error('upload failed:'+ error);
+            }
+            responseData = body;
+            responseCode = response.statusCode;
+            callback();
+        });
+    });
+
+    Given('I set invalid request header and body for POST call to ~/query', function (callback) {
         //prepare header and body for posting to IDA query endpoint
         options.preambleCRLF = options.postambleCRLF = true;
         options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portNumber;
@@ -77,7 +107,7 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I make a POST call to ~/query', function (callback) {
+    Given('I make a POST call to query', function (callback) {
         //I post to query and record the response
         options.url = '/query';
         Request.post(options, function (error, response, body) {
@@ -118,5 +148,17 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
+    function resetOptions() {
+        options  = {
+            "method": "",
+            "url": "",
+            "rejectUnauthorized": false,
+            "headers": {},
+            "json": true,
+            "body": {},
+            "preambleCRLF": true,
+            "postambleCRLF": true
+        };
+    }
 
 });

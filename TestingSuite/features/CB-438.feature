@@ -7,9 +7,9 @@ Background:
   Simple consumer should be able to subscribe/consume the data
 
   Scenario: GET list of existing topics
-    Given I set the xaccesskey
-    Given I grab ODA port number from globalconfig.json
-    When I Get :portnumber/query/topics
+    Given I set the xaccesskey for ODA
+    And I grab ODA port number from globalconfig.json
+    When I GET topics
     Then response code must be 200
     Then response body should be error-free
     Then The response message should not include <testResponse>
@@ -17,7 +17,7 @@ Background:
   Scenario: Subscribe to a topic
     Given I set valid request header and body for POST call to ~/query
     And I grab ODA port number from globalconfig.json
-    And I make a POST call to :portnumber/query
+    And I make a POST call to query
     Then response code is :200
     #Further validation is needed
     Then The response message should contain the merged dataset

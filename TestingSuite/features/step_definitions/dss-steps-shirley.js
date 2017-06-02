@@ -27,7 +27,7 @@ Cucumber.defineSupportCode(function(context) {
     var devServer = 'https://dev2012r2-sk.sotidev.com:';
     var portnumber = 0;
     var idaportnumber = 0;
-    var appconfig = require(process.cwd()+'/../globalconfig.json');
+    var appconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
     var options  = {
         'url': '',
         'baseUrl': 'https://dev2012r2-sk.sotidev.com:',
