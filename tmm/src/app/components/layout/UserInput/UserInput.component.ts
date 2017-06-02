@@ -2,8 +2,28 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  templateUrl: './UserInput.component.html',
-  styleUrls: ['./UserInput.component.css']
+  template: `<div class="row">
+  <div class="large-3 columns">
+    <ul>
+      <li *ngFor="let item of fakeDataPhoneModels">
+        <a (click)="selectJSON(item)">
+          {{item.name}}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-xs-5">
+    <form (submit)="onSubmitValidateJSON()">
+      <label> {{ toDisplay.name }}
+        <textarea autofocus rows="20vh">
+         {{toDisplay | json }}
+        </textarea>
+      </label>
+      <button type="button" class="btn btn-primary">Clear</button>
+    </form>
+  </div>
+</div>
+ `
 })
 export class UserInput implements OnInit {
   toDisplay: String;
@@ -44,9 +64,5 @@ export class UserInput implements OnInit {
 
   selectJSON(item) {
     this.toDisplay = item;
-  }
-
-  isEmpty(item) {
-    return (item == null);
   }
 }
