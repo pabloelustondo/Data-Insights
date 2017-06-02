@@ -76,6 +76,14 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
+    Then('The response message should not include {string}', function (string, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var resString = JSON.stringify(responseData).toLowerCase();
+        if (resString.includes('query not supported') || !resString.includes('createdat'))
+            throw new Error("response message did not includes: " + stringInDoubleQuote);
+        callback();
+    });
+
     When('I GET topics', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         resetOptions();
@@ -127,10 +135,6 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I make a GET request to ~/query/topics', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
-        callback();
-    });
 
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
