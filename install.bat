@@ -25,9 +25,9 @@ call npm install
 cd %installdir%\dos\backend
 call npm install
 cd %installdir%\ida
-npm install
+call npm install
 cd %installdir%\cdl
-npm install
+call npm install
 cd %installdir%\tmm
 call npm install
 cd %installdir%\tmm\backend
