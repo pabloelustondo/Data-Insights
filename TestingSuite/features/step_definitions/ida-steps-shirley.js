@@ -4,7 +4,7 @@ const Cucumber = require('cucumber');
 const Request = require('request');
 const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
-
+const globalconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
 require('ssl-root-cas').inject();
 
 // Certificate Handling
@@ -25,11 +25,12 @@ Cucumber.defineSupportCode(function(context) {
     var responseCode = 0;
     var responseData = 0;
     var portnumber = 0;
-    var appconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
+
     // Request Structure
     var options  = {
         "method": "",
         "url": "",
+        "baseUrl":"",
         "rejectUnauthorized": false,
         "headers": {
             "content-type": "application/json",
@@ -44,7 +45,7 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('grab IDA port number', function (callback) {
         // Write code here that turns the phrase above into concrete actions
-        var ida_url = appconfig.ida_url;
+        var ida_url = globalconfig.ida_url;
         if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
         var port_str = ida_url.match("[0-9]+")[0];
         if(isNaN(port_str)){

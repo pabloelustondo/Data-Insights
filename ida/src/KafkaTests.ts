@@ -1,82 +1,54 @@
-import { suite, test, slow, timeout, skip, only } from 'mocha-typescript';
-import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
-import {SDS} from './models/user';
+import { suite, test} from 'mocha-typescript';
 import * as express from 'express';
-import * as methodOverride from 'method-override';
-
-import * as https from 'https';
-import * as fs from 'fs';
-let localDynamo = require('local-dynamo');
-
-import {RegisterRoutes} from './routes';
-const expressWinston = require('express-winston');
-
 let helmet = require('helmet');
-
-
 const app = express();
-const swaggerPath =  __dirname + '/swagger.json';
-
-var http = require('http').Server(app);
-
-var path = require('path');
+let http = require('http').Server(app);
+let path = require('path');
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
 let globalconfig = require('../globalconfig.json');
-
-const config = require('../config.json');
 let jwt  = require('jsonwebtoken');
 let chai = require('chai');
+let TS = require('TS');
 let chaiHttp = require('chai-http');
 let server = require('./server');
 let should = chai.should();
 let expect = chai.expect;
+let kafka = require('kafka-node');
 
-const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhZ2VudGlkIjoiMjEzIiwidGVuYW50aWQiOiJ4eXphMTIiLCJpYXQiOjE0ODc4Nzk1NTcsImV4cCI6MTQ5NTA3OTU1N30.TnX4J-xSBGxvgSd2CO5CCMZvQ4TBHJX5Ne4Ioy6A2Kk';
-
-globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
-//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+globalconfig.hostname = 'localhost';  // this can be overwritten by app config if necessary
+// our app config will be the result of taking all global configurations and overwritting them with the local configurations
 Object.keys(appconfig).forEach(function(key){
     globalconfig[key] = appconfig[key];
-})
-globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
-
+});
+globalconfig.port = globalconfig[globalconfig.id + '_url'].split(':')[2];
 appconfig = globalconfig;
-
-console.log("configuration");
-console.log(appconfig);
-
 exports.config = config;
 exports.appconfig = appconfig;
 
 
-var kafka = require('kafka-node');
-var kafkaClient = new kafka.Client(appconfig.kafka_url);
 @suite class HelloKafka {
 
-    @test('Posting to a data source through IDA should result in a valid response from Kafka')
-    public post_to_ida(done: Function){
 
+    @test('Posting to a data source through IDA should result in a valid response from Kafka')
+    public post_to_ida(done: Function) {
         let projections: any[] = ['sensorValue'];
         let testData = {
             metadata  : {
                 dataSetId : 'idaSampleId2',
-                projections: ['']
+                projections: projections
             },
             data: {
                 sensorId : '123',
                 sensorValue: '45648946'
             }
         };
-
         let tenantId = 'varun_test';
         let jwtPayload = {
             tenantid: tenantId,
             agentid: '12345678901234567890'
         };
         let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
-        console.log(JSON.stringify(token));
-
         chai.use(chaiHttp);
         chai.request(server.app)
             .post('/data')
@@ -94,5 +66,42 @@ var kafkaClient = new kafka.Client(appconfig.kafka_url);
                 done();
             });
     }
+    @test('Checking if Kafka has received anything')
+    public check_kafka_working(done: Function) {
 
-}
+        let kafkaClient = new kafka.Client(appconfig.kafka_url);
+        let kafkaConsumer;
+        let payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];
+        let options = {
+            autoCommit: false,
+            sessionTimeout: 4000
+        };
+        let io = require('socket.io')(http);
+        try {
+            kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
+            this.post_to_ida(done); // makes an api request to IDA with test data and tenant
+            // now let's see if Kafka receives anything
+            kafkaConsumer.on('message', function (message: any, err: any) {
+                if (!err) {
+                    if ((io)) {
+                        io.emit('message', message.value);
+                        expect(message).not.to.be.equal(''); // the message is something and not nothing
+                        expect(err).to.be.null;
+                        done();
+                    }
+                }
+            });
+            kafkaConsumer.on('error', function (err: any) {
+                done(new Error(err));
+            });
+        }catch (e) {
+            if (e instanceof TS.TimeoutException) {
+                done(new Error('Kafka did not receive message on time'));
+            }else {
+                done(new Error('some error: ' + e.toString()));
+            }
+        }
+    }
+}/**
+ * Created by sxia on 06/02.
+ */
