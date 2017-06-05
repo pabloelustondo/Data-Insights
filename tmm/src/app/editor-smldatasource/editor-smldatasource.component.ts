@@ -1,8 +1,6 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import {Component, OnInit, Input, ViewChild, EventEmitter, Output} from '@angular/core';
 import { SmlDataSource } from '../../sml/sml';
 import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
-
-declare var JSONEditor;
 
 @Component({
   selector: 'app-editor-smldatasource',
@@ -18,6 +16,8 @@ declare var JSONEditor;
 export class EditorSMLDatasourceComponent implements OnInit {
   @Input()
   dataSource: any;
+
+  @Output() updateDataSource = new EventEmitter();
 
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
@@ -35,8 +35,7 @@ export class EditorSMLDatasourceComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnChanges() {
     console.log(this.dataSource);
@@ -44,9 +43,9 @@ export class EditorSMLDatasourceComponent implements OnInit {
     this.editor.set(this.data);
   }
 
-
   saveCurrentItem(){
     let a = this.editor.get();
+    this.updateDataSource.emit(a);
     console.log(a);
   }
 
