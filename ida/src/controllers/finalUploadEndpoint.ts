@@ -176,7 +176,7 @@ export class UploadDataSetController {
                         });
                         let transactionLogPayloads: any =  [
                             {
-                                topic: jwtDecodedToken.tenatid + 'transactionLog',
+                                topic: jwtDecodedToken.tenatid + '_' + 'transactionLog',
                                 partition: 0,
                                 messages: JSON.stringify(data)
                             }];
