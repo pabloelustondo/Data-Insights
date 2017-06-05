@@ -1,6 +1,6 @@
 ::Script presumes the presence of IDA_accessKeyID.txt & IDA_secretAccessKey.txt at root of C:\ . They can be blank.
 ::Change Installdir to your own install
-::USE AS IS. Only works on windows. Contact Peter Maney.
+::USE AS IS. Only works on windows. Contact Peter Meaney.
 ::WARNING WARNING we recomend newcomers read README and do this installation/run module by module.
 @echo off
 
