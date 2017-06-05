@@ -27,6 +27,7 @@ import { SmlDataService } from '../../../../sml/data.service';
   </div>
  `
 })
+
 export class UserInput implements OnInit {
   selectedOption: any;
   currentItem: any;
