@@ -2,7 +2,10 @@ import { suite, test} from 'mocha-typescript';
 import * as express from 'express';
 let helmet = require('helmet');
 const app = express();
+const swaggerPath =  __dirname + '/swagger.json';
+
 let http = require('http').Server(app);
+
 let path = require('path');
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
@@ -14,7 +17,6 @@ let chaiHttp = require('chai-http');
 let server = require('./server');
 let should = chai.should();
 let expect = chai.expect;
-let kafka = require('kafka-node');
 
 globalconfig.hostname = 'localhost';  // this can be overwritten by app config if necessary
 // our app config will be the result of taking all global configurations and overwritting them with the local configurations
@@ -22,13 +24,20 @@ Object.keys(appconfig).forEach(function(key){
     globalconfig[key] = appconfig[key];
 });
 globalconfig.port = globalconfig[globalconfig.id + '_url'].split(':')[2];
+
 appconfig = globalconfig;
+
+console.log('configuration');
+console.log(appconfig);
+
 exports.config = config;
 exports.appconfig = appconfig;
 
 
-@suite class HelloKafka {
 
+let kafka = require('kafka-node');
+let kafkaClient = new kafka.Client(appconfig.kafka_url);
+@suite class HelloKafka {
 
     @test('Posting to a data source through IDA should result in a valid response from Kafka')
     public post_to_ida(done: Function) {
@@ -66,9 +75,10 @@ exports.appconfig = appconfig;
                 done();
             });
     }
+
     @test('Checking if Kafka has received anything')
     public check_kafka_working(done: Function) {
-
+        let kafka = require('kafka-node');
         let kafkaClient = new kafka.Client(appconfig.kafka_url);
         let kafkaConsumer;
         let payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];

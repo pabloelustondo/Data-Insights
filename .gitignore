@@ -11,7 +11,7 @@
 */dps/services/*.js
 *.log
 ida/src/routes.ts
-oda/src/routes.ts
+oda/src/routes.tso4
 dad/backend/node_modules/
 npm-debug.log
 bin/

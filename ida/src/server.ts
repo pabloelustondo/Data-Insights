@@ -9,9 +9,9 @@ import * as https from 'https';
 import * as http from 'http';
 import * as fs from 'fs';
 import * as methodOverride from 'method-override';
-//const morgan = require('morgan');
+// const morgan = require('morgan');
 
-//const expressWinston = require('express-winston');
+// const expressWinston = require('express-winston');
 
 import {RegisterRoutes} from './routes';
 
@@ -21,7 +21,7 @@ const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
 
 let path = require('path');
-export var appconfig = require('../appconfig.json');
+export let appconfig = require('../appconfig.json');
 let globalconfig = require('../globalconfig.json');
 
 globalconfig.hostname = 'localhost';  // this can be overwritten by app config if necessary
@@ -151,7 +151,7 @@ app.use('/swagger.json', (req, res) => {
 app.use('/testing', express.static(path.join(__dirname + '/../testing')));
 app.use('/src', express.static(path.join(__dirname + '/../src')));
 
-app.get('/test', function(req,res){
+app.get('/test', function(req, res){
     res.sendFile(path.join(__dirname  + '/../testing/spec/SpecRunner.html'));
 });
 
