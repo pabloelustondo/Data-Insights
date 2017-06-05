@@ -28,17 +28,47 @@ import { SmlDataService } from '../../../../sml/data.service';
  `
 })
 
+
 export class UserInput implements OnInit {
   selectedOption: any;
   currentItem: any;
 
-  listItems: any = [{
-      "id": 1,
-      "title": "Data Source",
-      "type": "object",
-      "properties": {
-        "type": "string",
-        "active": "boolean"
+  listItems: any = [
+    {
+      'id': 1,
+      'title': 'Data Source',
+      'tennantID': '0121',
+      'dataSets': {
+        'id': '10-22-1',
+        'name': 'Test Data Set 01',
+        'from': 'Doga Ister',
+        'persist': true,
+        'filter': '/&AS/',
+        'merge': '09-21-31$F',
+        'projections': '',
+        'metadata': ''
+      },
+      'dataSource': {
+        'id': '10-23-1',
+        'name': 'Test Data Set 01',
+        'type': 'TestMockData',
+        'active': true,
+        'properties': ['Test', 'Ray', 'Is', 'Bae']
+      },
+      'users': {
+        'id': '10-24-1',
+        'name': 'Test Data Set 01',
+        'permissions': 'All',
+        'status': 'Admin'
+      },
+      'idapInformation': {
+        'id': '10-25-02',
+        'name': 'idap Main Config',
+        'endpoint': 'localhost:1023/endPointFTW',
+        'configurations': {
+          'method': 'GET',
+          'secure': 'x-access'
+        }
       }
   },
   {
