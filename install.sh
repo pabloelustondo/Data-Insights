@@ -28,4 +28,8 @@ npm install
 cd ../ida
 npm install
 
+cd ../dps
+npm install
+
+
 echo "installations completed"
