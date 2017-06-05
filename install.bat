@@ -5,37 +5,34 @@
 @echo off
 
 ::Install Everything
-
-cd ddb
+SET installdir= %cd%
+echo Current Folder %installdir%
+cd %installdir%
+cd %installdir%\ddb
 call npm install
-
-cd ..\dss
+cd %installdir%\dss
 call npm install
-
-cd backend
+cd %installdir%\dss\backend
 call npm install
-
-cd ..\..\dad
+cd %installdir%\dad
 call npm install
-
-cd backend
+cd %installdir%\dad\backend
 call npm install
-
-cd ..\..\oda
+cd %installdir%\oda
 call npm install
-
-cd ..\dos
+cd %installdir%\dos
 call npm install
-
-cd backend
+cd %installdir%\dos\backend
 call npm install
-
-cd ..\..\cdl
+cd %installdir%\ida
 npm install
-
-cd ..\ida
+cd %installdir%\cdl
 npm install
-
+cd %installdir%\tmm
+call npm install
+cd %installdir%\tmm\backend
+call npm install
+cd %installdir%
 echo "installations completed"
 
 
