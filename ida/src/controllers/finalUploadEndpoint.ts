@@ -210,7 +210,7 @@ export class UploadDataSetController {
                     const user: any = {
                         createdAt: new Date(),
                         metadata: mData,
-                        data: dpsResponse.response
+                        data: 'OK'
                     };
                     resolve(user);
 
