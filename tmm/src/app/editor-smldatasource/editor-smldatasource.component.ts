@@ -2,6 +2,8 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { SmlDataSource } from '../../sml/sml';
 import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
 
+declare var JSONEditor;
+
 @Component({
   selector: 'app-editor-smldatasource',
   template: `
