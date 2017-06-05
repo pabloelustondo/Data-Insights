@@ -1,77 +1,74 @@
 ///<reference path="../../models/fakeData.ts"/>
-import { Component, OnInit } from '@angular/core';
-//import { DadCrud } from '../../../../../../dad/src/app/dad/crud.component';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { DataSourceList } from './tmmModels';
+
+
+import { CrudComponent } from './crud.component';
+import { SmlDataService } from '../../../../sml/data.service';
 
 @Component({
-  template: `<div class="row">
-  <div class="col-md-4">
-    <ul>
-      <li *ngFor="let item of fakeDataPhoneModels">
-        <a (click)="selectJSON(item)">
-          {{item.name}}
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="col-md-8">
-    <form (submit)="onSubmitValidateJSON()">
-      <label> {{ toDisplay.name }}
-        <textarea autofocus cols="100%" rows="10">  
-         {{toDisplay | json }}
-        </textarea>
-      </label>
-    </form>
-  </div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <span class="glyphicons glyphicons-plus"></span>
+  selector: 'userinput' ,
+  providers: [SmlDataService],
+  template: `
+  <div>
+   <!--<crud [options]="DataSourceList"></crud>-->
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="list-group" *ngFor="let listItem of listItems">
+              <a class="list-group-item" (click)=optionChanged($event) [id]="listItem.id">  {{ listItem.title }}</a>
+          </div>
+        </div>
+        <div class="col">
+          <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (ngModelChange)="onChangeUpdate($event)"></app-editor-smldatasource>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
  `
 })
 export class UserInput implements OnInit {
-  toDisplay: String;
-  fakeDataPhoneModels = [
-    {
-      "name": "iPhone 8 Apple Edition",
-      "os": "iOS",
-      "version": "11",
-      "modelNumber": "HK2A3A1B",
-      "carrier": "Freedom"
-    },
-{
-  "name": "Pixel 2 XL",
-  "os": "Android",
-  "version": "7.1",
-  "modelNumber": "Dolphine",
-  "carrier": "Rogers"
-},
-{
-  "name": "DebianMax",
-  "os": "Android",
-  "version": "7.0",
-  "modelNumber": "Jessie12",
-  "carrier": "Bell"
-},
-{
-  "name": "Blackberry Passport",
-  "os": "BB10",
-  "version": "10.1.23",
-  "modelNumber": "Dolphine",
-  "carrier": "Rogers"
-}];
-  constructor() {
-  }
+  selectedOption: any;
+  currentItem: any;
 
-  ngOnInit() {
-  }
+  listItems: any = [{
+      "id": 1,
+      "title": "Data Source",
+      "type": "object",
+      "properties": {
+        "type": "string",
+        "active": "boolean"
+      }
+  },
+  {
+      "id": 2,
+      "title": "Data Source 2",
+      "type": "object",
+      "properties": {
+        "type": "string",
+        "active": "boolean"
+      }
+  }];
+  constructor() { }
 
-  selectJSON(item) {
-    this.toDisplay = item;
+  ngOnInit() { }
+
+
+  optionChanged(items){
+    this.listItems.forEach(item => {
+      if(item.id == parseInt(items.toElement.id)) {
+        this.selectedOption = item;
+      }
+    });
+
+    console.log(this.selectedOption);
   }
 
   isEmpty(item) {
     return (item == null);
+  }
+
+  onChangeUpdate(item){
+    console.log(item);
   }
 }

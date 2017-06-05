@@ -5,7 +5,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-    selector: 'dadcrud',
+    selector: 'crud',
     template: `
       <div class="combobox">
 
