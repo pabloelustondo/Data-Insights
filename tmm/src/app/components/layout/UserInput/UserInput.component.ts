@@ -20,14 +20,13 @@ import { SmlDataService } from '../../../../sml/data.service';
           </div>
         </div>
         <div class="col">
-          <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (ngModelChange)="onChangeUpdate($event)"></app-editor-smldatasource>
+          <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
         </div>
       </div>
     </div>
   </div>
  `
 })
-
 
 export class UserInput implements OnInit {
   selectedOption: any;
@@ -85,15 +84,21 @@ export class UserInput implements OnInit {
   ngOnInit() { }
 
 
-  optionChanged(items){
+  optionChanged(items) {
+    let index = 0;
     this.listItems.forEach(item => {
-      if(item.id == parseInt(items.toElement.id)) {
+      if (item.id == parseInt(items.toElement.id)) {
         this.selectedOption = item;
+        this.selectedOption['index'] = index;
       }
+      index++;
     });
-
-    console.log(this.selectedOption);
   }
+
+    optionUpdated(updatedItem){
+      this.listItems[updatedItem.index] = updatedItem;
+      delete this.listItems[updatedItem.index].index;
+    }
 
   isEmpty(item) {
     return (item == null);

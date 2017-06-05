@@ -6,7 +6,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
   selector: 'app-editor-smldatasource',
   template: `
     <div>
-      <json-editor style="height: 100vh" [options]="editorOptions" [data]="data"></json-editor >
+      <json-editor style="height: 100vh" [options]="editorOptions" [data]="dataSource"></json-editor >
       <br />
       <button class="btn btn-success" (click)="saveCurrentItem()">Save</button>
       <button class="btn btn-danger">Cancel</button>
@@ -14,17 +14,16 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
   styleUrls: ['./editor-smldatasource.component.css']
 })
 export class EditorSMLDatasourceComponent implements OnInit {
-  @Input()
-  dataSource: any;
+  @Input() dataSource: any;
 
-  @Output() updateDataSource = new EventEmitter();
+  @Output() optionUpdated = new EventEmitter();
 
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
 
   type: string;
   active: boolean;
   properties: any[];
-  data: any;
+  index: any;
 
   editorOptions = {
     theme: 'foundation6',
@@ -39,15 +38,17 @@ export class EditorSMLDatasourceComponent implements OnInit {
 
   ngOnChanges() {
     console.log(this.dataSource);
-    this.data = this.dataSource;
-    this.editor.set(this.data);
+    this.index = this.dataSource.index;
+    delete this.dataSource.index;
+    this.editor.set(this.dataSource);
   }
 
   saveCurrentItem(){
     let a = this.editor.get();
-    this.updateDataSource.emit(a);
+    a['index'] = this.index;
+    this.optionUpdated.emit(a);
+    delete a['index'];
+    this.index = -1;
     console.log(a);
   }
-
-
 }
