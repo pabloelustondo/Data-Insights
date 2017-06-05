@@ -36,7 +36,6 @@ exports.appconfig = appconfig;
 
 
 let kafka = require('kafka-node');
-let kafkaClient = new kafka.Client(appconfig.kafka_url);
 @suite class HelloKafka {
 
     @test('Posting to a data source through IDA should result in a valid response from Kafka')
@@ -78,7 +77,6 @@ let kafkaClient = new kafka.Client(appconfig.kafka_url);
 
     @test('Checking if Kafka has received anything')
     public check_kafka_working(done: Function) {
-        let kafka = require('kafka-node');
         let kafkaClient = new kafka.Client(appconfig.kafka_url);
         let kafkaConsumer;
         let payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];
