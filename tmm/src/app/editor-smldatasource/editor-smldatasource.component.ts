@@ -30,6 +30,9 @@ export class EditorSMLDatasourceComponent implements OnInit {
     theme: 'foundation6',
     search: false,
     modes: ['view', 'tree', 'text'],
+    onError: ( error ) => {
+      console.error(error);
+    }
   };
 
   constructor() {
@@ -44,12 +47,10 @@ export class EditorSMLDatasourceComponent implements OnInit {
     this.editor.set(this.dataSource);
   }
 
-  saveCurrentItem(){
-    let a = this.editor.get();
+  saveCurrentItem() {
+    const a = this.editor.get();
     a['index'] = this.index;
     this.optionUpdated.emit(a);
-    delete a['index'];
-    this.index = -1;
-    console.log(a);
+    this.index = '';
   }
 }
