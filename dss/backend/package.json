@@ -8,7 +8,7 @@
     "start": "npm run getConfigs & node server.js",
     "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
     "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
-    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
+    "getConfigs": "cp-cli ../../globalconfig.json ./globalconfig.json"
   },
   "repository": {
     "type": "git",

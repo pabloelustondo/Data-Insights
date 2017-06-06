@@ -1,0 +1,6 @@
+{
+  "id":"tmmback",
+  "name":"TMM Backend",
+  "dependencies":["ddb"],
+  "secret"  : "1234"
+}
