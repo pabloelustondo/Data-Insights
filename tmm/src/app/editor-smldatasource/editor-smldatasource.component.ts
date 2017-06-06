@@ -13,6 +13,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
     </div>  `,
   styleUrls: ['./editor-smldatasource.component.css']
 })
+
 export class EditorSMLDatasourceComponent implements OnInit {
   @Input() dataSource: any;
 
