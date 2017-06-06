@@ -2,15 +2,8 @@
 
 var Cucumber = require('cucumber')
     , Request = require('request');
-var RootCas = require('ssl-root-cas/latest').create();
-require('ssl-root-cas').inject();
-
-RootCas
-    .addFile(__dirname + '/dev2012r2-sk.sotidev.com.cer')
-    .addFile(__dirname + '/root.p7b');
 
 // will work with all https requests will all libraries (i.e. request.js)
-require('https').globalAgent.options.ca = RootCas;
 
 Cucumber.defineSupportCode(function(context) {
     var setWorldConstructor = context.setWorldConstructor;

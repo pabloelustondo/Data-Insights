@@ -11,13 +11,9 @@ const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
 //const config = require('../config.json');
 //const appconfig = require('../appconfig.json');
-const globalconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
-require('ssl-root-cas').inject();
+const globalconfig = require(process.cwd()+'/globalconfig_test.json');
 
-// Certificate Handling
-RootCas
-    .addFile(__dirname + '/dev2012r2-sk.sotidev.com.cer')
-    .addFile(__dirname + '/root.p7b');
+
 require('https').globalAgent.options.ca = RootCas;
 
 
@@ -99,7 +95,6 @@ Cucumber.defineSupportCode(function(context) {
             autoCommit: false,
             sessionTimeout: 4000
         };
-        try {
             kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
             // now let's see if Kafka receives anything
             kafkaConsumer.on('message', function (message, err) {
@@ -112,6 +107,8 @@ Cucumber.defineSupportCode(function(context) {
             kafkaConsumer.on('error', function (err) {
                 throw new Error("Something went wrong: " + err);
             });
-        }
+
+
     });
+
 });

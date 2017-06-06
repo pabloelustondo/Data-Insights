@@ -2,14 +2,6 @@
 
 const Cucumber = require('cucumber');
 const Request = require('request');
-const RootCas = require('ssl-root-cas/latest').create();
-require('ssl-root-cas').inject();
-
-// Certificate Handling
-RootCas
-    .addFile(__dirname + '/dev2012r2-sk.sotidev.com.cer')
-    .addFile(__dirname + '/root.p7b');
-require('https').globalAgent.options.ca = RootCas;
 
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
@@ -18,19 +10,21 @@ Cucumber.defineSupportCode(function(context) {
     var responseCode = 0;
     var responseData = '';
     var invalidToken = 'invalidtokenasdasdasdas';
-    var validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluaXN0cmF0b3IiLCJkb21haW5pZCI6ImV4dGVybmfsX3VzZXIiLCJ0ZW5hbnRJZCI6ImV4dGVybmfsX3VzZXIiLCJpYXQiOjE0OTUyMDUyMDAsImV4cCI6MTUwMTIwNTIwMH0.Fyu2Oklpme9GKaUR_nQEou48r13amYaxGkuDz4ofHyg';
+    var validToken = '';
     var oldauthorizationToken = '';
+    //some necessary evil for things that cannot be retrieved from API
     var mobiUrl = "https://cad099.corpss.soti.net/";
     var downAgentId = "b5b4fc4c-2973-4848-97fe-7d4eabb95010";
     var delAgentId1 = "42734935-57d8-4a1d-a2d4-0fd3e98bf4b3";
     var delAgentId2 = "6f3702e2-b3a5-4b09-8d5d-af7928da15dc";
-    var devServer = 'https://dev2012r2-sk.sotidev.com:';
+    //-------------------------------------------------------------
+    var url = '';
     var portnumber = 0;
     var idaportnumber = 0;
-    var appconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
-    var options  = {
+    var globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+    var options2  = {
         'url': '',
-        'baseUrl': 'https://dev2012r2-sk.sotidev.com:',
+        'baseUrl': '',
         'rejectUnauthorized': false,
         'headers': {
             'Content-Type': 'application/json',
@@ -44,8 +38,8 @@ Cucumber.defineSupportCode(function(context) {
     };
 
     Given('I set invalid header and body for external_user', function (callback) {
-        options.headers["x-access-token"] = invalidToken;
-        options.body = {
+        options2.headers["x-access-token"] = invalidToken;
+        options2.body = {
             'tenantid': "external_user",
             'dataSourceType': "MobiControl",
             'agentid': "asdas",
@@ -65,14 +59,14 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
+            url = ida_url.substring(0,ida_url.indexOf(idaportnumber)-1);
             idaportnumber = parseInt(port_str);
             callback();
         }
     });
-    Given('grab DSS port number', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
-        var appconfig = require('C:/Users/sxia/Desktop/CustomerBI/globalconfigs/globalconfig_local.json');
-        var dss_url = appconfig.dss_url;
+    Given('grab DSS port number and url', function (callback) {
+        // Write code here that turns the phrase above into concrete actions0
+        var dss_url = globalconfig.dss_url;
         if(dss_url == "" || dss_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
         var port_str = dss_url.match("[0-9]+")[0];
         if(isNaN(port_str)){
@@ -85,8 +79,8 @@ Cucumber.defineSupportCode(function(context) {
 
 
     Given('I set valid header and body for external_user', function (callback) {
-        options.headers['x-access-token'] = invalidToken;
-        options.body = {
+        options2.headers['x-access-token'] = invalidToken;
+        options2.body = {
             'tenantid': "external_user",
             'dataSourceType': "MobiControl",
             'agentid': "asdas",
@@ -99,9 +93,9 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     When('I POST :portnumber with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
-        options.baseUrl = devServer + portnumber;
-        options.url = stringInDoubleQuotes;
-        Request.post(options, function (error, response, body) {
+        options2.baseUrl = url + ':' + portnumber;
+        options2.url = stringInDoubleQuotes;
+        Request.post(options2, function (error, response, body) {
             if (error) {
                 return console.error('upload failed:', error);
             }
@@ -125,22 +119,27 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Given('I set invalid header and body for external_user for delete', function (callback) {
-        options.headers['x-access-token'] = invalidToken;
-        options.body['agentid'] = delAgentId1;
+        options2.headers['x-access-token'] = invalidToken;
+        options2.body['agentid'] = delAgentId1;
         callback();
     });
 
     Given('I set valid header and body for external_user for delete', function (callback) {
-        options.headers['x-access-token'] = validToken;
-        options.body['agentid'] = delAgentId2;
+        FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
+            if (err) return console.log(err);
+            validToken = contents;
+            callback();
+        });
+        options2.headers['x-access-token'] = validToken;
+        options2.body['agentid'] = delAgentId2;
         callback();
     });
 
     When('I GET :portnumber with endpoint {stringInDoubleQuotes} to download credentials', function (stringInDoubleQuotes, callback) {
-        options.baseUrl = devServer + portnumber;
-        options.url = stringInDoubleQuotes + '/' + downAgentId;
-        options.preambleCRLF = options.postambleCRLF = true;
-        Request.get(options, function (error, response, body) {
+        options2.baseUrl = url + ':' + portnumber;
+        options2.url = stringInDoubleQuotes + '/' + downAgentId;
+        options2.preambleCRLF = options2.postambleCRLF = true;
+        Request.get(options2, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:', error);
             }
@@ -151,17 +150,17 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Given('I set head and body for handling credentials', function (callback){
-        options.headers['x-access-token'] = validToken;
-        options.body['agentid'] = delAgentId1;
+        options2.headers['x-access-token'] = validToken;
+        options2.body['agentid'] = delAgentId1;
         callback();
     });
 
     Then('I GET :idaportnumber with old credentials and endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
-        options.preambleCRLF = options.postambleCRLF = true;
-        options.url = stringInDoubleQuotes;
-        options.headers['x-access-token'] = oldauthorizationToken;
-        options.baseUrl = devServer + idaportnumber;
-        Request.get(options, function (error, response, body) {
+        options2.preambleCRLF = options2.postambleCRLF = true;
+        options2.url = stringInDoubleQuotes;
+        options2.headers['x-access-token'] = oldauthorizationToken;
+        options2.baseUrl = url + ':' + portnumber;
+        Request.get(options2, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:', error);
             }
@@ -172,11 +171,11 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('I POST :portnumber with endpoint {stringInDoubleQuotes} to reset credentials', function (int, stringInDoubleQuotes, callback) {
-        options.preambleCRLF = options.postambleCRLF = true;
-        options.url = stringInDoubleQuotes + '/' + downAgentId;
-        options.headers['x-access-token'] = oldauthorizationToken;
-
-        Request.post(options, function (error, response, body) {
+        options2.preambleCRLF = options2.postambleCRLF = true;
+        options2.url = stringInDoubleQuotes + '/' + downAgentId;
+        options2.headers['x-access-token'] = oldauthorizationToken;
+        options2.baseUrl = url + ':' + portnumber;
+        Request.post(options2, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:', error);
             }

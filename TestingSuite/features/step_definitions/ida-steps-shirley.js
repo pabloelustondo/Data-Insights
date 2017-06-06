@@ -4,13 +4,10 @@ const Cucumber = require('cucumber');
 const Request = require('request');
 const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
-const globalconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
+const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
 require('ssl-root-cas').inject();
 
 // Certificate Handling
-RootCas
-    .addFile(__dirname + '/dev2012r2-sk.sotidev.com.cer')
-    .addFile(__dirname + '/root.p7b');
 require('https').globalAgent.options.ca = RootCas;
 
 Cucumber.defineSupportCode(function(context) {

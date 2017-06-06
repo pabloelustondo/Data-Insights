@@ -31,11 +31,11 @@ Feature: IDA API Tests
     #Then response code must be 200
     And response body should be empty or contain error
 
-    Scenario: As an administrator I want to validate that Kafka is receiving my posts to IDA
-      Given grab IDA port number for kafka test
-      Given Set headers and body for posting data to IDA
-      When I Post :portnumber after setting headers and body
-      Then Kafka Consumer should receive some message without error
+  Scenario: As an administrator I want to validate that Kafka is receiving my posts to IDA
+     Given grab IDA port number for kafka test
+     Given Set headers and body for posting data to IDA
+     When I Post :portnumber after setting headers and body
+     Then Kafka Consumer should receive some message without error
 
 
 
