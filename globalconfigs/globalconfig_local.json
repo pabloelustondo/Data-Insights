@@ -12,6 +12,8 @@
   "dos_url":"http://localhost:5000",
   "dosback_url":"http://localhost:5001",
   "ida_url":"http://localhost:8027",
+  "tmm_url":"http://localhost:8028",
+  "tmmback_url":"http://localhost:8029",
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017"
 }
