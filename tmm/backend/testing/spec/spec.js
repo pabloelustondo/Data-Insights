@@ -16,7 +16,7 @@ describe("DAD Backend", function() {
             $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var resObj = JSON.parse(data)[0];
                 expect(resObj).toBeDefined();
-                expect(resObj.userid).toBe("testtenant-testuser");
+                expect(resObj.tenantid).toBe("testtenant-testuser");
                 done();
             });
         });
@@ -27,7 +27,7 @@ describe("DAD Backend", function() {
             $.ajax({
                 url: "/tenant/testtenant-testuser",
                 type:"POST",
-                data: JSON.stringify({ userid:'testtenant-testuser', config:{attribute:"nada"}}),
+                data: JSON.stringify({ tenantid:'testtenant-testuser', config:{attribute:"nada"}}),
                 contentType:"application/json",
                 success: function(data, textStatus, jqXHR) {
                     expect(data).toBeDefined();
@@ -44,7 +44,7 @@ describe("DAD Backend", function() {
                 var configString = JSON.stringify(resObj.config);
                 var expectedConfigString = JSON.stringify({attribute:"nada"});
                 expect(resObj).toBeDefined();
-                expect(resObj.userid).toBe("testtenant-testuser");
+                expect(resObj.tenantid).toBe("testtenant-testuser");
                 expect(configString).toBe(expectedConfigString);
                 done();
             });
@@ -56,7 +56,7 @@ describe("DAD Backend", function() {
             $.ajax({
                 url: "/tenant/testtenant-testuser",
                 type:"POST",
-                data: JSON.stringify({ userid:'testtenant-testuser', config:{attribute:"algo"}}),
+                data: JSON.stringify({ tenantid:'testtenant-testuser', config:{attribute:"algo"}}),
                 contentType:"application/json",
                 success: function(data, textStatus, jqXHR) {
                     expect(data).toBeDefined();
@@ -73,7 +73,7 @@ describe("DAD Backend", function() {
                 var configString = JSON.stringify(resObj.config);
                 var expectedConfigString = JSON.stringify({attribute:"algo"});
                 expect(resObj).toBeDefined();
-                expect(resObj.userid).toBe("testtenant-testuser");
+                expect(resObj.tenantid).toBe("testtenant-testuser");
                 expect(configString).toBe(expectedConfigString);
                 done();
             });
@@ -85,7 +85,7 @@ describe("DAD Backend", function() {
             $.ajax({
                 url: "/tenant/testtenant-testuser",
                 type:"POST",
-                data: JSON.stringify({ userid:'testtenant-testuser', config:[CHARTS,CHARTS,CHARTS,CHARTS] }),
+                data: JSON.stringify({ tenantid:'testtenant-testuser', config:[CHARTS,CHARTS,CHARTS,CHARTS] }),
                 contentType:"application/json",
                 success: function(data, textStatus, jqXHR) {
                     expect(data).toBeDefined();
@@ -102,7 +102,7 @@ describe("DAD Backend", function() {
                 var configString = JSON.stringify(resObj.config);
                 var expectedConfigString = JSON.stringify([CHARTS,CHARTS,CHARTS,CHARTS]);
                 expect(resObj).toBeDefined();
-                expect(resObj.userid).toBe("testtenant-testuser");
+                expect(resObj.tenantid).toBe("testtenant-testuser");
                 expect(configString).toBe(expectedConfigString);
                 done();
             });
