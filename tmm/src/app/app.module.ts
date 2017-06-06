@@ -4,22 +4,22 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { UserInput } from './components/layout/UserInput/UserInput.component';
-import {RouterModule} from "@angular/router";
-
-const routes = [
-  { path: '**', component: UserInput },
-];
+import { CrudComponent } from './components/layout/UserInput/crud.component';
+import { EditorSMLDatasourceComponent } from './editor-smldatasource/editor-smldatasource.component';
+import { JSONEditorModule } from 'ng2-jsoneditor';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserInput
+    UserInput,
+    CrudComponent,
+    EditorSMLDatasourceComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(routes),
+    JSONEditorModule
   ],
   bootstrap: [AppComponent]
 })
