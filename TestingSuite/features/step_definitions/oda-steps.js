@@ -64,7 +64,6 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('I set valid request header and body for POST call to ~/query', function (callback) {
         //prepare header and body for posting to IDA query endpoint
-        options.baseUrl = url +":" + odaPortNumber;
         options.headers['content-type'] = 'application/json';
         //set example query in body
         options.body = {
@@ -87,7 +86,7 @@ Cucumber.defineSupportCode(function(context) {
     When('I GET topics', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         resetOptions();
-        options.baseUrl = url;
+        options.uri = url+'/query/topics';
         options.headers['content-type'] = 'application/json';
         options.headers['x-access-token'] = accessToken;
         Request.get(options, function (error, response, body) {
@@ -103,7 +102,6 @@ Cucumber.defineSupportCode(function(context) {
     Given('I set invalid request header and body for POST call to ~/query', function (callback) {
         //prepare header and body for posting to IDA query endpoint
         options.preambleCRLF = options.postambleCRLF = true;
-        options.baseUrl = url;
         options.headers['content-type'] = 'application/json';
         options.body = {
             "dataSetId": "string",
@@ -116,7 +114,7 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('I make a POST call to query', function (callback) {
         //I post to query and record the response
-        options.url = '/query';
+        options.uri = url+'/query';
         Request.post(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);

@@ -179,7 +179,12 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Given('I set the xaccesskey to a modified JWT', function (callback) {
-        accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMzNywidXNlcm5hbWUiOiJqb2huLmRvZSJ9.EvTdOJSfbffGHLyND3BMDwWE22zUBOCRspPZEHlNEw';
+        var tenantId = 'Xarun_test';
+        var jwtPayload = {
+            tenantid: tenantId,
+            agentid: '12345678901234567890'
+        };
+        accessToken = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
         callback();
     });
 });
