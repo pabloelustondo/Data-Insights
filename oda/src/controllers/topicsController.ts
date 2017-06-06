@@ -7,11 +7,10 @@
 import {Route, Get, Post, Delete, Patch, Example, Request} from 'tsoa';
 import {SDS} from '../models/user';
 import {QueryModel} from '../models/queryModel';
-import {Metrics} from '../models/metrics';
 import * as express from '@types/express';
 import {KafkaService} from '../services/kafkaService';
 import * as rp from 'request-promise';
-// import * as https from 'https';
+
 const config = require('../../appconfig.json');
 
 @Route('Query')

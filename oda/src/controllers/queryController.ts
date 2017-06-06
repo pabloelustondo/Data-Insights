@@ -4,7 +4,6 @@
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from '../models/user';
 import {QueryModel} from '../models/queryModel';
-import {Metrics} from '../models/metrics';
 import * as rp from 'request-promise';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
@@ -31,8 +30,6 @@ export class QueryController {
 
             let mData = [
                 'dataSets : ["ttcMaps", "deviceInfo"]'];
-
-
 
             const options: rp.OptionsWithUrl = {
                 headers: {

@@ -2,7 +2,6 @@
 import './controllers/intialChargeLevelController';
 import './controllers/dischargeRateController';
 import './controllers/devicesDidNotSurviveShift';
-import './controllers/retrieveReasonData';
 import './controllers/averageDischargeRateController';
 import './controllers/Lists/listOfDevicesDidNotSurviveShift';
 import './controllers/Lists/deviceList';
