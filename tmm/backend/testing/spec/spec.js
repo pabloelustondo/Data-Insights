@@ -1,4 +1,4 @@
-describe("DAD Backend", function() {
+describe("TMM Backend", function() {
 
     describe("GET /", function() {
         it("returns Welcome to TMM Backend", function(done) {
