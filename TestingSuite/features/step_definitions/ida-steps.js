@@ -21,8 +21,8 @@ Cucumber.defineSupportCode(function(context) {
     var authorizationToken = '';
     var responseCode = 0;
     var responseData = 0;
-    var portnumber = 0;
-
+    var idaPortNumber = 0;
+    var url = '';
     // Request Structure
     var options  = {
         "method": "",
@@ -48,7 +48,8 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
-            portnumber = parseInt(port_str);
+            url = ida_url;
+            idaPortNumber = parseInt(port_str);
             callback();
         }
     });
@@ -65,7 +66,7 @@ Cucumber.defineSupportCode(function(context) {
 
     //make get request to IDA with permanent token to retrieve temporary token
     When(/^I Get :portnumber$/, function (callback) {
-        options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portnumber;
+        options.baseUrl = url;
         options.url = '/Security/getAuthorizationToken';
         options.headers['x-access-token'] = accessToken;
 
@@ -93,7 +94,7 @@ Cucumber.defineSupportCode(function(context) {
     });
     When('I Post :portnumber with example data', function (callback) {
         options.preambleCRLF = options.postambleCRLF = true;
-        options.baseUrl = 'https://dev2012r2-sk.sotidev.com:' + portnumber;
+        options.baseUrl = url;
         options.url = '/data';
         options.headers['x-access-token'] = authorizationToken;
         options.headers['content-type'] = 'application/json';

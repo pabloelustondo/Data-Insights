@@ -44,7 +44,9 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
-            url = oda_url.substring(0, oda_url.indexOf(odaPortNumber)-1);
+            //url = oda_url.substring(0, oda_url.indexOf(odaPortNumber)-1);
+            //console.log(oda_url);
+            url = oda_url;
             odaPortNumber = parseInt(port_str);
             callback();
         }
@@ -85,7 +87,7 @@ Cucumber.defineSupportCode(function(context) {
     When('I GET topics', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         resetOptions();
-        options.baseUrl = url +":" + odaPortNumber;
+        options.baseUrl = url;
         options.headers['content-type'] = 'application/json';
         options.headers['x-access-token'] = accessToken;
         Request.get(options, function (error, response, body) {
@@ -101,7 +103,7 @@ Cucumber.defineSupportCode(function(context) {
     Given('I set invalid request header and body for POST call to ~/query', function (callback) {
         //prepare header and body for posting to IDA query endpoint
         options.preambleCRLF = options.postambleCRLF = true;
-        options.baseUrl = url +":" + odaPortNumber;
+        options.baseUrl = url;
         options.headers['content-type'] = 'application/json';
         options.body = {
             "dataSetId": "string",
