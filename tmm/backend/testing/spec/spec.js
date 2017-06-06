@@ -1,9 +1,9 @@
 describe("DAD Backend", function() {
 
     describe("GET /", function() {
-        it("returns Welcome to DAD Backend - The backend for the Data Analytics Dashboard", function(done) {
+        it("returns Welcome to TMM Backend", function(done) {
             $.get("/", function(data, textStatus, jqXHR) {
-                expect(data).toContain("Welcome to DAD Backend - A Very Light Basic Backend API for DAD");
+                expect(data).toContain("TMM backend");
                 done();
             });
         });
@@ -11,9 +11,9 @@ describe("DAD Backend", function() {
 
 
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns a configuration with the right test user id", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var resObj = JSON.parse(data)[0];
                 expect(resObj).toBeDefined();
                 expect(resObj.userid).toBe("testtenant-testuser");
@@ -22,10 +22,10 @@ describe("DAD Backend", function() {
         });
     });
 
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("post a new configuration for the test user", function(done) {
             $.ajax({
-                url: "/daduser/testtenant-testuser",
+                url: "/tenant/testtenant-testuser",
                 type:"POST",
                 data: JSON.stringify({ userid:'testtenant-testuser', config:{attribute:"nada"}}),
                 contentType:"application/json",
@@ -37,9 +37,9 @@ describe("DAD Backend", function() {
 
     });
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns a configuration with the right test user id and configuration", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var resObj = JSON.parse(data)[0];
                 var configString = JSON.stringify(resObj.config);
                 var expectedConfigString = JSON.stringify({attribute:"nada"});
@@ -51,10 +51,10 @@ describe("DAD Backend", function() {
         });
     });
 
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("post a new updated configuration for the test user", function(done) {
             $.ajax({
-                url: "/daduser/testtenant-testuser",
+                url: "/tenant/testtenant-testuser",
                 type:"POST",
                 data: JSON.stringify({ userid:'testtenant-testuser', config:{attribute:"algo"}}),
                 contentType:"application/json",
@@ -66,9 +66,9 @@ describe("DAD Backend", function() {
 
     });
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns the updated configuration with the right test user id and configuration", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var resObj = JSON.parse(data)[0];
                 var configString = JSON.stringify(resObj.config);
                 var expectedConfigString = JSON.stringify({attribute:"algo"});
@@ -80,10 +80,10 @@ describe("DAD Backend", function() {
         });
     });
 
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("post a new BIG updated configuration for the test user", function(done) {
             $.ajax({
-                url: "/daduser/testtenant-testuser",
+                url: "/tenant/testtenant-testuser",
                 type:"POST",
                 data: JSON.stringify({ userid:'testtenant-testuser', config:[CHARTS,CHARTS,CHARTS,CHARTS] }),
                 contentType:"application/json",
@@ -95,9 +95,9 @@ describe("DAD Backend", function() {
 
     });
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns the BIG updated configuration with the right test user id and configuration", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var resObj = JSON.parse(data)[0];
                 var configString = JSON.stringify(resObj.config);
                 var expectedConfigString = JSON.stringify([CHARTS,CHARTS,CHARTS,CHARTS]);
@@ -111,10 +111,10 @@ describe("DAD Backend", function() {
 
 
     /*
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("inserts  a daduser configuration ", function(done) {
             $.ajax({
-                url: "/daduser/testtenant-testuser",
+                url: "/tenant/testtenant-testuser",
                 type:"POST",
                 data: JSON.stringify({ userid:'testtenant-testuser', config:{}}),
                 contentType:"application/json",
@@ -127,9 +127,9 @@ describe("DAD Backend", function() {
     });
 
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns 1 daduser after posting it before", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var emptyArray = [];
                 expect(data).toBeDefined();
  //               expect(data.length).toBe(1);
@@ -138,10 +138,10 @@ describe("DAD Backend", function() {
         });
     });
 
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("replace a daduser configuration ", function(done) {
             $.ajax({
-                url: "/daduser/testtenant-testuser",
+                url: "/tenant/testtenant-testuser",
                 type:"POST",
                 data: JSON.stringify({ userid:'testtenant-testuser', config:{}}),
                 contentType:"application/json",
@@ -154,9 +154,9 @@ describe("DAD Backend", function() {
     });
 
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns 1 daduser after posting it before", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var emptyArray = [];
                 expect(data).toBeDefined();
 //                expect(data.length).toBe(1);
@@ -166,10 +166,10 @@ describe("DAD Backend", function() {
     });
 
     /*
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("it saves a user configuration calling DDB'", function(done) {
             $.ajax(
-                {   url:"/daduser/testtenant-testuser",
+                {   url:"/tenant/testtenant-testuser",
                     type:"",
                     contentType:"application/json",
                     success:function(data, textStatus, jqXHR) {
@@ -181,10 +181,10 @@ describe("DAD Backend", function() {
     });
 
 
-    describe("DEL /daduser/:userid", function() {
+    describe("DEL /tenant/:tenantid", function() {
         it("deletes a possible daduser configuration for the user 'testtenant-testuser'", function(done) {
             $.ajax(
-                {   url:"/daduser/testtenant-testuser",
+                {   url:"/tenant/testtenant-testuser",
                     type:"DELETE",
                     contentType:"application/json",
                     success:function(data, textStatus, jqXHR) {
@@ -196,9 +196,9 @@ describe("DAD Backend", function() {
     });
 
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns empty daduser after deleting it before", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var emptyArray = [];
                 expect(data).toBeDefined();
                 expect(data.length).toBe(0);
@@ -208,10 +208,10 @@ describe("DAD Backend", function() {
     });
 
 
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("inserts  a daduser configuration ", function(done) {
             $.ajax({
-                url: "/daduser/testtenant-testuser",
+                url: "/tenant/testtenant-testuser",
                 type:"POST",
                 data: JSON.stringify({ userid:'testtenant-testuser', config:{}}),
                 contentType:"application/json",
@@ -224,9 +224,9 @@ describe("DAD Backend", function() {
     });
 
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns 1 daduser after posting it before", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var emptyArray = [];
                 expect(data).toBeDefined();
                 expect(data.length).toBe(1);
@@ -235,10 +235,10 @@ describe("DAD Backend", function() {
         });
     });
 
-    describe("POST /daduser/:userid", function() {
+    describe("POST /tenant/:tenantid", function() {
         it("replace a daduser configuration ", function(done) {
             $.ajax({
-                url: "/daduser/testtenant-testuser",
+                url: "/tenant/testtenant-testuser",
                 type:"POST",
                 data: JSON.stringify({ userid:'testtenant-testuser', config:{}}),
                 contentType:"application/json",
@@ -251,9 +251,9 @@ describe("DAD Backend", function() {
     });
 
 
-    describe("GET /daduser/:userid", function() {
+    describe("GET /tenant/:tenantid", function() {
         it("returns 1 daduser after posting it before", function(done) {
-            $.get("/daduser/testtenant-testuser", function(data, textStatus, jqXHR) {
+            $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
                 var emptyArray = [];
                 expect(data).toBeDefined();
                 expect(data.length).toBe(1);

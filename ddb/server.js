@@ -177,9 +177,61 @@ router.delete('/daduser/:userid', function(req,res){
 
 ////////////////////////////
 // DAD USER related APIS  //
+// END                    //
+//                        //
+////////////////////////////
+
+
+////////////////////////////
+// TENANT related APIS  //
 // BEGIN                  //
 //                        //
 ////////////////////////////
+
+
+function checkTenantRequest(req, res){
+    if (req.params.tenantid !== req.body.tenantid )
+    {
+        res.status(400).send("url tenantid different from body tenantid");
+        return false;
+    }
+    return true;
+}
+
+
+router.get('/tenants/:tenantid', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        var tenantid = req.body.tenantid;
+        db.collection('tenant').find({"tenantid":req.params.tenantid}).toArray(next);
+    });
+});
+
+router.get('/tenant/:tenantid', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('tenant').find({"tenantid":req.params.tenantid}).toArray(next);
+    });
+});
+
+router.post('/tenant/:tenantid', function(req,res){
+    if (checkTenantRequest(req,res)) {
+        callDbAndRespond(req, res, function (req, res, db, next) {
+            db.collection('tenant').replaceOne({"tenantid": req.params.tenantid}, req.body, {upsert: true}, next);
+        });
+    }
+});
+
+router.delete('/tenant/:tenantid', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('tenant').deleteMany({"tenantid":req.params.tenantid}, next);
+    });
+});
+
+////////////////////////////
+// TENANT related APIS  //
+// END                    //
+//                        //
+////////////////////////////
+
 
 router.get('/remote', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
