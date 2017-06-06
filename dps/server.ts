@@ -20,6 +20,9 @@ import {processRequest} from './services/dataService';
 import {User} from "./models/user";
 import {accessSync} from "fs";
 
+
+let kafka = require('kafka-node');
+
 ////////////////////////
 // Express stuff
 
@@ -52,6 +55,45 @@ app.get('/', function(req,res){
 app.use(helmet());
 
 app.use(cors());
+
+////////////////////////////////
+// Kafka streaming topic     ///
+////////////////////////////////
+let kafkaClient = new kafka.Client(config.kafka_url);
+
+let payloads =  [{ topic: 'transactionLog', partition: 0 }];
+let options = { autoCommit: false};
+let kafkaOptions = { autoCommit: false};
+try {
+
+    let consumer = new kafka.Consumer(kafkaClient, payloads, options);
+
+    consumer.on('message', function (message: any) {
+        //console.log(message);
+        //console.log( JSON.stringify(message.value));
+      //  console.log( (message.value));
+        try {
+            let data = JSON.parse(message.value);
+
+            let idaMetadata = data.idaMetadata;
+            let clientData = data.clientData.body;
+            let clientMetadata = data.clientData.metadata;
+            console.log('json = ' + JSON.stringify(data));
+            processKafkaRequest(idaMetadata, clientMetadata, clientData);
+        } catch (e) {
+            console.log('not json format' + message.value);
+        }
+    });
+
+    consumer.on('error', function (err: any) {
+        console.log(err);
+    })
+
+} catch (e) {
+    console.log('IDA could not communicate with kafka producer');
+}
+
+
 
 ////////////////////////////
 // CUSTOMER TENANT DATA API
@@ -105,6 +147,38 @@ app.post('/data/request', function(req,res) {
     }
 
 });
+
+//TODO refactor the name of the function, functionality stays the same
+
+function processKafkaRequest (idaMetadata: any, clientMetadata: any, clientData: any ) {
+
+    let tenantId = idaMetadata.tenantId;
+    let dataSourceId = idaMetadata.dataSourceId;
+    uploadRawData(tenantId, dataSourceId, clientData).then(function (awsResponse: any) {
+            console.log(awsResponse);
+        }, function (error: any) {
+            console.log(error);
+        }
+    );
+
+    // massage and clean up data before sending to database layer
+    let tenant = db.getTenant(idaMetadata.tenantId);
+    if(tenant) {
+
+        let dataSource = _.find(tenant.dataSources, ['dataSourceId', idaMetadata.dataSourceId]);
+        let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
+        let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
+        let collectionName = dataSetId + '.' + dataSource['dataSourceId'];
+
+        DataProjections(clientData, projections).then(function (data) {
+            uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
+                console.log('Final response' + JSON.stringify(response));
+            }, function (error) {
+                console.log(error);
+            });
+        });
+    }
+}
 
 app.post('/data/outGoingRequest', function(req, res) {
 
