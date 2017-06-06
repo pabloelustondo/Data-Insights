@@ -1,15 +1,3 @@
-
-import './controllers/intialChargeLevelController';
-import './controllers/dischargeRateController';
-import './controllers/devicesDidNotSurviveShift';
-import './controllers/averageDischargeRateController';
-import './controllers/Lists/listOfDevicesDidNotSurviveShift';
-import './controllers/Lists/deviceList';
-import './controllers/Lists/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
-import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
-import './controllers/applicationExecutionTime';
-import './controllers/numberOfApplicationInstalls';
-import './controllers/vehicles/ttcVehicleLocations';
 import './controllers/queryController';
 import './controllers/topicsController';
 
