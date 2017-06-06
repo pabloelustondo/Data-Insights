@@ -60,8 +60,6 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-
-
     Given('I set valid request header and body for POST call to ~/query', function (callback) {
         //prepare header and body for posting to IDA query endpoint
         options.headers['content-type'] = 'application/json';
