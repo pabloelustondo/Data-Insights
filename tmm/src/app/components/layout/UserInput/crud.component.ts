@@ -9,12 +9,12 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     template: `
       <div class="combobox">
 
-          <select [(ngModel)]="selectedValue" #selectedOption (change)="add($event.target.value);" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+          <select [(ngModel)]="selectedValue" #selectedOption (change)="add($event.target.value);" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:200px;" >
              <option id="created" style="color:black;" *ngFor="let option of options; let i=index" value="{{i}}" [selected]="option.name" >{{ option.name }}</option>
-             <option style="color:black;" value="{{-2}}">No Filter Applied</option>
+             <option style="color:black;" value="{{-2}}">Click to add a Dataset</option>
              <option  id="selection" style="color:black;" value="{{-1}}" >Add Option</option> 
           </select>
-          
+
           <div *ngIf="addValue">
             <div><input id="optionName" style="height:32px;" [(ngModel)]="optionName" type="text" placeholder="Option Name"></div>
             <div><input id="optionAttribute"  style="height:32px;" [(ngModel)]="optionAttribute" type="text" placeholder="Option Expression"></div>
