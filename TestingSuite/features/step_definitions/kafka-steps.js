@@ -9,14 +9,7 @@ const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
 const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
-//const config = require('../config.json');
-//const appconfig = require('../appconfig.json');
 const globalconfig = require(process.cwd()+'/globalconfig_test.json');
-
-
-require('https').globalAgent.options.ca = RootCas;
-
-
 
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
@@ -25,6 +18,7 @@ Cucumber.defineSupportCode(function(context) {
     var portnumber = 0;
     var responseCode = 0;
     var responseData = '';
+    var url = '';
     var options  = {
         "method": "",
         "url": "",
@@ -49,6 +43,7 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
+            url = ida_url.substring(0,ida_url.indexOf(idaportnumber)-1);
             portnumber = parseInt(port_str);
             callback();
         }
