@@ -22,7 +22,7 @@ Background:
     #Further validation is needed
     Then the response dosent have to be merged
 
-    Scenario:
+
 
 
 
