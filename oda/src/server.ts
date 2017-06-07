@@ -32,7 +32,8 @@ globalconfig.hostname = "localhost";  //this can be overwritten by app config if
 //our app config will be the result of taking all global configurations and overwritting them with the local configurations
 Object.keys(appconfig).forEach(function(key){
     globalconfig[key] = appconfig[key];
-})
+});
+
 globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
 
 appconfig = globalconfig;
@@ -42,7 +43,6 @@ console.log(appconfig);
 
 exports.config = config;
 exports.appconfig = appconfig;
-
 
 var kafka = require('kafka-node');
 var kafkaClient = new kafka.Client(appconfig.kafka_url);

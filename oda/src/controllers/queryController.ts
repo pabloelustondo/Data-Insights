@@ -15,7 +15,6 @@ export class QueryController {
      * This api can be used to post a query that will use the stored metadata in the system to generate
      * and return a dataSet.
      *
-     *
      */
 
     @Post('')
@@ -25,7 +24,8 @@ export class QueryController {
     })
     public async Create(request: QueryModel): Promise<SDS> {
 
-
+        let server = require('../server');
+        let appConfig = server.appconfig;
         if (request.from[0] === 'vehicleInfo') {
 
             let mData = [
@@ -44,7 +44,7 @@ export class QueryController {
                         'queryId' : 'ttc'
                     }
                 },
-                url: 'http://localhost:8002/data/outGoingRequest'
+                url: appConfig['dps_url'] + 'data/outGoingRequest'
             };
             console.time('deviceNotSurviveShift: aws call');
 
@@ -134,7 +134,6 @@ export class QueryController {
                             }
                         ]
                     }
-
             };
             return user;
 

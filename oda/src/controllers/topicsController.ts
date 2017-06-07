@@ -36,10 +36,12 @@ export class TopicsController {
         let kafka = new KafkaService();
 
         if (token) {
+            let server = require('../server');
+            let appConfig = server.appconfig;
 
             let mData = ['topics : string [] '];
 
-            if (config.testingMode) {
+            if (appConfig.testingMode) {
 
                 let testData = ['vehicleInfo', 'customTopic'];
                 // returns test data for now
@@ -57,7 +59,8 @@ export class TopicsController {
                 // returns test data for now
 
                 let xqs = {tenantId: 'test'};
-                const xurl = 'https://' + config['dps_address'] + '/getMetadata';
+
+                const xurl = 'https://' + appConfig['dps_address'] + '/getMetadata';
 
                 const options: rp.OptionsWithUrl = {
                     headers: {

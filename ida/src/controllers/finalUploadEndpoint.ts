@@ -146,7 +146,6 @@ export class UploadDataSetController {
                 let appConfig = server.appconfig;
 
                 let metadata = (!express.body.metadata) ? {} : express.body.metadata;
-
                 let data = {
                     idaMetadata: {
                         referer: 'sampleRequestOriginInfo',
@@ -157,8 +156,8 @@ export class UploadDataSetController {
                     clientMetadata: metadata,
                     clientData: express.body.data
                 };
-                // create
 
+                // create
                 let kafkaClient = new kafka.Client(appConfig['kafka_url']);
                 try {
                   //  let Producer = ;
