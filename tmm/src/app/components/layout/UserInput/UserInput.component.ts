@@ -10,31 +10,37 @@ import { SmlDataService } from '../../../../sml/data.service';
   selector: 'userinput' ,
   providers: [SmlDataService],
   template: `
-  <div>
-   <!--<crud [options]="DataSourceList"></crud>-->
+    <h2 class="text-center"> Tenant Metadata </h2>
+    <hr />
     <div class="container">
       <div class="row">
-        <div class="col">
-          <div class="list-group" *ngFor="let listItem of listItems">
-              <a class="list-group-item" (click)=optionChanged($event) [id]="listItem.id">  {{ listItem.title }}</a>
+        <div class="col-lg-3">
+          <h4>User: {{listItems[0].users.name}}</h4>
+          <hr />
+          <h5 *ngFor="let message of messages"> {{ message }}</h5>
+        </div>
+     <!--<crud [options]="DataSourceList"></crud>-->
+          <div class="col-lg-3"> 
+            <div class="list-group" *ngFor="let listItem of listItems">
+                <a class="list-group-item" (click)=optionChanged($event) [id]="listItem.id">  {{ listItem.title }}</a>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem"
+                                      (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
           </div>
         </div>
-        <div class="col">
-          <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
-        </div>
       </div>
-    </div>
-  </div>
  `
 })
 
 export class UserInput implements OnInit {
   selectedOption: any;
   currentItem: any;
-
+  messages: string[] = [''];
   listItems: any = [
     {
-      'id': 1,
+      'id': '1',
       'title': 'Data Source',
       'tennantID': '0121',
       'dataSets': {
@@ -56,7 +62,7 @@ export class UserInput implements OnInit {
       },
       'users': {
         'id': '10-24-1',
-        'name': 'Test Data Set 01',
+        'name': 'Ray Gervais',
         'permissions': 'All',
         'status': 'Admin'
       },
@@ -71,12 +77,12 @@ export class UserInput implements OnInit {
       }
   },
   {
-      "id": 2,
-      "title": "Data Source 2",
-      "type": "object",
-      "properties": {
-        "type": "string",
-        "active": "boolean"
+      'id': '2',
+      'title': 'Data Source 2',
+      'type': 'object',
+      'properties': {
+        'type': 'string',
+        'active': 'boolean'
       }
   }];
   constructor() { }
@@ -87,24 +93,28 @@ export class UserInput implements OnInit {
   optionChanged(items) {
     let index = 0;
     this.listItems.forEach(item => {
-      if (item.id == parseInt(items.toElement.id)) {
+      if (item.id === items.toElement.id) {
         this.selectedOption = item;
         this.selectedOption['index'] = index;
       }
       index++;
     });
-  }
 
-    optionUpdated(updatedItem){
-      this.listItems[updatedItem.index] = updatedItem;
-      delete this.listItems[updatedItem.index].index;
+    if (!this.messages) {
+      this.messages[0] = 'Selected ' + this.selectedOption.title + '!';
+    } else {
+      this.messages.push(String('Selected ' + this.selectedOption.title + '!'));
     }
-
-  isEmpty(item) {
-    return (item == null);
   }
 
-  onChangeUpdate(item){
-    console.log(item);
-  }
+  optionUpdated(updatedItem) {
+    this.listItems[updatedItem.index] = updatedItem;
+    delete this.listItems[updatedItem.index].index;
+
+    if (!this.messages) {
+      this.messages[0] = 'Updated ' + updatedItem.title + '!';
+    } else {
+      this.messages.push(String('Updated ' + updatedItem.title + '!'));
+    }
+  }s
 }
