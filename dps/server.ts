@@ -69,17 +69,17 @@ try {
     let consumer = new kafka.Consumer(kafkaClient, payloads, options);
 
     consumer.on('message', function (message: any) {
-        //console.log(message);
-        //console.log( JSON.stringify(message.value));
-      //  console.log( (message.value));
         try {
             let data = JSON.parse(message.value);
 
             let idaMetadata = data.idaMetadata;
             let clientData = data.clientData.body;
             let clientMetadata = data.clientData.metadata;
+
             console.log('json = ' + JSON.stringify(data));
-            processKafkaRequest(idaMetadata, clientMetadata, clientData);
+
+            publishTransactionLog( idaMetadata, clientMetadata, clientData);
+            processCleanedData( idaMetadata, clientMetadata, clientData);
         } catch (e) {
             console.log('not json format' + message.value);
         }
@@ -135,7 +135,6 @@ app.post('/data/request', function(req,res) {
             let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
             let collectionName = dataSetId + '.' + dataSource['dataSourceId'];
 
-
             DataProjections(req.body.clientData, projections).then(function (data) {
                 uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
                     console.log('Final response' + JSON.stringify(response));
@@ -148,10 +147,7 @@ app.post('/data/request', function(req,res) {
 
 });
 
-//TODO refactor the name of the function, functionality stays the same
-
-function processKafkaRequest (idaMetadata: any, clientMetadata: any, clientData: any ) {
-
+function publishTransactionLog (idaMetadata: any, clientMetadata: any, clientData: any) {
     let tenantId = idaMetadata.tenantId;
     let dataSourceId = idaMetadata.dataSourceId;
     uploadRawData(tenantId, dataSourceId, clientData).then(function (awsResponse: any) {
@@ -160,6 +156,13 @@ function processKafkaRequest (idaMetadata: any, clientMetadata: any, clientData:
             console.log(error);
         }
     );
+}
+
+//TODO refactor the name of the function, functionality stays the same
+function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: any ) {
+
+    let tenantId = idaMetadata.tenantId;
+    let dataSourceId = idaMetadata.dataSourceId;
 
     // massage and clean up data before sending to database layer
     let tenant = db.getTenant(idaMetadata.tenantId);
@@ -177,6 +180,8 @@ function processKafkaRequest (idaMetadata: any, clientMetadata: any, clientData:
                 console.log(error);
             });
         });
+    } else {
+        console.log ('tenantId not found');
     }
 }
 
