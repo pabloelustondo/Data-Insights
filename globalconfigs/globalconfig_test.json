@@ -1,0 +1,17 @@
+{
+  "testingmode":false,
+  "useSSL":false,
+  "useAccessKey":false,
+  "ddb_url":"http://10.0.91.2:8000",
+  "dss_url":"http://10.0.91.2:8023",
+  "dssback_url":"http://10.0.91.2:8024",
+  "dad_url":"http://10.0.91.2:8025",
+  "dadback_url":"http://10.0.91.2:8026",
+  "oda_url":"http://10.0.91.2:8000",
+  "cdl_url":"http://10.0.91.2:8020",
+  "dos_url":"http://10.0.91.2:5000",
+  "dosback_url":"http://10.0.91.2:5001",
+  "ida_url":"http://10.0.91.2:8027",
+  "kafka_url":"10.0.91.2:2181",
+  "mongodb_url" : "mongodb://10.0.91.2::5494"
+}

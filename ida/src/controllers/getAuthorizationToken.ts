@@ -62,7 +62,7 @@ export class GetAuthorizationToken {
                     let server = require('../server');
                     let appConfig = server.appconfig;
                     if (decodedToken) {
-                        const dssEndpoint = appConfig['dss_url'] + '/getAgentToken';
+                        const dssEndpoint = appConfig['dssback_url'] + '/getAgentToken';
 
                         const optionsTest: rp.OptionsWithUrl = {
                             json: true,

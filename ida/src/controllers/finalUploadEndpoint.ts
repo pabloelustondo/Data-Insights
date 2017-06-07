@@ -160,9 +160,8 @@ export class UploadDataSetController {
                 // create
                 let kafkaClient = new kafka.Client(appConfig['kafka_url']);
                 try {
-                  //  let Producer = ;
-                    let producer = new kafka.Producer(kafkaClient);
 
+                    let producer = new kafka.Producer(kafkaClient);
 
                     producer.on('ready', function (message: any) {
                         let payloads: any =  [
