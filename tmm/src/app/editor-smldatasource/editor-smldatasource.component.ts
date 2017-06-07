@@ -9,7 +9,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
       <json-editor style="height: 100vh" [options]="editorOptions" [data]="dataSource"></json-editor >
       <br />
       <button class="btn btn-success" (click)="saveCurrentItem()">Save</button>
-      <button class="btn btn-danger">Cancel</button>
+      <button class="btn btn-danger" (click)="cancelCurrentItem()">Cancel</button>
     </div>  `,
   styleUrls: ['./editor-smldatasource.component.css']
 })
@@ -44,6 +44,11 @@ export class EditorSMLDatasourceComponent implements OnInit {
     this.index = this.dataSource.index;
     delete this.dataSource.index;
     this.editor.set(this.dataSource);
+  }
+
+  cancelCurrentItem() {
+    const emptyObject: any = {};
+    this.editor.set(emptyObject);
   }
 
   saveCurrentItem() {

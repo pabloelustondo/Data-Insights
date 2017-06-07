@@ -1,14 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserInput } from './UserInput.component';
+import { smlTenantMetadataEditor } from './smlTenantMetadataEditor.component';
 
-describe('UserInput', () => {
-  let component: UserInput;
+describe('smlTenantMetadataEditor', () => {
+  let component: smlTenantMetadataEditor;
   let fixture: ComponentFixture<UserInput>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserInput ]
+      declarations: [ smlTenantMetadataEditor ]
     })
     .compileComponents();
   }));

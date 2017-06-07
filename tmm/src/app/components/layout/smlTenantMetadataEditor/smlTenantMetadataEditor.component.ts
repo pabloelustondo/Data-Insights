@@ -8,7 +8,7 @@ import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchem
 
 
 @Component({
-  selector: 'userinput' ,
+  selector: 'smlTenantMetadataEditor' ,
   providers: [SmlDataService],
   template: `
   <div>     
@@ -34,7 +34,7 @@ import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchem
  `
 })
 
-export class UserInput implements OnInit {  //name will be sml tenant meta data editor  SMLTenantMetadataEditor
+export class smlTenantMetadataEditor implements OnInit {  //name will be sml tenant meta data editor  SMLTenantMetadataEditor
   selectedOption: any;
   currentItem: any;
   tenantMetadata: any = smlTenantMetadataSample;
