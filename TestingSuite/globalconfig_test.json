@@ -7,7 +7,7 @@
   "dssback_url":"http://10.0.91.2:8024",
   "dad_url":"http://sotiinsights.cloudapp.net:8025",
   "dadback_url":"http://sotiinsights.cloudapp.net:8026",
-  "oda_url":"http://10.0.91.2:8000",
+  "oda_url":"http://10.0.91.2:8022",
   "cdl_url":"http://sotiinsights.cloudapp.net:8020",
   "dos_url":"http://sotiinsights.cloudapp.net:5000",
   "dosback_url":"http://sotiinsights.cloudapp.net:5001",

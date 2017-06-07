@@ -51,7 +51,6 @@ Cucumber.defineSupportCode(function(context) {
             throw new Error('Cannot get port: invalid global config file');
         }else{
             url = ida_url;
-            console.log(url);
             idaPortNumber = parseInt(port_str);
             callback();
         }
@@ -79,7 +78,6 @@ Cucumber.defineSupportCode(function(context) {
             responseCode = response.statusCode;
             //var xaccess = obj.session_token;
             responseData = body;
-            console.log(body);
             authorizationToken = body.session_token;
             callback();
         })
