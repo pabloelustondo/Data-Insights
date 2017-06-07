@@ -33,8 +33,8 @@ Cucumber.defineSupportCode(function(context) {
     var url = '';
     var portnumber = 0;
     var idaportnumber = 0;
-    var globalconfig = require(process.cwd()+'\\globalconfig_test.json');
-
+    //const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
+    const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
     var options2  = {
         'url': '',
         'baseUrl': '',

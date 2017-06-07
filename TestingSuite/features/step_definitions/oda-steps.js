@@ -13,7 +13,8 @@ Cucumber.defineSupportCode(function(context) {
     var odaPortNumber = 0;
     var responseCode = 0;
     var responseData = '';
-    var globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+    const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+   // const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
     var accessToken='';
     var url = '';
 
@@ -84,7 +85,7 @@ Cucumber.defineSupportCode(function(context) {
     When('I GET topics', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         resetOptions();
-        options.uri = url+'/query/topics';
+        options.uri = url+'/Query/Topics';
         options.headers['content-type'] = 'application/json';
         options.headers['x-access-token'] = accessToken;
         Request.get(options, function (error, response, body) {
@@ -92,6 +93,7 @@ Cucumber.defineSupportCode(function(context) {
                 throw new Error('upload failed:'+ error);
             }
             responseData = body;
+            console.log(body);
             responseCode = response.statusCode;
             callback();
         });
@@ -112,7 +114,7 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('I make a POST call to query', function (callback) {
         //I post to query and record the response
-        options.uri = url+'/query';
+        options.uri = url+'/Query';
         Request.post(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);

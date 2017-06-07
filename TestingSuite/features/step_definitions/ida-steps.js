@@ -4,7 +4,10 @@ const Cucumber = require('cucumber');
 const Request = require('request');
 const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
+const jwt = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+//const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
+const config = require('..\\..\\ida_config.json');
 require('ssl-root-cas').inject();
 
 // Certificate Handling
@@ -26,8 +29,7 @@ Cucumber.defineSupportCode(function(context) {
     // Request Structure
     var options  = {
         "method": "",
-        "url": "",
-        "baseUrl":"",
+        "uri": "",
         "rejectUnauthorized": false,
         "headers": {
             "content-type": "application/json",
@@ -49,6 +51,7 @@ Cucumber.defineSupportCode(function(context) {
             throw new Error('Cannot get port: invalid global config file');
         }else{
             url = ida_url;
+            console.log(url);
             idaPortNumber = parseInt(port_str);
             callback();
         }
@@ -65,22 +68,18 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //make get request to IDA with permanent token to retrieve temporary token
-    When(/^I Get :portnumber$/, function (callback) {
-        options.baseUrl = url;
-        options.url = '/Security/getAuthorizationToken';
+    Then('I Get :portnumber with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        options.uri = url + stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
-
-
         //send a GET request to arg1 with accessToken as param
         Request.get(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
             }
-
             responseCode = response.statusCode;
             //var xaccess = obj.session_token;
             responseData = body;
-            //console.log(body);
+            console.log(body);
             authorizationToken = body.session_token;
             callback();
         })
@@ -94,8 +93,7 @@ Cucumber.defineSupportCode(function(context) {
     });
     When('I Post :portnumber with example data', function (callback) {
         options.preambleCRLF = options.postambleCRLF = true;
-        options.baseUrl = url;
-        options.url = '/data';
+        options.uri = url+'/data';
         options.headers['x-access-token'] = authorizationToken;
         options.headers['content-type'] = 'application/json';
         options.method = "POST";
@@ -170,7 +168,7 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         }else{
             var resString = JSON.stringify(responseData).toLowerCase();
-            if (!resString.includes('error') && resString != ''){
+            if (!resString.includes('error') && resString != '' && !resString.includes('invalid signature')){
                 throw new Error(resString);
             }
             callback();
