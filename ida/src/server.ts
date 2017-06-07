@@ -34,6 +34,7 @@ console.log('configuration');
 console.log(appconfig);
 
 appconfig = globalconfig;
+exports.appconfig = globalconfig;
 
 if (!fs.existsSync( config.logDir)) {
     fs.mkdir((config.logDir), function (err: any) {
@@ -209,6 +210,7 @@ if (appconfig.useSSL) {
 }
 
 // app.use(errorLogger);
+
 
 /*
 module.exports = logger;

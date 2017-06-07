@@ -5,7 +5,7 @@ import {Route, Get, Post, Delete, Patch, Example, Request} from 'tsoa';
 
 let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
-
+let server = require('../server');
 const config = require('../../config.json');
 const AWS      = require('aws-sdk');
 import * as fs from 'fs';
@@ -14,26 +14,6 @@ import * as rp from 'request-promise';
 
 import {SDSBattery} from '../models/batteryData';
 
-
-/*
-const awsPush = require('../awsPush');
-
-let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');
-let secretAccessKeyFile = fs.readFileSync(config['aws-secretKeyFileLocation'], 'utf8');
-
-const options = ({
-    accessKeyId: accessKeyIdFile,
-    secretAccessKey: secretAccessKeyFile
-});
-
-const creds = new AWS.Credentials(options);
-const firehose = new AWS.Firehose(
-    {
-        region : config['aws-region'],
-        credentials : creds
-    });
-
-*/
 
 @Route('Security')
 export class GetAuthorizationToken {
@@ -79,9 +59,10 @@ export class GetAuthorizationToken {
 
             let callDss = function (decodedToken: any) {
                 let promise = new Promise(function (resolve, reject) {
-
+                    let server = require('../server');
+                    let appConfig = server.appconfig;
                     if (decodedToken) {
-                        const dssEndpoint = config['dss-address'] + '/getAgentToken';
+                        const dssEndpoint = appConfig['dss_url'] + '/getAgentToken';
 
                         const optionsTest: rp.OptionsWithUrl = {
                             json: true,
@@ -135,7 +116,6 @@ export class GetAuthorizationToken {
                 status : '400'
             });
 
-            // throw new Error('invalid auth token');
         }
     }
 }
