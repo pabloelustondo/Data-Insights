@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { smlTenantMetadataEditor } from './components/layout/smlTenantMetadataEditor/smlTenantMetadataEditor.component';
-import { CrudComponent } from './components/layout/smlTenantMetadataEditor/crud.component';
 import { EditorSMLDatasourceComponent } from './editor-smldatasource/editor-smldatasource.component';
 import { JsonEditorComponent } from 'ng2-jsoneditor';
 
@@ -12,7 +11,6 @@ import { JsonEditorComponent } from 'ng2-jsoneditor';
   declarations: [
     AppComponent,
     smlTenantMetadataEditor,
-    CrudComponent,
     EditorSMLDatasourceComponent,
     JsonEditorComponent
   ],
