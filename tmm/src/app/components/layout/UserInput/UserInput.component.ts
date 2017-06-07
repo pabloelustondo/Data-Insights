@@ -6,7 +6,6 @@ import { SmlTenantMetadata } from '../../../../sml/sml';
 import { SmlDataService } from '../../../../sml/data.service';
 import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchema.configuration";
 
-
 @Component({
   selector: 'userinput' ,
   providers: [SmlDataService],
@@ -14,8 +13,9 @@ import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchem
   <div>     
     <div class="container">
       <br/>
-      <button type="button" class="btn btn-primary" (click)="objectInit()">Click to add a Data set</button>
-      <br/><br/>
+      <h3>Tenant Name: {{tenantMetadata.dataSets[0].from[0]}} </h3> 
+      <h3>Tenant ID: {{tenantMetadata.tenantId}} </h3>
+      <br/>
       <div class="row">
         <div class="col">
           <h2>List of Your Data Sets</h2>
@@ -23,9 +23,12 @@ import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchem
               <a class="list-group-item" (click)=editorOption(dataSet.id) [id]="dataSet.id">{{ dataSet.name }}</a>
           </div>
         </div>
-        
         <div class="col">
+        
           <h2>Editor</h2>
+          <button type="button" class="btn btn-primary" (click)="dataSetInit()">Click to add a Data set</button>
+          <button type="button" class="btn btn-primary" (click)="dataSetDelete()">Delete Selected</button>      
+          <br/><br/>
           <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
         </div>
       </div>
@@ -60,10 +63,18 @@ export class UserInput implements OnInit {  //name will be sml tenant meta data 
     delete this.tenantMetadata.dataSets[updatedItem.index].index;
   }
 
-  objectInit() {
+  dataSetInit() {
     this.selectedOption = this.emptyDataSet;
     this.selectedOption['index'] = this.tenantMetadata.dataSets.length;
-
   }
 
+  dataSetDelete(selectedOption){
+      let parsed: any = parseInt(selectedOption);
+      if(parsed == this.tenantMetadata.dataSets.length -1) {
+        this.tenantMetadata.dataSets.pop();
+      } else {
+        this.tenantMetadata.dataSets.splice(parsed, 1);
+        this.selectedOption = this.emptyDataSet;
+      }
+    }
 }
