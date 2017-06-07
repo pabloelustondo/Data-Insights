@@ -15,11 +15,8 @@ to run using a specific configuration/hostname/ports for a specific server do fo
 that will copy the globalconfig_dev.json from the globalconfigs folder into the root folder before starting.
 To login to the dashboard use the tenant “test”. You will see a mock IDP screen when you can type an arbitrary username.
 
-
-
-
-
-
+WARNING: we still have ports in package.json in UIs.dad, dss, tmm.
+Until we fix this please make sure they are consistent.
 
 
 
