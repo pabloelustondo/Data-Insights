@@ -112,7 +112,7 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I make a POST call to query', function (callback) {
+    Given('I make a POST call to ~/query', function (callback) {
         //I post to query and record the response
         options.uri = url+'/Query';
         Request.post(options, function (error, response, body) {
