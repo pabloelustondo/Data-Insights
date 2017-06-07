@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditorSMLDatasourceComponent } from './editor-smldatasource.component';
+import { EditorSMLDatasourceComponent } from './smlDataSourceEditor';
 
 describe('EditorSMLDatasourceComponent', () => {
   let component: EditorSMLDatasourceComponent;

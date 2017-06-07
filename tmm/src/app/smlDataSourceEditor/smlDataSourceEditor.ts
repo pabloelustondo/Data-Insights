@@ -11,10 +11,10 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
       <button class="btn btn-success" (click)="saveCurrentItem()">Save</button>
       <button class="btn btn-danger" (click)="cancelCurrentItem()">Cancel</button>
     </div>  `,
-  styleUrls: ['./editor-smldatasource.component.css']
+  styleUrls: ['./smlDataSourceEditor.css']
 })
 
-export class EditorSMLDatasourceComponent implements OnInit {
+export class smlDataSourceEditor implements OnInit {
   @Input() dataSource: any;
 
   @Output() optionUpdated = new EventEmitter();
