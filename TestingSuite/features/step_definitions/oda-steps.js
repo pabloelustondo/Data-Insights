@@ -21,9 +21,12 @@ Cucumber.defineSupportCode(function(context) {
     // Configure Client
     var options  = {
         "method": "",
-        "url": "",
+        "uri": "",
         "rejectUnauthorized": false,
-        "headers": {},
+        "headers": {
+            "content-type": "application/json",
+            "Keep-Alive": true
+        },
         "json": true,
         "body": {},
         "preambleCRLF": true,
@@ -61,15 +64,13 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-    Given('I set valid request header and body for POST call to ~/query', function (callback) {
+    Given('I set valid request header and body for POST call to ~/query with metadata id', function (callback) {
         //prepare header and body for posting to IDA query endpoint
         options.headers['content-type'] = 'application/json';
         //set example query in body
-        options.body = {
+        options.body =  {
             "dataSetId": "string",
-            "from": [
-                'vehicleInfo'
-            ]
+            "from": ["vehicleInfo"]
         };
         callback();
     });
@@ -93,7 +94,6 @@ Cucumber.defineSupportCode(function(context) {
                 throw new Error('upload failed:'+ error);
             }
             responseData = body;
-            console.log(body);
             responseCode = response.statusCode;
             callback();
         });
@@ -128,7 +128,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('response code is :{int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
         if (parseInt(int) != parseInt(responseCode))
-            throw new Error('Response should be ' + response +' but is ' + responseCode);
+            throw new Error('Response code should be ' + int +' but is ' + responseCode);
         callback();
     });
 

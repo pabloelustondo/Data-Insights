@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "npm install jsonwebtoken && npm install kafka-node && npm install -g cucumber && npm install",
-    "featuretest": "./node_modules/.bin/cucumberjs -f pretty features/CB-425.feature features/CB-438.feature",
+    "featuretest": "./node_modules/.bin/cucumberjs -f pretty features/CB-437.feature",
     "Components": "./node_modules/.bin/cucumberjs -f pretty features/DSS.feature features/IDA.feature features/ODA.feature",
     "report": "./node_modules/.bin/cucumberjs -f json features/DSS.feature > ./features/assets/ReportingBDD.json"
   },
