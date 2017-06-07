@@ -6,13 +6,16 @@ import {Route, Get, Post, Delete, Patch, Example, Request} from 'tsoa';
 let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 
-const config = require('../../appconfig.json');
+const config = require('../../config.json');
 const AWS      = require('aws-sdk');
 import * as fs from 'fs';
 import * as querystring from 'querystring';
 import * as rp from 'request-promise';
 
 import {SDSBattery} from '../models/batteryData';
+
+
+/*
 const awsPush = require('../awsPush');
 
 let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');
@@ -30,6 +33,7 @@ const firehose = new AWS.Firehose(
         credentials : creds
     });
 
+*/
 
 @Route('Security')
 export class GetAuthorizationToken {
@@ -62,7 +66,12 @@ export class GetAuthorizationToken {
              */
             let verifyToken = function () {
                 let promise = new Promise(function (resolve, reject) {
-                    resolve(jwt.verify(token, config['mcdp-secret']));
+                    try {
+                        resolve(jwt.verify(token, config['mcdp-secret']));
+                    } catch (err) {
+                        console.log('could not verify token');
+                        reject(err);
+                    }
                 });
                 return promise;
             };
@@ -84,7 +93,10 @@ export class GetAuthorizationToken {
                         };
                         resolve(rp(optionsTest));
                     } else {
-                        reject('Invalid token');
+                        reject( {
+                            message: 'Invalid token',
+                            status: 400
+                        });
                     }
                 });
                 return promise;
@@ -95,37 +107,34 @@ export class GetAuthorizationToken {
                     if (dssResponse) {
                         resolve(dssResponse);
                     } else {
-                        reject('Dss error response');
+                        reject( {
+                            message : 'Dss error response',
+                            status : 500
+                        });
                     }
 
                 });
                 return promise;
             };
             let p: any = await verifyToken().then(callDss).then(responseData, function(error) {
-                const user: any = {
-                    createdAt: new Date(),
-                    metadata: 'ERROR',
-                    data: 'Could not verify token ' + error
-                };
-                // return user;
 
-                throw new Error('Could not verify token');
+                return Promise.reject (
+                    {
+                        message : error.message,
+                        status : error.status
+                    }
+                );
             });
 
             console.log( JSON.stringify(p));
             return p;
         } else {
-            const user: any = {
-                createdAt: new Date(),
-                metadata: 'ERROR',
-                data: 'Invalid Token or missing token'
-            };
-           // return user;
 
-            throw {
-                message: 'error thrown',
-                status: 500
-            };
+            return Promise.reject({
+                message : 'missing token',
+                status : '400'
+            });
+
             // throw new Error('invalid auth token');
         }
     }

@@ -1,23 +1,27 @@
 Welcome to SOTI Insights
 
-SHORT STORY (Windows)
+Instructions to get , install, run and sort of monitor the whole thing:
+
 make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka)
-(follow official websites)
-make sure you have two scripts to start kafka "startkafka"  "startzoo" (for zookeper) that can run anywhere.
-also make sure you can run mongod from anywhere, you have in your path.
+we assume mongodb installed in C:\mongodb and kafka in c:\kafka. (if not please modify folder in 'run' script.
 
-git clone
-install   (takes a few minutes, get a coffee)
-run     (by default will run on localhost)
-http://localhost:5000
+> git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
+> install   (takes a few minutes, get a, good, coffee)
+> run     (by default will run on localhost)
+> http://localhost:5000
 
-run config  for specific configuration ...
-for example
-"dev" is for sotiinsights.clooudapp.net
 
-default configurations are in the globalconfigs folder.
-each microservice is able to overwrite the global configuration.....for that you need to go into each service folder.
-(in vanilla deployments you do not need that)
+to run using a specific configuration/hostname/ports for a specific server do for example "run dev"
+that will copy the globalconfig_dev.json from the globalconfigs folder into the root folder before starting.
+To login to the dashboard use the tenant “test”. You will see a mock IDP screen when you can type an arbitrary username.
+
+
+
+
+
+
+
+
 
 LONG STORY
 

@@ -2,14 +2,16 @@
 
 call setconfig %1
 
+SET kafkadir=C:\kafka
+
 SET installdir= %cd%
 cd %installdir%
 
 echo "starting kafka zoo"
-start cmd.exe /k startzoo
+start cmd.exe /k  "%kafkadir%\bin\windows\zookeeper-server-start.bat %kafkadir%\config\zookeeper.properties"
 
 echo "starting kafka"
-start cmd.exe /k startkafka
+start cmd.exe /k  "%kafkadir%\bin\windows\kafka-server-start.bat %kafkadir%\config\server.properties"
 
 echo "starting mongo"
 start cmd.exe /k mongod
@@ -40,3 +42,12 @@ start cmd.exe /k "cd %installdir%\dos\backend & call npm run start"
 
 echo "starting cdl"
 start cmd.exe /k "cd %installdir%\cdl & call npm run start"
+
+echo "starting ida"
+start cmd.exe /k "cd %installdir%\ida & call npm run start"
+
+echo "starting tmm"
+start cmd.exe /k "cd %installdir%\tmm & call npm run start"
+
+echo "starting tmm backend"
+start cmd.exe /k "cd %installdir%\tmm\backend & call npm run start"

@@ -4,9 +4,10 @@
   "description": "BDD for SOTI Insight",
   "main": "index.js",
   "scripts": {
-    "setup": "npm install -g cucumber && npm install",
-    "test": "./node_modules/.bin/cucumberjs -f pretty  features/IDA.feature features/DSS.feature",
-    "report": "./node_modules/.bin/cucumberjs -f json features/DSS.feature > ./features/ReportingBDD.json"
+    "setup": "npm install jsonwebtoken && npm install kafka-node && npm install -g cucumber && npm install",
+    "featuretest": "./node_modules/.bin/cucumberjs -f pretty features/CB-425.feature features/CB-438.feature",
+    "Components": "./node_modules/.bin/cucumberjs -f pretty features/DSS.feature features/IDA.feature features/ODA.feature",
+    "report": "./node_modules/.bin/cucumberjs -f json features/DSS.feature > ./features/assets/ReportingBDD.json"
   },
   "author": "",
   "license": "ISC",

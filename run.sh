@@ -46,3 +46,6 @@
  cd ..
  cd cdl
  npm start > ../dos/logs/cdl.log&
+ cd ..
+ cd ida
+ npm start > ../dos/logs/ida.log&

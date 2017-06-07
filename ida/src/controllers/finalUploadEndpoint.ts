@@ -1,42 +1,18 @@
 /**
  * Created by vdave on 5/2/2017.
  */
-import {Route, Get, Post, Delete, Patch, Example, Request} from 'tsoa';
+import {Route, Get, Post, Delete, Patch, Example, Request, Response} from 'tsoa';
 import {SDS} from '../models/user';
 import {InputDataModel} from '../models/inputDataModel';
-import {ResponseModel} from '../models/responseModel';
+import {ResponseModel, ErrorResponseModel} from '../models/responseModel';
 import {ListBatteryStats} from '../models/listBatteryStats';
 let jwt  = require('jsonwebtoken');
 import * as express from '@types/express';
 const path = require('path');
-const config = require('../../appconfig.json');
-const AWS = require('aws-sdk');
+const config = require('../../config.json');
 
-import {verifyToken} from '../services/jwtService';
-import {uploadDataToS3} from '../services/awsService';
-
-import * as fs from 'fs';
+let kafka = require('kafka-node');
 import * as rp from 'request-promise';
-
-const awsPush = require('../awsPush');
-
-let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');
-let secretAccessKeyFile = fs.readFileSync(config['aws-secretKeyFileLocation'], 'utf8');
-
-const options = ({
-    accessKeyId: accessKeyIdFile,
-    secretAccessKey: secretAccessKeyFile
-});
-
-const creds = new AWS.Credentials(options);
-
-
-const s3instance = new AWS.S3({
-    region : config['aws-region'] ,
-    credentials : creds,
-    bucket: config['aws-s3bucket']
-});
-
 
 
 @Route('data')
@@ -46,20 +22,58 @@ export class UploadDataSetController {
      * Post a unit of data to be stored in the cloud analytics database
      */
 
+    @Response<ResponseModel>('200', 'Data Stored')
+    @Response<ErrorResponseModel>('400', 'Missing Token')
+    @Response<ErrorResponseModel>('400', 'Token verification Failed')
+    @Response<ErrorResponseModel>('500', 'Internal Server Error. Please contact SOTI Support')
+    @Response<ErrorResponseModel>('400', 'Content-Type incorrect. Content-type must be Application/JSON')
+    @Response<ErrorResponseModel>('400', 'Wrong Input Model')
     @Post('')
     @Example<any>({
         headers: {
-            'x-access-token': 'Future Private Access Key',
-            'Accept': 'application/json'
+            'x-access-token': 'Temporary JWT that was retrieved from getAuthorizationToken endpoint',
+            'content-type': 'application/json'
         },
         json: true,
-        url: 'https://localhost:3010/data/input',
+        url: 'https://localhost:3010/data',
         data: {
-            dev_id: '12345678901234567890123456789012345678901234567890123456789012345678901234567890',
-            server_time_stamp: '2016-12-08T19:12:15.235Z',
-            int_value: 123456789123,
-            stat_type: 1234,
-            time_stamp: '2016-12-08T19:13:15.235Z'
+            metadata: {
+                dataSetId : 'myCustomDataSetId',
+                projections : ['device', 'application']
+            },
+            data : {
+                device : {
+                    id : 1234,
+                    name : 'testName',
+                    battery : 50,
+                    status : 'ok'
+                },
+                application : {
+                    id : 1234,
+                    name : 'applicationName',
+                    customApplicationData : {
+                        version : '1.0',
+                        size : '1M'
+                    }
+                },
+                logs : [{
+                    status : '200',
+                    message : 'OK',
+                    timeStamp : '2016-08-26T00:08:58.000Z'
+                }, {
+                    status : '200',
+                    message : 'OK',
+                    timeStamp : '2016-08-26T00:08:59.000Z'
+                }, {
+                        status : '400',
+                        message : 'Error',
+                        timeStamp : '2016-08-26T00:09:00.000Z',
+                        error : {
+                            trace : 'stackTrace'
+                        }
+                    }
+                ]
+            }
         }
     })
     public async Create( @Request() express: express.Request): Promise<ResponseModel> {
@@ -71,90 +85,118 @@ export class UploadDataSetController {
         let contentType = req.headers['content-type'];
 
 
+
+
         if (!token) {
-            let error: ResponseModel = {
-                error : {
-                    errorCode: '1',
-                    errorMessage: 'missing token'
-                }
-            };
-            return error;
+
+            return Promise.reject({
+                message : 'missing token',
+                status : '400'
+            });
+
+
         }
 
         if (contentType !== 'application/json') {
-
-            let error: ResponseModel = {
-                error : {
-                    errorCode: '2',
-                    errorMessage: 'Content-Type incorrect. Content-type must be Application/JSON'
-                }
-            };
-            return error;
-        }
+            return Promise.reject({
+                message : 'Content-Type incorrect. Content-type must be Application/JSON',
+                status : '400'
+            });
+         }
 
         let data = JSON.stringify(req.body);
         try {
             JSON.parse(data);
         } catch (e) {
 
-            let error: ResponseModel = {
-                error : {
-                    errorCode: '3',
-                    errorMessage: 'Content-Type incorrect. Body must be json type'
-                }
-            };
-            return error;
+
+            return Promise.reject({
+                message : 'Content-Type incorrect. Body must be json type',
+                status : '400'
+            });
+
         }
 
         let customerData: InputDataModel = express.body;
         if (!((customerData.metadata) && (customerData.metadata.dataSetId) && (customerData.data))) {
 
-            let error: ResponseModel = {
-                error : {
-                    errorCode: '4',
-                    errorMessage: 'wrong input model'
-                }
-            };
-            return error;
-
+            return Promise.reject({
+                message : 'Wrong input model',
+                status : '400'
+            });
         }
 
         let verifyAndDecodeJwt = function () {
             let promise = new Promise(function (resolve, reject) {
-                resolve(jwt.verify(token, config['expiring-secret']));
+                try {
+                    resolve(jwt.verify(token, config['expiring-secret']));
+                } catch (err) {
+                    console.log('could not verify token');
+                    reject(err);
+                }
             });
             return promise;
         };
 
 
         let sendToQueue = function (jwtDecodedToken: any) {
-           // let promise = new Promise(function (resolve, reject) {
+
+            if (jwtDecodedToken) {
+
+                let metadata = (!express.body.metadata) ? {} : express.body.metadata;
+
+                let data = {
+                    idaMetadata: {
+                        referer: 'sampleRequestOriginInfo',
+                        dataSourceId: jwtDecodedToken.agentid,
+                        tenantId: jwtDecodedToken.tenantid,
+                        timeStamp: (new Date()).toISOString()
+                    },
+                    clientMetadata: metadata,
+                    clientData: express.body.data
+                };
+                // create
+
+                let kafkaClient = new kafka.Client(config.kafka_url);
+                try {
+                  //  let Producer = ;
+                    let producer = new kafka.Producer(kafkaClient);
 
 
-            let metadata = (!express.body.metadata) ? {} : express.body.metadata;
+                    producer.on('ready', function (message: any) {
+                        let payloads: any =  [
+                            {
+                                topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetdId,
+                                partition: 0,
+                                messages: data
+                            }];
+                        producer.send(payloads, function (err: any, data: any) {
+                            console.log(data);
+                            return Promise.resolve(data);
+                        });
+                        let transactionLogPayloads: any =  [
+                            {
+                                topic: jwtDecodedToken.tenatid + '_' + 'transactionLog',
+                                partition: 0,
+                                messages: JSON.stringify(data)
+                            }];
+                        producer.send(transactionLogPayloads, function (err: any, data: any) {
+                            console.log(data);
+                           // return Promise.resolve(data);
+                        });
+                    });
+                    producer.on('error', function (error: any) {
+                        console.log(error);
+                    });
 
-            let data = {
-                idaMetadata: {
-                    referer: 'sampleRequestOriginInfo',
-                    dataSourceId: jwtDecodedToken.agentid,
-                    tenantId: jwtDecodedToken.tenantid,
-                    timeStamp: (new Date()).toISOString()
-                },
-                clientMetadata: metadata,
-                clientData: express.body.data
-            };
-            const headersOptions = {
-                'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
-            };
 
-            const options: rp.OptionsWithUrl = {
-                json: true,
-                method: 'POST',
-                headers: headersOptions,
-                url: config['queue_address'],
-                body: data
-            };
-            return rp(options);
+                } catch (e) {
+                    console.log('IDA could not communicate with kafka producer');
+                }
+                // return rp(options);
+            } else {
+                return new Error('invalid auth token');
+            }
 
         };
 
@@ -168,22 +210,27 @@ export class UploadDataSetController {
                     const user: any = {
                         createdAt: new Date(),
                         metadata: mData,
-                        data: dpsResponse.response
+                        data: 'OK'
                     };
                     resolve(user);
 
                 } else {
-                    reject('rejected');
+                    reject('Error with backend Service');
                 }
             });
             return promise;
         };
 
-
         let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData, function (err) {
             console.log(err);
+
+            return Promise.reject (
+                {
+                    message : err.message,
+                    status : '400'
+                }
+            );
         });
         return finalResponse;
-
     }
 }

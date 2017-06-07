@@ -25,5 +25,11 @@ npm install
 cd ../../cdl
 npm install
 
-cd ..
+cd ../ida
+npm install
+
+cd ../dps
+npm install
+
+
 echo "installations completed"

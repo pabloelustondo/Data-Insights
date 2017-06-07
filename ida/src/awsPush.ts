@@ -2,7 +2,7 @@ import {ListBatteryStats} from './models/listBatteryStats';
 import * as fs from 'fs';
 
 
-const config = require('../appconfig.json');
+const config = require('../config.json');
 const AWS      = require('aws-sdk');
 
 let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');

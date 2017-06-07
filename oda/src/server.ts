@@ -116,10 +116,19 @@ try {
      */
 
 
-    kafkaConsumer.on('message', function (message: any) {
-        console.log(message);
-        if (io) io.emit('chat message', message.value);
+    kafkaConsumer.on('message', function (message: any, err: any) {
+        if (!err) {
+            console.log(message);
+            if (io) io.emit('chat message', message.value);
+        }
     });
+
+    kafkaConsumer.on('error', function (err: any) {
+        console.log(err);
+    })
+
+
+
 
 } catch(e){
     console.log("ODA could not start kafka consumer");

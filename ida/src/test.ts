@@ -4,7 +4,7 @@
 import { suite, test, slow, timeout, skip, only } from 'mocha-typescript';
 import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
 import {SDS} from './models/user';
-const config = require('../appconfig.json');
+const config = require('../config.json');
 let jwt  = require('jsonwebtoken');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
@@ -156,6 +156,13 @@ const testData =  {
             'file' : config['large-data-set']
         };
         console.log('testing');
+        let tenantId = 'varun_test';
+        let jwtPayload = {
+            tenantid: tenantId,
+            agentid: '12345678901234567890'
+        };
+        let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15000});
+        console.log(JSON.stringify(token));
         chai.use(chaiHttp);
         chai.request('http://localhost:3010')
             .post('/Data/LargeDataSets')

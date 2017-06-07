@@ -1,7 +1,7 @@
 {
   "name": "DAD_Backend",
-  "contributors": "Pablo, Varun, Nathan ",
-  "description": "DAS Central Database, here we store, tenants, users,..etc",
+  "contributors": "Pablo",
+  "description": "Functions to communicate with DDB to stre / retrieve users ..have sockets but still not used",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
@@ -21,6 +21,6 @@
     "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
     "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
     "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js",
-    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
+    "getConfigs": "cp-cli ../../globalconfig.json ./globalconfig.json"
   }
 }
