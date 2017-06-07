@@ -16,10 +16,6 @@ export class SmlTenantMetadata {
 export class SmlElement{
   id: string;
   name: string;
-
-  validate(){
-    return (this.id !== undefined && this.name !== undefined)
-  }
 }
 
 export class SmlDataSource extends SmlElement{
