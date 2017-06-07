@@ -9,18 +9,7 @@ const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
 const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
-//const config = require('../config.json');
-//const appconfig = require('../appconfig.json');
-const globalconfig = require(process.cwd()+'/../globalconfigs/globalconfig_dev.json');
-require('ssl-root-cas').inject();
-
-// Certificate Handling
-RootCas
-    .addFile(__dirname + '/dev2012r2-sk.sotidev.com.cer')
-    .addFile(__dirname + '/root.p7b');
-require('https').globalAgent.options.ca = RootCas;
-
-
+const globalconfig = require(process.cwd()+'/globalconfig_test.json');
 
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
@@ -29,6 +18,7 @@ Cucumber.defineSupportCode(function(context) {
     var portnumber = 0;
     var responseCode = 0;
     var responseData = '';
+    var url = '';
     var options  = {
         "method": "",
         "url": "",
@@ -53,6 +43,7 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
+            url = ida_url.substring(0,ida_url.indexOf(idaportnumber)-1);
             portnumber = parseInt(port_str);
             callback();
         }
@@ -99,7 +90,6 @@ Cucumber.defineSupportCode(function(context) {
             autoCommit: false,
             sessionTimeout: 4000
         };
-        try {
             kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
             // now let's see if Kafka receives anything
             kafkaConsumer.on('message', function (message, err) {
@@ -112,6 +102,8 @@ Cucumber.defineSupportCode(function(context) {
             kafkaConsumer.on('error', function (err) {
                 throw new Error("Something went wrong: " + err);
             });
-        }
+
+
     });
+
 });

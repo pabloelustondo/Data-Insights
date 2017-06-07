@@ -1,68 +1,110 @@
 ///<reference path="../../models/fakeData.ts"/>
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { DataSourceList } from './tmmModels';
+
+
+import { CrudComponent } from './crud.component';
+import { SmlDataService } from '../../../../sml/data.service';
 
 @Component({
-  template: `<div class="row">
-  <div class="large-3 columns">
-    <ul>
-      <li *ngFor="let item of fakeDataPhoneModels">
-        <a (click)="selectJSON(item)">
-          {{item.name}}
-        </a>
-      </li>
-    </ul>
+  selector: 'userinput' ,
+  providers: [SmlDataService],
+  template: `
+  <div>
+   <!--<crud [options]="DataSourceList"></crud>-->
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="list-group" *ngFor="let listItem of listItems">
+              <a class="list-group-item" (click)=optionChanged($event) [id]="listItem.id">  {{ listItem.title }}</a>
+          </div>
+        </div>
+        <div class="col">
+          <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-xs-5">
-    <form (submit)="onSubmitValidateJSON()">
-      <label> {{ toDisplay.name }}
-        <textarea autofocus rows="20vh">
-         {{toDisplay | json }}
-        </textarea>
-      </label>
-      <button type="button" class="btn btn-primary">Clear</button>
-    </form>
-  </div>
-</div>
  `
 })
+
 export class UserInput implements OnInit {
-  toDisplay: String;
-  fakeDataPhoneModels = [
+  selectedOption: any;
+  currentItem: any;
+
+  listItems: any = [
     {
-      "name": "iPhone 8 Apple Edition",
-      "os": "iOS",
-      "version": "11",
-      "modelNumber": "HK2A3A1B",
-      "carrier": "Freedom"
-    },
-{
-  "name": "Pixel 2 XL",
-  "os": "Android",
-  "version": "7.1",
-  "modelNumber": "Dolphine",
-  "carrier": "Rogers"
-},
-{
-  "name": "DebianMax",
-  "os": "Android",
-  "version": "7.0",
-  "modelNumber": "Jessie12",
-  "carrier": "Bell"
-},
-{
-  "name": "Blackberry Passport",
-  "os": "BB10",
-  "version": "10.1.23",
-  "modelNumber": "Dolphine",
-  "carrier": "Rogers"
-}];
-  constructor() {
+      'id': 1,
+      'title': 'Data Source',
+      'tennantID': '0121',
+      'dataSets': {
+        'id': '10-22-1',
+        'name': 'Test Data Set 01',
+        'from': 'Doga Ister',
+        'persist': true,
+        'filter': '/&AS/',
+        'merge': '09-21-31$F',
+        'projections': '',
+        'metadata': ''
+      },
+      'dataSource': {
+        'id': '10-23-1',
+        'name': 'Test Data Set 01',
+        'type': 'TestMockData',
+        'active': true,
+        'properties': ['Test', 'Ray', 'Is', 'Bae']
+      },
+      'users': {
+        'id': '10-24-1',
+        'name': 'Test Data Set 01',
+        'permissions': 'All',
+        'status': 'Admin'
+      },
+      'idapInformation': {
+        'id': '10-25-02',
+        'name': 'idap Main Config',
+        'endpoint': 'localhost:1023/endPointFTW',
+        'configurations': {
+          'method': 'GET',
+          'secure': 'x-access'
+        }
+      }
+  },
+  {
+      "id": 2,
+      "title": "Data Source 2",
+      "type": "object",
+      "properties": {
+        "type": "string",
+        "active": "boolean"
+      }
+  }];
+  constructor() { }
+
+  ngOnInit() { }
+
+
+  optionChanged(items) {
+    let index = 0;
+    this.listItems.forEach(item => {
+      if (item.id == parseInt(items.toElement.id)) {
+        this.selectedOption = item;
+        this.selectedOption['index'] = index;
+      }
+      index++;
+    });
   }
 
-  ngOnInit() {
+    optionUpdated(updatedItem){
+      this.listItems[updatedItem.index] = updatedItem;
+      delete this.listItems[updatedItem.index].index;
+    }
+
+  isEmpty(item) {
+    return (item == null);
   }
 
-  selectJSON(item) {
-    this.toDisplay = item;
+  onChangeUpdate(item){
+    console.log(item);
   }
 }

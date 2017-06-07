@@ -1,7 +1,7 @@
 {
-  "name": "DAD_Backend",
+  "name": "TMM_Backend",
   "contributors": "Pablo",
-  "description": "Functions to communicate with DDB to stre / retrieve users ..have sockets but still not used",
+  "description": "Functions to communicate with DDB to stre / retrieve tenant information ..have sockets but still not used",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {

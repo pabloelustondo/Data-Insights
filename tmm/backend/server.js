@@ -74,10 +74,10 @@ app.get('/status', function(req,res){
     return res.send(report);
 });
 
-app.get('/daduser/:userid', function(req,res){
+app.get('/tenant/:tenantid', function(req,res){
 
     var options = {
-        uri:appconfig.ddb_url + "/daduser/" + req.params.userid,
+        uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
         method:"GET",
         contentType:"application/json"
     };
@@ -92,9 +92,9 @@ app.get('/daduser/:userid', function(req,res){
         });
 });
 
-app.post('/daduser/:userid', function(req,res){
+app.post('/tenant/:tenantid', function(req,res){
     var options = {
-        uri:appconfig.ddb_url + "/daduser/" + req.params.userid,
+        uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
         method:"POST",
         contentType:"application/json",
         body: req.body,
@@ -112,7 +112,7 @@ app.post('/daduser/:userid', function(req,res){
 });
 
 
-app.delete('/daduser/:userid', function(req,res){
+app.delete('/tenant/:tenantid', function(req,res){
 
 });
 
