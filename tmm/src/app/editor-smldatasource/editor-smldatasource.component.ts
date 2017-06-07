@@ -41,7 +41,6 @@ export class EditorSMLDatasourceComponent implements OnInit {
   ngOnInit() {}
 
   ngOnChanges() {
-    console.log(this.dataSource);
     this.index = this.dataSource.index;
     delete this.dataSource.index;
     this.editor.set(this.dataSource);

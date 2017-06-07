@@ -1,7 +1,7 @@
 /**
  * Created by dister on 6/6/2017.
  */
-import { SmlTenantMetadata } from "../../../../sml/sml";
+import {SmlTenantMetadata, SmlDataSet} from "../../../../sml/sml";
 
 
 //this is the dataset schema that we need for JSON editor and crud component will use this too
@@ -73,5 +73,17 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
       }],
   };
 
+
+export const smlTenantMetadataEmpty: SmlDataSet =
+  {
+    id: '',
+    name: '',
+    from: [''],
+    persist: true,
+    filter: '',
+    merge: '',
+    projections: '',
+    metadata: ['']
+  };
 
 

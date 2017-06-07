@@ -16,8 +16,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
           </select>
 
           <div *ngIf="addValue">
+            <div><input id="optionID" style="height:32px;" [(ngModel)]="optionID" type="text" placeholder="Option ID"></div>
             <div><input id="optionName" style="height:32px;" [(ngModel)]="optionName" type="text" placeholder="Option Name"></div>
-            <div><input id="optionAttribute"  style="height:32px;" [(ngModel)]="optionAttribute" type="text" placeholder="Option Expression"></div>
+            <div><input id="optionID" style="height:32px;" [(ngModel)]="tenantID" type="text" placeholder="Tenant ID"></div>
+            <div><input id="optionID" style="height:32px;" [(ngModel)]="tenantID" type="text" placeholder="Tenant ID"></div>
             <span id="addNewOption" class="glyphicons glyphicons-ok" (click)="addNewOption($event)"></span> 
             <span class="glyphicons glyphicons-remove" (click)="add(-1)"></span>
           </div>     
@@ -39,6 +41,8 @@ export class CrudComponent {
 
     addOption?: boolean = false;
     optionName?: any;
+    optionID?: any;
+    tenantID?: any;
     optionAttribute?: any;
     updatedOptionName?:any;
     updatedOptionAttribute?:any;
