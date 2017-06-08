@@ -23,14 +23,14 @@ Background:
     Then response code must be 200
     Then response body should be empty or contain error
 
-  Scenario: Post to /data and get a valid AWS response
+  Scenario: As an administrator I want to Post to /data
     Given I set the temporary AuthorizationToken
     And grab IDA port number
     When I Post :portnumber with example data
     Then response code must be 200
     And response body should be a valid IDA-POST response
 
-  Scenario: Invalid Post to /data
+  Scenario: As an administrator I want to send Invalid Post information to /data
     Given I set the AuthorizationToken to PermanentToken
     And grab IDA port number
     When I Post :portnumber with example data
