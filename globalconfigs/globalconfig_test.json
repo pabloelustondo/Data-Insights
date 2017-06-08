@@ -15,5 +15,5 @@
   "tmm_url":"http://10.0.91.2:8028",
   "tmmback_url":"http://10.0.91.2:8029",
   "kafka_url":"10.0.91.2:2181",
-  "mongodb_url" : "mongodb://10.0.91.2::5494"
+  "mongodb_url" : "mongodb://10.0.91.2:5494"
 }
