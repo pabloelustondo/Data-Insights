@@ -15,6 +15,7 @@ let testResponses = require('../testing/testResponses.json');
 export function uploadRawData(tenantId: string, dataSourceId: string, clientData: ClientData) {
 
     if (appconfig.testingmode) {
+
         return new Promise( (resolve) => { resolve(testResponses.awsSampleResponse + tenantId) }) ;
     }
     else {

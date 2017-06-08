@@ -9,13 +9,12 @@ var rp = require("request-promise");
 var DatabaseService = (function () {
     function DatabaseService(ddbUrl) {
         var _this = this;
+        this.appConfig = appconfig;
         if (appconfig.testingmode) {
             this.tenants = sampletenants.tenants;
         }
         else {
             //TODO: call DDB for this but for now just return  test data
-            //  this.tenants = sampletenants.tenants;
-            // this.loadTenants();
             var headersOptions = {
                 'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
             };
@@ -23,20 +22,25 @@ var DatabaseService = (function () {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: 'http://localhost:8000/getAllTenants',
+                url: this.appConfig['ddb_url'] + '/getAllTenants',
             };
             rp(options).then(function (data) { return _this.tenants = data.tenants; }).catch(function (err) {
                 console.log(err);
             });
         }
     }
+    DatabaseService.prototype.populateTenants = function (tenants) {
+        this.tenants = tenants;
+    };
     DatabaseService.prototype.getTenant = function (tenantId) {
-        var value = _.find(this.tenants, ['tenantId', tenantId]);
-        return value;
-        /*
-            return _.find(this.tenants, function(element: any) {
-                return element.tenantId == tenantId;
-            })*/
+        if (this.tenants) {
+            return _.find(this.tenants, ['tenantId', tenantId]);
+        }
+        else {
+            return null;
+        }
+    };
+    DatabaseService.prototype.getTenantDataSets = function (tenant, dataSet) {
     };
     DatabaseService.prototype.findProperty = function (propertyName, propertyValue) {
         return _.find(this.tenants, [propertyName, propertyValue]);
