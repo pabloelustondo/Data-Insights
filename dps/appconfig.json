@@ -1,20 +1,6 @@
 {
-  "testingmode": false,
-  "port": 8002,
-  "ddb_url":"http://localhost:8000",
-  "cdl_ds_address": "http://localhost:8001/ds/",
-  "cdl_transLog_address": "http://localhost:8001/transactionLog/",
-  "dss_url": "http://localhost:8023",
-  "dssback_url": "http://localhost:8024",
-  "dad_url": "http://localhost:8025",
-  "dadback_url": "http://localhost:8026",
-  "oda_url": "http://localhost:8022",
-  "cdl_url": "http://localhost:8020",
-  "dos_url": "http://localhost:5000",
-  "dosback_url": "http://localhost:5001",
-  "ida_url": "http://localhost:8027",
-  "tmm_url": "http://localhost:8028",
-  "tmmback_url": "http://localhost:8029",
-  "kafka_url": "localhost:2181",
-  "mongodb_url": "mongodb://localhost:27017"
+  "id" : "dps",
+  "name" : "DPS",
+  "secret" : "1234",
+  "dependencies" : ["cdl", "ddb", "kafka"]
 }

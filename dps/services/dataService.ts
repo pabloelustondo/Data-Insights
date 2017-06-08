@@ -13,7 +13,7 @@ import * as express from "express";
 
 let dataSets = [
     {
-        queryId : '12345',
+        id : '12345',
         dataSources: [
             {
                 dataSource: 'test',
@@ -29,7 +29,7 @@ let dataSets = [
         definition : {} //what the output data contains
     },
     {
-        queryId : '21345',
+        id : '21345',
         dataSources : [
             {
                 dataSource: 'test'
@@ -40,7 +40,7 @@ let dataSets = [
         ]
     },
     {
-        queryId: 'ttc',
+       id: 'ttc',
         dataSources: [
             {
                 dataSource: 'ttcMaps',
@@ -60,7 +60,7 @@ let dataSets = [
         merge : 'data'
     },
     {
-        queryId: 'test12345',
+        id: 'test12345',
         dataSources: [
         {
             dataSource: 'test',
@@ -89,13 +89,13 @@ export function findElement (data: any, element: any) {
     return (data[element]) ? data[element] : null;
 }
 
-export function processRequest (metadata: any, res) {
+export function processRequest (metadata: any, _dataSets: any, res) {
 
 
     let queryId = metadata.queryId;
 
     // get dataSetFrom all available dataSets
-    let dataSet = _.find(dataSets, { queryId : queryId} );
+    let dataSet = _.find(_dataSets, { id : queryId} );
 
     let dataSources = dataSet.dataSources;
 
@@ -158,13 +158,12 @@ export function processRequest (metadata: any, res) {
             console.log(err);
         } else {
 
-            if (! ( responseData.length === dataSet.length)) {
-                res.status(204).send('no data found');
-            } else if (dataSet.merge) {
+        if (dataSet.merge) {
 
-                let a1 = _.find(responseData, dataSet.dataSources[0].dataSource );
-                let a2 = _.find(responseData, dataSet.dataSources[1].dataSource );
+            let a1 = _.find(responseData, dataSet.dataSources[0].dataSource );
+            let a2 = _.find(responseData, dataSet.dataSources[1].dataSource );
 
+            if (a1 && a2){
                 let a = a1[dataSet.dataSources[0].dataSource];
                 let b = a2[dataSet.dataSources[1].dataSource];
 
@@ -174,8 +173,10 @@ export function processRequest (metadata: any, res) {
 
                res.status(200).send({
                    result : merge
-               });
-
+               });}
+               else {
+                   res.status(204).send('No data found');
+               }
             } else {
                  res.status(200).send(responseData);
 
