@@ -46,7 +46,11 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
 
   constructor(private tmmConfigService: TmmConfigService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+   let response = this.tmmConfigService.getTenantMetadata('testtenant-testuser')
+   console.log(response);
+  // this.tenantMetadata = response;
+  }
 
   editorOption(id) {
     let index = 0;
@@ -59,16 +63,16 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
     });
   }
 
-  optionUpdated(updatedItem){
+  optionUpdated(updatedItem) {
     this.tenantMetadata.dataSets[updatedItem.index] = updatedItem;
     delete this.tenantMetadata.dataSets[updatedItem.index].index;
-
     this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
   }
 
   dataSetInit() {
     this.selectedOption = this.emptyDataSet;
     this.selectedOption['index'] = this.tenantMetadata.dataSets.length;
+    console.log(this.selectedOption['index']);
   }
 
   dataSetDelete(selectedOption) {
@@ -80,6 +84,5 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
         this.selectedOption = this.emptyDataSet;
       }
     this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
-
   }
 }

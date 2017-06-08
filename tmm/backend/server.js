@@ -77,7 +77,7 @@ app.get('/status', function(req,res){
 app.get('/tenant/:tenantid', function(req,res){
 
     var options = {
-        uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
+        uri:appconfig.ddb_url + "/tenant/" + req.body.tenantId,
         method:"GET",
         contentType:"application/json"
     };
@@ -94,7 +94,7 @@ app.get('/tenant/:tenantid', function(req,res){
 
 app.post('/tenant/:tenantid', function(req,res){
     var options = {
-        uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
+        uri:appconfig.ddb_url + "/tenant/" + req.params.tenantId,
         method:"POST",
         contentType:"application/json",
         body: req.body,
@@ -113,7 +113,6 @@ app.post('/tenant/:tenantid', function(req,res){
 
 
 app.delete('/tenant/:tenantid', function(req,res){
-
 });
 
 

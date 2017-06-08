@@ -15,7 +15,7 @@ export class TmmConfigService {
   constructor(private http: Http) {}
 
   deleteUserByTenantId(tenantid) {
-    return this.http.delete('http://localhost:8029/tenant/' + this.config.tenantId).map(res => res.json());
+    return this.http.delete('http://localhost:8029/tenant/' + tenantid);
   }
 
   saveDataByTenantId(tenantid, tmtMetadata) {
@@ -32,8 +32,8 @@ export class TmmConfigService {
     );
   }
 
-  public getTenantMetadata(tenantid): Promise<any> {
-    let url = this.config.url + '/tenant/' + this.config.tenantId;
-    return this.http.get(this.config.url).toPromise();
+  public getTenantMetadata(tenantId) {
+    let url = 'http://localhost:8029/tenant/' + tenantId;
+    return this.http.get(url);
   }
 }
