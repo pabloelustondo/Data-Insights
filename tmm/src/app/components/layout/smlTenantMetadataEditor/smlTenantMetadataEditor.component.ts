@@ -5,6 +5,7 @@ import { SmlTenantMetadata } from '../../../../sml/sml';
 
 import { SmlDataService } from '../../../../sml/data.service';
 import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchema.configuration";
+import { TmmConfigService } from './tmmconfig.service';
 
 @Component({
   selector: 'smlTenantMetadataEditor' ,
@@ -42,6 +43,7 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   currentItem: any;
   tenantMetadata: any = smlTenantMetadataSample;
   emptyDataSet: any = smlTenantMetadataEmpty;
+  tmmConfigService: any = TmmConfigService;
 
   constructor() { }
 
@@ -61,6 +63,9 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   optionUpdated(updatedItem){
     this.tenantMetadata.dataSets[updatedItem.index] = updatedItem;
     delete this.tenantMetadata.dataSets[updatedItem.index].index;
+
+    this.tenantMetadata = this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantid, this.tenantMetadata.dataSets);
+
   }
 
   dataSetInit() {
@@ -76,5 +81,7 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
         this.tenantMetadata.dataSets.splice(parsed, 1);
         this.selectedOption = this.emptyDataSet;
       }
-    }
+    this.tenantMetadata = this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantid, this.tenantMetadata.dataSets);
+
+  }
 }
