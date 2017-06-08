@@ -11,6 +11,8 @@
   "cdl_url":"http://10.0.91.2:8020",
   "dos_url":"http://10.0.91.2:5000",
   "dosback_url":"http://10.0.91.2:5001",
+  "tmm_url":"http://10.0.91.2:8028",
+  "tmmback_url":"http://10.0.91.2:8029",
   "ida_url":"http://10.0.91.2:8027",
   "kafka_url":"http://10.0.91.2:2181",
   "mongodb_url" : "mongodb://http://10.0.91.2:5494"
