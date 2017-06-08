@@ -10,15 +10,16 @@ import {MongoClient, Db} from "mongodb";
 let _ = require('lodash');
 let config = require('./config.json');
 let appconfig = require('./appconfig.json');
+import * as rp from 'request-promise';
+
 let app = express();
 var mongodb = require('mongodb').MongoClient;
 
 import {uploadRawData, uploadModifiedData} from './services/rawDataLakeService';
 import {DatabaseService} from  './services/databaseService';
 import {DataProjections} from './services/projection';
-import {processRequest} from './services/dataService';
-import {User} from "./models/user";
-import {accessSync} from "fs";
+import {processRequest, getDbFromDataService} from './services/dataService';
+
 
 
 let kafka = require('kafka-node');
@@ -27,7 +28,7 @@ let kafka = require('kafka-node');
 // Express stuff
 
 let db = new DatabaseService(appconfig.ddb_address);
-//db.start();
+
 
 app.set('db', db);
 
@@ -86,6 +87,8 @@ try {
     });
 
     consumer.on('error', function (err: any) {
+
+        console.log('varun');
         console.log(err);
     })
 
@@ -148,6 +151,7 @@ app.post('/data/request', function(req,res) {
 });
 
 function publishTransactionLog (idaMetadata: any, clientMetadata: any, clientData: any) {
+
     let tenantId = idaMetadata.tenantId;
     let dataSourceId = idaMetadata.dataSourceId;
     uploadRawData(tenantId, dataSourceId, clientData).then(function (awsResponse: any) {
@@ -187,9 +191,12 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
 
 app.post('/data/outGoingRequest', function(req, res) {
 
-    // TODO: process metadata to figure out the request
+
     let metadata = req.body.metadata;
 
+    let db = app.get('db');
+    let tenant = db.getTenant('test');
+    let dataSets = tenant.dataSets;
     if (metadata) {
         processRequest(metadata, res);
     } else {
@@ -200,6 +207,8 @@ app.post('/data/outGoingRequest', function(req, res) {
 
 
 } );
+
+exports.app = app;
 
 if (config.useSSL) {
     var httpsOptions = {
@@ -215,5 +224,30 @@ if (config.useSSL) {
 
     httpServer.listen(appconfig.port, function () {
         console.log('Starting no SSL http server.. http://localhost:' + appconfig.port + '/test');
+        let db = getDbFromDataService();
+
+        const headersOptions = {
+            'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+        };
+
+        const options: rp.OptionsWithUrl = {
+            json: true,
+            method: 'get',
+            headers: headersOptions,
+            url: appconfig['ddb_url'] + '/getAllTenants',
+        };
+        rp(options).then(function (data){
+            db.populateTenants(data.tenants);
+        }).catch(function(err) {
+            console.log(err);
+        }).then(function (){
+            let tenant = db.getTenant('test');
+            console.log(JSON.stringify(tenant));
+        });
+
+        //
+
     });
+
+
 }

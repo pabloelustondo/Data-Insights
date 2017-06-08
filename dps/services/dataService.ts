@@ -7,6 +7,9 @@ let _ = require('lodash');
 let async = require('async');
 import * as rp from 'request-promise';
 let config = require('../config.json');
+import * as express from "express";
+
+
 
 let dataSets = [
     {
@@ -67,6 +70,14 @@ let dataSets = [
         filter : {}
     }
 ];
+
+export function getDbFromDataService (){
+    let server = require('../server');
+    let app = server.app;
+    let db = app.get('db');
+    return app.get('db');
+}
+
 export function filter(data: any, property: any, value: any) {
     let filteredArray: any = data.filter(function (o:any ){
          return o[property] === value;
@@ -80,10 +91,10 @@ export function findElement (data: any, element: any) {
 
 export function processRequest (metadata: any, res) {
 
+
     let queryId = metadata.queryId;
 
     // get dataSetFrom all available dataSets
-
     let dataSet = _.find(dataSets, { queryId : queryId} );
 
     let dataSources = dataSet.dataSources;
@@ -91,7 +102,6 @@ export function processRequest (metadata: any, res) {
     let responseData = [];
     async.each(dataSources,function (ds, callback) {
         console.log(ds);
-
         let aggregate: any = [{
             $match : {}},
             {
@@ -119,7 +129,7 @@ export function processRequest (metadata: any, res) {
 
         }
         var options = {
-            url : 'http://localhost:8001/ds/test/getdata/query',
+            url : 'http://localhost:8020/ds/test/getdata/query',
             method: 'POST',
 
             body: {
@@ -128,23 +138,12 @@ export function processRequest (metadata: any, res) {
             },
             json: true
         };
-
         function responseCallback ( err, response, body) {
             if (!err && response.statusCode == 200) {
                 var info = JSON.stringify(body);
 
-                // console.log('CDL reponse : \n ' + info);
-
                 var responseObj = {};
 
-                /*
-                let dataTest = body.map( function (element) {
-                    return element.data;
-                }); */
-
-                //let x = body[0];
-               // let y = x['data.vehicle'];
-               // let z = _.get(x, 'data.vehicle');
                 let projected = _.get(body[0], ds.projection);
                 // let sample = projected[ds.projection];
                 responseObj[ds.dataSource] = _.get(body[0], ds.projection);
@@ -158,10 +157,10 @@ export function processRequest (metadata: any, res) {
         if (err) {
             console.log(err);
         } else {
-             // console.log( results);
-            // console.log(responseData);
 
-            if (dataSet.merge) {
+            if (! ( responseData.length === dataSet.length)) {
+                res.status(204).send('no data found');
+            } else if (dataSet.merge) {
 
                 let a1 = _.find(responseData, dataSet.dataSources[0].dataSource );
                 let a2 = _.find(responseData, dataSet.dataSources[1].dataSource );
@@ -169,16 +168,8 @@ export function processRequest (metadata: any, res) {
                 let a = a1[dataSet.dataSources[0].dataSource];
                 let b = a2[dataSet.dataSources[1].dataSource];
 
-
-
-                let m2 = _.map( a, function (obj) {
-                   let t = _.assign(obj, _.find(b, {Value : obj.id}));
-                   return t;
-                });
-
                 let merge = _.map(a, function(item) {
-
-                return _.merge(item,  _.find(b, { 'Value' : parseInt(item.id) }));
+                    return _.merge(item,  _.find(b, { 'Value' : parseInt(item.id) }));
                 });
 
                res.status(200).send({
@@ -186,24 +177,14 @@ export function processRequest (metadata: any, res) {
                });
 
             } else {
+                 res.status(200).send(responseData);
 
-
-
-                res.status(200).send(responseData);
             }
-           // res.status(501).send("Needs to be implemented");
         }
     });
-
-
-
 }
 
-
-
 function getDataFromDb (dataSource: any) {
-
-
     return {
         'test': true,
         dataSource: dataSource
