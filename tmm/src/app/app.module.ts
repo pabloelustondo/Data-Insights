@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { smlTenantMetadataEditor } from './components/layout/smlTenantMetadataEditor/smlTenantMetadataEditor.component';
 import { smlDataSourceEditor } from './smlDataSourceEditor/smlDataSourceEditor';
 import { JsonEditorComponent } from 'ng2-jsoneditor';
+import {TmmConfigService} from "./components/layout/smlTenantMetadataEditor/tmmconfig.service";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { JsonEditorComponent } from 'ng2-jsoneditor';
     FormsModule,
     HttpModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [TmmConfigService]
 })
 export class AppModule { }

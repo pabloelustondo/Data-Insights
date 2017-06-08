@@ -2,27 +2,37 @@
  * Created by dister on 6/7/2017.
  */
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { ActivatedRoute } from '@angular/router';
+import { Http, Response } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class TmmConfigService {
-  config:{
-    url: 'http://localhost:8029';
+  config: {
+    url: 'localhost:8029';
     tenantId: 'testtenant-testuser';
   };
 
-  constructor(private http: Http, private activatedRoute: ActivatedRoute) {}
+  constructor(private http: Http) {}
 
-  deleteUserByTenantId() {
-    return this.http.delete(this.config.url + '/tenant/' + this.config.tenantId).map(res => res.json());
+  deleteUserByTenantId(tenantid) {
+    return this.http.delete('http://localhost:8029/tenant/' + this.config.tenantId).map(res => res.json());
   }
 
-  saveDataByTenantId(tenantMetadata) {
-    return this.http.post(this.config.url + '/tenant/' + this.config.tenantId, tenantMetadata);
+  saveDataByTenantId(tenantid, tmtMetadata) {
+    console.log(tmtMetadata);
+    let url = 'http://localhost:8029/tenant/' + tmtMetadata.tenantId;
+    this.http.post(url, tmtMetadata).toPromise().then(
+      (res: Response) => {
+        console.log((res));
+      }).catch(
+      (error) => {
+        alert("Failed to save configuration to database " + error);
+        console.log('configuration failed to save');
+      }
+    );
   }
 
-  public getTenantMetadata(): Promise<any> {
+  public getTenantMetadata(tenantid): Promise<any> {
     let url = this.config.url + '/tenant/' + this.config.tenantId;
     return this.http.get(this.config.url).toPromise();
   }

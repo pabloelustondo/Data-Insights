@@ -4,12 +4,12 @@ import { DataSourceList } from './tmmModels';
 import { SmlTenantMetadata } from '../../../../sml/sml';
 
 import { SmlDataService } from '../../../../sml/data.service';
-import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchema.configuration";
+import {smlTenantMetadataSample, smlTenantMetadataEmpty} from './jsonEditorSchema.configuration';
 import { TmmConfigService } from './tmmconfig.service';
 
 @Component({
   selector: 'smlTenantMetadataEditor' ,
-  providers: [SmlDataService],
+  providers: [TmmConfigService],
   template: `
   <div>     
     <div class="container">
@@ -43,9 +43,8 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   currentItem: any;
   tenantMetadata: any = smlTenantMetadataSample;
   emptyDataSet: any = smlTenantMetadataEmpty;
-  tmmConfigService: any = TmmConfigService;
 
-  constructor() { }
+  constructor(private tmmConfigService: TmmConfigService) { }
 
   ngOnInit() { }
 
@@ -64,8 +63,7 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
     this.tenantMetadata.dataSets[updatedItem.index] = updatedItem;
     delete this.tenantMetadata.dataSets[updatedItem.index].index;
 
-    this.tenantMetadata = this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantid, this.tenantMetadata.dataSets);
-
+    this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
   }
 
   dataSetInit() {
@@ -73,15 +71,15 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
     this.selectedOption['index'] = this.tenantMetadata.dataSets.length;
   }
 
-  dataSetDelete(selectedOption){
+  dataSetDelete(selectedOption) {
       let parsed: any = parseInt(selectedOption);
-      if(parsed == this.tenantMetadata.dataSets.length -1) {
+      if (parsed === this.tenantMetadata.dataSets.length - 1 ) {
         this.tenantMetadata.dataSets.pop();
       } else {
         this.tenantMetadata.dataSets.splice(parsed, 1);
         this.selectedOption = this.emptyDataSet;
       }
-    this.tenantMetadata = this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantid, this.tenantMetadata.dataSets);
+    this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
 
   }
 }

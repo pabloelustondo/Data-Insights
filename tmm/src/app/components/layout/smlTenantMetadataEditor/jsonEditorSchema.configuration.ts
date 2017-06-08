@@ -9,7 +9,7 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
   {
     id: 'Doga',  //id of the metadata
     name: 'Data Source',
-    tenantId: '0121',
+    tenantId: 'testtenant-testuser',
     dataSets: [{
       id: '10-22-1',
       name: 'Test Data Set 01',
