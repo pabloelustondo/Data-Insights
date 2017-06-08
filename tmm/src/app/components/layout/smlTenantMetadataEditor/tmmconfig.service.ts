@@ -32,8 +32,17 @@ export class TmmConfigService {
     );
   }
 
-  public getTenantMetadata(tenantId) {
+  public getTenantMetadata(tenantId): Promise<any> {
     let url = 'http://localhost:8029/tenant/' + tenantId;
-    return this.http.get(url);
+    return this.http.get(url).toPromise().then(
+      (res: Response) => {
+        console.log(res);
+        Promise.resolve(res);
+      }).catch(
+      (error) => {
+        alert("Failed to save configuration to database " + error);
+        console.log('configuration failed to save');
+      }
+    );
   }
 }
