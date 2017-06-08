@@ -42,7 +42,7 @@ Cucumber.defineSupportCode(function(context) {
         "postambleCRLF": true
     };
 
-    Given('grab IDA port number', function (callback) {
+    Given('grab and store IDA port number', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var ida_url = globalconfig.ida_url;
         if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
@@ -67,7 +67,7 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //make get request to IDA with permanent token to retrieve temporary token
-    Then('I Get :portnumber with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+    Then('I make GET call to endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         options.uri = url + stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
         //send a GET request to arg1 with accessToken as param
@@ -150,13 +150,16 @@ Cucumber.defineSupportCode(function(context) {
     //check response code
     Then(/^response code must be (.*)$/, function (response, callback) {
         //console.log(JSON.stringify(responseData));
-        if (parseInt(response) != parseInt(responseCode))
-            throw new Error('Response should be ' + response +' but is ' + responseCode);
+        if (parseInt(response) != parseInt(responseCode)) {
+            console.log('Error: '+ responseData);
+            throw new Error('Response code should be ' + response + ' but is ' + responseCode);
+
+        };
         callback();
     });
 
 
-    Given('I set the AuthorizationToken to PermanentToken', function (callback) {
+    Given('I set the AuthorizationToken to invalid token', function (callback) {
         authorizationToken = accessToken;
         callback();
     });
@@ -167,7 +170,7 @@ Cucumber.defineSupportCode(function(context) {
         }else{
             var resString = JSON.stringify(responseData).toLowerCase();
             if (!resString.includes('error') && resString != '' && !resString.includes('invalid signature')){
-                throw new Error(resString);
+                throw new Error("response body should be empty or contain error but is: "+resString);
             }
             callback();
         }

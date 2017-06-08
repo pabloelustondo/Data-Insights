@@ -10,12 +10,31 @@ DSS should be responsible only for data sources management and the future featur
 
   Scenario: As an administrator, I want to create a new data set
     Given I Create a new Tenant Metadata Object
-    When I POST to 'URL_TBD'
-    Then The response code should be '200'
+    And grab tmm port number
+    Then I set headers and body for posting to tmm
+    When I POST to "/tenant"
+    Then The response code needs to be '200'
     And The response body should contain an array of valid meta data objects
 
   Scenario: As an administrator, I want to create a new modified data set
-    Given I modify a Tenant Metadata Object
-    When I POST to 'URL_TBD'
-    Then The response code should be '200'
+    Given I modify a Tenant Metadata Object such that it remains valid
+    And grab tmm port number
+    Then I set headers and body for posting to tmm
+    When I POST to "/tenant"
+    Then The response code needs to be '200'
     And The response body should contain an array of valid meta data objects
+
+  Scenario: As an administrator, I want to post to tmm with an invalid Tenant Metadata Object
+    Given I modify a Tenant Metadata Object to have an invalid tenantid
+    And grab tmm port number
+    Then I set headers and body for posting to tmm
+    When I POST to "/tenant"
+    Then The response code needs to be '200'
+    And The response body should contain statusCode 400
+
+  Scenario: As an administrator, I want to post to tmm with inconsistent tenantid
+    Given I modify a Tenant Metadata Object to have different tenantid from the one passed in through url
+    And grab tmm port number
+    When I POST to "/tenant"
+    Then The response code needs to be '200'
+    And The response body should contain the error "url tenantid different from body tenantid"

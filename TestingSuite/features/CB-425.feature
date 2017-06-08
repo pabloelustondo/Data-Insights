@@ -9,8 +9,8 @@ Background:
 
   Scenario: As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints
     Given I set the xaccesskey
-    And grab IDA port number
-    When I Get :portnumber with endpoint "/Security/getAuthorizationToken"
+    And grab and store IDA port number
+    When I make GET call to endpoint "/Security/getAuthorizationToken"
     Then response code must be 200
     And response body should be error-free
     And AuthorizationToken is not empty
@@ -18,21 +18,21 @@ Background:
 
   Scenario: As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey
     Given I set the xaccesskey to a modified JWT
-    And grab IDA port number
-    When I Get :portnumber with endpoint "/Security/getAuthorizationToken"
+    And grab and store IDA port number
+    When I make GET call to endpoint "/Security/getAuthorizationToken"
     Then response code must be 200
     Then response body should be empty or contain error
 
   Scenario: As an administrator I want to Post to /data
     Given I set the temporary AuthorizationToken
-    And grab IDA port number
+    And grab and store IDA port number
     When I Post :portnumber with example data
     Then response code must be 200
     And response body should be a valid IDA-POST response
 
   Scenario: As an administrator I want to send Invalid Post information to /data
-    Given I set the AuthorizationToken to PermanentToken
-    And grab IDA port number
+    Given I set the AuthorizationToken to invalid token
+    And grab and store IDA port number
     When I Post :portnumber with example data
     #Then response code must be 200
     And response body should be empty or contain error
