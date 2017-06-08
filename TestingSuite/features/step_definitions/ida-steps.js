@@ -42,7 +42,7 @@ Cucumber.defineSupportCode(function(context) {
         "postambleCRLF": true
     };
 
-    Given('grab IDA port number', function (callback) {
+    Given('grab and store IDA port number', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var ida_url = globalconfig.ida_url;
         if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
@@ -67,7 +67,7 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //make get request to IDA with permanent token to retrieve temporary token
-    Then('I Get :portnumber with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+    Then('I make GET call to endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         options.uri = url + stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
         //send a GET request to arg1 with accessToken as param
@@ -159,7 +159,7 @@ Cucumber.defineSupportCode(function(context) {
     });
 
 
-    Given('I set the AuthorizationToken to PermanentToken', function (callback) {
+    Given('I set the AuthorizationToken to invalid token', function (callback) {
         authorizationToken = accessToken;
         callback();
     });
