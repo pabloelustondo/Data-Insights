@@ -28,6 +28,8 @@ cd %installdir%\ida
 call npm install
 cd %installdir%\cdl
 call npm install
+cd %installdir%\dps
+call npm install
 cd %installdir%\tmm
 call npm install
 cd %installdir%\tmm\backend
