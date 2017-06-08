@@ -7,6 +7,7 @@ import {QueryModel} from '../models/queryModel';
 import * as rp from 'request-promise';
 // import * as https from 'https';
 const config = require('../../appconfig.json');
+let server = require('../server');
 
 @Route('Query')
 export class QueryController {
@@ -24,8 +25,9 @@ export class QueryController {
     })
     public async Create(request: QueryModel): Promise<SDS> {
 
-        let server = require('../server');
-        let appConfig = server.appconfig;
+        let server = require('../../globalconfig.json');
+
+        let appConfig =  require('../../globalconfig.json');
         if (request.from[0] === 'vehicleInfo') {
 
             let mData = [
