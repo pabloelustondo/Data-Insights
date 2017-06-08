@@ -10,12 +10,16 @@ DSS should be responsible only for data sources management and the future featur
 
   Scenario: As an administrator, I want to create a new data set
     Given I Create a new Tenant Metadata Object
+    And grab tmm port number
+    Then I set headers and body for posting to URL_TBD
     When I POST to 'URL_TBD'
     Then The response code should be '200'
     And The response body should contain an array of valid meta data objects
 
   Scenario: As an administrator, I want to create a new modified data set
     Given I modify a Tenant Metadata Object
+    And grab tmm port number
+    Then I set headers and body for posting to URL_TBD
     When I POST to 'URL_TBD'
     Then The response code should be '200'
     And The response body should contain an array of valid meta data objects

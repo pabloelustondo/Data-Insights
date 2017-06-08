@@ -150,8 +150,11 @@ Cucumber.defineSupportCode(function(context) {
     //check response code
     Then(/^response code must be (.*)$/, function (response, callback) {
         //console.log(JSON.stringify(responseData));
-        if (parseInt(response) != parseInt(responseCode))
-            throw new Error('Response should be ' + response +' but is ' + responseCode);
+        if (parseInt(response) != parseInt(responseCode)) {
+            console.log('Error: '+ responseData);
+            throw new Error('Response code should be ' + response + ' but is ' + responseCode);
+
+        };
         callback();
     });
 
@@ -167,7 +170,7 @@ Cucumber.defineSupportCode(function(context) {
         }else{
             var resString = JSON.stringify(responseData).toLowerCase();
             if (!resString.includes('error') && resString != '' && !resString.includes('invalid signature')){
-                throw new Error(resString);
+                throw new Error("response body should be empty or contain error but is: "+resString);
             }
             callback();
         }

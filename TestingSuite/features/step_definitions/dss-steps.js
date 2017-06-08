@@ -26,13 +26,11 @@ Cucumber.defineSupportCode(function(context) {
 
     //some necessary evil for things that cannot be retrieved through the API
     var mobiUrl = "https://cad099.corpss.soti.net/";
-    var downAgentId = "b5b4fc4c-2973-4848-97fe-7d4eabb95010";
-    var delAgentId1 = "42734935-57d8-4a1d-a2d4-0fd3e98bf4b3";
-    var delAgentId2 = "6f3702e2-b3a5-4b09-8d5d-af7928da15dc";
+    var downAgentId = "31940960-70f1-4d92-aedd-a148f19c8757";
+    var delAgentId1 = "c4b1c820-48f6-4e9b-a100-bc714043dff3";
+    var delAgentId2 = "a14e1739-18e0-44f9-9471-69e842be98ad";
     //-------------------------------------------------------------
     var url = '';
-    var portnumber = 0;
-    var idaportnumber = 0;
     //const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
     const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
     var options2  = {
@@ -208,10 +206,10 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //Shirley tests----------------------------------------------------------------------
-    Given('I set invalid header and body for external_user', function (callback) {
+    Given('I set invalid header and body for test_user', function (callback) {
         options2.headers["x-access-token"] = invalidToken;
         options2.body = {
-            'tenantid': "external_user",
+            'tenantid': "test_user",
             'dataSourceType': "MobiControl",
             'agentid': "asdas",
             'data': {
@@ -230,8 +228,7 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
-            url = ida_url.substring(0,ida_url.indexOf(idaportnumber)-1);
-            idaportnumber = parseInt(port_str);
+            url = ida_url
             callback();
         }
     });
@@ -243,16 +240,16 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
-            portnumber = parseInt(port_str);
+            url = dss_url;
             callback();
         }
     });
 
 
-    Given('I set valid header and body for external_user', function (callback) {
+    Given('I set valid header and body for test_user', function (callback) {
         options2.headers['x-access-token'] = invalidToken;
         options2.body = {
-            'tenantid': "external_user",
+            'tenantid': "test_user",
             'dataSourceType': "MobiControl",
             'agentid': "asdas",
             'data': {
@@ -289,13 +286,13 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set invalid header and body for external_user for delete', function (callback) {
+    Given('I set invalid header and body for test_user for delete', function (callback) {
         options2.headers['x-access-token'] = invalidToken;
         options2.body['agentid'] = delAgentId1;
         callback();
     });
 
-    Given('I set valid header and body for external_user for delete', function (callback) {
+    Given('I set valid header and body for test_user for delete', function (callback) {
         FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
             if (err) return console.log(err);
             validToken = contents;
@@ -366,6 +363,7 @@ Cucumber.defineSupportCode(function(context) {
 
     Then('response code should be {int}', function (int, callback) {
         if(responseCode != int) {
+            console.log('Error: '+ responseData);
             throw new Error('Response should be :' + int + ', Got:' + responseCode);
         }
         callback();

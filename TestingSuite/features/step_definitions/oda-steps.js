@@ -127,8 +127,11 @@ Cucumber.defineSupportCode(function(context) {
 
     Then('response code is :{int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
-        if (parseInt(int) != parseInt(responseCode))
+        if (parseInt(int) != parseInt(responseCode)){
+            console.log('Error: '+ responseData);
             throw new Error('Response code should be ' + int +' but is ' + responseCode);
+        }
+
         callback();
     });
 
