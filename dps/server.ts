@@ -20,6 +20,23 @@ import {DatabaseService} from  './services/databaseService';
 import {DataProjections} from './services/projection';
 import {processRequest, getDbFromDataService} from './services/dataService';
 
+var globalconfig = require('./globalconfig.json');
+var path = require('path');
+var cors = require('cors');
+
+globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function(key){
+    globalconfig[key] = appconfig[key];
+});
+globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
+
+appconfig = globalconfig;
+global.appconfig = appconfig;
+
+console.log("configuration");
+console.log(appconfig);
+
 
 
 let kafka = require('kafka-node');
@@ -226,7 +243,27 @@ if (config.useSSL) {
         console.log('Starting no SSL http server.. http://localhost:' + appconfig.port + '/test');
         let db = getDbFromDataService();
 
+        const headersOptions = {
+            'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+        };
+
+
+        const options: rp.OptionsWithUrl = {
+            json: true,
+            method: 'get',
+            headers: headersOptions,
+            url: appconfig['ddb_url'] + '/getAllTenants',
+        };
+        rp(options).then(function (data) {
+            db.populateTenants(data.tenants);
+        }).catch(function (err) {
+            console.log(err);
+        }).then(function () {
+            let tenant = db.getTenant('test');
+            console.log(JSON.stringify(tenant));
+        });
         // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
+
 
         setInterval(function() {
             const headersOptions = {
@@ -246,9 +283,10 @@ if (config.useSSL) {
                 console.log(err);
             }).then(function () {
                 let tenant = db.getTenant('test');
-                console.log(JSON.stringify(tenant));
+                //console.log(JSON.stringify(tenant));
             });
         }, 15000);
+
         //
 
     });

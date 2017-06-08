@@ -18,6 +18,19 @@ var rawDataLakeService_1 = require("./services/rawDataLakeService");
 var databaseService_1 = require("./services/databaseService");
 var projection_1 = require("./services/projection");
 var dataService_1 = require("./services/dataService");
+var globalconfig = require('./globalconfig.json');
+var path = require('path');
+var cors = require('cors');
+globalconfig.hostname = "localhost"; //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function (key) {
+    globalconfig[key] = appconfig[key];
+});
+globalconfig.port = globalconfig[globalconfig.id + "_url"].split(":")[2];
+appconfig = globalconfig;
+global.appconfig = appconfig;
+console.log("configuration");
+console.log(appconfig);
 var kafka = require('kafka-node');
 ////////////////////////
 // Express stuff
@@ -177,6 +190,23 @@ else {
     httpServer.listen(appconfig.port, function () {
         console.log('Starting no SSL http server.. http://localhost:' + appconfig.port + '/test');
         var db = dataService_1.getDbFromDataService();
+        var headersOptions = {
+            'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+        };
+        var options = {
+            json: true,
+            method: 'get',
+            headers: headersOptions,
+            url: appconfig['ddb_url'] + '/getAllTenants',
+        };
+        rp(options).then(function (data) {
+            db.populateTenants(data.tenants);
+        }).catch(function (err) {
+            console.log(err);
+        }).then(function () {
+            var tenant = db.getTenant('test');
+            console.log(JSON.stringify(tenant));
+        });
         // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
         setInterval(function () {
             var headersOptions = {
@@ -194,7 +224,7 @@ else {
                 console.log(err);
             }).then(function () {
                 var tenant = db.getTenant('test');
-                console.log(JSON.stringify(tenant));
+                //console.log(JSON.stringify(tenant));
             });
         }, 15000);
         //
