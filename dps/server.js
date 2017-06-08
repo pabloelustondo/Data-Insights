@@ -153,7 +153,7 @@ app.post('/data/outGoingRequest', function (req, res) {
     var tenant = db.getTenant('test');
     var dataSets = tenant.dataSets;
     if (metadata) {
-        dataService_1.processRequest(metadata, res);
+        dataService_1.processRequest(metadata, dataSets, res);
     }
     else {
         res.status(400).send({
@@ -177,23 +177,26 @@ else {
     httpServer.listen(appconfig.port, function () {
         console.log('Starting no SSL http server.. http://localhost:' + appconfig.port + '/test');
         var db = dataService_1.getDbFromDataService();
-        var headersOptions = {
-            'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
-        };
-        var options = {
-            json: true,
-            method: 'get',
-            headers: headersOptions,
-            url: appconfig['ddb_url'] + '/getAllTenants',
-        };
-        rp(options).then(function (data) {
-            db.populateTenants(data.tenants);
-        }).catch(function (err) {
-            console.log(err);
-        }).then(function () {
-            var tenant = db.getTenant('test');
-            console.log(JSON.stringify(tenant));
-        });
+        // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
+        setInterval(function () {
+            var headersOptions = {
+                'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+            };
+            var options = {
+                json: true,
+                method: 'get',
+                headers: headersOptions,
+                url: appconfig['ddb_url'] + '/getAllTenants',
+            };
+            rp(options).then(function (data) {
+                db.populateTenants(data.tenants);
+            }).catch(function (err) {
+                console.log(err);
+            }).then(function () {
+                var tenant = db.getTenant('test');
+                console.log(JSON.stringify(tenant));
+            });
+        }, 15000);
         //
     });
 }

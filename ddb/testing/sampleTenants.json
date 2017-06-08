@@ -209,36 +209,62 @@
       ],
       "dataSets": [
         {
-          "id" : "varun_test_customdata_two_projections",
+          "id" : "12345",
+          "dataSources": [
+            {
+              "dataSource": "test",
+              "filter" : {}
+            },
+            {
+              "dataSource": "test2",
+              "filter" : {}
+            }
+          ],
           "filter" : {},
           "merge" : "field1",
-          "from" : []
+          "definition" : {}
+        },
+        {
+          "id" : "21345",
+          "dataSources" : [
+            {
+              "dataSource" : "test"
+            },
+            {
+              "dataSource": "customDataSetId.TestuniqueId12345456"
+            }
+          ]
+        },
+        {
+          "id": "ttc",
+          "dataSources": [
+            {
+              "dataSource" : "ttcMaps",
+              "projection" : "data.vehicle"
+            },
+            {
+              "dataSource" : "customDeviceInfo",
+              "filter" : {
+                "id" : "$data",
+                "key": "Name",
+                "value": "VehicleID"
+              },
+              "projection" : "data"
+            }
 
+          ],
+          "merge" : "data"
         },
         {
-          "id" : "ttcMaps",
-          "filter" : {},
-          "projections" : "data.vehicle",
-          "from" : []
-        },
-        {
-          "id" : "customDeviceInfo",
-          "filter" : {
-            "id" : "$data",
-            "key" : "Name",
-            "value" : "VehicleID"
-          },
-          "projections" : "data",
-          "from" : []
-
-        },
-        {
-          "id" : "ttc",
-          "filter" : {},
-          "merge" : "data",
-          "from" : ["ttcMaps", "customDeviceInfo"]
+          "id": "test12345",
+          "dataSources": [
+            {
+              "dataSource": "test"
+            }
+          ],
+          "filter" : {}
         }
-        ],
+      ],
       "streams" : [],
       "dataLakeInformation" : "http://localhost:8000/test/data"
     }

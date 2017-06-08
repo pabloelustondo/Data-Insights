@@ -198,7 +198,7 @@ app.post('/data/outGoingRequest', function(req, res) {
     let tenant = db.getTenant('test');
     let dataSets = tenant.dataSets;
     if (metadata) {
-        processRequest(metadata, res);
+        processRequest(metadata, dataSets, res);
     } else {
         res.status(400).send ({
             message: 'No metadata field present in request body.'
@@ -226,25 +226,29 @@ if (config.useSSL) {
         console.log('Starting no SSL http server.. http://localhost:' + appconfig.port + '/test');
         let db = getDbFromDataService();
 
-        const headersOptions = {
-            'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
-        };
+        // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
 
-        const options: rp.OptionsWithUrl = {
-            json: true,
-            method: 'get',
-            headers: headersOptions,
-            url: appconfig['ddb_url'] + '/getAllTenants',
-        };
-        rp(options).then(function (data){
-            db.populateTenants(data.tenants);
-        }).catch(function(err) {
-            console.log(err);
-        }).then(function (){
-            let tenant = db.getTenant('test');
-            console.log(JSON.stringify(tenant));
-        });
+        setInterval(function() {
+            const headersOptions = {
+                'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+            };
 
+
+            const options: rp.OptionsWithUrl = {
+                json: true,
+                method: 'get',
+                headers: headersOptions,
+                url: appconfig['ddb_url'] + '/getAllTenants',
+            };
+            rp(options).then(function (data) {
+                db.populateTenants(data.tenants);
+            }).catch(function (err) {
+                console.log(err);
+            }).then(function () {
+                let tenant = db.getTenant('test');
+                console.log(JSON.stringify(tenant));
+            });
+        }, 15000);
         //
 
     });

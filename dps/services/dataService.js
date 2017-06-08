@@ -9,7 +9,7 @@ var async = require('async');
 var config = require('../config.json');
 var dataSets = [
     {
-        queryId: '12345',
+        id: '12345',
         dataSources: [
             {
                 dataSource: 'test',
@@ -25,7 +25,7 @@ var dataSets = [
         definition: {} //what the output data contains
     },
     {
-        queryId: '21345',
+        id: '21345',
         dataSources: [
             {
                 dataSource: 'test'
@@ -36,7 +36,7 @@ var dataSets = [
         ]
     },
     {
-        queryId: 'ttc',
+        id: 'ttc',
         dataSources: [
             {
                 dataSource: 'ttcMaps',
@@ -55,7 +55,7 @@ var dataSets = [
         merge: 'data'
     },
     {
-        queryId: 'test12345',
+        id: 'test12345',
         dataSources: [
             {
                 dataSource: 'test',
@@ -82,10 +82,10 @@ function findElement(data, element) {
     return (data[element]) ? data[element] : null;
 }
 exports.findElement = findElement;
-function processRequest(metadata, res) {
+function processRequest(metadata, _dataSets, res) {
     var queryId = metadata.queryId;
     // get dataSetFrom all available dataSets
-    var dataSet = _.find(dataSets, { queryId: queryId });
+    var dataSet = _.find(_dataSets, { id: queryId });
     var dataSources = dataSet.dataSources;
     var responseData = [];
     async.each(dataSources, function (ds, callback) {
@@ -141,20 +141,22 @@ function processRequest(metadata, res) {
             console.log(err);
         }
         else {
-            if (!(responseData.length === dataSet.length)) {
-                res.status(204).send('no data found');
-            }
-            else if (dataSet.merge) {
+            if (dataSet.merge) {
                 var a1 = _.find(responseData, dataSet.dataSources[0].dataSource);
                 var a2 = _.find(responseData, dataSet.dataSources[1].dataSource);
-                var a = a1[dataSet.dataSources[0].dataSource];
-                var b_1 = a2[dataSet.dataSources[1].dataSource];
-                var merge = _.map(a, function (item) {
-                    return _.merge(item, _.find(b_1, { 'Value': parseInt(item.id) }));
-                });
-                res.status(200).send({
-                    result: merge
-                });
+                if (a1 && a2) {
+                    var a = a1[dataSet.dataSources[0].dataSource];
+                    var b_1 = a2[dataSet.dataSources[1].dataSource];
+                    var merge = _.map(a, function (item) {
+                        return _.merge(item, _.find(b_1, { 'Value': parseInt(item.id) }));
+                    });
+                    res.status(200).send({
+                        result: merge
+                    });
+                }
+                else {
+                    res.status(204).send('No data found');
+                }
             }
             else {
                 res.status(200).send(responseData);
