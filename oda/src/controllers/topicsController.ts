@@ -10,7 +10,7 @@ import {QueryModel} from '../models/queryModel';
 import * as express from '@types/express';
 import {KafkaService} from '../services/kafkaService';
 import * as rp from 'request-promise';
-
+let server = require('../server');
 const config = require('../../appconfig.json');
 
 @Route('Query')
@@ -37,11 +37,11 @@ export class TopicsController {
 
         if (token) {
             let server = require('../server');
-            let appConfig = server.appconfig;
-
+          //  let appConfig = server.appconfig;
+            let appConfig =  require('../../globalconfig.json');
             let mData = ['topics : string [] '];
 
-            if (appConfig.testingMode) {
+            if (appConfig.testingmode) {
 
                 let testData = ['vehicleInfo', 'customTopic'];
                 // returns test data for now

@@ -41,8 +41,7 @@ appconfig = globalconfig;
 console.log("configuration");
 console.log(appconfig);
 
-exports.config = config;
-exports.appconfig = appconfig;
+
 
 var kafka = require('kafka-node');
 var kafkaClient = new kafka.Client(appconfig.kafka_url);
@@ -260,7 +259,7 @@ if (config.useSSL) {
 
 }
 
-
+exports.appconfig = globalconfig;
 module.exports = logger;
 module.exports.stream = {
     write: function(message: any, encoding: any){
