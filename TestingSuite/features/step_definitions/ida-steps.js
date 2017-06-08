@@ -4,7 +4,10 @@ const Cucumber = require('cucumber');
 const Request = require('request');
 const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
+const jwt = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+//const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
+const config = require('..\\..\\ida_config.json');
 require('ssl-root-cas').inject();
 
 // Certificate Handling
@@ -26,8 +29,7 @@ Cucumber.defineSupportCode(function(context) {
     // Request Structure
     var options  = {
         "method": "",
-        "url": "",
-        "baseUrl":"",
+        "uri": "",
         "rejectUnauthorized": false,
         "headers": {
             "content-type": "application/json",
@@ -40,7 +42,7 @@ Cucumber.defineSupportCode(function(context) {
         "postambleCRLF": true
     };
 
-    Given('grab IDA port number', function (callback) {
+    Given('grab and store IDA port number', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var ida_url = globalconfig.ida_url;
         if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
@@ -65,22 +67,17 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //make get request to IDA with permanent token to retrieve temporary token
-    When(/^I Get :portnumber$/, function (callback) {
-        options.baseUrl = url;
-        options.url = '/Security/getAuthorizationToken';
+    Then('I make GET call to endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        options.uri = url + stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
-
-
         //send a GET request to arg1 with accessToken as param
         Request.get(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
             }
-
             responseCode = response.statusCode;
             //var xaccess = obj.session_token;
             responseData = body;
-            //console.log(body);
             authorizationToken = body.session_token;
             callback();
         })
@@ -94,8 +91,7 @@ Cucumber.defineSupportCode(function(context) {
     });
     When('I Post :portnumber with example data', function (callback) {
         options.preambleCRLF = options.postambleCRLF = true;
-        options.baseUrl = url;
-        options.url = '/data';
+        options.uri = url+'/data';
         options.headers['x-access-token'] = authorizationToken;
         options.headers['content-type'] = 'application/json';
         options.method = "POST";
@@ -154,13 +150,16 @@ Cucumber.defineSupportCode(function(context) {
     //check response code
     Then(/^response code must be (.*)$/, function (response, callback) {
         //console.log(JSON.stringify(responseData));
-        if (parseInt(response) != parseInt(responseCode))
-            throw new Error('Response should be ' + response +' but is ' + responseCode);
+        if (parseInt(response) != parseInt(responseCode)) {
+            console.log('Error: '+ responseData);
+            throw new Error('Response code should be ' + response + ' but is ' + responseCode);
+
+        };
         callback();
     });
 
 
-    Given('I set the AuthorizationToken to PermanentToken', function (callback) {
+    Given('I set the AuthorizationToken to invalid token', function (callback) {
         authorizationToken = accessToken;
         callback();
     });
@@ -170,8 +169,8 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         }else{
             var resString = JSON.stringify(responseData).toLowerCase();
-            if (!resString.includes('error') && resString != ''){
-                throw new Error(resString);
+            if (!resString.includes('error') && resString != '' && !resString.includes('invalid signature')){
+                throw new Error("response body should be empty or contain error but is: "+resString);
             }
             callback();
         }

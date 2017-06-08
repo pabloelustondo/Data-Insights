@@ -13,6 +13,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
     </div>  `,
   styleUrls: ['./editor-smldatasource.component.css']
 })
+
 export class EditorSMLDatasourceComponent implements OnInit {
   @Input() dataSource: any;
 
@@ -29,6 +30,9 @@ export class EditorSMLDatasourceComponent implements OnInit {
     theme: 'foundation6',
     search: false,
     modes: ['view', 'tree', 'text'],
+    onError: ( error ) => {
+      console.error(error);
+    }
   };
 
   constructor() {
@@ -37,18 +41,15 @@ export class EditorSMLDatasourceComponent implements OnInit {
   ngOnInit() {}
 
   ngOnChanges() {
-    console.log(this.dataSource);
     this.index = this.dataSource.index;
     delete this.dataSource.index;
     this.editor.set(this.dataSource);
   }
 
-  saveCurrentItem(){
-    let a = this.editor.get();
+  saveCurrentItem() {
+    const a = this.editor.get();
     a['index'] = this.index;
     this.optionUpdated.emit(a);
-    delete a['index'];
-    this.index = -1;
-    console.log(a);
+    this.index = '';
   }
 }

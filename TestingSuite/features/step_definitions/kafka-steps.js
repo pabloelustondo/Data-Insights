@@ -10,7 +10,7 @@ const FS = require('fs');
 const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'/globalconfig_test.json');
-
+// globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
     var When = context.When;

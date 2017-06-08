@@ -1,25 +1,31 @@
 ///<reference path="../../models/fakeData.ts"/>
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { DataSourceList } from './tmmModels';
+import { SmlTenantMetadata } from '../../../../sml/sml';
 
-
-import { CrudComponent } from './crud.component';
 import { SmlDataService } from '../../../../sml/data.service';
+import {smlTenantMetadataSample, smlTenantMetadataEmpty} from "./jsonEditorSchema.configuration";
+
 
 @Component({
   selector: 'userinput' ,
   providers: [SmlDataService],
   template: `
-  <div>
-   <!--<crud [options]="DataSourceList"></crud>-->
+  <div>     
     <div class="container">
+      <br/>
+      <button type="button" class="btn btn-primary" (click)="objectInit()">Click to add a Data set</button>
+      <br/><br/>
       <div class="row">
         <div class="col">
-          <div class="list-group" *ngFor="let listItem of listItems">
-              <a class="list-group-item" (click)=optionChanged($event) [id]="listItem.id">  {{ listItem.title }}</a>
+          <h2>List of Your Data Sets</h2>
+          <div class="list-group" *ngFor="let dataSet of tenantMetadata.dataSets">
+              <a class="list-group-item" (click)=editorOption(dataSet.id) [id]="dataSet.id">{{ dataSet.name }}</a>
           </div>
         </div>
+        
         <div class="col">
+          <h2>Editor</h2>
           <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
         </div>
       </div>
@@ -28,66 +34,20 @@ import { SmlDataService } from '../../../../sml/data.service';
  `
 })
 
-export class UserInput implements OnInit {
+export class UserInput implements OnInit {  //name will be sml tenant meta data editor  SMLTenantMetadataEditor
   selectedOption: any;
   currentItem: any;
+  tenantMetadata: any = smlTenantMetadataSample;
+  emptyDataSet: any = smlTenantMetadataEmpty;
 
-  listItems: any = [
-    {
-      'id': 1,
-      'title': 'Data Source',
-      'tennantID': '0121',
-      'dataSets': {
-        'id': '10-22-1',
-        'name': 'Test Data Set 01',
-        'from': 'Doga Ister',
-        'persist': true,
-        'filter': '/&AS/',
-        'merge': '09-21-31$F',
-        'projections': '',
-        'metadata': ''
-      },
-      'dataSource': {
-        'id': '10-23-1',
-        'name': 'Test Data Set 01',
-        'type': 'TestMockData',
-        'active': true,
-        'properties': ['Test', 'Ray', 'Is', 'Bae']
-      },
-      'users': {
-        'id': '10-24-1',
-        'name': 'Test Data Set 01',
-        'permissions': 'All',
-        'status': 'Admin'
-      },
-      'idapInformation': {
-        'id': '10-25-02',
-        'name': 'idap Main Config',
-        'endpoint': 'localhost:1023/endPointFTW',
-        'configurations': {
-          'method': 'GET',
-          'secure': 'x-access'
-        }
-      }
-  },
-  {
-      "id": 2,
-      "title": "Data Source 2",
-      "type": "object",
-      "properties": {
-        "type": "string",
-        "active": "boolean"
-      }
-  }];
   constructor() { }
 
   ngOnInit() { }
 
-
-  optionChanged(items) {
+  editorOption(id) {
     let index = 0;
-    this.listItems.forEach(item => {
-      if (item.id == parseInt(items.toElement.id)) {
+    this.tenantMetadata.dataSets.forEach(item => {
+      if (item.id == id) {
         this.selectedOption = item;
         this.selectedOption['index'] = index;
       }
@@ -95,16 +55,15 @@ export class UserInput implements OnInit {
     });
   }
 
-    optionUpdated(updatedItem){
-      this.listItems[updatedItem.index] = updatedItem;
-      delete this.listItems[updatedItem.index].index;
-    }
-
-  isEmpty(item) {
-    return (item == null);
+  optionUpdated(updatedItem){
+    this.tenantMetadata.dataSets[updatedItem.index] = updatedItem;
+    delete this.tenantMetadata.dataSets[updatedItem.index].index;
   }
 
-  onChangeUpdate(item){
-    console.log(item);
+  objectInit() {
+    this.selectedOption = this.emptyDataSet;
+    this.selectedOption['index'] = this.tenantMetadata.dataSets.length;
+
   }
+
 }

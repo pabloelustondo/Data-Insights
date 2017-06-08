@@ -37,6 +37,9 @@ start cmd.exe /k "cd %installdir%\oda & call npm run start"
 echo "starting dos"
 start cmd.exe /k "cd %installdir%\dos & call npm run start"
 
+echo "starting dps"
+start cmd.exe /k "cd %installdir%\dps & call npm run start"
+
 echo "starting dos backend"
 start cmd.exe /k "cd %installdir%\dos\backend & call npm run start"
 

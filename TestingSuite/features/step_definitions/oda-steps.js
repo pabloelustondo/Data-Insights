@@ -13,16 +13,20 @@ Cucumber.defineSupportCode(function(context) {
     var odaPortNumber = 0;
     var responseCode = 0;
     var responseData = '';
-    var globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+    const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+   // const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
     var accessToken='';
     var url = '';
 
     // Configure Client
     var options  = {
         "method": "",
-        "url": "",
+        "uri": "",
         "rejectUnauthorized": false,
-        "headers": {},
+        "headers": {
+            "content-type": "application/json",
+            "Keep-Alive": true
+        },
         "json": true,
         "body": {},
         "preambleCRLF": true,
@@ -60,15 +64,13 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-    Given('I set valid request header and body for POST call to ~/query', function (callback) {
+    Given('I set valid request header and body for POST call to ~/query with metadata id', function (callback) {
         //prepare header and body for posting to IDA query endpoint
         options.headers['content-type'] = 'application/json';
         //set example query in body
-        options.body = {
+        options.body =  {
             "dataSetId": "string",
-            "from": [
-                'vehicleInfo'
-            ]
+            "from": ["vehicleInfo"]
         };
         callback();
     });
@@ -84,7 +86,7 @@ Cucumber.defineSupportCode(function(context) {
     When('I GET topics', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         resetOptions();
-        options.uri = url+'/query/topics';
+        options.uri = url+'/Query/Topics';
         options.headers['content-type'] = 'application/json';
         options.headers['x-access-token'] = accessToken;
         Request.get(options, function (error, response, body) {
@@ -110,9 +112,9 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I make a POST call to query', function (callback) {
+    Given('I make a POST call to ~/query', function (callback) {
         //I post to query and record the response
-        options.uri = url+'/query';
+        options.uri = url+'/Query';
         Request.post(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -125,8 +127,11 @@ Cucumber.defineSupportCode(function(context) {
 
     Then('response code is :{int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
-        if (parseInt(int) != parseInt(responseCode))
-            throw new Error('Response should be ' + response +' but is ' + responseCode);
+        if (parseInt(int) != parseInt(responseCode)){
+            console.log('Error: '+ responseData);
+            throw new Error('Response code should be ' + int +' but is ' + responseCode);
+        }
+
         callback();
     });
 

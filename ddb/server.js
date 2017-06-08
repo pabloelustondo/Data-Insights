@@ -198,6 +198,11 @@ function checkTenantRequest(req, res){
     return true;
 }
 
+router.get('/tenant', function (req, res) {
+    //TODO: Provide DDB gix
+    res.status(200).send(testTenants);
+});
+
 
 router.get('/tenants/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
@@ -357,13 +362,6 @@ router.get('/getAgendas', function (req, res ) {
         db.collection('jobs').find({}).toArray(next);
     });
 });
-
-
-router.get('/getAllTenants', function (req, res) {
-    //TODO: Provide DDB gix
-    res.status(200).send(testTenants);
-});
-
 
 router.get('/dataSourceByType', function(req,res) {
     callDbAndRespond(req,res, function(req,res,db, next){
