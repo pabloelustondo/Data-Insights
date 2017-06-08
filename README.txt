@@ -2,13 +2,17 @@ Welcome to SOTI Insights
 
 Instructions to get , install, run and sort of monitor the whole thing:
 
-make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka)
+make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka, make sure you have the JAVA_HOME)
 we assume mongodb installed in C:\mongodb and kafka in c:\kafka. (if not please modify folder in 'run' script.
+(mongo db needs a data folder c:/data/db.. follow instructions)
+Now, run the following commands in your command prompt:
 
+> cd ~/CustomerBI
 > git clone http://taipan:8080/tfs/SOTITFS/_git/CustomerBI
-> install   (takes a few minutes, get a, good, coffee)
+> install   (use .bet in windows .sh in linus)
 > run     (by default will run on localhost)
-> http://localhost:5000
+
+open you browser on http://localhost:5000
 
 
 to run using a specific configuration/hostname/ports for a specific server do for example "run dev"
