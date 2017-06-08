@@ -7,13 +7,13 @@ RUN apk add --no-cache nodejs-current tini make gcc g++ python krb5-dev
 WORKDIR .
 
 # Set tini as entrypoint
-ENTRYPOINT ["/sbin/tini", "--"]
+#ENTRYPOINT ["/sbin/tini", "--"]
 # copy project file
 
 COPY ./ ./
 
-RUN npm install --silent
+RUN npm install jsonwebtoken && npm install kafka-node && npm install -g cucumber && npm install
 
 RUN apk del make gcc g++ python krb5-dev
 
-CMD ["npm", "start"]
+# CMD ["./node_modules/.bin/cucumberjs -f pretty features/CB-425.feature features/CB-438.feature"]
