@@ -82,17 +82,27 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
+    Then('response code should equal :{int}', function (int, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        if (parseInt(int) != parseInt(responseCode)){
+            //console.log('Error: '+ responseData);
+            throw new Error('Response code should be ' + int +' but is ' + responseCode);
+        }
 
+        callback();
+    });
     Then("Kafka Consumer should receive some message without error", function (callback) {
-        console.log(globalconfig.kafka_url);
-        var kafkaClient = new kafka.Client(globalconfig.kafka_url);
-        var kafkaConsumer;
+        var kafka_url = globalconfig.kafka_url;
+        kafka_url = kafka_url.replace("http://", "");
+        var kafkaClient = new kafka.Client(kafka_url);
+
         var payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];
         var options = {
             autoCommit: false,
             sessionTimeout: 4000
         };
-            kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
+
+        var kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
             // now let's see if Kafka receives anything
             kafkaConsumer.on('message', function (message, err) {
                 if (!err && message != undefined && message != "") {
@@ -104,8 +114,6 @@ Cucumber.defineSupportCode(function(context) {
             kafkaConsumer.on('error', function (err) {
                 throw new Error("Something went wrong: " + err);
             });
-
-
     });
 
 });
