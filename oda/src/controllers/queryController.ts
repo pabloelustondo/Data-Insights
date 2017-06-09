@@ -46,7 +46,7 @@ export class QueryController {
                         'queryId' : 'ttc'
                     }
                 },
-                url: appConfig['dps_url'] + 'data/outGoingRequest'
+                url: appConfig['dps_url'] + '/data/outGoingRequest'
             };
             console.time('deviceNotSurviveShift: aws call');
 

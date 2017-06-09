@@ -3,13 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongodb = require('mongodb').MongoClient;
 var config = require('../config.json');
 var appconfig = require('../appconfig.json');
+var globalConfig = require('../globalconfig.json');
 var sampletenants = require('../testing/sampleTenants.json');
 var _ = require('lodash');
 var rp = require("request-promise");
 var DatabaseService = (function () {
     function DatabaseService(ddbUrl) {
         var _this = this;
-        this.appConfig = appconfig;
+        this.appConfig = globalConfig;
         if (appconfig.testingmode) {
             this.tenants = sampletenants.tenants;
         }
@@ -22,7 +23,7 @@ var DatabaseService = (function () {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: this.appConfig['ddb_url'] + '/getAllTenants',
+                url: globalConfig['ddb_url'] + '/getAllTenants',
             };
             rp(options).then(function (data) { return _this.tenants = data.tenants; }).catch(function (err) {
                 console.log(err);

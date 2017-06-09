@@ -6,13 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var rp = require("request-promise");
 var config = require('../config.json');
 var appconfig = require('../appconfig.json');
+var globalConfig = require('../globalconfig.json');
 var testResponses = require('../testing/testResponses.json');
 function uploadRawData(tenantId, dataSourceId, clientData) {
     if (appconfig.testingmode) {
         return new Promise(function (resolve) { resolve(testResponses.awsSampleResponse + tenantId); });
     }
     else {
-        var endpoint = appconfig['cdl_transLog_address'] + tenantId + '/data';
+        var endpoint = globalConfig['cdl_url'] + '/transactionLog/' + tenantId + '/data';
         var headerOptions = {
             'x-access-token': config['access_token']
         };
@@ -40,7 +41,7 @@ function uploadModifiedData(tenantId, collectionName, clientData) {
         };
     }
     else {
-        var endpoint = appconfig['cdl_ds_address'] + tenantId + config['cdl_put_endpoint'];
+        var endpoint = globalConfig['cdl_url'] + tenantId + config['cdl_put_endpoint'];
         var headerOptions = {
             'x-access-token': config['access_token']
         };

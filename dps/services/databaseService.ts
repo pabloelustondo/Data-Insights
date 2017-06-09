@@ -5,6 +5,7 @@ import {MongoClient, Db} from "mongodb";
 var mongodb = require('mongodb').MongoClient;
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
+let globalConfig = require('../globalconfig.json');
 let sampletenants = require('../testing/sampleTenants.json');
 let _ = require('lodash');
 import * as rp from 'request-promise';
@@ -19,7 +20,7 @@ export class DatabaseService {
 
     constructor(ddbUrl: string) {
 
-        this.appConfig = appconfig;
+        this.appConfig = globalConfig;
         if (appconfig.testingmode) {
             this.tenants = sampletenants.tenants;
         } else {
@@ -34,7 +35,7 @@ export class DatabaseService {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: this.appConfig['ddb_url'] + '/getAllTenants',
+                url: globalConfig['ddb_url'] + '/getAllTenants',
             };
             rp(options).then(data => this.tenants = data.tenants).catch(function(err) {
                 console.log(err);

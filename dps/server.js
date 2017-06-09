@@ -52,37 +52,6 @@ app.get('/', function (req, res) {
 });
 app.use(helmet());
 app.use(cors());
-////////////////////////////////
-// Kafka streaming topic     ///
-////////////////////////////////
-var kafkaClient = new kafka.Client(config.kafka_url);
-var payloads = [{ topic: 'transactionLog', partition: 0 }];
-var options = { autoCommit: false };
-var kafkaOptions = { autoCommit: false };
-try {
-    var consumer = new kafka.Consumer(kafkaClient, payloads, options);
-    consumer.on('message', function (message) {
-        try {
-            var data = JSON.parse(message.value);
-            var idaMetadata = data.idaMetadata;
-            var clientData = data.clientData.body;
-            var clientMetadata = data.clientData.metadata;
-            console.log('json = ' + JSON.stringify(data));
-            publishTransactionLog(idaMetadata, clientMetadata, clientData);
-            processCleanedData(idaMetadata, clientMetadata, clientData);
-        }
-        catch (e) {
-            console.log('not json format' + message.value);
-        }
-    });
-    consumer.on('error', function (err) {
-        console.log('varun');
-        console.log(err);
-    });
-}
-catch (e) {
-    console.log('IDA could not communicate with kafka producer');
-}
 ////////////////////////////
 // CUSTOMER TENANT DATA API
 ////////////////////////////
@@ -142,6 +111,7 @@ function processCleanedData(idaMetadata, clientMetadata, clientData) {
     var tenantId = idaMetadata.tenantId;
     var dataSourceId = idaMetadata.dataSourceId;
     // massage and clean up data before sending to database layer
+    var db = app.get('db');
     var tenant = db.getTenant(idaMetadata.tenantId);
     if (tenant) {
         var dataSource = _.find(tenant.dataSources, ['dataSourceId', idaMetadata.dataSourceId]);
@@ -206,6 +176,38 @@ else {
         }).then(function () {
             var tenant = db.getTenant('test');
             console.log(JSON.stringify(tenant));
+        }).then(function () {
+            ////////////////////////////////
+            // Kafka streaming topic     ///
+            ////////////////////////////////
+            var kafkaClient = new kafka.Client(config.kafka_url);
+            var payloads = [{ topic: 'transactionLog', partition: 0 }];
+            var options = { autoCommit: false };
+            var kafkaOptions = { autoCommit: false };
+            try {
+                var consumer = new kafka.Consumer(kafkaClient, payloads, options);
+                consumer.on('message', function (message) {
+                    try {
+                        var data = JSON.parse(message.value);
+                        var idaMetadata = data.idaMetadata;
+                        var clientData = data.clientData.body;
+                        var clientMetadata = data.clientData.metadata;
+                        console.log('json = ' + JSON.stringify(data));
+                        //    publishTransactionLog( idaMetadata, clientMetadata, clientData);
+                        processCleanedData(idaMetadata, clientMetadata, clientData);
+                    }
+                    catch (e) {
+                        console.log('not json format' + message.value);
+                    }
+                });
+                consumer.on('error', function (err) {
+                    console.log('varun');
+                    console.log(err);
+                });
+            }
+            catch (e) {
+                console.log('IDA could not communicate with kafka producer');
+            }
         });
         // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
         setInterval(function () {
