@@ -10,8 +10,8 @@ Feature: SOTI Insights- ODA Backend Components
   Scenario: As an admininstrator I want to GET a list of existing topics
     Given I set the xaccesskey for ODA
     And I grab ODA port number from globalconfig.json
-    When I GET topics
-    Then response code must be 200
+    When I GET ~/query/topics
+    Then response code is :200
     Then response body should be error-free
     Then The response message should not include <testResponse>
 

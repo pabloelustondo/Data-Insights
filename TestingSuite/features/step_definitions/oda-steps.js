@@ -79,10 +79,11 @@ Cucumber.defineSupportCode(function(context) {
     When('I GET topics', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         resetOptions();
-        options.uri = url+'/Query/Topics';
-        options.headers['content-type'] = 'application/json';
+        options.method = "GET";
+        options.uri = url+'/query/topics';
+        options.headers['Content-Type'] = 'Application/Json';
         options.headers['x-access-token'] = accessToken;
-        Request.get(options, function (error, response, body) {
+        Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
             }
@@ -119,7 +120,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('response code is :{int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
         if (parseInt(int) != parseInt(responseCode)){
-            console.log('Error: '+ responseData);
+            //console.log('Error: '+ responseData);
             throw new Error('Response code should be ' + int +' but is ' + responseCode);
         }
 
@@ -149,14 +150,16 @@ Cucumber.defineSupportCode(function(context) {
     function resetOptions() {
         options  = {
             "method": "",
-            "url": "",
+            "uri": "",
             "rejectUnauthorized": false,
-            "headers": {},
+            "headers": {
+                "content-type": "application/json",
+                "Keep-Alive": true
+            },
             "json": true,
             "body": {},
             "preambleCRLF": true,
             "postambleCRLF": true
         };
     }
-
 });

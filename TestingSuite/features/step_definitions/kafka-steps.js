@@ -11,7 +11,6 @@ const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'/globalconfig_test.json');
 const config = require('..\\..\\ida_config.json');
-// globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
     var When = context.When;
@@ -44,7 +43,7 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
-            portnumber = parseInt(port_str);
+            url = ida_url;
             callback();
         }
     });
@@ -69,9 +68,11 @@ Cucumber.defineSupportCode(function(context) {
         var token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
         options.headers['x-access-token'] = token;
         options.body = testData;
+        callback();
     });
 
     When('I Post :portnumber after setting headers and body', function (callback) {
+        options.uri = url + "/data"
         Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -83,7 +84,8 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then("Kafka Consumer should receive some message without error", function (callback) {
-        var kafkaClient = new kafka.Client(appconfig.kafka_url);
+        console.log(globalconfig.kafka_url);
+        var kafkaClient = new kafka.Client(globalconfig.kafka_url);
         var kafkaConsumer;
         var payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];
         var options = {

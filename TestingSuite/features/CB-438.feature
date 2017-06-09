@@ -10,7 +10,7 @@ Background:
     Given I set the xaccesskey for ODA
     And I grab ODA port number from globalconfig.json
     When I GET topics
-    Then response code must be 200
+    Then response code is :200
     Then response body should be error-free
 
   Scenario: As an admininstrator I want to subscribe to a topic
