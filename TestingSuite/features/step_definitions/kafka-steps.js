@@ -10,6 +10,7 @@ const FS = require('fs');
 const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'/globalconfig_test.json');
+const config = require('..\\..\\ida_config.json');
 // globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
@@ -43,7 +44,6 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
-            url = ida_url.substring(0,ida_url.indexOf(idaportnumber)-1);
             portnumber = parseInt(port_str);
             callback();
         }
