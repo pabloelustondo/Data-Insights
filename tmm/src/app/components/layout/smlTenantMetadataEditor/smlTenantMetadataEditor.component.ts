@@ -50,7 +50,7 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
         try {
           let response = JSON.parse(data._body);
           console.log(response);
-          //this.tenantMetadata = response[0];
+          this.tenantMetadata.dataSets = response[0].dataSets;
         } catch (err) {
           console.error(new Error(err));
         }
@@ -100,7 +100,9 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
     } else {
       this.tenantMetadata.dataSets.splice(parsed, 1);
     }
+    this.selectedOption = this.emptyDataSet;
 
-    this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
+
+    this.tmmConfigService.deleteUserByTenantId( this.tenantMetadata.tenantId);
   }
 }

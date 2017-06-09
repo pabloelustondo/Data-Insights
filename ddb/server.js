@@ -224,10 +224,14 @@ router.post('/tenant/:tenantid', function(req,res){
 
 router.delete('/tenant/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-        db.collection('tenant').deleteMany({"tenantid":req.params.tenantid}, next);
+        db.collection('tenant').update({"tenantid":req.params.tenantid}, { '$pull': { 'dataSets': {}}}, next );
     });
 });
-
+/*router.delete('/tenant/:tenantid', function(req,res){
+ callDbAndRespond(req,res, function(req,res,db, next){
+ db.collection('tenant').deleteMany({"tenantid":req.params.tenantid}, next);
+ });
+ });*/
 ////////////////////////////
 // TENANT related APIS  //
 // END                    //
