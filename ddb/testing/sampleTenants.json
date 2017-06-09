@@ -256,6 +256,29 @@
           "merge" : "data"
         },
         {
+          "id": "rawMaps",
+          "dataSources": [
+            {
+              "dataSource" : "ttcMaps",
+              "projection" : "data.vehicle"
+            }
+          ]
+        },
+        {
+          "id": "customDevice",
+          "dataSources": [
+            {
+              "dataSource" : "customDeviceInfo",
+              "projection" : "data",
+              "filter" : {
+                "id" : "$data",
+                "key": "Name",
+                "value": "VehicleID"
+              }
+            }
+          ]
+        },
+        {
           "id": "test12345",
           "dataSources": [
             {

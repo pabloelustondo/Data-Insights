@@ -361,7 +361,8 @@ router.get('/getAgendas', function (req, res ) {
 
 router.get('/getAllTenants', function (req, res) {
     //TODO: Provide DDB gix
-    res.status(200).send(testTenants);
+
+    res.status(200).send(fs.readFileSync('./testing/sampleTenants.json'));
 });
 
 
