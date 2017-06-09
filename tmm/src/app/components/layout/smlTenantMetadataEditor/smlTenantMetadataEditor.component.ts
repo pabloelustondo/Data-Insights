@@ -14,8 +14,8 @@ import { TmmConfigService } from './tmmconfig.service';
     <div>
       <div class="container">
         <br/>
-        <!--<h3>Tenant Name: {{tenantMetadata.dataSets[0].from[0]}} </h3> -->
-        <!--<h3>Tenant ID: {{tenantMetadata.tenantId}} </h3>-->
+        <h3>Tenant Name: {{tenantMetadata.dataSets[0].from[0]}} </h3>
+        <h3>Tenant ID: {{tenantMetadata.tenantId}} </h3>
         <br/>
         <div class="row">
           <div class="col">
@@ -95,7 +95,7 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   dataSetDelete() {
     let parsed: any = this.index;
 
-    if(parsed == this.tenantMetadata.dataSets.length -1) {
+    if(parsed == this.tenantMetadata.dataSets.length - 1) {
       this.tenantMetadata.dataSets.pop();
     } else {
       this.tenantMetadata.dataSets.splice(parsed, 1);
@@ -104,5 +104,7 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
 
 
     this.tmmConfigService.deleteUserByTenantId( this.tenantMetadata.tenantId);
+    this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
+
   }
 }
