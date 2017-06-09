@@ -10,6 +10,7 @@ import {User} from '../models/user';
 import {ClientData} from '../models/clientData';
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
+let globalConfig = require('../globalconfig.json');
 let testResponses = require('../testing/testResponses.json');
 
 export function uploadRawData(tenantId: string, dataSourceId: string, clientData: ClientData) {
@@ -19,7 +20,7 @@ export function uploadRawData(tenantId: string, dataSourceId: string, clientData
         return new Promise( (resolve) => { resolve(testResponses.awsSampleResponse + tenantId) }) ;
     }
     else {
-        let endpoint = appconfig['cdl_transLog_address'] + tenantId + '/data';
+        let endpoint = globalConfig['cdl_url'] + '/transactionLog/' + tenantId + '/data';
 
         const headerOptions = {
             'x-access-token': config['access_token']
@@ -51,7 +52,7 @@ export function uploadModifiedData(tenantId: string, collectionName: string, cli
         };
     } else {
 
-        let endpoint = appconfig['cdl_ds_address'] + tenantId + config['cdl_put_endpoint'];
+        let endpoint = globalConfig ['cdl_url'] + tenantId + config['cdl_put_endpoint'];
 
         const headerOptions = {
             'x-access-token': config['access_token']

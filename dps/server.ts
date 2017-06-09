@@ -74,45 +74,6 @@ app.use(helmet());
 
 app.use(cors());
 
-////////////////////////////////
-// Kafka streaming topic     ///
-////////////////////////////////
-let kafkaClient = new kafka.Client(config.kafka_url);
-
-let payloads =  [{ topic: 'transactionLog', partition: 0 }];
-let options = { autoCommit: false};
-let kafkaOptions = { autoCommit: false};
-try {
-
-    let consumer = new kafka.Consumer(kafkaClient, payloads, options);
-
-    consumer.on('message', function (message: any) {
-        try {
-            let data = JSON.parse(message.value);
-
-            let idaMetadata = data.idaMetadata;
-            let clientData = data.clientData.body;
-            let clientMetadata = data.clientData.metadata;
-
-            console.log('json = ' + JSON.stringify(data));
-
-            publishTransactionLog( idaMetadata, clientMetadata, clientData);
-            processCleanedData( idaMetadata, clientMetadata, clientData);
-        } catch (e) {
-            console.log('not json format' + message.value);
-        }
-    });
-
-    consumer.on('error', function (err: any) {
-
-        console.log('varun');
-        console.log(err);
-    })
-
-} catch (e) {
-    console.log('IDA could not communicate with kafka producer');
-}
-
 
 
 ////////////////////////////
@@ -186,6 +147,7 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
     let dataSourceId = idaMetadata.dataSourceId;
 
     // massage and clean up data before sending to database layer
+    let db = app.get('db');
     let tenant = db.getTenant(idaMetadata.tenantId);
     if(tenant) {
 
@@ -261,6 +223,47 @@ if (config.useSSL) {
         }).then(function () {
             let tenant = db.getTenant('test');
             console.log(JSON.stringify(tenant));
+        }).then(function () {
+            ////////////////////////////////
+// Kafka streaming topic     ///
+////////////////////////////////
+            let kafkaClient = new kafka.Client(config.kafka_url);
+
+            let payloads =  [{ topic: 'transactionLog', partition: 0 }];
+            let options = { autoCommit: false};
+            let kafkaOptions = { autoCommit: false};
+            try {
+
+                let consumer = new kafka.Consumer(kafkaClient, payloads, options);
+
+                consumer.on('message', function (message: any) {
+                    try {
+                        let data = JSON.parse(message.value);
+
+                        let idaMetadata = data.idaMetadata;
+                        let clientData = data.clientData.body;
+                        let clientMetadata = data.clientData.metadata;
+
+                        console.log('json = ' + JSON.stringify(data));
+
+                    //    publishTransactionLog( idaMetadata, clientMetadata, clientData);
+                        processCleanedData( idaMetadata, clientMetadata, clientData);
+                    } catch (e) {
+                        console.log('not json format' + message.value);
+                    }
+                });
+
+                consumer.on('error', function (err: any) {
+
+                    console.log('varun');
+                    console.log(err);
+                })
+
+            } catch (e) {
+                console.log('IDA could not communicate with kafka producer');
+            }
+
+
         });
 
         // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
