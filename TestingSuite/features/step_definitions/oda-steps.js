@@ -149,7 +149,13 @@ Cucumber.defineSupportCode(function(context) {
             throw new Error("error: " + resString);
         callback();
     });
+    Then('the response doesnt have to be merged', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
 
+        if (responseData == undefined)
+            throw new Error("error: response body is" + responseData );
+        callback();
+    });
 
     function resetOptions() {
         options  = {

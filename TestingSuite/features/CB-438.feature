@@ -12,7 +12,6 @@ Background:
     When I GET topics
     Then response code must be 200
     Then response body should be error-free
-    Then The response message should not include <testResponse>
 
   Scenario: As an admininstrator I want to subscribe to a topic
     Given I set valid request header and body for POST call to ~/query with metadata id
@@ -20,7 +19,7 @@ Background:
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed
-    Then the response dosent have to be merged
+    Then the response doesnt have to be merged
 
 
 
