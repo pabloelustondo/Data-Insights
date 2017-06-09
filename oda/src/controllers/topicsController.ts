@@ -60,7 +60,7 @@ export class TopicsController {
 
                 let xqs = {tenantId: 'test'};
 
-                const xurl = 'https://' + appConfig['dps_address'] + '/getMetadata';
+                const xurl = appConfig['dps_address'] + '/getMetadata';
 
                 const options: rp.OptionsWithUrl = {
                     headers: {
