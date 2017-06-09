@@ -146,14 +146,23 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
     let tenantId = idaMetadata.tenantId;
     let dataSourceId = idaMetadata.dataSourceId;
 
+
+  //  console.log('tenantID ' + tenantId);
+
+ //   console.log('dataSourceId ' + dataSourceId);
+
     // massage and clean up data before sending to database layer
     let db = app.get('db');
     let tenant = db.getTenant(idaMetadata.tenantId);
+
     if(tenant) {
 
         let dataSource = _.find(tenant.dataSources, ['dataSourceId', idaMetadata.dataSourceId]);
+        console.log('dataSource \t ' + JSON.stringify(dataSource));
         let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
+        console.log('projections \t ' + JSON.stringify(projections));
         let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
+
         let collectionName = dataSetId + '.' + dataSource['dataSourceId'];
 
         DataProjections(clientData, projections).then(function (data) {
@@ -186,6 +195,15 @@ app.post('/data/outGoingRequest', function(req, res) {
 
 
 } );
+
+app.get('/getMetadata/:tenantId', function (req, res) {
+    let tenantId = req.params.tenantId;
+
+    let db = app.get('db');
+    let tenant = db.getTenant(tenantId);
+    let dataSets = tenant.dataSets;
+    res.status(200).send(dataSets);
+})
 
 exports.app = app;
 
