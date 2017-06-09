@@ -214,7 +214,6 @@ router.get('/tenant/:tenantid', function(req,res){
 
 router.post('/tenant/:tenantid', function(req,res){
     callDbAndRespond(req, res, function (req, res, db, next) {
-        console.log(req.body);
         try {
             db.collection('tenant').replaceOne({"tenantId": req.params.tenantid}, req.body, {upsert: true}, next);
         } catch (e) {
