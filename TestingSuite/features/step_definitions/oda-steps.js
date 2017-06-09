@@ -145,7 +145,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('The response message should contain the merged dataset', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (resString.includes('query not supported') || !resString.includes('createdat') || !!resString.includes('metadata'))
+        if (resString.includes('query not supported') || !resString.includes('createdat') || !resString.includes('metadata'))
             throw new Error("error: " + resString);
         callback();
     });
