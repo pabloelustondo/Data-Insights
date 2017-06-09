@@ -105,9 +105,7 @@ Cucumber.defineSupportCode(function(context) {
         options.headers['content-type'] = 'application/json';
         options.body = {
             "dataSetId": "string",
-            "from": [
-                'UnicornCollection'
-            ]
+            "from": ["UnicornCollection"]
         };
         callback();
     });
@@ -151,6 +149,7 @@ Cucumber.defineSupportCode(function(context) {
             throw new Error("error: " + resString);
         callback();
     });
+
 
     function resetOptions() {
         options  = {

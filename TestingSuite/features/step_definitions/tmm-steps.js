@@ -158,7 +158,6 @@ Cucumber.defineSupportCode(function(context) {
         if (responseData == undefined || responseData.ok == undefined) {
             throw new Error("did not get a response back");
         }
-        console.log(responseData);
         callback();
     });
 
@@ -177,7 +176,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('The response body should contain statusCode {int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
         if (responseData.statusCode != int) {
-            throw new Error("response body should contain statusCode : "+int +" but instead contains: "+responseData.statusCode);
+            throw new Error("response body should contain statusCode : "+int +" but instead contains: "+ JSON.stringify(responseData));
         }
         callback();
     });
@@ -190,9 +189,70 @@ Cucumber.defineSupportCode(function(context) {
 
     Then('The response body should contain the error {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         // Write code here that turns the phrase above into concrete actions
-        if (responseData.error != stringInDoubleQuotes) {
-            throw new Error("response body should contain error: "+stringInDoubleQuotes +" but instead contains: "+responseData.error);
+        if (responseData == undefined || responseData.error != stringInDoubleQuotes) {
+            throw new Error("response body should contain error: "+stringInDoubleQuotes +" but instead contains: "+ JSON.stringify(responseData));
         }
         callback();
     });
+
+    Then('I set header for making get to tmm', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        resetOptions();
+        tenantID = "testtenant-testuser";
+        callback();
+    });
+
+    When('I get {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.uri = url + stringInDoubleQuotes+ "/"+ tenantID;
+        Request.get(options, function (error, response, body) {
+            if (error) {
+                throw new Error("upload failed:"+ error);
+            }
+            responseData = body;
+            //console.log(body);
+            responseCode = response.statusCode;
+            callback();
+        });
+    });
+
+    Then('the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        if (responseData == undefined || responseData[0].tenantid != tenantID) {
+            throw new Error("response body should contain tenantID: "+ tenantID +" but instead contains: "+ responseData.tenantid);
+        }
+        callback();
+    });
+
+    Then('I set header for making get to tmm with non-existent tenantid', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        resetOptions();
+        tenantID = "testtenant-unicorn";
+        callback();
+    });
+
+    Then('The response body should be an empty array', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        if (responseData == undefined ||  responseData.length!=0) {
+            throw new Error("The response body either undefined or not empty");
+        }
+        callback();
+    });
+
+    function resetOptions() {
+        options  =  {
+            "method": "",
+            "uri": "",
+            "rejectUnauthorized": false,
+            "headers": {
+                "content-type": "application/json",
+                "Keep-Alive": true
+            },
+            "json": true,
+            "body": {},
+            "preambleCRLF": true,
+            "postambleCRLF": true
+        };
+    }
+
 });

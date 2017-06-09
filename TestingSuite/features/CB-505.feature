@@ -32,9 +32,25 @@ DSS should be responsible only for data sources management and the future featur
     Then The response code needs to be '200'
     And The response body should contain statusCode 400
 
-  Scenario: As an administrator, I want to post to tmm with inconsistent tenantid
+  Scenario: As an administrator, I want to post to tmm with the wrong tenantid in the url
     Given I modify a Tenant Metadata Object to have different tenantid from the one passed in through url
     And grab tmm port number
     When I POST to "/tenant"
     Then The response code needs to be '200'
     And The response body should contain the error "url tenantid different from body tenantid"
+
+  Scenario: As an administrator I want to make a get request to tmm
+    Given I Create a new Tenant Metadata Object
+    And grab tmm port number
+    Then I set header for making get to tmm
+    When I get "/tenant"
+    Then The response code needs to be '200'
+    And the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid
+
+  Scenario: As an administrator I want to make an invalid get request to tmm
+    Given I Create a new Tenant Metadata Object
+    And grab tmm port number
+    Then I set header for making get to tmm with non-existent tenantid
+    When I get "/tenant"
+    Then The response code needs to be '200'
+    And The response body should be an empty array
