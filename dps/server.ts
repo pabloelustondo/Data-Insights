@@ -262,9 +262,8 @@ if (config.useSSL) {
             let tenant = db.getTenant('test');
             console.log(JSON.stringify(tenant));
         });
+
         // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
-
-
         setInterval(function() {
             const headersOptions = {
                 'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
