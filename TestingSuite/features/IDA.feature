@@ -14,7 +14,7 @@ Feature: IDA API Tests
     Given I set the xaccesskey to a modified JWT
     And grab and store IDA port number
     When I make GET call to endpoint "/Security/getAuthorizationToken"
-    Then response code must be 200
+    Then response code must be 400
     Then response body should be empty or contain error
 
   Scenario: As an administrator I want to make a POST request to IDA using my temporary Authorization Token

@@ -130,7 +130,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (resString.includes('query not supported'))
+        if (!resString.includes('query not supported'))
             throw new Error("response message: " + resString);
         callback();
     });
