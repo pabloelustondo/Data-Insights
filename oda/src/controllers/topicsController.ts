@@ -60,7 +60,7 @@ export class TopicsController {
 
                 let xqs = {tenantId: 'test'};
 
-                const xurl = appConfig['dps_url'] + '/getMetadata';
+                const xurl = appConfig['dps_url'] + '/getMetadata/' + xqs.tenantId;
 
                 const options: rp.OptionsWithUrl = {
                     headers: {

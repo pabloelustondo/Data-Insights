@@ -148,6 +148,13 @@ app.post('/data/outGoingRequest', function (req, res) {
         });
     }
 });
+app.get('/getMetadata/:tenantId', function (req, res) {
+    var tenantId = req.params.tenantId;
+    var db = app.get('db');
+    var tenant = db.getTenant(tenantId);
+    var dataSets = tenant.dataSets;
+    res.status(200).send(dataSets);
+});
 exports.app = app;
 if (config.useSSL) {
     var httpsOptions = {
