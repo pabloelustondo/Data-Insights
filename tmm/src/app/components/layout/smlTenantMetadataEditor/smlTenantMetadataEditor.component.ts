@@ -43,6 +43,7 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   currentItem: any;
   tenantMetadata: any = smlTenantMetadataSample;
   emptyDataSet: any = smlTenantMetadataEmpty;
+  index: number = 0;
 
   constructor(private tmmConfigService: TmmConfigService) { }
 
@@ -53,13 +54,18 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   }
 
   editorOption(id) {
-    let index = 0;
+    this.index = 0;
+    let found = false;
     this.tenantMetadata.dataSets.forEach(item => {
       if (item.id == id) {
         this.selectedOption = item;
-        this.selectedOption['index'] = index;
+        this.selectedOption['index'] = this.index;
+        console.log(this.index);
+        found = true;
       }
-      index++;
+      if (!found) {
+        this.index++;
+      }
     });
   }
 
@@ -75,14 +81,14 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
     console.log(this.selectedOption['index']);
   }
 
-  dataSetDelete(selectedOption) {
-      let parsed: any = parseInt(selectedOption);
-      if (parsed === this.tenantMetadata.dataSets.length - 1 ) {
-        this.tenantMetadata.dataSets.pop();
-      } else {
-        this.tenantMetadata.dataSets.splice(parsed, 1);
-        this.selectedOption = this.emptyDataSet;
-      }
+  dataSetDelete() {
+    let parsed: any = this.index;
+    if(parsed == this.tenantMetadata.dataSets.length -1) {
+      this.tenantMetadata.dataSets.pop();
+    } else {
+      this.tenantMetadata.dataSets.splice(parsed, 1);
+    }
+
     this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
   }
 }
