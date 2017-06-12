@@ -8,8 +8,8 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor';
     <div>
       <json-editor style="height: 100vh" [options]="editorOptions" [data]="dataSource"></json-editor >
       <br />
-      <button class="btn btn-success" (click)="saveCurrentItem()">Save</button>
-      <button class="btn btn-danger" (click)="cancelCurrentItem()">Cancel</button>
+      <button id="save" class="btn btn-success" (click)="saveCurrentItem()">Save</button>
+      <button id="cancel" class="btn btn-danger" (click)="cancelCurrentItem()">Cancel</button>
     </div>  `,
   styleUrls: ['./smlDataSourceEditor.css']
 })
