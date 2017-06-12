@@ -29,6 +29,7 @@ export class smlDataSourceEditor implements OnInit {
   editorOptions = {
     theme: 'foundation6',
     search: false,
+    mode: 'text',
     modes: ['view', 'tree', 'text'],
     onError: ( error ) => {
       console.error(error);
