@@ -19,7 +19,7 @@
             "name": "I set valid request header and body for POST call to ~/query with metadata id",
             "result": {
               "status": "passed",
-              "duration": 2
+              "duration": 1
             },
             "line": 8,
             "match": {
@@ -45,7 +45,7 @@
             "name": "I make a POST call to ~/query",
             "result": {
               "status": "passed",
-              "duration": 98
+              "duration": 86
             },
             "line": 10,
             "match": {

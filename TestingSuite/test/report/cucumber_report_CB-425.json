@@ -45,7 +45,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 60
+              "duration": 61
             },
             "line": 13,
             "match": {
@@ -58,7 +58,7 @@
             "name": "response code must be 200",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 14,
             "match": {
@@ -71,7 +71,7 @@
             "name": "response body should be error-free",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 15,
             "match": {
@@ -84,7 +84,7 @@
             "name": "AuthorizationToken is not empty",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 16,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 19
+              "duration": 56
             },
             "line": 22,
             "match": {
@@ -158,7 +158,7 @@
             "name": "response code must be 200",
             "result": {
               "status": "failed",
-              "duration": 0,
+              "duration": 1,
               "error_message": "Error: Response code should be 200 but is 500\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:154:19)"
             },
             "line": 23,
@@ -193,7 +193,7 @@
             "name": "I set the temporary AuthorizationToken",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 27,
             "match": {
@@ -206,7 +206,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 28,
             "match": {
@@ -219,7 +219,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 4
+              "duration": 16
             },
             "line": 29,
             "match": {
@@ -280,7 +280,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 35,
             "match": {
@@ -293,7 +293,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 31
+              "duration": 14
             },
             "line": 36,
             "match": {

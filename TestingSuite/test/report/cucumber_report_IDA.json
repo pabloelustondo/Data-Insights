@@ -19,7 +19,7 @@
             "name": "I set the xaccesskey",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 2
             },
             "line": 5,
             "match": {
@@ -45,7 +45,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 91
+              "duration": 62
             },
             "line": 7,
             "match": {
@@ -71,7 +71,7 @@
             "name": "response body should be error-free",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 9,
             "match": {
@@ -97,7 +97,7 @@
             "name": "I store the returned value in file named AuthorizationToken",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 2
             },
             "line": 11,
             "match": {
@@ -132,7 +132,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 15,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 19
+              "duration": 54
             },
             "line": 16,
             "match": {
@@ -219,7 +219,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 31
+              "duration": 25
             },
             "line": 23,
             "match": {
@@ -293,7 +293,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 30
+              "duration": 12
             },
             "line": 30,
             "match": {
@@ -342,7 +342,7 @@
             "name": "Set headers and body for posting data to IDA",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 36,
             "match": {
@@ -355,7 +355,7 @@
             "name": "I Post :portnumber after setting headers and body",
             "result": {
               "status": "passed",
-              "duration": 5
+              "duration": 20
             },
             "line": 37,
             "match": {
@@ -368,7 +368,7 @@
             "name": "Kafka Consumer should receive some message without error",
             "result": {
               "status": "failed",
-              "duration": 85,
+              "duration": 101,
               "error_message": "Error: Something went wrong: TopicsNotExistError: The topic(s) varun_test_idaSampleId2 do not exist\n    at Consumer.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\kafka-steps.js:115:23)\n    at emitOne (events.js:96:13)\n    at Consumer.emit (events.js:191:7)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\consumer.js:114:19\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\client.js:424:40\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:52:16\n    at done (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:246:17)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:44:16\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\client.js:432:7\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\zookeeper.js:348:7\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:165:26\n    at Object.async.whilst (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\node_modules\\async\\lib\\async.js:627:13)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\node_modules\\async\\lib\\async.js:623:23\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:145:21\n    at Object.callback (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:752:17)\n    at ConnectionManager.onSocketData (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\lib\\ConnectionManager.js:569:35)"
             },
             "line": 38,

@@ -262,8 +262,8 @@ pre {
           <a class="navbar-brand">Cucumberjs Report</a>
           <div class="project-name visible-md visible-lg">testingsuite</div>
           <div class="label-container">
-            <span class="label label-success" title=scenarios>Passed: 1</span>
-            <span class="label label-danger" title=scenarios>Failed: 4</span>
+            <span class="label label-success" title=scenarios>Passed: 5</span>
+            <span class="label label-danger" title=scenarios>Failed: 1</span>
           </div>
         </div>
       </div>
@@ -360,10 +360,10 @@ pre {
                     <a data-toggle="collapse" href="#collapseFeaturetestingsuite0">
                         <i class="glyphicon glyphicon-chevron-right"></i>
                         <i class="glyphicon glyphicon-chevron-down"></i>
-                        <b>Feature:</b>IDA API Tests
+                        <b>Feature:</b>Create TMM service
                         <span class="label-container">
-              <span class="label label-success" title="1 Scenarios Passed">1</span>
-              <span class="label label-danger" title="4 Scenarios Failed">4</span>
+              <span class="label label-success" title="5 Scenarios Passed">5</span>
+              <span class="label label-danger" title="1 Scenarios Failed">1</span>
               
               
               
@@ -387,11 +387,11 @@ pre {
                                         <div style="padding-right: 30px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
-                                            <b>Scenario:</b>As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints
+                                            <b>Scenario:</b>As an administrator, I want to create a new data set
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="7 Steps Passed">7</span>
+                              <span class="label label-success" title="6 Steps Passed">6</span>
                               
                               
                               
@@ -417,7 +417,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the xaccesskey</span>
+                          <span> I Create a new Tenant Metadata Object</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -451,12 +451,42 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
+                          <span> grab tmm port number</span>
                           
                               <span class="step-duration">
                                <1ms
                               </span>
                             
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I set headers and body for posting to tmm</span>
+                          
                          
                             
                           
@@ -485,7 +515,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">When </span>
-                          <span> I make GET call to endpoint "/Security/getAuthorizationToken"</span>
+                          <span> I POST to "/tenant"</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -519,7 +549,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Then </span>
-                          <span> response code must be 200</span>
+                          <span> The response code needs to be '200'</span>
                           
                          
                             
@@ -549,72 +579,8 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> response body should be error-free</span>
+                          <span> The response body should contain an array of valid meta data objects</span>
                           
-                         
-                            
-                          
-                      </span>
-                                    
-                                    
-
-                                    
-
-                                    
-
-                                    
-
-                                    
-                                </p>
-                            </div>
-                            
-                            
-                                
-                                <p class="scenario-container">
-                                <div class="row steps">
-                                    
-                                    
-                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
-                                    
-                                    
-                                    <span class="text">
-                        <span class="keyword highlight">And </span>
-                          <span> AuthorizationToken is not empty</span>
-                          
-                         
-                            
-                          
-                      </span>
-                                    
-                                    
-
-                                    
-
-                                    
-
-                                    
-
-                                    
-                                </p>
-                            </div>
-                            
-                            
-                                
-                                <p class="scenario-container">
-                                <div class="row steps">
-                                    
-                                    
-                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
-                                    
-                                    
-                                    <span class="text">
-                        <span class="keyword highlight">Then </span>
-                          <span> I store the returned value in file named AuthorizationToken</span>
-                          
-                              <span class="step-duration">
-                               <1ms
-                              </span>
-                            
                          
                             
                           
@@ -645,18 +611,18 @@ pre {
                                 <a data-toggle="collapse" href="#collapseScenariotestingsuite0_1">
                                     <div>
 
-                                        <div style="padding-right: 70px">
+                                        <div style="padding-right: 30px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
-                                            <b>Scenario:</b>As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey
+                                            <b>Scenario:</b>As an administrator, I want to create a new modified data set
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="3 Steps Passed">3</span>
+                              <span class="label label-success" title="6 Steps Passed">6</span>
                               
                               
-                              <span class="label label-warning" title="1 Steps Skipped">1</span>
-                              <span class="label label-danger" title="1 Steps Failed">1</span>
+                              
+                              
                               
                             </span>
                                         </div>
@@ -678,7 +644,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the xaccesskey to a modified JWT</span>
+                          <span> I modify a Tenant Metadata Object such that it remains valid</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -712,7 +678,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
+                          <span> grab tmm port number</span>
                           
                          
                             
@@ -741,8 +707,8 @@ pre {
                                     
                                     
                                     <span class="text">
-                        <span class="keyword highlight">When </span>
-                          <span> I make GET call to endpoint "/Security/getAuthorizationToken"</span>
+                        <span class="keyword highlight">Then </span>
+                          <span> I set headers and body for posting to tmm</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -771,13 +737,17 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-danger" title="Failed"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
                                     
                                     
                                     <span class="text">
-                        <span class="keyword highlight">Then </span>
-                          <span> response code must be 400</span>
+                        <span class="keyword highlight">When </span>
+                          <span> I POST to "/tenant"</span>
                           
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
                          
                             
                           
@@ -785,12 +755,6 @@ pre {
                                     
                                     
 
-                                    
-                                    <a href="#error0_13" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_13" class="collapse">
-                                        <pre class=info>Error: Response code should be 400 but is 500
-    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:154:19)</pre>
-                                    </div>
                                     
 
                                     
@@ -807,13 +771,51 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-warning" title="Skipped"><i class="glyphicon glyphicon-minus"></i></span>
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
                                     
                                     
                                     <span class="text">
                         <span class="keyword highlight">Then </span>
-                          <span> response body should be empty or contain error</span>
+                          <span> The response code needs to be '200'</span>
                           
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> The response body should contain an array of valid meta data objects</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
                          
                             
                           
@@ -844,17 +846,17 @@ pre {
                                 <a data-toggle="collapse" href="#collapseScenariotestingsuite0_2">
                                     <div>
 
-                                        <div style="padding-right: 70px">
+                                        <div style="padding-right: 50px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
-                                            <b>Scenario:</b>As an administrator I want to make a POST request to IDA using my temporary Authorization Token
+                                            <b>Scenario:</b>As an administrator, I want to post to tmm with an invalid Tenant Metadata Object
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="3 Steps Passed">3</span>
+                              <span class="label label-success" title="5 Steps Passed">5</span>
                               
                               
-                              <span class="label label-warning" title="1 Steps Skipped">1</span>
+                              
                               <span class="label label-danger" title="1 Steps Failed">1</span>
                               
                             </span>
@@ -877,7 +879,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the temporary AuthorizationToken</span>
+                          <span> I modify a Tenant Metadata Object to have an invalid tenantid</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -911,7 +913,41 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
+                          <span> grab tmm port number</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I set headers and body for posting to tmm</span>
                           
                          
                             
@@ -941,7 +977,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">When </span>
-                          <span> I Post :portnumber with example data</span>
+                          <span> I POST to "/tenant"</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -970,12 +1006,12 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-danger" title="Failed"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
                                     
                                     
                                     <span class="text">
                         <span class="keyword highlight">Then </span>
-                          <span> response code must be 200</span>
+                          <span> The response code needs to be '200'</span>
                           
                          
                             
@@ -984,12 +1020,6 @@ pre {
                                     
                                     
 
-                                    
-                                    <a href="#error0_23" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_23" class="collapse">
-                                        <pre class=info>Error: Response code should be 200 but is 500
-    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:154:19)</pre>
-                                    </div>
                                     
 
                                     
@@ -1006,12 +1036,12 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-warning" title="Skipped"><i class="glyphicon glyphicon-minus"></i></span>
+                                    <span class="label label-danger" title="Failed"><i class="glyphicon glyphicon-remove"></i></span>
                                     
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> response body should be a valid IDA-POST response</span>
+                          <span> The response body should contain statusCode 400</span>
                           
                          
                             
@@ -1020,6 +1050,12 @@ pre {
                                     
                                     
 
+                                    
+                                    <a href="#error0_25" data-toggle="collapse">+ Show Error</a>
+                                    <div id="error0_25" class="collapse">
+                                        <pre class=info>Error: response body should contain statusCode : 400 but instead contains: {"n":1,"nModified":1,"ok":1}
+    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\tmm-steps.js:176:19)</pre>
+                                    </div>
                                     
 
                                     
@@ -1043,18 +1079,18 @@ pre {
                                 <a data-toggle="collapse" href="#collapseScenariotestingsuite0_3">
                                     <div>
 
-                                        <div style="padding-right: 50px">
+                                        <div style="padding-right: 30px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
-                                            <b>Scenario:</b>As an administrator I want to make a POST request to IDA using an invalid token
+                                            <b>Scenario:</b>As an administrator, I want to post to tmm with the wrong tenantid in the url
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="3 Steps Passed">3</span>
+                              <span class="label label-success" title="5 Steps Passed">5</span>
                               
                               
                               
-                              <span class="label label-danger" title="1 Steps Failed">1</span>
+                              
                               
                             </span>
                                         </div>
@@ -1076,67 +1112,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the AuthorizationToken to invalid token</span>
-                          
-                         
-                            
-                          
-                      </span>
-                                    
-                                    
-
-                                    
-
-                                    
-
-                                    
-
-                                    
-                                </p>
-                            </div>
-                            
-                            
-                                
-                                <p class="scenario-container">
-                                <div class="row steps">
-                                    
-                                    
-                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
-                                    
-                                    
-                                    <span class="text">
-                        <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
-                          
-                         
-                            
-                          
-                      </span>
-                                    
-                                    
-
-                                    
-
-                                    
-
-                                    
-
-                                    
-                                </p>
-                            </div>
-                            
-                            
-                                
-                                <p class="scenario-container">
-                                <div class="row steps">
-                                    
-                                    
-                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
-                                    
-                                    
-                                    <span class="text">
-                        <span class="keyword highlight">When </span>
-                          <span> I Post :portnumber with example data</span>
+                          <span> I modify a Tenant Metadata Object to have different tenantid from the one passed in through url</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -1165,12 +1141,80 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-danger" title="Failed"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
                                     
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> response body should be empty or contain error</span>
+                          <span> grab tmm port number</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">When </span>
+                          <span> I POST to "/tenant"</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> The response code needs to be '200'</span>
                           
                          
                             
@@ -1180,11 +1224,35 @@ pre {
                                     
 
                                     
-                                    <a href="#error0_33" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_33" class="collapse">
-                                        <pre class=info>Error: response body should be empty or contain error but is: "cannot read property 'status' of undefined"
-    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:171:23)</pre>
-                                    </div>
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> The response body should contain the error "url tenantid different from body tenantid"</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
                                     
 
                                     
@@ -1208,18 +1276,18 @@ pre {
                                 <a data-toggle="collapse" href="#collapseScenariotestingsuite0_4">
                                     <div>
 
-                                        <div style="padding-right: 50px">
+                                        <div style="padding-right: 30px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
-                                            <b>Scenario:</b>As an administrator I want to validate that Kafka is receiving my posts to IDA
+                                            <b>Scenario:</b>As an administrator I want to make a get request to tmm
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="3 Steps Passed">3</span>
+                              <span class="label label-success" title="6 Steps Passed">6</span>
                               
                               
                               
-                              <span class="label label-danger" title="1 Steps Failed">1</span>
+                              
                               
                             </span>
                                         </div>
@@ -1241,7 +1309,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> grab IDA port number for kafka test</span>
+                          <span> I Create a new Tenant Metadata Object</span>
                           
                          
                             
@@ -1270,13 +1338,43 @@ pre {
                                     
                                     
                                     <span class="text">
-                        <span class="keyword highlight">Given </span>
-                          <span> Set headers and body for posting data to IDA</span>
+                        <span class="keyword highlight">And </span>
+                          <span> grab tmm port number</span>
                           
                               <span class="step-duration">
                                <1ms
                               </span>
                             
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I set header for making get to tmm</span>
+                          
                          
                             
                           
@@ -1305,7 +1403,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">When </span>
-                          <span> I Post :portnumber after setting headers and body</span>
+                          <span> I get "/tenant"</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -1334,12 +1432,137 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-danger" title="Failed"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
                                     
                                     
                                     <span class="text">
                         <span class="keyword highlight">Then </span>
-                          <span> Kafka Consumer should receive some message without error</span>
+                          <span> The response code needs to be '200'</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                
+                                <div class="tags"> </div>
+                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_5">
+                                    <div>
+
+                                        <div style="padding-right: 30px">
+                                            <i class="glyphicon glyphicon-chevron-right"></i>
+                                            <i class="glyphicon glyphicon-chevron-down"></i>
+                                            <b>Scenario:</b>As an administrator I want to make an invalid get request to tmm
+                                        </div>
+                                        <div>
+                            <span class="label-container">
+                              <span class="label label-success" title="6 Steps Passed">6</span>
+                              
+                              
+                              
+                              
+                              
+                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseScenariotestingsuite0_5" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                
+                                
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Given </span>
+                          <span> I Create a new Tenant Metadata Object</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> grab tmm port number</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -1353,26 +1576,133 @@ pre {
                                     
 
                                     
-                                    <a href="#error0_43" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_43" class="collapse">
-                                        <pre class=info>Error: Something went wrong: TopicsNotExistError: The topic(s) varun_test_idaSampleId2 do not exist
-    at Consumer.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\kafka-steps.js:115:23)
-    at emitOne (events.js:96:13)
-    at Consumer.emit (events.js:191:7)
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\kafka-node\lib\consumer.js:114:19
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\kafka-node\lib\client.js:424:40
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\async\lib\async.js:52:16
-    at done (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\async\lib\async.js:246:17)
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\async\lib\async.js:44:16
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\kafka-node\lib\client.js:432:7
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\kafka-node\lib\zookeeper.js:348:7
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\node-zookeeper-client\index.js:165:26
-    at Object.async.whilst (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\node-zookeeper-client\node_modules\async\lib\async.js:627:13)
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\node-zookeeper-client\node_modules\async\lib\async.js:623:23
-    at C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\node-zookeeper-client\index.js:145:21
-    at Object.callback (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\node-zookeeper-client\index.js:752:17)
-    at ConnectionManager.onSocketData (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\node_modules\node-zookeeper-client\lib\ConnectionManager.js:569:35)</pre>
-                                    </div>
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I set header for making get to tmm with non-existent tenantid</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">When </span>
+                          <span> I get "/tenant"</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> The response code needs to be '200'</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> The response body should be an empty array</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
                                     
 
                                     
@@ -1427,8 +1757,8 @@ pre {
                                             });
         google.setOnLoadCallback(function() {drawChart({
                                                             "title" : "Scenarios",
-                                                            "failed" : 4,
-                                                            "passed" : 1,
+                                                            "failed" : 1,
+                                                            "passed" : 5,
                                                             "notdefined" : 0,
                                                             "pending" : 0,
                                                             "skipped" : 0,

@@ -9,6 +9,9 @@ Feature: Generates HTML reports for BDD tests
   Scenario: Create HTML report for CB-437
     Given I generate report for "CB-437"
 
+  Scenario: Create HTML report for CB-505
+    Given I generate report for "CB-505"
+
   Scenario: Create HTML report for ODA
     Given I generate report for "ODA"
 

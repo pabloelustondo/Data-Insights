@@ -19,7 +19,7 @@
             "name": "I Create a new Tenant Metadata Object",
             "result": {
               "status": "passed",
-              "duration": 2
+              "duration": 1
             },
             "line": 12,
             "match": {
@@ -58,7 +58,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 356
+              "duration": 56
             },
             "line": 15,
             "match": {
@@ -106,7 +106,7 @@
             "name": "I modify a Tenant Metadata Object such that it remains valid",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 20,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 83
+              "duration": 141
             },
             "line": 23,
             "match": {
@@ -158,7 +158,7 @@
             "name": "The response code needs to be '200'",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 24,
             "match": {
@@ -171,7 +171,7 @@
             "name": "The response body should contain an array of valid meta data objects",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 25,
             "match": {
@@ -193,7 +193,7 @@
             "name": "I modify a Tenant Metadata Object to have an invalid tenantid",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 28,
             "match": {
@@ -206,7 +206,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 29,
             "match": {
@@ -219,7 +219,7 @@
             "name": "I set headers and body for posting to tmm",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 30,
             "match": {
@@ -232,7 +232,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 82
+              "duration": 205
             },
             "line": 31,
             "match": {
@@ -281,7 +281,7 @@
             "name": "I modify a Tenant Metadata Object to have different tenantid from the one passed in through url",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 36,
             "match": {
@@ -294,7 +294,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 37,
             "match": {
@@ -307,7 +307,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 29
+              "duration": 49
             },
             "line": 38,
             "match": {
@@ -333,7 +333,7 @@
             "name": "The response body should contain the error \"url tenantid different from body tenantid\"",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 40,
             "match": {
@@ -394,7 +394,7 @@
             "name": "I get \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 95
+              "duration": 129
             },
             "line": 46,
             "match": {
@@ -455,7 +455,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 52,
             "match": {
@@ -481,7 +481,7 @@
             "name": "I get \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 35
+              "duration": 97
             },
             "line": 54,
             "match": {
@@ -494,7 +494,7 @@
             "name": "The response code needs to be '200'",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 55,
             "match": {

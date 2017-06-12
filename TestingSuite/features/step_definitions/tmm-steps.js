@@ -143,7 +143,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('The response code needs to be \'{int}\'', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
         if (int != parseInt(responseCode)) {
-            console.log("Error: "+ responseData);
+            //console.log("Error: "+ responseData);
             throw new Error("Response code should be " + response + " but is " + responseCode);
 
         };
@@ -198,6 +198,7 @@ Cucumber.defineSupportCode(function(context) {
 
     When('I get {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         options.uri = url + stringInDoubleQuotes+ "/"+ tenantID;
+        //console.log(options);
         Request.get(options, function (error, response, body) {
             if (error) {
                 throw new Error("upload failed:"+ error);

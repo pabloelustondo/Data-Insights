@@ -45,7 +45,7 @@
             "name": "I GET topics",
             "result": {
               "status": "passed",
-              "duration": 38
+              "duration": 33
             },
             "line": 8,
             "match": {
@@ -84,7 +84,7 @@
             "name": "The response message should not include <testResponse>",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 11,
             "match": {
@@ -106,7 +106,7 @@
             "name": "I set valid request header and body for POST call to ~/query with metadata id",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 14,
             "match": {
@@ -132,7 +132,7 @@
             "name": "I make a POST call to ~/query",
             "result": {
               "status": "passed",
-              "duration": 43
+              "duration": 65
             },
             "line": 16,
             "match": {
@@ -180,7 +180,7 @@
             "name": "I set invalid request header and body for POST call to ~/query",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 22,
             "match": {
@@ -206,7 +206,7 @@
             "name": "I make a POST call to ~/query",
             "result": {
               "status": "passed",
-              "duration": 5
+              "duration": 11
             },
             "line": 24,
             "match": {
