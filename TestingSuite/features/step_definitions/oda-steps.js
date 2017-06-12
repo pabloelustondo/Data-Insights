@@ -2,7 +2,7 @@
 
 var Cucumber = require('cucumber')
     , Request = require('request');
-
+var reporter = require('cucumber-html-reporter');
 
 Cucumber.defineSupportCode(function(context) {
     const FS = require('fs');
@@ -51,7 +51,7 @@ Cucumber.defineSupportCode(function(context) {
     //retrieve x-access-token from file. this will be replaced later
     Given(/^I set the xaccesskey for ODA$/, function (callback) {
         FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
-            if (err) return console.log(err);
+            if (err) throw new Error(err);
             accessToken = contents;
             callback();
         });
@@ -146,6 +146,27 @@ Cucumber.defineSupportCode(function(context) {
             throw new Error("error: response body is" + responseData );
         callback();
     });
+    Given('I generate report for {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var options = {
+            theme: 'bootstrap',
+            jsonFile: 'test\\report\\cucumber_report_'+stringInDoubleQuotes+'.json',
+            output: 'test\\report\\cucumber_report_'+stringInDoubleQuotes+'.html',
+            reportSuiteAsScenarios: true,
+            launchReport: true,
+            metadata: {
+                "App Version":"0.3.2",
+                "Test Environment": "STAGING",
+                "Browser": "Chrome  54.0.2840.98",
+                "Platform": "Windows 10",
+                "Parallel": "Scenarios",
+                "Executed": "Remote"
+            }
+        };
+        reporter.generate(options);
+        callback();
+    });
+
 
     function resetOptions() {
         options  = {

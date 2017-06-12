@@ -7,7 +7,9 @@
     "setup": "npm install jsonwebtoken && npm install kafka-node && npm install -g cucumber && npm install",
     "featuretest": "./node_modules/.bin/cucumberjs -f pretty features/CB-437.feature features/CB-438.feature features/CB-425.feature features/CB-505.feature",
     "Components": "./node_modules/.bin/cucumberjs -f pretty features/IDA.feature features/ODA.feature",
-    "report": "./node_modules/.bin/cucumberjs -f json features/DSS.feature > ./features/assets/ReportingBDD.json"
+    "report": "generate_json",
+    "html": "./node_modules/.bin/cucumberjs -f pretty features\\reports.feature",
+    "test": "wdio"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +20,11 @@
     "kafka-node": "^1.6.2",
     "node-rest-client": "^3.1.0",
     "request": "^2.81.0",
-    "ssl-root-cas": "^1.2.3"
+    "ssl-root-cas": "^1.2.3",
+    "wdio-cucumber-framework": "^0.3.1",
+    "webdriverio": "^4.8.0"
+  },
+  "dependencies": {
+    "webdriverio-cucumber-js": "^1.1.4"
   }
 }
