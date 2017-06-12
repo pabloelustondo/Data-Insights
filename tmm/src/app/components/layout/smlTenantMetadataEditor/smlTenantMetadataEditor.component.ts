@@ -14,21 +14,21 @@ import { TmmConfigService } from './tmmconfig.service';
     <div>
       <div class="container">
         <br/>
-        <h3>Tenant Name: {{tenantMetadata.dataSets[0].from[0]}} </h3>
-        <h3>Tenant ID: {{tenantMetadata.tenantId}} </h3>
-        <br/>
+        <h3 id="tenantname">Tenant Name:</h3> <i>{{tenantMetadata.dataSets[0].from[0]}}</i>
+        <h3 id="tenantid">Tenant ID:</h3> <i>{{tenantMetadata.tenantId}}</i>
+        <hr/>
         <div class="row">
           <div class="col">
-            <h2>List of Your Data Sets</h2>
+            <h2 id="listheader">List of Your Data Sets Definition</h2>
             <div class="list-group" *ngFor="let dataSet of tenantMetadata.dataSets">
-              <a class="list-group-item" (click)=editorOption(dataSet.id) [id]="dataSet.id">{{ dataSet.name }}</a>
+              <a id="listItemsChoose" class="list-group-item" (click)=editorOption(dataSet.id) [id]="dataSet.id">{{ dataSet.name }}</a>
             </div>
           </div>
           <div class="col">
 
-            <h2>Editor</h2>
-            <button type="button" class="btn btn-primary" (click)="dataSetInit()">Click to add a Data set</button>
-            <button type="button" class="btn btn-primary" (click)="dataSetDelete()">Delete Selected</button>
+            <h2 id="editorheader">Editor</h2>
+            <button id="addDataSet" type="button" class="btn btn-primary" (click)="dataSetInit()">Click to add a Data set</button>
+            <button id="deleteDataSet" type="button" class="btn btn-primary" (click)="dataSetDelete()">Delete Selected</button>
             <br/><br/>
             <app-editor-smldatasource [dataSource] = "selectedOption" 
                                       [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
