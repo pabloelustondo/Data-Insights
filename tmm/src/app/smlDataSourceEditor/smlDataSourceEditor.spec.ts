@@ -6,9 +6,10 @@ import { JsonEditorComponent } from 'ng2-jsoneditor';
 describe('The SML Data Source Editor Component', () => {
   let component: smlDataSourceEditor;
   let fixture: ComponentFixture<smlDataSourceEditor>;
-
+  let editor: JsonEditorComponent;
   beforeEach(() => {
     this.component = new smlDataSourceEditor();
+    this.editor = this.component.editor;
   });
   it('should be created', () => {
     expect(this.component).toBeTruthy();
@@ -37,7 +38,8 @@ describe('The SML Data Source Editor Component', () => {
       id: 'karmaTest',
       name: 'karmaTest'
     };
-    let savedObject = this.component.editor.get().stringify();
-    expect(savedObject === this.component.dataSource).toBeTruthy();
+    this.editor.set(this.dataSource);
+    let savedObject = this.editor.get();
+    expect(savedObject).toBe(this.component.dataSource);
   });
 });
