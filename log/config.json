@@ -1,0 +1,9 @@
+{
+  "useSSL":false,
+  "userAccessKey":false,
+  "mongodb-config-location" : null,
+  "mongodb-table" : "configuration",
+  "https-key-location" : "../certificate.key",
+  "https-cert-location" : "../certificate.cert",
+  "accessKey-location" : "./accessKey"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "DDB",
+  "contributors": "Pablo, Varun, Nathan ",
+  "description": "DAS Central Database, here we store, tenants, users,..etc",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "1.14.1",
+    "cors": "^2.8.3",
+    "cp-cli": "1.0.2",
+    "express": "4.13.3",
+    "helmet": "^3.4.1",
+    "jasmine-node": "^1.14.5",
+    "mongodb": "2.0.46",
+    "request": "^2.65.0"
+  },
+  "scripts": {
+    "start": "npm run getConfigs & node server.js",
+    "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
+    "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
+    "test": "echo unit tests not implemented for now",
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
+  }
+}
