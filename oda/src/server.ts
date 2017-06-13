@@ -1,16 +1,3 @@
-
-import './controllers/intialChargeLevelController';
-import './controllers/dischargeRateController';
-import './controllers/devicesDidNotSurviveShift';
-import './controllers/retrieveReasonData';
-import './controllers/averageDischargeRateController';
-import './controllers/Lists/listOfDevicesDidNotSurviveShift';
-import './controllers/Lists/deviceList';
-import './controllers/Lists/listOfDevicesNotFullyChargedAndDidNotSurviveShift';
-import './controllers/Lists/listOfDevicesWithHighAverageDischargeRatePerShift';
-import './controllers/applicationExecutionTime';
-import './controllers/numberOfApplicationInstalls';
-import './controllers/vehicles/ttcVehicleLocations';
 import './controllers/queryController';
 import './controllers/topicsController';
 
@@ -45,7 +32,8 @@ globalconfig.hostname = "localhost";  //this can be overwritten by app config if
 //our app config will be the result of taking all global configurations and overwritting them with the local configurations
 Object.keys(appconfig).forEach(function(key){
     globalconfig[key] = appconfig[key];
-})
+});
+
 globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
 
 appconfig = globalconfig;
@@ -53,8 +41,6 @@ appconfig = globalconfig;
 console.log("configuration");
 console.log(appconfig);
 
-exports.config = config;
-exports.appconfig = appconfig;
 
 
 var kafka = require('kafka-node');
@@ -66,7 +52,6 @@ var kafkaClient = new kafka.Client(appconfig.kafka_url);
  zkOptions: Object, Zookeeper options, see node-zookeeper-client
  noAckBatchOptions: Object, when requireAcks is disabled on Producer side we can define the batch properties, 'noAckBatchSize' in bytes and 'noAckBatchAge' in milliseconds. The default value is { noAckBatchSize: null, noAckBatchAge: null } and it acts as if there was no batch
  sslOptions: Object, options to be passed to the tls broker sockets, ex. { rejectUnauthorized: false } (Kafka +0.9)
-
  */
 
 var payloads =  [{ topic: 'demo', partition: 0 }];
@@ -273,7 +258,7 @@ if (config.useSSL) {
 
 }
 
-
+exports.appconfig = globalconfig;
 module.exports = logger;
 module.exports.stream = {
     write: function(message: any, encoding: any){

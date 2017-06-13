@@ -24,13 +24,15 @@
     "cp-cli": "1.0.2",
     "async": "2.4.1",
     "underscore": "1.8.3",
-    "request-promise": "4.1.1"
+    "request-promise": "4.1.1",
+    "kafka-node": "1.6.2"
   },
   "scripts": {
-    "start": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json &  node server.js",
-    "debugwin": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node %NODE_DEBUG_OPTION% server.js",
+    "start": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & npm run getConfigs & node server.js",
+    "debugwin": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & npm run getConfigs & node  %NODE_DEBUG_OPTION% server.js",
     "debugmac": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node $NODE_DEBUG_OPTION server.js",
-    "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js"
+    "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js",
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
   },
   "devDependencies": {
     "typescript": "2.3.2"

@@ -7,6 +7,7 @@ import {SDS} from './models/user';
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('./server');
+let appconfig = server.appconfig;
 let should = chai.should();
 let expect = chai.expect;
 @suite class Hello {

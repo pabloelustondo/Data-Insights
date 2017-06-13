@@ -7,10 +7,7 @@ based on given data set metadata definition we should be able to return merged d
   Scenario: Return Merged DataSet
     Given I set valid request header and body for POST call to ~/query with metadata id
     And I grab ODA port number from globalconfig.json
-    And I make a POST call to query
+    And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed
     Then The response message should contain the merged dataset
-
-
-

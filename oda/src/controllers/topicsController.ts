@@ -7,11 +7,10 @@
 import {Route, Get, Post, Delete, Patch, Example, Request} from 'tsoa';
 import {SDS} from '../models/user';
 import {QueryModel} from '../models/queryModel';
-import {Metrics} from '../models/metrics';
 import * as express from '@types/express';
 import {KafkaService} from '../services/kafkaService';
 import * as rp from 'request-promise';
-// import * as https from 'https';
+let server = require('../server');
 const config = require('../../appconfig.json');
 
 @Route('Query')
@@ -37,10 +36,12 @@ export class TopicsController {
         let kafka = new KafkaService();
 
         if (token) {
-
+            let server = require('../server');
+          //  let appConfig = server.appconfig;
+            let appConfig =  require('../../globalconfig.json');
             let mData = ['topics : string [] '];
 
-            if (config.testingMode) {
+            if (appConfig.testingmode) {
 
                 let testData = ['vehicleInfo', 'customTopic'];
                 // returns test data for now
@@ -58,7 +59,8 @@ export class TopicsController {
                 // returns test data for now
 
                 let xqs = {tenantId: 'test'};
-                const xurl = 'https://' + config['dps_address'] + '/getMetadata';
+
+                const xurl = appConfig['dps_url'] + '/getMetadata/' + xqs.tenantId;
 
                 const options: rp.OptionsWithUrl = {
                     headers: {

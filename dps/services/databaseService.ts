@@ -5,6 +5,7 @@ import {MongoClient, Db} from "mongodb";
 var mongodb = require('mongodb').MongoClient;
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
+let globalConfig = require('../globalconfig.json');
 let sampletenants = require('../testing/sampleTenants.json');
 let _ = require('lodash');
 import * as rp from 'request-promise';
@@ -13,16 +14,18 @@ export class DatabaseService {
 
     connectionString: string;
     database: any;
-    tenants: any[];
+    tenants: any [];
+
+    appConfig: any;
 
     constructor(ddbUrl: string) {
 
+        this.appConfig = globalConfig;
         if (appconfig.testingmode) {
             this.tenants = sampletenants.tenants;
         } else {
             //TODO: call DDB for this but for now just return  test data
-          //  this.tenants = sampletenants.tenants;
-            // this.loadTenants();
+
 
             const headersOptions = {
                 'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
@@ -32,7 +35,7 @@ export class DatabaseService {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: 'http://localhost:8000/getAllTenants',
+                url: globalConfig['ddb_url'] + '/getAllTenants',
             };
             rp(options).then(data => this.tenants = data.tenants).catch(function(err) {
                 console.log(err);
@@ -40,14 +43,23 @@ export class DatabaseService {
         }
     }
 
+    public populateTenants( tenants: any) {
+
+        this.tenants = tenants;
+
+    }
 
     public getTenant(tenantId: string) {
-        let value =  _.find(this.tenants, ['tenantId', tenantId]);
-        return value;
-        /*
-            return _.find(this.tenants, function(element: any) {
-                return element.tenantId == tenantId;
-            })*/
+        if (this.tenants) {
+            return _.find(this.tenants, ['tenantId', tenantId]);
+        } else {
+            return null;
+        }
+
+    }
+
+    public getTenantDataSets(tenant: any, dataSet: string) {
+
     }
 
     public findProperty(propertyName: string, propertyValue: string) {

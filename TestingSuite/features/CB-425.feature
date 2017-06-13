@@ -7,16 +7,32 @@ Background:
   New service (CDB) should save data into S3 and MongoDB in parallel asynchronously
   S3 keeps all the data in the document whereas MongoDB keeps only subset defined in the DataModel
 
-  Scenario: Post to /data and get a valid AWS response
+  Scenario: As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints
+    Given I set the xaccesskey
+    And grab and store IDA port number
+    When I make GET call to endpoint "/Security/getAuthorizationToken"
+    Then response code must be 200
+    And response body should be error-free
+    And AuthorizationToken is not empty
+    Then I store the returned value in file named AuthorizationToken
+
+  Scenario: As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey
+    Given I set the xaccesskey to a modified JWT
+    And grab and store IDA port number
+    When I make GET call to endpoint "/Security/getAuthorizationToken"
+    Then response code must be 200
+    Then response body should be empty or contain error
+
+  Scenario: As an administrator I want to Post to /data
     Given I set the temporary AuthorizationToken
-    And grab IDA port number
+    And grab and store IDA port number
     When I Post :portnumber with example data
     Then response code must be 200
     And response body should be a valid IDA-POST response
 
-  Scenario: Invalid Post to /data
-    Given I set the AuthorizationToken to PermanentToken
-    And grab IDA port number
+  Scenario: As an administrator I want to send Invalid Post information to /data
+    Given I set the AuthorizationToken to invalid token
+    And grab and store IDA port number
     When I Post :portnumber with example data
     #Then response code must be 200
     And response body should be empty or contain error

@@ -142,9 +142,10 @@ export class UploadDataSetController {
         let sendToQueue = function (jwtDecodedToken: any) {
 
             if (jwtDecodedToken) {
+                let server = require('../server');
+                let appConfig = server.appconfig;
 
                 let metadata = (!express.body.metadata) ? {} : express.body.metadata;
-
                 let data = {
                     idaMetadata: {
                         referer: 'sampleRequestOriginInfo',
@@ -155,13 +156,12 @@ export class UploadDataSetController {
                     clientMetadata: metadata,
                     clientData: express.body.data
                 };
+
                 // create
-
-                let kafkaClient = new kafka.Client(config.kafka_url);
+                let kafkaClient = new kafka.Client(appConfig['kafka_url']);
                 try {
-                  //  let Producer = ;
-                    let producer = new kafka.Producer(kafkaClient);
 
+                    let producer = new kafka.Producer(kafkaClient);
 
                     producer.on('ready', function (message: any) {
                         let payloads: any =  [

@@ -1,5 +1,6 @@
 {
   "id":"dssback",
   "name":"DSS Backend",
+  "secret"  : "1234",
   "dependencies":["ddb","dlm"]
 }

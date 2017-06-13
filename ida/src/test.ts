@@ -161,7 +161,7 @@ const testData =  {
             tenantid: tenantId,
             agentid: '12345678901234567890'
         };
-        let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15000});
+        let token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 150000});
         console.log(JSON.stringify(token));
         chai.use(chaiHttp);
         chai.request('http://localhost:3010')

@@ -1,8 +1,5 @@
-import {Parameter} from './parameterModel';
-import {Predicates} from './predicates';
-import {Metrics} from './metrics';
 import {BatteryNotFullyChargedBeforeShiftParam} from './kpi/batteryNotFullyChargedBeforeShift';
-import {SampleAPI} from './kpi/PlaceHolderKPI';
+
 
 
 export interface CalculatePredicates {
@@ -10,6 +7,11 @@ export interface CalculatePredicates {
     predicates: Predicates[];
     parameters: BatteryNotFullyChargedBeforeShiftParam ;
 }
+
+type Metrics = 'DevicesDidNotLastShift'| 'TotalActiveDevices' | 'DevicesConstantlyCharging';
+type Predicates = 'batteryNotFullyChargedBeforeShift'
+    | 'batteryAgeGreaterThanNYears'
+    | 'deviceRechargedMoreThanNTimes';
 
 /**
  * Created by vdave on 1/9/2017.

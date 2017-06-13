@@ -1,6 +1,6 @@
 {
-  "testingmode": true,
-  "port": 8002,
-  "cdl_ds_address" : "http://localhost:8001/ds/",
-  "cdl_transLog_address" : "http://localhost:8001/transactionLog/"
+  "id" : "dps",
+  "name" : "DPS",
+  "secret" : "1234",
+  "dependencies" : ["cdl", "ddb", "kafka"]
 }

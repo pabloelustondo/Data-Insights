@@ -9,6 +9,31 @@ describe("Data Analytics Service - CDL", function() {
         });
     });
 
+    describe("POST /data/outGoingRequest /", function() {
+        it("should get vehicleInfo from CDL", function(done) {
+
+            $.ajax(
+                {   url:"/data/outGoingRequest",
+                    method:"POST",
+                    contentType:"application/json",
+                    data: JSON.stringify(
+                        {
+                            metadata : {
+                               queryId : 'ttc'
+                            }
+                        }
+                    ),
+                    success:function(data, textStatus, jqXHR) {
+                      //  var inputFileName = data.response;
+                      //  var testValue = 'https://s3.amazonaws.com/da-s3-bucket%2FDataExchange%2F' + 'dpsTestTenantId';
+                      //  var testValuelength = testValue.length;
+                        expect(textStatus).toBe('success');
+                       // expect(inputFileName.substring(0,testValuelength)).toBe(testValue);
+                        done();}
+                });
+        });
+    });
+/*
 
     describe("POST /data/request", function() {
 
@@ -192,6 +217,6 @@ describe("Data Analytics Service - CDL", function() {
         });
 
     });
-
+*/
 
 });
