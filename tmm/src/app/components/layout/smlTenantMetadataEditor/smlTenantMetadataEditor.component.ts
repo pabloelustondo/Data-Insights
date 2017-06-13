@@ -30,8 +30,7 @@ import { TmmConfigService } from './tmmconfig.service';
             <button id="addDataSet" type="button" class="btn btn-primary" (click)="dataSetInit()">Click to add a Data set</button>
             <button id="deleteDataSet" type="button" class="btn btn-primary" (click)="dataSetDelete()">Delete Selected</button>
             <br/><br/>
-            <app-editor-smldatasource [dataSource] = "selectedOption" 
-                                      [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
+            <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
           </div>
         </div>
       </div>

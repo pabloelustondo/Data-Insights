@@ -59,15 +59,18 @@ describe('TMM UI Elements', () => {
 
 
   it('Should be able to write in the text area', () => {
+    element(by.id('addDataSet')).click();
     element(by.className('jsoneditor-text')).click();
     element(by.className('jsoneditor-text')).clear();
     element(by.className('jsoneditor-text')).sendKeys(
-      '{"id": "10-22-1",  "name": "Test Data Protractor", "from": ["Doga Ister"], "persist": true, "filter": ["/&AS/"], "merge": ["09-21-31$F"], "projections": [""], "metadata": [""]}'
+      '{"id": "Test Protractor",  "name": "Test Data Protractor", "from": ["Doga Ister"], "persist": true, "filter": ["/&AS/"], "merge": ["09-21-31$F"], "projections": [""], "metadata": [""]}'
     );
     browser.sleep(1000);
     element(by.id('save')).click();
     browser.sleep(1000);
-    expect(element(by.id('10-22-1')).getText()).toEqual('Test Data Protractor');
+    expect(element(by.id('Test Protractor')).getText()).toEqual('Test Data Protractor');
+    browser.sleep(1000);
+
   });
 
 });
