@@ -1,5 +1,5 @@
 {
   "id":"dss",
   "name":"DSS",
-  "dependencies":["dssback"]
+  "dependencies":["dssback", "dad"]
 }

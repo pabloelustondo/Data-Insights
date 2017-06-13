@@ -3,6 +3,7 @@ import { PAGES } from '../dad/sample.page'
 import { DadPage } from "../dad/page.component";
 import { DadConfigService, DadUserConfig } from '../dad/dadconfig.service';
 import { ActivatedRoute, Params} from '@angular/router';
+import { config } from "../dad/appconfig";
 
 let appconfig = require("../../../appconfig.json");
 
@@ -15,6 +16,7 @@ export class FullLayoutComponent implements OnInit {
 
     user: DadUserConfig;
     testingmode:boolean;
+    parentRouter;
 
     constructor(private dadConfigService: DadConfigService,private activatedRoute: ActivatedRoute) {}
 
@@ -62,5 +64,9 @@ export class FullLayoutComponent implements OnInit {
 
 
         this.testingmode = appconfig.testingmode;
+    }
+
+    goToAdmin(event){
+        window.location.assign(config.dss_url + '/#/home');
     }
 }
