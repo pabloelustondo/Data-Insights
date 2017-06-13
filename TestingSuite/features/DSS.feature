@@ -17,7 +17,7 @@ Feature: DSS API Tests
     Then The HTTP Code should be 200
     Then The response's id_token should be valid
 
-  Scenario: As an administrator I want to try to enroll with invalid values
+  Scenario Outline: As an administrator I want to try to enroll with invalid values
     Given I submit with invalid <valueField> value: <valueUsed>
     Then The HTTP Code should be 400
     Then The response should contain '<valueErrorResponse>'
