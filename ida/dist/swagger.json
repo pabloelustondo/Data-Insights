@@ -1,0 +1,321 @@
+{
+	"basePath": "/",
+	"consumes": [
+		"application/json"
+	],
+	"definitions": {
+		"RsaOtherPrimesInfo": {
+			"description": "",
+			"properties": {
+				"r": {
+					"type": "string",
+					"description": ""
+				},
+				"d": {
+					"type": "string",
+					"description": ""
+				},
+				"t": {
+					"type": "string",
+					"description": ""
+				}
+			},
+			"required": [
+				"r",
+				"d",
+				"t"
+			],
+			"type": "object"
+		},
+		"JsonWebKey": {
+			"description": "",
+			"properties": {
+				"kty": {
+					"type": "string",
+					"description": ""
+				},
+				"use": {
+					"type": "string",
+					"description": ""
+				},
+				"key_ops": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": ""
+				},
+				"alg": {
+					"type": "string",
+					"description": ""
+				},
+				"kid": {
+					"type": "string",
+					"description": ""
+				},
+				"x5u": {
+					"type": "string",
+					"description": ""
+				},
+				"x5c": {
+					"type": "string",
+					"description": ""
+				},
+				"x5t": {
+					"type": "string",
+					"description": ""
+				},
+				"ext": {
+					"type": "boolean",
+					"description": ""
+				},
+				"crv": {
+					"type": "string",
+					"description": ""
+				},
+				"x": {
+					"type": "string",
+					"description": ""
+				},
+				"y": {
+					"type": "string",
+					"description": ""
+				},
+				"d": {
+					"type": "string",
+					"description": ""
+				},
+				"n": {
+					"type": "string",
+					"description": ""
+				},
+				"e": {
+					"type": "string",
+					"description": ""
+				},
+				"p": {
+					"type": "string",
+					"description": ""
+				},
+				"q": {
+					"type": "string",
+					"description": ""
+				},
+				"dp": {
+					"type": "string",
+					"description": ""
+				},
+				"dq": {
+					"type": "string",
+					"description": ""
+				},
+				"qi": {
+					"type": "string",
+					"description": ""
+				},
+				"oth": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/RsaOtherPrimesInfo"
+					},
+					"description": ""
+				},
+				"k": {
+					"type": "string",
+					"description": ""
+				}
+			},
+			"required": [
+				"kty"
+			],
+			"type": "object"
+		},
+		"ErrorResponseModel2": {
+			"description": "",
+			"properties": {
+				"errorCode": {
+					"type": "string",
+					"description": ""
+				},
+				"errorMessage": {
+					"type": "string",
+					"description": ""
+				}
+			},
+			"required": [
+				"errorCode",
+				"errorMessage"
+			],
+			"type": "object"
+		},
+		"ResponseModel": {
+			"description": "Created by vdave on 5/5/2017.",
+			"properties": {
+				"errorCode": {
+					"type": "string",
+					"description": ""
+				},
+				"errorMessage": {
+					"type": "string",
+					"description": ""
+				},
+				"error": {
+					"$ref": "#/definitions/ErrorResponseModel2"
+				}
+			},
+			"required": [
+				"errorCode",
+				"errorMessage"
+			],
+			"type": "object"
+		},
+		"ErrorResponseModel": {
+			"description": "",
+			"properties": {
+				"status": {
+					"type": "number",
+					"format": "double",
+					"description": ""
+				},
+				"message": {
+					"type": "string",
+					"description": ""
+				}
+			},
+			"required": [
+				"status",
+				"message"
+			],
+			"type": "object"
+		}
+	},
+	"info": {
+		"description": "This service provides and API to post data to SOTI cloud data analytics service",
+		"license": {
+			"name": "MIT"
+		},
+		"title": "IDA",
+		"version": "0.0.1"
+	},
+	"paths": {
+		"/Security/getAuthorizationToken": {
+			"get": {
+				"operationId": "GetAuthorizationTokenGet",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/JsonWebKey"
+						},
+						"examples": {
+							"application/json": {
+								"headers": {
+									"x-access-token": "Certificate from admin console",
+									"Accept": "application/json"
+								},
+								"json": true,
+								"url": "https://localhost:3010/security/getAuthorizationToken"
+							}
+						}
+					}
+				},
+				"description": "Post a unit of data to be stored in the cloud analytics database",
+				"parameters": []
+			}
+		},
+		"/data/": {
+			"post": {
+				"operationId": "UploadDataSetCreate",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"$ref": "#/definitions/ResponseModel"
+						},
+						"examples": {
+							"application/json": {
+								"headers": {
+									"x-access-token": "Temporary JWT that was retrieved from getAuthorizationToken endpoint",
+									"content-type": "application/json"
+								},
+								"json": true,
+								"url": "https://localhost:3010/data",
+								"data": {
+									"metadata": {
+										"dataSetId": "myCustomDataSetId",
+										"projections": [
+											"device",
+											"application"
+										]
+									},
+									"data": {
+										"device": {
+											"id": 1234,
+											"name": "testName",
+											"battery": 50,
+											"status": "ok"
+										},
+										"application": {
+											"id": 1234,
+											"name": "applicationName",
+											"customApplicationData": {
+												"version": "1.0",
+												"size": "1M"
+											}
+										},
+										"logs": [
+											{
+												"status": "200",
+												"message": "OK",
+												"timeStamp": "2016-08-26T00:08:58.000Z"
+											},
+											{
+												"status": "200",
+												"message": "OK",
+												"timeStamp": "2016-08-26T00:08:59.000Z"
+											},
+											{
+												"status": "400",
+												"message": "Error",
+												"timeStamp": "2016-08-26T00:09:00.000Z",
+												"error": {
+													"trace": "stackTrace"
+												}
+											}
+										]
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Wrong Input Model",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponseModel"
+						}
+					},
+					"500": {
+						"description": "Internal Server Error. Please contact SOTI Support",
+						"schema": {
+							"$ref": "#/definitions/ErrorResponseModel"
+						}
+					}
+				},
+				"description": "Post a unit of data to be stored in the cloud analytics database",
+				"parameters": []
+			}
+		}
+	},
+	"produces": [
+		"application/json"
+	],
+	"swagger": "2.0",
+	"securityDefinitions": {},
+	"host": "localhost:3010"
+}
