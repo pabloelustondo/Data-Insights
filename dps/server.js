@@ -86,7 +86,7 @@ app.post('/data/request', function (req, res) {
             var dataSource = _.find(tenant_1.dataSources, ['dataSourceId', req.body.idaMetadata.dataSourceId]);
             var projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
             var dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
-            var collectionName_1 = dataSetId + '.' + dataSource['dataSourceId'];
+            var collectionName_1 = dataSetId;
             projection_1.DataProjections(req.body.clientData, projections).then(function (data) {
                 rawDataLakeService_1.uploadModifiedData(tenant_1.tenantId, collectionName_1, data).then(function (response) {
                     console.log('Final response' + JSON.stringify(response));
@@ -121,7 +121,7 @@ function processCleanedData(idaMetadata, clientMetadata, clientData) {
         var projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
         console.log('projections \t ' + JSON.stringify(projections));
         var dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
-        var collectionName_2 = dataSetId + '.' + dataSource['dataSourceId'];
+        var collectionName_2 = dataSetId;
         projection_1.DataProjections(clientData, projections).then(function (data) {
             rawDataLakeService_1.uploadModifiedData(tenant.tenantId, collectionName_2, data).then(function (response) {
                 console.log('Final response' + JSON.stringify(response));
@@ -205,7 +205,7 @@ else {
                         var clientMetadata = data.clientData.metadata;
                         console.log('json = ' + JSON.stringify(data));
                         //    publishTransactionLog( idaMetadata, clientMetadata, clientData);
-                        processCleanedData(idaMetadata, clientMetadata, clientData);
+                        //    processCleanedData( idaMetadata, clientMetadata, clientData);
                     }
                     catch (e) {
                         console.log('not json format' + message.value);

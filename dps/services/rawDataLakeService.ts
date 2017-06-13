@@ -52,7 +52,7 @@ export function uploadModifiedData(tenantId: string, collectionName: string, cli
         };
     } else {
 
-        let endpoint = globalConfig ['cdl_url'] + tenantId + config['cdl_put_endpoint'];
+        let endpoint = globalConfig ['cdl_url'] + '/ds/' +tenantId + config['cdl_put_endpoint'];
 
         const headerOptions = {
             'x-access-token': config['access_token']

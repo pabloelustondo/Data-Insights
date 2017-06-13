@@ -3,17 +3,16 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
-import { UserInput } from './components/layout/UserInput/UserInput.component';
-import { CrudComponent } from './components/layout/UserInput/crud.component';
-import { EditorSMLDatasourceComponent } from './editor-smldatasource/editor-smldatasource.component';
+import { smlTenantMetadataEditor } from './components/layout/smlTenantMetadataEditor/smlTenantMetadataEditor.component';
+import { smlDataSourceEditor } from './smlDataSourceEditor/smlDataSourceEditor';
 import { JsonEditorComponent } from 'ng2-jsoneditor';
+import {TmmConfigService} from './components/layout/smlTenantMetadataEditor/tmmconfig.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserInput,
-    CrudComponent,
-    EditorSMLDatasourceComponent,
+    smlTenantMetadataEditor,
+    smlDataSourceEditor,
     JsonEditorComponent
   ],
   imports: [
@@ -21,6 +20,7 @@ import { JsonEditorComponent } from 'ng2-jsoneditor';
     FormsModule,
     HttpModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [TmmConfigService]
 })
 export class AppModule { }
