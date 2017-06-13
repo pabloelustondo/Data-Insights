@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & npm run getConfigs & node server.js",
-    "debugwin": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & npm run getConfigs & node server.js",
+    "debugwin": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & npm run getConfigs & node  %NODE_DEBUG_OPTION% server.js",
     "debugmac": "cp-cli ../common/sampleTenants.json ./testing/sampleTenants.json & node $NODE_DEBUG_OPTION server.js",
     "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js",
     "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
