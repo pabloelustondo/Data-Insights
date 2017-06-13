@@ -33,13 +33,4 @@ describe('The SML Data Source Editor Component', () => {
     });
     expect(result).toBeTruthy();
   });
-  it('the saveCurrentItem function should contain a valid return object', () => {
-    this.component.dataSource = {
-      id: 'karmaTest',
-      name: 'karmaTest'
-    };
-    this.editor.set(this.component.dataSource);
-    let savedObject = this.editor.get();
-    expect(savedObject).toBe(this.component.dataSource);
-  });
 });
