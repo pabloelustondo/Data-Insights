@@ -2,8 +2,7 @@
 
 var Cucumber = require('cucumber')
     , Request = require('request');
-
-// will work with all https requests will all libraries (i.e. request.js)
+var reporter = require('cucumber-html-reporter');
 
 Cucumber.defineSupportCode(function(context) {
     const FS = require('fs');
@@ -14,11 +13,10 @@ Cucumber.defineSupportCode(function(context) {
     var responseCode = 0;
     var responseData = '';
     const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
-   // const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
     var accessToken='';
     var url = '';
 
-    // Configure Client
+    // Configure options
     var options  = {
         "method": "",
         "uri": "",
@@ -33,18 +31,12 @@ Cucumber.defineSupportCode(function(context) {
         "postambleCRLF": true
     };
 
-    // Step Definitions
-    // Scenario: Initial Charge Levels
-
     Given('I grab ODA port number from globalconfig.json', function (callback) {
         //I get ODA's port number from the url in config json file using REGEX
         var oda_url = globalconfig.oda_url;
-
         if(oda_url == "" || oda_url == undefined)
             throw new Error('Cannot get port: ida url not in global config file');
-
         var port_str = oda_url.match("[0-9]+")[0];
-
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
@@ -56,9 +48,10 @@ Cucumber.defineSupportCode(function(context) {
         }
     });
 
+    //retrieve x-access-token from file. this will be replaced later
     Given(/^I set the xaccesskey for ODA$/, function (callback) {
         FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
-            if (err) return console.log(err);
+            if (err) throw new Error(err);
             accessToken = contents;
             callback();
         });
@@ -86,10 +79,11 @@ Cucumber.defineSupportCode(function(context) {
     When('I GET topics', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         resetOptions();
-        options.uri = url+'/Query/Topics';
-        options.headers['content-type'] = 'application/json';
+        options.method = "GET";
+        options.uri = url+'/query/topics';
+        options.headers['Content-Type'] = 'Application/Json';
         options.headers['x-access-token'] = accessToken;
-        Request.get(options, function (error, response, body) {
+        Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
             }
@@ -126,48 +120,67 @@ Cucumber.defineSupportCode(function(context) {
     Then('response code is :{int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
         if (parseInt(int) != parseInt(responseCode)){
-            console.log('Error: '+ responseData);
+            //console.log('Error: '+ responseData);
             throw new Error('Response code should be ' + int +' but is ' + responseCode);
         }
 
         callback();
     });
 
-
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (resString.includes('query not supported'))
-            throw new Error("response message: " + stringInDoubleQuote);
+        if (!resString.includes('query not supported'))
+            throw new Error("response message: " + resString);
         callback();
     });
 
     Then('The response message should contain the merged dataset', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
         if (resString.includes('query not supported') || !resString.includes('createdat') || !resString.includes('metadata'))
             throw new Error("error: " + resString);
         callback();
     });
     Then('the response doesnt have to be merged', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
-
         if (responseData == undefined)
             throw new Error("error: response body is" + responseData );
         callback();
     });
+    Given('I generate report for {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var options = {
+            theme: 'bootstrap',
+            jsonFile: 'test\\report\\cucumber_report_'+stringInDoubleQuotes+'.json',
+            output: 'test\\report\\cucumber_report_'+stringInDoubleQuotes+'.html',
+            reportSuiteAsScenarios: true,
+            launchReport: true,
+            metadata: {
+                "App Version":"0.3.2",
+                "Test Environment": "STAGING",
+                "Browser": "Chrome  54.0.2840.98",
+                "Platform": "Windows 10",
+                "Parallel": "Scenarios",
+                "Executed": "Remote"
+            }
+        };
+        reporter.generate(options);
+        callback();
+    });
+
 
     function resetOptions() {
         options  = {
             "method": "",
-            "url": "",
+            "uri": "",
             "rejectUnauthorized": false,
-            "headers": {},
+            "headers": {
+                "content-type": "application/json",
+                "Keep-Alive": true
+            },
             "json": true,
             "body": {},
             "preambleCRLF": true,
             "postambleCRLF": true
         };
     }
-
 });

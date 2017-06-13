@@ -6,11 +6,8 @@ const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
 const jwt = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
-//const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
 const config = require('..\\..\\ida_config.json');
-require('ssl-root-cas').inject();
 
-// Certificate Handling
 require('https').globalAgent.options.ca = RootCas;
 
 Cucumber.defineSupportCode(function(context) {
@@ -26,6 +23,7 @@ Cucumber.defineSupportCode(function(context) {
     var responseData = 0;
     var idaPortNumber = 0;
     var url = '';
+
     // Request Structure
     var options  = {
         "method": "",
@@ -82,6 +80,7 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         })
     });
+
     Given('I set the temporary AuthorizationToken', function (callback) {
         FS.readFile("features/assets/AuthorizationToken", 'utf8', function(err, contents) {
             if (err) return console.log(err);
@@ -89,6 +88,7 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
+
     When('I Post :portnumber with example data', function (callback) {
         options.preambleCRLF = options.postambleCRLF = true;
         options.uri = url+'/data';
@@ -149,15 +149,13 @@ Cucumber.defineSupportCode(function(context) {
 
     //check response code
     Then(/^response code must be (.*)$/, function (response, callback) {
-        //console.log(JSON.stringify(responseData));
         if (parseInt(response) != parseInt(responseCode)) {
-            console.log('Error: '+ responseData);
+            //console.log('Error: '+ responseData);
             throw new Error('Response code should be ' + response + ' but is ' + responseCode);
 
         };
         callback();
     });
-
 
     Given('I set the AuthorizationToken to invalid token', function (callback) {
         authorizationToken = accessToken;

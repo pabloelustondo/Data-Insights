@@ -10,7 +10,7 @@ const FS = require('fs');
 const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'/globalconfig_test.json');
-// globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
+const config = require('..\\..\\ida_config.json');
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
     var When = context.When;
@@ -43,8 +43,7 @@ Cucumber.defineSupportCode(function(context) {
         if(isNaN(port_str)){
             throw new Error('Cannot get port: invalid global config file');
         }else{
-            url = ida_url.substring(0,ida_url.indexOf(idaportnumber)-1);
-            portnumber = parseInt(port_str);
+            url = ida_url;
             callback();
         }
     });
@@ -69,9 +68,11 @@ Cucumber.defineSupportCode(function(context) {
         var token = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
         options.headers['x-access-token'] = token;
         options.body = testData;
+        callback();
     });
 
     When('I Post :portnumber after setting headers and body', function (callback) {
+        options.uri = url + "/data"
         Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -81,16 +82,27 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
+    Then('response code should equal :{int}', function (int, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        if (parseInt(int) != parseInt(responseCode)){
+            //console.log('Error: '+ responseData);
+            throw new Error('Response code should be ' + int +' but is ' + responseCode);
+        }
 
+        callback();
+    });
     Then("Kafka Consumer should receive some message without error", function (callback) {
-        var kafkaClient = new kafka.Client(appconfig.kafka_url);
-        var kafkaConsumer;
+        var kafka_url = globalconfig.kafka_url;
+        kafka_url = kafka_url.replace("http://", "");
+        var kafkaClient = new kafka.Client(kafka_url);
+
         var payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];
         var options = {
             autoCommit: false,
             sessionTimeout: 4000
         };
-            kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
+
+        var kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
             // now let's see if Kafka receives anything
             kafkaConsumer.on('message', function (message, err) {
                 if (!err && message != undefined && message != "") {
@@ -102,8 +114,6 @@ Cucumber.defineSupportCode(function(context) {
             kafkaConsumer.on('error', function (err) {
                 throw new Error("Something went wrong: " + err);
             });
-
-
     });
 
 });

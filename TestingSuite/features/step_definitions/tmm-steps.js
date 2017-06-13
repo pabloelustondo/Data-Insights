@@ -14,13 +14,10 @@ Cucumber.defineSupportCode(function(context) {
     var When = context.When;
     var Then = context.Then;
     var tenant_data = {};
-    var odaPortNumber = 0;
     var responseCode = 0;
     var responseData = "";
     const globalconfig = require(process.cwd() + "\\globalconfig_test.json");
     var tenantID = '';
-    // const globalconfig = require(process.cwd()+"\\..\\globalconfigs\\globalconfig_dev.json");
-    var accessToken = "";
     var url = "";
 
     // Configure Client
@@ -182,13 +179,11 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Given('I modify a Tenant Metadata Object to have different tenantid from the one passed in through url', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
         tenantID = "testtenant-externaluser"
         callback();
     });
 
     Then('The response body should contain the error {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
-        // Write code here that turns the phrase above into concrete actions
         if (responseData == undefined || responseData.error != stringInDoubleQuotes) {
             throw new Error("response body should contain error: "+stringInDoubleQuotes +" but instead contains: "+ JSON.stringify(responseData));
         }
@@ -196,14 +191,12 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('I set header for making get to tmm', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
         resetOptions();
         tenantID = "testtenant-testuser";
         callback();
     });
 
     When('I get {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
-        // Write code here that turns the phrase above into concrete actions
         options.uri = url + stringInDoubleQuotes+ "/"+ tenantID;
         Request.get(options, function (error, response, body) {
             if (error) {
@@ -217,7 +210,6 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
         if (responseData == undefined || responseData[0].tenantid != tenantID) {
             throw new Error("response body should contain tenantID: "+ tenantID +" but instead contains: "+ responseData.tenantid);
         }
@@ -225,14 +217,12 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('I set header for making get to tmm with non-existent tenantid', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
         resetOptions();
         tenantID = "testtenant-unicorn";
         callback();
     });
 
     Then('The response body should be an empty array', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
         if (responseData == undefined ||  responseData.length!=0) {
             throw new Error("The response body either undefined or not empty");
         }
