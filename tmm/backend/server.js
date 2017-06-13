@@ -113,9 +113,23 @@ app.post('/tenant/:tenantid', function(req,res){
 
 
 app.delete('/tenant/:tenantid', function(req,res){
-
+  var options = {
+    uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
+    method:"DELETE",
+    contentType:"application/json",
+    body: req.body,
+    json:true
+  };
+  rp(options)
+    .then(function (data) {
+      console.log("OK" + data)
+      res.send(data)
+    })
+    .catch(function (err) {
+      console.log("BAD" + err);
+      res.send(err);
+    });
 });
-
 
 
 if (config.useSSL) {

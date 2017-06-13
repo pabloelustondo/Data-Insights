@@ -208,24 +208,30 @@ router.get('/tenants/:tenantid', function(req,res){
 
 router.get('/tenant/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-        db.collection('tenant').find({"tenantid":req.params.tenantid}).toArray(next);
+        db.collection('tenant').find({"tenantId":req.params.tenantid}).toArray(next);
     });
 });
 
 router.post('/tenant/:tenantid', function(req,res){
-    if (checkTenantRequest(req,res)) {
-        callDbAndRespond(req, res, function (req, res, db, next) {
-            db.collection('tenant').replaceOne({"tenantid": req.params.tenantid}, req.body, {upsert: true}, next);
-        });
-    }
+    callDbAndRespond(req, res, function (req, res, db, next) {
+        try {
+            db.collection('tenant').replaceOne({"tenantId": req.params.tenantid}, req.body, {upsert: true}, next);
+        } catch (e) {
+            console.log(e);
+        }
+    });
 });
 
 router.delete('/tenant/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-        db.collection('tenant').deleteMany({"tenantid":req.params.tenantid}, next);
+        db.collection('tenant').update({"tenantid":req.params.tenantid}, { '$pull': { 'dataSets': {}}}, next );
     });
 });
-
+/*router.delete('/tenant/:tenantid', function(req,res){
+ callDbAndRespond(req,res, function(req,res,db, next){
+ db.collection('tenant').deleteMany({"tenantid":req.params.tenantid}, next);
+ });
+ });*/
 ////////////////////////////
 // TENANT related APIS  //
 // END                    //
