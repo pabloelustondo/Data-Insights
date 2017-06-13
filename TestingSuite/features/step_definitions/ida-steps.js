@@ -149,9 +149,10 @@ Cucumber.defineSupportCode(function(context) {
 
     //check response code
     Then(/^response code must be (.*)$/, function (response, callback) {
+        var resString = JSON.stringify(responseData).toLowerCase();
         if (parseInt(response) != parseInt(responseCode)) {
             //console.log('Error: '+ responseData);
-            throw new Error('Response code should be ' + response + ' but is ' + responseCode);
+            throw new Error('Response code should be ' + response +' but is ' + responseCode +'\n Error:'+ resString);
 
         };
         callback();

@@ -36,6 +36,7 @@
     "body-parser": "1.15.2",
     "chai": "3.5.0",
     "cp-cli": "^1.0.2",
+    "cucumber": "^2.3.1",
     "express": "4.14.0",
     "express-winston": "2.1.2",
     "helmet": "3.4.1",
