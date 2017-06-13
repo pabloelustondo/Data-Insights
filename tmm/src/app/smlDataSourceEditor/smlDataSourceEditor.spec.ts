@@ -38,7 +38,7 @@ describe('The SML Data Source Editor Component', () => {
       id: 'karmaTest',
       name: 'karmaTest'
     };
-    this.editor.set(this.dataSource);
+    this.editor.set(this.component.dataSource);
     let savedObject = this.editor.get();
     expect(savedObject).toBe(this.component.dataSource);
   });

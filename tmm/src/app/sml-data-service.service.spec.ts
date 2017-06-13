@@ -8,8 +8,4 @@ describe('SmlDataServiceService', () => {
       providers: [SmlDataServiceService]
     });
   });
-
-  it('should ...', inject([SmlDataServiceService], (service: SmlDataServiceService) => {
-    expect(service).toBeTruthy();
-  }));
 });
