@@ -49,7 +49,7 @@ Cucumber.defineSupportCode(function(context) {
 
     // Request Structure
     var options  = {
-        'url': '',
+        'uri': '',
         'rejectUnauthorized': false,
         'headers' : {
             'Content-Type': 'application/json',
@@ -123,11 +123,11 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-    Given(/^I POST with enrollment data for {stringInDoubleQuotes}$/, function(stringInDoubleQuotes, callback){
+    Given("I POST with enrollment data for {stringInDoubleQuotes}", function(stringInDoubleQuotes, callback){
         resetOptions('/enrollments');
         resetFormOldValues(stringInDoubleQuotes);
         //options.baseUrl = 'https://dev2012r2-sk.sotidev.com:3003/#/';
-
+        //console.log(options);
         Request.post(options, function (error, response, body) {
             testBody = body;
             testResponse = response;
@@ -403,11 +403,10 @@ Cucumber.defineSupportCode(function(context) {
             accountid: 'external_user',
             apikey: '244cc44394ba4efd8fe38297ee8213d3',
             clientsecret: '1',
-            domainid: 'bdd_old_account',
+            domainid: tenant,
             mcurl: 'https://cad099.corp.soti.net/MobiControl',
             password: '1',
-            username: 'administrator',
-            tenantid: tenant,
+            username: 'administrator'
         };
     }
 

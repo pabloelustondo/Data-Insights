@@ -8,8 +8,8 @@ Feature: DSS API Tests
     Then response code should be 400
 
   Scenario: As an administrator I want to enroll a new tenant
-    Given I delete "new_tenant"
-    Then I POST with enrollment data for "new_tenant"
+   # Given I delete "new_tenant"
+    Given I POST with enrollment data for "new_tenant"
     Then The HTTP Code should be 200
     Then The response's id_token should be valid
 
