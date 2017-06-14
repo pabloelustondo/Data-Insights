@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cdl-svc
+  namespace: stage
+  labels:
+    app: cdl-svc
+spec:
+  selector:
+    app: cdl
+  ports:
+  - name: tcp
+    port: 8020
+    protocol: TCP
+  type: ClusterIP

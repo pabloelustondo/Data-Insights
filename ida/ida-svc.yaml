@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ida-svc
+  namespace: stage
+  labels:
+    app: ida-svc
+spec:
+  selector:
+    app: ida
+  ports:
+  - name: 
+    port: 8027
+    protocol: TCP
+  type: ClusterIP

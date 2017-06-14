@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: oda
+  namespace: stage
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: oda
+    spec:
+      containers:
+      - name: oda
+        image: kube-registry.kube-system.svc.cluster.local:31000/oda:sprint-15
+        ports:
+        - containerPort: 8000

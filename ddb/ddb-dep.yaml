@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ddp
+  namespace: stage
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ddp
+    spec:
+      containers:
+      - name: ddp
+        image: kube-registry.kube-system.svc.cluster.local:31000/ida:sprint-15
+        ports:
+        - containerPort: 8000
