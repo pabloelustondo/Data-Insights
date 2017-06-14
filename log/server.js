@@ -157,7 +157,8 @@ router.get('/silog', function(req,res){
     });
 });
 
-router.post('/silog/:tenantid', function(req,res){
+//router.post('/silog/:tenantid', function(req,res){
+router.post('/silog', function(req,res){
 // router.post('/silog', function(req,res){
     if (checksilogRequest(req,res)) {
         callDbAndRespond(req, res, function (req, res, db, next) {
