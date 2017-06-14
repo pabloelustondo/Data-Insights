@@ -9,24 +9,24 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
   {
     id: 'Doga',  //id of the metadata
     name: 'Data Source',
-    tenantId: '0121',
+    tenantId: 'testtenant-testuser',
     dataSets: [{
       id: '10-22-1',
       name: 'Test Data Set 01',
       from: ['Doga Ister'],
       persist: true,
-      filter: '/&AS/',
-      merge: '09-21-31$F',
-      projections: '',
+      filter: ['/&AS/'],
+      merge: ['09-21-31$F'],
+      projections: [''],
       metadata: ['']
     }, {
       id: '101',
       name: 'Test Data Set 02',
       from: ['Ray Gervais'],
       persist: true,
-      filter: '/&asdasdasda/',
-      merge: '09-1231-31$F',
-      projections: '',
+      filter: ['/&asdasdasda/'],
+      merge: ['09-1231-31$F'],
+      projections: [''],
       metadata: ['']
     }],
     dataSource: [{

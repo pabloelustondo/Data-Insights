@@ -114,7 +114,7 @@ app.post('/data/request', function(req,res) {
             let dataSource = _.find(tenant.dataSources, ['dataSourceId', req.body.idaMetadata.dataSourceId]);
             let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
             let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
-            let collectionName = dataSetId + '.' + dataSource['dataSourceId'];
+            let collectionName = dataSetId ;
 
             DataProjections(req.body.clientData, projections).then(function (data) {
                 uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
@@ -163,7 +163,7 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
         console.log('projections \t ' + JSON.stringify(projections));
         let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
 
-        let collectionName = dataSetId + '.' + dataSource['dataSourceId'];
+        let collectionName = dataSetId;
 
         DataProjections(clientData, projections).then(function (data) {
             uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
@@ -265,7 +265,7 @@ if (config.useSSL) {
                         console.log('json = ' + JSON.stringify(data));
 
                     //    publishTransactionLog( idaMetadata, clientMetadata, clientData);
-                        processCleanedData( idaMetadata, clientMetadata, clientData);
+                    //    processCleanedData( idaMetadata, clientMetadata, clientData);
                     } catch (e) {
                         console.log('not json format' + message.value);
                     }

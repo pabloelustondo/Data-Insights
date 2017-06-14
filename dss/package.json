@@ -32,7 +32,10 @@
     "jwt-decode": "^2.0.1",
     "node-uuid": "1.4.7",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "extract-text-webpack-plugin" : "^2.0.0-beta",
+    "webpack" : "^2.2.0"
+
   },
   "devDependencies": {
     "@angular/cli": "1.0.0",

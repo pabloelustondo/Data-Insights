@@ -19,7 +19,7 @@
             "name": "I set the xaccesskey",
             "result": {
               "status": "passed",
-              "duration": 2
+              "duration": 1
             },
             "line": 11,
             "match": {
@@ -32,7 +32,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 12,
             "match": {
@@ -45,7 +45,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 60
+              "duration": 82
             },
             "line": 13,
             "match": {
@@ -84,7 +84,7 @@
             "name": "AuthorizationToken is not empty",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 16,
             "match": {
@@ -97,7 +97,7 @@
             "name": "I store the returned value in file named AuthorizationToken",
             "result": {
               "status": "passed",
-              "duration": 2
+              "duration": 1
             },
             "line": 17,
             "match": {
@@ -119,11 +119,11 @@
             "name": "I set the xaccesskey to a modified JWT",
             "result": {
               "status": "passed",
-              "duration": 3
+              "duration": 2
             },
             "line": 20,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:178"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:179"
             }
           },
           {
@@ -132,7 +132,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 21,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 19
+              "duration": 17
             },
             "line": 22,
             "match": {
@@ -159,7 +159,7 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 200 but is 500\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:154:19)"
+              "error_message": "Error: Response code should be 200 but is 500\n Error:\"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
             },
             "line": 23,
             "match": {
@@ -175,7 +175,7 @@
             },
             "line": 24,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:165"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166"
             }
           }
         ]
@@ -193,7 +193,7 @@
             "name": "I set the temporary AuthorizationToken",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 27,
             "match": {
@@ -206,7 +206,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 28,
             "match": {
@@ -219,7 +219,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 4
+              "duration": 7
             },
             "line": 29,
             "match": {
@@ -233,7 +233,7 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 200 but is 500\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:154:19)"
+              "error_message": "Error: Response code should be 200 but is 500\n Error:\"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
             },
             "line": 30,
             "match": {
@@ -267,11 +267,11 @@
             "name": "I set the AuthorizationToken to invalid token",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 34,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:160"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:161"
             }
           },
           {
@@ -280,7 +280,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 35,
             "match": {
@@ -293,7 +293,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 31
+              "duration": 5
             },
             "line": 36,
             "match": {
@@ -306,12 +306,12 @@
             "name": "response body should be empty or contain error",
             "result": {
               "status": "failed",
-              "duration": 0,
-              "error_message": "Error: response body should be empty or contain error but is: \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:171:23)"
+              "duration": 1,
+              "error_message": "Error: response body should be empty or contain error but is: \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:172:23)"
             },
             "line": 38,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:165"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166"
             }
           }
         ]

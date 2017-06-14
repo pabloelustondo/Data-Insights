@@ -262,8 +262,8 @@ pre {
           <a class="navbar-brand">Cucumberjs Report</a>
           <div class="project-name visible-md visible-lg">testingsuite</div>
           <div class="label-container">
-            <span class="label label-success" title=scenarios>Passed: 2</span>
-            <span class="label label-danger" title=scenarios>Failed: 0</span>
+            <span class="label label-success" title=scenarios>Passed: 1</span>
+            <span class="label label-danger" title=scenarios>Failed: 1</span>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ pre {
 
     <div class="container">
 
-      <div class="generated-on">Mon Jun 12 2017 12:11:29 GMT-0400 (Eastern Daylight Time)</div>
+      <div class="generated-on">Wed Jun 14 2017 10:55:53 GMT-0400 (Eastern Daylight Time)</div>
 
       <div class="row">
         <div class="chart col-lg-6 col-md-6" id="piechart_features"></div>
@@ -362,8 +362,8 @@ pre {
                         <i class="glyphicon glyphicon-chevron-down"></i>
                         <b>Feature:</b>Extend ODA with Pub/Sub (for DAD/3rd party apps)
                         <span class="label-container">
-              <span class="label label-success" title="2 Scenarios Passed">2</span>
-              
+              <span class="label label-success" title="1 Scenarios Passed">1</span>
+              <span class="label label-danger" title="1 Scenarios Failed">1</span>
               
               
               
@@ -585,18 +585,18 @@ pre {
                                 <a data-toggle="collapse" href="#collapseScenariotestingsuite0_1">
                                     <div>
 
-                                        <div style="padding-right: 30px">
+                                        <div style="padding-right: 70px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
                                             <b>Scenario:</b>As an admininstrator I want to subscribe to a topic
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="5 Steps Passed">5</span>
+                              <span class="label label-success" title="3 Steps Passed">3</span>
                               
                               
-                              
-                              
+                              <span class="label label-warning" title="1 Steps Skipped">1</span>
+                              <span class="label label-danger" title="1 Steps Failed">1</span>
                               
                             </span>
                                         </div>
@@ -620,10 +620,6 @@ pre {
                         <span class="keyword highlight">Given </span>
                           <span> I set valid request header and body for POST call to ~/query with metadata id</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
-                            
                          
                             
                           
@@ -654,10 +650,6 @@ pre {
                         <span class="keyword highlight">And </span>
                           <span> I grab ODA port number from globalconfig.json</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
-                            
                          
                             
                           
@@ -715,7 +707,7 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    <span class="label label-danger" title="Failed"><i class="glyphicon glyphicon-remove"></i></span>
                                     
                                     
                                     <span class="text">
@@ -729,6 +721,13 @@ pre {
                                     
                                     
 
+                                    
+                                    <a href="#error0_13" data-toggle="collapse">+ Show Error</a>
+                                    <div id="error0_13" class="collapse">
+                                        <pre class=info>Error: Response code should be 200 but is 500
+ Error:"500 - \"(!doctype html)\\n(html lang=\\\"en\\\")\\n(head)\\n(meta charset=\\\"utf-8\\\")\\n(title)error(/title)\\n(/head)\\n(body)\\n(pre)typeerror: cannot read property &#39;datasources&#39; of undefined(br) &nbsp; &nbsp;at object.processrequest (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\services\\\\dataservice.js:89:30)(br) &nbsp; &nbsp;at c:\\\\customerbi2\\\\customerbi\\\\dps\\\\server.js:143:23(br) &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\layer.js:95:5)(br) &nbsp; &nbsp;at next (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\route.js:137:13)(br) &nbsp; &nbsp;at route.dispatch (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\route.js:112:3)(br) &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\layer.js:95:5)(br) &nbsp; &nbsp;at c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\index.js:281:22(br) &nbsp; &nbsp;at function.process_params (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\index.js:335:12)(br) &nbsp; &nbsp;at next (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\index.js:275:10)(br) &nbsp; &nbsp;at cors (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\cors\\\\lib\\\\index.js:185:7)(br) &nbsp; &nbsp;at c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\cors\\\\lib\\\\index.js:221:17(br) &nbsp; &nbsp;at origincallback (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\cors\\\\lib\\\\index.js:211:15)(br) &nbsp; &nbsp;at c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\cors\\\\lib\\\\index.js:216:13(br) &nbsp; &nbsp;at optionscallback (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\cors\\\\lib\\\\index.js:196:9)(br) &nbsp; &nbsp;at corsmiddleware (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\cors\\\\lib\\\\index.js:201:7)(br) &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\layer.js:95:5)(br) &nbsp; &nbsp;at trim_prefix (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\index.js:317:13)(br) &nbsp; &nbsp;at c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\index.js:284:7(br) &nbsp; &nbsp;at function.process_params (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\index.js:335:12)(br) &nbsp; &nbsp;at immediate.next (c:\\\\customerbi2\\\\customerbi\\\\dps\\\\node_modules\\\\express\\\\lib\\\\router\\\\index.js:275:10)(br) &nbsp; &nbsp;at runcallback (timers.js:653:20)(br) &nbsp; &nbsp;at tryonimmediate (timers.js:624:5)(/pre)\\n(/body)\\n(/html)\\n\""
+    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\oda-steps.js:125:19)</pre>
+                                    </div>
                                     
 
                                     
@@ -745,7 +744,7 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    <span class="label label-warning" title="Skipped"><i class="glyphicon glyphicon-minus"></i></span>
                                     
                                     
                                     <span class="text">
@@ -806,15 +805,15 @@ pre {
         google.load("visualization", "1", {packages: ["corechart"]});
         google.setOnLoadCallback(function() {drawChart({
                                                             "title" : "Features",
-                                                            "failed" : 0,
-                                                            "passed" : 1,
+                                                            "failed" : 1,
+                                                            "passed" : 0,
                                                             "ambiguous" : 0
                                                         })
                                             });
         google.setOnLoadCallback(function() {drawChart({
                                                             "title" : "Scenarios",
-                                                            "failed" : 0,
-                                                            "passed" : 2,
+                                                            "failed" : 1,
+                                                            "passed" : 1,
                                                             "notdefined" : 0,
                                                             "pending" : 0,
                                                             "skipped" : 0,

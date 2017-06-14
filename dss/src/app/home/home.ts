@@ -9,9 +9,10 @@ declare var window: any;
 let appconfig = require('../../../appconfig.json');
 let globalconfig = require('../../../globalconfig.json');
 
+
 Object.keys(appconfig).forEach(function(key){
   globalconfig[key] = appconfig[key];
-})
+});
 appconfig = globalconfig;
 
 
@@ -26,7 +27,7 @@ export type DataSourceTypeOptions = 'Mobicontrol' | 'NextBus' | 'Other...';
 
 @Component({
   selector: 'home',
-  template: template,
+  templateUrl: 'home.html',
   styles: [ styles ]
 })
 export class Home {
@@ -280,5 +281,10 @@ export class Home {
           error => this.response = error.text()
         );
     }
+  }
+
+  goToDashboard(event){
+    window.location.assign(globalconfig.dad_url);
+
   }
 }
