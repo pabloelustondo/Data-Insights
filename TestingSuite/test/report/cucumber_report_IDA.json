@@ -1,0 +1,384 @@
+[
+  {
+    "keyword": "Feature",
+    "line": 2,
+    "name": "IDA API Tests",
+    "tags": [],
+    "uri": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\IDA.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "line": 4,
+        "name": "As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints",
+        "tags": [],
+        "id": "ida-api-tests;as-an-administrator-i-want-to-get-a-temporary-authorization-token-from-ida-to-use-the-other-api-endpoints",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set the xaccesskey",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 5,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:58"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "grab and store IDA port number",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 6,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
+            "result": {
+              "status": "passed",
+              "duration": 61
+            },
+            "line": 7,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:68"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code must be 200",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 8,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "response body should be error-free",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 9,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:122"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "AuthorizationToken is not empty",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 10,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:116"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I store the returned value in file named AuthorizationToken",
+            "result": {
+              "status": "passed",
+              "duration": 2
+            },
+            "line": 11,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:139"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 13,
+        "name": "As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey",
+        "tags": [],
+        "id": "ida-api-tests;as-an-administrator-i-want-to-try-to-get-a-temporary-authorization-token-from-ida-to-use-the-other-api-endpoints-using-an-invalid-xaccesskey",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set the xaccesskey to a modified JWT",
+            "result": {
+              "status": "passed",
+              "duration": 3
+            },
+            "line": 14,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:179"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "grab and store IDA port number",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 15,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
+            "result": {
+              "status": "passed",
+              "duration": 12
+            },
+            "line": 16,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:68"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code must be 400",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: Response code should be 400 but is 500\n Error:\"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+            },
+            "line": 17,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response body should be empty or contain error",
+            "result": {
+              "status": "skipped"
+            },
+            "line": 18,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 20,
+        "name": "As an administrator I want to make a POST request to IDA using my temporary Authorization Token",
+        "tags": [],
+        "id": "ida-api-tests;as-an-administrator-i-want-to-make-a-post-request-to-ida-using-my-temporary-authorization-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set the temporary AuthorizationToken",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 21,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:84"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "grab and store IDA port number",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 22,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I Post :portnumber with example data",
+            "result": {
+              "status": "passed",
+              "duration": 6
+            },
+            "line": 23,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:92"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code must be 200",
+            "result": {
+              "status": "failed",
+              "duration": 1,
+              "error_message": "Error: Response code should be 200 but is 500\n Error:\"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+            },
+            "line": 24,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "response body should be a valid IDA-POST response",
+            "result": {
+              "status": "skipped"
+            },
+            "line": 25,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:130"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 27,
+        "name": "As an administrator I want to make a POST request to IDA using an invalid token",
+        "tags": [],
+        "id": "ida-api-tests;as-an-administrator-i-want-to-make-a-post-request-to-ida-using-an-invalid-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I set the AuthorizationToken to invalid token",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 28,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:161"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "grab and store IDA port number",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 29,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I Post :portnumber with example data",
+            "result": {
+              "status": "passed",
+              "duration": 6
+            },
+            "line": 30,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:92"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "response body should be empty or contain error",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: response body should be empty or contain error but is: \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:172:23)"
+            },
+            "line": 32,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 34,
+        "name": "As an administrator I want to validate that Kafka is receiving my posts to IDA",
+        "tags": [],
+        "id": "ida-api-tests;as-an-administrator-i-want-to-validate-that-kafka-is-receiving-my-posts-to-ida",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "grab IDA port number for kafka test",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 35,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\kafka-steps.js:38"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "Set headers and body for posting data to IDA",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 36,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\kafka-steps.js:51"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I Post :portnumber after setting headers and body",
+            "result": {
+              "status": "passed",
+              "duration": 6
+            },
+            "line": 37,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\kafka-steps.js:74"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "Kafka Consumer should receive some message without error",
+            "result": {
+              "status": "failed",
+              "duration": 77,
+              "error_message": "Error: Something went wrong: TopicsNotExistError: The topic(s) varun_test_idaSampleId2 do not exist\n    at Consumer.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\kafka-steps.js:116:23)\n    at emitOne (events.js:96:13)\n    at Consumer.emit (events.js:191:7)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\consumer.js:114:19\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\client.js:424:40\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:52:16\n    at done (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:246:17)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:44:16\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\client.js:432:7\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\zookeeper.js:348:7\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:165:26\n    at Object.async.whilst (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\node_modules\\async\\lib\\async.js:627:13)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\node_modules\\async\\lib\\async.js:623:23\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:145:21\n    at Object.callback (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:752:17)\n    at ConnectionManager.onSocketData (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\lib\\ConnectionManager.js:569:35)"
+            },
+            "line": 38,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\kafka-steps.js:95"
+            }
+          }
+        ]
+      }
+    ],
+    "id": "ida-api-tests"
+  }
+]
