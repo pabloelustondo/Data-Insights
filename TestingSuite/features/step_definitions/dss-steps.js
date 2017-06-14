@@ -2,7 +2,6 @@
 
 const Cucumber = require('cucumber');
 const Request = require('request');
-const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
 
 
@@ -74,11 +73,12 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then(/^The response should contain '(.*)'$/, function (response, callback) {
-        if(testBody === response) {
+        var resString = JSON.stringify(testBody).toLowerCase();
+        if(resString.includes(response.toLowerCase())) {
             callback();
         } else {
             console.error('Expected response: ' + response
-                + ', but received: ' + testBody);
+                + ', but received: ' + resString);
         }
     });
 
@@ -89,19 +89,6 @@ Cucumber.defineSupportCode(function(context) {
             testBody = body;
             testResponse = response;
             testJWT = response.id_token || '';
-            callback();
-        }).on('error', function (error) {
-            console.log("Error with Request:" + error);
-        });
-    });
-
-    Given(/^I submit using previously enrolled values$/, function (callback) {
-        resetOptions('/enrollments');
-        resetFormOldValues();
-
-        Request.post(options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
             callback();
         }).on('error', function (error) {
             console.log("Error with Request:" + error);
@@ -136,6 +123,22 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
+    Given(/^I POST with enrollment data for {stringInDoubleQuotes}$/, function(stringInDoubleQuotes, callback){
+        resetOptions('/enrollments');
+        resetFormOldValues(stringInDoubleQuotes);
+        //options.baseUrl = 'https://dev2012r2-sk.sotidev.com:3003/#/';
+
+        Request.post(options, function (error, response, body) {
+            testBody = body;
+            testResponse = response;
+            testJWT = JSON.stringify(testBody) || '';
+
+            callback();
+        }).on('error', function (error) {
+            console.log("Error with Request:" + error);
+        });
+    });
+
     Given(/^I do a '(.*)' request with valid values$/, function(httpCall, callback){
         resetFormValid('/enrollments');
 
@@ -151,6 +154,7 @@ Cucumber.defineSupportCode(function(context) {
             console.log("Error with Request:" + error);
         });
     });
+
 
     Then(/^The response should be a HTML Document -> (.*)$/, function (fileName, callback) {
         FS.readFile(fileName, 'utf8', function(error, contents) {
@@ -232,9 +236,9 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         }
     });
-    Given('grab DSS port number and url', function (callback) {
+    Given('grab DSS port number', function (callback) {
         // Write code here that turns the phrase above into concrete actions0
-        var dss_url = globalconfig.dss_url;
+        var dss_url = globalconfig.dssback_url;
         if(dss_url == "" || dss_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
         var port_str = dss_url.match("[0-9]+")[0];
         if(isNaN(port_str)){
@@ -261,7 +265,7 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     When('I POST :portnumber with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
-        options2.baseUrl = url + ':' + portnumber;
+        options2.baseUrl = url;
         options2.url = stringInDoubleQuotes;
         Request.post(options2, function (error, response, body) {
             if (error) {
@@ -354,17 +358,17 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('response body contain some sort of error', function (callback) {
+        var resString = JSON.stringify(responseData).toLowerCase();
         if(responseData['error'] || responseData['metaData'] == "Error") {
-            console.log(jsonObj.metadata);
-            throw new Error("This shouldn't pass what the hell");
+            throw new Error("This shouldn't pass what the hell: " + resString);
         }
         callback();
     });
 
     Then('response code should be {int}', function (int, callback) {
+        var resString = JSON.stringify(responseData).toLowerCase();
         if(responseCode != int) {
-            console.log('Error: '+ responseData);
-            throw new Error('Response should be :' + int + ', Got:' + responseCode);
+            throw new Error('Response should be :' + int + ', Got:' + responseCode+'\n '+ resString);
         }
         callback();
     });
@@ -394,7 +398,7 @@ Cucumber.defineSupportCode(function(context) {
         };
     }
 
-    function resetFormOldValues() {
+    function resetFormOldValues(tenant) {
         options.form = {
             accountid: 'external_user',
             apikey: '244cc44394ba4efd8fe38297ee8213d3',
@@ -403,14 +407,13 @@ Cucumber.defineSupportCode(function(context) {
             mcurl: 'https://cad099.corp.soti.net/MobiControl',
             password: '1',
             username: 'administrator',
-            tenantid: 'bdd_old_account'
+            tenantid: tenant,
         };
     }
 
-    function resetOptions(url) {
+    function resetOptions(endpoint) {
         options  = {
-            'url': url,
-            'baseUrl': 'https://10.0.91.25:3004/',
+            'uri': url + endpoint,
             'rejectUnauthorized': false,
             'headers' : {
                 'Content-Type': 'application/json',
