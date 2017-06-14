@@ -198,6 +198,11 @@ function checkTenantRequest(req, res){
     return true;
 }
 
+router.get('/tenants', function(req,res){
+    callDbAndRespond(req,res, function(req,res,db, next){
+        db.collection('tenant').find().toArray(next);
+    });
+});
 
 router.get('/tenants/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
