@@ -20,7 +20,7 @@ Background:
     Given I set the xaccesskey to a modified JWT
     And grab and store IDA port number
     When I make GET call to endpoint "/Security/getAuthorizationToken"
-    Then response code must be 200
+    Then response code must be 400
     Then response body should be empty or contain error
 
   Scenario: As an administrator I want to Post to /data
@@ -34,7 +34,7 @@ Background:
     Given I set the AuthorizationToken to invalid token
     And grab and store IDA port number
     When I Post :portnumber with example data
-    #Then response code must be 200
+    Then response code must be 400
     And response body should be empty or contain error
 
     #Todo: Query Mongo for the DataModel DataSet
