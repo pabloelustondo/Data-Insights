@@ -4,6 +4,7 @@ Feature: DSS API Tests
 
 
   Scenario: As an administrator I want to enroll
+  #  Given I delete previous test information
     Given I grab 'dssback' url from config file
     Given I create new user named "test1" with the following data:
       | accountid           |  apikey                          | clientsecret | domainid               | mcurl                                     |password|username          |
