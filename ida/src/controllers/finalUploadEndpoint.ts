@@ -159,40 +159,41 @@ export class UploadDataSetController {
 
                 // create
                 let kafkaClient = new kafka.Client(appConfig['kafka_url']);
-                try {
 
-                    let producer = new kafka.Producer(kafkaClient);
-
-                    producer.on('ready', function (message: any) {
-                        let payloads: any =  [
-                            {
-                                topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetdId,
-                                partition: 0,
-                                messages: data
-                            }];
-                        producer.send(payloads, function (err: any, data: any) {
-                            console.log(data);
-                            return Promise.resolve(data);
-                        });
-                        let transactionLogPayloads: any =  [
-                            {
-                                topic: jwtDecodedToken.tenatid + '_' + 'transactionLog',
-                                partition: 0,
-                                messages: JSON.stringify(data)
-                            }];
-                        producer.send(transactionLogPayloads, function (err: any, data: any) {
-                            console.log(data);
-                           // return Promise.resolve(data);
-                        });
+                    let promise = new Promise(function (resolve, reject) {
+                        try {
+                            let producer = new kafka.Producer(kafkaClient);
+                            producer.on('ready', function (message: any) {
+                                let payloads: any =  [
+                                    {
+                                        topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetId,
+                                        partition: 0,
+                                        messages: data
+                                    }];
+                                producer.send(payloads, function (err: any, data: any) {
+                                    console.log(data);
+                                    resolve(data);
+                                });
+                                let transactionLogPayloads: any =  [
+                                    {
+                                        topic: jwtDecodedToken.tenatid + '_' + 'transactionLog',
+                                        partition: 0,
+                                        messages: JSON.stringify(data)
+                                    }];
+                                producer.send(transactionLogPayloads, function (err: any, data: any) {
+                                    console.log(data);
+                                    // return Promise.resolve(data);
+                                });
+                            });
+                            producer.on('error', function (error: any) {
+                                console.log(error);
+                            });
+                        } catch (e) {
+                            console.log('IDA could not communicate with kafka producer');
+                        }
                     });
-                    producer.on('error', function (error: any) {
-                        console.log(error);
-                    });
 
-
-                } catch (e) {
-                    console.log('IDA could not communicate with kafka producer');
-                }
+                return promise;
                 // return rp(options);
             } else {
                 return new Error('invalid auth token');
@@ -204,7 +205,7 @@ export class UploadDataSetController {
             let promise = new Promise(function (resolve, reject) {
 
 
-                if (dpsResponse['status'] === 200) {
+                if (dpsResponse) {
                     let mData = ['awsResponse : boolean'];
 
                     const user: any = {
