@@ -207,6 +207,15 @@ Cucumber.defineSupportCode(function(context) {
         var ddb_url = globalconfig.ddb_url;
         if(ddb_url == "" || ddb_url == undefined) throw new Error('ddb url not in global config file');
         url = ddb_url
+        resetOptions("/tenant/"+stringInDoubleQuotes);
+        Request.delete(options, function (error, response, body) {
+            responseData = body;
+            responseCode = response.statusCode;
+            if(responseCode!=200 && responsedata.ok != 1){
+                console.error('Could not delete: '+ responseData);
+            }
+            callback();
+        });
         callback();
     });
 
