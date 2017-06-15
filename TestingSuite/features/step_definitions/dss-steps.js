@@ -50,14 +50,31 @@ Cucumber.defineSupportCode(function(context) {
         'headers' : {
             'Content-Type': 'application/json',
             'Keep-Alive': true,
-        },
-        'form': {
+            'Accept-Encoding': 'gzip,deflate'
         }
     };
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      Step Definitions
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    Given('I create new user named {stringInDoubleQuotes} with the following data:', function (stringInDoubleQuotes, table, callback) {
+        resetOptions('/enrollments');
+        options.form = table.hashes()[0];
+        //options.form.domainid = stringInDoubleQuotes;
+        //console.log(options);
+        Request.post(options, function (error, response, body) {
+            responseData = body;
+            responseCode = response.statusCode;
+            var resString = JSON.stringify(testBody).toLowerCase();
+            //console.log(testBody['id_token']);
+            if (testBody.includes('id_token')) {
+                callback();
+            } else
+                console.error(testResponse);
+        });
+    });
+
+
     Then(/^The HTTP Code should be (.*)$/, function (httpCode, callback) {
         if(httpCode) {
             callback();
@@ -119,7 +136,7 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-    Given("I POST with enrollment data for {stringInDoubleQuotes}", function(stringInDoubleQuotes, callback){
+    Given('I POST with enrollment data for {stringInDoubleQuotes}', function(stringInDoubleQuotes, callback){
         resetOptions('/enrollments');
         resetFormOldValues(stringInDoubleQuotes);
         //options.baseUrl = 'https://dev2012r2-sk.sotidev.com:3003/#/';
@@ -236,6 +253,7 @@ Cucumber.defineSupportCode(function(context) {
         if(tmp_url == "" || tmp_url == undefined) throw new Error(variable + ' url not in global config file');
         url = tmp_url
         callback();
+
     });
 
     Given('I set valid header and body for test_user', function (callback) {
@@ -391,10 +409,11 @@ Cucumber.defineSupportCode(function(context) {
             accountid: 'external_user',
             apikey: '244cc44394ba4efd8fe38297ee8213d3',
             clientsecret: '1',
-            domainid: tenant,
+            domainid: 'bdd_old_account',
             mcurl: 'https://cad099.corp.soti.net/MobiControl',
             password: '1',
-            username: 'administrator'
+            username: 'administrator',
+            tenantid: tenant,
         };
     }
 
