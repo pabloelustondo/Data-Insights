@@ -9,10 +9,8 @@ Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;
     var When = context.When;
     var Then = context.Then;
-
+    const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
     // Testing Values
-    var testResponse;
-    var testBody;
     var testJWT;
     var newUser;
     Request.debug = false;
@@ -28,10 +26,8 @@ Cucumber.defineSupportCode(function(context) {
     var downAgentId = "31940960-70f1-4d92-aedd-a148f19c8757";
     var delAgentId1 = "c4b1c820-48f6-4e9b-a100-bc714043dff3";
     var delAgentId2 = "a14e1739-18e0-44f9-9471-69e842be98ad";
-    //-------------------------------------------------------------
     var url = '';
-    //const globalconfig = require(process.cwd()+'\\..\\globalconfigs\\globalconfig_dev.json');
-    const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
+
     var options2  = {
         'url': '',
         'baseUrl': '',
@@ -68,12 +64,12 @@ Cucumber.defineSupportCode(function(context) {
         } else {
             console.error('Expected httpCode: ' + httpCode
                 + ', but received: ' + testResponse.statusCode);
-            console.error('Error Response :' + testBody);
+            console.error('Error Response :' + responseData);
         }
     });
 
     Then(/^The response should contain '(.*)'$/, function (response, callback) {
-        var resString = JSON.stringify(testBody).toLowerCase();
+        var resString = JSON.stringify(responseData).toLowerCase();
         if(resString.includes(response.toLowerCase())) {
             callback();
         } else {
@@ -86,8 +82,8 @@ Cucumber.defineSupportCode(function(context) {
         resetOptions('/enrollments');
 
         Request.post(options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
+            responseData = body;
+            responseCode = response.statusCode;
             testJWT = response.id_token || '';
             callback();
         }).on('error', function (error) {
@@ -100,8 +96,8 @@ Cucumber.defineSupportCode(function(context) {
         options.form[variable] = '';
 
         Request.post(options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
+            responseData = body;
+            responseCode = response.statusCode;
 
             callback();
         }).on('error', function (error) {
@@ -114,8 +110,8 @@ Cucumber.defineSupportCode(function(context) {
         options.form[variable.toLowerCase()] = value;
 
         Request.post(options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
+            responseData = body;
+            responseCode = response.statusCode;
 
             callback();
         }).on('error', function (error) {
@@ -128,11 +124,12 @@ Cucumber.defineSupportCode(function(context) {
         resetFormOldValues(stringInDoubleQuotes);
         //options.baseUrl = 'https://dev2012r2-sk.sotidev.com:3003/#/';
         //console.log(options);
+        //console.log(options);
         Request.post(options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
-            testJWT = JSON.stringify(testBody) || '';
-
+            responseData = body;
+            responseCode = response.statusCode;
+            testJWT = JSON.stringify(responseData) || '';
+            console.log(responseData);
             callback();
         }).on('error', function (error) {
             console.log("Error with Request:" + error);
@@ -145,9 +142,9 @@ Cucumber.defineSupportCode(function(context) {
         //options.baseUrl = 'https://dev2012r2-sk.sotidev.com:3003/#/';
 
         Request[httpCall.toLowerCase()](options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
-            testJWT = JSON.stringify(testBody) || '';
+            responseData = body;
+            responseCode = response.statusCode;
+            testJWT = JSON.stringify(responseData) || '';
 
             callback();
         }).on('error', function (error) {
@@ -164,17 +161,18 @@ Cucumber.defineSupportCode(function(context) {
             }
 
             //Remove Whitespace issues while comparing
-            if (contents.toString().replace(/\s/g, "") === testBody.toString().replace(/\s/g, "")) {
+            if (contents.toString().replace(/\s/g, "") === responseData.toString().replace(/\s/g, "")) {
                 callback();
             }
         })
     });
 
     Then(/^The response\'s id_token should be valid$/, function (callback) {
-        if(testJWT.includes("id_token")) {
+        if(responseData["id_token"]) {
             callback();
         } else {
-            console.error('Token was not found in response: ' + JSON.stringify(testBody));
+            console.log(responseData);
+            console.error('Token was not found in response: ' + JSON.stringify(responseData));
         }
     });
 
@@ -185,8 +183,8 @@ Cucumber.defineSupportCode(function(context) {
         };
 
         Request[httpCall.toLowerCase()](options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
+            responseData = body;
+            responseCode = response.statusCode;
 
             callback();
         }).on('error', function (error) {
@@ -200,8 +198,8 @@ Cucumber.defineSupportCode(function(context) {
             'domainid': ''
         };
         Request[httpCall.toLowerCase()](options, function (error, response, body) {
-            testBody = body;
-            testResponse = response;
+            responseData = body;
+            responseCode = response.statusCode;
 
             callback();
         }).on('error', function (error) {
@@ -210,7 +208,15 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //Shirley tests----------------------------------------------------------------------
-    Given('I set invalid header and body for test_user', function (callback) {
+    Given('I wipe the user {stringInDoubleQuotes} from DDB', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var ddb_url = globalconfig.ddb_url;
+        if(ddb_url == "" || ddb_url == undefined) throw new Error('ddb url not in global config file');
+        url = ddb_url
+        callback();
+    });
+
+    Given('I set header and body for test_user with invalid access token', function (callback) {
         options2.headers["x-access-token"] = invalidToken;
         options2.body = {
             'tenantid': "test_user",
@@ -224,31 +230,13 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given("grab IDA's port number", function (callback) {
+    Given(/^I grab '(.*)' url from config file$/, function (variable, callback) {
         // Write code here that turns the phrase above into concrete actions
-        var ida_url = appconfig.ida_url;
-        if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
-        var port_str = ida_url.match("[0-9]+")[0];
-        if(isNaN(port_str)){
-            throw new Error('Cannot get port: invalid global config file');
-        }else{
-            url = ida_url
-            callback();
-        }
+        var tmp_url = globalconfig[variable+'_url'];
+        if(tmp_url == "" || tmp_url == undefined) throw new Error(variable + ' url not in global config file');
+        url = tmp_url
+        callback();
     });
-    Given('grab DSS port number', function (callback) {
-        // Write code here that turns the phrase above into concrete actions0
-        var dss_url = globalconfig.dssback_url;
-        if(dss_url == "" || dss_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
-        var port_str = dss_url.match("[0-9]+")[0];
-        if(isNaN(port_str)){
-            throw new Error('Cannot get port: invalid global config file');
-        }else{
-            url = dss_url;
-            callback();
-        }
-    });
-
 
     Given('I set valid header and body for test_user', function (callback) {
         options2.headers['x-access-token'] = invalidToken;

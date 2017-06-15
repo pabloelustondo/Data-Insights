@@ -2,16 +2,17 @@ Feature: DSS API Tests
 
   #Enrollment
   Scenario: As an administrator I want to try to enroll a MobiControl data source using an invalid x-access-token
-    Given I set invalid header and body for test_user
-    And grab DSS port number
+    Given I set header and body for test_user with invalid access token
+    And I grab 'dssback' url from config file
     When I POST :portnumber with endpoint "registerDataSource"
     Then response code should be 400
 
   Scenario: As an administrator I want to enroll a new tenant
-   # Given I delete "new_tenant"
-    Given I POST with enrollment data for "new_tenant"
+    Given I wipe the user "new_tenant" from DDB
+    And I grab 'dssback' url from config file
+    And I POST with enrollment data for "new_tenant"
     Then The HTTP Code should be 200
-    Then The response's id_token should be valid
+    Then The response should contain 'id_token'
 
   Scenario: As an administrator I want to try to enroll with an existing tenant
     Given I POST with enrollment data for "new_tenant"
