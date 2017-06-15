@@ -206,7 +206,7 @@ export class UploadDataSetController {
 
 
                 if (dpsResponse) {
-                    let mData = ['awsResponse : boolean'];
+                    let mData = ['status : string'];
 
                     const user: any = {
                         createdAt: new Date(),
