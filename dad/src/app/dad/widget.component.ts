@@ -33,6 +33,7 @@ export class DadWidget extends DadElement{
 
                     <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('lalal')">Edit</div></button>
+                        <button class="dropdown-item" style="cursor:pointer;"> <div>Select a Data Set</div></button>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                         <button *ngIf="widget.type==0 && widget.metrics.length>2" class="dropdown-item" style="cursor:pointer;"> <div (click)="onMoreDetails('lalal')">More Details</div></button>
                         <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>

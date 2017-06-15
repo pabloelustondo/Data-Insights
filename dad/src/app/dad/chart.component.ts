@@ -43,6 +43,7 @@ export class DadChart extends DadElement {
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div>Select a Data Set</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>

@@ -9,8 +9,10 @@ import { ActivatedRoute} from '@angular/router';
 import {DadWidget} from "./widget.component";
 import {DadChart} from "./chart.component";
 import {DadTable} from "./table.component";
+import { DadElement } from './dadmodels';
 import { config } from "./appconfig";
 import { DadUser, DadElementType } from "./dadmodels";
+import { DadCrudComponent} from './crud.component';
 
 export class DadPage {
     id: string;
@@ -33,16 +35,21 @@ export class DadPage {
     template: `
    <div *ngIf="page" class="animated fadeIn">
         <div *ngIf="page.widgets" class="row">
-            <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
-                <dadwidget [widget]="widget" [page]="page"></dadwidget>
-            </div>
+            <button style="cursor:pointer" title="Click to add a new element" class="glyphicons glyphicons-plus pull-right" (click)="selectElement()"></button> <br/><br/>
+            <select *ngIf="selectingElement" [(ngModel)]="selectedValue" #selectedOption (change)="selectElement($event.target.value);" class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                     <option id="created" style="color:black;" *ngFor="let option of options; let i=index" value="{{i}}" [selected]="option.name" >{{ option.name }}</option>
+            </select>
+                  
+        <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
+            <dadwidget [widget]="widget" [page]="page"></dadwidget>
+        </div>
         </div>
         <div *ngIf="page.charts" class="row">
             <div *ngFor="let chart of page.charts">
                 <dadchart [chart]="chart"></dadchart>
             </div>
         </div>
-    </div>
+        </div>
     `
 })
 export class  DadPageComponent implements OnInit{
@@ -53,6 +60,7 @@ export class  DadPageComponent implements OnInit{
     page: DadPage;
     public id : string;
     user: DadUser;
+    selectingElement: boolean = false;
 
     constructor(private dadConfigService: DadConfigService,
                 private activatedRoute: ActivatedRoute
@@ -88,5 +96,13 @@ export class  DadPageComponent implements OnInit{
                 });
         }
     }
+
+
+    selectElement(){
+        if (!this.selectingElement) this.selectingElement = true;
+        else this.selectingElement = false;
+    }
+
+    selectDataSet(){}
 
 }

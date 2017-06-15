@@ -4,21 +4,34 @@ import { DadPage } from "../dad/page.component";
 import { DadConfigService, DadUserConfig } from '../dad/dadconfig.service';
 import { ActivatedRoute, Params} from '@angular/router';
 import { config } from "../dad/appconfig";
+import { DadCrudComponent } from '../dad/crud.component';
+import { DadConfigComponent } from '../dad/configuration.component';
 
 let appconfig = require("../../../appconfig.json");
 
 @Component({
     selector: 'app-dashboard',
     providers: [DadConfigService],
-    templateUrl: './full-layout.component.html'
+    templateUrl: './full-layout.component.html',
+    styles: [`.div_hover:hover{background-color:#2c3334}`]
 })
-export class FullLayoutComponent implements OnInit {
+export class FullLayoutComponent extends DadCrudComponent implements OnInit {
 
     user: DadUserConfig;
     testingmode:boolean;
-    parentRouter;
+    addingPage: boolean = false;
+    pageName: string;
+    chartids: string[];
+    widgetids: string[];
+    tableids: string[];
+    newPage: any;
+    public selectedPage: DadPage;
+    public pages: DadPage[];
+    public dirty:boolean = false;
 
-    constructor(private dadConfigService: DadConfigService,private activatedRoute: ActivatedRoute) {}
+    constructor(private dadConfigService: DadConfigService,private activatedRoute: ActivatedRoute) {
+        super();
+    }
 
     pagelinks: string[];
     pagenames: string[];
@@ -40,6 +53,41 @@ export class FullLayoutComponent implements OnInit {
         localStorage.removeItem('id_token');
         window.location.reload();
     }
+
+    addPage(){
+        this.newPage = new DadPage();
+        this.newPage.name = this.pageName;
+        this.newPage.id = this.pageName;
+        this.newPage.chartids = this.chartids;
+        this.newPage.widgetids = this.widgetids;
+        this.newPage.tableids = this.tableids;
+        this.newPage.elementType = 'page';
+        this.dadConfigService.saveOne(this.newPage);
+        this.dadConfigService.getConfig().then((config) => {
+            this.user = config;
+            let pagelinks = this.pagelinks = [];
+            let pagenames = this.pagenames = [];
+            config.configs.filter((config) => config.elementType==="page").forEach(function(page){
+                pagelinks.push("/dad/page/" + page.id);
+                pagenames.push(page.name);
+            });
+        });
+        this.addingNewPage();
+        this.clearField();
+    }
+
+    clearField(){
+        this.pageName = '';
+    }
+
+    addingNewPage(){
+        if (!this.addingPage) this.addingPage = true;
+        else this.addingPage = false;
+    }
+
+    //deletePage(){
+      //  DadConfigComponent.bind(this.deletePage());
+   // }
 
     ngOnInit(): void {
 
