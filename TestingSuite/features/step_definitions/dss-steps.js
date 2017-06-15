@@ -28,22 +28,7 @@ Cucumber.defineSupportCode(function(context) {
     var delAgentId2 = "a14e1739-18e0-44f9-9471-69e842be98ad";
     var url = '';
 
-    var options2  = {
-        'url': '',
-        'baseUrl': '',
-        'rejectUnauthorized': false,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Keep-Alive': true,
-            'x-access-token': ''
-        },
-        'form': {   },
-        'body': {   },
-        'preambleCRLF': '',
-        'postambleCRLF': ''
-    };
-
-    // Request Structure
+   // Request Structure
     var options  = {
         'uri': '',
         'rejectUnauthorized': false,
@@ -60,18 +45,10 @@ Cucumber.defineSupportCode(function(context) {
     Given('I create new user named {stringInDoubleQuotes} with the following data:', function (stringInDoubleQuotes, table, callback) {
         resetOptions('/enrollments');
         options.form = table.hashes()[0];
+        callback();
         //options.form.domainid = stringInDoubleQuotes;
         //console.log(options);
-        Request.post(options, function (error, response, body) {
-            responseData = body;
-            responseCode = response.statusCode;
-            var resString = JSON.stringify(testBody).toLowerCase();
-            //console.log(testBody['id_token']);
-            if (testBody.includes('id_token')) {
-                callback();
-            } else
-                console.error(testResponse);
-        });
+
     });
 
 
@@ -188,8 +165,8 @@ Cucumber.defineSupportCode(function(context) {
         if(responseData["id_token"]) {
             callback();
         } else {
-            console.log(responseData);
             console.error('Token was not found in response: ' + JSON.stringify(responseData));
+            throw new Error('Token was not found in response: ' + JSON.stringify(responseData));
         }
     });
 
@@ -233,17 +210,10 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set header and body for test_user with invalid access token', function (callback) {
-        options2.headers["x-access-token"] = invalidToken;
-        options2.body = {
-            'tenantid': "test_user",
-            'dataSourceType': "MobiControl",
-            'agentid': "asdas",
-            'data': {
-                'inputName': "mcurl",
-                'inputValue': mobiUrl
-            }
-        };
+    Given('I set header and body for test_user with invalid access token {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
+        options.headers["x-access-token"] = stringInDoubleQuotes;
+        options.form = table.hashes()[0];
+        options.uri = url;
         callback();
     });
 
@@ -270,18 +240,14 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I POST :portnumber with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
-        options2.baseUrl = url;
-        options2.url = stringInDoubleQuotes;
-        Request.post(options2, function (error, response, body) {
-            if (error) {
-                return console.error('upload failed:', error);
-            }
-            if(parseInt(response.statusCode) != 204) {
-                responseData = body;
-                responseCode = response.statusCode;
-                callback();
-            }
+    When('I POST with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+
+        options.uri = url+'/'+stringInDoubleQuotes;
+        Request.post(options, function (error, response, body) {
+            responseData = body;
+            responseCode = response.statusCode;
+            callback();
+
         });
     });
 
@@ -374,6 +340,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('response code should be {int}', function (int, callback) {
         var resString = JSON.stringify(responseData).toLowerCase();
         if(responseCode != int) {
+            console.error('Response should be :' + int + ', Got:' + responseCode+'\n '+ resString);
             throw new Error('Response should be :' + int + ', Got:' + responseCode+'\n '+ resString);
         }
         callback();
