@@ -71,7 +71,7 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I Post :portnumber after setting headers and body', function (callback) {
+    When('I make a POST call to /data', function (callback) {
         options.uri = url + "/data"
         Request(options, function (error, response, body) {
             if (error) {
@@ -97,7 +97,7 @@ Cucumber.defineSupportCode(function(context) {
         kafka_url = kafka_url.replace("http://", "");
         var kafkaClient = new kafka.Client(kafka_url);
 
-        var payloads =  [{ topic: 'test_idaSampleId2', partition: 0 }];
+        var payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];
         var options = {
             autoCommit: false,
             sessionTimeout: 4000
