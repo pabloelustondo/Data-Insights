@@ -219,7 +219,7 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set header and body for test_user with invalid access token {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
+    Given('I set header and body for test_user with access token {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
         options.headers["x-access-token"] = stringInDoubleQuotes;
         options.form = table.hashes()[0];
         options.uri = url;
@@ -256,7 +256,6 @@ Cucumber.defineSupportCode(function(context) {
             responseData = body;
             responseCode = response.statusCode;
             callback();
-
         });
     });
 
@@ -354,6 +353,21 @@ Cucumber.defineSupportCode(function(context) {
         }
         callback();
     });
+
+    Then(/^I store the response token in a file '(.*)'$/, function (variable,callback) {
+        //console.log(authorizationToken);
+        var responseJSON = JSON.parse(responseData);
+        validToken = responseJSON['id_token'];
+        FS.writeFile("features/assets/"+variable, validToken, function(err) {
+            if(err) {
+                throw new Error(err);
+            }
+            //console.log("The file was saved!");
+            callback();
+        });
+    });
+
+
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      UTILITIES
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
