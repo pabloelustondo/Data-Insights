@@ -21,7 +21,7 @@ import { RouterModule } from "@angular/router";
     FormsModule,
     HttpModule,
     RouterModule.forRoot ([{
-      path: ':tID', component: smlTenantMetadataEditor
+      path: ':tenantId', component: smlTenantMetadataEditor
     }])
   ],
   bootstrap: [AppComponent],

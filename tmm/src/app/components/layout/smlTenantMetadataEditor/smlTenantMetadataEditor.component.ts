@@ -2,7 +2,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { DataSourceList } from './tmmModels';
 import { SmlTenantMetadata } from '../../../../sml/sml';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 import { SmlDataService } from '../../../../sml/data.service';
 import { smlTenantMetadataSample, smlTenantMetadataEmpty } from './jsonEditorSchema.configuration';
@@ -47,25 +47,32 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   index: number = 0;
   urlId: any;
 
-  constructor(private tmmConfigService: TmmConfigService, private router: Router) {
+  constructor(private tmmConfigService: TmmConfigService, private activatedRoute: ActivatedRoute) {
     //console.log(router);
   }
 
   ngOnInit() {
-    this.urlId = this.router.url;
-    console.log(this.urlId);
-    this.tmmConfigService.getTenantMetadata(this.urlId).then(data => {
-        if (data && data._body) {
-          try {
-            let response = JSON.parse(data._body);
-            console.log(response);
-            this.tenantMetadata.dataSets = response[0].dataSets;
-          } catch (err) {
-            console.error(new Error(err));
+    //this.urlId = this.router.url;
+    this.activatedRoute.params.subscribe((params: Params) => {
+
+      this.urlId = params['tenantId'];
+      console.log(this.urlId);
+
+      this.tmmConfigService.getTenantMetadata(this.urlId).then(data => {
+          if (data && data._body) {
+            try {
+              let response = JSON.parse(data._body);
+              console.log(response);
+              this.tenantMetadata.dataSets = response[0].dataSets;
+            } catch (err) {
+              console.error(new Error(err));
+            }
           }
         }
-      }
-    );
+      );
+    });
+
+
     console.log(this.tenantMetadata);
   }
 
