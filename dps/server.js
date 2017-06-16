@@ -12,6 +12,8 @@ var _ = require('lodash');
 var config = require('./config.json');
 var appconfig = require('./appconfig.json');
 var rp = require("request-promise");
+var kafka = require('kafka-node');
+var ConsumerGroup = kafka.ConsumerGroup;
 var app = express();
 var mongodb = require('mongodb').MongoClient;
 var rawDataLakeService_1 = require("./services/rawDataLakeService");
@@ -31,8 +33,6 @@ appconfig = globalconfig;
 global.appconfig = appconfig;
 console.log("configuration");
 console.log(appconfig);
-var kafka = require('kafka-node');
-var ConsumerGroup = kafka.ConsumerGroup;
 ////////////////////////
 // Express stuff
 var db = new databaseService_1.DatabaseService(appconfig.ddb_address);
@@ -111,9 +111,6 @@ function publishTransactionLog(idaMetadata, clientMetadata, clientData) {
 function processCleanedData(idaMetadata, clientMetadata, clientData) {
     var tenantId = idaMetadata.tenantId;
     var dataSourceId = idaMetadata.dataSourceId;
-    //  console.log('tenantID ' + tenantId);
-    //   console.log('dataSourceId ' + dataSourceId);
-    // massage and clean up data before sending to database layer
     var db = app.get('db'); //get db
     var tenant = db.getTenant(idaMetadata.tenantId); //get the tenant for request
     if (tenant) {
@@ -123,16 +120,39 @@ function processCleanedData(idaMetadata, clientMetadata, clientData) {
         var dataSetId = dataSet.id; //get the id
         var collectionName_2 = dataSetId;
         projection_1.DataProjections(clientData, projections).then(function (data) {
+            //upload to database
             rawDataLakeService_1.uploadModifiedData(tenant.tenantId, collectionName_2, data).then(function (response) {
                 console.log('Final response' + JSON.stringify(response));
             }, function (error) {
                 console.log(error);
             });
+            // make it ready for consumption right away
+            publishCleanedDataToKafka('undefined_cleanedData', tenant.tenantId, data);
         });
     }
     else {
         console.log('tenantId not found');
     }
+}
+function publishCleanedDataToKafka(topic, tenantId, data) {
+    var kafkaClient = new kafka.Client(globalconfig['kafka_url']);
+    var producer = new kafka.Producer(kafkaClient);
+    producer.on('ready', function (message) {
+        var payloads = [
+            {
+                topic: topic,
+                partition: 0,
+                messages: JSON.stringify(data)
+            }
+        ];
+        producer.send(payloads, function (err, data) {
+            console.log(data);
+            // return Promise.resolve(data);
+        });
+    });
+    producer.on('error', function (error) {
+        console.log(error);
+    });
 }
 app.post('/data/outGoingRequest', function (req, res) {
     var metadata = req.body.metadata;
@@ -231,49 +251,6 @@ else {
                 }
                 // console.log('message' + message);
             });
-            /*            let payloads = [];
-                        for (let dataSet of dataSets) {
-                            payloads.push ({
-                                topic : 'undefined_'+ dataSet.dataSet.id
-                            });
-                        }
-            */
-            /*let payloads =  [{ topic: 'undefined_transactionLogs' }];
-
-            let options = { autoCommit: false};
-            let kafkaOptions = { autoCommit: false};
-            try {
-
-                let consumer = new kafka.Consumer(kafkaClient, payloads, options);
-
-                consumer.on('message', function (message: any) {
-                    try {
-                        let data = JSON.parse(message.value);
-
-                        let idaMetadata = data.idaMetadata;
-                        let clientData = data.clientData;
-                        let clientMetadata = data.clientMetadata;
-
-                        console.log('json = ' + JSON.stringify(data));
-
-                      //  publishTransactionLog( idaMetadata, clientMetadata, clientData);
-                      //  processCleanedData( idaMetadata, clientMetadata, clientData);
-                    } catch (e) {
-                        console.log('not json format' + message.value);
-                    }
-                });
-
-                consumer.on('error', function (err: any) {
-
-                    console.log('varun');
-                    console.log(err);
-                })
-
-            } catch (e) {
-                console.log('DPS could not communicate with kafka producer');
-            }
-
-*/
         });
         // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
         setInterval(function () {
