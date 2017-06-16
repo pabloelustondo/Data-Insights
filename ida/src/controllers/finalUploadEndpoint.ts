@@ -166,7 +166,7 @@ export class UploadDataSetController {
                                     {
                                         topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetId,
                                         partition: 0,
-                                        messages: data
+                                        messages: JSON.stringify(data)
                                     }];
                                 producer.send(payloads, function (err: any, data: any) {
                                     console.log(data);
