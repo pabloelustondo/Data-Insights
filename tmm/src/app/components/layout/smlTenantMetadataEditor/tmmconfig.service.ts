@@ -4,6 +4,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { config } from "../../../../../appconfig";
+import { smlTenantMetadataSample, smlTenantMetadataEmpty } from './jsonEditorSchema.configuration';
 
 @Injectable()
 export class TmmConfigService {
@@ -15,10 +17,13 @@ export class TmmConfigService {
   constructor(private http: Http) {}
 
   deleteUserByTenantId(tenantid) {
-    return this.http.delete('http://localhost:8029/tenant/' + tenantid);
+    if (config.ddb_url != "") {
+      return this.http.delete(config.ddb_url + '/tenant/' + tenantid);
+    }
   }
 
   saveDataByTenantId(tenantid, tmtMetadata) {
+    if (config.ddb_url != "") {
     console.log(tmtMetadata);
     let url = 'http://localhost:8029/tenant/' + tmtMetadata.tenantId;
     this.http.post(url, tmtMetadata).toPromise().then(
@@ -30,10 +35,18 @@ export class TmmConfigService {
         console.log('configuration failed to save');
       }
     );
-  }
+  }}
 
   public getTenantMetadata(tenantId): Promise<any> {
+    if (config.ddb_url != "") {
     let url = 'http://localhost:8029/tenant/' + tenantId;
     return this.http.get(url).toPromise();
+  }else {
+
+      return Promise.resolve(smlTenantMetadataSample);
+    }
+
+
   }
+
 }
