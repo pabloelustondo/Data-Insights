@@ -1,12 +1,10 @@
 /**
  * Created by vdave on 5/8/2017.
  */
-import {MongoClient, Db} from "mongodb";
-var mongodb = require('mongodb').MongoClient;
-let config = require('../config.json');
-let appconfig = require('../appconfig.json');
-let globalConfig = require('../globalconfig.json');
-let sampletenants = require('../testing/sampleTenants.json');
+let config = require('../../config.json');
+let appconfig = require('../../appconfig.json');
+let globalConfig = require('../../globalconfig.json');
+let sampletenants = require('../../testing/sampleTenants.json');
 let _ = require('lodash');
 import * as rp from 'request-promise';
 
@@ -66,6 +64,13 @@ export class DatabaseService {
         return dataSets;
     }
 
+    public getDbFromDataService (){
+        let server = require('../server');
+        let app = server.app;
+        let db = app.get('db');
+        return app.get('db');
+    }
+
     public getTenant(tenantId: string) {
         if (this.tenants) {
             return _.find(this.tenants, ['tenantId', tenantId]);
@@ -92,26 +97,4 @@ export class DatabaseService {
         }
     }
 
-
-    public callDbAndRespond(req,res,query){
-    //this function opens a connection to the tenant db and calls the specific query.
-    //when this is do it returns the http response.
-    //the inout parameter query contains the actual query to be executed against to db
-    var uri = '1234'; // one database per tenant
-    //check uri and make sure we have rights
-    mongodb.connect(uri,function(err,db:Db){
-        if (err) {
-            res.send({data:null, status:err });
-        }
-        else query(req,res,db,function(err,doc){
-            if (doc !== null) {
-                res.status(200).send(doc);
-            }
-            else {
-                res.status(404).send("No Results are returned");
-            }
-            db.close();
-        });
-    });
-}
 }
