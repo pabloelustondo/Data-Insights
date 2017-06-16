@@ -63,6 +63,7 @@ Cucumber.defineSupportCode(function(context) {
         options['method'] = 'GET';
         callback();
     });
+
     Given('response body should contain a temporary token', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         if(responseData['session_token']!=undefined){
@@ -72,7 +73,6 @@ Cucumber.defineSupportCode(function(context) {
             console.error('Response body does not contain temp token');
             return new Error('Response body does not contain temp token');
         }
-
     });
 
     Given(/^I set up request for making get call to '(.*)'$/, function (variable, callback) {
@@ -99,6 +99,10 @@ Cucumber.defineSupportCode(function(context) {
 
     Then('I get the agentID of a data source', function (callback) {
         // Write code here that turns the phrase above into concrete actions
+        if(responseData[0] == undefined || responseData[0].agentId == undefined){
+            console.log(responseData);
+            console.error("data sources undefined");
+        }
         agentID = responseData[0].agentId;
         callback();
     });
@@ -111,7 +115,6 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     When('I make a POST call', function (callback) {
-
         Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -129,15 +132,13 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('response body should be error-free', function (callback) {
-
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (resString.includes('error'))
+        if (resString.includes('error') || resString.includes('invalid'))
             throw new Error(resString);
         callback();
     });
 
     Then('response body should be a valid IDA-POST response', function (callback) {
-
         var resString = JSON.stringify(responseData).toLowerCase();
          if (resString.includes('error') && !resString.includes('createdat') && !resString.includes('awsresponse'))
             throw new Error(resString);
@@ -168,12 +169,12 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Given('I set the AuthorizationToken to invalid token', function (callback) {
-        authorizationToken = xaccessToken;
+        authorizationToken = "iasdlkjaskdjklajsdklajsdkljaskldjaskldjaskldjaskldjlaskdjlaks.asjdhajkdhajksdhjkashdjkahskdjhakjshkjasd.asdhgasdhgashdjasghdhjsgahj";
         callback();
     });
 
     Then('response body should be empty or contain error', function (callback) {
-        if (responseData == undefined){
+        if (responseData == undefined || responseData == ""){
             callback();
         }else{
             var resString = JSON.stringify(responseData).toLowerCase();
@@ -182,10 +183,9 @@ Cucumber.defineSupportCode(function(context) {
             }
             callback();
         }
-
     });
 
-    Given('I modify the xaccesskey to a different JWT', function (callback) {
+    Given('I modify the xaccesskey to an invalid JWT', function (callback) {
         var tenantId = 'Varun_is_lame';
         var jwtPayload = {
             tenantid: tenantId,

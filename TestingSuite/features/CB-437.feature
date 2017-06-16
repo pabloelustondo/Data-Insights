@@ -6,8 +6,6 @@ based on given data set metadata definition we should be able to return merged d
 
   Scenario: Return Merged DataSet
     Given I set valid request header and body for POST call to ~/query
-      | tenantid        |  dataSourceType | agentid    | data                                      |
-      | test_user		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
     And I grab ODA port number from globalconfig.json
     And I make a POST call to ~/query
     Then response code is :200
