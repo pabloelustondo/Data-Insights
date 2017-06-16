@@ -24,29 +24,26 @@ export class TmmConfigService {
 
   saveDataByTenantId(tenantid, tmtMetadata) {
     if (config.ddb_url != "") {
-    console.log(tmtMetadata);
-    let url = 'http://localhost:8029/tenant/' + tmtMetadata.tenantId;
-    this.http.post(url, tmtMetadata).toPromise().then(
-      (res: Response) => {
-        console.log((res));
-      }).catch(
-      (error) => {
-        alert("Failed to save configuration to database " + error);
-        console.log('configuration failed to save');
-      }
-    );
-  }}
+      console.log(tmtMetadata);
+      let url = 'http://localhost:8029/tenant/' + tmtMetadata.tenantId;
+      this.http.post(url, tmtMetadata).toPromise().then(
+        (res: Response) => {
+          console.log((res));
+        }).catch(
+        (error) => {
+          alert("Failed to save configuration to database " + error);
+          console.log('configuration failed to save');
+        }
+      );
+    }
+  }
 
   public getTenantMetadata(tenantId): Promise<any> {
     if (config.ddb_url != "") {
-    let url = 'http://localhost:8029/tenant/' + tenantId;
-    return this.http.get(url).toPromise();
-  }else {
-
+      let url = 'http://localhost:8029/tenant/' + tenantId;
+      return this.http.get(url).toPromise();
+    }else {
       return Promise.resolve(smlTenantMetadataSample);
     }
-
-
   }
-
 }

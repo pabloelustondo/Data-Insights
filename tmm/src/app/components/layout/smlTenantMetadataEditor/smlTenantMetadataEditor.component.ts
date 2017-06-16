@@ -31,7 +31,6 @@ import { TmmConfigService } from './tmmconfig.service';
             <button id="addDataSet" type="button" class="btn btn-primary" (click)="dataSetInit()">Click to add a Data set</button>
             <button id="deleteDataSet" type="button" class="btn btn-primary" (click)="dataSetDelete()">Delete Selected</button>
             <br/><br/>
-            --    --    --
             <app-editor-smldatasource [dataSource] = "selectedOption" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
           </div>
         </div>
@@ -48,12 +47,13 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   index: number = 0;
   urlId: any;
 
-  constructor(private tmmConfigService: TmmConfigService) {
+  constructor(private tmmConfigService: TmmConfigService, private router: Router) {
     //console.log(router);
   }
 
   ngOnInit() {
-    //console.log(this.urlId);
+    this.urlId = this.router.url;
+    console.log(this.urlId);
     this.tmmConfigService.getTenantMetadata(this.urlId).then(data => {
         if (data && data._body) {
           try {

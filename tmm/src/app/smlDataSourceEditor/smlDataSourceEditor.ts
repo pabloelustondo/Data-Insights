@@ -6,7 +6,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ng2-jsoneditor'; //https
   selector: 'app-editor-smldatasource',
   template: `
     <div ng-if="dataSource">
-      Editor Is Here {{dataSource.name}}
+      {{dataSource.name}}
       <json-editor style="height: 100vh" [options]="editorOptions" [data]="dataSource"></json-editor >
       <br />
       <button id="save" class="btn btn-success" (click)="saveCurrentItem()">Save</button>
@@ -44,9 +44,13 @@ export class smlDataSourceEditor implements OnInit {
 
   ngOnChanges() {
     if (this.dataSource &&  this.editor && this.editor.set ){
-    this.index = this.dataSource.index;
-    delete this.dataSource.index;
-    try{this.editor.set(this.dataSource); } catch (e) { };
+      this.index = this.dataSource.index;
+      delete this.dataSource.index;
+      try{
+        this.editor.set(this.dataSource);
+      } catch (e) {
+        console.log(e);
+      };
     }
   }
 
