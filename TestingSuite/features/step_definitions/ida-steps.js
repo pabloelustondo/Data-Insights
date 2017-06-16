@@ -110,20 +110,8 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I Post :portnumber with example data', function (callback) {
-        options.preambleCRLF = options.postambleCRLF = true;
-        options.uri = url+'/data';
-        options.headers['x-access-token'] = authorizationToken;
-        options.headers['content-type'] = 'application/json';
-        options.method = "POST";
-        options.body = {
-            'metadata': {
-                'dataSetId' : 'idaSampleId2',
-                'projections': '[]' },
-            'data': {
-                'sensorId' : '123',
-                'sensorValue' : '45648946'}
-        };
+    When('I make a POST call', function (callback) {
+
         Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -173,8 +161,8 @@ Cucumber.defineSupportCode(function(context) {
         var resString = JSON.stringify(responseData).toLowerCase();
         if (parseInt(response) != parseInt(responseCode)) {
             //console.log('Error: '+ responseData);
+            console.log('Response code should be ' + response +' but is ' + responseCode +'\n '+ resString);
             throw new Error('Response code should be ' + response +' but is ' + responseCode +'\n '+ resString);
-
         };
         callback();
     });
@@ -197,8 +185,8 @@ Cucumber.defineSupportCode(function(context) {
 
     });
 
-    Given('I set the xaccesskey to a modified JWT', function (callback) {
-        var tenantId = 'Xarun_test';
+    Given('I modify the xaccesskey to a different JWT', function (callback) {
+        var tenantId = 'Varun_is_lame';
         var jwtPayload = {
             tenantid: tenantId,
             agentid: '12345678901234567890'
@@ -206,5 +194,24 @@ Cucumber.defineSupportCode(function(context) {
         xaccessToken = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
         callback();
     });
+
+    Given(/^I set up request for making post call to '(.*)'$/, function (variable, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.preambleCRLF = options.postambleCRLF = true;
+        options.uri = url+variable;
+        options.headers['x-access-token'] = xaccessToken;
+        options.headers['content-type'] = 'application/json';
+        options.method = "POST";
+        options.body = {
+            'metadata': {
+                'dataSetId' : 'idaSampleId2',
+                'projections': '[]' },
+            'data': {
+                'sensorId' : '123',
+                'sensorValue' : '45648946'}
+        };
+        callback();
+    });
+
 });
 

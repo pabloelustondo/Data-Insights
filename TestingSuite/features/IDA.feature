@@ -27,24 +27,27 @@ Feature: IDA API Tests
     Then I store the response in 'testTemporaryToken'
 
   Scenario: As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey
-    Given I set the xaccesskey to a modified JWT
-    And I grab IDA url from the config file
-    When I make GET call to endpoint "/Security/getAuthorizationToken"
+    Given I modify the xaccesskey to a different JWT
+    And I grab 'ida' url from the config file
+    And I set up request for making get call to '/Security/getAuthorizationToken'
+    When I make a GET call
     Then response code must be 400
     Then response body should be empty or contain error
 
   Scenario: As an administrator I want to make a POST request to IDA using my temporary Authorization Token
-    Given I set the temporary AuthorizationToken
-    And I grab IDA url from the config file
-    When I Post :portnumber with example data
+    Given I grab the xaccesskey from 'testTemporaryToken'
+    And I grab 'ida' url from the config file
+    And I set up request for making post call to '/data'
+    When I make a POST call
     Then response code must be 200
     And response body should be a valid IDA-POST response
 
   Scenario: As an administrator I want to make a POST request to IDA using an invalid token
-    Given I set the AuthorizationToken to invalid token
-    And I grab IDA url from the config file
-    When I Post :portnumber with example data
-    #Then response code must be 200
+    Given I modify the xaccesskey to a different JWT
+    And I grab 'ida' url from the config file
+    And I set up request for making post call to '/data'
+    When I make a POST call
+    Then response code must be 400
     And response body should be empty or contain error
 
   Scenario: As an administrator I want to validate that Kafka is receiving my posts to IDA
