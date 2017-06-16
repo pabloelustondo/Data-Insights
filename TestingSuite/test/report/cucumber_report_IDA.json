@@ -32,7 +32,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 6,
             "match": {
@@ -45,7 +45,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 61
+              "duration": 63
             },
             "line": 7,
             "match": {
@@ -84,7 +84,7 @@
             "name": "AuthorizationToken is not empty",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 10,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 12
+              "duration": 28
             },
             "line": 16,
             "match": {
@@ -159,7 +159,7 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 400 but is 500\n Error:\"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+              "error_message": "Error: Response code should be 400 but is 500\n \"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
             },
             "line": 17,
             "match": {
@@ -219,7 +219,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 6
+              "duration": 7
             },
             "line": 23,
             "match": {
@@ -232,8 +232,8 @@
             "name": "response code must be 200",
             "result": {
               "status": "failed",
-              "duration": 1,
-              "error_message": "Error: Response code should be 200 but is 500\n Error:\"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+              "duration": 0,
+              "error_message": "Error: Response code should be 200 but is 500\n \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
             },
             "line": 24,
             "match": {
@@ -267,7 +267,7 @@
             "name": "I set the AuthorizationToken to invalid token",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 28,
             "match": {
@@ -280,7 +280,7 @@
             "name": "grab and store IDA port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 29,
             "match": {
@@ -293,7 +293,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 6
+              "duration": 8
             },
             "line": 30,
             "match": {
@@ -329,7 +329,7 @@
             "name": "grab IDA port number for kafka test",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 35,
             "match": {
@@ -342,7 +342,7 @@
             "name": "Set headers and body for posting data to IDA",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 36,
             "match": {
@@ -355,7 +355,7 @@
             "name": "I Post :portnumber after setting headers and body",
             "result": {
               "status": "passed",
-              "duration": 6
+              "duration": 8
             },
             "line": 37,
             "match": {
@@ -368,7 +368,7 @@
             "name": "Kafka Consumer should receive some message without error",
             "result": {
               "status": "failed",
-              "duration": 77,
+              "duration": 172,
               "error_message": "Error: Something went wrong: TopicsNotExistError: The topic(s) varun_test_idaSampleId2 do not exist\n    at Consumer.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\kafka-steps.js:116:23)\n    at emitOne (events.js:96:13)\n    at Consumer.emit (events.js:191:7)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\consumer.js:114:19\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\client.js:424:40\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:52:16\n    at done (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:246:17)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\async\\lib\\async.js:44:16\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\client.js:432:7\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\kafka-node\\lib\\zookeeper.js:348:7\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:165:26\n    at Object.async.whilst (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\node_modules\\async\\lib\\async.js:627:13)\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\node_modules\\async\\lib\\async.js:623:23\n    at C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:145:21\n    at Object.callback (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\index.js:752:17)\n    at ConnectionManager.onSocketData (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\node-zookeeper-client\\lib\\ConnectionManager.js:569:35)"
             },
             "line": 38,

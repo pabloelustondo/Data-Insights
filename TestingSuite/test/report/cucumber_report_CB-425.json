@@ -19,7 +19,7 @@
             "name": "I set the xaccesskey",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 2
             },
             "line": 11,
             "match": {
@@ -45,7 +45,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 82
+              "duration": 59
             },
             "line": 13,
             "match": {
@@ -58,7 +58,7 @@
             "name": "response code must be 200",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 14,
             "match": {
@@ -97,7 +97,7 @@
             "name": "I store the returned value in file named AuthorizationToken",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 4
             },
             "line": 17,
             "match": {
@@ -119,7 +119,7 @@
             "name": "I set the xaccesskey to a modified JWT",
             "result": {
               "status": "passed",
-              "duration": 2
+              "duration": 3
             },
             "line": 20,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
             "result": {
               "status": "passed",
-              "duration": 17
+              "duration": 23
             },
             "line": 22,
             "match": {
@@ -155,11 +155,11 @@
           {
             "arguments": [],
             "keyword": "Then ",
-            "name": "response code must be 200",
+            "name": "response code must be 400",
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 200 but is 500\n Error:\"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+              "error_message": "Error: Response code should be 400 but is 500\n \"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
             },
             "line": 23,
             "match": {
@@ -219,7 +219,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 7
+              "duration": 5
             },
             "line": 29,
             "match": {
@@ -233,7 +233,7 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 200 but is 500\n Error:\"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+              "error_message": "Error: Response code should be 200 but is 500\n \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
             },
             "line": 30,
             "match": {
@@ -267,7 +267,7 @@
             "name": "I set the AuthorizationToken to invalid token",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 34,
             "match": {
@@ -293,7 +293,7 @@
             "name": "I Post :portnumber with example data",
             "result": {
               "status": "passed",
-              "duration": 5
+              "duration": 7
             },
             "line": 36,
             "match": {
@@ -302,12 +302,24 @@
           },
           {
             "arguments": [],
+            "keyword": "Then ",
+            "name": "response code must be 400",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: Response code should be 400 but is 500\n \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+            },
+            "line": 37,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
+            }
+          },
+          {
+            "arguments": [],
             "keyword": "And ",
             "name": "response body should be empty or contain error",
             "result": {
-              "status": "failed",
-              "duration": 1,
-              "error_message": "Error: response body should be empty or contain error but is: \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:172:23)"
+              "status": "skipped"
             },
             "line": 38,
             "match": {

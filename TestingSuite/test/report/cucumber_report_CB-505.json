@@ -19,7 +19,7 @@
             "name": "I Create a new Tenant Metadata Object",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 2
             },
             "line": 12,
             "match": {
@@ -58,7 +58,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 49
+              "duration": 82
             },
             "line": 15,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 90
+              "duration": 269
             },
             "line": 23,
             "match": {
@@ -193,7 +193,7 @@
             "name": "I modify a Tenant Metadata Object to have an invalid tenantid",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 28,
             "match": {
@@ -232,7 +232,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 35
+              "duration": 85
             },
             "line": 31,
             "match": {
@@ -246,7 +246,7 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 204 but is 200\n Error:{\"n\":1,\"nmodified\":0,\"upserted\":[{\"index\":0,\"_id\":\"59414e3cda7613df69532dd1\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:148:19)"
+              "error_message": "Error: Response code should be 204 but is 200\n Error:{\"n\":1,\"nmodified\":0,\"upserted\":[{\"index\":0,\"_id\":\"5942bd4e332ee4e66bffddf5\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:148:19)"
             },
             "line": 32,
             "match": {
@@ -281,7 +281,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 37,
             "match": {
@@ -294,7 +294,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 64
+              "duration": 57
             },
             "line": 38,
             "match": {
@@ -321,7 +321,7 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: response body should contain error: url tenantid different from body tenantid but instead contains: {\"n\":1,\"nModified\":0,\"upserted\":[{\"index\":0,\"_id\":\"59414e3cda7613df69532dd5\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:189:19)"
+              "error_message": "Error: response body should contain error: url tenantid different from body tenantid but instead contains: {\"n\":1,\"nModified\":0,\"upserted\":[{\"index\":0,\"_id\":\"5942bd4e332ee4e66bffddf9\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:189:19)"
             },
             "line": 40,
             "match": {
@@ -356,7 +356,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 44,
             "match": {
@@ -382,7 +382,7 @@
             "name": "I get \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 107
+              "duration": 232
             },
             "line": 46,
             "match": {
@@ -470,7 +470,7 @@
             "name": "I get \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 51
+              "duration": 58
             },
             "line": 54,
             "match": {
