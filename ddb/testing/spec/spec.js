@@ -118,17 +118,17 @@ describe("Data Analytics Service - DDB", function() {
     });
 
 
-    describe("GET /getAllTenants", function () {
+    describe("GET /tenants", function () {
 
        it ("gets all tenants with all metadata for every tenant. It expects the list in sample tenants", function (done) {
            $.ajax({
-               url: "/getAllTenants",
+               url: "/tenants",
                type:"GET",
                contentType:"application/json",
                success: function(data, textStatus, jqXHR) {
                    console.log("From get: " + JSON.stringify(data));
                    var inData = data.tenants;
-                   expect(data.tenants.length).toBe(4);
+                   expect(data.length).toBeGreaterThan(0);
                    done();},
                error: function(data, textStatus, jqXHR) {
                    console.log("Error From post: " + JSON.stringify(data,null,2));

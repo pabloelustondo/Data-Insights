@@ -1,21 +1,32 @@
 Feature: DSS API Tests
 
   #Enrollment
-  Scenario: As an administrator I want to try to enroll a MobiControl data source using an invalid x-access-token
-    Given I set invalid header and body for test_user
-    And grab DSS port number
-    When I POST :portnumber with endpoint "registerDataSource"
+  Scenario: As an administrator I want to try to enroll a MobiControl data source
+    Given I grab 'dssback' url from config file
+    Given I set header and body for test_user with access token "asdasdasdasdasdas"
+      | tenantid        |  dataSourceType | agentid    | data                                      |
+      | test_user		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
+    When I POST with endpoint "registerDataSource"
     Then response code should be 400
 
   Scenario: As an administrator I want to enroll a new tenant
-   # Given I delete "new_tenant"
-    Given I POST with enrollment data for "new_tenant"
+    Given I wipe the user "new_tenant" from DDB
+    Given I grab 'dssback' url from config file
+    Given I create new user named "test1" with the following data:
+      | accountid           |  apikey                          | clientsecret | domainid               | mcurl                                     |password|username          |
+      | external_user		|  244cc44394ba4efd8fe38297ee8213d3| 1            | Integ_User               | https://cad099.corp.soti.net/MobiControl  |1       |administrator     |
+    When I POST with endpoint "enrollments"
     Then The HTTP Code should be 200
-    Then The response's id_token should be valid
+    Then The response should contain 'id_token'
+    Then I store the response token in a file 'InUserToken'
 
   Scenario: As an administrator I want to try to enroll with an existing tenant
-    Given I POST with enrollment data for "new_tenant"
-    Then The HTTP Code should be 400
+    Given I grab 'dssback' url from config file
+    Given I create new user named "test1" with the following data:
+      | accountid           |  apikey                          | clientsecret | domainid               | mcurl                                     |password|username          |
+      | external_user		|  244cc44394ba4efd8fe38297ee8213d3| 1            | Integ_User               | https://cad099.corp.soti.net/MobiControl  |1       |administrator     |
+    When I POST with endpoint "enrollments"
+    Then The HTTP Code should be 200
     Then The response should contain 'Tenant ID already enrolled'
 
 #  Scenario Outline: As an administrator I want to try to enroll with invalid values

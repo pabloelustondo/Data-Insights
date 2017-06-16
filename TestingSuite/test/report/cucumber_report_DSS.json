@@ -16,31 +16,61 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "name": "I set invalid header and body for external_user",
+            "name": "I grab 'dssback' url from config file",
             "result": {
-              "status": "undefined"
+              "status": "passed",
+              "duration": 1
             },
-            "line": 5
+            "line": 5,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:220"
+            }
           },
           {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "grab DSS port number",
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "tenantid",
+                      "dataSourceType",
+                      "agentid",
+                      "data"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "test_user",
+                      "MobiControl",
+                      "asdas",
+                      "{inputName: \"mcurl\",inputValue: mobiUrl}"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "name": "I set header and body for test_user with invalid access token \"asdasdasdasdasdas\"",
             "result": {
-              "status": "undefined"
+              "status": "passed",
+              "duration": 1
             },
-            "line": 6
+            "line": 6,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:213"
+            }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "name": "I POST :portnumber with endpoint \"registerDataSource\"",
+            "name": "I POST with endpoint \"registerDataSource\"",
             "result": {
-              "status": "skipped"
+              "status": "passed",
+              "duration": 43
             },
-            "line": 7,
+            "line": 9,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:263"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:243"
             }
           },
           {
@@ -48,81 +78,101 @@
             "keyword": "Then ",
             "name": "response code should be 400",
             "result": {
-              "status": "skipped"
+              "status": "failed",
+              "duration": 1,
+              "error_message": "Error: Response should be :400, Got:200\n \"added successfully\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:344:19)"
             },
-            "line": 8,
+            "line": 10,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:364"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:340"
             }
           }
         ]
       },
       {
         "keyword": "Scenario",
-        "line": 10,
-        "name": "As an administrator I want to try to enroll with an existing tenant",
+        "line": 12,
+        "name": "As an administrator I want to enroll a new tenant",
         "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-an-existing-tenant",
+        "id": "dss-api-tests;as-an-administrator-i-want-to-enroll-a-new-tenant",
         "steps": [
           {
             "arguments": [],
             "keyword": "Given ",
-            "name": "I submit using previously enrolled values",
+            "name": "I wipe the user \"new_tenant\" from DDB",
             "result": {
-              "status": "failed",
-              "duration": 5007,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 11,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:98"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 12,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Tenant ID already enrolled'",
-            "result": {
-              "status": "skipped"
+              "status": "passed",
+              "duration": 0
             },
             "line": 13,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:205"
             }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 15,
-        "name": "As an administrator I want to enroll",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-enroll",
-        "steps": [
+          },
           {
             "arguments": [],
             "keyword": "Given ",
-            "name": "I do a 'POST' request with valid values",
+            "name": "I grab 'dssback' url from config file",
             "result": {
-              "status": "failed",
-              "duration": 5001,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+              "status": "passed",
+              "duration": 0
             },
-            "line": 16,
+            "line": 14,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:139"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:220"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "accountid",
+                      "apikey",
+                      "clientsecret",
+                      "domainid",
+                      "mcurl",
+                      "password",
+                      "username"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "external_user",
+                      "244cc44394ba4efd8fe38297ee8213d3",
+                      "1",
+                      "stupidshit",
+                      "https://cad099.corp.soti.net/MobiControl",
+                      "1",
+                      "administrator"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "name": "I create new user named \"test1\" with the following data:",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 15,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:45"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST with endpoint \"enrollments\"",
+            "result": {
+              "status": "passed",
+              "duration": 64
+            },
+            "line": 18,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:243"
             }
           },
           {
@@ -130,11 +180,12 @@
             "keyword": "Then ",
             "name": "The HTTP Code should be 200",
             "result": {
-              "status": "skipped"
+              "status": "passed",
+              "duration": 0
             },
-            "line": 17,
+            "line": 19,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:55"
             }
           },
           {
@@ -142,717 +193,61 @@
             "keyword": "Then ",
             "name": "The response's id_token should be valid",
             "result": {
-              "status": "skipped"
-            },
-            "line": 18,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:169"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 27,
-        "name": "As an administrator I want to try to enroll with invalid values",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-invalid-values",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I submit with invalid TenantID value: _____+_+.A",
-            "result": {
               "status": "failed",
-              "duration": 5002,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
+              "duration": 0,
+              "error_message": "Error: Token was not found in response: \"Tenant ID already enrolled\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:169:19)"
             },
-            "line": 21,
+            "line": 20,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:125"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 22,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Invalid TenantID Provided'",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 23,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:164"
             }
           }
         ]
       },
       {
         "keyword": "Scenario",
-        "line": 28,
-        "name": "As an administrator I want to try to enroll with invalid values",
+        "line": 22,
+        "name": "As an administrator I want to try to enroll with an existing tenant",
         "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-invalid-values",
+        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-an-existing-tenant",
         "steps": [
           {
             "arguments": [],
             "keyword": "Given ",
-            "name": "I submit with invalid MobiURL value: http://google.com/r/Android",
-            "result": {
-              "status": "failed",
-              "duration": 5003,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 21,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:125"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 22,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Invalid MobiControl URL Provided'",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 23,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 29,
-        "name": "As an administrator I want to try to enroll with invalid values",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-invalid-values",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I submit with invalid ClientID value: _!+!+@_#+$_%+!@+#_",
-            "result": {
-              "status": "failed",
-              "duration": 5002,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 21,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:125"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 22,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Client ID Cannot Contain Special Characters'",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 23,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 30,
-        "name": "As an administrator I want to try to enroll with invalid values",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-invalid-values",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I submit with invalid ClientSecret value: *",
-            "result": {
-              "status": "failed",
-              "duration": 5003,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 21,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:125"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 22,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Client Secret Cannot Be Less Than 8 Characters'",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 23,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 31,
-        "name": "As an administrator I want to try to enroll with invalid values",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-invalid-values",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I submit with invalid Username value: ^!^#^^^#^^#^#^^#",
-            "result": {
-              "status": "failed",
-              "duration": 5004,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 21,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:125"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 22,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Username Cannot Contain Special Characters'",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 23,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 32,
-        "name": "As an administrator I want to try to enroll with invalid values",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-invalid-values",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I submit with invalid Password value: 12",
-            "result": {
-              "status": "failed",
-              "duration": 5003,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 21,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:125"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 22,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Password Cannot Be Less Than 8 Characters'",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 23,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 35,
-        "name": "As an administrator I want to login",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-login",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I do a 'POST' request with valid login values",
-            "result": {
-              "status": "failed",
-              "duration": 5002,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 36,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:177"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 200",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 37,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 39,
-        "name": "As an administrator I want to try to login without using an accountid",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-login-without-using-an-accountid",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I do a 'POST' request with no login values",
-            "result": {
-              "status": "failed",
-              "duration": 5005,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 40,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:193"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 41,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should contain 'Missing AccountID'",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 42,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:76"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 45,
-        "name": "As an administrator I want to download DataSource credentials",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-download-datasource-credentials",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I set head and body for handling credentials",
+            "name": "I POST with enrollment data for \"new_tenant\"",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 82
             },
-            "line": 46,
+            "line": 23,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:320"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "grab DSS port number",
-            "result": {
-              "status": "undefined"
-            },
-            "line": 47
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "name": "I GET :portnumber with endpoint \"sourceCredentials\" to download credentials",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 48,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:306"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:116"
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "name": "response code should be 200",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 49,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:364"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 51,
-        "name": "As an administrator I want to reset DataSource credentials",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-reset-datasource-credentials",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I set head and body for handling credentials",
+            "name": "The HTTP Code should be 400",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
-            "line": 52,
+            "line": 24,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:320"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "grab DSS port number",
-            "result": {
-              "status": "undefined"
-            },
-            "line": 53
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "name": "I GET :portnumber with endpoint \"sourceCredentials\" to download credentials",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 54,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:306"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:55"
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "name": "I set head and body for handling credentials",
+            "name": "The response should contain 'Tenant ID already enrolled'",
             "result": {
-              "status": "skipped"
+              "status": "passed",
+              "duration": 1
             },
-            "line": 55,
+            "line": 25,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:320"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "I POST :portnumber with endpoint \"resetCredentials\" to reset credentials",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 56,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:341"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "grab IDA's port number",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 57,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:223"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "I GET :idaportnumber with old credentials and endpoint \"Security/GetAuthorizationToken\"",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 58,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:326"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "response body contain some sort of error",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 59,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:356"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 61,
-        "name": "As an administrator I want to try to delete a data source and invalid x-access-token",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-delete-a-data-source-and-invalid-x-access-token",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I set invalid header and body for external_user for delete",
-            "result": {
-              "status": "undefined"
-            },
-            "line": 62
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "grab DSS port number",
-            "result": {
-              "status": "undefined"
-            },
-            "line": 63
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "name": "I POST :portnumber with endpoint \"deleteDataSource\"",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 64,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:263"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "response code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 65,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:364"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 68,
-        "name": "As an administrator I want to try to delete a data source with a valid x-access-token",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-delete-a-data-source-with-a-valid-x-access-token",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I set valid header and body for external_user for delete",
-            "result": {
-              "status": "undefined"
-            },
-            "line": 69
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "grab DSS port number",
-            "result": {
-              "status": "undefined"
-            },
-            "line": 70
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "name": "I POST :portnumber with endpoint \"deleteDataSource\"",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 71,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:263"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "response code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 72,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:364"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 75,
-        "name": "As an administrator I want to try to GET /login",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-get-/login",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I do a 'GET' request with valid login values",
-            "result": {
-              "status": "failed",
-              "duration": 5000,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 76,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:177"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 77,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 79,
-        "name": "As an administrator I want to try to GET /enrollments",
-        "tags": [],
-        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-get-/enrollments",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I do a 'GET' request with valid values",
-            "result": {
-              "status": "failed",
-              "duration": 5001,
-              "error_message": "Error: function timed out after 5000 milliseconds\n    at Timeout._onTimeout (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\node_modules\\cucumber\\lib\\user_code_runner.js:91:22)\n    at ontimeout (timers.js:386:14)\n    at tryOnTimeout (timers.js:250:5)\n    at Timer.listOnTimeout (timers.js:214:5)"
-            },
-            "line": 80,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:139"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The HTTP Code should be 400",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 81,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:66"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "name": "The response should be a HTML Document -> features/assets/dss_cannot_get.html",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 82,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:155"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:65"
             }
           }
         ]
