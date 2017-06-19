@@ -24,6 +24,3 @@ Feature: SOTI Insight ODA Backend Components
       And I make a POST call to ~/query
       Then response code is :200
       Then The response message should contain error
-
-
-

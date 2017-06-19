@@ -6,7 +6,7 @@ import {smlTenantMetadataEditor} from './components/layout/smlTenantMetadataEdit
   selector: 'body',
   template: `
     <div>
-      <smlTenantMetadataEditor></smlTenantMetadataEditor>
+      <router-outlet></router-outlet>
     </div>
   `,
 })

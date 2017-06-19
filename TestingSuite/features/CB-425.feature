@@ -8,33 +8,37 @@ Background:
   S3 keeps all the data in the document whereas MongoDB keeps only subset defined in the DataModel
 
   Scenario: As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints
-    Given I set the xaccesskey
-    And grab and store IDA port number
-    When I make GET call to endpoint "/Security/getAuthorizationToken"
+    Given I grab the xaccesskey from 'testPermanentToken'
+    And I grab 'ida' url from the config file
+    And I set up request for making get call to '/Security/getAuthorizationToken'
+    When I make a GET call
     Then response code must be 200
     And response body should be error-free
-    And AuthorizationToken is not empty
-    Then I store the returned value in file named AuthorizationToken
+    And response body should contain a temporary token
+    Then I store the response in 'testTemporaryToken'
 
   Scenario: As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey
-    Given I set the xaccesskey to a modified JWT
-    And grab and store IDA port number
-    When I make GET call to endpoint "/Security/getAuthorizationToken"
-    Then response code must be 200
+    Given I modify the xaccesskey to an invalid JWT
+    And I grab 'ida' url from the config file
+    And I set up request for making get call to '/Security/getAuthorizationToken'
+    When I make a GET call
+    Then response code must be 400
     Then response body should be empty or contain error
 
-  Scenario: As an administrator I want to Post to /data
-    Given I set the temporary AuthorizationToken
-    And grab and store IDA port number
-    When I Post :portnumber with example data
+  Scenario: As an administrator I want to make a POST request to IDA using my temporary Authorization Token
+    Given I grab the xaccesskey from 'testTemporaryToken'
+    And I grab 'ida' url from the config file
+    And I set up request for making post call to '/data'
+    When I make a POST call
     Then response code must be 200
     And response body should be a valid IDA-POST response
 
-  Scenario: As an administrator I want to send Invalid Post information to /data
-    Given I set the AuthorizationToken to invalid token
-    And grab and store IDA port number
-    When I Post :portnumber with example data
-    #Then response code must be 200
+  Scenario: As an administrator I want to make a POST request to IDA using an invalid token
+    Given I modify the xaccesskey to an invalid JWT
+    And I grab 'ida' url from the config file
+    And I set up request for making post call to '/data'
+    When I make a POST call
+    Then response code must be 400
     And response body should be empty or contain error
 
     #Todo: Query Mongo for the DataModel DataSet

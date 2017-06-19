@@ -33,6 +33,23 @@ var DatabaseService = (function () {
     DatabaseService.prototype.populateTenants = function (tenants) {
         this.tenants = tenants;
     };
+    DatabaseService.prototype.getAllDataSets = function () {
+        var dataSets = [];
+        // go through each tenant and find the dataSet that needs to be updated listened to
+        for (var _i = 0, _a = this.tenants; _i < _a.length; _i++) {
+            var tenant = _a[_i];
+            if (tenant.dataSets) {
+                for (var _b = 0, _c = tenant.dataSets; _b < _c.length; _b++) {
+                    var dataSet = _c[_b];
+                    dataSets.push({
+                        tenantId: tenant.id,
+                        dataSet: dataSet
+                    });
+                }
+            }
+        }
+        return dataSets;
+    };
     DatabaseService.prototype.getTenant = function (tenantId) {
         if (this.tenants) {
             return _.find(this.tenants, ['tenantId', tenantId]);
