@@ -6,8 +6,9 @@
   "scripts": {
     "setup": "npm install jsonwebtoken && npm install kafka-node && npm install -g cucumber && npm install",
     "featuretest": "./node_modules/.bin/cucumberjs -f pretty features/CB-437.feature features/CB-438.feature features/CB-425.feature features/CB-505.feature",
-    "Components": "./node_modules/.bin/cucumberjs -f pretty features/IDA.feature",
+    "Components": "./node_modules/.bin/cucumberjs -f pretty features/DSS.feature",
     "report": "generate_json",
+    "everything": "./node_modules/.bin/cucumberjs -f pretty features/CB-437.feature features/CB-438.feature features/CB-425.feature features/CB-505.feature features/DSS.feature features/IDA.feature features/ODA.feature features/Enrollment.feature features/TenancyManagement.feature",
     "html": "./node_modules/.bin/cucumberjs -f pretty features/reports.feature"
   },
   "author": "",

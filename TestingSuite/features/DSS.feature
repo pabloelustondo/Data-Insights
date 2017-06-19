@@ -14,7 +14,7 @@ Feature: DSS API Tests
 
   Scenario: As an administrator I want to enroll a new tenant
     #  Given I delete previous test information
-    Given I grab 'dss' url from config file
+    Given I grab 'dssback' url from config file
     Given I create new user named "test1" with the following data:
       | accountid           |  apikey                                  | clientsecret | domainid               | mcurl                                      |password|username          |
       | test		        |  244cc44394ba4efd8fe38297ee8213d3        | 1            | test1                   | https://cad099.corp.soti.net/MobiControl  |1       |administrator     |
