@@ -393,7 +393,7 @@ Cucumber.defineSupportCode(function(context) {
     Given('Given I create a login session as {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
         // Write code here that turns the phrase above into concrete actions'
         resetOptions('sessions/create');
-        options.uri = "http://10.0.91.2:8024/sessions/create";
+        options.uri = "http://localhost:8024/sessions/create";
         options.body = {"domainid": "test", "code": "administrator"};
         console.log(options);
         Request.post(options, function (error, response, body) {

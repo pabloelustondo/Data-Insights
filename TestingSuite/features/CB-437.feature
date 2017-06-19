@@ -4,7 +4,7 @@ Feature: Server-side metadata with merge (non-persisted, for interactive queries
 Background:
 based on given data set metadata definition we should be able to return merged data set.
 
-  Scenario: Return Merged DataSet
+  Scenario: As an administrator, I want to post my data to ODA and get a merged dataSet returned
     Given I set valid request header and body for POST call to ~/query
     And I grab ODA port number from globalconfig.json
     And I make a POST call to ~/query
