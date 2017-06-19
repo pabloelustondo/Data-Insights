@@ -6,7 +6,7 @@ import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { config } from "../../../../../appconfig";
 import { smlTenantMetadataSample, smlTenantMetadataEmpty } from './jsonEditorSchema.configuration';
-
+const globalConfig = require('../../appconfig.json');
 @Injectable()
 export class TmmConfigService {
   config: {
@@ -25,7 +25,7 @@ export class TmmConfigService {
   saveDataByTenantId(tenantid, tmtMetadata) {
     if (config.ddb_url != "") {
       console.log(tmtMetadata);
-      let url = 'http://localhost:8029/tenant/' + tmtMetadata.tenantId;
+      let url = globalConfig.tmmback_url + tmtMetadata.tenantId;
       this.http.post(url, tmtMetadata).toPromise().then(
         (res: Response) => {
           console.log((res));
