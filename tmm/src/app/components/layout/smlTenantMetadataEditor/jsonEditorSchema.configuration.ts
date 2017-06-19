@@ -73,6 +73,16 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
       }],
   };
 
+export const smlTenantEmptyMetadataSample: SmlTenantMetadata =
+  {
+    id: '',  //id of the metadata
+    name: '',
+    tenantId: '',
+    dataSets: [],
+    dataSource: [],
+    users: [],
+    idpInformation: [],
+  };
 
 export const smlTenantMetadataEmpty: SmlDataSet =
   {

@@ -59,15 +59,15 @@ export class smlDataSourceEditor implements OnInit {
   }
 
   saveCurrentItem() {
-    const a = this.editor.get();
-    this.dataSource = this.editor.get();
-    a['index'] = this.index;
-    this.optionUpdated.emit(a);
-    this.index = '';
+    try{
+      const a = this.editor.get();
+      this.dataSource = this.editor.get();
+      a['index'] = this.index;
+      this.optionUpdated.emit(a);
+      this.index = '';
+    }catch(e){
+      console.log(e);
+    }
   }
 
-  clearCurrentItem(){
-    const a = this.editor.get();
-
-  }
 }
