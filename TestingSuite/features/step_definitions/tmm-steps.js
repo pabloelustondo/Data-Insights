@@ -215,7 +215,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid', function (callback) {
 
         if (responseData == undefined || responseData.length ==0 ||responseData[0].tenantid != tenantID) {
-            throw new Error("Did not receive list of tenant metadata objects: "+options);
+            throw new Error("Did not receive list of tenant metadata objects. "+ responseData);
         }
         callback();
     });
