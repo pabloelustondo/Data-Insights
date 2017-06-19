@@ -69,6 +69,8 @@ Cucumber.defineSupportCode(function(context) {
         } else {
             console.error('Expected response: ' + response
                 + ', but received: ' + resString);
+            return new Error('Expected response: ' + response
+                + ', but received: ' + resString);
         }
     });
 
@@ -153,7 +155,6 @@ Cucumber.defineSupportCode(function(context) {
                 console.log( error);
                 return;
             }
-
             //Remove Whitespace issues while comparing
             if (contents.toString().replace(/\s/g, "") === responseData.toString().replace(/\s/g, "")) {
                 callback();
@@ -219,8 +220,8 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set header and body for test_user with access token {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
-        options.headers["x-access-token"] = stringInDoubleQuotes;
+    Given('I set request for test_user', function (table, callback) {
+        //options.headers["x-access-token"] = stringInDoubleQuotes;
         options.form = table.hashes()[0];
         options.uri = url;
         callback();
@@ -301,10 +302,33 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-    Given('I set head and body for handling credentials', function (callback){
-        options2.headers['x-access-token'] = validToken;
-        options2.body['agentid'] = delAgentId1;
+    When('I GET with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        resetOptions(stringInDoubleQuotes);
+        Request.get(options, function (error, response, body) {
+            if (error) {
+                throw new Error('upload failed:', error);
+            }
+            responseData = body;
+            responseCode = response.statusCode;
+            console.log(responseData);
+            callback();
+        });
+    });
+
+    Then('I should receive my user information with all the valid fields', function (table, callback) {
+
+        var table_json = table.hashes()[0];
+        if(table_json['domainid']!=responseData['domainid'] || table_json['tenantid']!=responseData['tenantid']) {
+            console.error('Response contains missing fields: ' +responseData);
+            return new Error("Response: " + responseData + "does not contain all the valid fields: " + table_json);
+        }
         callback();
+    });
+
+    Given('I set head and body for handling credentials', function (callback){
+        options.headers['x-access-token'] = validToken;
+        //options.body['agentid'] = agentID;
+        //callback();
     });
 
     Then('I GET :idaportnumber with old credentials and endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
@@ -366,7 +390,23 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
-
+    Given('Given I create a login session as {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
+        // Write code here that turns the phrase above into concrete actions'
+        resetOptions('sessions/create');
+        options.uri = "http://10.0.91.2:8024/sessions/create";
+        options.body = {"domainid": "test", "code": "administrator"};
+        console.log(options);
+        Request.post(options, function (error, response, body) {
+            if (error) {
+                throw new Error('upload failed:', error);
+            }
+            responseData = body;
+            responseCode = response.statusCode;
+            console.log(responseData);
+            callback();
+        });
+        callback();
+    });
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      UTILITIES
@@ -409,14 +449,15 @@ Cucumber.defineSupportCode(function(context) {
 
     function resetOptions(endpoint) {
         options  = {
-            'uri': url + endpoint,
+            'uri': url +'/'+endpoint,
             'rejectUnauthorized': false,
             'headers' : {
                 'Content-Type': 'application/json',
                 'Keep-Alive': true,
                 'Accept-Encoding': 'gzip,deflate'
-            }
+            },
+            'body' :{},
+            'form' :{}
         };
-        resetFormValid();
     }
 });

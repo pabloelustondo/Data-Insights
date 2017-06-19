@@ -46,9 +46,19 @@ Feature: Tenancy Management
     When  I GET MCDP location
     Then response code should be 200
 
-  Scenario: As an administrator I want to Logout
-    Given ?
+  Scenario: As an administrator, I want to navigate to the dashboard from the tenancy management page
+    Given I login as "test1"
+    When I click on the Dashboard button
+    Then I should be brought directly to Dashboard
 
-    When  ?
-    Then  ?
+  Scenario: As an administrator, I want to navigate to the tenancy management page from the dashboard
+    Given I login as "test1"
+    When I click on the Admin button
+    Then I should be brought directly to Tenacy Management page
+
+  Scenario: As an administrator I want to Logout
+    Given I login as "test1"
+    When  I click on the Logout button
+    Then  I should be logged out
+
 
