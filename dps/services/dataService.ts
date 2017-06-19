@@ -92,7 +92,7 @@ export function findElement (data: any, element: any) {
 export function processRequest (metadata: any, _dataSets: any, res) {
 
 
-    let queryId = metadata.queryId;
+    let queryId = metadata.dataSetId;
 
     // get dataSetFrom all available dataSets
     let dataSet = _.find(_dataSets, { id : queryId} );
