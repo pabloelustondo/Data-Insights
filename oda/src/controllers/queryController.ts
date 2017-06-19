@@ -1,12 +1,14 @@
 /**
  * Created by vdave on 5/25/2017.
  */
-import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
+import {Route, Get, Post, Delete, Patch, Request,  Example} from 'tsoa';
 import {SDS} from '../models/user';
 import {QueryModel} from '../models/queryModel';
 import * as rp from 'request-promise';
-// import * as https from 'https';
-const config = require('../../appconfig.json');
+import * as express from '@types/express';
+let jwt  = require('jsonwebtoken');
+import * as https from 'https';
+const config = require('../../config.json');
 let server = require('../server');
 
 @Route('Query')
@@ -23,42 +25,60 @@ export class QueryController {
         dataSetId : 'myCustomQueryID',
         from : ['sourceMetadataId']
     })
-    public async Create(request: QueryModel): Promise<SDS> {
+    public async Create(request: QueryModel,@Request() express: express.Request ): Promise<SDS> {
 
         let server = require('../../globalconfig.json');
 
         let appConfig =  require('../../globalconfig.json');
     //    if (request.from[0] === 'vehicleInfo') {
+        let req = express;
+        let token = req.headers['x-access-token'];
 
-        let mData = [
-            'dataSets : ["ttcMaps", "deviceInfo"]'];
+        let verifyAndDecodeJwt = function () {
+            let promise = new Promise(function (resolve, reject) {
+                try {
+                    resolve(jwt.verify(token, config['expiring-secret']));
+                } catch (err) {
+                    console.log('could not verify token');
 
-        const options: rp.OptionsWithUrl = {
-            headers: {
-                'x-api-key': config['aws-x-api-key']
-            },
-            json: true,
-            method: 'POST',
-            body: {
-                metadata : {
-                    'filterProperty' : 'prop1',
-                    'value' : '3',
-                    'queryId' : request.from[0]
+                    reject(err);
                 }
-            },
-            url: appConfig['dps_url'] + '/data/outGoingRequest'
+            });
+            return promise;
         };
-        console.time('deviceNotSurviveShift: aws call');
 
-        let p = await rp(options); // request library used
 
-        // returns test data for now
-        const user: any = {
-            createdAt: new Date(),
-            metadata: mData,
-            data: p
+        let backendCall = function (jwtDecodedToken: any) {
+            let promise = new Promise( function( resolve, reject) {
+                const options: rp.OptionsWithUrl = {
+                    headers: {
+                        'x-api-key': config['aws-x-api-key']
+                    },
+                    json: true,
+                    method: 'POST',
+                    body: {
+                        metadata : {
+                            'tenantId' : jwtDecodedToken.tenantId,
+                            'dataSetId' : request.from[0]
+                        }
+                    },
+                    url: appConfig['dps_url'] + '/data/outGoingRequest'
+                };
+                resolve(rp(options));
+            });
+            return promise;
         };
-        return user;
+
+
+        let p: any = verifyAndDecodeJwt().then(backendCall).then(function (data: any) {
+            return data;
+        }, function (err: any) {
+            return Promise.reject( {
+                message : err.message,
+                status : '400'
+            });
+        });
+        return p;
 
     }
 

@@ -83,7 +83,7 @@ function findElement(data, element) {
 }
 exports.findElement = findElement;
 function processRequest(metadata, _dataSets, res) {
-    var queryId = metadata.queryId;
+    var queryId = metadata.dataSetId;
     // get dataSetFrom all available dataSets
     var dataSet = _.find(_dataSets, { id: queryId });
     var dataSources = dataSet.dataSources;
