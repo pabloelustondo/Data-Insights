@@ -47,24 +47,23 @@ export class QueryController {
             return promise;
         };
 
-        const options: rp.OptionsWithUrl = {
-            headers: {
-                'x-api-key': config['aws-x-api-key']
-            },
-            json: true,
-            method: 'POST',
-            body: {
-                metadata : {
-                    'tenantId' : '',
-                    'dataSetId' : request.from[0]
-                }
-            },
-            url: appConfig['dps_url'] + '/data/outGoingRequest'
-        };
-        console.time('deviceNotSurviveShift: aws call');
 
         let backendCall = function (jwtDecodedToken: any) {
             let promise = new Promise( function( resolve, reject) {
+                const options: rp.OptionsWithUrl = {
+                    headers: {
+                        'x-api-key': config['aws-x-api-key']
+                    },
+                    json: true,
+                    method: 'POST',
+                    body: {
+                        metadata : {
+                            'tenantId' : jwtDecodedToken.tenantId,
+                            'dataSetId' : request.from[0]
+                        }
+                    },
+                    url: appConfig['dps_url'] + '/data/outGoingRequest'
+                };
                 resolve(rp(options));
             });
             return promise;
