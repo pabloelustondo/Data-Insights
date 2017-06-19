@@ -21,7 +21,7 @@ DSS should be responsible only for data sources management and the future featur
     And grab tmm port number
     Then I set headers and body for posting to tmm
     When I POST to "/tenant"
-    Then The response code needs to be '400'
+    Then The response code needs to be '200'
     And The response body should contain an array of valid meta data objects
 
   Scenario: As an administrator, I want to post to tmm with an invalid Tenant Metadata Object
@@ -29,7 +29,7 @@ DSS should be responsible only for data sources management and the future featur
     And grab tmm port number
     Then I set headers and body for posting to tmm
     When I POST to "/tenant"
-    Then The response code needs to be '204'
+    Then The response code needs to be '400'
     #And The response body should contain statusCode 400
 
   Scenario: As an administrator, I want to post to tmm with the wrong tenantid in the url

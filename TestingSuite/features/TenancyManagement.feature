@@ -3,13 +3,14 @@ Feature: Tenancy Management
   #DataSources
   Scenario: As an administrator I want to check my additional information is correct
     Given I grab 'dssback' url from config file
-    Given Given I create a login session as "test"
+    Given I create a login session as "test"
     |domainid |code         |
     |test     |administrator|
     Then response code should be 200
   #{"domainid": "test", "code": "administrator"}
     When I GET with endpoint "api/myenrollments"
     # http://10.0.91.2:8024/api/myenrollments
+    Then response code should be 200
     Then I should receive my user information with all the valid fields
       |accountid     |domainid |
       |external_user |test_user|
@@ -18,19 +19,23 @@ Feature: Tenancy Management
 
   Scenario: As an administrator I want to create a DataSource
   #  Given I delete previous test information
-    #Given I login as "test1"
     Given I grab 'dssback' url from config file
+    Given I create a login session as "test"
+      |domainid |code         |
+      |test     |administrator|
     Given I set request for test_user
       | tenantid        |  dataSourceType | agentid    | data                                      |
       | test_user		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
     When  I POST with endpoint "registerDataSource"
     Then response code should be 200
 
-#  Scenario: As an administrator I want to see all DataSources
-##    Given I login as "test1"
-#    Given I grab 'dssback' url from config file
-#    When  I GET with endpoint "getDataSources"
-#    Then response code should be 200
+  Scenario: As an administrator I want to see all DataSources
+    Given I grab 'dssback' url from config file
+    Given I create a login session as "test"
+      |domainid |code         |
+      |test     |administrator|
+    When  I GET with endpoint "getDataSources"
+    Then response code should be 200
 #
 #  Scenario: As an administrator I want to download DataSource credentials
 #    Given I login as "test1"

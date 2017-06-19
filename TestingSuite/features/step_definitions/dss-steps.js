@@ -36,7 +36,7 @@ Cucumber.defineSupportCode(function(context) {
             'Content-Type': 'application/json',
             'Keep-Alive': true,
             'Accept-Encoding': 'gzip,deflate'
-        }
+        }, 'body':{}
     };
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +125,7 @@ Cucumber.defineSupportCode(function(context) {
             responseData = body;
             responseCode = response.statusCode;
             testJWT = JSON.stringify(responseData) || '';
-            console.log(responseData);
+            //console.log(responseData);
             callback();
         }).on('error', function (error) {
             console.log("Error with Request:" + error);
@@ -390,22 +390,25 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
-    Given('Given I create a login session as {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
-        // Write code here that turns the phrase above into concrete actions'
-        resetOptions('sessions/create');
-        options.uri = "http://localhost:8024/sessions/create";
-        options.body = {"domainid": "test", "code": "administrator"};
-        console.log(options);
-        Request.post(options, function (error, response, body) {
-            if (error) {
-                throw new Error('upload failed:', error);
-            }
-            responseData = body;
+    Given('I create a login session as {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
+        //create request for login session
+        options = {
+            url : url+"/sessions/create",
+            json: true,
+            method : "POST",
+            headers: { //We can define headers too
+                'Content-Type': 'application/JSON'
+            },
+            body: table.hashes()[0]
+        };
+        Request ( options, function (err, response) {
+            //console.log(response.statusCode);
+            responseData = response.body;
             responseCode = response.statusCode;
-            console.log(responseData);
             callback();
+        }).on('error', function (error) {
+            console.log("Error with Request:" + error);
         });
-        callback();
     });
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
