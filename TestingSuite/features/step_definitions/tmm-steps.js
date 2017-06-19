@@ -153,6 +153,7 @@ Cucumber.defineSupportCode(function(context) {
 
     Then("The response body should contain an array of valid meta data objects", function (callback) {
         // Write code here that turns the phrase above into concrete actions
+
         if (responseData == undefined || responseData.ok == undefined) {
             throw new Error("did not get a response back");
         }
@@ -212,8 +213,9 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid', function (callback) {
-        if (responseData == undefined || responseData[0].tenantid != tenantID) {
-            throw new Error("response body should contain tenantID: "+ tenantID +" but instead contains: "+ responseData.tenantid);
+
+        if (responseData == undefined || responseData.length ==0 ||responseData[0].tenantid != tenantID) {
+            throw new Error("Did not receive list of tenant metadata objects: "+options);
         }
         callback();
     });
