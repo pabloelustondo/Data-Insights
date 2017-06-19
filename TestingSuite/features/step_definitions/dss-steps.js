@@ -237,8 +237,8 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Given('I set valid header and body for test_user', function (callback) {
-        options2.headers['x-access-token'] = invalidToken;
-        options2.body = {
+        options.headers['x-access-token'] = invalidToken;
+        options.body = {
             'tenantid': "test_user",
             'dataSourceType': "MobiControl",
             'agentid': "asdas",
