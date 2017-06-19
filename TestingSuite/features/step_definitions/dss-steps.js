@@ -17,7 +17,8 @@ Cucumber.defineSupportCode(function(context) {
 
     var responseCode = 0;
     var responseData = '';
- //   var invalidToken = 'invalidtokenasdasdasdas';
+    var xaccesskey = '';
+    var invalidToken = 'invalidtokenasdasdasdas';
     var validToken = '';
     var oldauthorizationToken = '';
     var url = '';
@@ -203,6 +204,14 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //Shirley tests----------------------------------------------------------------------
+    Given(/^I grab the access token from '(.*)'$/, function (variable, callback) {
+        FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
+            if (err) return console.log(err);
+            xaccesskey = contents;
+            console.log(contents);
+            callback();
+        });
+    });
     Given('I wipe the user {stringInDoubleQuotes} from DDB', function (stringInDoubleQuotes, callback) {
         // Write code here that turns the phrase above into concrete actions
         var ddb_url = globalconfig.ddb_url;
@@ -304,6 +313,7 @@ Cucumber.defineSupportCode(function(context) {
 
     When('I GET with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         resetOptions(stringInDoubleQuotes);
+        options.headers['x-access-token'] = xaccesskey;
         Request.get(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:', error);
@@ -318,7 +328,8 @@ Cucumber.defineSupportCode(function(context) {
     Then('I should receive my user information with all the valid fields', function (table, callback) {
 
         var table_json = table.hashes()[0];
-        if(table_json['domainid']!=responseData['domainid'] || table_json['tenantid']!=responseData['tenantid']) {
+        var res = JSON.parse(responseData);
+        if(table_json['domainid']!=res['domainid'] || table_json['tenantid']!=res['tenantid']) {
             console.error('Response contains missing fields: ' +responseData);
             return new Error("Response: " + responseData + "does not contain all the valid fields: " + table_json);
         }

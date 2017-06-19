@@ -23,7 +23,7 @@
             },
             "line": 10,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:52"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:44"
             }
           },
           {
@@ -45,11 +45,11 @@
             "name": "I GET topics",
             "result": {
               "status": "passed",
-              "duration": 26
+              "duration": 30
             },
             "line": 12,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:79"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:70"
             }
           },
           {
@@ -57,12 +57,13 @@
             "keyword": "Then ",
             "name": "response code is :200",
             "result": {
-              "status": "passed",
-              "duration": 1
+              "status": "failed",
+              "duration": 1,
+              "error_message": "Error: Response code should be 200 but is 500\n\"500 - \\\"<!doctype html>\\\\n<html lang=\\\\\\\"en\\\\\\\">\\\\n<head>\\\\n<meta charset=\\\\\\\"utf-8\\\\\\\">\\\\n<title>error</title>\\\\n</head>\\\\n<body>\\\\n<pre>typeerror: cannot read property &#39;datasets&#39; of undefined<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\server.js:175:26<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:137:13)<br> &nbsp; &nbsp;at route.dispatch (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:112:3)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:281:22<br> &nbsp; &nbsp;at param (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:354:14)<br> &nbsp; &nbsp;at param (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:365:14)<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:410:3)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at cors (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:185:7)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:221:17<br> &nbsp; &nbsp;at origincallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:211:15)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:216:13<br> &nbsp; &nbsp;at optionscallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:196:9)<br> &nbsp; &nbsp;at corsmiddleware (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:201:7)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at trim_prefix (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:317:13)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:284:7<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at immediate.next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at runcallback (timers.js:653:20)</pre>\\\\n</body>\\\\n</html>\\\\n\\\"\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:117:19)"
             },
             "line": 13,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:120"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:111"
             }
           },
           {
@@ -70,12 +71,11 @@
             "keyword": "Then ",
             "name": "response body should be error-free",
             "result": {
-              "status": "passed",
-              "duration": 1
+              "status": "skipped"
             },
             "line": 14,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:122"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:134"
             }
           }
         ]
@@ -97,7 +97,7 @@
             },
             "line": 17,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:60"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:52"
             }
           },
           {
@@ -119,11 +119,11 @@
             "name": "I make a POST call to ~/query",
             "result": {
               "status": "passed",
-              "duration": 28
+              "duration": 12
             },
             "line": 19,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:107"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:96"
             }
           },
           {
@@ -133,11 +133,11 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 200 but is 500\n\"500 - \\\"<!doctype html>\\\\n<html lang=\\\\\\\"en\\\\\\\">\\\\n<head>\\\\n<meta charset=\\\\\\\"utf-8\\\\\\\">\\\\n<title>error</title>\\\\n</head>\\\\n<body>\\\\n<pre>typeerror: cannot read property &#39;datasources&#39; of undefined<br> &nbsp; &nbsp;at object.processrequest (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\services\\\\\\\\dataservice.js:89:30)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\server.js:143:23<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:137:13)<br> &nbsp; &nbsp;at route.dispatch (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:112:3)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:281:22<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at cors (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:185:7)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:221:17<br> &nbsp; &nbsp;at origincallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:211:15)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:216:13<br> &nbsp; &nbsp;at optionscallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:196:9)<br> &nbsp; &nbsp;at corsmiddleware (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:201:7)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at trim_prefix (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:317:13)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:284:7<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at immediate.next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at runcallback (timers.js:653:20)<br> &nbsp; &nbsp;at tryonimmediate (timers.js:624:5)</pre>\\\\n</body>\\\\n</html>\\\\n\\\"\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:125:19)"
+              "error_message": "Error: Response code should be 200 but is 500\n\"500 - \\\"<!doctype html>\\\\n<html lang=\\\\\\\"en\\\\\\\">\\\\n<head>\\\\n<meta charset=\\\\\\\"utf-8\\\\\\\">\\\\n<title>error</title>\\\\n</head>\\\\n<body>\\\\n<pre>typeerror: cannot read property &#39;datasets&#39; of undefined<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\server.js:161:26<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:137:13)<br> &nbsp; &nbsp;at route.dispatch (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:112:3)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:281:22<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at cors (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:185:7)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:221:17<br> &nbsp; &nbsp;at origincallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:211:15)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:216:13<br> &nbsp; &nbsp;at optionscallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:196:9)<br> &nbsp; &nbsp;at corsmiddleware (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:201:7)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at trim_prefix (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:317:13)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:284:7<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at immediate.next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at runcallback (timers.js:653:20)<br> &nbsp; &nbsp;at tryonimmediate (timers.js:624:5)<br> &nbsp; &nbsp;at processimmediate [as _immediatecallback] (timers.js:596:5)</pre>\\\\n</body>\\\\n</html>\\\\n\\\"\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:117:19)"
             },
             "line": 20,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:120"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:111"
             }
           },
           {
@@ -149,7 +149,7 @@
             },
             "line": 22,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:145"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:137"
             }
           }
         ]

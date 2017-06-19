@@ -32,7 +32,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 13,
             "match": {
@@ -58,7 +58,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 82
+              "duration": 1089
             },
             "line": 15,
             "match": {
@@ -84,7 +84,7 @@
             "name": "The response body should contain an array of valid meta data objects",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 17,
             "match": {
@@ -110,7 +110,7 @@
             },
             "line": 20,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:162"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:163"
             }
           },
           {
@@ -132,7 +132,7 @@
             "name": "I set headers and body for posting to tmm",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 22,
             "match": {
@@ -145,7 +145,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 269
+              "duration": 459
             },
             "line": 23,
             "match": {
@@ -197,7 +197,7 @@
             },
             "line": 28,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:168"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:169"
             }
           },
           {
@@ -206,7 +206,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 29,
             "match": {
@@ -232,7 +232,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 85
+              "duration": 528
             },
             "line": 31,
             "match": {
@@ -246,7 +246,7 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 204 but is 200\n Error:{\"n\":1,\"nmodified\":0,\"upserted\":[{\"index\":0,\"_id\":\"5942bd4e332ee4e66bffddf5\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:148:19)"
+              "error_message": "Error: Response code should be 204 but is 200\n Error:{\"n\":1,\"nmodified\":0,\"upserted\":[{\"index\":0,\"_id\":\"59443d14732729d46ffd6455\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:148:19)"
             },
             "line": 32,
             "match": {
@@ -272,7 +272,7 @@
             },
             "line": 36,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:182"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:183"
             }
           },
           {
@@ -281,7 +281,7 @@
             "name": "grab tmm port number",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 37,
             "match": {
@@ -294,7 +294,7 @@
             "name": "I POST to \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 57
+              "duration": 277
             },
             "line": 38,
             "match": {
@@ -320,12 +320,12 @@
             "name": "The response body should contain the error \"url tenantid different from body tenantid\"",
             "result": {
               "status": "failed",
-              "duration": 0,
-              "error_message": "Error: response body should contain error: url tenantid different from body tenantid but instead contains: {\"n\":1,\"nModified\":0,\"upserted\":[{\"index\":0,\"_id\":\"5942bd4e332ee4e66bffddf9\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:189:19)"
+              "duration": 1,
+              "error_message": "Error: response body should contain error: url tenantid different from body tenantid but instead contains: {\"n\":1,\"nModified\":0,\"upserted\":[{\"index\":0,\"_id\":\"59443d14732729d46ffd6459\"}],\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:190:19)"
             },
             "line": 40,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:187"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:188"
             }
           }
         ]
@@ -373,7 +373,7 @@
             },
             "line": 45,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:194"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:195"
             }
           },
           {
@@ -382,11 +382,11 @@
             "name": "I get \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 232
+              "duration": 109
             },
             "line": 46,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:200"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:201"
             }
           },
           {
@@ -409,11 +409,11 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "TypeError: Cannot read property 'tenantid' of undefined\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:215:57)"
+              "error_message": "Error: Did not receive list of tenant metadata objects\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:218:19)"
             },
             "line": 48,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:214"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:215"
             }
           }
         ]
@@ -461,7 +461,7 @@
             },
             "line": 53,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:221"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:223"
             }
           },
           {
@@ -470,11 +470,11 @@
             "name": "I get \"/tenant\"",
             "result": {
               "status": "passed",
-              "duration": 58
+              "duration": 396
             },
             "line": 54,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:200"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:201"
             }
           },
           {
@@ -483,7 +483,7 @@
             "name": "The response code needs to be '200'",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 55,
             "match": {
@@ -500,7 +500,7 @@
             },
             "line": 56,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:227"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:229"
             }
           }
         ]

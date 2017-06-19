@@ -3,17 +3,18 @@ Feature: Tenancy Management
   #DataSources
   Scenario: As an administrator I want to check my additional information is correct
     Given I grab 'dssback' url from config file
-    Given I create a login session as "test"
+    Given I create a login session as "test_user"
     |domainid |code         |
-    |test     |administrator|
+    |test     |adced710-f61d-4e87-8652-b84b13fdff6b|
     Then response code should be 200
   #{"domainid": "test", "code": "administrator"}
+    Given I grab the access token from 'test_userPermanentToken'
     When I GET with endpoint "api/myenrollments"
     # http://10.0.91.2:8024/api/myenrollments
     Then response code should be 200
     Then I should receive my user information with all the valid fields
-      |accountid     |domainid |
-      |external_user |test_user|
+      |domainid     |tenantid |
+      |peter.meaney@soti.net |test_user|
 
   # {"status":"new","tenantid":"test_user","mcurl":"https://cad145.corp.soti.net/MobiControl","domainid":"peter.meaney@soti.net","username":"peter.meaney@soti.net"}
 
@@ -23,6 +24,7 @@ Feature: Tenancy Management
     Given I create a login session as "test"
       |domainid |code         |
       |test     |administrator|
+    Then response code should be 200
     Given I set request for test_user
       | tenantid        |  dataSourceType | agentid    | data                                      |
       | test_user		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
@@ -34,6 +36,7 @@ Feature: Tenancy Management
     Given I create a login session as "test"
       |domainid |code         |
       |test     |administrator|
+    Then response code should be 200
     When  I GET with endpoint "getDataSources"
     Then response code should be 200
 #
