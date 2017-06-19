@@ -16,6 +16,8 @@ export class DadUser {
 
 export type DadElementType = "chart" | "widget" | "table" | "page";
 
+export type DadUIElement = DadChart | DadWidget | DadTable;
+
 export class DadElement {
   id: string;
   elementType?: DadElementType;

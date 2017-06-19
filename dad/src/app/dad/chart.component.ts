@@ -13,6 +13,12 @@ import { DadCrudComponent } from './crud.component';
 declare var d3, c3: any;
 
 export class DadChart extends DadElement {
+
+    constructor(){
+        super();
+        this.elementType = 'chart';
+    }
+
     type: string;
     width?: number;
     height?: number;
@@ -174,7 +180,7 @@ export class DadChartComponent implements OnInit {
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
                 private dadConfigsService: DadConfigService,
-                private router: Router, private route: ActivatedRoute,) {}
+                private router: Router, private route: ActivatedRoute) {}
 
 
     optionChanged(v) {

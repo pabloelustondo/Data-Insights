@@ -11,7 +11,7 @@ import {DadChart} from "./chart.component";
 import {DadTable} from "./table.component";
 import { DadElement } from './dadmodels';
 import { config } from "./appconfig";
-import { DadUser, DadElementType } from "./dadmodels";
+import { DadUser, DadElementType, DadUIElement } from "./dadmodels";
 import { DadCrudComponent} from './crud.component';
 
 export class DadPage {
@@ -36,13 +36,23 @@ export class DadPage {
    <div *ngIf="page" class="animated fadeIn">
         <div *ngIf="page.widgets" class="row">
             <button style="cursor:pointer" title="Click to add a new element" class="glyphicons glyphicons-plus pull-right" (click)="selectElement()"></button> <br/><br/>
-            <select *ngIf="selectingElement" [(ngModel)]="selectedValue" #selectedOption (change)="selectElement($event.target.value);" class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
-                     <option id="created" style="color:black;" *ngFor="let option of options; let i=index" value="{{i}}" [selected]="option.name" >{{ option.name }}</option>
-            </select>
-                  
-        <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
-            <dadwidget [widget]="widget" [page]="page"></dadwidget>
-        </div>
+            <select *ngIf="selectingElement" [(ngModel)]="selectedValue" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                     <option id="option_chart" style="color:black;" value="chart">Chart</option>
+                     <option id="option_widget" style="color:black;" value="widget">Widget</option>
+            </select> <br/><br/>
+           <select *ngIf="selectedValue=='chart'" [(ngModel)]="selectedValue" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                <option id="option_chart_bar" style="color:black;" value="bar">Bar</option>
+                <option id="option_chart_pie" style="color:black;" value="pie">Pie</option>
+                <option id="option_chart_pie" style="color:black;" value="map">Map</option>
+            </select> <br/><br/>
+             <div *ngIf="selectingElement">
+                 <span id='cancel' class="glyphicons glyphicons-remove pull-right" (click)="selectElement()"></span>
+                 <span id='apply' class="glyphicons glyphicons-ok pull-right" (click)="addElement()"></span>
+             </div>
+    
+            <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
+                <dadwidget [widget]="widget" [page]="page"></dadwidget>
+            </div>
         </div>
         <div *ngIf="page.charts" class="row">
             <div *ngFor="let chart of page.charts">
@@ -61,6 +71,8 @@ export class  DadPageComponent implements OnInit{
     public id : string;
     user: DadUser;
     selectingElement: boolean = false;
+    selectedValue: any = -1;
+    value: string;
 
     constructor(private dadConfigService: DadConfigService,
                 private activatedRoute: ActivatedRoute
@@ -101,6 +113,36 @@ export class  DadPageComponent implements OnInit{
     selectElement(){
         if (!this.selectingElement) this.selectingElement = true;
         else this.selectingElement = false;
+        this.selectedValue ="";
+
+    }
+
+    addElement(){
+        let newElement: DadUIElement;
+        //chart
+        if(this.selectedValue == 'chart') {
+            newElement = new DadChart();
+            newElement.id = Date.now().toString();  //Name
+            this.page.chartids.push(newElement.id);
+            this.page.charts.push(newElement);
+
+            this.dadConfigService.saveOne(newElement);
+            this.dadConfigService.saveOne(this.page);
+
+            this.selectElement();
+            }
+        //widget
+        if(this.selectedValue == 'widget') {
+            newElement = new DadWidget();
+            newElement.id = Date.now().toString();  //Name
+            this.page.widgetids.push(newElement.id);
+            this.page.widgets.push(newElement);
+
+            this.dadConfigService.saveOne(newElement);
+            this.dadConfigService.saveOne(this.page);
+
+            this.selectElement();
+        }
     }
 
     selectDataSet(){}
