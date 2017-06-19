@@ -57,13 +57,16 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
 
       this.urlId = params['tenantId'];
       console.log(this.urlId);
+      this.tenantMetadata.tenantId = this.urlId;
 
       this.tmmConfigService.getTenantMetadata(this.urlId).then(data => {
-          if (data && data._body) {
+          if (data && data._body)
+          {
             try {
               let response = JSON.parse(data._body);
               console.log(response);
               this.tenantMetadata.dataSets = response[0].dataSets;
+
             } catch (err) {
               console.error(new Error(err));
             }
