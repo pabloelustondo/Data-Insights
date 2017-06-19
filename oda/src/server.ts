@@ -1,7 +1,7 @@
 import './controllers/queryController';
 import './controllers/topicsController';
 
-
+import * as rp from 'request-promise';
 import * as winston from 'winston';
 
 import * as bodyParser from 'body-parser';
@@ -13,10 +13,13 @@ import * as fs from 'fs';
 let localDynamo = require('local-dynamo');
 
 import {RegisterRoutes} from './routes';
+import {DatabaseService} from  './services/databaseService';
 const expressWinston = require('express-winston');
 
 let helmet = require('helmet');
 
+let kafka = require('kafka-node');
+let ConsumerGroup = kafka.ConsumerGroup;
 
 const app = express();
 const swaggerPath =  __dirname + '/swagger.json';
@@ -41,85 +44,10 @@ appconfig = globalconfig;
 console.log("configuration");
 console.log(appconfig);
 
+let db = new DatabaseService(appconfig.ddb_address);
 
 
-var kafka = require('kafka-node');
-var kafkaClient = new kafka.Client(appconfig.kafka_url);
-/*
- Client(connectionString, clientId, [zkOptions], [noAckBatchOptions], [sslOptions])
- connectionString: Zookeeper connection string, default localhost:2181/
- clientId: This is a user-supplied identifier for the client application, default kafka-node-client
- zkOptions: Object, Zookeeper options, see node-zookeeper-client
- noAckBatchOptions: Object, when requireAcks is disabled on Producer side we can define the batch properties, 'noAckBatchSize' in bytes and 'noAckBatchAge' in milliseconds. The default value is { noAckBatchSize: null, noAckBatchAge: null } and it acts as if there was no batch
- sslOptions: Object, options to be passed to the tls broker sockets, ex. { rejectUnauthorized: false } (Kafka +0.9)
- */
-
-var payloads =  [{ topic: 'demo', partition: 0 }];
-var options = { autoCommit: false};
-try {
-    var kafkaConsumer = new kafka.Consumer(kafkaClient, payloads, options);
-    /*
-     Consumer(client, payloads, options)
-     client: client which keeps a connection with the Kafka server. Note: it's recommend that create new client for different consumers.
-     payloads: Array,array of FetchRequest, FetchRequest is a JSON object like:
-     {
-     topic: 'topicName',
-     offset: 0, //default 0
-     }
-     options: options for consumer,
-     {
-     groupId: 'kafka-node-group',//consumer group id, default `kafka-node-group`
-     // Auto commit config
-     autoCommit: true,
-     autoCommitIntervalMs: 5000,
-     // The max wait time is the maximum amount of time in milliseconds to block waiting if insufficient data is available at the time the request is issued, default 100ms
-     fetchMaxWaitMs: 100,
-     // This is the minimum number of bytes of messages that must be available to give a response, default 1 byte
-     fetchMinBytes: 1,
-     // The maximum bytes to include in the message set for this partition. This helps bound the size of the response.
-     fetchMaxBytes: 1024 * 1024,
-     // If set true, consumer will fetch message from the given offset in the payloads
-     fromOffset: false,
-     // If set to 'buffer', values will be returned as raw buffer objects.
-     encoding: 'utf8'
-     }
-     Example:
-
-     var kafka = require('kafka-node'),
-     Consumer = kafka.Consumer,
-     client = new kafka.Client(),
-     consumer = new Consumer(
-     client,
-     [
-     { topic: 't', partition: 0 }, { topic: 't1', partition: 1 }
-     ],
-     {
-     autoCommit: false
-     }
-     );
-
-     */
-
-
-    kafkaConsumer.on('message', function (message: any, err: any) {
-        if (!err) {
-            console.log(message);
-            if (io) io.emit('chat message', message.value);
-        }
-    });
-
-    kafkaConsumer.on('error', function (err: any) {
-        console.log(err);
-    })
-
-
-
-
-} catch(e){
-    console.log("ODA could not start kafka consumer");
-
-}
-
+app.set('db', db);
 
 var io = require('socket.io')(http);
 
@@ -254,6 +182,74 @@ if (config.useSSL) {
    // let httpServer = http.createServer(app);
     http.listen(appconfig.port, function (){
         console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
+
+        let db = app.get('db');
+
+        const headersOptions = {
+            'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
+        };
+
+
+        const options: rp.OptionsWithUrl = {
+            json: true,
+            method: 'get',
+            headers: headersOptions,
+            url: appconfig['ddb_url'] + '/getAllTenants',
+        };
+        rp(options).then(function (data) {
+            db.populateTenants(data.tenants);
+        }).catch(function (err) {
+            console.log(err);
+        }).then(function () {
+            let tenant = db.getTenant('test');
+            console.log(JSON.stringify(tenant));
+        }).then(function () {
+
+
+            let dataSets = db.getAllDataSets();
+            let topics = ['undefined_transactionLogs'];
+            let consumerGroupOptions = {
+                host: '127.0.0.1:2181',
+                ssl: false, // optional (defaults to false) or tls options hash
+                groupId: 'ExampleTestGroup',
+                sessionTimeout: 15000,
+                // An array of partition assignment protocols ordered by preference.
+                // 'roundrobin' or 'range' string for built ins (see below to pass in custom assignment protocol)
+                protocol: ['roundrobin'],
+
+                // Offsets to use for new groups other options could be 'earliest' or 'none' (none will emit an error if no offsets were saved)
+                // equivalent to Java client's auto.offset.reset
+                fromOffset: 'earliest', // default
+
+                // how to recover from OutOfRangeOffset error (where save offset is past server retention) accepts same value as fromOffset
+                outOfRangeOffset: 'earliest', // default
+                migrateHLC: false,    // for details please see Migration section below
+                migrateRolling: true
+            };
+
+            let consumerGroup = new ConsumerGroup(consumerGroupOptions , 'undefined_cleanedData');
+            consumerGroup.on('error', function(err: any) {
+                console.log('error' + err);
+            });
+            consumerGroup.on('message', function (message: any) {
+                try {
+                    let data = JSON.parse(message.value);
+
+                    let idaMetadata = data.idaMetadata;
+                    let clientData = data.clientData;
+                    let clientMetadata = data.clientMetadata;
+
+                    console.log('json = ' + JSON.stringify(data));
+
+                    io.emit('chat message', message.value);
+                } catch (e) {
+                    console.log('not json format' + message.value);
+                }
+                // console.log('message' + message);
+            });
+
+        });
+
     });
 
 }

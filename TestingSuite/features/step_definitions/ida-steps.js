@@ -17,13 +17,13 @@ Cucumber.defineSupportCode(function(context) {
 
     //Request.debug = true;
 
-    var accessToken = '';
+    var xaccessToken = '';
     var authorizationToken = '';
     var responseCode = 0;
     var responseData = 0;
     var idaPortNumber = 0;
     var url = '';
-
+    var agentID = '';
     // Request Structure
     var options  = {
         "method": "",
@@ -39,70 +39,82 @@ Cucumber.defineSupportCode(function(context) {
         "preambleCRLF": true,
         "postambleCRLF": true
     };
-
-    Given('grab and store IDA port number', function (callback) {
+    Given(/^I grab '(.*)' url from the config file$/, function (variable, callback) {
         // Write code here that turns the phrase above into concrete actions
-        var ida_url = globalconfig.ida_url;
-        if(ida_url == "" || ida_url == undefined) throw new Error('Cannot get port: ida url not in global config file');
-        var port_str = ida_url.match("[0-9]+")[0];
-        if(isNaN(port_str)){
-            throw new Error('Cannot get port: invalid global config file');
-        }else{
-            url = ida_url;
-            idaPortNumber = parseInt(port_str);
-            callback();
-        }
+        var tmp_url = globalconfig[variable+'_url'];
+        if(tmp_url == "" || tmp_url == undefined) throw new Error(variable + ' url not in global config file');
+        url = tmp_url
+        callback();
     });
 
     //Retrieve permanent access token from file
-    Given(/^I set the xaccesskey$/, function (callback) {
-        FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
+    Given(/^I grab the xaccesskey from '(.*)'$/, function (variable, callback) {
+        FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
             if (err) return console.log(err);
-            accessToken = contents;
+            xaccessToken = contents;
             callback();
         });
+    });
 
+    Given('I set up request for making get call to /getDataSources', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.headers['x-access-token'] = xaccessToken;
+        options['uri'] = url+'/getDataSources';
+        options['method'] = 'GET';
+        callback();
+    });
+
+    Given('response body should contain a temporary token', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        if(responseData['session_token']!=undefined){
+            responseData = responseData.session_token;
+            callback();
+        }else{
+            console.error('Response body does not contain temp token');
+            return new Error('Response body does not contain temp token');
+        }
+    });
+
+    Given(/^I set up request for making get call to '(.*)'$/, function (variable, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.headers['x-access-token'] = xaccessToken;
+        options['uri'] = url+variable;
+        options['method'] = 'GET';
+        callback();
     });
 
     //make get request to IDA with permanent token to retrieve temporary token
-    Then('I make GET call to endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
-        options.uri = url + stringInDoubleQuotes;
-        options.headers['x-access-token'] = accessToken;
-        //send a GET request to arg1 with accessToken as param
+    Then('I make a GET call', function (callback) {
+        //send a GET request to arg1 with xaccessToken as param
         Request.get(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
             }
             responseCode = response.statusCode;
-            //var xaccess = obj.session_token;
             responseData = body;
-            authorizationToken = body.session_token;
+            //console.log(body);
             callback();
         })
     });
 
-    Given('I set the temporary AuthorizationToken', function (callback) {
-        FS.readFile("features/assets/AuthorizationToken", 'utf8', function(err, contents) {
-            if (err) return console.log(err);
-            authorizationToken = contents;
-            callback();
-        });
+    Then('I get the agentID of a data source', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        if(responseData[0] == undefined || responseData[0].agentId == undefined){
+            console.log(responseData);
+            console.error("data sources undefined");
+        }
+        agentID = responseData[0].agentId;
+        callback();
     });
 
-    When('I Post :portnumber with example data', function (callback) {
-        options.preambleCRLF = options.postambleCRLF = true;
-        options.uri = url+'/data';
-        options.headers['x-access-token'] = authorizationToken;
-        options.headers['content-type'] = 'application/json';
-        options.method = "POST";
-        options.body = {
-            'metadata': {
-                'dataSetId' : 'idaSampleId2',
-                'projections': '[]' },
-            'data': {
-                'sensorId' : '123',
-                'sensorValue' : '45648946'}
-        };
+    Then('I set up request for making get call to get permanent token for the data source', function (callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.headers['x-access-token'] = xaccessToken;
+        options.uri = url+'/sourceCredentials/'+agentID;
+        callback();
+    });
+
+    When('I make a POST call', function (callback) {
         Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -120,15 +132,13 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('response body should be error-free', function (callback) {
-
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (resString.includes('error'))
+        if (resString.includes('error') || resString.includes('invalid'))
             throw new Error(resString);
         callback();
     });
 
     Then('response body should be a valid IDA-POST response', function (callback) {
-
         var resString = JSON.stringify(responseData).toLowerCase();
          if (resString.includes('error') && !resString.includes('createdat') && !resString.includes('awsresponse'))
             throw new Error(resString);
@@ -136,13 +146,13 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //store temporary authorization token for data source in file
-    Then(/^I store the returned value in file named AuthorizationToken$/, function (callback) {
+
+    Then(/^I store the response in '(.*)'$/, function (variable, callback) {
         //console.log(authorizationToken);
-        FS.writeFile("features/assets/AuthorizationToken", authorizationToken, function(err) {
+        FS.writeFile("features/assets/"+variable, responseData, function(err) {
             if(err) {
                 throw new Error(err);
             }
-            //console.log("The file was saved!");
             callback();
         });
     });
@@ -152,19 +162,19 @@ Cucumber.defineSupportCode(function(context) {
         var resString = JSON.stringify(responseData).toLowerCase();
         if (parseInt(response) != parseInt(responseCode)) {
             //console.log('Error: '+ responseData);
-            throw new Error('Response code should be ' + response +' but is ' + responseCode +'\n Error:'+ resString);
-
+            console.log('Response code should be ' + response +' but is ' + responseCode +'\n '+ resString);
+            throw new Error('Response code should be ' + response +' but is ' + responseCode +'\n '+ resString);
         };
         callback();
     });
 
     Given('I set the AuthorizationToken to invalid token', function (callback) {
-        authorizationToken = accessToken;
+        authorizationToken = "iasdlkjaskdjklajsdklajsdkljaskldjaskldjaskldjaskldjlaskdjlaks.asjdhajkdhajksdhjkashdjkahskdjhakjshkjasd.asdhgasdhgashdjasghdhjsgahj";
         callback();
     });
 
     Then('response body should be empty or contain error', function (callback) {
-        if (responseData == undefined){
+        if (responseData == undefined || responseData == ""){
             callback();
         }else{
             var resString = JSON.stringify(responseData).toLowerCase();
@@ -173,17 +183,35 @@ Cucumber.defineSupportCode(function(context) {
             }
             callback();
         }
-
     });
 
-    Given('I set the xaccesskey to a modified JWT', function (callback) {
-        var tenantId = 'Xarun_test';
+    Given('I modify the xaccesskey to an invalid JWT', function (callback) {
+        var tenantId = 'Varun_is_lame';
         var jwtPayload = {
             tenantid: tenantId,
             agentid: '12345678901234567890'
         };
-        accessToken = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
+        xaccessToken = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
         callback();
     });
+
+    Given(/^I set up request for making post call to '(.*)'$/, function (variable, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        options.preambleCRLF = options.postambleCRLF = true;
+        options.uri = url+variable;
+        options.headers['x-access-token'] = xaccessToken;
+        options.headers['content-type'] = 'application/json';
+        options.method = "POST";
+        options.body = {
+            'metadata': {
+                'dataSetId' : 'idaSampleId2',
+                'projections': '[]' },
+            'data': {
+                'sensorId' : '123',
+                'sensorValue' : '45648946'}
+        };
+        callback();
+    });
+
 });
 

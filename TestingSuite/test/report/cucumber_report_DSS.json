@@ -1,0 +1,258 @@
+[
+  {
+    "keyword": "Feature",
+    "line": 1,
+    "name": "DSS API Tests",
+    "tags": [],
+    "uri": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\DSS.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "line": 4,
+        "name": "As an administrator I want to try to enroll a MobiControl data source using an invalid x-access-token",
+        "tags": [],
+        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-a-mobicontrol-data-source-using-an-invalid-x-access-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I grab 'dssback' url from config file",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 5,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:220"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "tenantid",
+                      "dataSourceType",
+                      "agentid",
+                      "data"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "test_user",
+                      "MobiControl",
+                      "asdas",
+                      "{inputName: \"mcurl\",inputValue: mobiUrl}"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "name": "I set header and body for test_user with invalid access token \"asdasdasdasdasdas\"",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 6,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:213"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST with endpoint \"registerDataSource\"",
+            "result": {
+              "status": "passed",
+              "duration": 43
+            },
+            "line": 9,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:243"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code should be 400",
+            "result": {
+              "status": "failed",
+              "duration": 1,
+              "error_message": "Error: Response should be :400, Got:200\n \"added successfully\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:344:19)"
+            },
+            "line": 10,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:340"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 12,
+        "name": "As an administrator I want to enroll a new tenant",
+        "tags": [],
+        "id": "dss-api-tests;as-an-administrator-i-want-to-enroll-a-new-tenant",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I wipe the user \"new_tenant\" from DDB",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 13,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:205"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I grab 'dssback' url from config file",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 14,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:220"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "accountid",
+                      "apikey",
+                      "clientsecret",
+                      "domainid",
+                      "mcurl",
+                      "password",
+                      "username"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "external_user",
+                      "244cc44394ba4efd8fe38297ee8213d3",
+                      "1",
+                      "stupidshit",
+                      "https://cad099.corp.soti.net/MobiControl",
+                      "1",
+                      "administrator"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "name": "I create new user named \"test1\" with the following data:",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 15,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:45"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST with endpoint \"enrollments\"",
+            "result": {
+              "status": "passed",
+              "duration": 64
+            },
+            "line": 18,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:243"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 200",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 19,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:55"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response's id_token should be valid",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: Token was not found in response: \"Tenant ID already enrolled\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:169:19)"
+            },
+            "line": 20,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:164"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 22,
+        "name": "As an administrator I want to try to enroll with an existing tenant",
+        "tags": [],
+        "id": "dss-api-tests;as-an-administrator-i-want-to-try-to-enroll-with-an-existing-tenant",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I POST with enrollment data for \"new_tenant\"",
+            "result": {
+              "status": "passed",
+              "duration": 82
+            },
+            "line": 23,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:116"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The HTTP Code should be 400",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 24,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:55"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response should contain 'Tenant ID already enrolled'",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 25,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\dss-steps.js:65"
+            }
+          }
+        ]
+      }
+    ],
+    "id": "dss-api-tests"
+  }
+]
