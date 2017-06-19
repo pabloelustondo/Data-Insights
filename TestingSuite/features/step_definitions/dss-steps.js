@@ -208,7 +208,7 @@ Cucumber.defineSupportCode(function(context) {
         FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
             if (err) return console.log(err);
             xaccesskey = contents;
-            console.log(contents);
+            //console.log(contents);
             callback();
         });
     });
@@ -320,7 +320,7 @@ Cucumber.defineSupportCode(function(context) {
             }
             responseData = body;
             responseCode = response.statusCode;
-            console.log(responseData);
+            //console.log(responseData);
             callback();
         });
     });
