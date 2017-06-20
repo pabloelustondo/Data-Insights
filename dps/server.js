@@ -158,8 +158,9 @@ app.post('/data/outGoingRequest', function (req, res) {
     var metadata = req.body.metadata;
     var db = app.get('db');
     var tenant = db.getTenant(metadata.tenantId);
-    if (tenant) {
-        var dataSets = tenant['dataSets'];
+    var dataSets = tenant['dataSets'];
+    var dataSet = _.find(dataSets, { id: metadata.dataSetId });
+    if (tenant && dataSet) {
         dataService_1.processRequest(metadata, dataSets, res);
     }
     else {
