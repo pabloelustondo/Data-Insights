@@ -83,12 +83,14 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-    Given('I set invalid request header and body for POST call to ~/query', function (callback) {
-        //prepare header and body for posting to IDA query endpoint
-        options.preambleCRLF = options.postambleCRLF = true;
-        options.body = {
-            "dataSetId": "string",
-            "from": ["UnicornCollection"]
+    Given('I set invalid request for POST call to ~/query', function (table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        //set example query in body
+        options.headers['x-access-token'] = accessToken;
+        var tableJson = table.hashes()[0];
+        options.body =  {
+            "dataSetId": tableJson.dataSetId,
+            "from": [tableJson.from]
         };
         callback();
     });
@@ -166,13 +168,14 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set valid request for posting to ~/query', function (callback) {
+    Given('I set valid request for posting to ~/query', function (table, callback) {
         // Write code here that turns the phrase above into concrete actions
         //set example query in body
         options.headers['x-access-token'] = accessToken;
+        var tableJson = table.hashes()[0];
         options.body =  {
-            "dataSetId": "string",
-            "from": ["vehicleInfo"]
+            "dataSetId": tableJson.dataSetId,
+            "from": [tableJson.from]
         };
         callback();
     });

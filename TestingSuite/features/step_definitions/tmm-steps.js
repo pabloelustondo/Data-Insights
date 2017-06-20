@@ -144,7 +144,6 @@ Cucumber.defineSupportCode(function(context) {
     When("I POST to {stringInDoubleQuotes}", function (stringInDoubleQuotes,callback) {
         // Write code here that turns the phrase above into concrete actions
         options.uri = url + stringInDoubleQuotes;
-        console.log(options);
         Request.post(options, function (error, response, body) {
             if (error) {
                 throw new Error("upload failed:"+ error);
