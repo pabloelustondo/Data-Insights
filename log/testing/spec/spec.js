@@ -1,5 +1,4 @@
 
-
 describe("Data Analytics Service - LOG", function() {
 
     describe("GET /siloguser", function() {
@@ -81,23 +80,20 @@ describe("Data Analytics Service - LOG", function() {
         });
     });
 
-    describe("POST logss to KAFKA", function() {
+    describe("POST logs to KAFKA", function() {
         it("sends logs to the KAFKA", function(done) {
-            let Producer = kafka.Producer,
-                KeyedMessage = kafka.KeyedMessage,
-                client = new kafka.Client(),
-                producer = new Producer(client),
-                km = new KeyedMessage('key', 'message'),
-                payloads = [ { topic: 'log', messages: '{"producer": "MCDP", "params": {"tenantId": "someTenantId"}}', partition: 0 }} ];
-            producer.on('ready', function () {
-                producer.send(payloads, function (err, data) {
-                    console.log(data);
-                });
+            $.ajax({
+                url: "/unittest",
+                type:"GET",
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    console.log("From post: " + JSON.stringify(data,null,2));
+                    expect(data.ok).toBe(1);
+                    done();
+                }
             });
-
-            producer.on('error', function (err) {})
-
         });
+    });
 
 });
 

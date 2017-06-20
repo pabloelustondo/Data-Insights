@@ -1,1 +1,1 @@
-{"version":3,"file":"logconfig.js","sourceRoot":"","sources":["logconfig.ts"],"names":[],"mappings":";;AAAA,kBAAe;IACX,WAAW,EAAE,6BAA6B;IAC1C,WAAW,EAAE,6BAA6B;CAC7C,CAAA"}
+{"version":3,"file":"logconfig.js","sourceRoot":"","sources":["logconfig.ts"],"names":[],"mappings":";;AAAA,kBAAe;IACX,KAAK,EAAE,mCAAmC;CAC7C,CAAA"}

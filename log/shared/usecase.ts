@@ -1,7 +1,8 @@
-import * as log from "./log";
+import {log, interpolate} from "./log";
 
-log.client({classifier: "Read_Success", mesasage: "any message", tenenatId: "myTenantId", parameters: {}});
+log({classifier:"Read_Success", message: "any", producer: "Tenant", params:{tenenatId: "someTenantId"} });
+log({classifier:"Read_Success", message: "any", producer: "DDB", params:{tenenatId: "someTenantId"} });
 
-log.server({classifier: "Read_Success", mesasage: "any message", tenenatId: "myTenantId", parameters: {}});
+var t = interpolate({classifier:"Read_Success", producer: "DDB", message: "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", params: { speed: "quick", fox: { color: "brown" }, mammal: ["dog", "cat", "fox"] }});
 
-
+console.log(t);

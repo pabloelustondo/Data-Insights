@@ -11,6 +11,7 @@
     "express": "4.13.3",
     "helmet": "^3.4.1",
     "jasmine-node": "^1.14.5",
+    "kafka-node": "^1.6.2",
     "mongodb": "2.0.46",
     "request": "^2.65.0"
   },
@@ -18,7 +19,10 @@
     "start": "npm run getConfigs & node server.js",
     "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
     "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
-    "test": "echo unit tests not implemented for now",
+    "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js",
     "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
+  },
+  "devDependencies": {
+    "karma-browserify": "^5.1.1"
   }
 }
