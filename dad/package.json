@@ -1,6 +1,6 @@
 {
   "name": "genesis-ui",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "description": "Bootstrap 4 Admin Template",
   "author": "",
   "url": "https://genesisui.com",
@@ -15,7 +15,7 @@
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
     "e2eDebug": "protractor debug",
-    "getConfigs": "cp-cli ./globalconfig_kub.json ./globalconfig.json",
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json",
     "build": "ng build"
   },
   "private": true,
@@ -54,8 +54,11 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "^2.4.0",
+    "@angular/tsc-wrapped": "^4.2.3",
     "@types/jasmine": "2.5.37",
     "@types/jquery": "^2.0.39",
+    "angular-cli": "1.0.0-beta.21",
+    "autoprefixer": "^7.1.1",
     "codelyzer": "1.0.0-beta.4",
     "cp-cli": "^1.0.2",
     "jasmine-core": "2.5.2",
