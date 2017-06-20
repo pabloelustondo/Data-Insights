@@ -34,22 +34,32 @@ export class DadPage {
     providers: [DadElementDataService, DadConfigService],
     template: `
    <div *ngIf="page" class="animated fadeIn">
-        <div *ngIf="page.widgets" class="row">
-            <button style="cursor:pointer" title="Click to add a new element" class="glyphicons glyphicons-plus pull-right" (click)="selectElement()"></button> <br/><br/>
+            <span style="cursor:pointer" title="Click to add a new element" class="glyphicons glyphicons-plus pull-right" (click)="selectElement()"></span> <br/><br/>
+            <input style="max-width:150px" *ngIf="selectingElement" [(ngModel)]="elementName" class="pull-right" type="text" placeholder="New Element Name" required> <br/><br/>
+
             <select *ngIf="selectingElement" [(ngModel)]="selectedValue" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                      <option id="option_chart" style="color:black;" value="chart">Chart</option>
                      <option id="option_widget" style="color:black;" value="widget">Widget</option>
             </select> <br/><br/>
-           <select *ngIf="selectedValue=='chart'" [(ngModel)]="selectedValue" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
-                <option id="option_chart_bar" style="color:black;" value="bar">Bar</option>
-                <option id="option_chart_pie" style="color:black;" value="pie">Pie</option>
+            
+           <select *ngIf="selectedValue=='chart'" [(ngModel)]="selectedChartType" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                <option id="option_chart_bar" style="color:black;" value="bar">Bar Chart</option>
+                <option id="option_chart_pie" style="color:black;" value="pie">Pie Chart</option>
                 <option id="option_chart_pie" style="color:black;" value="map">Map</option>
             </select> <br/><br/>
+            <!--
+            <select *ngIf="selectedValue=='widget'" [(ngModel)]="selectedWidgetType" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                <option id="option_widget" style="color:black;" value="tile">Tile</option>
+                <option id="option_widget_chart" style="color:black;" value="widget.chart">Widget Chart</option>
+            </select> <br/><br/>
+            -->
              <div *ngIf="selectingElement">
                  <span id='cancel' class="glyphicons glyphicons-remove pull-right" (click)="selectElement()"></span>
                  <span id='apply' class="glyphicons glyphicons-ok pull-right" (click)="addElement()"></span>
              </div>
-    
+            
+            <div *ngIf="page.widgets" class="row">
+
             <div class="col-m-12 row-sm-4" *ngFor="let widget of page.widgets">
                 <dadwidget [widget]="widget" [page]="page"></dadwidget>
             </div>
@@ -72,7 +82,10 @@ export class  DadPageComponent implements OnInit{
     user: DadUser;
     selectingElement: boolean = false;
     selectedValue: any = -1;
+    selectedChartType: any = -1;
+    selectedWidgetType: any = -1;
     value: string;
+    elementName: string;
 
     constructor(private dadConfigService: DadConfigService,
                 private activatedRoute: ActivatedRoute
@@ -122,27 +135,51 @@ export class  DadPageComponent implements OnInit{
         //chart
         if(this.selectedValue == 'chart') {
             newElement = new DadChart();
-            newElement.id = Date.now().toString();  //Name
+            newElement.name =  this.elementName;
+            if(this.elementName) {
+                newElement.id = this.elementName;
+            } else{ newElement.id = Date.now().toString();}
             this.page.chartids.push(newElement.id);
             this.page.charts.push(newElement);
+
+            if(this.selectedChartType == 'bar'){
+                newElement.type = 'bar';
+            }
+            if(this.selectedChartType == 'pie'){
+                newElement.type = 'pie';
+            }
+            if(this.selectedChartType == 'map'){
+                newElement.type = 'map';
+            }
 
             this.dadConfigService.saveOne(newElement);
             this.dadConfigService.saveOne(this.page);
 
-            this.selectElement();
             }
         //widget
         if(this.selectedValue == 'widget') {
             newElement = new DadWidget();
-            newElement.id = Date.now().toString();  //Name
+            newElement.name =  this.elementName;
+            if(this.elementName) {
+                newElement.id = this.elementName;
+            } else{ newElement.id = Date.now().toString();}
+            newElement.type = 0;
+           /* if(this.selectedWidgetType == 'Tile'){
+                newElement.type = 0;
+            }
+            if(this.selectedWidgetType == 'Widget Chart'){
+                newElement.type = 1;
+            }
+            */
             this.page.widgetids.push(newElement.id);
             this.page.widgets.push(newElement);
 
             this.dadConfigService.saveOne(newElement);
             this.dadConfigService.saveOne(this.page);
 
-            this.selectElement();
         }
+        this.selectElement();
+
     }
 
     selectDataSet(){}

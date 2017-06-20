@@ -11,6 +11,12 @@ import { config } from "./appconfig";
 export enum DadWidgetType { OneNumber, Chart };
 
 export class DadWidget extends DadElement{
+
+    constructor(){
+        super();
+        this.elementType = 'widget';
+    }
+
   type: DadWidgetType;
   chart?: DadChart;
   drillTo?: string;

@@ -34,6 +34,7 @@ export class DadElement {
   lat?: string;
   parameterMappers?:any[];
   endpoint?: string;
+  widget?: DadWidget;
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
   tableId?: string;
