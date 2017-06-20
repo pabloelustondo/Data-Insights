@@ -8,4 +8,4 @@ node .\node_modules\cucumber\bin\cucumber.js -f pretty features\\DSS.feature -f 
 node .\node_modules\cucumber\bin\cucumber.js -f pretty features\\TenancyManagement.feature -f pretty -f json:test/report/cucumber_report_TenancyManagement.json
 node .\node_modules\cucumber\bin\cucumber.js -f pretty features\\Enrollment.feature -f pretty -f json:test/report/cucumber_report_Enrollment.json
 
-node .\node_modules\cucumber\bin\cucumber.js -f pretty features\\reports.feature
+start cmd.exe /k  "node .\node_modules\cucumber\bin\cucumber.js -f pretty features\\reports.feature"
