@@ -1,6 +1,6 @@
 {
   "name": "genesis-ui",
-  "version": "1.5.11",
+  "version": "1.5.10",
   "description": "Bootstrap 4 Admin Template",
   "author": "",
   "url": "https://genesisui.com",
@@ -8,14 +8,15 @@
   "license": "MIT",
   "angular-cli": "1.0.0-rc.4",
   "scripts": {
-    "start": "npm run getConfigs & ng serve --host 0.0.0.0 --disable-host-check true --port 8025",
+    "start": "npm run getConfigs & ng serve --port 8025",
     "startSSL": "npm run getConfigs &ng serve --host 127.0.0.1 --port 4200 --ssl 1 --ssl-key  \"C:/63663247-localhost_3002.key\"  --ssl-cert \"C:/63663247-localhost_3002.cert\" ",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
     "e2eDebug": "protractor debug",
-    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
+    "getConfigs": "cp-cli ./globalconfig_kub.json ./globalconfig.json",
+    "build": "ng build"
   },
   "private": true,
   "dependencies": {
@@ -52,10 +53,9 @@
     "zone.js": "0.7.2"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "^4.0.1",
+    "@angular/compiler-cli": "^2.4.0",
     "@types/jasmine": "2.5.37",
     "@types/jquery": "^2.0.39",
-    "angular-cli": "1.0.0-beta.21",
     "codelyzer": "1.0.0-beta.4",
     "cp-cli": "^1.0.2",
     "jasmine-core": "2.5.2",
