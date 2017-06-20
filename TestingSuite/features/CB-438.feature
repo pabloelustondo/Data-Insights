@@ -15,7 +15,7 @@ Background:
 
   Scenario: As an admininstrator I want to subscribe to a topic
     Given I set valid request header and body for POST call to ~/query with metadata id
-    And I grab ODA port number from globalconfig.json
+    And I grab ODA url from globalconfig.json
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed

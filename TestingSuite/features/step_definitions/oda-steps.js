@@ -35,7 +35,7 @@ Cucumber.defineSupportCode(function(context) {
         //I get ODA's port number from the url in config json file using REGEX
         var oda_url = globalconfig.oda_url;
         if(oda_url == "" || oda_url == undefined)
-            throw new Error('Cannot get port: ida url not in global config file');
+            throw new Error('Cannot get port: oda url not in global config file');
         url = oda_url;
         callback();
     });
