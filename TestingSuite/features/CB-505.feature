@@ -16,7 +16,7 @@ DSS should be responsible only for data sources management and the future featur
     Then The response code needs to be '200'
     And The response body should contain an array of valid meta data objects
 
-  Scenario: As an administrator, I want to create a new modified data set
+  Scenario: As an administrator, I want to create a new data set
     Given I modify a Tenant Metadata Object such that it remains valid
     And grab tmm port number
     Then I set headers and body for posting to tmm
