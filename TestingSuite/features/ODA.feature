@@ -15,7 +15,7 @@ Feature: SOTI Insight ODA Backend Components
     And I grab ODA url from globalconfig.json
     Then I set valid request for posting to ~/query
       |dataSetId|from       |
-      |string   |vehicleInfo|
+      |10-22-1  |Percentage       |
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed
