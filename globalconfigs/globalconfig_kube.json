@@ -3,7 +3,7 @@
   "useSSL":       false,
   "useAccessKey": false,
   "ddb_url":      "http://ddb-svc.stage.svc.cluster.local:8000",
-  "dss_url":      "http://sotiinsights.cloudapp.net:8023",
+  "dss_url":      "http://dssb-svc.stage.svc.cluster.local:8023",
   "dssback_url":  "http://dssb-svc.stage.svc.cluster.local:8024",
   "dad_url":      "http://dadb-svc.stage.svc.cluster.local:8025",
   "dadback_url":  "http://dadb-svc.stage.svc.cluster.local:8026",
