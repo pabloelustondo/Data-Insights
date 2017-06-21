@@ -5,6 +5,7 @@
   "aws-secretKeyFileLocation": "C:/IDA_secretAccessKey.txt",
   "https-key-location" : "C:/63663247-localhost_3002.key",
   "https-cert-location" : "C:/63663247-localhost_3002.cert",
+  "expiring-secret": "abcdefg9876543210",
   "aws-path":  "/test/function_one",
   "aws-discharge" : "/test/dischargeratedistribution",
   "aws-deviceNotLasted" : "/test/countOfDevicesDidNotSurviveShift",

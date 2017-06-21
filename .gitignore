@@ -19,3 +19,5 @@ obj/
 config/
 */globalconfig.json
 globalconfig.json
+TestingSuite/features/assets/*
+TestingSuite/test/*

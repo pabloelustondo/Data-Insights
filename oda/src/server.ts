@@ -235,13 +235,20 @@ if (config.useSSL) {
                 try {
                     let data = JSON.parse(message.value);
 
+
                     let idaMetadata = data.idaMetadata;
                     let clientData = data.clientData;
                     let clientMetadata = data.clientMetadata;
 
                     console.log('json = ' + JSON.stringify(data));
 
-                    io.emit('chat message', message.value);
+                    let ioMessage = [
+                        {
+                            timeStamp: new Date().toISOString(),
+                            data: message.value
+                        }
+                    ];
+                    io.emit('chat message',ioMessage);
                 } catch (e) {
                     console.log('not json format' + message.value);
                 }

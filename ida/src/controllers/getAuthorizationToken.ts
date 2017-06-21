@@ -102,7 +102,7 @@ export class GetAuthorizationToken {
                 return Promise.reject (
                     {
                         message : error.message,
-                        status : error.status
+                        status : error.statusCode
                     }
                 );
             });

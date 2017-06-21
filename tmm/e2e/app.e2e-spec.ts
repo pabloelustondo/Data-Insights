@@ -22,7 +22,7 @@ describe('TMM Module', () => {
 describe('TMM UI Elements', () => {
 
   it('Should check if the "Click to add a Data Set" button is there', () => {
-    browser.get('http://localhost:8028');
+    browser.get('http://localhost:8028/test');
     expect(element(by.id('addDataSet')).getText()).toEqual('Click to add a Data set');
     browser.sleep(500);
   });
@@ -58,7 +58,7 @@ describe('TMM UI Elements', () => {
   });
 
 
-  it('Should be able to write in the text area', () => {
+  it('Should be able to write in the text area and save it correctly', () => {
     element(by.id('addDataSet')).click();
     element(by.className('jsoneditor-text')).click();
     element(by.className('jsoneditor-text')).clear();

@@ -262,8 +262,8 @@ pre {
           <a class="navbar-brand">Cucumberjs Report</a>
           <div class="project-name visible-md visible-lg">testingsuite</div>
           <div class="label-container">
-            <span class="label label-success" title=scenarios>Passed: 1</span>
-            <span class="label label-danger" title=scenarios>Failed: 4</span>
+            <span class="label label-success" title=scenarios>Passed: 3</span>
+            <span class="label label-danger" title=scenarios>Failed: 3</span>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ pre {
 
     <div class="container">
 
-      <div class="generated-on">Thu Jun 15 2017 13:57:38 GMT-0400 (Eastern Daylight Time)</div>
+      <div class="generated-on">Fri Jun 16 2017 16:18:36 GMT-0400 (Eastern Daylight Time)</div>
 
       <div class="row">
         <div class="chart col-lg-6 col-md-6" id="piechart_features"></div>
@@ -362,8 +362,8 @@ pre {
                         <i class="glyphicon glyphicon-chevron-down"></i>
                         <b>Feature:</b>IDA API Tests
                         <span class="label-container">
-              <span class="label label-success" title="1 Scenarios Passed">1</span>
-              <span class="label label-danger" title="4 Scenarios Failed">4</span>
+              <span class="label label-success" title="3 Scenarios Passed">3</span>
+              <span class="label label-danger" title="3 Scenarios Failed">3</span>
               
               
               
@@ -387,11 +387,11 @@ pre {
                                         <div style="padding-right: 30px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
-                                            <b>Scenario:</b>As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints
+                                            <b>Scenario:</b>As an administrator I want to download an x-access-token for a data source
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="7 Steps Passed">7</span>
+                              <span class="label label-success" title="11 Steps Passed">11</span>
                               
                               
                               
@@ -417,7 +417,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the xaccesskey</span>
+                          <span> I grab the xaccesskey from 'testToken'</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -451,7 +451,37 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
+                          <span> I grab 'dssback' url from the config file</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> I set up request for making get call to '/getDataSources'</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -485,7 +515,388 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">When </span>
-                          <span> I make GET call to endpoint "/Security/getAuthorizationToken"</span>
+                          <span> I make a GET call</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> response code must be 200</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I get the agentID of a data source</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I set up request for making get call to get permanent token for the data source</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I make a GET call</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> response code must be 200</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> response body should be error-free</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> I store the response in 'testPermanentToken'</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                
+                                <div class="tags"> </div>
+                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_1">
+                                    <div>
+
+                                        <div style="padding-right: 30px">
+                                            <i class="glyphicon glyphicon-chevron-right"></i>
+                                            <i class="glyphicon glyphicon-chevron-down"></i>
+                                            <b>Scenario:</b>As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints
+                                        </div>
+                                        <div>
+                            <span class="label-container">
+                              <span class="label label-success" title="8 Steps Passed">8</span>
+                              
+                              
+                              
+                              
+                              
+                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseScenariotestingsuite0_1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                
+                                
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Given </span>
+                          <span> I grab the xaccesskey from 'testPermanentToken'</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> I grab 'ida' url from the config file</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> I set up request for making get call to '/Security/getAuthorizationToken'</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">When </span>
+                          <span> I make a GET call</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -579,7 +990,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> AuthorizationToken is not empty</span>
+                          <span> response body should contain a temporary token</span>
                           
                          
                             
@@ -609,7 +1020,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Then </span>
-                          <span> I store the returned value in file named AuthorizationToken</span>
+                          <span> I store the response in 'testTemporaryToken'</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -642,7 +1053,7 @@ pre {
                             <h4 class="panel-title">
                                 
                                 <div class="tags"> </div>
-                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_1">
+                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_2">
                                     <div>
 
                                         <div style="padding-right: 70px">
@@ -652,7 +1063,7 @@ pre {
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="3 Steps Passed">3</span>
+                              <span class="label label-success" title="4 Steps Passed">4</span>
                               
                               
                               <span class="label label-warning" title="1 Steps Skipped">1</span>
@@ -664,7 +1075,7 @@ pre {
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseScenariotestingsuite0_1" class="panel-collapse collapse">
+                        <div id="collapseScenariotestingsuite0_2" class="panel-collapse collapse">
                             <div class="panel-body">
                                 
                                 
@@ -678,7 +1089,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the xaccesskey to a modified JWT</span>
+                          <span> I modify the xaccesskey to an invalid JWT</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -712,12 +1123,38 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
+                          <span> I grab 'ida' url from the config file</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
+                         
                             
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> I set up request for making get call to '/Security/getAuthorizationToken'</span>
+                          
                          
                             
                           
@@ -746,7 +1183,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">When </span>
-                          <span> I make GET call to endpoint "/Security/getAuthorizationToken"</span>
+                          <span> I make a GET call</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -790,11 +1227,11 @@ pre {
                                     
 
                                     
-                                    <a href="#error0_13" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_13" class="collapse">
+                                    <a href="#error0_24" data-toggle="collapse">+ Show Error</a>
+                                    <div id="error0_24" class="collapse">
                                         <pre class=info>Error: Response code should be 400 but is 500
  "invalid signature"
-    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:155:19)</pre>
+    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:166:19)</pre>
                                     </div>
                                     
 
@@ -846,21 +1283,21 @@ pre {
                             <h4 class="panel-title">
                                 
                                 <div class="tags"> </div>
-                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_2">
+                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_3">
                                     <div>
 
-                                        <div style="padding-right: 70px">
+                                        <div style="padding-right: 30px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
                                             <b>Scenario:</b>As an administrator I want to make a POST request to IDA using my temporary Authorization Token
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="3 Steps Passed">3</span>
+                              <span class="label label-success" title="6 Steps Passed">6</span>
                               
                               
-                              <span class="label label-warning" title="1 Steps Skipped">1</span>
-                              <span class="label label-danger" title="1 Steps Failed">1</span>
+                              
+                              
                               
                             </span>
                                         </div>
@@ -868,7 +1305,7 @@ pre {
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseScenariotestingsuite0_2" class="panel-collapse collapse">
+                        <div id="collapseScenariotestingsuite0_3" class="panel-collapse collapse">
                             <div class="panel-body">
                                 
                                 
@@ -882,12 +1319,8 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the temporary AuthorizationToken</span>
+                          <span> I grab the xaccesskey from 'testTemporaryToken'</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
-                            
                          
                             
                           
@@ -916,7 +1349,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
+                          <span> I grab 'ida' url from the config file</span>
                           
                          
                             
@@ -945,8 +1378,8 @@ pre {
                                     
                                     
                                     <span class="text">
-                        <span class="keyword highlight">When </span>
-                          <span> I Post :portnumber with example data</span>
+                        <span class="keyword highlight">And </span>
+                          <span> I set up request for making post call to '/data'</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -975,13 +1408,17 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-danger" title="Failed"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
                                     
                                     
                                     <span class="text">
-                        <span class="keyword highlight">Then </span>
-                          <span> response code must be 200</span>
+                        <span class="keyword highlight">When </span>
+                          <span> I make a POST call</span>
                           
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
                          
                             
                           
@@ -989,13 +1426,6 @@ pre {
                                     
                                     
 
-                                    
-                                    <a href="#error0_23" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_23" class="collapse">
-                                        <pre class=info>Error: Response code should be 200 but is 500
- "cannot read property 'status' of undefined"
-    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:155:19)</pre>
-                                    </div>
                                     
 
                                     
@@ -1012,7 +1442,37 @@ pre {
                                 <div class="row steps">
                                     
                                     
-                                    <span class="label label-warning" title="Skipped"><i class="glyphicon glyphicon-minus"></i></span>
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> response code must be 200</span>
+                          
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
                                     
                                     
                                     <span class="text">
@@ -1046,20 +1506,20 @@ pre {
                             <h4 class="panel-title">
                                 
                                 <div class="tags"> </div>
-                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_3">
+                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_4">
                                     <div>
 
-                                        <div style="padding-right: 50px">
+                                        <div style="padding-right: 70px">
                                             <i class="glyphicon glyphicon-chevron-right"></i>
                                             <i class="glyphicon glyphicon-chevron-down"></i>
                                             <b>Scenario:</b>As an administrator I want to make a POST request to IDA using an invalid token
                                         </div>
                                         <div>
                             <span class="label-container">
-                              <span class="label label-success" title="3 Steps Passed">3</span>
+                              <span class="label label-success" title="4 Steps Passed">4</span>
                               
                               
-                              
+                              <span class="label label-warning" title="1 Steps Skipped">1</span>
                               <span class="label label-danger" title="1 Steps Failed">1</span>
                               
                             </span>
@@ -1068,7 +1528,7 @@ pre {
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseScenariotestingsuite0_3" class="panel-collapse collapse">
+                        <div id="collapseScenariotestingsuite0_4" class="panel-collapse collapse">
                             <div class="panel-body">
                                 
                                 
@@ -1082,12 +1542,8 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> I set the AuthorizationToken to invalid token</span>
+                          <span> I modify the xaccesskey to an invalid JWT</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
-                            
                          
                             
                           
@@ -1116,12 +1572,38 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">And </span>
-                          <span> grab and store IDA port number</span>
+                          <span> I grab 'ida' url from the config file</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
+                         
                             
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-success" title="Success"><i class="glyphicon glyphicon-ok"></i></span>
+                                    
+                                    
+                                    <span class="text">
+                        <span class="keyword highlight">And </span>
+                          <span> I set up request for making post call to '/data'</span>
+                          
                          
                             
                           
@@ -1150,7 +1632,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">When </span>
-                          <span> I Post :portnumber with example data</span>
+                          <span> I make a POST call</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -1183,6 +1665,47 @@ pre {
                                     
                                     
                                     <span class="text">
+                        <span class="keyword highlight">Then </span>
+                          <span> response code must be 400</span>
+                          
+                              <span class="step-duration">
+                               <1ms
+                              </span>
+                            
+                         
+                            
+                          
+                      </span>
+                                    
+                                    
+
+                                    
+                                    <a href="#error0_44" data-toggle="collapse">+ Show Error</a>
+                                    <div id="error0_44" class="collapse">
+                                        <pre class=info>Error: Response code should be 400 but is 200
+ {"createdat":"2017-06-16t20:18:22.293z","metadata":["status : string"],"data":"ok"}
+    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:166:19)</pre>
+                                    </div>
+                                    
+
+                                    
+
+                                    
+
+                                    
+                                </p>
+                            </div>
+                            
+                            
+                                
+                                <p class="scenario-container">
+                                <div class="row steps">
+                                    
+                                    
+                                    <span class="label label-warning" title="Skipped"><i class="glyphicon glyphicon-minus"></i></span>
+                                    
+                                    
+                                    <span class="text">
                         <span class="keyword highlight">And </span>
                           <span> response body should be empty or contain error</span>
                           
@@ -1193,12 +1716,6 @@ pre {
                                     
                                     
 
-                                    
-                                    <a href="#error0_33" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_33" class="collapse">
-                                        <pre class=info>Error: response body should be empty or contain error but is: "cannot read property 'status' of undefined"
-    at World.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\ida-steps.js:172:23)</pre>
-                                    </div>
                                     
 
                                     
@@ -1219,7 +1736,7 @@ pre {
                             <h4 class="panel-title">
                                 
                                 <div class="tags"> </div>
-                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_4">
+                                <a data-toggle="collapse" href="#collapseScenariotestingsuite0_5">
                                     <div>
 
                                         <div style="padding-right: 50px">
@@ -1241,7 +1758,7 @@ pre {
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseScenariotestingsuite0_4" class="panel-collapse collapse">
+                        <div id="collapseScenariotestingsuite0_5" class="panel-collapse collapse">
                             <div class="panel-body">
                                 
                                 
@@ -1257,10 +1774,6 @@ pre {
                         <span class="keyword highlight">Given </span>
                           <span> grab IDA port number for kafka test</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
-                            
                          
                             
                           
@@ -1289,12 +1802,8 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">Given </span>
-                          <span> Set headers and body for posting data to IDA</span>
+                          <span> I set up request for making post call to '/data'</span>
                           
-                              <span class="step-duration">
-                               <1ms
-                              </span>
-                            
                          
                             
                           
@@ -1323,7 +1832,7 @@ pre {
                                     
                                     <span class="text">
                         <span class="keyword highlight">When </span>
-                          <span> I Post :portnumber after setting headers and body</span>
+                          <span> I make a POST call to /data</span>
                           
                               <span class="step-duration">
                                <1ms
@@ -1371,8 +1880,8 @@ pre {
                                     
 
                                     
-                                    <a href="#error0_43" data-toggle="collapse">+ Show Error</a>
-                                    <div id="error0_43" class="collapse">
+                                    <a href="#error0_53" data-toggle="collapse">+ Show Error</a>
+                                    <div id="error0_53" class="collapse">
                                         <pre class=info>Error: Something went wrong: TopicsNotExistError: The topic(s) varun_test_idaSampleId2 do not exist
     at Consumer.(anonymous) (C:\Users\sxia\Desktop\CustomerBI\TestingSuite\features\step_definitions\kafka-steps.js:116:23)
     at emitOne (events.js:96:13)
@@ -1445,8 +1954,8 @@ pre {
                                             });
         google.setOnLoadCallback(function() {drawChart({
                                                             "title" : "Scenarios",
-                                                            "failed" : 4,
-                                                            "passed" : 1,
+                                                            "failed" : 3,
+                                                            "passed" : 3,
                                                             "notdefined" : 0,
                                                             "pending" : 0,
                                                             "skipped" : 0,

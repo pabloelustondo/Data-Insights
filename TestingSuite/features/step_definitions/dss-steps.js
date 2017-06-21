@@ -17,16 +17,17 @@ Cucumber.defineSupportCode(function(context) {
 
     var responseCode = 0;
     var responseData = '';
+    var xaccesskey = '';
     var invalidToken = 'invalidtokenasdasdasdas';
     var validToken = '';
     var oldauthorizationToken = '';
-
+    var url = '';
     //some necessary evil for things that cannot be retrieved through the API
-    var mobiUrl = "https://cad099.corpss.soti.net/";
+   /* var mobiUrl = "https://cad099.corpss.soti.net/";
     var downAgentId = "31940960-70f1-4d92-aedd-a148f19c8757";
     var delAgentId1 = "c4b1c820-48f6-4e9b-a100-bc714043dff3";
     var delAgentId2 = "a14e1739-18e0-44f9-9471-69e842be98ad";
-    var url = '';
+    */
 
    // Request Structure
     var options  = {
@@ -36,7 +37,7 @@ Cucumber.defineSupportCode(function(context) {
             'Content-Type': 'application/json',
             'Keep-Alive': true,
             'Accept-Encoding': 'gzip,deflate'
-        }
+        }, 'body':{}
     };
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,6 +69,8 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         } else {
             console.error('Expected response: ' + response
+                + ', but received: ' + resString);
+            return new Error('Expected response: ' + response
                 + ', but received: ' + resString);
         }
     });
@@ -123,7 +126,7 @@ Cucumber.defineSupportCode(function(context) {
             responseData = body;
             responseCode = response.statusCode;
             testJWT = JSON.stringify(responseData) || '';
-            console.log(responseData);
+            //console.log(responseData);
             callback();
         }).on('error', function (error) {
             console.log("Error with Request:" + error);
@@ -153,7 +156,6 @@ Cucumber.defineSupportCode(function(context) {
                 console.log( error);
                 return;
             }
-
             //Remove Whitespace issues while comparing
             if (contents.toString().replace(/\s/g, "") === responseData.toString().replace(/\s/g, "")) {
                 callback();
@@ -202,6 +204,14 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     //Shirley tests----------------------------------------------------------------------
+    Given(/^I grab the access token from '(.*)'$/, function (variable, callback) {
+        FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
+            if (err) return console.log(err);
+            xaccesskey = contents;
+            //console.log(contents);
+            callback();
+        });
+    });
     Given('I wipe the user {stringInDoubleQuotes} from DDB', function (stringInDoubleQuotes, callback) {
         // Write code here that turns the phrase above into concrete actions
         var ddb_url = globalconfig.ddb_url;
@@ -219,8 +229,8 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set header and body for test_user with access token {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
-        options.headers["x-access-token"] = stringInDoubleQuotes;
+    Given('I set request for test_user', function (table, callback) {
+        //options.headers["x-access-token"] = stringInDoubleQuotes;
         options.form = table.hashes()[0];
         options.uri = url;
         callback();
@@ -235,9 +245,9 @@ Cucumber.defineSupportCode(function(context) {
 
     });
 
-    Given('I set valid header and body for test_user', function (callback) {
-        options2.headers['x-access-token'] = invalidToken;
-        options2.body = {
+ /*   Given('I set valid header and body for test_user', function (callback) {
+        options.headers['x-access-token'] = invalidToken;
+        options.body = {
             'tenantid': "test_user",
             'dataSourceType': "MobiControl",
             'agentid': "asdas",
@@ -247,7 +257,7 @@ Cucumber.defineSupportCode(function(context) {
             }
         };
         callback();
-    });
+    });*/
 
     When('I POST with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
 
@@ -270,13 +280,13 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set invalid header and body for test_user for delete', function (callback) {
+/*    Given('I set invalid header and body for test_user for delete', function (callback) {
         options2.headers['x-access-token'] = invalidToken;
         options2.body['agentid'] = delAgentId1;
         callback();
-    });
+    });*/
 
-    Given('I set valid header and body for test_user for delete', function (callback) {
+/*    Given('I set valid header and body for test_user for delete', function (callback) {
         FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
             if (err) return console.log(err);
             validToken = contents;
@@ -285,9 +295,9 @@ Cucumber.defineSupportCode(function(context) {
         options2.headers['x-access-token'] = validToken;
         options2.body['agentid'] = delAgentId2;
         callback();
-    });
+    });*/
 
-    When('I GET :portnumber with endpoint {stringInDoubleQuotes} to download credentials', function (stringInDoubleQuotes, callback) {
+    /*When('I GET :portnumber with endpoint {stringInDoubleQuotes} to download credentials', function (stringInDoubleQuotes, callback) {
         options2.baseUrl = url + ':' + portnumber;
         options2.url = stringInDoubleQuotes + '/' + downAgentId;
         options2.preambleCRLF = options2.postambleCRLF = true;
@@ -299,12 +309,37 @@ Cucumber.defineSupportCode(function(context) {
             responseCode = response.statusCode;
             callback();
         });
+    });*/
+
+    When('I GET with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        resetOptions(stringInDoubleQuotes);
+        options.headers['x-access-token'] = xaccesskey;
+        Request.get(options, function (error, response, body) {
+            if (error) {
+                throw new Error('upload failed:', error);
+            }
+            responseData = body;
+            responseCode = response.statusCode;
+            //console.log(responseData);
+            callback();
+        });
+    });
+
+    Then('I should receive my user information with all the valid fields', function (table, callback) {
+
+        var table_json = table.hashes()[0];
+        var res = JSON.parse(responseData);
+        if(table_json['domainid']!=res['domainid'] || table_json['tenantid']!=res['tenantid']) {
+            console.error('Response contains missing fields: ' +responseData);
+            return new Error("Response: " + responseData + "does not contain all the valid fields: " + table_json);
+        }
+        callback();
     });
 
     Given('I set head and body for handling credentials', function (callback){
-        options2.headers['x-access-token'] = validToken;
-        options2.body['agentid'] = delAgentId1;
-        callback();
+        options.headers['x-access-token'] = validToken;
+        //options.body['agentid'] = agentID;
+        //callback();
     });
 
     Then('I GET :idaportnumber with old credentials and endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
@@ -322,7 +357,7 @@ Cucumber.defineSupportCode(function(context) {
         })
     });
 
-    Then('I POST :portnumber with endpoint {stringInDoubleQuotes} to reset credentials', function (int, stringInDoubleQuotes, callback) {
+    /*Then('I POST :portnumber with endpoint {stringInDoubleQuotes} to reset credentials', function (int, stringInDoubleQuotes, callback) {
         options2.preambleCRLF = options2.postambleCRLF = true;
         options2.url = stringInDoubleQuotes + '/' + downAgentId;
         options2.headers['x-access-token'] = oldauthorizationToken;
@@ -335,7 +370,7 @@ Cucumber.defineSupportCode(function(context) {
             responseCode = response.statusCode;
             callback();
         });
-    });
+    });*/
 
     Then('response body contain some sort of error', function (callback) {
         var resString = JSON.stringify(responseData).toLowerCase();
@@ -366,8 +401,33 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
-
-
+    Given('I create a login session as {stringInDoubleQuotes}', function (stringInDoubleQuotes, table, callback) {
+        //create request for login session
+        options = {
+            url : url+"/sessions/create",
+            json: true,
+            method : "POST",
+            headers: { //We can define headers too
+                'Content-Type': 'application/JSON'
+            },
+            body: table.hashes()[0]
+        };
+        Request ( options, function (err, response) {
+            //console.log(response.statusCode);
+            responseData = response.body;
+            responseCode = response.statusCode;
+            callback();
+        }).on('error', function (error) {
+            console.log("Error with Request:" + error);
+        });
+    });
+    Then('I should receive my user information', function (callback) {
+        var resString = JSON.stringify(responseData).toLowerCase();
+        if(responseData['"new"'] ) {
+            console.log("Verified");
+        }
+        callback();
+    });
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      UTILITIES
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -409,14 +469,15 @@ Cucumber.defineSupportCode(function(context) {
 
     function resetOptions(endpoint) {
         options  = {
-            'uri': url + endpoint,
+            'uri': url +'/'+endpoint,
             'rejectUnauthorized': false,
             'headers' : {
                 'Content-Type': 'application/json',
                 'Keep-Alive': true,
                 'Accept-Encoding': 'gzip,deflate'
-            }
+            },
+            'body' :{},
+            'form' :{}
         };
-        resetFormValid();
     }
 });

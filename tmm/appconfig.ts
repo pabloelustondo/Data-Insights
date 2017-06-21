@@ -2,6 +2,8 @@
  * Created by pelustondo on 11/23/2016.
  */
 
+// import {fs} from "fs";
+
 export const config = {
   "testingmode": true,
   "useSSL":false,
@@ -22,4 +24,8 @@ export const config = {
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017"
 };
-
+/*
+export function globalConfig () {
+  let globalConfig = fs.readFileSync('./globalconfig.json', 'utf8');
+  return globalConfig;
+}*/

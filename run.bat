@@ -19,7 +19,7 @@ start cmd.exe /k mongod
 echo "starting ddb"
 start cmd.exe /k "cd %installdir%\ddb & call npm start"
 
-ehoc "starting dss"
+echo "starting dss"
 start cmd.exe /k "cd %installdir%\dss & call npm start"
 
 echo "starting dss backend"

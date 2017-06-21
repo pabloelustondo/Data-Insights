@@ -157,14 +157,15 @@ function publishCleanedDataToKafka(topic, tenantId, data) {
 app.post('/data/outGoingRequest', function (req, res) {
     var metadata = req.body.metadata;
     var db = app.get('db');
-    var tenant = db.getTenant('test');
-    var dataSets = tenant.dataSets;
-    if (metadata) {
+    var tenant = db.getTenant(metadata.tenantId);
+    var dataSets = tenant['dataSets'];
+    var dataSet = _.find(dataSets, { id: metadata.dataSetId });
+    if (tenant && dataSet) {
         dataService_1.processRequest(metadata, dataSets, res);
     }
     else {
         res.status(400).send({
-            message: 'No metadata field present in request body.'
+            message: 'No combination of tenant and dataSet found.'
         });
     }
 });

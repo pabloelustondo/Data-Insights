@@ -204,13 +204,14 @@ app.post('/data/outGoingRequest', function(req, res) {
     let metadata = req.body.metadata;
 
     let db = app.get('db');
-    let tenant = db.getTenant('test');
-    let dataSets = tenant.dataSets;
-    if (metadata) {
+    let tenant = db.getTenant(metadata.tenantId);
+    let dataSets = tenant['dataSets'];
+    let dataSet = _.find(dataSets, {id : metadata.dataSetId});
+    if (tenant && dataSet) {
         processRequest(metadata, dataSets, res);
     } else {
         res.status(400).send ({
-            message: 'No metadata field present in request body.'
+            message: 'No combination of tenant and dataSet found.'
         })
     }
 

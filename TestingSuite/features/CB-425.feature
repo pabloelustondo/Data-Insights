@@ -1,4 +1,4 @@
-Feature: Finalize data incoming flow
+Feature: Finalize data incoming flow (CB-425)
   # https://jira.soti.net/browse/CB-425
 
 Background:

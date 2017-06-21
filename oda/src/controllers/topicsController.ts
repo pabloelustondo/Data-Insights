@@ -28,7 +28,7 @@ export class TopicsController {
         dataSetId : 'myCustomQueryID',
         from : ['sourceMetadataId']
     })
-    public async Create(@Request() request: express.Request): Promise<SDS> {
+    public async Create(@Request() request: express.Request, tenantId: string): Promise<SDS> {
 
         let req = request;
         let token = req.headers['x-access-token'];
@@ -58,9 +58,9 @@ export class TopicsController {
                 let testData = ['vehicleInfo', 'customTopic'];
                 // returns test data for now
 
-                let xqs = {tenantId: 'test'};
+                let xqs = {tenantId: tenantId};
 
-                const xurl = appConfig['dps_url'] + '/getMetadata/' + xqs.tenantId;
+                const xurl = appConfig['dps_url'] + '/getMetadata/' + tenantId;
 
                 const options: rp.OptionsWithUrl = {
                     headers: {
