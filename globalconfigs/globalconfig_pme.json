@@ -14,6 +14,8 @@
   "ida_url":"http://cad059.corp.soti.net:8027",
   "tmm_url":"http://cad059.corp.soti.net:8028",
   "tmmback_url":"http://cad059.corp.soti.net:8029",
+  "dps_url":"http://localhost:8002",
+  "sml_url":"http://localhost:8031",
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017"
 }

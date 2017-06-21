@@ -11,15 +11,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by vdave on 5/2/2017.
  */
-const tsoa_1 = require('tsoa');
+const tsoa_1 = require("tsoa");
 let jwt = require('jsonwebtoken');
 const path = require('path');
 const config = require('../../config.json');
@@ -102,7 +103,8 @@ let UploadDataSetController = class UploadDataSetController {
                                             topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetId,
                                             partition: 0,
                                             messages: JSON.stringify(data)
-                                        }];
+                                        }
+                                    ];
                                     producer.send(payloads, function (err, data) {
                                         console.log('response from kafka' + data);
                                     });
@@ -111,7 +113,8 @@ let UploadDataSetController = class UploadDataSetController {
                                             topic: jwtDecodedToken.tenatid + '_' + 'transactionLogs',
                                             partition: 0,
                                             messages: JSON.stringify(data)
-                                        }];
+                                        }
+                                    ];
                                     producer.send(transactionLogPayloads, function (err, data) {
                                         console.log(data);
                                         // return Promise.resolve(data);
@@ -127,6 +130,7 @@ let UploadDataSetController = class UploadDataSetController {
                             }
                         });
                         return promise;
+                        // return rp(options);
                     }
                     else {
                         return new Promise(function (resolve, reject) {

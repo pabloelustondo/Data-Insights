@@ -1,9 +1,10 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /* tslint:disable */
-const tsoa_1 = require('tsoa');
-const tsoa_2 = require('tsoa');
-const getAuthorizationToken_1 = require('./controllers/getAuthorizationToken');
-const finalUploadEndpoint_1 = require('./controllers/finalUploadEndpoint');
+const tsoa_1 = require("tsoa");
+const tsoa_2 = require("tsoa");
+const getAuthorizationToken_1 = require("./controllers/getAuthorizationToken");
+const finalUploadEndpoint_1 = require("./controllers/finalUploadEndpoint");
 const models = {
     "RsaOtherPrimesInfo": {
         properties: {

@@ -1,5 +1,6 @@
 "use strict";
-const fs = require('fs');
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
 const config = require('../config.json');
 const AWS = require('aws-sdk');
 let accessKeyIdFile = fs.readFileSync(config['aws-accessKeyFileLocation'], 'utf8');
