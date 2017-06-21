@@ -15,7 +15,7 @@ import { TmmConfigService } from './tmmconfig.service';
     <div>
       <div *ngIf="tenantMetadata.dataSets && tenantMetadata.tenantId" class="container">
         <br/>
-        <h3 id="tenantname">Tenant Name:</h3> <i>{{tenantMetadata.dataSets[0].from[0]}}</i>
+        <h3 id="tenantname">Tenant Name:</h3> <i>{{tenantMetadata.name}}</i>
         <h3 id="tenantid">Tenant ID:</h3> <i>{{tenantMetadata.tenantId}}</i>
         <hr/>
         <div class="row">
@@ -57,15 +57,21 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
 
       this.urlId = params['tenantId'];
       console.log(this.urlId);
+      this.tenantMetadata.tenantId = this.urlId;
 
       this.tmmConfigService.getTenantMetadata(this.urlId).then(data => {
-          if (data && data._body) {
+          if (data && data._body)
+          {
             try {
               let response = JSON.parse(data._body);
+
               console.log(response);
-              this.tenantMetadata.dataSets = response[0].dataSets;
+              if(response.length != 0){
+                this.tenantMetadata.dataSets = response[0].dataSets;
+                this.tenantMetadata.name = response[0].name;
+              }
             } catch (err) {
-              console.error(new Error(err));
+              console.log(err);
             }
           }
         }

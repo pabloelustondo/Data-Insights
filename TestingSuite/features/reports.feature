@@ -17,3 +17,9 @@ Feature: Generates HTML reports for BDD tests
 
   Scenario: Create HTML report for IDA
     Given I generate report for "IDA"
+
+  Scenario: Create HTML report for TenancyManagement
+    Given I generate report for "TenancyManagement"
+
+  Scenario: Create HTML report for Enrollment
+    Given I generate report for "Enrollment"

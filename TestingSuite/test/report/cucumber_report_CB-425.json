@@ -16,40 +16,53 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "name": "I set the xaccesskey",
+            "name": "I grab the xaccesskey from 'testPermanentToken'",
             "result": {
               "status": "passed",
               "duration": 2
             },
             "line": 11,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:58"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:51"
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
-            "name": "grab and store IDA port number",
+            "name": "I grab 'ida' url from the config file",
             "result": {
               "status": "passed",
               "duration": 0
             },
             "line": 12,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:42"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I set up request for making get call to '/Security/getAuthorizationToken'",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 13,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:78"
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
+            "name": "I make a GET call",
             "result": {
               "status": "passed",
-              "duration": 59
+              "duration": 415
             },
-            "line": 13,
+            "line": 14,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:68"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:87"
             }
           },
           {
@@ -58,11 +71,11 @@
             "name": "response code must be 200",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
-            "line": 14,
+            "line": 15,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:161"
             }
           },
           {
@@ -71,44 +84,44 @@
             "name": "response body should be error-free",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
-            "line": 15,
+            "line": 16,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:122"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:134"
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
-            "name": "AuthorizationToken is not empty",
+            "name": "response body should contain a temporary token",
             "result": {
               "status": "passed",
               "duration": 0
             },
-            "line": 16,
+            "line": 17,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:116"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:67"
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "name": "I store the returned value in file named AuthorizationToken",
+            "name": "I store the response in 'testTemporaryToken'",
             "result": {
               "status": "passed",
-              "duration": 4
+              "duration": 2
             },
-            "line": 17,
+            "line": 18,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:139"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:150"
             }
           }
         ]
       },
       {
         "keyword": "Scenario",
-        "line": 19,
+        "line": 20,
         "name": "As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey",
         "tags": [],
         "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-try-to-get-a-temporary-authorization-token-from-ida-to-use-the-other-api-endpoints-using-an-invalid-xaccesskey",
@@ -116,40 +129,53 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "name": "I set the xaccesskey to a modified JWT",
+            "name": "I modify the xaccesskey to an invalid JWT",
             "result": {
               "status": "passed",
               "duration": 3
             },
-            "line": 20,
+            "line": 21,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:179"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:188"
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
-            "name": "grab and store IDA port number",
+            "name": "I grab 'ida' url from the config file",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
-            "line": 21,
+            "line": 22,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:42"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I set up request for making get call to '/Security/getAuthorizationToken'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 23,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:78"
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "name": "I make GET call to endpoint \"/Security/getAuthorizationToken\"",
+            "name": "I make a GET call",
             "result": {
               "status": "passed",
-              "duration": 23
+              "duration": 15
             },
-            "line": 22,
+            "line": 24,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:68"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:87"
             }
           },
           {
@@ -159,11 +185,11 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 400 but is 500\n \"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+              "error_message": "Error: Response code should be 400 but is 500\n \"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166:19)"
             },
-            "line": 23,
+            "line": 25,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:161"
             }
           },
           {
@@ -173,57 +199,70 @@
             "result": {
               "status": "skipped"
             },
-            "line": 24,
+            "line": 26,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:176"
             }
           }
         ]
       },
       {
         "keyword": "Scenario",
-        "line": 26,
-        "name": "As an administrator I want to Post to /data",
+        "line": 28,
+        "name": "As an administrator I want to make a POST request to IDA using my temporary Authorization Token",
         "tags": [],
-        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-post-to-/data",
+        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-make-a-post-request-to-ida-using-my-temporary-authorization-token",
         "steps": [
           {
             "arguments": [],
             "keyword": "Given ",
-            "name": "I set the temporary AuthorizationToken",
+            "name": "I grab the xaccesskey from 'testTemporaryToken'",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
-            "line": 27,
+            "line": 29,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:84"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:51"
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
-            "name": "grab and store IDA port number",
+            "name": "I grab 'ida' url from the config file",
             "result": {
               "status": "passed",
               "duration": 0
             },
-            "line": 28,
+            "line": 30,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:42"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I set up request for making post call to '/data'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 31,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:198"
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "name": "I Post :portnumber with example data",
+            "name": "I make a POST call",
             "result": {
               "status": "passed",
-              "duration": 5
+              "duration": 98
             },
-            "line": 29,
+            "line": 32,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:92"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:117"
             }
           },
           {
@@ -231,45 +270,10 @@
             "keyword": "Then ",
             "name": "response code must be 200",
             "result": {
-              "status": "failed",
-              "duration": 0,
-              "error_message": "Error: Response code should be 200 but is 500\n \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
-            },
-            "line": 30,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "name": "response body should be a valid IDA-POST response",
-            "result": {
-              "status": "skipped"
-            },
-            "line": 31,
-            "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:130"
-            }
-          }
-        ]
-      },
-      {
-        "keyword": "Scenario",
-        "line": 33,
-        "name": "As an administrator I want to send Invalid Post information to /data",
-        "tags": [],
-        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-send-invalid-post-information-to-/data",
-        "steps": [
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "name": "I set the AuthorizationToken to invalid token",
-            "result": {
               "status": "passed",
               "duration": 0
             },
-            "line": 34,
+            "line": 33,
             "match": {
               "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:161"
             }
@@ -277,27 +281,75 @@
           {
             "arguments": [],
             "keyword": "And ",
-            "name": "grab and store IDA port number",
+            "name": "response body should be a valid IDA-POST response",
             "result": {
               "status": "passed",
               "duration": 0
             },
-            "line": 35,
+            "line": 34,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:43"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:141"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 36,
+        "name": "As an administrator I want to make a POST request to IDA using an invalid token",
+        "tags": [],
+        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-make-a-post-request-to-ida-using-an-invalid-token",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I modify the xaccesskey to an invalid JWT",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 37,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:188"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I grab 'ida' url from the config file",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 38,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:42"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I set up request for making post call to '/data'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 39,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:198"
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "name": "I Post :portnumber with example data",
+            "name": "I make a POST call",
             "result": {
               "status": "passed",
-              "duration": 7
+              "duration": 106
             },
-            "line": 36,
+            "line": 40,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:92"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:117"
             }
           },
           {
@@ -307,11 +359,11 @@
             "result": {
               "status": "failed",
               "duration": 0,
-              "error_message": "Error: Response code should be 400 but is 500\n \"cannot read property 'status' of undefined\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:155:19)"
+              "error_message": "Error: Response code should be 400 but is 200\n {\"createdat\":\"2017-06-16t20:18:24.630z\",\"metadata\":[\"status : string\"],\"data\":\"ok\"}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166:19)"
             },
-            "line": 37,
+            "line": 41,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:151"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:161"
             }
           },
           {
@@ -321,9 +373,9 @@
             "result": {
               "status": "skipped"
             },
-            "line": 38,
+            "line": 42,
             "match": {
-              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166"
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:176"
             }
           }
         ]

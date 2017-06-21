@@ -4,11 +4,12 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 8028 --host 0.0.0.0",
+    "start": "npm run getConfigs && ng serve --port 8028 --host 0.0.0.0",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
+    "cp-cli": "^1.0.2",
     "json-editor": "^0.7.28",
     "ng2-jsoneditor": "^0.1.0",
     "rxjs": "^5.1.0",
