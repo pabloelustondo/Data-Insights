@@ -11,21 +11,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+        step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by vdave on 2/9/2017.
  */
-const tsoa_1 = require("tsoa");
+const tsoa_1 = require('tsoa');
 let jwt = require('jsonwebtoken');
 let server = require('../server');
 const config = require('../../config.json');
 const AWS = require('aws-sdk');
-const rp = require("request-promise");
+const rp = require('request-promise');
 let GetAuthorizationToken = class GetAuthorizationToken {
     /**
      * Post a unit of data to be stored in the cloud analytics database
@@ -94,7 +93,7 @@ let GetAuthorizationToken = class GetAuthorizationToken {
                 let p = yield verifyToken().then(callDss).then(responseData, function (error) {
                     return Promise.reject({
                         message: error.message,
-                        status: error.status
+                        status: error.statusCode
                     });
                 });
                 console.log(JSON.stringify(p));

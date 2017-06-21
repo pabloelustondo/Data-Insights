@@ -11,16 +11,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+        step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by vdave on 5/2/2017.
  */
-const tsoa_1 = require("tsoa");
+const tsoa_1 = require('tsoa');
 let jwt = require('jsonwebtoken');
 const path = require('path');
 const config = require('../../config.json');
@@ -41,122 +40,129 @@ let UploadDataSetController = class UploadDataSetController {
                     status: '400'
                 });
             }
-            if (contentType !== 'application/json') {
-                return Promise.reject({
-                    message: 'Content-Type incorrect. Content-type must be Application/JSON',
-                    status: '400'
-                });
-            }
-            let data = JSON.stringify(req.body);
-            try {
-                JSON.parse(data);
-            }
-            catch (e) {
-                return Promise.reject({
-                    message: 'Content-Type incorrect. Body must be json type',
-                    status: '400'
-                });
-            }
-            let customerData = express.body;
-            if (!((customerData.metadata) && (customerData.metadata.dataSetId) && (customerData.data))) {
-                return Promise.reject({
-                    message: 'Wrong input model',
-                    status: '400'
-                });
-            }
-            let verifyAndDecodeJwt = function () {
-                let promise = new Promise(function (resolve, reject) {
-                    try {
-                        resolve(jwt.verify(token, config['expiring-secret']));
-                    }
-                    catch (err) {
-                        console.log('could not verify token');
-                        reject(err);
-                    }
-                });
-                return promise;
-            };
-            let sendToQueue = function (jwtDecodedToken) {
-                if (jwtDecodedToken) {
-                    let server = require('../server');
-                    let appConfig = server.appconfig;
-                    let metadata = (!express.body.metadata) ? {} : express.body.metadata;
-                    let data = {
-                        idaMetadata: {
-                            referer: 'sampleRequestOriginInfo',
-                            dataSourceId: jwtDecodedToken.agentid,
-                            tenantId: jwtDecodedToken.tenantid,
-                            timeStamp: (new Date()).toISOString()
-                        },
-                        clientMetadata: metadata,
-                        clientData: express.body.data
-                    };
-                    // create
-                    let kafkaClient = new kafka.Client(appConfig['kafka_url']);
-                    try {
-                        let producer = new kafka.Producer(kafkaClient);
-                        producer.on('ready', function (message) {
-                            let payloads = [
-                                {
-                                    topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetdId,
-                                    partition: 0,
-                                    messages: data
-                                }
-                            ];
-                            producer.send(payloads, function (err, data) {
-                                console.log(data);
-                                return Promise.resolve(data);
-                            });
-                            let transactionLogPayloads = [
-                                {
-                                    topic: jwtDecodedToken.tenatid + '_' + 'transactionLog',
-                                    partition: 0,
-                                    messages: JSON.stringify(data)
-                                }
-                            ];
-                            producer.send(transactionLogPayloads, function (err, data) {
-                                console.log(data);
-                                // return Promise.resolve(data);
-                            });
-                        });
-                        producer.on('error', function (error) {
-                            console.log(error);
-                        });
-                    }
-                    catch (e) {
-                        console.log('IDA could not communicate with kafka producer');
-                    }
-                    // return rp(options);
+            else {
+                if (contentType !== 'application/json') {
+                    return Promise.reject({
+                        message: 'Content-Type incorrect. Content-type must be Application/JSON',
+                        status: '400'
+                    });
                 }
-                else {
-                    return new Error('invalid auth token');
+                let data = JSON.stringify(req.body);
+                try {
+                    JSON.parse(data);
                 }
-            };
-            let responseData = function (dpsResponse) {
-                let promise = new Promise(function (resolve, reject) {
-                    if (dpsResponse['status'] === 200) {
-                        let mData = ['awsResponse : boolean'];
-                        const user = {
-                            createdAt: new Date(),
-                            metadata: mData,
-                            data: 'OK'
+                catch (e) {
+                    return Promise.reject({
+                        message: 'Content-Type incorrect. Body must be json type',
+                        status: '400'
+                    });
+                }
+                let customerData = express.body;
+                if (!((customerData.metadata) && (customerData.metadata.dataSetId) && (customerData.data))) {
+                    return Promise.reject({
+                        message: 'Wrong input model',
+                        status: '400'
+                    });
+                }
+                let verifyAndDecodeJwt = function () {
+                    let promise = new Promise(function (resolve, reject) {
+                        try {
+                            resolve(jwt.verify(token, config['expiring-secret']));
+                        }
+                        catch (err) {
+                            console.log('could not verify token');
+                            reject(err);
+                        }
+                    });
+                    return promise;
+                };
+                let sendToQueue = function (jwtDecodedToken) {
+                    if (jwtDecodedToken) {
+                        let server = require('../server');
+                        let appConfig = server.appconfig;
+                        let metadata = (!express.body.metadata) ? {} : express.body.metadata;
+                        let data = {
+                            idaMetadata: {
+                                referer: 'sampleRequestOriginInfo',
+                                dataSourceId: jwtDecodedToken.agentid,
+                                tenantId: jwtDecodedToken.tenantid,
+                                timeStamp: (new Date()).toISOString()
+                            },
+                            clientMetadata: metadata,
+                            clientData: express.body.data
                         };
-                        resolve(user);
+                        // create
+                        let kafkaClient = new kafka.Client(appConfig['kafka_url']);
+                        let promise = new Promise(function (resolve, reject) {
+                            try {
+                                let producer = new kafka.Producer(kafkaClient);
+                                producer.on('ready', function (message) {
+                                    let payloads = [
+                                        {
+                                            topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetId,
+                                            partition: 0,
+                                            messages: JSON.stringify(data)
+                                        }];
+                                    producer.send(payloads, function (err, data) {
+                                        console.log('response from kafka' + data);
+                                    });
+                                    let transactionLogPayloads = [
+                                        {
+                                            topic: jwtDecodedToken.tenatid + '_' + 'transactionLogs',
+                                            partition: 0,
+                                            messages: JSON.stringify(data)
+                                        }];
+                                    producer.send(transactionLogPayloads, function (err, data) {
+                                        console.log(data);
+                                        // return Promise.resolve(data);
+                                        resolve(data);
+                                    });
+                                });
+                                producer.on('error', function (error) {
+                                    console.log(error);
+                                });
+                            }
+                            catch (e) {
+                                console.log('IDA could not communicate with kafka producer');
+                            }
+                        });
+                        return promise;
                     }
                     else {
-                        reject('Error with backend Service');
+                        return new Promise(function (resolve, reject) {
+                            reject({
+                                statusCode: 404,
+                                message: 'Invalid token'
+                            });
+                        });
                     }
+                };
+                let responseData = function (kafkaResponse) {
+                    let promise = new Promise(function (resolve, reject) {
+                        if (kafkaResponse) {
+                            let mData = ['status : string'];
+                            const user = {
+                                createdAt: new Date(),
+                                metadata: mData,
+                                data: 'OK'
+                            };
+                            resolve(user);
+                        }
+                        else {
+                            reject('Error with backend Service');
+                        }
+                    });
+                    return promise;
+                };
+                let finalResponse = yield verifyAndDecodeJwt().then(sendToQueue).then(responseData, function (err) {
+                    console.log(err);
+                    return Promise.reject({
+                        message: err.message,
+                        status: '400'
+                    });
                 });
-                return promise;
-            };
-            let finalResponse = yield verifyAndDecodeJwt().then(sendToQueue).then(responseData, function (err) {
-                console.log(err);
-                return Promise.reject({
-                    message: err.message,
-                    status: '400'
-                });
-            });
-            return finalResponse;
+                return finalResponse;
+            }
         });
     }
 };
