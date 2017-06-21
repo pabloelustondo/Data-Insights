@@ -176,6 +176,7 @@ export class DadChartComponent implements OnInit {
     newAlertAttribute: string;
     newAlertName: string;
     intervalId: any;
+    connection: any;
 
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
@@ -257,9 +258,15 @@ export class DadChartComponent implements OnInit {
     realDataMonitoring() {
         if (this.chart.intervalRefreshOption === true) {
             let timeInterval = this.chart.intervalTime;
-            this.intervalId = setInterval(() => {
+            /*this.intervalId = setInterval(() => {
                 this.changeMapData();
             }, timeInterval);
+*/
+            this.dadChartDataService.getMessages('nextBus').subscribe(message => {
+                // parse the message and only refresh if it is for the selected data set
+                console.log(message);
+                this.data = message['vehicle'];
+            } );
         }
     }
 
@@ -322,11 +329,18 @@ export class DadChartComponent implements OnInit {
     }
 
     changeMapData() {
-            this.dadChartDataService.getElementData(this.chart).subscribe(
+            /* this.dadChartDataService.getElementData(this.chart).subscribe(
                 data => {
                     this.data = data;
                 }
             )
+            */
+        //TODO: replace nextBus with actual valie
+        this.dadChartDataService.getMessages('nextBus').subscribe(message => {
+            // parse the message and only refresh if it is for the selected data set
+            console.log(message);
+            return message;
+        } )
     }
 
     onEdit(message: string): void {

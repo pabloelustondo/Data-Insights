@@ -14,11 +14,16 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Rx';
 import { Router } from "@angular/router";
+import { Subject } from 'rxjs/Subject';
+import * as io from 'socket.io-client';
 
 @Injectable()
 export class DadElementDataService {
 
-  constructor(private http: Http, private router: Router) { }
+    private url = 'http://10.0.91.2:8022';
+    private socket;
+
+    constructor(private http: Http, private router: Router) { }
 
   getElementData(element:DadElement): Observable<any> {
       console.log("we got " + config["oda_dev_url"]);
@@ -57,6 +62,23 @@ export class DadElementDataService {
                           .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
       }
   }
+
+    getMessages(dataSetId: any) {
+        let observable = new Observable(observer => {
+            this.socket = io(this.url);
+            this.socket.on('chat message', (data) => {
+                // console.log(data[0].data);
+                let d = JSON.parse(data[0].data);
+                if (d.dataSetId === dataSetId) {
+                    observer.next(d.data);
+                }
+            });
+            return () => {
+                this.socket.disconnect();
+            };
+        });
+        return observable;
+    }
 }
 
 
