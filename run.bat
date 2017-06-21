@@ -57,3 +57,6 @@ start cmd.exe /k "cd %installdir%\tmm\backend & call npm run start"
 
 echo "starting sml"
 start cmd.exe /k "cd %installdir%\sml\client & call npm run start"
+
+echo "starting log"
+start cmd.exe /k "cd %installdir%\log & call npm run start"
