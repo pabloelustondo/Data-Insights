@@ -49,6 +49,23 @@ export class DatabaseService {
 
     }
 
+    public getAllDataSets () {
+        let dataSets = [];
+
+        // go through each tenant and find the dataSet that needs to be updated listened to
+        for ( let tenant of this.tenants) {
+            if (tenant.dataSets) {
+                for (let dataSet of tenant.dataSets) {
+                    dataSets.push({
+                        tenantId: tenant.id,
+                        dataSet: dataSet
+                    });
+                }
+            }
+        }
+        return dataSets;
+    }
+
     public getTenant(tenantId: string) {
         if (this.tenants) {
             return _.find(this.tenants, ['tenantId', tenantId]);

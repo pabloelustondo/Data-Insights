@@ -31,21 +31,13 @@ Cucumber.defineSupportCode(function(context) {
         "postambleCRLF": true
     };
 
-    Given('I grab ODA port number from globalconfig.json', function (callback) {
+    Given('I grab ODA url from globalconfig.json', function (callback) {
         //I get ODA's port number from the url in config json file using REGEX
         var oda_url = globalconfig.oda_url;
         if(oda_url == "" || oda_url == undefined)
-            throw new Error('Cannot get port: ida url not in global config file');
-        var port_str = oda_url.match("[0-9]+")[0];
-        if(isNaN(port_str)){
-            throw new Error('Cannot get port: invalid global config file');
-        }else{
-            //url = oda_url.substring(0, oda_url.indexOf(odaPortNumber)-1);
-            //console.log(oda_url);
-            url = oda_url;
-            odaPortNumber = parseInt(port_str);
-            callback();
-        }
+            throw new Error('Cannot get port: oda url not in global config file');
+        url = oda_url;
+        callback();
     });
 
     //retrieve x-access-token from file. this will be replaced later
@@ -59,7 +51,6 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('I set valid request header and body for POST call to ~/query with metadata id', function (callback) {
         //prepare header and body for posting to IDA query endpoint
-        options.headers['content-type'] = 'application/json';
         //set example query in body
         options.body =  {
             "dataSetId": "string",
@@ -81,7 +72,6 @@ Cucumber.defineSupportCode(function(context) {
         resetOptions();
         options.method = "GET";
         options.uri = url+'/query/topics';
-        options.headers['Content-Type'] = 'Application/Json';
         options.headers['x-access-token'] = accessToken;
         Request(options, function (error, response, body) {
             if (error) {
@@ -93,13 +83,14 @@ Cucumber.defineSupportCode(function(context) {
         });
     });
 
-    Given('I set invalid request header and body for POST call to ~/query', function (callback) {
-        //prepare header and body for posting to IDA query endpoint
-        options.preambleCRLF = options.postambleCRLF = true;
-        options.headers['content-type'] = 'application/json';
-        options.body = {
-            "dataSetId": "string",
-            "from": ["UnicornCollection"]
+    Given('I set invalid request for POST call to ~/query', function (table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        //set example query in body
+        options.headers['x-access-token'] = accessToken;
+        var tableJson = table.hashes()[0];
+        options.body =  {
+            "dataSetId": tableJson.dataSetId,
+            "from": [tableJson.from]
         };
         callback();
     });
@@ -107,6 +98,8 @@ Cucumber.defineSupportCode(function(context) {
     Given('I make a POST call to ~/query', function (callback) {
         //I post to query and record the response
         options.uri = url+'/Query';
+        options.method = 'POST'
+        options.headers['x-access-token'] = accessToken;
         Request.post(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -120,14 +113,21 @@ Cucumber.defineSupportCode(function(context) {
     Then('response code is :{int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
+        //console.log(options);
         if (parseInt(int) != parseInt(responseCode)){
-            //console.log('Error: '+ responseData);
-            throw new Error('Response code should be ' + int +' but is ' + responseCode +'\n Error:'+ resString);
+            //console.error('Error: '+ responseData);
+            throw new Error('Response code should be ' + int +' but is ' + responseCode +'\n'+ resString);
         }
 
         callback();
     });
-
+    Given(/^I grab the xaccesskey for ODA from '(.*)'$/, function (variable, callback) {
+        FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
+            if (err) return console.log(err);
+            accessToken = contents;
+            callback();
+        });
+    });
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
@@ -168,6 +168,17 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
+    Given('I set valid request for posting to ~/query', function (table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        //set example query in body
+        options.headers['x-access-token'] = accessToken;
+        var tableJson = table.hashes()[0];
+        options.body =  {
+            "dataSetId": tableJson.dataSetId,
+            "from": [tableJson.from]
+        };
+        callback();
+    });
 
     function resetOptions() {
         options  = {

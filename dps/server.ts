@@ -12,6 +12,10 @@ let config = require('./config.json');
 let appconfig = require('./appconfig.json');
 import * as rp from 'request-promise';
 
+
+let kafka = require('kafka-node');
+let ConsumerGroup = kafka.ConsumerGroup;
+
 let app = express();
 var mongodb = require('mongodb').MongoClient;
 
@@ -19,6 +23,7 @@ import {uploadRawData, uploadModifiedData} from './services/rawDataLakeService';
 import {DatabaseService} from  './services/databaseService';
 import {DataProjections} from './services/projection';
 import {processRequest, getDbFromDataService} from './services/dataService';
+import message = SNS.message;
 
 var globalconfig = require('./globalconfig.json');
 var path = require('path');
@@ -38,8 +43,6 @@ console.log("configuration");
 console.log(appconfig);
 
 
-
-let kafka = require('kafka-node');
 
 ////////////////////////
 // Express stuff
@@ -146,50 +149,69 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
     let tenantId = idaMetadata.tenantId;
     let dataSourceId = idaMetadata.dataSourceId;
 
+    let db = app.get('db');  //get db
+    let tenant = db.getTenant(idaMetadata.tenantId); //get the tenant for request
 
-  //  console.log('tenantID ' + tenantId);
-
- //   console.log('dataSourceId ' + dataSourceId);
-
-    // massage and clean up data before sending to database layer
-    let db = app.get('db');
-    let tenant = db.getTenant(idaMetadata.tenantId);
-
-    if(tenant) {
-
-        let dataSource = _.find(tenant.dataSources, ['dataSourceId', idaMetadata.dataSourceId]);
-        console.log('dataSource \t ' + JSON.stringify(dataSource));
-        let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
+    if(tenant ) {
+        let dataSet =_.find(tenant['dataSets'], ['id', clientMetadata.dataSetId]); //get the dataSet for the request
+        let projections = dataSet.projections; //get the projections
         console.log('projections \t ' + JSON.stringify(projections));
-        let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
+        let dataSetId = dataSet.id; //get the id
 
         let collectionName = dataSetId;
 
         DataProjections(clientData, projections).then(function (data) {
+
+            //upload to database
             uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
                 console.log('Final response' + JSON.stringify(response));
             }, function (error) {
                 console.log(error);
             });
+
+            // make it ready for consumption right away
+            publishCleanedDataToKafka('undefined_cleanedData',  tenant.tenantId, data );
+
         });
     } else {
         console.log ('tenantId not found');
     }
 }
 
+function publishCleanedDataToKafka (topic: string, tenantId: string, data: string) {
+    let kafkaClient = new kafka.Client(globalconfig['kafka_url']);
+    let producer = new kafka.Producer(kafkaClient);
+    producer.on('ready', function (message: any) {
+        let payloads: any = [
+            {
+                topic: topic,
+                partition: 0,
+                messages:  JSON.stringify(data)
+            }];
+
+        producer.send(payloads, function (err: any, data: any) {
+            console.log(data);
+            // return Promise.resolve(data);
+        });
+    });
+    producer.on('error', function (error: any) {
+        console.log(error);
+    });
+}
 app.post('/data/outGoingRequest', function(req, res) {
 
 
     let metadata = req.body.metadata;
 
     let db = app.get('db');
-    let tenant = db.getTenant('test');
-    let dataSets = tenant.dataSets;
-    if (metadata) {
+    let tenant = db.getTenant(metadata.tenantId);
+    let dataSets = tenant['dataSets'];
+    let dataSet = _.find(dataSets, {id : metadata.dataSetId});
+    if (tenant && dataSet) {
         processRequest(metadata, dataSets, res);
     } else {
         res.status(400).send ({
-            message: 'No metadata field present in request body.'
+            message: 'No combination of tenant and dataSet found.'
         })
     }
 
@@ -232,10 +254,10 @@ if (config.useSSL) {
             json: true,
             method: 'get',
             headers: headersOptions,
-            url: appconfig['ddb_url'] + '/getAllTenants',
+            url: appconfig['ddb_url'] + '/tenants',
         };
         rp(options).then(function (data) {
-            db.populateTenants(data.tenants);
+            db.populateTenants(data);
         }).catch(function (err) {
             console.log(err);
         }).then(function () {
@@ -245,42 +267,51 @@ if (config.useSSL) {
             ////////////////////////////////
 // Kafka streaming topic     ///
 ////////////////////////////////
-            let kafkaClient = new kafka.Client(config.kafka_url);
+           // let kafkaClient = new kafka.Client(config.kafka_url);
+            let dataSets = db.getAllDataSets();
+            let topics = ['undefined_transactionLogs'];
+            let consumerGroupOptions = {
+                host: '127.0.0.1:2181',
+                zk : undefined,   // put client zk settings if you need them (see Client)
+                batch: undefined, // put client batch settings if you need them (see Client)
+                ssl: false, // optional (defaults to false) or tls options hash
+                groupId: 'ExampleTestGroup',
+                sessionTimeout: 15000,
+                // An array of partition assignment protocols ordered by preference.
+                // 'roundrobin' or 'range' string for built ins (see below to pass in custom assignment protocol)
+                protocol: ['roundrobin'],
 
-            let payloads =  [{ topic: 'transactionLog', partition: 0 }];
-            let options = { autoCommit: false};
-            let kafkaOptions = { autoCommit: false};
-            try {
+                // Offsets to use for new groups other options could be 'earliest' or 'none' (none will emit an error if no offsets were saved)
+                // equivalent to Java client's auto.offset.reset
+                fromOffset: 'earliest', // default
 
-                let consumer = new kafka.Consumer(kafkaClient, payloads, options);
+                // how to recover from OutOfRangeOffset error (where save offset is past server retention) accepts same value as fromOffset
+                outOfRangeOffset: 'earliest', // default
+                migrateHLC: false,    // for details please see Migration section below
+                migrateRolling: true
+            };
 
-                consumer.on('message', function (message: any) {
-                    try {
-                        let data = JSON.parse(message.value);
+            let consumerGroup = new ConsumerGroup(consumerGroupOptions , 'undefined_transactionLogs');
+            consumerGroup.on('error', function(err) {
+                console.log('error' + err);
+            });
+            consumerGroup.on('message', function (message) {
+                try {
+                    let data = JSON.parse(message.value);
 
-                        let idaMetadata = data.idaMetadata;
-                        let clientData = data.clientData.body;
-                        let clientMetadata = data.clientData.metadata;
+                    let idaMetadata = data.idaMetadata;
+                    let clientData = data.clientData;
+                    let clientMetadata = data.clientMetadata;
 
-                        console.log('json = ' + JSON.stringify(data));
+                    console.log('json = ' + JSON.stringify(data));
+                    publishTransactionLog( idaMetadata, clientMetadata, clientData);
+                    processCleanedData( idaMetadata, clientMetadata, clientData);
 
-                    //    publishTransactionLog( idaMetadata, clientMetadata, clientData);
-                    //    processCleanedData( idaMetadata, clientMetadata, clientData);
-                    } catch (e) {
-                        console.log('not json format' + message.value);
-                    }
-                });
-
-                consumer.on('error', function (err: any) {
-
-                    console.log('varun');
-                    console.log(err);
-                })
-
-            } catch (e) {
-                console.log('IDA could not communicate with kafka producer');
-            }
-
+                } catch (e) {
+                    console.log('not json format' + message.value);
+                }
+                // console.log('message' + message);
+            });
 
         });
 
@@ -295,10 +326,10 @@ if (config.useSSL) {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: appconfig['ddb_url'] + '/getAllTenants',
+                url: appconfig['ddb_url'] + '/tenants',
             };
             rp(options).then(function (data) {
-                db.populateTenants(data.tenants);
+                db.populateTenants(data);
             }).catch(function (err) {
                 console.log(err);
             }).then(function () {

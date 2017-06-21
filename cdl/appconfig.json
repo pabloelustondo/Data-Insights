@@ -3,5 +3,5 @@
   "name" : "CDL",
   "secret"  : "1234",
   "dependencies" : ["mongodb","s3"],
-  "logtype":"file"
+  "logtype":"s3"
 }

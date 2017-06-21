@@ -2,9 +2,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { DataSourceList } from './tmmModels';
 import { SmlTenantMetadata } from '../../../../sml/sml';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 import { SmlDataService } from '../../../../sml/data.service';
-import {smlTenantMetadataSample, smlTenantMetadataEmpty} from './jsonEditorSchema.configuration';
+import { smlTenantMetadataSample, smlTenantMetadataEmpty } from './jsonEditorSchema.configuration';
 import { TmmConfigService } from './tmmconfig.service';
 
 @Component({
@@ -12,9 +13,9 @@ import { TmmConfigService } from './tmmconfig.service';
   providers: [TmmConfigService],
   template: `
     <div>
-      <div class="container">
+      <div *ngIf="tenantMetadata.dataSets && tenantMetadata.tenantId" class="container">
         <br/>
-        <h3 id="tenantname">Tenant Name:</h3> <i>{{tenantMetadata.dataSets[0].from[0]}}</i>
+        <h3 id="tenantname">Tenant Name:</h3> <i>{{tenantMetadata.name}}</i>
         <h3 id="tenantid">Tenant ID:</h3> <i>{{tenantMetadata.tenantId}}</i>
         <hr/>
         <div class="row">
@@ -30,7 +31,7 @@ import { TmmConfigService } from './tmmconfig.service';
             <button id="addDataSet" type="button" class="btn btn-primary" (click)="dataSetInit()">Click to add a Data set</button>
             <button id="deleteDataSet" type="button" class="btn btn-primary" (click)="dataSetDelete()">Delete Selected</button>
             <br/><br/>
-            <app-editor-smldatasource [dataSource] = "selectedOption" [(ngModel)]="currentItem" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
+            <app-editor-smldatasource [dataSource] = "selectedOption" (optionUpdated)="optionUpdated($event)"></app-editor-smldatasource>
           </div>
         </div>
       </div>
@@ -39,29 +40,46 @@ import { TmmConfigService } from './tmmconfig.service';
 })
 
 export class smlTenantMetadataEditor implements OnInit {  //name will be sml tenant meta data editor  SMLTenantMetadataEditor
-  selectedOption: any;
-  currentItem: any;
+  selectedOption: any ={};
+  currentItem: any = 0;
   tenantMetadata: any = smlTenantMetadataSample;
   emptyDataSet: any = smlTenantMetadataEmpty;
   index: number = 0;
+  urlId: any;
 
-  constructor(private tmmConfigService: TmmConfigService) {
-    this.tmmConfigService.getTenantMetadata('testtenant-testuser').then(data => {
-        try {
-          let response = JSON.parse(data._body);
-          console.log(response);
-          this.tenantMetadata.dataSets = response[0].dataSets;
-        } catch (err) {
-          console.error(new Error(err));
-        }
-      }
-    );
-    console.log(this.tenantMetadata);
+  constructor(private tmmConfigService: TmmConfigService, private activatedRoute: ActivatedRoute) {
+    //console.log(router);
   }
 
   ngOnInit() {
+    //this.urlId = this.router.url;
+    this.activatedRoute.params.subscribe((params: Params) => {
 
-    // this.tenantMetadata = response;
+      this.urlId = params['tenantId'];
+      console.log(this.urlId);
+      this.tenantMetadata.tenantId = this.urlId;
+
+      this.tmmConfigService.getTenantMetadata(this.urlId).then(data => {
+          if (data && data._body)
+          {
+            try {
+              let response = JSON.parse(data._body);
+
+              console.log(response);
+              if(response.length != 0){
+                this.tenantMetadata.dataSets = response[0].dataSets;
+                this.tenantMetadata.name = response[0].name;
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }
+      );
+    });
+
+
+    console.log(this.tenantMetadata);
   }
 
   editorOption(id) {

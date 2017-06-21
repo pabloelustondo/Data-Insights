@@ -80,157 +80,159 @@ export class UploadDataSetController {
 
 
         let req = express;
-        let ip = req.headers['x-forwarded-for'] ;
+        let ip = req.headers['x-forwarded-for'];
         let token = req.headers['x-access-token'];
         let contentType = req.headers['content-type'];
-
-
 
 
         if (!token) {
 
             return Promise.reject({
-                message : 'missing token',
-                status : '400'
+                message: 'missing token',
+                status: '400'
             });
 
 
-        }
+        } else {
 
-        if (contentType !== 'application/json') {
-            return Promise.reject({
-                message : 'Content-Type incorrect. Content-type must be Application/JSON',
-                status : '400'
-            });
-         }
-
-        let data = JSON.stringify(req.body);
-        try {
-            JSON.parse(data);
-        } catch (e) {
-
-
-            return Promise.reject({
-                message : 'Content-Type incorrect. Body must be json type',
-                status : '400'
-            });
-
-        }
-
-        let customerData: InputDataModel = express.body;
-        if (!((customerData.metadata) && (customerData.metadata.dataSetId) && (customerData.data))) {
-
-            return Promise.reject({
-                message : 'Wrong input model',
-                status : '400'
-            });
-        }
-
-        let verifyAndDecodeJwt = function () {
-            let promise = new Promise(function (resolve, reject) {
-                try {
-                    resolve(jwt.verify(token, config['expiring-secret']));
-                } catch (err) {
-                    console.log('could not verify token');
-                    reject(err);
-                }
-            });
-            return promise;
-        };
-
-
-        let sendToQueue = function (jwtDecodedToken: any) {
-
-            if (jwtDecodedToken) {
-                let server = require('../server');
-                let appConfig = server.appconfig;
-
-                let metadata = (!express.body.metadata) ? {} : express.body.metadata;
-                let data = {
-                    idaMetadata: {
-                        referer: 'sampleRequestOriginInfo',
-                        dataSourceId: jwtDecodedToken.agentid,
-                        tenantId: jwtDecodedToken.tenantid,
-                        timeStamp: (new Date()).toISOString()
-                    },
-                    clientMetadata: metadata,
-                    clientData: express.body.data
-                };
-
-                // create
-                let kafkaClient = new kafka.Client(appConfig['kafka_url']);
-                try {
-
-                    let producer = new kafka.Producer(kafkaClient);
-
-                    producer.on('ready', function (message: any) {
-                        let payloads: any =  [
-                            {
-                                topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetdId,
-                                partition: 0,
-                                messages: data
-                            }];
-                        producer.send(payloads, function (err: any, data: any) {
-                            console.log(data);
-                            return Promise.resolve(data);
-                        });
-                        let transactionLogPayloads: any =  [
-                            {
-                                topic: jwtDecodedToken.tenatid + '_' + 'transactionLog',
-                                partition: 0,
-                                messages: JSON.stringify(data)
-                            }];
-                        producer.send(transactionLogPayloads, function (err: any, data: any) {
-                            console.log(data);
-                           // return Promise.resolve(data);
-                        });
-                    });
-                    producer.on('error', function (error: any) {
-                        console.log(error);
-                    });
-
-
-                } catch (e) {
-                    console.log('IDA could not communicate with kafka producer');
-                }
-                // return rp(options);
-            } else {
-                return new Error('invalid auth token');
+            if (contentType !== 'application/json') {
+                return Promise.reject({
+                    message: 'Content-Type incorrect. Content-type must be Application/JSON',
+                    status: '400'
+                });
             }
 
-        };
+            let data = JSON.stringify(req.body);
+            try {
+                JSON.parse(data);
+            } catch (e) {
 
-        let responseData = function (dpsResponse: any) {
-            let promise = new Promise(function (resolve, reject) {
+
+                return Promise.reject({
+                    message: 'Content-Type incorrect. Body must be json type',
+                    status: '400'
+                });
+
+            }
+
+            let customerData: InputDataModel = express.body;
+            if (!((customerData.metadata) && (customerData.metadata.dataSetId) && (customerData.data))) {
+
+                return Promise.reject({
+                    message: 'Wrong input model',
+                    status: '400'
+                });
+            }
+
+            let verifyAndDecodeJwt = function () {
+                let promise = new Promise(function (resolve, reject) {
+                    try {
+                        resolve(jwt.verify(token, config['expiring-secret']));
+                    } catch (err) {
+                        console.log('could not verify token');
+                        reject(err);
+                    }
+                });
+                return promise;
+            };
 
 
-                if (dpsResponse['status'] === 200) {
-                    let mData = ['awsResponse : boolean'];
+            let sendToQueue = function (jwtDecodedToken: any) {
 
-                    const user: any = {
-                        createdAt: new Date(),
-                        metadata: mData,
-                        data: 'OK'
+                if (jwtDecodedToken) {
+                    let server = require('../server');
+                    let appConfig = server.appconfig;
+
+                    let metadata = (!express.body.metadata) ? {} : express.body.metadata;
+                    let data = {
+                        idaMetadata: {
+                            referer: 'sampleRequestOriginInfo',
+                            dataSourceId: jwtDecodedToken.agentid,
+                            tenantId: jwtDecodedToken.tenantid,
+                            timeStamp: (new Date()).toISOString()
+                        },
+                        clientMetadata: metadata,
+                        clientData: express.body.data
                     };
-                    resolve(user);
 
+                    // create
+                    let kafkaClient = new kafka.Client(appConfig['kafka_url']);
+
+                    let promise = new Promise(function (resolve, reject) {
+                        try {
+                            let producer = new kafka.Producer(kafkaClient);
+                            producer.on('ready', function (message: any) {
+                                let payloads: any = [
+                                    {
+                                        topic: jwtDecodedToken.tenatid + '_' + data.clientMetadata.dataSetId,
+                                        partition: 0,
+                                        messages: JSON.stringify(data)
+                                    }];
+                                producer.send(payloads, function (err: any, data: any) {
+                                    console.log('response from kafka' + data);
+
+                                });
+                                let transactionLogPayloads: any = [
+                                    {
+                                        topic: jwtDecodedToken.tenatid + '_' + 'transactionLogs',
+                                        partition: 0,
+                                        messages: JSON.stringify(data)
+                                    }];
+                                producer.send(transactionLogPayloads, function (err: any, data: any) {
+                                    console.log(data);
+                                    // return Promise.resolve(data);
+                                    resolve(data);
+                                });
+                            });
+                            producer.on('error', function (error: any) {
+                                console.log(error);
+                            });
+                        } catch (e) {
+                            console.log('IDA could not communicate with kafka producer');
+                        }
+                    });
+
+                    return promise;
+                    // return rp(options);
                 } else {
-                    reject('Error with backend Service');
+                    return new Promise (function (resolve, reject) {
+                        reject({
+                            statusCode : 404,
+                            message : 'Invalid token'
+                        });
+                    });
                 }
+
+            };
+
+            let responseData = function (kafkaResponse: any) {
+                let promise = new Promise(function (resolve, reject) {
+                    if (kafkaResponse) {
+                        let mData = ['status : string'];
+                        const user: any = {
+                            createdAt: new Date(),
+                            metadata: mData,
+                            data: 'OK'
+                        };
+                        resolve(user);
+                    } else {
+                        reject('Error with backend Service');
+                    }
+                });
+                return promise;
+            };
+
+            let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData, function (err) {
+                console.log(err);
+
+                return Promise.reject(
+                    {
+                        message: err.message,
+                        status: '400'
+                    }
+                );
             });
-            return promise;
-        };
-
-        let finalResponse: any = await verifyAndDecodeJwt().then(sendToQueue).then(responseData, function (err) {
-            console.log(err);
-
-            return Promise.reject (
-                {
-                    message : err.message,
-                    status : '400'
-                }
-            );
-        });
-        return finalResponse;
+            return finalResponse;
+        }
     }
 }

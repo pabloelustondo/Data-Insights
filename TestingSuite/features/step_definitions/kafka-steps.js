@@ -71,7 +71,7 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I Post :portnumber after setting headers and body', function (callback) {
+    When('I make a POST call to /data', function (callback) {
         options.uri = url + "/data"
         Request(options, function (error, response, body) {
             if (error) {
