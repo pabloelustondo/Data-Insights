@@ -136,6 +136,7 @@ export class  DadPageComponent implements OnInit{
         if(this.selectedValue == 'chart') {
             newElement = new DadChart();
             newElement.name =  this.elementName;
+           // newElement.endpoint = ;
             if(this.elementName) {
                 newElement.id = this.elementName;
             } else{ newElement.id = Date.now().toString();}
@@ -150,6 +151,12 @@ export class  DadPageComponent implements OnInit{
             }
             if(this.selectedChartType == 'map'){
                 newElement.type = 'map2';
+                newElement.dataElement = 'vehicle';
+                newElement.parameters = [];
+                newElement.uiparameters = [];
+                newElement.lon = 'lon';
+                newElement.lat = 'lat';
+              //  newElement.endpoint = 'QueryTopics';
             }
 
             this.dadConfigService.saveOne(newElement);

@@ -60,7 +60,7 @@ export class FullLayoutComponent extends DadCrudComponent implements OnInit {
         this.newPage.id = this.pageName;
         this.newPage.chartids = this.chartids;
         this.newPage.widgetids = this.widgetids;
-        this.newPage.tableids = this.tableids;
+     //   this.newPage.tableids = this.tableids;
         this.newPage.elementType = 'page';
         this.dadConfigService.saveOne(this.newPage);
         this.dadConfigService.getConfig().then((config) => {
