@@ -32,10 +32,10 @@ exports.log = log;
 /**
 *
 * Interpolates the message with the given parameters and returns result back.
-* message: "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}",
+* @example message: "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}",
 * params: { speed: "quick", fox: { color: "brown" }, mammal: ["dog", "cat", "fox"] }
-* Will be intyerpolated as:
-* 'The quick brown fox jumped over the lazy dog'
+*
+* @result 'The quick brown fox jumped over the lazy dog'
 * @param {logging} logMessage The message that would be interpolated.
 *
 */

@@ -15,7 +15,7 @@ type Classifier = "Create_Sucess" |
                   "Test_Log";
 
 type Component = "AWS" | "CDL" | "DAD" | "DDB" | "DLM" | "DOS" | "DPS" | "DSS" | "IDA" | "LOG" | "ODA" | "TMM";
-type Agent = "MCDP";
+type Agent = "MCDP" | "DLM";
 
 interface Parameter {
     tenenatId?: string;
