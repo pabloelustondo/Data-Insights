@@ -12,6 +12,6 @@ spec:
     spec:
       containers:
       - name: oda
-        image: kube-registry.kube-system.svc.cluster.local:31000/oda:sprint-15
+        image: ae7bf2c134d5f11e7a174123ab8f20a4-1306207793.us-east-1.elb.amazonaws.com:5494/oda:sprint-16
         ports:
         - containerPort: 8000
