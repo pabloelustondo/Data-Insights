@@ -169,8 +169,8 @@ export class UploadDataSetController {
                                         messages: JSON.stringify(data)
                                     }];
                                 producer.send(payloads, function (err: any, data: any) {
-                                    console.log(data);
-                                    resolve(data);
+                                    console.log('response from kafka' + data);
+
                                 });
                                 let transactionLogPayloads: any = [
                                     {
@@ -181,6 +181,7 @@ export class UploadDataSetController {
                                 producer.send(transactionLogPayloads, function (err: any, data: any) {
                                     console.log(data);
                                     // return Promise.resolve(data);
+                                    resolve(data);
                                 });
                             });
                             producer.on('error', function (error: any) {
@@ -194,25 +195,26 @@ export class UploadDataSetController {
                     return promise;
                     // return rp(options);
                 } else {
-                    return new Error('invalid auth token');
+                    return new Promise (function (resolve, reject) {
+                        reject({
+                            statusCode : 404,
+                            message : 'Invalid token'
+                        });
+                    });
                 }
 
             };
 
-            let responseData = function (dpsResponse: any) {
+            let responseData = function (kafkaResponse: any) {
                 let promise = new Promise(function (resolve, reject) {
-
-
-                    if (dpsResponse) {
+                    if (kafkaResponse) {
                         let mData = ['status : string'];
-
                         const user: any = {
                             createdAt: new Date(),
                             metadata: mData,
                             data: 'OK'
                         };
                         resolve(user);
-
                     } else {
                         reject('Error with backend Service');
                     }

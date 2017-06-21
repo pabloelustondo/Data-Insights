@@ -9,22 +9,22 @@ DSS should be responsible only for data sources management and the future featur
 # add TMM positive/negative validation tests
 
   Scenario: As an administrator, I want to create a new data set
-    Given I create a new Tenant Metadata Object for tenant 'test_user'
+    Given I create a new Tenant Metadata Object for tenant test_user
     |id   |name       |from             |persist  |filter |merge  |projections  |metadata |
     |123  |testDataSet|[testDataSource] |true     |[]     |[]     |[]           |[]       |
     And I grab tmm backend url from the config file
     Then I setup request for posting to tmm backend
-    When I POST to "/tenant/testuser"
+    When I POST to "/tenant/test_user"
     Then The response code needs to be '200'
     And The response body should contain an array of valid meta data objects
 
   Scenario: As an administrator, I want to create a duplicate data set
-    Given I create a new Tenant Metadata Object for tenant 'test_user'
+    Given I create a new Tenant Metadata Object for tenant test_user
       |id   |name       |from             |persist  |filter |merge  |projections  |metadata |
       |123  |testDataSet|[testDataSource] |true     |[]     |[]     |[]           |[]       |
     And I grab tmm backend url from the config file
     Then I setup request for posting to tmm backend
-    When I POST to "/tenant/testuser"
+    When I POST to "/tenant/test_user"
     Then The response code needs to be '400'
     And The response body should contain the error "object already exists"
 
@@ -47,7 +47,7 @@ DSS should be responsible only for data sources management and the future featur
   Scenario: As an administrator I want to make a get request to tmm
     Given I grab tmm backend url from the config file
     Then I set header for making a get request to tmm
-    When I get "/tenant/test_user"
+    When I GET "/tenant/test_user"
     Then The response code needs to be '200'
     And the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid
 #
