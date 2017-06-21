@@ -156,7 +156,6 @@ export class  DadPageComponent implements OnInit{
                 newElement.uiparameters = [];
                 newElement.lon = 'lon';
                 newElement.lat = 'lat';
-              //  newElement.endpoint = 'QueryTopics';
             }
 
             this.dadConfigService.saveOne(newElement);
