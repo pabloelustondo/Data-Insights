@@ -149,7 +149,7 @@ export class  DadPageComponent implements OnInit{
                 newElement.type = 'pie';
             }
             if(this.selectedChartType == 'map'){
-                newElement.type = 'map';
+                newElement.type = 'map2';
             }
 
             this.dadConfigService.saveOne(newElement);
