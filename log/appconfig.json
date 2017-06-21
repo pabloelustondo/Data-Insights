@@ -1,0 +1,7 @@
+{
+  "id" : "log",
+  "name" : "DDB",
+  "secret"  : "1234",
+  "port"  : "8003",
+  "dependencies" : ["mongodb"]
+}
