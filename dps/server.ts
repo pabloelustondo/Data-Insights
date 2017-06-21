@@ -170,15 +170,15 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
             });
 
             // make it ready for consumption right away
-            publishCleanedDataToKafka('undefined_cleanedData',  tenant.tenantId, data );
+            publishCleanedDataToKafka('undefined_cleanedData',  tenant.tenantId, dataSetId, data );
 
         });
     } else {
-        console.log ('tenantId not found');
+        console.log (tenantId +  'tenantId not found');
     }
 }
 
-function publishCleanedDataToKafka (topic: string, tenantId: string, data: string) {
+function publishCleanedDataToKafka (topic: string, tenantId: string, dataSetId: string,  data: string) {
     let kafkaClient = new kafka.Client(globalconfig['kafka_url']);
     let producer = new kafka.Producer(kafkaClient);
     producer.on('ready', function (message: any) {
@@ -186,7 +186,11 @@ function publishCleanedDataToKafka (topic: string, tenantId: string, data: strin
             {
                 topic: topic,
                 partition: 0,
-                messages:  JSON.stringify(data)
+                messages:  JSON.stringify( {
+                    tenantId : tenantId,
+                    dataSetId : dataSetId,
+                    data : data
+                })
             }];
 
         producer.send(payloads, function (err: any, data: any) {

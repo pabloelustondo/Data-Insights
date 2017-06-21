@@ -117,8 +117,8 @@ function processCleanedData(idaMetadata, clientMetadata, clientData) {
         var dataSet = _.find(tenant['dataSets'], ['id', clientMetadata.dataSetId]); //get the dataSet for the request
         var projections = dataSet.projections; //get the projections
         console.log('projections \t ' + JSON.stringify(projections));
-        var dataSetId = dataSet.id; //get the id
-        var collectionName_2 = dataSetId;
+        var dataSetId_1 = dataSet.id; //get the id
+        var collectionName_2 = dataSetId_1;
         projection_1.DataProjections(clientData, projections).then(function (data) {
             //upload to database
             rawDataLakeService_1.uploadModifiedData(tenant.tenantId, collectionName_2, data).then(function (response) {
@@ -127,14 +127,14 @@ function processCleanedData(idaMetadata, clientMetadata, clientData) {
                 console.log(error);
             });
             // make it ready for consumption right away
-            publishCleanedDataToKafka('undefined_cleanedData', tenant.tenantId, data);
+            publishCleanedDataToKafka('undefined_cleanedData', tenant.tenantId, dataSetId_1, data);
         });
     }
     else {
-        console.log('tenantId not found');
+        console.log(tenantId + 'tenantId not found');
     }
 }
-function publishCleanedDataToKafka(topic, tenantId, data) {
+function publishCleanedDataToKafka(topic, tenantId, dataSetId, data) {
     var kafkaClient = new kafka.Client(globalconfig['kafka_url']);
     var producer = new kafka.Producer(kafkaClient);
     producer.on('ready', function (message) {
@@ -142,7 +142,11 @@ function publishCleanedDataToKafka(topic, tenantId, data) {
             {
                 topic: topic,
                 partition: 0,
-                messages: JSON.stringify(data)
+                messages: JSON.stringify({
+                    tenantId: tenantId,
+                    dataSetId: dataSetId,
+                    data: data
+                })
             }
         ];
         producer.send(payloads, function (err, data) {

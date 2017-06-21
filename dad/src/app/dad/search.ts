@@ -32,6 +32,7 @@ export class DadSearch{
                 }
             });
             if (eval(ss)) result.push(d);
+
         });
         return result;
     }
