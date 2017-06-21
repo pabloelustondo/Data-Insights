@@ -205,9 +205,9 @@ app.post('/data/outGoingRequest', function(req, res) {
 
     let db = app.get('db');
     let tenant = db.getTenant(metadata.tenantId);
-
-    if (tenant) {
-        let dataSets = tenant['dataSets'];
+    let dataSets = tenant['dataSets'];
+    let dataSet = _.find(dataSets, {id : metadata.dataSetId});
+    if (tenant && dataSet) {
         processRequest(metadata, dataSets, res);
     } else {
         res.status(400).send ({

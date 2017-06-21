@@ -7,15 +7,17 @@ Background:
   Simple consumer should be able to subscribe/consume the data
 
   Scenario: As an admininstrator I want to GET a list of existing topics
-    Given I set the xaccesskey for ODA
-    And I grab ODA port number from globalconfig.json
+    Given I grab ODA url from globalconfig.json
+    And I grab the xaccesskey for ODA from 'testTemporaryToken'
     When I GET topics
     Then response code is :200
     Then response body should be error-free
 
   Scenario: As an admininstrator I want to subscribe to a topic
-    Given I set valid request header and body for POST call to ~/query with metadata id
-    And I grab ODA port number from globalconfig.json
+    Given I set valid request for posting to ~/query
+      |dataSetId|from       |
+      |string   |vehicleInfo|
+    And I grab ODA url from globalconfig.json
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed
