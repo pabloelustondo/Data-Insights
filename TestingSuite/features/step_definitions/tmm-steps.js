@@ -69,24 +69,19 @@ Cucumber.defineSupportCode(function(context) {
             name: 'Data Source',
             tenantId: variable,
             dataSets: [{
-            id: '10-22-1',
-            name: 'Test Data Set 01',
-            from: ['Doga Ister'],
-            persist: true,
-            filter: ['/&AS/'],
-            merge: ['09-21-31$F'],
-            projections: [''],
-            metadata: ['']
-        }, {
-            id: '101',
-            name: 'Test Data Set 02',
-            from: ['Ray Gervais'],
-            persist: true,
-            filter: ['/&asdasdasda/'],
-            merge: ['09-1231-31$F'],
-            projections: [''],
-            metadata: ['']
-        }],
+                "id": "nextBus",
+                "name": "nextBus",
+                "from": [
+                    "nextBus"
+                ],
+                "persist": true,
+                "filter": "",
+                "merge": "",
+                "projections": "",
+                "metadata": [
+                    "data"
+                ]
+            }],
             dataSource: [{
             id: '10-23-1',
             name: 'Test Data Set 01',
