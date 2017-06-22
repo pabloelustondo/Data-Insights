@@ -55,6 +55,7 @@ export class DadElement {
   intervalRefreshOption?: boolean = false;
   readExpression?: any;
   alertExpression?: string;
+  postBody?: any;
 }
 
 export class DadDateRange{

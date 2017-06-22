@@ -99,6 +99,7 @@ export class  DadPageComponent implements OnInit{
     tenantID: string = 'test';
 
 
+
     constructor(private dadConfigService: DadConfigService,
                 private activatedRoute: ActivatedRoute,
                 private dadElementDataService: DadElementDataService
@@ -143,71 +144,83 @@ export class  DadPageComponent implements OnInit{
 
     }
 
-    addElement(){
+    addElement() {
         let newElement: DadUIElement;
         //chart
-        if(this.selectedValue == 'chart') {
+        if (this.selectedValue == 'chart') {
             newElement = new DadChart();
-            newElement.name =  this.elementName;
-           // newElement.endpoint = ;
-            if(this.elementName) {
+            newElement.name = this.elementName;
+            // newElement.endpoint = ;
+            if (this.elementName) {
                 newElement.id = this.elementName;
-            } else{ newElement.id = Date.now().toString();}
+            } else {
+                newElement.id = Date.now().toString();
+            }
             this.page.chartids.push(newElement.id);
             this.page.charts.push(newElement);
 
-            if(this.selectedChartType == 'bar'){
+            newElement.endpoint = 'Query';
+            newElement.parameters = [{
+                tenantId: this.tenantID
+            }];
+
+            if (this.selectedChartType == 'bar') {
                 newElement.type = 'bar';
-                newElement.endpoint = config['TenantMetaData'];
-               // this.selectDataSet(newElement);
+
+                // this.selectDataSet(newElement);
             }
-            if(this.selectedChartType == 'pie'){
+            if (this.selectedChartType == 'pie') {
                 newElement.type = 'pie';
-                newElement.endpoint = config['TenantMetaData'];
-               // this.selectDataSet(newElement);
+
+                // this.selectDataSet(newElement);
             }
-            if(this.selectedChartType == 'map'){
+            if (this.selectedChartType == 'map') {
                 newElement.type = 'map2';
-                newElement.endpoint = 'TenantMetaData';
-                newElement.parameters = [{
-                    tenantId : this.tenantID
-                }];
-               // this.selectDataSet(newElement);
-                  /*            newElement.dataElement = 'vehicle';
-                                newElement.parameters = [];
-                                newElement.uiparameters = [];
-                                newElement.lon = 'lon';
-                                newElement.lat = 'lat';*/
-            }
 
-            this.dadConfigService.saveOne(newElement);
-            this.dadConfigService.saveOne(this.page);
+
+                newElement.dataElement = 'vehicle';
+                newElement.parameters = [];
+                newElement.uiparameters = [];
+                newElement.lon = 'lon';
+                newElement.lat = 'lat';
+
+                let _dataSet = _.find(this.data, {name: this.selectedDataSet});
+                newElement.postBody = {
+                    dataSetId: '',
+                    from: [_dataSet['id']]
+                };
+
+                this.dadConfigService.saveOne(newElement);
+                this.dadConfigService.saveOne(this.page);
 
             }
-        //widget
-        if(this.selectedValue == 'widget') {
-            newElement = new DadWidget();
-            newElement.name =  this.elementName;
-            if(this.elementName) {
-                newElement.id = this.elementName;
-            } else{ newElement.id = Date.now().toString();}
-            newElement.type = 0;
-           /* if(this.selectedWidgetType == 'Tile'){
+            //widget
+            if (this.selectedValue == 'widget') {
+                newElement = new DadWidget();
+                newElement.name = this.elementName;
+                if (this.elementName) {
+                    newElement.id = this.elementName;
+                } else {
+                    newElement.id = Date.now().toString();
+                }
                 newElement.type = 0;
-            }
-            if(this.selectedWidgetType == 'Widget Chart'){
-                newElement.type = 1;
-            }
-            */
-            this.page.widgetids.push(newElement.id);
-            this.page.widgets.push(newElement);
+                /* if(this.selectedWidgetType == 'Tile'){
+                 newElement.type = 0;
+                 }
+                 if(this.selectedWidgetType == 'Widget Chart'){
+                 newElement.type = 1;
+                 }
+                 */
+                this.page.widgetids.push(newElement.id);
+                this.page.widgets.push(newElement);
 
-            this.dadConfigService.saveOne(newElement);
-            this.dadConfigService.saveOne(this.page);
+                this.dadConfigService.saveOne(newElement);
+                this.dadConfigService.saveOne(this.page);
+
+            }
+            this.selectElement();
 
         }
-        this.selectElement();
-
     }
 
     selectDataSet(){
@@ -252,4 +265,3 @@ export class  DadPageComponent implements OnInit{
     }
 
 
-}
