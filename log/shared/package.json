@@ -1,0 +1,19 @@
+{
+  "name": "log-system",
+  "version": "1.0.0",
+  "description": "Logging System",
+  "main": "log.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node usecase.js & typedoc --experimentalDecorators --target 'es6' --module 'commonjs' --out documentations/ src/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.16.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0",
+    "typescript": "^2.3.4"
+  }
+}

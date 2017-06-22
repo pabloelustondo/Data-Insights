@@ -5,9 +5,11 @@ Background:
 based on given data set metadata definition we should be able to return merged data set.
 
   Scenario: As an administrator, I want to post my data to ODA and get a merged dataSet returned
-    Given I set valid request header and body for POST call to ~/query
-    And I grab ODA port number from globalconfig.json
+    Given I grab ODA url from globalconfig.json
+    And I grab the xaccesskey for ODA from 'testTemporaryToken'
+    And I set valid request for posting to ~/query
+      |dataSetId|from       |
+      |string   |vehicleInfo|
     And I make a POST call to ~/query
     Then response code is :200
-    #Further validation is needed
     Then The response message should contain the merged dataset

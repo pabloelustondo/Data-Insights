@@ -86,10 +86,15 @@ function processRequest(metadata, _dataSets, res) {
     var queryId = metadata.dataSetId;
     // get dataSetFrom all available dataSets
     var dataSet = _.find(_dataSets, { id: queryId });
-    var dataSources = dataSet.dataSources;
+    var dataSources = dataSet['from'];
     var responseData = [];
-    async.each(dataSources, function (ds, callback) {
-        console.log(ds);
+    async.each(dataSources, function (dsId, callback) {
+        console.log(dsId);
+        var db = getDbFromDataService();
+        var tenant = db.getTenant(metadata.tenantId);
+        var allDataSets = tenant.dataSets;
+        var ds = _.find(allDataSets, { id: dsId });
+        var filter = (ds.filter !== "") ? ds.filter : undefined;
         var aggregate = [{
                 $match: {}
             },
@@ -99,7 +104,7 @@ function processRequest(metadata, _dataSets, res) {
                     'data': 1
                 }
             }];
-        if (ds.filter) {
+        if (filter) {
             var project = {
                 $project: {
                     '_id': 0,
@@ -107,7 +112,7 @@ function processRequest(metadata, _dataSets, res) {
                         $filter: {
                             input: '$data',
                             as: 'customData',
-                            cond: { $eq: ['$$customData.' + ds.filter.key, ds.filter.value] }
+                            cond: { $eq: ['$$customData.' + filter.key, filter.value] }
                         }
                     }
                 }
@@ -116,10 +121,10 @@ function processRequest(metadata, _dataSets, res) {
             aggregate[1] = project;
         }
         var options = {
-            url: 'http://localhost:8020/ds/test/getdata/query',
+            url: 'http://localhost:8020/ds/' + metadata.tenantId + '/getdata/query',
             method: 'POST',
             body: {
-                'collectionName': ds.dataSource,
+                'collectionName': ds.id,
                 'aggregation': aggregate
             },
             json: true
@@ -128,9 +133,9 @@ function processRequest(metadata, _dataSets, res) {
             if (!err && response.statusCode == 200) {
                 var info = JSON.stringify(body);
                 var responseObj = {};
-                var projected = _.get(body[0], ds.projection);
+                var projected = _.get(body[0], ds.projections[0]);
                 // let sample = projected[ds.projection];
-                responseObj[ds.dataSource] = _.get(body[0], ds.projection);
+                responseObj[ds.id] = _.get(body[0], ds.projections[0]);
                 responseData.push(responseObj);
             }
             callback();
@@ -142,15 +147,16 @@ function processRequest(metadata, _dataSets, res) {
         }
         else {
             if (dataSet.merge) {
-                var a1 = _.find(responseData, dataSet.dataSources[0].dataSource);
-                var a2 = _.find(responseData, dataSet.dataSources[1].dataSource);
+                var a1 = _.find(responseData, dataSet.from[0]);
+                var a2 = _.find(responseData, dataSet.from[1]);
                 if (a1 && a2) {
-                    var a = a1[dataSet.dataSources[0].dataSource];
-                    var b_1 = a2[dataSet.dataSources[1].dataSource];
+                    var a = a1[dataSet.from[0]];
+                    var b_1 = a2[dataSet.from[1]];
                     var merge = _.map(a, function (item) {
                         return _.merge(item, _.find(b_1, { 'Value': parseInt(item.id) }));
                     });
                     res.status(200).send({
+                        timeStamp: new Date().toISOString(),
                         result: merge
                     });
                 }
@@ -159,7 +165,10 @@ function processRequest(metadata, _dataSets, res) {
                 }
             }
             else {
-                res.status(200).send(responseData);
+                res.status(200).send({
+                    timeStamp: new Date().toISOString(),
+                    result: responseData
+                });
             }
         }
     });
