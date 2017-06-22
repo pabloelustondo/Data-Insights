@@ -1,5 +1,4 @@
 Feature: Everything
-  # https://jira.soti.net/browse/CB-437
 
   Background:
   Everything
