@@ -117,11 +117,20 @@ Cucumber.defineSupportCode(function(context) {
         //console.log(options);
         if (parseInt(int) != parseInt(responseCode)){
             //console.error('Error: '+ responseData);
+            console.log(options);
             throw new Error('Response code should be ' + int +' but is ' + responseCode +'\n'+ resString);
         }
 
         callback();
     });
+
+    Then('response body must be error-free', function (callback) {
+        var resString = JSON.stringify(responseData).toLowerCase();
+        if (resString.includes('error') || resString.includes('invalid'))
+            throw new Error(resString);
+        callback();
+    });
+
     Given(/^I grab the xaccesskey for ODA from '(.*)'$/, function (variable, callback) {
         FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
             if (err) return console.log(err);
@@ -132,7 +141,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (!resString.includes('invalid'))
+        if (!resString.includes('invalid') && !resString.includes('error') && !resString.includes('400'))
             throw new Error("response message: " + resString);
         callback();
     });

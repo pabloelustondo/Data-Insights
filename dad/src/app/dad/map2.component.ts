@@ -11,6 +11,9 @@ import { DadChart } from './chart.component';
 
     <div id="mapid"></div>
 
+
+
+
     `,
 })
 export class DadMap2 implements OnInit {

@@ -7,7 +7,7 @@ Feature: SOTI Insight ODA Backend Components
     And I grab ODA url from globalconfig.json
     When I GET topics for "test"
     Then response code is :200
-    Then response body should be error-free
+    Then response body must be error-free
     #Then The response message should not include <testResponse>
 
    Scenario: As an administrator I want to subscribe to a topic
