@@ -290,8 +290,12 @@ consumerGroup.on('error', function(err) {
 });
 
 consumerGroup.on('message', function (message) {
-    let data =  //{producer: "MCDP", params: {"tenantId": "someid"}};
+    let data = // {producer: "MCDP", params: {"tenantId": "someid"}};
     JSON.parse(message.value);
+
+    var timeStamp = new Date().getTime();
+    data = { ...data, ...{ "timeStamp": timeStamp.toString() } };
+
     console.log('data = ' + JSON.stringify(data));
     if (data.producer == "Tenant") {
         callDbAndAct(function (db, next) {
