@@ -58,7 +58,7 @@ export class QueryController {
                     method: 'POST',
                     body: {
                         metadata : {
-                            'tenantId' : jwtDecodedToken.tenantId,
+                            'tenantId' : jwtDecodedToken.tenantid,
                             'dataSetId' : request.from[0]
                         }
                     },

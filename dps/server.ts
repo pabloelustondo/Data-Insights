@@ -209,14 +209,18 @@ app.post('/data/outGoingRequest', function(req, res) {
 
     let db = app.get('db');
     let tenant = db.getTenant(metadata.tenantId);
-    let dataSets = tenant['dataSets'];
-    let dataSet = _.find(dataSets, {id : metadata.dataSetId});
-    if (tenant && dataSet) {
-        processRequest(metadata, dataSets, res);
+    if (!tenant) {
+        res.status(404).send('Tenant not found');
     } else {
-        res.status(400).send ({
-            message: 'No combination of tenant and dataSet found.'
-        })
+        let dataSets = tenant['dataSets'];
+        let dataSet = _.find(dataSets, {id: metadata.dataSetId});
+        if (dataSet) {
+            processRequest(metadata, dataSets, res);
+        } else {
+            res.status(400).send({
+                message: 'No combination of tenant and dataSet found.'
+            })
+        }
     }
 
 

@@ -34,6 +34,10 @@ cd %installdir%\tmm
 call npm install
 cd %installdir%\tmm\backend
 call npm install
+cd %installdir%\sml\client
+call npm install
+cd %installdir%\log
+call npm install
 cd %installdir%
 echo "installations completed"
 
