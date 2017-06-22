@@ -262,7 +262,7 @@ if (config.useSSL) {
             json: true,
             method: 'get',
             headers: headersOptions,
-            url: appconfig['ddb_url'] + '/tenants',
+            url: globalconfig['ddb_url'] + '/tenants',
         };
         rp(options).then(function (data) {
             db.populateTenants(data);
@@ -311,7 +311,7 @@ if (config.useSSL) {
                     let clientData = data.clientData;
                     let clientMetadata = data.clientMetadata;
 
-                    console.log('json = ' + JSON.stringify(data));
+                   // console.log('json = ' + JSON.stringify(data));
                     publishTransactionLog( idaMetadata, clientMetadata, clientData);
                     processCleanedData( idaMetadata, clientMetadata, clientData);
 
@@ -334,7 +334,7 @@ if (config.useSSL) {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: appconfig['ddb_url'] + '/tenants',
+                url: globalconfig['ddb_url'] + '/tenants',
             };
             rp(options).then(function (data) {
                 db.populateTenants(data);
