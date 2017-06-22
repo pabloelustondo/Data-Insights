@@ -52,10 +52,12 @@
     "zone.js": "0.7.2"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "^4.0.1",
+    "@angular/compiler-cli": "^2.4.0",
+    "@angular/tsc-wrapped": "^4.2.3",
     "@types/jasmine": "2.5.37",
     "@types/jquery": "^2.0.39",
     "angular-cli": "1.0.0-beta.21",
+    "autoprefixer": "^7.1.1",
     "codelyzer": "1.0.0-beta.4",
     "cp-cli": "^1.0.2",
     "jasmine-core": "2.5.2",
