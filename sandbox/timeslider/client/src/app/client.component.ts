@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'client-app',
   template: `
-<daddataview></daddataview>
-<chat-component></chat-component>
+   <a routerLink="/messages">messages</a> <a routerLink="/">home</a>
+   <br/>
+   <router-outlet></router-outlet>
 `
 })
 export class ClientAppComponent {

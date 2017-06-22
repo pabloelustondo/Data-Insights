@@ -45,7 +45,7 @@ let LocalStorageServiceConfig = {
         DatepickerModule,
         TimepickerModule,
         AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyDK7Z_arQKxXVf0ZiUDl4_yackjHiD9HNA'
+            apiKey: 'AIzaSyDFEe9DgsS2r2Bmt-ffYZUjSb2VZNWiGFQ'
         })
     ],
     declarations: [DadChartComponent, DadConfigComponent,

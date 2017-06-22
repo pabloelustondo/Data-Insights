@@ -67,11 +67,11 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I GET topics', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
+    When('I GET topics for {stringInDoubleQuotes}', function (stringInDoubleQuotes,callback) {
+
         resetOptions();
         options.method = "GET";
-        options.uri = url+'/query/topics';
+        options.uri = url+'/query/topics?tenantId='+stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
         Request(options, function (error, response, body) {
             if (error) {
@@ -111,7 +111,6 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('response code is :{int}', function (int, callback) {
-        // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
         //console.log(options);
         if (parseInt(int) != parseInt(responseCode)){
@@ -131,7 +130,7 @@ Cucumber.defineSupportCode(function(context) {
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (!resString.includes('query not supported'))
+        if (!resString.includes('invalid'))
             throw new Error("response message: " + resString);
         callback();
     });
