@@ -9,7 +9,7 @@ Background:
   Scenario: As an admininstrator I want to GET a list of existing topics
     Given I grab the xaccesskey for ODA from 'testTemporaryToken'
     Given I grab ODA url from globalconfig.json
-    When I GET topics
+    When I GET topics for "test"
     Then response code is :200
     Then response body should be error-free
 

@@ -67,11 +67,11 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I GET topics', function (callback) {
+    When('I GET topics for {stringInDoubleQuotes}', function (stringInDoubleQuotes,callback) {
 
         resetOptions();
         options.method = "GET";
-        options.uri = url+'/query/topics?tenantId=test_user';
+        options.uri = url+'/query/topics?tenantId='+stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
         Request(options, function (error, response, body) {
             if (error) {
@@ -124,7 +124,6 @@ Cucumber.defineSupportCode(function(context) {
         FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
             if (err) return console.log(err);
             accessToken = contents;
-            console.log(accessToken)
             callback();
         });
     });
