@@ -55,6 +55,6 @@ Feature: IDA API Tests
      Given I set up request for making post call to '/data'
      When I make a POST call to /data
      Then Kafka Consumer should receive some message without error
-    
+
 
 

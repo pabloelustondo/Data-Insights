@@ -79,7 +79,6 @@ Cucumber.defineSupportCode(function(context) {
             }
             responseData = body;
             responseCode = response.statusCode;
-            console.log(options.headers)
             callback();
         });
     });
