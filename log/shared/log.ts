@@ -27,7 +27,7 @@ type Producer = Component | Agent | "Tenant";
 /**
  * Mesages are like this: "Deleted {{numRows}} rows of dimention {{dimention}} form the tenant Id {{tenantId}}" 
  */
-type logging = {classifier: Classifier, message: string, producer: Producer, params?: Parameter};
+type logging = {"classifier": Classifier, "message": string, "producer": Producer, "params"?: Parameter};
 
 /**
  * Creates a log request and send it to the handler API.
@@ -37,24 +37,27 @@ type logging = {classifier: Classifier, message: string, producer: Producer, par
  * 
  */
 
-export function log(logMessage: logging): void {
-  var message = { ...logMessage, ...{ timeStamp: new Date().getTime() } };
-  var url = config.url;
+export function log(logMessage: logging): number {
 
-  axios.post(url, message)
+    var timeStamp = new Date().getTime();
+    var message = { ...logMessage, ...{ "timeStamp": timeStamp.toString() } };
+    var url = config.url;
+
+    axios.post(url, message)
     .then(function (response) {
-      return(true);
+        console.log(response.data);
     })
     .catch(function (error) {
-      return(false);
+        console.log(error);
     });
+    return timeStamp;
 }
 
 /** 
 *
 * Interpolates the message with the given parameters and returns result back.   
-* @example message: "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", 
-* params: { speed: "quick", fox: { color: "brown" }, mammal: ["dog", "cat", "fox"] }
+* @example "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", 
+* "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] }
 * 
 * @result 'The quick brown fox jumped over the lazy dog'
 * @param {logging} logMessage The message that would be interpolated.
