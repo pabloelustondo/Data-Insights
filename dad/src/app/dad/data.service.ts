@@ -50,8 +50,23 @@ export class DadElementDataService {
     }
 
     let findData = function(data){
-        if (element.dataElement) return data.data[element.dataElement];
-        return data.data;
+        if (element.dataElement) {
+            if (data.data) {
+                return data.data[element.dataElement];
+            }
+            else if (data.result) {
+                return data.result[0].nextBus;
+            }
+            else {
+                return data.data;
+            }
+
+        }
+
+        else {
+            return data.data;
+        }
+
       };
 
 
@@ -90,6 +105,7 @@ export class DadElementDataService {
         });
         return observable;
     }
+
 }
 
 

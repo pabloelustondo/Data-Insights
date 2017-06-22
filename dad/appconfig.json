@@ -3,5 +3,6 @@
   "name":"DAD Front End",
   "dependencies":["ddb","dss","oda"],
   "secret"  : "1234",
-  "oda_url_not_needed":""
+  "oda_url_not_needed":"",
+  "oda_url" : "http://10.0.91.2:8022"
 }
