@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "socket.io server",
   "scripts":{
-    "start": "node server.js"
+    "start": "node server.js",
+    "startdmac": "node $NODE_DEBUG_OPTION server.js"
   },
   "dependencies": {
     "express": "^4.13.4",
