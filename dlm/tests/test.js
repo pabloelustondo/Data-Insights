@@ -66,6 +66,7 @@ describe("Test external API service calls", function() {
     });
 
     describe("Call API with invalid api call", function() {
+  
         it('calls Api Call service to Nextbus API', function (done){
             // there is a typo in the command filed. (There is an extra 's' in services)
             var req = {

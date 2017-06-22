@@ -11,7 +11,7 @@ ManageAgendaService = {
         //TODO: Provide a wrapper that allows a user to start agenda/scheduler service
 
         agenda.on('ready', function () {
-
+            console.log(timeInterval);
             agenda.processEvery(timeInterval + ' seconds');
             agenda.start();
             callback();
@@ -26,6 +26,11 @@ ManageAgendaService = {
 
     createLocalCache : function () {
         JobManagementService.findJob(config['api_service_job_name'], function (err, result) {
+            if(!err){
+                console.log(config['api_service_job_name'] + " " + "is not found");
+            }else{
+                console.log(config['api_service_job_name'] + ":" + result);
+            }
             for (var configIdx in result){
                 ManageApiConfigurations.addApiConfig(result[configIdx].attrs.data, function (err, result){
                     if (err) {

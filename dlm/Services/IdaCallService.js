@@ -24,7 +24,6 @@ IdaCallService  = {
                 } else {
                     next(null, _body);
                 }
-
             }
             else{
                 console.log('yes error');
