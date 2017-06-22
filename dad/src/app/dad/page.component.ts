@@ -48,7 +48,7 @@ export class DadPage {
                 <option id="option_chart_pie" style="color:black;" value="map">Map</option>
             </select> <br/><br/>
             
-             <select *ngIf="selectedChartType"  [(ngModel)]="selectedChartType" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+             <select *ngIf="selectedChartType"  [(ngModel)]="selectedDataSet" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                 <option *ngFor="let optionsOfDropdown of data">{{optionsOfDropdown.name}}</option>
             </select> <br/><br/>
             
@@ -93,6 +93,7 @@ export class  DadPageComponent implements OnInit{
     selectedValue: any = -1;
     selectedChartType: any;
     selectedWidgetType: any = -1;
+    selectedDataSet: any;
     value: string;
     elementName: string;
     tenantID: string = 'test';
