@@ -247,7 +247,7 @@ router.delete('/silogagent/:tenantid', function(req,res){
 let ConsumerGroup = kafka.ConsumerGroup;
 let topics = ['log1'];
 let consumerGroupOptions = {
-    host: '127.0.0.1:2181',
+    host: appconfig.kafka_url,
     zk : undefined,   // put client zk settings if you need them (see Client)
     batch: undefined, // put client batch settings if you need them (see Client)
     ssl: false, // optional (defaults to false) or tls options hash

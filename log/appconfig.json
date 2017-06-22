@@ -1,6 +1,6 @@
 {
   "id" : "log",
-  "name" : "DDB",
+  "name" : "LOG",
   "secret"  : "1234",
   "dependencies" : ["mongodb"]
 }

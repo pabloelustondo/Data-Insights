@@ -21,7 +21,7 @@ Feature: Tenancy Management
   Scenario: As an administrator I want to create a DataSource
   #  Given I delete previous test information
     Given I grab 'dssback' url from config file
-    Given I create a login session as "test"
+    Given I create a login session as "test_user"
       |domainid |code         |
       |test     |administrator|
     Then response code should be 200
@@ -33,7 +33,7 @@ Feature: Tenancy Management
 
   Scenario: As an administrator I want to see all DataSources
     Given I grab 'dssback' url from config file
-    Given I create a login session as "test"
+    Given I create a login session as "test_user"
       |domainid |code         |
       |test     |administrator|
     Then response code should be 200
