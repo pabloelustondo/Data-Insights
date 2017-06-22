@@ -47,6 +47,11 @@ export class DadPage {
                 <option id="option_chart_pie" style="color:black;" value="pie">Pie Chart</option>
                 <option id="option_chart_pie" style="color:black;" value="map">Map</option>
             </select> <br/><br/>
+            
+            
+            <select *ngIf="page" #selectedOption class="form-control pull-right" (change)="selectDataSet(selectedValue)" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+               
+            </select> <br/><br/>
             <!--
             <select *ngIf="selectedValue=='widget'" [(ngModel)]="selectedWidgetType" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                 <option id="option_widget" style="color:black;" value="tile">Tile</option>
@@ -86,9 +91,11 @@ export class  DadPageComponent implements OnInit{
     selectedWidgetType: any = -1;
     value: string;
     elementName: string;
+    tenantID: string = 'test';
 
     constructor(private dadConfigService: DadConfigService,
-                private activatedRoute: ActivatedRoute
+                private activatedRoute: ActivatedRoute,
+                private dadElementDataService: DadElementDataService
     ) { }
 
     ngOnInit()  {
@@ -145,17 +152,29 @@ export class  DadPageComponent implements OnInit{
 
             if(this.selectedChartType == 'bar'){
                 newElement.type = 'bar';
+                newElement.endpoint = config['TenantMetaData'];
+               // this.selectDataSet(newElement);
             }
             if(this.selectedChartType == 'pie'){
                 newElement.type = 'pie';
+                newElement.endpoint = config['TenantMetaData'];
+               // this.selectDataSet(newElement);
             }
             if(this.selectedChartType == 'map'){
                 newElement.type = 'map2';
-                newElement.dataElement = 'vehicle';
-                newElement.parameters = [];
-                newElement.uiparameters = [];
-                newElement.lon = 'lon';
-                newElement.lat = 'lat';
+                newElement.endpoint = 'TenantMetaData';
+
+
+                // config['TenantMetaData'] + this.tenantID;
+                newElement.parameters = [{
+                    tenantId : this.tenantID
+                }];
+             //   this.selectDataSet(newElement);
+                              newElement.dataElement = 'vehicle';
+                                newElement.parameters = [];
+                                newElement.uiparameters = [];
+                                newElement.lon = 'lon';
+                                newElement.lat = 'lat';
             }
 
             this.dadConfigService.saveOne(newElement);
@@ -187,7 +206,20 @@ export class  DadPageComponent implements OnInit{
         this.selectElement();
 
     }
+/*
+    selectDataSet(element: DadUIElement){
+        this.dadElementDataService.getElementData(element).subscribe(
+            data => {
+               /* for(let i = 0; i <== smth.length; i++){
+                    data[i].id;
+                }
 
-    selectDataSet(){}
+                let dropDownOptions = _.pick(data,['id', 'name']);
+
+                console.log(JSON.stringify(data));
+            }
+        );
+    }
+    */
 
 }

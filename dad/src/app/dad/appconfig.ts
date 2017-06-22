@@ -27,5 +27,6 @@ export const config = {
     "ApplicationDeploymentCount": appconfig.oda_url + "/Devices/Application/executionTime",
     "NumberOfInstallations": appconfig.oda_url + "/Devices/Application/numberOfInstallations",
     "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations",
+    "TenantMetaData": appconfig.oda_url + "/Query/Topics"
 };
 
