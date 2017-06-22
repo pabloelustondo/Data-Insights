@@ -96,7 +96,7 @@ export class  DadPageComponent implements OnInit{
     selectedDataSet: any;
     value: string;
     elementName: string;
-    tenantID: string = 'test';
+    tenantID: string = 'sample';
 
 
 

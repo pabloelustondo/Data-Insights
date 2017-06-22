@@ -35,7 +35,8 @@ export class DadElementDataService {
       params.set(param, parameters[param]);
     }
     let endpoint0 = config[element.endpoint];
-    let token = localStorage.getItem('id_token');
+   // let token = localStorage.getItem('id_token');
+    let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkYXNmIiwiaWF0IjoxNDk4MTY4MzIyLCJleHAiOjE1Mjk3MDQzMzEsImF1ZCI6InNkcmZkcyIsInN1YiI6ImZkYXNkZnNhIiwidGVuYW50aWQiOiJzYW1wbGUifQ.t4BuEQOLbCb9ov7GaXZqWk86QZn3YLmO6aCaPz1zExQ';
     let headers = new Headers({ 'Content-Type': 'application/json',  'x-access-token' : token});
     let data = {
         metricName:element.metricName,
@@ -59,7 +60,7 @@ export class DadElementDataService {
       if(endpoint0.method === "post"){
 
 
-          return this.http.post(endpoint0.url, data, headers)
+          return this.http.post(endpoint0.url, data, { headers: headers})
                           .map((res:Response) => findData(res.json()))
                           .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
       }
