@@ -191,7 +191,7 @@ Cucumber.defineSupportCode(function(context) {
             tenantid: tenantId,
             agentid: '12345678901234567890'
         };
-        xaccessToken = jwt.sign(jwtPayload, config['expiring-secret'], {expiresIn: 15});
+        xaccessToken = jwt.sign(jwtPayload, 'Varun_is_lame', {expiresIn: 15});
         callback();
     });
 
