@@ -3,7 +3,7 @@ Feature: SOTI Insight ODA Backend Components
         #New ODA endpoints CB-437 and CB-438
 
    Scenario: As an administrator I want to GET a list of existing topics
-    Given I grab the xaccesskey for ODA from 'testPermanentToken'
+    Given I grab the xaccesskey for ODA from 'testTemporaryToken'
     And I grab ODA url from globalconfig.json
     When I GET topics for "test"
     Then response code is :200
