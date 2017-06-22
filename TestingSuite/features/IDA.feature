@@ -26,13 +26,13 @@ Feature: IDA API Tests
     And response body should contain a temporary token
     Then I store the response in 'testTemporaryToken'
 
-  Scenario: As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey
-    Given I modify the xaccesskey to an invalid JWT
-    And I grab 'ida' url from the config file
-    And I set up request for making get call to '/Security/getAuthorizationToken'
-    When I make a GET call
-    Then response code must be 400
-    Then response body should be empty or contain error
+#  Scenario: As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey
+#    Given I modify the xaccesskey to an invalid JWT
+#    And I grab 'ida' url from the config file
+#    And I set up request for making get call to '/Security/getAuthorizationToken'
+#    When I make a GET call
+#    Then response code must be 400
+#    Then response body should be empty or contain error
 
   Scenario: As an administrator I want to make a POST request to IDA using my temporary Authorization Token
     Given I grab the xaccesskey from 'testTemporaryToken'
@@ -55,6 +55,6 @@ Feature: IDA API Tests
      Given I set up request for making post call to '/data'
      When I make a POST call to /data
      Then Kafka Consumer should receive some message without error
-    
+
 
 

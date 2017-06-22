@@ -38,8 +38,7 @@ export class UploadDataSetController {
         url: 'https://localhost:3010/data',
         data: {
             metadata: {
-                dataSetId : 'myCustomDataSetId',
-                projections : ['device', 'application']
+                dataSetId : 'myCustomDataSetId'
             },
             data : {
                 device : {
@@ -130,7 +129,10 @@ export class UploadDataSetController {
                         resolve(jwt.verify(token, config['expiring-secret']));
                     } catch (err) {
                         console.log('could not verify token');
-                        reject(err);
+                        reject( {
+                            message: err.message,
+                            statusCode: 400
+                        });
                     }
                 });
                 return promise;
@@ -181,14 +183,28 @@ export class UploadDataSetController {
                                 producer.send(transactionLogPayloads, function (err: any, data: any) {
                                     console.log(data);
                                     // return Promise.resolve(data);
+                                    if (err) {
+                                        reject ({
+                                            message : err.message,
+                                            statusCode : 500
+                                        });
+                                    }
                                     resolve(data);
                                 });
                             });
                             producer.on('error', function (error: any) {
                                 console.log(error);
+                                reject ({
+                                    message : error.message,
+                                    statusCode : 500
+                                });
                             });
                         } catch (e) {
                             console.log('IDA could not communicate with kafka producer');
+                            reject ({
+                                message : 'IDA could not communicate with Queue producer',
+                                statusCode : 500
+                            });
                         }
                     });
 
@@ -216,7 +232,10 @@ export class UploadDataSetController {
                         };
                         resolve(user);
                     } else {
-                        reject('Error with backend Service');
+                        reject( {
+                            message : 'Error with backend Service',
+                            statusCode : 504
+                        });
                     }
                 });
                 return promise;
@@ -228,7 +247,7 @@ export class UploadDataSetController {
                 return Promise.reject(
                     {
                         message: err.message,
-                        status: '400'
+                        status:  err.statusCode
                     }
                 );
             });

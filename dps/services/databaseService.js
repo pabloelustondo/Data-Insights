@@ -15,7 +15,6 @@ var DatabaseService = (function () {
             this.tenants = sampletenants.tenants;
         }
         else {
-            //TODO: call DDB for this but for now just return  test data
             var headersOptions = {
                 'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
             };
@@ -35,7 +34,6 @@ var DatabaseService = (function () {
     };
     DatabaseService.prototype.getAllDataSets = function () {
         var dataSets = [];
-        // go through each tenant and find the dataSet that needs to be updated listened to
         for (var _i = 0, _a = this.tenants; _i < _a.length; _i++) {
             var tenant = _a[_i];
             if (tenant.dataSets) {
@@ -64,18 +62,13 @@ var DatabaseService = (function () {
         return _.find(this.tenants, [propertyName, propertyValue]);
     };
     DatabaseService.prototype.getUserInfo = function (userId) {
-        //TODO: proper implementation
         return {
             userId: "varun",
             tenantId: "varunTenant" + Math.floor(Math.random() * 5) + 1
         };
     };
     DatabaseService.prototype.callDbAndRespond = function (req, res, query) {
-        //this function opens a connection to the tenant db and calls the specific query.
-        //when this is do it returns the http response.
-        //the inout parameter query contains the actual query to be executed against to db
-        var uri = '1234'; // one database per tenant
-        //check uri and make sure we have rights
+        var uri = '1234';
         mongodb.connect(uri, function (err, db) {
             if (err) {
                 res.send({ data: null, status: err });
@@ -95,3 +88,4 @@ var DatabaseService = (function () {
     return DatabaseService;
 }());
 exports.DatabaseService = DatabaseService;
+//# sourceMappingURL=databaseService.js.map

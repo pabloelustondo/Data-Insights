@@ -2,20 +2,20 @@ Feature: SOTI Insight ODA Backend Components
 
         #New ODA endpoints CB-437 and CB-438
 
-   Scenario: As an admininstrator I want to GET a list of existing topics
+   Scenario: As an administrator I want to GET a list of existing topics
     Given I grab the xaccesskey for ODA from 'testTemporaryToken'
     And I grab ODA url from globalconfig.json
-    When I GET topics
+    When I GET topics for "test"
     Then response code is :200
     Then response body should be error-free
     #Then The response message should not include <testResponse>
 
-   Scenario: As an admininstrator I want to subscribe to a topic
+   Scenario: As an administrator I want to subscribe to a topic
     Given I grab the xaccesskey for ODA from 'testTemporaryToken'
     And I grab ODA url from globalconfig.json
     Then I set valid request for posting to ~/query
       |dataSetId|from       |
-      |10-22-1  |Percentage       |
+      |10-22-1  |nextBus       |
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed

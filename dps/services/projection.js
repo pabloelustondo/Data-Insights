@@ -1,7 +1,4 @@
 "use strict";
-/**
- * Created by vdave on 5/10/2017.
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 var config = require('../config.json');
 var appconfig = require('../appconfig.json');
@@ -20,3 +17,4 @@ function DataProjections(data, projections) {
     });
 }
 exports.DataProjections = DataProjections;
+//# sourceMappingURL=projection.js.map

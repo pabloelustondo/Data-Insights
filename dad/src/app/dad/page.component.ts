@@ -42,16 +42,20 @@ export class DadPage {
                      <option id="option_widget" style="color:black;" value="widget">Widget</option>
             </select> <br/><br/>
             
-           <select *ngIf="selectedValue=='chart'" [(ngModel)]="selectedChartType" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+           <select *ngIf="selectedValue=='chart'" [(ngModel)]="selectedChartType" (change) = "selectDataSet(selectedChartType)" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                 <option id="option_chart_bar" style="color:black;" value="bar">Bar Chart</option>
                 <option id="option_chart_pie" style="color:black;" value="pie">Pie Chart</option>
                 <option id="option_chart_pie" style="color:black;" value="map">Map</option>
             </select> <br/><br/>
             
-            
-            <select *ngIf="page" #selectedOption class="form-control pull-right" (change)="selectDataSet(selectedValue)" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
-               
+             <select *ngIf="selectedChartType"  [(ngModel)]="selectedChartType" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+                <option *ngFor="let optionsOfDropdown of data">{{optionsOfDropdown.name}}</option>
             </select> <br/><br/>
+            
+            
+           <!-- <select *ngIf="page" #selectedOption class="form-control pull-right" (change)="selectDataSet(selectedValue)" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
+               
+            </select> <br/><br/> -->
             <!--
             <select *ngIf="selectedValue=='widget'" [(ngModel)]="selectedWidgetType" #selectedOption class="form-control pull-right" style=" display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                 <option id="option_widget" style="color:black;" value="tile">Tile</option>
@@ -87,11 +91,12 @@ export class  DadPageComponent implements OnInit{
     user: DadUser;
     selectingElement: boolean = false;
     selectedValue: any = -1;
-    selectedChartType: any = -1;
+    selectedChartType: any;
     selectedWidgetType: any = -1;
     value: string;
     elementName: string;
     tenantID: string = 'test';
+
 
     constructor(private dadConfigService: DadConfigService,
                 private activatedRoute: ActivatedRoute,
@@ -163,18 +168,15 @@ export class  DadPageComponent implements OnInit{
             if(this.selectedChartType == 'map'){
                 newElement.type = 'map2';
                 newElement.endpoint = 'TenantMetaData';
-
-
-                // config['TenantMetaData'] + this.tenantID;
                 newElement.parameters = [{
                     tenantId : this.tenantID
                 }];
-             //   this.selectDataSet(newElement);
-                              newElement.dataElement = 'vehicle';
+               // this.selectDataSet(newElement);
+                  /*            newElement.dataElement = 'vehicle';
                                 newElement.parameters = [];
                                 newElement.uiparameters = [];
                                 newElement.lon = 'lon';
-                                newElement.lat = 'lat';
+                                newElement.lat = 'lat';*/
             }
 
             this.dadConfigService.saveOne(newElement);
@@ -206,20 +208,47 @@ export class  DadPageComponent implements OnInit{
         this.selectElement();
 
     }
-/*
-    selectDataSet(element: DadUIElement){
-        this.dadElementDataService.getElementData(element).subscribe(
-            data => {
-               /* for(let i = 0; i <== smth.length; i++){
-                    data[i].id;
+
+    selectDataSet(){
+
+        let newElement: DadUIElement;
+        newElement = new DadChart();
+        newElement.endpoint = 'TenantMetaData';
+        newElement.parameters = [{
+            tenantId: this.tenantID
+        }];
+
+        if (this.selectedChartType == 'map') {
+            newElement.type = 'map2';
+        }
+        if (this.selectedChartType == 'bar') {
+            newElement.type = 'bar';
+        }
+        if (this.selectedChartType == 'pie') {
+            newElement.type = 'pie';
+        }
+            this.dadElementDataService.getElementData(newElement).subscribe(
+                data => {
+                    let dropdownOptions = [];
+                    dropdownOptions.push({
+                        id: '',
+                        name: ''
+                    });
+                    for (let i = 0; i < data.length; i++) {
+                        dropdownOptions.push({
+                            id: data[i].id,
+                            name: data[i].name
+                        });
+                    }
+
+                    // let dropDownOptions = _.pick(data,['id', 'name']);
+                    this.data = dropdownOptions;
+                    console.log(JSON.stringify(data));
                 }
+            );
+        }
 
-                let dropDownOptions = _.pick(data,['id', 'name']);
-
-                console.log(JSON.stringify(data));
-            }
-        );
     }
-    */
+
 
 }
