@@ -152,14 +152,13 @@ function checksilogRequest(req, res){
 
 router.get('/siloguser', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-//        db.collection('silog').find({"tenantid":req.params.tenantid}).toArray(next);
         db.collection('siloguser').find({}).toArray(next);
     });
 });
 
 router.post('/siloguser', function(req,res){
     callDbAndRespond(req, res, function (req, res, db, next) {
-        db.collection('siloguser').replaceOne({"tenantid": req.params.tenantid}, req.body, {upsert: true}, next);
+        db.collection('siloguser').insertOne(req.body, next);
     });
 });
 
@@ -193,7 +192,7 @@ router.get('/silogserver', function(req,res){
 
 router.post('/silogserver', function(req,res){
     callDbAndRespond(req, res, function (req, res, db, next) {
-        db.collection('silogserver').replaceOne({"tenantid": req.params.tenantid}, req.body, {upsert: true}, next);
+        db.collection('silogserver').insertOne(req.body, next);
     });
 });
 
@@ -226,7 +225,7 @@ router.get('/silogagent', function(req,res){
 router.post('/silogagent', function(req,res){
     if (checksilogRequest(req,res)) {
         callDbAndRespond(req, res, function (req, res, db, next) {
-            db.collection('silogagent').replaceOne({"tenantid": req.params.tenantid}, req.body, {upsert: true}, next);
+            db.collection('silogagent').insertOne(req.body, next);
         });
     }
 });
@@ -247,7 +246,7 @@ router.delete('/silogagent/:tenantid', function(req,res){
 let ConsumerGroup = kafka.ConsumerGroup;
 let topics = ['log1'];
 let consumerGroupOptions = {
-    host: appconfig.kafka_url,
+    host: '127.0.0.1:2181',
     zk : undefined,   // put client zk settings if you need them (see Client)
     batch: undefined, // put client batch settings if you need them (see Client)
     ssl: false, // optional (defaults to false) or tls options hash
@@ -323,7 +322,7 @@ producer.on('error', function (err) {
 });
 
 router.get('/unittest', function(req, res){
-    let timeStamp =  new Date().getTime()
+    let timeStamp =  new Date().getTime();
     let payloads = [ { topic: 'log1', messages: `{"producer": "MCDP", "timeStamp": "${timeStamp}", "message": "TEST" ,"params": {"tenantId": "someTenantId"}}`, partition: 0 } ];
     producer.send(payloads, function (err, data) {
 

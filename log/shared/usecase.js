@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
 var logconfig_1 = require("./logconfig");
 var log_1 = require("./log");
-//var ts = log({classifier:"Read_Success", message: "any", producer: "DDB", params:{tenenatId: "someTenantId"} });
-var ts = log_1.log({ "classifier": "Read_Success", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } });
+var message = { "classifier": "Read_Success", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } };
+var ts = log_1.log(message);
 console.log("ts: " + ts);
 var url = logconfig_1.default.url;
 axios_1.default.get(url)

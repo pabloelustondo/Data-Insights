@@ -128,13 +128,12 @@ function checksilogRequest(req, res) {
 ////////////////////////////
 router.get('/siloguser', function (req, res) {
     callDbAndRespond(req, res, function (req, res, db, next) {
-        //        db.collection('silog').find({"tenantid":req.params.tenantid}).toArray(next);
         db.collection('siloguser').find({}).toArray(next);
     });
 });
 router.post('/siloguser', function (req, res) {
     callDbAndRespond(req, res, function (req, res, db, next) {
-        db.collection('siloguser').replaceOne({ "tenantid": req.params.tenantid }, req.body, { upsert: true }, next);
+        db.collection('siloguser').insertOne(req.body, next);
     });
 });
 router.delete('/siloguser/:tenantid', function (req, res) {
@@ -160,7 +159,7 @@ router.get('/silogserver', function (req, res) {
 });
 router.post('/silogserver', function (req, res) {
     callDbAndRespond(req, res, function (req, res, db, next) {
-        db.collection('silogserver').replaceOne({ "tenantid": req.params.tenantid }, req.body, { upsert: true }, next);
+        db.collection('silogserver').insertOne(req.body, next);
     });
 });
 router.delete('/silogserver/:tenantid', function (req, res) {
@@ -186,7 +185,7 @@ router.get('/silogagent', function (req, res) {
 router.post('/silogagent', function (req, res) {
     if (checksilogRequest(req, res)) {
         callDbAndRespond(req, res, function (req, res, db, next) {
-            db.collection('silogagent').replaceOne({ "tenantid": req.params.tenantid }, req.body, { upsert: true }, next);
+            db.collection('silogagent').insertOne(req.body, next);
         });
     }
 });

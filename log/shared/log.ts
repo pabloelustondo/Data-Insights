@@ -1,3 +1,4 @@
+import kafka = require('kafka-node');
 import axios from "axios";
 import config from "./logconfig";
 
@@ -27,7 +28,7 @@ type Producer = Component | Agent | "Tenant";
 /**
  * Mesages are like this: "Deleted {{numRows}} rows of dimention {{dimention}} form the tenant Id {{tenantId}}" 
  */
-type logging = {"classifier": Classifier, "message": string, "producer": Producer, "params"?: Parameter};
+export type logging = {"classifier": Classifier, "message": string, "producer": Producer, "params"?: Parameter};
 
 /**
  * Creates a log request and send it to the handler API.
@@ -42,7 +43,7 @@ export function log(logMessage: logging): number {
     var timeStamp = new Date().getTime();
     var message = { ...logMessage, ...{ "timeStamp": timeStamp.toString() } };
     var url = config.url;
-
+    
     axios.post(url, message)
     .then(function (response) {
         console.log(response.data);

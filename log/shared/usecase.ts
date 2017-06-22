@@ -1,10 +1,12 @@
 import axios from "axios";
 import config from "./logconfig";
 
-import {log, interpolate} from "./log";
+import {log, interpolate, logging} from "./log";
 
-//var ts = log({classifier:"Read_Success", message: "any", producer: "DDB", params:{tenenatId: "someTenantId"} });
-var ts = log({"classifier":"Read_Success", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } });
+
+var message: logging = {"classifier":"Read_Success", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } }; 
+
+var ts = log(message);
 
 console.log("ts: " + ts);
 
