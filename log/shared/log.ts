@@ -2,8 +2,8 @@ import kafka = require('kafka-node');
 import axios from "axios";
 import config from "./logconfig";
 
-type Classifier = "Create_Sucess" |
-                  "Create_Sucess" |
+type Classifier = "Create_Success" |
+                  "Create_Error" |
                   "Read_Success" |
                   "Read_Error" |
                   "Update_Success" |
@@ -25,10 +25,12 @@ interface Parameter {
 
 type Producer = Component | Agent | "Tenant";
 
+type Priority = "Fatal" | "Critical" | "Important" | "Warning" | "Info";
+
 /**
  * Mesages are like this: "Deleted {{numRows}} rows of dimention {{dimention}} form the tenant Id {{tenantId}}" 
  */
-export type logging = {"classifier": Classifier, "message": string, "producer": Producer, "params"?: Parameter};
+export type logging = {"classifier": Classifier, "serverId": string, "priority": Priority, "tenantId"?: string, "message": string, "producer": Producer, "params"?: Parameter};
 
 /**
  * Creates a log request and send it to the handler API.

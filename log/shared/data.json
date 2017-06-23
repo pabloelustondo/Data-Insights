@@ -1,5 +1,7 @@
 {
-    "classifier": "Read_Success",
+    "classifier": "Create_Success",
+    "serverId": "someSeverId",
+    "priority": "Critical",
     "producer": "DDB",
     "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}",
     "params": {

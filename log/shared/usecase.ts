@@ -4,7 +4,7 @@ import config from "./logconfig";
 import {log, interpolate, logging} from "./log";
 
 
-var message: logging = {"classifier":"Read_Success", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } }; 
+var message: logging = {"classifier":"Create_Success", "serverId": "someSeverId", "priority": "Critical", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } }; 
 
 var ts = log(message);
 

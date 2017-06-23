@@ -82,6 +82,7 @@
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="_log_.html#agent" class="tsd-kind-icon">Agent</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="_log_.html#classifier" class="tsd-kind-icon">Classifier</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="_log_.html#component" class="tsd-kind-icon">Component</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="_log_.html#priority" class="tsd-kind-icon">Priority</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="_log_.html#producer" class="tsd-kind-icon">Producer</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_log_.html#logging" class="tsd-kind-icon">logging</a></li>
 							</ul>
@@ -111,7 +112,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
 					<a name="classifier" class="tsd-anchor"></a>
 					<h3>Classifier</h3>
-					<div class="tsd-signature tsd-kind-icon">Classifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Create_Sucess"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Create_Sucess"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Read_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Read_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Update_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Update_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Delete_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Delete_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Server_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Server_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"System_Failure"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Test_Log"</span></div>
+					<div class="tsd-signature tsd-kind-icon">Classifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Create_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Create_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Read_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Read_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Update_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Update_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Delete_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Delete_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Server_Success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Server_Error"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"System_Failure"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Test_Log"</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in log.ts:5</li>
@@ -125,6 +126,16 @@
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in log.ts:18</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="priority" class="tsd-anchor"></a>
+					<h3>Priority</h3>
+					<div class="tsd-signature tsd-kind-icon">Priority<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Fatal"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Critical"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Important"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Warning"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"Info"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in log.ts:28</li>
 						</ul>
 					</aside>
 				</section>
@@ -144,7 +155,7 @@
 					<div class="tsd-signature tsd-kind-icon">logging<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in log.ts:31</li>
+							<li>Defined in log.ts:33</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -165,7 +176,16 @@
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_log_.parameter.html" class="tsd-signature-type">Parameter</a></h5>
 							</li>
 							<li class="tsd-parameter">
+								<h5>priority<span class="tsd-signature-symbol">: </span><a href="_log_.html#priority" class="tsd-signature-type">Priority</a></h5>
+							</li>
+							<li class="tsd-parameter">
 								<h5>producer<span class="tsd-signature-symbol">: </span><a href="_log_.html#producer" class="tsd-signature-type">Producer</a></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>server<wbr>Id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> tenant<wbr>Id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
 							</li>
 						</ul>
 					</div>
@@ -183,7 +203,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in log.ts:67</li>
+									<li>Defined in log.ts:69</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -223,7 +243,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in log.ts:41</li>
+									<li>Defined in log.ts:43</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,6 +297,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_log_.html#component" class="tsd-kind-icon">Component</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_log_.html#priority" class="tsd-kind-icon">Priority</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_log_.html#producer" class="tsd-kind-icon">Producer</a>
