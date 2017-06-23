@@ -106,9 +106,9 @@ export function processRequest (metadata: any, _dataSets: any, res) {
         let db = getDbFromDataService();
         let tenant = db.getTenant(metadata.tenantId);
         let allDataSets = tenant.dataSets;
-        let ds = _.find(allDataSets,{id : dsId });
 
-        let filter = (ds.filter !== "") ? ds.filter : undefined;
+        let ds = _.find(allDataSets,{id : dsId});
+        let filter = (ds && ds.filter !== "" ) ? ds.filter : undefined;
         let aggregate: any = [{
             $match : {}},
             {
@@ -140,7 +140,7 @@ export function processRequest (metadata: any, _dataSets: any, res) {
             method: 'POST',
 
             body: {
-                'collectionName': ds.id,
+                'collectionName': (ds)? ds.id: queryId,
                 'aggregation' : aggregate
             },
             json: true
@@ -151,10 +151,19 @@ export function processRequest (metadata: any, _dataSets: any, res) {
 
                 var responseObj = {};
 
-                let projected = _.get(body[0], ds.projections[0]);
-                // let sample = projected[ds.projection];
-                responseObj[ds.id] = _.get(body[0], ds.projections[0]);
-                responseData.push( responseObj);
+                if (ds) {
+                    let projected = _.get(body[0], ds.projections[0]);
+                    // let sample = projected[ds.projection];
+                    responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    responseData.push(responseObj);
+                } else {
+
+                    let ds = _.find(allDataSets,{id : queryId});
+                    let projected = _.get(body[0], ds.projections[0]);
+                    // let sample = projected[ds.projection];
+                    responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    responseData.push(responseObj);
+                }
             }
             callback();
         }

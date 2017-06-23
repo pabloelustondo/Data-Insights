@@ -1,0 +1,282 @@
+[
+  {
+    "keyword": "Feature",
+    "line": 1,
+    "name": "SOTI Insight ODA Backend Components",
+    "tags": [],
+    "uri": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\ODA.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "line": 5,
+        "name": "As an admininstrator I want to GET a list of existing topics",
+        "tags": [],
+        "id": "soti-insight-oda-backend-components;as-an-admininstrator-i-want-to-get-a-list-of-existing-topics",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I grab the xaccesskey for ODA from 'testTemporaryToken'",
+            "result": {
+              "status": "passed",
+              "duration": 2
+            },
+            "line": 6,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:124"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I grab ODA url from globalconfig.json",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 7,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:34"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I GET topics",
+            "result": {
+              "status": "passed",
+              "duration": 45
+            },
+            "line": 8,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:70"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code is :200",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 9,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:113"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response body should be error-free",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 10,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:134"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 13,
+        "name": "As an admininstrator I want to subscribe to a topic",
+        "tags": [],
+        "id": "soti-insight-oda-backend-components;as-an-admininstrator-i-want-to-subscribe-to-a-topic",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I grab the xaccesskey for ODA from 'testTemporaryToken'",
+            "result": {
+              "status": "passed",
+              "duration": 2
+            },
+            "line": 14,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:124"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I grab ODA url from globalconfig.json",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 15,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:34"
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "dataSetId",
+                      "from"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "string",
+                      "vehicleInfo"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "name": "I set valid request for posting to ~/query",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 16,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:171"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I make a POST call to ~/query",
+            "result": {
+              "status": "passed",
+              "duration": 22
+            },
+            "line": 19,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:98"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code is :200",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: Response code should be 200 but is 400\n\"500 - \\\"<!doctype html>\\\\n<html lang=\\\\\\\"en\\\\\\\">\\\\n<head>\\\\n<meta charset=\\\\\\\"utf-8\\\\\\\">\\\\n<title>error</title>\\\\n</head>\\\\n<body>\\\\n<pre>typeerror: cannot read property &#39;datasets&#39; of undefined<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\server.js:161:26<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:137:13)<br> &nbsp; &nbsp;at route.dispatch (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:112:3)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:281:22<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at cors (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:185:7)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:221:17<br> &nbsp; &nbsp;at origincallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:211:15)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:216:13<br> &nbsp; &nbsp;at optionscallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:196:9)<br> &nbsp; &nbsp;at corsmiddleware (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:201:7)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at trim_prefix (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:317:13)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:284:7<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at immediate.next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at runcallback (timers.js:653:20)<br> &nbsp; &nbsp;at tryonimmediate (timers.js:624:5)<br> &nbsp; &nbsp;at processimmediate [as _immediatecallback] (timers.js:596:5)</pre>\\\\n</body>\\\\n</html>\\\\n\\\"\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:119:19)"
+            },
+            "line": 20,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:113"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "the response doesnt have to be merged",
+            "result": {
+              "status": "skipped"
+            },
+            "line": 22,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:145"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 24,
+        "name": "invalid POST to Query",
+        "tags": [],
+        "id": "soti-insight-oda-backend-components;invalid-post-to-query",
+        "steps": [
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "dataSetId",
+                      "from"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "string",
+                      "unicornCollection"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "name": "I set invalid request for POST call to ~/query",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 25,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:86"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I grab ODA url from globalconfig.json",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 28,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:34"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I make a POST call to ~/query",
+            "result": {
+              "status": "passed",
+              "duration": 28
+            },
+            "line": 29,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:98"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "response code is :400",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 30,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:113"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response message should contain error",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: response message: \"500 - \\\"<!doctype html>\\\\n<html lang=\\\\\\\"en\\\\\\\">\\\\n<head>\\\\n<meta charset=\\\\\\\"utf-8\\\\\\\">\\\\n<title>error</title>\\\\n</head>\\\\n<body>\\\\n<pre>typeerror: cannot read property &#39;datasets&#39; of undefined<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\server.js:161:26<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:137:13)<br> &nbsp; &nbsp;at route.dispatch (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\route.js:112:3)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:281:22<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at cors (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:185:7)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:221:17<br> &nbsp; &nbsp;at origincallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:211:15)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:216:13<br> &nbsp; &nbsp;at optionscallback (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:196:9)<br> &nbsp; &nbsp;at corsmiddleware (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\cors\\\\\\\\lib\\\\\\\\index.js:201:7)<br> &nbsp; &nbsp;at layer.handle [as handle_request] (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\layer.js:95:5)<br> &nbsp; &nbsp;at trim_prefix (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:317:13)<br> &nbsp; &nbsp;at c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:284:7<br> &nbsp; &nbsp;at function.process_params (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:335:12)<br> &nbsp; &nbsp;at immediate.next (c:\\\\\\\\customerbi2\\\\\\\\customerbi\\\\\\\\dps\\\\\\\\node_modules\\\\\\\\express\\\\\\\\lib\\\\\\\\router\\\\\\\\index.js:275:10)<br> &nbsp; &nbsp;at runcallback (timers.js:653:20)<br> &nbsp; &nbsp;at tryonimmediate (timers.js:624:5)<br> &nbsp; &nbsp;at processimmediate [as _immediatecallback] (timers.js:596:5)</pre>\\\\n</body>\\\\n</html>\\\\n\\\"\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:135:19)"
+            },
+            "line": 31,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\oda-steps.js:131"
+            }
+          }
+        ]
+      }
+    ],
+    "id": "soti-insight-oda-backend-components"
+  }
+]

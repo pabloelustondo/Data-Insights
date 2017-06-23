@@ -1,28 +1,18 @@
 /**
- * Created by pablo elustondo on 12/7/2016.
+ * Created by pabloelustondo on 2017-06-21.
  */
-import {DadChart} from "./chart.component";
-import {DadWidget} from "./widget.component";
-import {DadTable} from "./table.component";
-import {DadCrudComponent} from "./crud.component";
+
+import { SmlDataSet } from "./sml"
 
 
-export class DadUser {
-
-  userid: string;
-  username: string;
-  tenantid: string;
-}
-
-export type DadElementType = "chart" | "widget" | "table" | "page";
-
-export type DadUIElement = DadChart | DadWidget | DadTable;
+export type DadElementType = "chart" | "widget" | "table" | "page" | "data";
 
 export class DadElement {
   id: string;
-  elementType?: DadElementType;
+  elementType: DadElementType;
   name?: string;
   data?: any;
+  timeWindow?:number;
   mappedData?: any;
   parameters?: any[];
   metricName?: string;
@@ -34,7 +24,7 @@ export class DadElement {
   lat?: string;
   parameterMappers?:any[];
   endpoint?: string;
-  widget?: DadWidget;
+  dataset?: SmlDataSet;
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
   tableId?: string;
@@ -55,7 +45,10 @@ export class DadElement {
   intervalRefreshOption?: boolean = false;
   readExpression?: any;
   alertExpression?: string;
-  postBody?: any;
+}
+
+export class DadDataView extends DadElement {
+  type?: string;
 }
 
 export class DadDateRange{
@@ -127,5 +120,24 @@ export interface DadAlert{
   name?:string
 }
 
+export class DadChart extends DadElement {
+  type: string;
+  width?: number;
+  height?: number;
+  mini?: boolean = false;
+  big?: boolean = false;
+  horizontal?: boolean = false;
+  embeddedChart?: boolean = false;
+  regionM?: number;
+  aname?: String;
+  bname?: String;
+  action?: String;
+  widgetClickChart?: boolean = false;
+  drillchart?: any;
+}
 
-
+export class DadUser {
+  userid: string;
+  username: string;
+  tenantid: string;
+}

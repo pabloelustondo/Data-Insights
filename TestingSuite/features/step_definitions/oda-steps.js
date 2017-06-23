@@ -67,19 +67,19 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I GET topics', function (callback) {
-
+    When('I GET topics for {stringInDoubleQuotes}', function (stringInDoubleQuotes,callback) {
         resetOptions();
         options.method = "GET";
-        options.uri = url+'/query/topics?tenantId=test_user';
+        options.uri = url+'/query/topics?tenantId='+stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
+        //console.log(options);
         Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
             }
             responseData = body;
             responseCode = response.statusCode;
-            console.log(options.headers)
+            //console.log(body);
             callback();
         });
     });
@@ -88,6 +88,7 @@ Cucumber.defineSupportCode(function(context) {
         // Write code here that turns the phrase above into concrete actions
         //set example query in body
         options.headers['x-access-token'] = accessToken;
+        options.headers['x-access-token'] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2VudGlkIjoiZjExMDgyMTItMTUwOS00NjY0LWE0NTktMWFhZjQ1YzNhMjRlIiwidGVuYW50aWQiOiJ0ZXN0IiwiaWF0IjoxNDk4MTU5ODc1LCJleHAiOjE0OTgyNzk4NzV9.lXfdBUsiVZ0eDIcoaJM8KiQyQSXq16w48s9spXfhZqc";
         var tableJson = table.hashes()[0];
         options.body =  {
             "dataSetId": tableJson.dataSetId,
@@ -116,23 +117,31 @@ Cucumber.defineSupportCode(function(context) {
         //console.log(options);
         if (parseInt(int) != parseInt(responseCode)){
             //console.error('Error: '+ responseData);
+            //console.log(options);
             throw new Error('Response code should be ' + int +' but is ' + responseCode +'\n'+ resString);
         }
 
         callback();
     });
+
+    Then('response body must be error-free', function (callback) {
+        var resString = JSON.stringify(responseData).toLowerCase();
+        if (resString.includes('error') || resString.includes('invalid'))
+            throw new Error(resString);
+        callback();
+    });
+
     Given(/^I grab the xaccesskey for ODA from '(.*)'$/, function (variable, callback) {
         FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
             if (err) return console.log(err);
             accessToken = contents;
-            console.log(accessToken)
             callback();
         });
     });
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (!resString.includes('invalid'))
+        if (!resString.includes('invalid') && !resString.includes('error') && !resString.includes('400'))
             throw new Error("response message: " + resString);
         callback();
     });

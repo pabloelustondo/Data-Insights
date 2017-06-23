@@ -209,14 +209,18 @@ app.post('/data/outGoingRequest', function(req, res) {
 
     let db = app.get('db');
     let tenant = db.getTenant(metadata.tenantId);
-    let dataSets = tenant['dataSets'];
-    let dataSet = _.find(dataSets, {id : metadata.dataSetId});
-    if (tenant && dataSet) {
-        processRequest(metadata, dataSets, res);
+    if (!tenant) {
+        res.status(404).send('Tenant not found');
     } else {
-        res.status(400).send ({
-            message: 'No combination of tenant and dataSet found.'
-        })
+        let dataSets = tenant['dataSets'];
+        let dataSet = _.find(dataSets, {id: metadata.dataSetId});
+        if (dataSet) {
+            processRequest(metadata, dataSets, res);
+        } else {
+            res.status(400).send({
+                message: 'No combination of tenant and dataSet found.'
+            })
+        }
     }
 
 
@@ -258,7 +262,7 @@ if (config.useSSL) {
             json: true,
             method: 'get',
             headers: headersOptions,
-            url: appconfig['ddb_url'] + '/tenants',
+            url: globalconfig['ddb_url'] + '/tenants',
         };
         rp(options).then(function (data) {
             db.populateTenants(data);
@@ -307,7 +311,7 @@ if (config.useSSL) {
                     let clientData = data.clientData;
                     let clientMetadata = data.clientMetadata;
 
-                    console.log('json = ' + JSON.stringify(data));
+                   // console.log('json = ' + JSON.stringify(data));
                     publishTransactionLog( idaMetadata, clientMetadata, clientData);
                     processCleanedData( idaMetadata, clientMetadata, clientData);
 
@@ -330,7 +334,7 @@ if (config.useSSL) {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: appconfig['ddb_url'] + '/tenants',
+                url: globalconfig['ddb_url'] + '/tenants',
             };
             rp(options).then(function (data) {
                 db.populateTenants(data);

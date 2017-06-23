@@ -1,9 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var request = require("request");
-/**
- * Created by vdave on 5/17/2017.
- */
 var _ = require('lodash');
 var async = require('async');
 var config = require('../config.json');
@@ -22,7 +19,7 @@ var dataSets = [
         ],
         filter: {},
         merge: 'field1',
-        definition: {} //what the output data contains
+        definition: {}
     },
     {
         id: '21345',
@@ -84,7 +81,6 @@ function findElement(data, element) {
 exports.findElement = findElement;
 function processRequest(metadata, _dataSets, res) {
     var queryId = metadata.dataSetId;
-    // get dataSetFrom all available dataSets
     var dataSet = _.find(_dataSets, { id: queryId });
     var dataSources = dataSet['from'];
     var responseData = [];
@@ -94,7 +90,7 @@ function processRequest(metadata, _dataSets, res) {
         var tenant = db.getTenant(metadata.tenantId);
         var allDataSets = tenant.dataSets;
         var ds = _.find(allDataSets, { id: dsId });
-        var filter = (ds.filter !== "") ? ds.filter : undefined;
+        var filter = (ds && ds.filter !== "") ? ds.filter : undefined;
         var aggregate = [{
                 $match: {}
             },
@@ -124,7 +120,7 @@ function processRequest(metadata, _dataSets, res) {
             url: 'http://localhost:8020/ds/' + metadata.tenantId + '/getdata/query',
             method: 'POST',
             body: {
-                'collectionName': ds.id,
+                'collectionName': (ds) ? ds.id : queryId,
                 'aggregation': aggregate
             },
             json: true
@@ -133,10 +129,17 @@ function processRequest(metadata, _dataSets, res) {
             if (!err && response.statusCode == 200) {
                 var info = JSON.stringify(body);
                 var responseObj = {};
-                var projected = _.get(body[0], ds.projections[0]);
-                // let sample = projected[ds.projection];
-                responseObj[ds.id] = _.get(body[0], ds.projections[0]);
-                responseData.push(responseObj);
+                if (ds) {
+                    var projected = _.get(body[0], ds.projections[0]);
+                    responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    responseData.push(responseObj);
+                }
+                else {
+                    var ds_1 = _.find(allDataSets, { id: queryId });
+                    var projected = _.get(body[0], ds_1.projections[0]);
+                    responseObj[ds_1.id] = _.get(body[0], ds_1.projections[0]);
+                    responseData.push(responseObj);
+                }
             }
             callback();
         }
@@ -180,3 +183,4 @@ function getDataFromDb(dataSource) {
         dataSource: dataSource
     };
 }
+//# sourceMappingURL=dataService.js.map

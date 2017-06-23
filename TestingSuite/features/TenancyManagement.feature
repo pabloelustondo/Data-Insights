@@ -9,7 +9,7 @@ Feature: Tenancy Management
     Then response code should be 200
   #{"domainid": "test", "code": "administrator"}
     Given I grab the access token from 'test_userPermanentToken'
-    When I GET with endpoint "api/myenrollments"
+    When I make GET request to endpoint "api/myenrollments"
     # http://10.0.91.2:8024/api/myenrollments
     Then response code should be 200
     Then I should receive my user information with all the valid fields
@@ -25,10 +25,10 @@ Feature: Tenancy Management
       |domainid |code         |
       |test     |administrator|
     Then response code should be 200
-    Given I set request for test_user
+    Given I set post request for registering data source
       | tenantid        |  dataSourceType | agentid    | data                                      |
       | test_user		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
-    When  I POST with endpoint "registerDataSource"
+    When  I POST to endpoint "registerDataSource"
     Then response code should be 200
 
   Scenario: As an administrator I want to see all DataSources
@@ -37,7 +37,7 @@ Feature: Tenancy Management
       |domainid |code         |
       |test     |administrator|
     Then response code should be 200
-    When  I GET with endpoint "getDataSources"
+    When I make GET request to endpoint "getDataSources"
     Then response code should be 200
 #
 #  Scenario: As an administrator I want to download DataSource credentials
