@@ -244,7 +244,7 @@ router.delete('/silogagent/:tenantid', function(req,res){
 
 
 let ConsumerGroup = kafka.ConsumerGroup;
-let topics = ['log1'];
+let topics = ['log'];
 let consumerGroupOptions = {
     host: '127.0.0.1:2181',
     zk : undefined,   // put client zk settings if you need them (see Client)
@@ -284,7 +284,6 @@ function callDbAndAct(query){
     });
 }
 
-
 consumerGroup.on('error', function(err) {
     console.log('error: ' + err);
 });
@@ -293,8 +292,10 @@ consumerGroup.on('message', function (message) {
     let data = // {producer: "MCDP", params: {"tenantId": "someid"}};
     JSON.parse(message.value);
 
-    var timeStamp = new Date().getTime();
-    data = { ...data, ...{ "timeStamp": timeStamp.toString() } };
+    if (!data.hasOwnProperty('timeStamp')) {
+        var timeStamp = new Date().getTime();
+        data = {...data, ...{"timeStamp": timeStamp.toString()}};
+    }
 
     console.log('data = ' + JSON.stringify(data));
     if (data.producer == "Tenant") {
@@ -327,7 +328,7 @@ producer.on('error', function (err) {
 
 router.get('/unittest', function(req, res){
     let timeStamp =  new Date().getTime();
-    let payloads = [ { topic: 'log1', messages: `{"producer": "MCDP", "timeStamp": "${timeStamp}", "message": "TEST" ,"params": {"tenantId": "someTenantId"}}`, partition: 0 } ];
+    let payloads = [ { topic: 'log', messages: `{"producer": "MCDP", "timeStamp": "${timeStamp}", "message": "TEST" ,"params": {"tenantId": "someTenantId"}}`, partition: 0 } ];
     producer.send(payloads, function (err, data) {
 
         //Waits for Kafka Listener to act

@@ -15,7 +15,7 @@ type Classifier = "Create_Sucess" |
                   "System_Failure" |
                   "Test_Log";
 
-type Component = "AWS" | "CDL" | "DAD" | "DDB" | "DLM" | "DOS" | "DPS" | "DSS" | "IDA" | "LOG" | "ODA" | "TMM";
+type Component = "CDL" | "DAD" | "DDB" | "DOS" | "DPS" | "DSS" | "IDA" | "LOG" | "ODA" | "TMM";
 type Agent = "MCDP" | "DLM";
 
 interface Parameter {

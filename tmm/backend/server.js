@@ -107,8 +107,7 @@ app.get('/status', function(req,res){
 
 app.get('/tenant/:tenantid', function(req,res){
     var timeStamp = new Date().getTime();
-//  var payloads = [{ topic: 'log1', messages: "{\"producer\": \"TMMB\", \"timeStamp\": \"" + timeStamp + "\", \"message\": " + req.params.tenantid.toString() + "get request\" ,\"params\": {\"tenantId\": \""+req.params.tenantid + "\"}}", partition: 0 }];
-  var payloads = [{ topic: 'log1', messages: `{"producer": "TMM", "message": "${req.params.tenantid}", "params": {"tenantId": "${req.params.tenantid}"}}`, partition: 0 }];
+    var payloads = [{ topic: 'log', messages: `{"producer": "TMM", "message": "${req.params.tenantid}", "params": {"tenantId": "${req.params.tenantid}"}}`, partition: 0 }];
     producer.send(payloads, function (err, data) {
 
     var options = {
@@ -130,8 +129,10 @@ app.get('/tenant/:tenantid', function(req,res){
 
 app.post('/tenant/:tenantid', function(req,res){
     var timeStamp = new Date().getTime();
-    var payloads = [{ topic: 'log1', messages: "{\"producer\": \"TMMB\", \"timeStamp\": \"" + timeStamp + "\", \"message\": " + req.params.tenantid + "post request\" ,\"params\": {\"tenantId\": \""+req.params.tenantid + "\"}}", partition: 0 }];
-    producer.send(payloads, function (err, data) {
+    var payloads = [{ topic: 'log', messages: `{"producer": "TMM", "message": "${req.params.tenantid}", "params": {"tenantId": "${req.params.tenantid}"}}`, partition: 0 }];
+
+
+  producer.send(payloads, function (err, data) {
 
     var options = {
         uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
