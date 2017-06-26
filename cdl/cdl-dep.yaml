@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: cdl
-  namespace: stage
+  namespace: demo
 spec:
   replicas: 1
   template:
@@ -12,6 +12,6 @@ spec:
     spec:
       containers:
       - name: cdl
-        image: ae7bf2c134d5f11e7a174123ab8f20a4-1306207793.us-east-1.elb.amazonaws.com:5494/cdl:sprint-16
+        image: ae7bf2c134d5f11e7a174123ab8f20a4-1306207793.us-east-1.elb.amazonaws.com:5494/cdl:sprint-16Demo3
         ports:
         - containerPort: 8020

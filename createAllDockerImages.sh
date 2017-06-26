@@ -2,15 +2,15 @@
 #By Ray Gervais
 
 # Variables
-components=("cdl:8020" "dad:8026" "ddb:8000" "dlm:8003" "dos:5000" "dps:8002" "dss:8024" "ida:8027" "oda:8022" "tmm:8029")
+components=("cdl:cdl" "dadb:dad/dadb" "ddb:ddb" "dlm:dlm" "dosb:dos/dosb" "dps:dps" "dssb:dss/dssb" "ida:ida" "oda:oda" "tmmb:tmm/tmmb")
 
 # Create Kubenetes Images
 for i in "${components[@]}"
 do
     echo "Comp" ${i%:*}
-    echo "Port" ${i##*:}
-    ./createDockerImages.bat ${i%:*} ${i##*:} true
+    echo "Location" ${i##*:}
+    ./createDockerImages.bat ${i%:*} ${i##*:} true true
 done 
 
 echo "Completed!"
-kubectrl.exe --namespace stage get all
+kubectrl.exe --namespace demo get all

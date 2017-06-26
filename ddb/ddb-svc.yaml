@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ddb-svc
-  namespace: stage
+  namespace: demo
   labels:
     app: ddb-svc
 spec:
