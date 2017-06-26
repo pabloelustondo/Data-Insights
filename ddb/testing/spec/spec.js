@@ -118,17 +118,17 @@ describe("Data Analytics Service - DDB", function() {
     });
 
 
-    describe("GET /getAllTenants", function () {
+    describe("GET /tenants", function () {
 
        it ("gets all tenants with all metadata for every tenant. It expects the list in sample tenants", function (done) {
            $.ajax({
-               url: "/getAllTenants",
+               url: "/tenants",
                type:"GET",
                contentType:"application/json",
                success: function(data, textStatus, jqXHR) {
                    console.log("From get: " + JSON.stringify(data));
                    var inData = data.tenants;
-                   expect(data.tenants.length).toBe(4);
+                   expect(data.length).toBeGreaterThan(0);
                    done();},
                error: function(data, textStatus, jqXHR) {
                    console.log("Error From post: " + JSON.stringify(data,null,2));
@@ -212,7 +212,6 @@ describe("Data Analytics Service - DDB", function() {
         });
     });
 
-
     describe("GET /tenant/:tenantid", function() {
         it("returns 1 tenant after posting a replace before", function(done) {
             $.get("/tenant/testtenant-testuser", function(data, textStatus, jqXHR) {
@@ -226,25 +225,37 @@ describe("Data Analytics Service - DDB", function() {
         });
     });
 
-    describe("POST /tenant/:tenantid", function() {
-        it("replace a tenant configuration wromg id different data", function(done) {
+    describe("POST /newEnrollment", function() {
+        it("create a new tenant", function(done) {
             $.ajax({
-                url: "/tenant/testtenant-testuser2",
+                url: "/newEnrollment",
                 type:"POST",
                 data: JSON.stringify({ tenantid:'testtenant-testuser', config:{data:'somethingelse'}}),
                 contentType:"application/json",
                 success: function(data, textStatus, jqXHR) {
                     console.log("From post: " + JSON.stringify(data,null,2));
-                    failure("this call should fail with error message");
-                    done();},
-                error: function(data, textStatus, jqXHR) {
-                    console.log("Error From post: " + JSON.stringify(data,null,2));
-                    expect(data).toBeDefined();
-                    expect(data.status).toBe(400);
-                    expect(data.responseText).toBe("url tenantid different from body tenantid");
-                    done();}
+                    expect(data.ok).toBe(1);
+                    done();
+                }
             });
         });
     });
+
+
+    describe("DELETE /tenant/:tenantid", function() {
+        it("delete a tenant", function(done) {
+            $.ajax({
+                url: "/tenant/" + 'testtenant-testuser',
+                type:"DELETE",
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    console.log("From post: " + JSON.stringify(data,null,2));
+                    expect(data.ok).toBe(1);
+                   done();
+                }
+            });
+        });
+    });
+
 
 });

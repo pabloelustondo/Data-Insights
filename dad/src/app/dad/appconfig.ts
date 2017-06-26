@@ -15,6 +15,7 @@ export const config = {
     "testing":appconfig.testingmode,
     "dss_url":appconfig.dss_url,
     "oda_url":appconfig.oda_url,
+    "dad_url":appconfig.dad_url,
     "dadback_url":appconfig.dadback_url,
     "authorizationserver":appconfig.dss_url,
     "InitialChargeLevels":appconfig.oda_url + "/Devices/Battery/Summary/InitialChargeLevels",
@@ -25,6 +26,8 @@ export const config = {
     "AverageDischargeRate": appconfig.oda_url + "/Devices/Battery/Summary/AverageDischargeRate",
     "ApplicationDeploymentCount": appconfig.oda_url + "/Devices/Application/executionTime",
     "NumberOfInstallations": appconfig.oda_url + "/Devices/Application/numberOfInstallations",
-    "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations"
+    "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations",
+    "TenantMetaData": appconfig.oda_url + "/Query/Topics",
+    "Query":{url : appconfig.oda_url + "/Query/", method: "post"}
 };
 

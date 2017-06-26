@@ -50,7 +50,10 @@ export class GetAuthorizationToken {
                         resolve(jwt.verify(token, config['mcdp-secret']));
                     } catch (err) {
                         console.log('could not verify token');
-                        reject(err);
+                        reject( {
+                            message : err.message,
+                            statusCode : 400
+                        });
                     }
                 });
                 return promise;
@@ -72,7 +75,15 @@ export class GetAuthorizationToken {
                                 'x-access-token': token
                             }
                         };
-                        resolve(rp(optionsTest));
+                        rp(optionsTest).then(function (data) {
+                            resolve(data);
+                        }, function (error) {
+                            reject ({
+                                message: 'Backend Error - Get Token. Contact Soti Support',
+                                statusCode: 504
+                            });
+                        });
+                        // resolve(rp(optionsTest));
                     } else {
                         reject( {
                             message: 'Invalid token',
@@ -89,8 +100,8 @@ export class GetAuthorizationToken {
                         resolve(dssResponse);
                     } else {
                         reject( {
-                            message : 'Dss error response',
-                            status : 500
+                            message : 'Backend error. Contact Soti Support',
+                            statusCode : 500
                         });
                     }
 
@@ -102,7 +113,7 @@ export class GetAuthorizationToken {
                 return Promise.reject (
                     {
                         message : error.message,
-                        status : error.status
+                        status : error.statusCode
                     }
                 );
             });

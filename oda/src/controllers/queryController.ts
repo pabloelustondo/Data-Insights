@@ -1,12 +1,14 @@
 /**
  * Created by vdave on 5/25/2017.
  */
-import {Route, Get, Post, Delete, Patch, Example} from 'tsoa';
+import {Route, Get, Post, Delete, Patch, Request,  Example} from 'tsoa';
 import {SDS} from '../models/user';
 import {QueryModel} from '../models/queryModel';
 import * as rp from 'request-promise';
-// import * as https from 'https';
-const config = require('../../appconfig.json');
+import * as express from '@types/express';
+let jwt  = require('jsonwebtoken');
+import * as https from 'https';
+const config = require('../../config.json');
 let server = require('../server');
 
 @Route('Query')
@@ -23,124 +25,60 @@ export class QueryController {
         dataSetId : 'myCustomQueryID',
         from : ['sourceMetadataId']
     })
-    public async Create(request: QueryModel): Promise<SDS> {
+    public async Create(request: QueryModel,@Request() express: express.Request ): Promise<SDS> {
 
         let server = require('../../globalconfig.json');
 
         let appConfig =  require('../../globalconfig.json');
-        if (request.from[0] === 'vehicleInfo') {
+    //    if (request.from[0] === 'vehicleInfo') {
+        let req = express;
+        let token = req.headers['x-access-token'];
 
-            let mData = [
-                'dataSets : ["ttcMaps", "deviceInfo"]'];
+        let verifyAndDecodeJwt = function () {
+            let promise = new Promise(function (resolve, reject) {
+                try {
+                    resolve(jwt.verify(token, config['expiring-secret']));
+                } catch (err) {
+                    console.log('could not verify token');
 
-            const options: rp.OptionsWithUrl = {
-                headers: {
-                    'x-api-key': config['aws-x-api-key']
-                },
-                json: true,
-                method: 'POST',
-                body: {
-                    metadata : {
-                        'filterProperty' : 'prop1',
-                        'value' : '3',
-                        'queryId' : 'ttc'
-                    }
-                },
-                url: appConfig['dps_url'] + '/data/outGoingRequest'
-            };
-            console.time('deviceNotSurviveShift: aws call');
+                    reject(err);
+                }
+            });
+            return promise;
+        };
 
-            let p = await rp(options); // request library used
 
-            // returns test data for now
-            const user: any = {
-                createdAt: new Date(),
-                metadata: mData,
-                data: p
-            };
-            return user;
-        } else {
-            let mData = ['Query Not supported, returning sample test data for ttc vehicle and device together'];
+        let backendCall = function (jwtDecodedToken: any) {
+            let promise = new Promise( function( resolve, reject) {
+                const options: rp.OptionsWithUrl = {
+                    headers: {
+                        'x-api-key': config['aws-x-api-key']
+                    },
+                    json: true,
+                    method: 'POST',
+                    body: {
+                        metadata : {
+                            'tenantId' : jwtDecodedToken.tenantid,
+                            'dataSetId' : request.from[0]
+                        }
+                    },
+                    url: appConfig['dps_url'] + '/data/outGoingRequest'
+                };
+                resolve(rp(options));
+            });
+            return promise;
+        };
 
-            const user: any = {
-                createdAt: new Date(),
-                metadata: mData,
-                data:
-                    {
-                        'result' : [
-                            {
-                                'id' : '1551',
-                                'lon' : '-79.493118',
-                                'routeTag' : '32',
-                                'predictable' : 'true',
-                                'dirTag' : '32_0_mp32sch',
-                                'heading' : '216',
-                                'lat' : '43.688217',
-                                'secsSinceReport' : '19',
-                                'deviceId': '123456789',
-                                'flag': 0,
-                                'Name': 'VehicleID',
-                                'Value': 1151
-                            }, {
-                                'id' : '1552',
-                                'lon' : '-79.473118',
-                                'routeTag' : '33',
-                                'predictable' : 'true',
-                                'dirTag' : '33_0_mp32sch',
-                                'heading' : '216',
-                                'lat' : '43.689217',
-                                'secsSinceReport' : '19'
-                            }, {
-                                'id' : '1406',
-                                'lon' : '-79.531631',
-                                'routeTag' : '32',
-                                'predictable' : 'true',
-                                'dirTag' : '32_1_32A',
-                                'heading' : '257',
-                                'lat' : '43.6813999',
-                                'secsSinceReport' : '21'
-                            },
-                            {
-                                'id' : '1073',
-                                'lon' : '-79.439537',
-                                'routeTag' : '32',
-                                'predictable' : 'true',
-                                'dirTag' : '32_0_32D',
-                                'heading' : '74',
-                                'lat' : '43.697884',
-                                'secsSinceReport' : '11',
-                                'deviceId': '{10101010-1010-1010-1010-101010101010}',
-                                'flag': 0,
-                                'Name': 'VehicleID',
-                                'Value': 1073
-                            },
-                            {
-                                'id' : '1548',
-                                'lon' : '-79.5039369',
-                                'routeTag' : '32',
-                                'predictable' : 'true',
-                                'dirTag' : '32_1_32C',
-                                'heading' : '252',
-                                'lat' : '43.700733',
-                                'secsSinceReport' : '19'
-                            },
-                            {
-                                'id' : '1405',
-                                'lon' : '-79.47538',
-                                'routeTag' : '32',
-                                'predictable' : 'true',
-                                'dirTag' : '32_0_32D',
-                                'heading' : '72',
-                                'lat' : '43.689983',
-                                'secsSinceReport' : '12'
-                            }
-                        ]
-                    }
-            };
-            return user;
 
-        }
-
+        let p: any = verifyAndDecodeJwt().then(backendCall).then(function (data: any) {
+            return data;
+        }, function (err: any) {
+            return Promise.reject( {
+                message : err.message,
+                status : '400'
+            });
+        });
+        return p;
 
     }
 

@@ -1,9 +1,8 @@
 {
-  "logtype":"file",
   "id" : "cdl",
   "name":"CDL",
-  "testingmode" : true,
+  "testingmode" : false,
   "secret"  : "1234",
-  "port": 8020,
-  "dependencies" : ["mongodb","s3"]
+  "dependencies" : ["mongodb","s3"],
+  "logtype":"s3"
 }

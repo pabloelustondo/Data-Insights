@@ -18,6 +18,11 @@
             <input class="form-control" type="text" placeholder="Search...">
         </form>
         <ul class="nav navbar-nav float-xs-right hidden-md-down">
+
+            <li class="nav-item">
+                <a style="color:blue; cursor:pointer; padding-right: 15px;" (click)="goToAdmin($event)">Admin</a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link nav-pill" href="#"><i class="icon-bell"></i><span class="tag tag-pill tag-danger">5</span></a>
             </li>
@@ -66,16 +71,32 @@
 
 <div class="sidebar">
     <nav class="sidebar-nav">
+        <div class="container-fluid">
+            <div class="row">
         <ul *ngIf="pagelinks" class="nav">
-            <li *ngFor="let pagelink of pagelinks; let i=index" class="nav-item">
-                <a class="nav-link" routerLinkActive="active" [routerLink]="[pagelink]"><i class="icon-speedometer"></i>{{pagenames[i]}}</a>
-            </li>
+              <li *ngFor="let pagelink of pagelinks; let i=index" class="nav-item">
+                  <div class="div_hover">
+                    <a style="display: inline-block" class="nav-link" routerLinkActive="active" [routerLink]="[pagelink]"><i class="icon-speedometer"></i>{{pagenames[i]}}</a>
+                    <span class="glyphicons glyphicons-remove pull-right"></span><!--(click)="deletePage(i)-->
+                  </div>
+              </li>
             <li class="nav-item">
                 <a class="nav-link" routerLinkActive="active" [routerLink]="['/dad/conf']"><i class="icon-speedometer"></i> Configuration </a>
             </li>
+            <li>
+                <a style="cursor:pointer" title="Click to add a new page" class="glyphicons glyphicons-plus" (click)="addingNewPage()" ></a>
+                <input *ngIf="addingPage" [(ngModel)]="pageName" type="text" placeholder="New Page Name"/>
+            </li>
+            <li *ngIf="addingPage" style="cursor:pointer; padding-left: 25px;">
+                <span id='apply' class="glyphicons glyphicons-ok" (click)="addPage()"></span>
+                <span id='cancel' class="glyphicons glyphicons-remove" (click)="addingNewPage()"></span>
+            </li>
         </ul>
+            </div>
+        </div>
     </nav>
 </div>
+
 
 <!-- Main content -->
 <main class="main">

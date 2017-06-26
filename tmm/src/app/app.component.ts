@@ -1,12 +1,12 @@
 import {Component, resolveForwardRef} from '@angular/core';
 import { Router } from '@angular/router';
-import {UserInput} from './components/layout/UserInput/UserInput.component';
+import {smlTenantMetadataEditor} from './components/layout/smlTenantMetadataEditor/smlTenantMetadataEditor.component';
 
 @Component({
   selector: 'body',
   template: `
     <div>
-      <userinput></userinput>
+      <router-outlet></router-outlet>
     </div>
   `,
 })

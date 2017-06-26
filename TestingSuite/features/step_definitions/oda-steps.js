@@ -2,7 +2,7 @@
 
 var Cucumber = require('cucumber')
     , Request = require('request');
-
+var reporter = require('cucumber-html-reporter');
 
 Cucumber.defineSupportCode(function(context) {
     const FS = require('fs');
@@ -31,27 +31,19 @@ Cucumber.defineSupportCode(function(context) {
         "postambleCRLF": true
     };
 
-    Given('I grab ODA port number from globalconfig.json', function (callback) {
+    Given('I grab ODA url from globalconfig.json', function (callback) {
         //I get ODA's port number from the url in config json file using REGEX
         var oda_url = globalconfig.oda_url;
         if(oda_url == "" || oda_url == undefined)
-            throw new Error('Cannot get port: ida url not in global config file');
-        var port_str = oda_url.match("[0-9]+")[0];
-        if(isNaN(port_str)){
-            throw new Error('Cannot get port: invalid global config file');
-        }else{
-            //url = oda_url.substring(0, oda_url.indexOf(odaPortNumber)-1);
-            //console.log(oda_url);
-            url = oda_url;
-            odaPortNumber = parseInt(port_str);
-            callback();
-        }
+            throw new Error('Cannot get port: oda url not in global config file');
+        url = oda_url;
+        callback();
     });
 
     //retrieve x-access-token from file. this will be replaced later
     Given(/^I set the xaccesskey for ODA$/, function (callback) {
         FS.readFile("features/assets/PermanentToken", 'utf8', function(err, contents) {
-            if (err) return console.log(err);
+            if (err) throw new Error(err);
             accessToken = contents;
             callback();
         });
@@ -59,7 +51,6 @@ Cucumber.defineSupportCode(function(context) {
 
     Given('I set valid request header and body for POST call to ~/query with metadata id', function (callback) {
         //prepare header and body for posting to IDA query endpoint
-        options.headers['content-type'] = 'application/json';
         //set example query in body
         options.body =  {
             "dataSetId": "string",
@@ -76,30 +67,32 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I GET topics', function (callback) {
-        // Write code here that turns the phrase above into concrete actions
+    When('I GET topics for {stringInDoubleQuotes}', function (stringInDoubleQuotes,callback) {
         resetOptions();
         options.method = "GET";
-        options.uri = url+'/query/topics';
-        options.headers['Content-Type'] = 'Application/Json';
+        options.uri = url+'/query/topics?tenantId='+stringInDoubleQuotes;
         options.headers['x-access-token'] = accessToken;
+        //console.log(options);
         Request(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
             }
             responseData = body;
             responseCode = response.statusCode;
+            //console.log(body);
             callback();
         });
     });
 
-    Given('I set invalid request header and body for POST call to ~/query', function (callback) {
-        //prepare header and body for posting to IDA query endpoint
-        options.preambleCRLF = options.postambleCRLF = true;
-        options.headers['content-type'] = 'application/json';
-        options.body = {
-            "dataSetId": "string",
-            "from": ["UnicornCollection"]
+    Given('I set invalid request for POST call to ~/query', function (table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        //set example query in body
+        options.headers['x-access-token'] = accessToken;
+        options.headers['x-access-token'] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2VudGlkIjoiZjExMDgyMTItMTUwOS00NjY0LWE0NTktMWFhZjQ1YzNhMjRlIiwidGVuYW50aWQiOiJ0ZXN0IiwiaWF0IjoxNDk4MTU5ODc1LCJleHAiOjE0OTgyNzk4NzV9.lXfdBUsiVZ0eDIcoaJM8KiQyQSXq16w48s9spXfhZqc";
+        var tableJson = table.hashes()[0];
+        options.body =  {
+            "dataSetId": tableJson.dataSetId,
+            "from": [tableJson.from]
         };
         callback();
     });
@@ -107,6 +100,8 @@ Cucumber.defineSupportCode(function(context) {
     Given('I make a POST call to ~/query', function (callback) {
         //I post to query and record the response
         options.uri = url+'/Query';
+        options.method = 'POST'
+        options.headers['x-access-token'] = accessToken;
         Request.post(options, function (error, response, body) {
             if (error) {
                 throw new Error('upload failed:'+ error);
@@ -118,19 +113,35 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('response code is :{int}', function (int, callback) {
-        // Write code here that turns the phrase above into concrete actions
+        var resString = JSON.stringify(responseData).toLowerCase();
+        //console.log(options);
         if (parseInt(int) != parseInt(responseCode)){
-            //console.log('Error: '+ responseData);
-            throw new Error('Response code should be ' + int +' but is ' + responseCode);
+            //console.error('Error: '+ responseData);
+            //console.log(options);
+            throw new Error('Response code should be ' + int +' but is ' + responseCode +'\n'+ resString);
         }
 
         callback();
     });
 
+    Then('response body must be error-free', function (callback) {
+        var resString = JSON.stringify(responseData).toLowerCase();
+        if (resString.includes('error') || resString.includes('invalid'))
+            throw new Error(resString);
+        callback();
+    });
+
+    Given(/^I grab the xaccesskey for ODA from '(.*)'$/, function (variable, callback) {
+        FS.readFile("features/assets/"+variable, 'utf8', function(err, contents) {
+            if (err) return console.log(err);
+            accessToken = contents;
+            callback();
+        });
+    });
     Then('The response message should contain error', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         var resString = JSON.stringify(responseData).toLowerCase();
-        if (!resString.includes('query not supported'))
+        if (!resString.includes('invalid') && !resString.includes('error') && !resString.includes('400'))
             throw new Error("response message: " + resString);
         callback();
     });
@@ -144,6 +155,38 @@ Cucumber.defineSupportCode(function(context) {
     Then('the response doesnt have to be merged', function (callback) {
         if (responseData == undefined)
             throw new Error("error: response body is" + responseData );
+        callback();
+    });
+    Given('I generate report for {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var options = {
+            theme: 'bootstrap',
+            jsonFile: 'test\\report\\cucumber_report_'+stringInDoubleQuotes+'.json',
+            output: 'test\\report\\cucumber_report_'+stringInDoubleQuotes+'.html',
+            reportSuiteAsScenarios: true,
+            launchReport: true,
+            metadata: {
+                "App Version":"0.3.2",
+                "Test Environment": "STAGING",
+                "Browser": "Chrome  54.0.2840.98",
+                "Platform": "Windows 10",
+                "Parallel": "Scenarios",
+                "Executed": "Remote"
+            }
+        };
+        reporter.generate(options);
+        callback();
+    });
+
+    Given('I set valid request for posting to ~/query', function (table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        //set example query in body
+        options.headers['x-access-token'] = accessToken;
+        var tableJson = table.hashes()[0];
+        options.body =  {
+            "dataSetId": tableJson.dataSetId,
+            "from": [tableJson.from]
+        };
         callback();
     });
 

@@ -1,32 +1,26 @@
-import { TestBed, async } from '@angular/core/testing';
-
+import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+import { smlTenantMetadataEditor } from './components/layout/smlTenantMetadataEditor/smlTenantMetadataEditor.component';
 import { AppComponent } from './app.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import { HttpModule } from "@angular/http";
 
 describe('AppComponent', () => {
+  let fixture: ComponentFixture<AppComponent>;
+  let app: AppComponent;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
+      imports: [ HttpModule ],
+      declarations: [AppComponent, smlTenantMetadataEditor ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
   }));
 
+  beforeEach(() => {
+    this.fixture = TestBed.createComponent(AppComponent);
+    this.app = this.fixture.debugElement.componentInstance;
+  });
+
   it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-
-  it(`should have a defined model'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.m).toBeTruthy();
-  }));
-
-  it('should render Data Sources in a h2 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('table h2').textContent).toContain('Data Sources');
+    expect(this.app).toBeTruthy();
   }));
 });

@@ -12,6 +12,8 @@ var _ = require('lodash');
 var config = require('./config.json');
 var appconfig = require('./appconfig.json');
 var rp = require("request-promise");
+var kafka = require('kafka-node');
+var ConsumerGroup = kafka.ConsumerGroup;
 var app = express();
 var mongodb = require('mongodb').MongoClient;
 var rawDataLakeService_1 = require("./services/rawDataLakeService");
@@ -21,8 +23,7 @@ var dataService_1 = require("./services/dataService");
 var globalconfig = require('./globalconfig.json');
 var path = require('path');
 var cors = require('cors');
-globalconfig.hostname = "localhost"; //this can be overwritten by app config if necessary
-//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+globalconfig.hostname = "localhost";
 Object.keys(appconfig).forEach(function (key) {
     globalconfig[key] = appconfig[key];
 });
@@ -31,9 +32,6 @@ appconfig = globalconfig;
 global.appconfig = appconfig;
 console.log("configuration");
 console.log(appconfig);
-var kafka = require('kafka-node');
-////////////////////////
-// Express stuff
 var db = new databaseService_1.DatabaseService(appconfig.ddb_address);
 app.set('db', db);
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -52,13 +50,8 @@ app.get('/', function (req, res) {
 });
 app.use(helmet());
 app.use(cors());
-////////////////////////////
-// CUSTOMER TENANT DATA API
-////////////////////////////
-// Puts a data point into a tenant datasets.
 app.post('/data/request', function (req, res) {
     console.log('request came in');
-    // send data to s3 without a lot of fuss
     var idaMetadata = req.body.idaMetadata;
     var clientMetadata = req.body.clientMetadata;
     if (!idaMetadata) {
@@ -80,13 +73,12 @@ app.post('/data/request', function (req, res) {
             console.log(error);
             res.status(500).send(error);
         });
-        // massage and clean up data before sending to database layer
         var tenant_1 = db.getTenant(req.body.idaMetadata.tenantId);
         if (tenant_1) {
             var dataSource = _.find(tenant_1.dataSources, ['dataSourceId', req.body.idaMetadata.dataSourceId]);
             var projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
             var dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
-            var collectionName_1 = dataSetId + '.' + dataSource['dataSourceId'];
+            var collectionName_1 = dataSetId;
             projection_1.DataProjections(req.body.clientData, projections).then(function (data) {
                 rawDataLakeService_1.uploadModifiedData(tenant_1.tenantId, collectionName_1, data).then(function (response) {
                     console.log('Final response' + JSON.stringify(response));
@@ -106,46 +98,71 @@ function publishTransactionLog(idaMetadata, clientMetadata, clientData) {
         console.log(error);
     });
 }
-//TODO refactor the name of the function, functionality stays the same
 function processCleanedData(idaMetadata, clientMetadata, clientData) {
     var tenantId = idaMetadata.tenantId;
     var dataSourceId = idaMetadata.dataSourceId;
-    //  console.log('tenantID ' + tenantId);
-    //   console.log('dataSourceId ' + dataSourceId);
-    // massage and clean up data before sending to database layer
     var db = app.get('db');
     var tenant = db.getTenant(idaMetadata.tenantId);
     if (tenant) {
-        var dataSource = _.find(tenant.dataSources, ['dataSourceId', idaMetadata.dataSourceId]);
-        console.log('dataSource \t ' + JSON.stringify(dataSource));
-        var projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
+        var dataSet = _.find(tenant['dataSets'], ['id', clientMetadata.dataSetId]);
+        var projections = dataSet.projections;
         console.log('projections \t ' + JSON.stringify(projections));
-        var dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
-        var collectionName_2 = dataSetId + '.' + dataSource['dataSourceId'];
+        var dataSetId_1 = dataSet.id;
+        var collectionName_2 = dataSetId_1;
         projection_1.DataProjections(clientData, projections).then(function (data) {
             rawDataLakeService_1.uploadModifiedData(tenant.tenantId, collectionName_2, data).then(function (response) {
                 console.log('Final response' + JSON.stringify(response));
             }, function (error) {
                 console.log(error);
             });
+            publishCleanedDataToKafka('undefined_cleanedData', tenant.tenantId, dataSetId_1, data);
         });
     }
     else {
-        console.log('tenantId not found');
+        console.log(tenantId + 'tenantId not found');
     }
+}
+function publishCleanedDataToKafka(topic, tenantId, dataSetId, data) {
+    var kafkaClient = new kafka.Client(globalconfig['kafka_url']);
+    var producer = new kafka.Producer(kafkaClient);
+    producer.on('ready', function (message) {
+        var payloads = [
+            {
+                topic: topic,
+                partition: 0,
+                messages: JSON.stringify({
+                    tenantId: tenantId,
+                    dataSetId: dataSetId,
+                    data: data
+                })
+            }
+        ];
+        producer.send(payloads, function (err, data) {
+            console.log(data);
+        });
+    });
+    producer.on('error', function (error) {
+        console.log(error);
+    });
 }
 app.post('/data/outGoingRequest', function (req, res) {
     var metadata = req.body.metadata;
     var db = app.get('db');
-    var tenant = db.getTenant('test');
-    var dataSets = tenant.dataSets;
-    if (metadata) {
-        dataService_1.processRequest(metadata, dataSets, res);
+    var tenant = db.getTenant(metadata.tenantId);
+    if (!tenant) {
+        res.status(404).send('Tenant not found');
     }
     else {
-        res.status(400).send({
-            message: 'No metadata field present in request body.'
-        });
+        var dataSets = tenant['dataSets'];
+        var dataSet = _.find(dataSets, { id: metadata.dataSetId });
+        if (dataSet) {
+            dataService_1.processRequest(metadata, dataSets, res);
+        }
+        else {
+            res.status(400).send({
+                message: 'No combination of tenant and dataSet found.'
+            });
+        }
     }
 });
 app.get('/getMetadata/:tenantId', function (req, res) {
@@ -178,49 +195,49 @@ else {
             json: true,
             method: 'get',
             headers: headersOptions,
-            url: appconfig['ddb_url'] + '/getAllTenants',
+            url: globalconfig['ddb_url'] + '/tenants',
         };
         rp(options).then(function (data) {
-            db.populateTenants(data.tenants);
+            db.populateTenants(data);
         }).catch(function (err) {
             console.log(err);
         }).then(function () {
             var tenant = db.getTenant('test');
             console.log(JSON.stringify(tenant));
         }).then(function () {
-            ////////////////////////////////
-            // Kafka streaming topic     ///
-            ////////////////////////////////
-            var kafkaClient = new kafka.Client(config.kafka_url);
-            var payloads = [{ topic: 'transactionLog', partition: 0 }];
-            var options = { autoCommit: false };
-            var kafkaOptions = { autoCommit: false };
-            try {
-                var consumer = new kafka.Consumer(kafkaClient, payloads, options);
-                consumer.on('message', function (message) {
-                    try {
-                        var data = JSON.parse(message.value);
-                        var idaMetadata = data.idaMetadata;
-                        var clientData = data.clientData.body;
-                        var clientMetadata = data.clientData.metadata;
-                        console.log('json = ' + JSON.stringify(data));
-                        //    publishTransactionLog( idaMetadata, clientMetadata, clientData);
-                        processCleanedData(idaMetadata, clientMetadata, clientData);
-                    }
-                    catch (e) {
-                        console.log('not json format' + message.value);
-                    }
-                });
-                consumer.on('error', function (err) {
-                    console.log('varun');
-                    console.log(err);
-                });
-            }
-            catch (e) {
-                console.log('IDA could not communicate with kafka producer');
-            }
+            var dataSets = db.getAllDataSets();
+            var topics = ['undefined_transactionLogs'];
+            var consumerGroupOptions = {
+                host: '127.0.0.1:2181',
+                zk: undefined,
+                batch: undefined,
+                ssl: false,
+                groupId: 'ExampleTestGroup',
+                sessionTimeout: 15000,
+                protocol: ['roundrobin'],
+                fromOffset: 'earliest',
+                outOfRangeOffset: 'earliest',
+                migrateHLC: false,
+                migrateRolling: true
+            };
+            var consumerGroup = new ConsumerGroup(consumerGroupOptions, 'undefined_transactionLogs');
+            consumerGroup.on('error', function (err) {
+                console.log('error' + err);
+            });
+            consumerGroup.on('message', function (message) {
+                try {
+                    var data = JSON.parse(message.value);
+                    var idaMetadata = data.idaMetadata;
+                    var clientData = data.clientData;
+                    var clientMetadata = data.clientMetadata;
+                    publishTransactionLog(idaMetadata, clientMetadata, clientData);
+                    processCleanedData(idaMetadata, clientMetadata, clientData);
+                }
+                catch (e) {
+                    console.log('not json format' + message.value);
+                }
+            });
         });
-        // continuously monitor mongodb for new tenant metadata; this can be updated with kafka streams later
         setInterval(function () {
             var headersOptions = {
                 'x-api-key': 'kTq3Zu7OohN3R5H59g3Q4PU40Mzuy7J5sU030jPg'
@@ -229,17 +246,16 @@ else {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: appconfig['ddb_url'] + '/getAllTenants',
+                url: globalconfig['ddb_url'] + '/tenants',
             };
             rp(options).then(function (data) {
-                db.populateTenants(data.tenants);
+                db.populateTenants(data);
             }).catch(function (err) {
                 console.log(err);
             }).then(function () {
                 var tenant = db.getTenant('test');
-                //console.log(JSON.stringify(tenant));
             });
         }, 15000);
-        //
     });
 }
+//# sourceMappingURL=server.js.map

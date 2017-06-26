@@ -6,8 +6,9 @@
   "scripts": {
     "setup": "npm install jsonwebtoken && npm install kafka-node && npm install -g cucumber && npm install",
     "featuretest": "./node_modules/.bin/cucumberjs -f pretty features/CB-437.feature features/CB-438.feature features/CB-425.feature features/CB-505.feature",
-    "Components": "./node_modules/.bin/cucumberjs -f pretty features/IDA.feature features/ODA.feature",
-    "report": "./node_modules/.bin/cucumberjs -f json features/DSS.feature > ./features/assets/ReportingBDD.json"
+    "everything": "./node_modules/.bin/cucumberjs -f pretty features/DSS.feature features/TenancyManagement.feature features/Enrollment.feature features/IDA.feature features/CB-437.feature features/CB-438.feature features/CB-425.feature features/CB-505.feature features/ODA.feature",
+    "Components": "./node_modules/.bin/cucumberjs -f pretty features/ODA.feature",
+    "report": "generateBDDreports"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +18,6 @@
     "jsonwebtoken": "^7.4.1",
     "kafka-node": "^1.6.2",
     "node-rest-client": "^3.1.0",
-    "request": "^2.81.0",
-    "ssl-root-cas": "^1.2.3"
+    "request": "^2.81.0"
   }
 }

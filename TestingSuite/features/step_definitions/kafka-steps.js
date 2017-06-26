@@ -71,7 +71,7 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    When('I Post :portnumber after setting headers and body', function (callback) {
+    When('I make a POST call to /data', function (callback) {
         options.uri = url + "/data"
         Request(options, function (error, response, body) {
             if (error) {
@@ -84,9 +84,10 @@ Cucumber.defineSupportCode(function(context) {
     });
     Then('response code should equal :{int}', function (int, callback) {
         // Write code here that turns the phrase above into concrete actions
+        var resString = JSON.stringify(responseData).toLowerCase();
         if (parseInt(int) != parseInt(responseCode)){
             //console.log('Error: '+ responseData);
-            throw new Error('Response code should be ' + int +' but is ' + responseCode);
+            throw new Error('Response code should be ' + int +' but is ' + responseCode +'\n Error:'+ resString);
         }
 
         callback();
@@ -96,7 +97,7 @@ Cucumber.defineSupportCode(function(context) {
         kafka_url = kafka_url.replace("http://", "");
         var kafkaClient = new kafka.Client(kafka_url);
 
-        var payloads =  [{ topic: 'varun_test_idaSampleId2', partition: 0 }];
+        var payloads =  [{ topic: 'undefined_transactionLogs', partition: 0 }];
         var options = {
             autoCommit: false,
             sessionTimeout: 4000

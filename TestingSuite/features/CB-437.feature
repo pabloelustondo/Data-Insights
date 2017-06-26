@@ -4,13 +4,13 @@ Feature: Server-side metadata with merge (non-persisted, for interactive queries
 Background:
 based on given data set metadata definition we should be able to return merged data set.
 
-  Scenario: Return Merged DataSet
-    Given I set valid request header and body for POST call to ~/query with metadata id
-    And I grab ODA port number from globalconfig.json
+  Scenario: As an administrator, I want to post my data to ODA and get a merged dataSet returned
+    Given I grab the xaccesskey for ODA from 'testTemporaryToken'
+    And I grab ODA url from globalconfig.json
+    Then I set valid request for posting to ~/query
+      |dataSetId|from       |
+      |10-22-1  |nextBus       |
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed
-    Then The response message should contain the merged dataset
-
-
-
+    Then the response doesnt have to be merged

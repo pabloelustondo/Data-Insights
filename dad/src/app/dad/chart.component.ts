@@ -13,6 +13,12 @@ import { DadCrudComponent } from './crud.component';
 declare var d3, c3: any;
 
 export class DadChart extends DadElement {
+
+    constructor(){
+        super();
+        this.elementType = 'chart';
+    }
+
     type: string;
     width?: number;
     height?: number;
@@ -43,6 +49,7 @@ export class DadChart extends DadElement {
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('')">Edit</div></button>
+                           <button class="dropdown-item" style="cursor:pointer;"> <div>Select a Data Set</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
@@ -169,11 +176,12 @@ export class DadChartComponent implements OnInit {
     newAlertAttribute: string;
     newAlertName: string;
     intervalId: any;
+    connection: any;
 
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
                 private dadConfigsService: DadConfigService,
-                private router: Router, private route: ActivatedRoute,) {}
+                private router: Router, private route: ActivatedRoute) {}
 
 
     optionChanged(v) {
@@ -250,9 +258,15 @@ export class DadChartComponent implements OnInit {
     realDataMonitoring() {
         if (this.chart.intervalRefreshOption === true) {
             let timeInterval = this.chart.intervalTime;
-            this.intervalId = setInterval(() => {
+            /*this.intervalId = setInterval(() => {
                 this.changeMapData();
             }, timeInterval);
+*/
+            this.dadChartDataService.getMessages('nextBus').subscribe(message => {
+                // parse the message and only refresh if it is for the selected data set
+                console.log(message);
+                this.data = message['vehicle'];
+            } );
         }
     }
 
@@ -315,11 +329,18 @@ export class DadChartComponent implements OnInit {
     }
 
     changeMapData() {
-            this.dadChartDataService.getElementData(this.chart).subscribe(
+            /* this.dadChartDataService.getElementData(this.chart).subscribe(
                 data => {
                     this.data = data;
                 }
             )
+            */
+        //TODO: replace nextBus with actual valie
+        this.dadChartDataService.getMessages('nextBus').subscribe(message => {
+            // parse the message and only refresh if it is for the selected data set
+            console.log(message);
+            return message;
+        } )
     }
 
     onEdit(message: string): void {

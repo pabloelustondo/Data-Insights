@@ -1,0 +1,405 @@
+[
+  {
+    "keyword": "Feature",
+    "line": 1,
+    "name": "Create TMM service",
+    "tags": [],
+    "uri": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\CB-505.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "As an administrator, I want to create a new data set",
+        "tags": [],
+        "id": "create-tmm-service;as-an-administrator,-i-want-to-create-a-new-data-set",
+        "steps": [
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "id",
+                      "name",
+                      "from",
+                      "persist",
+                      "filter",
+                      "merge",
+                      "projections",
+                      "metadata"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "123",
+                      "testDataSet",
+                      "[testDataSource]",
+                      "true",
+                      "[]",
+                      "[]",
+                      "[]",
+                      "[]"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "name": "I create a new Tenant Metadata Object for tenant test_user",
+            "result": {
+              "status": "passed",
+              "duration": 2
+            },
+            "line": 12,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:64"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I grab tmm backend url from the config file",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 15,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:38"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I setup request for posting to tmm backend",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 16,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:136"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST to \"/tenant/test_user\"",
+            "result": {
+              "status": "passed",
+              "duration": 70
+            },
+            "line": 17,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:144"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response code needs to be '200'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 18,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:157"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "The response body should contain an array of valid meta data objects",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 19,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:168"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 21,
+        "name": "As an administrator, I want to create a duplicate data set",
+        "tags": [],
+        "id": "create-tmm-service;as-an-administrator,-i-want-to-create-a-duplicate-data-set",
+        "steps": [
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "id",
+                      "name",
+                      "from",
+                      "persist",
+                      "filter",
+                      "merge",
+                      "projections",
+                      "metadata"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "123",
+                      "testDataSet",
+                      "[testDataSource]",
+                      "true",
+                      "[]",
+                      "[]",
+                      "[]",
+                      "[]"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "name": "I create a new Tenant Metadata Object for tenant test_user",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 22,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:64"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I grab tmm backend url from the config file",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 25,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:38"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I setup request for posting to tmm backend",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 26,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:136"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST to \"/tenant/test_user\"",
+            "result": {
+              "status": "passed",
+              "duration": 29
+            },
+            "line": 27,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:144"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response code needs to be '400'",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: Response code should be 400 but is 200\n Error:{\"n\":1,\"nmodified\":1,\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:162:19)"
+            },
+            "line": 28,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:157"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "The response body should contain the error \"object already exists\"",
+            "result": {
+              "status": "skipped"
+            },
+            "line": 29,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:196"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 39,
+        "name": "As an administrator, I want to post to tmm with a tenantid different from the one passed through the url",
+        "tags": [],
+        "id": "create-tmm-service;as-an-administrator,-i-want-to-post-to-tmm-with-a-tenantid-different-from-the-one-passed-through-the-url",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I modify the Tenant Metadata Object tenantid to \"best_user\"",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 40,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:191"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "I grab tmm backend url from the config file",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 41,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:38"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I setup request for posting to tmm backend",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 42,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:136"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I POST to \"/tenant/test_user\"",
+            "result": {
+              "status": "passed",
+              "duration": 31
+            },
+            "line": 43,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:144"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response code needs to be '400'",
+            "result": {
+              "status": "failed",
+              "duration": 0,
+              "error_message": "Error: Response code should be 400 but is 200\n Error:{\"n\":1,\"nmodified\":1,\"ok\":1}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:162:19)"
+            },
+            "line": 44,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:157"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "The response body should contain the error \"url tenantid different from body tenantid\"",
+            "result": {
+              "status": "skipped"
+            },
+            "line": 45,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:196"
+            }
+          }
+        ]
+      },
+      {
+        "keyword": "Scenario",
+        "line": 47,
+        "name": "As an administrator I want to make a get request to tmm",
+        "tags": [],
+        "id": "create-tmm-service;as-an-administrator-i-want-to-make-a-get-request-to-tmm",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I grab tmm backend url from the config file",
+            "result": {
+              "status": "passed",
+              "duration": 1
+            },
+            "line": 48,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:38"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "I set header for making a get request to tmm",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 49,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:203"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "I GET \"/tenant/test_user\"",
+            "result": {
+              "status": "passed",
+              "duration": 48
+            },
+            "line": 50,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:208"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "The response code needs to be '200'",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 51,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:157"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "line": 52,
+            "match": {
+              "location": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\tmm-steps.js:221"
+            }
+          }
+        ]
+      }
+    ],
+    "id": "create-tmm-service"
+  }
+]

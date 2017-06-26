@@ -92,16 +92,23 @@ export function findElement (data: any, element: any) {
 export function processRequest (metadata: any, _dataSets: any, res) {
 
 
-    let queryId = metadata.queryId;
+    let queryId = metadata.dataSetId;
 
     // get dataSetFrom all available dataSets
     let dataSet = _.find(_dataSets, { id : queryId} );
 
-    let dataSources = dataSet.dataSources;
+    let dataSources = dataSet['from'];
+
 
     let responseData = [];
-    async.each(dataSources,function (ds, callback) {
-        console.log(ds);
+    async.each(dataSources,function (dsId, callback) {
+        console.log(dsId);
+        let db = getDbFromDataService();
+        let tenant = db.getTenant(metadata.tenantId);
+        let allDataSets = tenant.dataSets;
+
+        let ds = _.find(allDataSets,{id : dsId});
+        let filter = (ds && ds.filter !== "" ) ? ds.filter : undefined;
         let aggregate: any = [{
             $match : {}},
             {
@@ -110,7 +117,7 @@ export function processRequest (metadata: any, _dataSets: any, res) {
                     'data' : 1
                 }
             }];
-        if (ds.filter) {
+        if (filter) {
             let project =
                 {
                     $project : {
@@ -119,7 +126,7 @@ export function processRequest (metadata: any, _dataSets: any, res) {
                             $filter : {
                                 input : '$data',
                                 as : 'customData',
-                                cond: { $eq : ['$$customData.'+ds.filter.key, ds.filter.value ]}
+                                cond: { $eq : ['$$customData.'+ filter.key, filter.value ]}
                             }
                         }
                     }
@@ -129,25 +136,34 @@ export function processRequest (metadata: any, _dataSets: any, res) {
 
         }
         var options = {
-            url : 'http://localhost:8020/ds/test/getdata/query',
+            url : 'http://localhost:8020/ds/' + metadata.tenantId +'/getdata/query',
             method: 'POST',
 
             body: {
-                'collectionName': ds.dataSource,
+                'collectionName': (ds)? ds.id: queryId,
                 'aggregation' : aggregate
             },
             json: true
         };
         function responseCallback ( err, response, body) {
-            if (!err && response.statusCode == 200) {
+            if (!err && response.statusCode == 200 && body) {
                 var info = JSON.stringify(body);
 
                 var responseObj = {};
 
-                let projected = _.get(body[0], ds.projection);
-                // let sample = projected[ds.projection];
-                responseObj[ds.dataSource] = _.get(body[0], ds.projection);
-                responseData.push( responseObj);
+                if (ds) {
+                    let projected = _.get(body[0], ds.projections[0]);
+                    // let sample = projected[ds.projection];
+                    responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    responseData.push(responseObj);
+                } else {
+
+                    let ds = _.find(allDataSets,{id : queryId});
+                    let projected = _.get(body[0], ds.projections[0]);
+                    // let sample = projected[ds.projection];
+                    responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    responseData.push(responseObj);
+                }
             }
             callback();
         }
@@ -160,25 +176,29 @@ export function processRequest (metadata: any, _dataSets: any, res) {
 
         if (dataSet.merge) {
 
-            let a1 = _.find(responseData, dataSet.dataSources[0].dataSource );
-            let a2 = _.find(responseData, dataSet.dataSources[1].dataSource );
+            let a1 = _.find(responseData, dataSet.from[0]);
+            let a2 = _.find(responseData, dataSet.from[1]);
 
             if (a1 && a2){
-                let a = a1[dataSet.dataSources[0].dataSource];
-                let b = a2[dataSet.dataSources[1].dataSource];
+                let a = a1[dataSet.from[0]];
+                let b = a2[dataSet.from[1]];
 
                 let merge = _.map(a, function(item) {
                     return _.merge(item,  _.find(b, { 'Value' : parseInt(item.id) }));
                 });
 
                res.status(200).send({
+                   timeStamp : new Date().toISOString(),
                    result : merge
                });}
                else {
                    res.status(204).send('No data found');
                }
             } else {
-                 res.status(200).send(responseData);
+                 res.status(200).send({
+                     timeStamp : new Date().toISOString(),
+                     result: responseData
+                 });
 
             }
         }
