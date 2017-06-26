@@ -1,3 +1,11 @@
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -128,13 +136,12 @@ function checksilogRequest(req, res) {
 ////////////////////////////
 router.get('/siloguser', function (req, res) {
     callDbAndRespond(req, res, function (req, res, db, next) {
-        //        db.collection('silog').find({"tenantid":req.params.tenantid}).toArray(next);
         db.collection('siloguser').find({}).toArray(next);
     });
 });
 router.post('/siloguser', function (req, res) {
     callDbAndRespond(req, res, function (req, res, db, next) {
-        db.collection('siloguser').replaceOne({ "tenantid": req.params.tenantid }, req.body, { upsert: true }, next);
+        db.collection('siloguser').insertOne(req.body, next);
     });
 });
 router.delete('/siloguser/:tenantid', function (req, res) {
@@ -160,7 +167,7 @@ router.get('/silogserver', function (req, res) {
 });
 router.post('/silogserver', function (req, res) {
     callDbAndRespond(req, res, function (req, res, db, next) {
-        db.collection('silogserver').replaceOne({ "tenantid": req.params.tenantid }, req.body, { upsert: true }, next);
+        db.collection('silogserver').insertOne(req.body, next);
     });
 });
 router.delete('/silogserver/:tenantid', function (req, res) {
@@ -186,7 +193,7 @@ router.get('/silogagent', function (req, res) {
 router.post('/silogagent', function (req, res) {
     if (checksilogRequest(req, res)) {
         callDbAndRespond(req, res, function (req, res, db, next) {
-            db.collection('silogagent').replaceOne({ "tenantid": req.params.tenantid }, req.body, { upsert: true }, next);
+            db.collection('silogagent').insertOne(req.body, next);
         });
     }
 });
@@ -201,7 +208,7 @@ router.delete('/silogagent/:tenantid', function (req, res) {
 //                         //
 /////////////////////////////
 var ConsumerGroup = kafka.ConsumerGroup;
-var topics = ['log1'];
+var topics = ['log'];
 var consumerGroupOptions = {
     host: '127.0.0.1:2181',
     zk: undefined,
@@ -240,6 +247,10 @@ consumerGroup.on('error', function (err) {
 });
 consumerGroup.on('message', function (message) {
     var data = JSON.parse(message.value);
+    if (!data.hasOwnProperty('timeStamp')) {
+        var timeStamp = new Date().getTime();
+        data = __assign({}, data, { "timeStamp": timeStamp.toString() });
+    }
     console.log('data = ' + JSON.stringify(data));
     if (data.producer == "Tenant") {
         callDbAndAct(function (db, next) {
@@ -264,7 +275,7 @@ producer.on('error', function (err) {
 });
 router.get('/unittest', function (req, res) {
     var timeStamp = new Date().getTime();
-    var payloads = [{ topic: 'log1', messages: "{\"producer\": \"MCDP\", \"timeStamp\": \"" + timeStamp + "\", \"message\": \"TEST\" ,\"params\": {\"tenantId\": \"someTenantId\"}}", partition: 0 }];
+    var payloads = [{ topic: 'log', messages: "{\"producer\": \"MCDP\", \"timeStamp\": \"" + timeStamp + "\", \"message\": \"TEST\" ,\"params\": {\"tenantId\": \"someTenantId\"}}", partition: 0 }];
     producer.send(payloads, function (err, data) {
         //Waits for Kafka Listener to act
         setTimeout(function () {
