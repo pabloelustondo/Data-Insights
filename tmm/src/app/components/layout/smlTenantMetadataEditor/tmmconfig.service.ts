@@ -26,14 +26,14 @@ export class TmmConfigService {
     }
   }
 
-  saveDataByTenantId(tenantid, tmtMetadata) {
+  saveDataByTenantId(tenantid, tmtMetadata, callback) {
     if (config.ddb_url != "") {
       console.log(tmtMetadata);
 
       let url = globalConfig['tmmback_url'] + '/tenant/' + tmtMetadata.tenantId;
       this.http.post(url, tmtMetadata).toPromise().then(
         (res: Response) => {
-          console.log((res));
+          callback();
         }).catch(
         (error) => {
           alert("Failed to save configuration to database " + error);
