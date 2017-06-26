@@ -36,7 +36,7 @@ ApiCallService = {
                         if(parseBody && typeof parseBody === "object"){
                             newBody =  {
                                 metadata : {
-                                    "dataSetId" : "nextBus"
+                                    "dataSetId" : dataSource.dataSetId
                                 },
                                 data : parseBody
                             };
@@ -66,6 +66,5 @@ ApiCallService = {
     }
 
 };
-
 
 module.exports = ApiCallService;
