@@ -2,7 +2,7 @@
   {
     "keyword": "Feature",
     "line": 1,
-    "name": "Finalize data incoming flow",
+    "name": "Finalize data incoming flow (CB-425)",
     "tags": [],
     "uri": "C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\CB-425.feature",
     "elements": [
@@ -11,7 +11,7 @@
         "line": 10,
         "name": "As an administrator I want to get a temporary Authorization Token from IDA to use the other API endpoints",
         "tags": [],
-        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-get-a-temporary-authorization-token-from-ida-to-use-the-other-api-endpoints",
+        "id": "finalize-data-incoming-flow-(cb-425);as-an-administrator-i-want-to-get-a-temporary-authorization-token-from-ida-to-use-the-other-api-endpoints",
         "steps": [
           {
             "arguments": [],
@@ -19,7 +19,7 @@
             "name": "I grab the xaccesskey from 'testPermanentToken'",
             "result": {
               "status": "passed",
-              "duration": 2
+              "duration": 1
             },
             "line": 11,
             "match": {
@@ -45,7 +45,7 @@
             "name": "I set up request for making get call to '/Security/getAuthorizationToken'",
             "result": {
               "status": "passed",
-              "duration": 1
+              "duration": 0
             },
             "line": 13,
             "match": {
@@ -58,7 +58,7 @@
             "name": "I make a GET call",
             "result": {
               "status": "passed",
-              "duration": 415
+              "duration": 70
             },
             "line": 14,
             "match": {
@@ -84,7 +84,7 @@
             "name": "response body should be error-free",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 16,
             "match": {
@@ -110,7 +110,7 @@
             "name": "I store the response in 'testTemporaryToken'",
             "result": {
               "status": "passed",
-              "duration": 2
+              "duration": 3
             },
             "line": 18,
             "match": {
@@ -124,7 +124,7 @@
         "line": 20,
         "name": "As an administrator I want to try to get a temporary Authorization Token from IDA to use the other API endpoints using an invalid xaccesskey",
         "tags": [],
-        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-try-to-get-a-temporary-authorization-token-from-ida-to-use-the-other-api-endpoints-using-an-invalid-xaccesskey",
+        "id": "finalize-data-incoming-flow-(cb-425);as-an-administrator-i-want-to-try-to-get-a-temporary-authorization-token-from-ida-to-use-the-other-api-endpoints-using-an-invalid-xaccesskey",
         "steps": [
           {
             "arguments": [],
@@ -132,7 +132,7 @@
             "name": "I modify the xaccesskey to an invalid JWT",
             "result": {
               "status": "passed",
-              "duration": 3
+              "duration": 4
             },
             "line": 21,
             "match": {
@@ -171,7 +171,7 @@
             "name": "I make a GET call",
             "result": {
               "status": "passed",
-              "duration": 15
+              "duration": 24
             },
             "line": 24,
             "match": {
@@ -184,7 +184,7 @@
             "name": "response code must be 400",
             "result": {
               "status": "failed",
-              "duration": 0,
+              "duration": 2,
               "error_message": "Error: Response code should be 400 but is 500\n \"invalid signature\"\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166:19)"
             },
             "line": 25,
@@ -211,7 +211,7 @@
         "line": 28,
         "name": "As an administrator I want to make a POST request to IDA using my temporary Authorization Token",
         "tags": [],
-        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-make-a-post-request-to-ida-using-my-temporary-authorization-token",
+        "id": "finalize-data-incoming-flow-(cb-425);as-an-administrator-i-want-to-make-a-post-request-to-ida-using-my-temporary-authorization-token",
         "steps": [
           {
             "arguments": [],
@@ -219,7 +219,7 @@
             "name": "I grab the xaccesskey from 'testTemporaryToken'",
             "result": {
               "status": "passed",
-              "duration": 0
+              "duration": 1
             },
             "line": 29,
             "match": {
@@ -258,7 +258,7 @@
             "name": "I make a POST call",
             "result": {
               "status": "passed",
-              "duration": 98
+              "duration": 80
             },
             "line": 32,
             "match": {
@@ -298,7 +298,7 @@
         "line": 36,
         "name": "As an administrator I want to make a POST request to IDA using an invalid token",
         "tags": [],
-        "id": "finalize-data-incoming-flow;as-an-administrator-i-want-to-make-a-post-request-to-ida-using-an-invalid-token",
+        "id": "finalize-data-incoming-flow-(cb-425);as-an-administrator-i-want-to-make-a-post-request-to-ida-using-an-invalid-token",
         "steps": [
           {
             "arguments": [],
@@ -345,7 +345,7 @@
             "name": "I make a POST call",
             "result": {
               "status": "passed",
-              "duration": 106
+              "duration": 54
             },
             "line": 40,
             "match": {
@@ -358,8 +358,8 @@
             "name": "response code must be 400",
             "result": {
               "status": "failed",
-              "duration": 0,
-              "error_message": "Error: Response code should be 400 but is 200\n {\"createdat\":\"2017-06-16t20:18:24.630z\",\"metadata\":[\"status : string\"],\"data\":\"ok\"}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166:19)"
+              "duration": 2,
+              "error_message": "Error: Response code should be 400 but is 200\n {\"createdat\":\"2017-06-20t19:53:27.283z\",\"metadata\":[\"status : string\"],\"data\":\"ok\"}\n    at World.<anonymous> (C:\\Users\\sxia\\Desktop\\CustomerBI\\TestingSuite\\features\\step_definitions\\ida-steps.js:166:19)"
             },
             "line": 41,
             "match": {
@@ -381,6 +381,6 @@
         ]
       }
     ],
-    "id": "finalize-data-incoming-flow"
+    "id": "finalize-data-incoming-flow-(cb-425)"
   }
 ]

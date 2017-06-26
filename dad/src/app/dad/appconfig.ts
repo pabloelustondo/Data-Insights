@@ -26,6 +26,8 @@ export const config = {
     "AverageDischargeRate": appconfig.oda_url + "/Devices/Battery/Summary/AverageDischargeRate",
     "ApplicationDeploymentCount": appconfig.oda_url + "/Devices/Application/executionTime",
     "NumberOfInstallations": appconfig.oda_url + "/Devices/Application/numberOfInstallations",
-    "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations"
+    "GetLocation": appconfig.oda_url + "/Vehicles/Data/GetLocations",
+    "TenantMetaData": appconfig.oda_url + "/Query/Topics",
+    "Query":{url : appconfig.oda_url + "/Query/", method: "post"}
 };
 

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tmm-svc
+  namespace: stage
+  labels:
+    app: tmm-svc
+spec:
+  selector:
+    app: tmm
+  ports:
+  - name: 
+    port: 8028
+    protocol: TCP
+  type: ClusterIP

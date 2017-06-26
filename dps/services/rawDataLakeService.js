@@ -1,7 +1,4 @@
 "use strict";
-/**
- * Created by vdave on 5/8/2017.
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 var rp = require("request-promise");
 var config = require('../config.json');
@@ -61,3 +58,4 @@ function uploadModifiedData(tenantId, collectionName, clientData) {
     }
 }
 exports.uploadModifiedData = uploadModifiedData;
+//# sourceMappingURL=rawDataLakeService.js.map
