@@ -7,6 +7,7 @@ var config = require('./../appconfig.json');
 
 IdaCallService  = {
     makeIdaCall:  function(req,  next) {
+        console.log(req);
         request({
             json: true,
             url : config['ida_url'],
@@ -18,7 +19,7 @@ IdaCallService  = {
             } }, function(_error, _response, _body) {
 
             if (!_error ) {
-                // console.log( _body);
+                console.log( _body);
                 if (_response.statusCode === 500) {
                     next (new Error('Token has expired'), null);
                 } else {

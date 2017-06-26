@@ -13,6 +13,7 @@
     "chai-spies": "0.7.1",
     "cp-cli": "^1.0.2",
     "express": "4.13.3",
+    "json-validation": "^1.0.4",
     "jsonwebtoken": "^7.3.0",
     "mocha": "3.2.0",
     "mongodb": "2.0.46",
