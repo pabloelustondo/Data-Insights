@@ -47,39 +47,34 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
   index: number = 0;
   urlId: any;
 
-  constructor(private tmmConfigService: TmmConfigService, private activatedRoute: ActivatedRoute) {
-    //console.log(router);
-  }
+  constructor(private tmmConfigService: TmmConfigService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
     //this.urlId = this.router.url;
+    this.getTenantMetadata();
+  }
+
+  getTenantMetadata() {
     this.activatedRoute.params.subscribe((params: Params) => {
+      this.tenantMetadata.tenantId = params['tenantId'];
 
-      this.urlId = params['tenantId'];
-      console.log(this.urlId);
-      this.tenantMetadata.tenantId = this.urlId;
+      this.tmmConfigService.getTenantMetadata(this.tenantMetadata.tenantId).then(data => {
+        if (data && data._body) {
+          try {
+            let response = JSON.parse(data._body);
 
-      this.tmmConfigService.getTenantMetadata(this.urlId).then(data => {
-          if (data && data._body)
-          {
-            try {
-              let response = JSON.parse(data._body);
-
-              console.log(response);
-              if(response.length != 0){
-                this.tenantMetadata.dataSets = response[0].dataSets;
-                this.tenantMetadata.name = response[0].name;
-              }
-            } catch (err) {
-              console.log(err);
+            if (response.length != 0) {
+              this.tenantMetadata.tenantId = params['tenantId'];
+              this.tenantMetadata.dataSets = response[0].dataSets;
+              this.tenantMetadata.name = response[0].name;
+              // this.tenantMetadata = response[0];
             }
+          } catch (err) {
+            console.log(err);
           }
         }
-      );
+      });
     });
-
-
-    console.log(this.tenantMetadata);
   }
 
   editorOption(id) {
@@ -100,10 +95,20 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
 
   optionUpdated(updatedItem) {
     console.log(updatedItem);
-    this.tenantMetadata.dataSets[updatedItem.index] = updatedItem;
-    delete this.tenantMetadata.dataSets[updatedItem.index].index;
-    this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
+
+    let newTenantMetadata = Object.assign({}, this.tenantMetadata);
+
+    newTenantMetadata.dataSets[updatedItem.index] =  updatedItem;
+    delete newTenantMetadata.dataSets[updatedItem.index].index;
+    
+    this.tmmConfigService.saveDataByTenantId(this.tenantMetadata.tenantId, newTenantMetadata, data => {
+      if (data) {
+        this.getTenantMetadata();
+      }
+    });
   }
+
+
 
   dataSetInit() {
     this.selectedOption = this.emptyDataSet;
@@ -118,11 +123,15 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
     } else {
       this.tenantMetadata.dataSets.splice(parsed, 1);
     }
+    this.selectedOption.index = this.tenantMetadata.dataSets.length();
     this.selectedOption = this.emptyDataSet;
 
 
     this.tmmConfigService.deleteUserByTenantId( this.tenantMetadata.tenantId);
-    this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata);
-
+    this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata, (data) => {
+       if (data && data._body) {
+        this.getTenantMetadata();
+      }
+    });
   }
 }
