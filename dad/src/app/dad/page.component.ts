@@ -13,6 +13,7 @@ import { DadElement } from './dadmodels';
 import { config } from "./appconfig";
 import { DadUser, DadElementType, DadUIElement } from "./dadmodels";
 import { DadCrudComponent} from './crud.component';
+import * as _ from 'lodash';
 
 export class DadPage {
     id: string;
