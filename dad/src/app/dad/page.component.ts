@@ -2,17 +2,18 @@
  * Created by dister on 2/2/2017.
  */
 import { Component, Input, Output, OnInit, AfterViewInit, EventEmitter } from '@angular/core';
-import { DadConfigService } from './dadconfig.service';
 import { DadElementDataService } from "./data.service";
 import {Subscription } from 'rxjs';
 import { ActivatedRoute} from '@angular/router';
 import {DadWidget} from "./widget.component";
 import {DadChart} from "./chart.component";
 import {DadTable} from "./table.component";
+import {DadUserConfig, DadConfigService} from './dadconfig.service';
 import { DadElement } from './dadmodels';
 import { config } from "./appconfig";
 import { DadUser, DadElementType, DadUIElement } from "./dadmodels";
 import { DadCrudComponent} from './crud.component';
+import * as _ from 'lodash';
 
 export class DadPage {
     id: string;
@@ -96,7 +97,7 @@ export class  DadPageComponent implements OnInit{
     selectedDataSet: any;
     value: string;
     elementName: string;
-    tenantID: string = 'sample';
+    tenantID: string;
 
 
 
@@ -122,7 +123,8 @@ export class  DadPageComponent implements OnInit{
                                 if (chart) this.page.charts.push(chart);
                             })
                         }
-
+                        // let user = this.dadConfigService.user;
+                        this.tenantID = this.dadConfigService.user.tenantid;
                         this.page.widgets = [];
                         for (let widgetid of this.page.widgetids) {
                             this.dadConfigService.getWidgetConfig(widgetid).then((widget) => {

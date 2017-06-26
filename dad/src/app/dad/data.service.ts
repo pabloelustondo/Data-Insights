@@ -20,7 +20,7 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class DadElementDataService {
 
-    private url = 'http://10.0.91.2:8022';
+    private url = 'http://10.0.91.2';
     private socket;
 
     constructor(private http: Http, private router: Router) { }

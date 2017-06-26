@@ -1,6 +1,7 @@
 {
   "id" : "cdl",
-  "name" : "CDL",
+  "name":"CDL",
+  "testingmode" : false,
   "secret"  : "1234",
   "dependencies" : ["mongodb","s3"],
   "logtype":"s3"

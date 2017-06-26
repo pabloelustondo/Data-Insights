@@ -1,0 +1,19 @@
+{
+  "testingmode":  false,
+  "useSSL":       false,
+  "useAccessKey": false,
+  "ddb_url":      "http://ddb-svc.stage.svc.cluster.local:8000",
+  "dss_url":      "http://dssb-svc.stage.svc.cluster.local:8023",
+  "dssback_url":  "http://dssb-svc.stage.svc.cluster.local:8024",
+  "dad_url":      "http://dadb-svc.stage.svc.cluster.local:8025",
+  "dadback_url":  "http://dadb-svc.stage.svc.cluster.local:8026",
+  "oda_url":      "http://oda-svc.stage.svc.cluster.local:8000",
+  "cdl_url":      "http://cdl-svc.stage.svc.cluster.local:8020",
+  "dos_url":      "http://dosb-svc.stage.svc.cluster.local:5000",
+  "dosback_url":  "http://dosb-svc.stage.svc.cluster.local:5001",
+  "ida_url":      "http://ida-svc.stage.svc.cluster.local:8027",
+  "kafka_url":    "zookeeper.stage.svc.cluster.local:2181",
+  "dps_url":      "http://dps-svc.stage.svc.cluster.local:8022",
+  "tmmb_url":     "http://tmmb-svc.stage.svc.cluster.local:8029",
+  "mongodb_url":  "mongodb://cust-mongodb.stage.svc.cluster.local:5494"
+}
