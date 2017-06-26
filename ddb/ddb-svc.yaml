@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ddb-svc
+  namespace: demo
+  labels:
+    app: ddb-svc
+spec:
+  selector:
+    app: ddb
+  ports:
+  - name: 
+    port: 8000
+    protocol: TCP
+  type: ClusterIP

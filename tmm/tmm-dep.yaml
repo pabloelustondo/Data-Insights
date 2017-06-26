@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tmm
+  namespace: stage
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tmm
+    spec:
+      containers:
+      - name: tmm
+        image: ae7bf2c134d5f11e7a174123ab8f20a4-1306207793.us-east-1.elb.amazonaws.com:5494/tmm:sprint-16 
+        ports:
+        - containerPort: 8028
