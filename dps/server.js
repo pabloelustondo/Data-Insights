@@ -195,7 +195,7 @@ else {
             json: true,
             method: 'get',
             headers: headersOptions,
-            url: appconfig['ddb_url'] + '/tenants',
+            url: globalconfig['ddb_url'] + '/tenants',
         };
         rp(options).then(function (data) {
             db.populateTenants(data);
@@ -230,7 +230,6 @@ else {
                     var idaMetadata = data.idaMetadata;
                     var clientData = data.clientData;
                     var clientMetadata = data.clientMetadata;
-                    console.log('json = ' + JSON.stringify(data));
                     publishTransactionLog(idaMetadata, clientMetadata, clientData);
                     processCleanedData(idaMetadata, clientMetadata, clientData);
                 }
@@ -247,7 +246,7 @@ else {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: appconfig['ddb_url'] + '/tenants',
+                url: globalconfig['ddb_url'] + '/tenants',
             };
             rp(options).then(function (data) {
                 db.populateTenants(data);
