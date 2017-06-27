@@ -63,31 +63,7 @@ export class MetadataController {
 
         } else {
 
-            if (contentType !== 'application/json') {
-                return Promise.reject({
-                    message: 'Content-Type incorrect. Content-type must be Application/JSON',
-                    status: '406'
-                });
-            }
 
-            let data = JSON.stringify(req.body);
-            try {
-                JSON.parse(data);
-            } catch (e) {
-                return Promise.reject({
-                    message: 'Content-Type incorrect. Body must be json type',
-                    status: '406'
-                });
-            }
-
-            let customerData: InputDataModel = express.body;
-            if (!((customerData.metadata) && (customerData.metadata.dataSetId) && (customerData.data))) {
-
-                return Promise.reject({
-                    message: 'Wrong input model',
-                    status: '406'
-                });
-            }
 
             let verifyAndDecodeJwt = function () {
                 let promise = new Promise(function (resolve, reject) {
