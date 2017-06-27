@@ -5,6 +5,7 @@ import {DadElement} from "./dadmodels";
 import {Router, ActivatedRoute} from "@angular/router";
 import {config} from "./appconfig";
 import { DadConfigService } from './dadconfig.service';
+import { ChatService } from './chat.service';
 import {DadFilter} from "./filter";
 import {Observable} from "rxjs";
 import {DadMap2} from './map2.component';
@@ -29,7 +30,7 @@ export class DadChart extends DadElement {
 }
 @Component({
     selector: 'dadchart',
-    providers: [DadElementDataService, DadConfigService],
+    providers: [DadElementDataService, DadConfigService, ChatService],
     template: `
 <div class="dadChart">
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
@@ -121,7 +122,28 @@ export class DadChart extends DadElement {
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
         <div *ngIf="_data && chart.type==='map'" > <dadmap [map]="chart" [data]="_data"></dadmap></div>
         <!--<div *ngIf="_data && chart.type==='map2'" > <dadmap2 [map]="chart" [data]="_data"></dadmap2></div>-->
+  
+        <!--  TIME SLIDER SPIKE  -->
          
+  <div *ngIf="this.chart.timeSlider">
+  <h1>DataView</h1>
+  Monitor ON: <input [(ngModel)]="monitor"  (change)="updateMonitor()" type="checkbox">
+  
+  <input [(ngModel)]="slider" id="test" type="range" (change)="sliderChange()"/>
+  
+  <h2 *ngIf="messages">{{messages.length}} - {{slider}}</h2>
+  <h2 *ngIf="message">Current: {{message.text}}</h2>
+ 
+  
+  <div *ngIf="messages" style="border:solid">
+  <table>
+    <tr *ngFor="let message of messages">
+      <td>{{message.t}}</td>
+      <td>{{message.text}}</td>
+      </tr>
+   </table>
+  </div>
+</div>
         
 </div>
     `
@@ -169,6 +191,19 @@ export class DadChartComponent implements OnInit {
     newAlertAttribute: string;
     newAlertName: string;
     intervalId: any;
+
+    /// SPIKE
+
+    monitor:boolean = false;
+    messages:any[] = [];
+    datas:any[] = [];
+    connection;
+    message:any;
+    config:any;
+    slider = 0;
+    timeWindow:100;
+
+    ///
 
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
