@@ -1,7 +1,7 @@
 import pandas as pd
 import datetime
 import sys
-import getopt  //https://pymotw.com/2/getopt/  get parameters
+import getopt
 import pymongo as mongo
 import json
 
@@ -15,7 +15,7 @@ def main(param=None):
     start = ''
     shift = 0
     threshold = 0
-    try:  //obviously all this parameter passing should not be here
+    try:
         opts, args = getopt.getopt(param, 'h', ['mode=', 'start=', 'shift=', 'threshold='])
         for opt, arg in opts:
             if opt == '--start':
@@ -37,8 +37,7 @@ def main(param=None):
         if threshold == 0:
             threshold = Params.threshold
         end = start + datetime.timedelta(hours=shift)
-        query = {     //this is kind of cool... but
-                    //we do not want to let processes access DB directly...by where is the tenant id :)
+        query = {
             "$and":
                 [
                     {"time_stamp": {"$gte": str(start)}},
@@ -57,10 +56,7 @@ def main(param=None):
         collection = db[collectionname]
         cursor = collection.find(query)
         data = pd.DataFrame(list(cursor))
-            //OK there is something intereting here the cursor.....but converted into a list
-            //we ned to think... but I beleive that we should be able to read chunks into memmory at once
-            //every node.js (or pythong..whaterver..microservice will run many processes onr many processors.
-        data = cleanData(data) //what is this?
+        data = cleanData(data)
     #    data = data[data['devid']=='73E65B7606490108000D-1BB066730600']
 
         data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
