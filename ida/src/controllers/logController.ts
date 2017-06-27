@@ -38,7 +38,7 @@ export class LogController {
             'content-type': 'application/json'
         },
         json: true,
-        url: 'https://localhost:3010/data',
+        url: 'https://localhost:3010/data/log',
         data: {
             metadata: {
                 dataSetId : 'myCustomDataSetId'
@@ -100,7 +100,7 @@ export class LogController {
             if (contentType !== 'application/json') {
                 return Promise.reject({
                     message: 'Content-Type incorrect. Content-type must be Application/JSON',
-                    status: '400'
+                    status: '406'
                 });
             }
 
@@ -110,7 +110,7 @@ export class LogController {
             } catch (e) {
                 return Promise.reject({
                     message: 'Content-Type incorrect. Body must be json type',
-                    status: '400'
+                    status: '406'
                 });
             }
 
@@ -119,7 +119,7 @@ export class LogController {
 
                 return Promise.reject({
                     message: 'Wrong input model',
-                    status: '400'
+                    status: '406'
                 });
             }
 
@@ -131,7 +131,7 @@ export class LogController {
                         console.log('could not verify token');
                         reject( {
                             message: err.message,
-                            statusCode: 400
+                            statusCode: 401
                         });
                     }
                 });
@@ -204,7 +204,7 @@ export class LogController {
                 } else {
                     return new Promise (function (resolve, reject) {
                         reject({
-                            statusCode : 404,
+                            statusCode : 401,
                             message : 'Invalid token'
                         });
                     });

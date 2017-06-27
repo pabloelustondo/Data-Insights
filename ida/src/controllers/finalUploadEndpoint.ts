@@ -109,7 +109,7 @@ export class UploadDataSetController {
 
                 return Promise.reject({
                     message: 'Content-Type incorrect. Body must be json type',
-                    status: '400'
+                    status: '406'
                 });
 
             }
@@ -119,7 +119,7 @@ export class UploadDataSetController {
 
                 return Promise.reject({
                     message: 'Wrong input model',
-                    status: '400'
+                    status: '406'
                 });
             }
 
@@ -131,7 +131,7 @@ export class UploadDataSetController {
                         console.log('could not verify token');
                         reject( {
                             message: err.message,
-                            statusCode: 400
+                            statusCode: 401
                         });
                     }
                 });
@@ -213,7 +213,7 @@ export class UploadDataSetController {
                 } else {
                     return new Promise (function (resolve, reject) {
                         reject({
-                            statusCode : 404,
+                            statusCode : 401,
                             message : 'Invalid token'
                         });
                     });
