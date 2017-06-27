@@ -69,7 +69,7 @@ export class DadChart extends DadElement {
                            <br/>
                            <i>filter by</i>
                     
-                             <div *ngIf="chart.filters">
+                             <div>
                                  <dadcrud [options]='chart.filters' [option]='chart.newFilter' (optionChanged)='optionChanged($event)'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
                              </div>
                             
@@ -262,7 +262,7 @@ export class DadChartComponent implements OnInit {
                 this.changeMapData();
             }, timeInterval);
 */
-            this.dadChartDataService.getMessages('nextBus').subscribe(message => {
+            this.dadChartDataService.getMessages(this.chart.postBody.from).subscribe(message => {
                 // parse the message and only refresh if it is for the selected data set
                 console.log(message);
                 this.data = message['vehicle'];
