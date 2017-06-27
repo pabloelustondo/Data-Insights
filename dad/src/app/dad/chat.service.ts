@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
 export class ChatService {
-  private url = 'http://localhost:8037';
+  private url = 'http://localhost:8037';   //THIS SERVER IS A SIMULATOR AND YOU CAN FIND IT AT SANDBOX / TIMESLIDER / SERVER
   private socket;
 
   sendMessage(message){

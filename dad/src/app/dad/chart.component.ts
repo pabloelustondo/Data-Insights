@@ -27,6 +27,7 @@ export class DadChart extends DadElement {
     action?: String;
     widgetClickChart?: boolean = false;
     drillchart?: any;
+    timeSlider?:any;
 }
 @Component({
     selector: 'dadchart',
@@ -349,6 +350,8 @@ export class DadChartComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        //this.chart.timeSlider = true; // you can use this trick when using the timeslider
 
         this.miniChartWidth = this.chart.width;
         this.miniChartHeight = this.chart.height;
