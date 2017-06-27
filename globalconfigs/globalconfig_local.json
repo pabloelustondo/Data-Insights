@@ -18,5 +18,5 @@
   "sml_url":"http://localhost:8031",
   "log_url":"http://localhost:8032",
   "kafka_url":"localhost:2181",
-  "mongodb_url" : "mongodb://localhost:27017/soti"
+  "mongodb_url" : "mongodb://localhost:27017"
 }
