@@ -1,0 +1,9 @@
+{
+	"message" : "This is a test mode",
+	"connectionstring" : {
+		"servername" : "192.168.56.101",
+		"port" : 37017,
+		"dbname" : "ha-meteo",
+		"collectionname" : "devstatint"
+	}
+}

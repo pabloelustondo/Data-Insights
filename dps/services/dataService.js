@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var request = require("request");
 var _ = require('lodash');
 var async = require('async');
@@ -92,8 +91,7 @@ function processRequest(metadata, _dataSets, res) {
         var ds = _.find(allDataSets, { id: dsId });
         var filter = (ds && ds.filter !== "") ? ds.filter : undefined;
         var aggregate = [{
-                $match: {}
-            },
+                $match: {} },
             {
                 $project: {
                     '_id': 0,
