@@ -1,8 +1,21 @@
-import {log, interpolate} from "./log";
+import axios from "axios";
+import config from "./logconfig";
 
-log({classifier:"Read_Success", message: "any", producer: "Tenant", params:{tenenatId: "someTenantId"} });
-log({classifier:"Read_Success", message: "any", producer: "DDB", params:{tenenatId: "someTenantId"} });
+import {log, interpolate, logging} from "./log";
 
-var t = interpolate({classifier:"Read_Success", producer: "DDB", message: "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", params: { speed: "quick", fox: { color: "brown" }, mammal: ["dog", "cat", "fox"] }});
 
-console.log(t);
+var message: logging = {"classifier":"Create_Success", "serverId": "someSeverId", "priority": "Critical", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } }; 
+
+var ts = log(message);
+
+console.log("ts: " + ts);
+
+var url = config.url;
+
+axios.get(url)
+.then(function (response) {
+    console.log(interpolate(response.data.filter(a => a.timeStamp == ts)[0]));
+})
+.catch(function (error) {
+    console.log(error);
+});

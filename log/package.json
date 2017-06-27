@@ -16,7 +16,7 @@
     "request": "^2.65.0"
   },
   "scripts": {
-    "start": "npm run getConfigs & node server.js",
+    "start": "npm run getConfigs & node server.js",    
     "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
     "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
     "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js",

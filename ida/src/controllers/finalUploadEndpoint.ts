@@ -23,11 +23,11 @@ export class UploadDataSetController {
      */
 
     @Response<ResponseModel>('200', 'Data Stored')
-    @Response<ErrorResponseModel>('400', 'Missing Token')
-    @Response<ErrorResponseModel>('400', 'Token verification Failed')
+    @Response<ErrorResponseModel>('401', 'Missing Token')
+    @Response<ErrorResponseModel>('401', 'Token verification Failed')
     @Response<ErrorResponseModel>('500', 'Internal Server Error. Please contact SOTI Support')
     @Response<ErrorResponseModel>('400', 'Content-Type incorrect. Content-type must be Application/JSON')
-    @Response<ErrorResponseModel>('400', 'Wrong Input Model')
+    @Response<ErrorResponseModel>('406', 'Wrong Input Model')
     @Post('')
     @Example<any>({
         headers: {
@@ -109,7 +109,7 @@ export class UploadDataSetController {
 
                 return Promise.reject({
                     message: 'Content-Type incorrect. Body must be json type',
-                    status: '400'
+                    status: '406'
                 });
 
             }
@@ -119,7 +119,7 @@ export class UploadDataSetController {
 
                 return Promise.reject({
                     message: 'Wrong input model',
-                    status: '400'
+                    status: '406'
                 });
             }
 
@@ -131,7 +131,7 @@ export class UploadDataSetController {
                         console.log('could not verify token');
                         reject( {
                             message: err.message,
-                            statusCode: 400
+                            statusCode: 401
                         });
                     }
                 });
@@ -213,7 +213,7 @@ export class UploadDataSetController {
                 } else {
                     return new Promise (function (resolve, reject) {
                         reject({
-                            statusCode : 404,
+                            statusCode : 401,
                             message : 'Invalid token'
                         });
                     });

@@ -20,10 +20,13 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class DadElementDataService {
 
-    private url = 'http://10.0.91.2';
+    // private url = 'http://10.0.91.2';
+    private url;
     private socket;
 
-    constructor(private http: Http, private router: Router) { }
+    constructor(private http: Http, private router: Router) {
+        this.url = config['oda_url'];
+    }
 
   getElementData(element:DadElement): Observable<any> {
       console.log("we got " + config["oda_dev_url"]);
