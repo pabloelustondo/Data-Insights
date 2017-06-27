@@ -126,7 +126,7 @@ function processRequest(metadata, _dataSets, res) {
             json: true
         };
         function responseCallback(err, response, body) {
-            if (!err && response.statusCode == 200) {
+            if (!err && response.statusCode == 200 && body) {
                 var info = JSON.stringify(body);
                 var responseObj = {};
                 if (ds) {

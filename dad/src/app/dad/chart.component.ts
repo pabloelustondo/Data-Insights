@@ -55,21 +55,25 @@ export class DadChart extends DadElement {
                         </div>
                     </div>
                     <div>
-                        <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
+                        <h3 *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</h3>  
+                        
                         <div style="color:black;">  
-                                     
+                            
                            <select *ngIf="chart.reduction" (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
                                     <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
-                           </select>  
-                           by                          
+                           </select> 
+                            
+                           <i *ngIf="chart.reduction">
+                                by                       
+                           </i>
                            <select *ngIf="chart.reduction" (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                                     <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Dimension</option>
                            </select>
                            <br/>
-                           <i>filter by</i>
-                    
-                             <div>
+                           <i>filter by</i>                    
+                            
+                             <div *ngIf="chart.filters">
                                  <dadcrud [options]='chart.filters' [option]='chart.newFilter' (optionChanged)='optionChanged($event)'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
                              </div>
                             
@@ -188,6 +192,14 @@ export class DadChartComponent implements OnInit {
         if(!this.chart.newFilter) {
             this.chart.newFilter = {};
         }
+        if(!this.chart.filters) {
+            this.chart.filters = [];
+        }
+        //
+        // if(!this.chart.reductions) {
+        //     this.chart.reductions = [];
+        // }
+
         if (this.chart.filters && this.chart.filters.length >=0){
             if(v >= 0) {
                 let newFilter = this.chart.filters[v];
@@ -202,6 +214,7 @@ export class DadChartComponent implements OnInit {
             let chartData = this.mapper.map(this.chart, this.data);
             this.mapData = chartData;
             this.changeChartData(chartData);
+            this.changeMapData();
         }
     }
 
@@ -329,12 +342,12 @@ export class DadChartComponent implements OnInit {
     }
 
     changeMapData() {
-            /* this.dadChartDataService.getElementData(this.chart).subscribe(
+             this.dadChartDataService.getElementData(this.chart).subscribe(
                 data => {
                     this.data = data;
                 }
             )
-            */
+
         //TODO: replace nextBus with actual valie
         this.dadChartDataService.getMessages('nextBus').subscribe(message => {
             // parse the message and only refresh if it is for the selected data set

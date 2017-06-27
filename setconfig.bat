@@ -20,3 +20,10 @@ echo configfile %configfile%
 
 echo copying globalconfig for %1   %configfile%
 copy globalconfigs\%configfile% .\globalconfig.json
+
+
+echo "copying files to components"
+for %%x in ("cdl", "dad", "ddb", "dlm", "dos", "dps", "dss", "ida", "oda", "tmm") do (
+    copy .\globalconfig.json .\%%x\globalconfig.json
+)
+

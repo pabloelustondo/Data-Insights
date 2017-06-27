@@ -1,0 +1,19 @@
+{
+  "testingmode":false,
+  "useSSL":false,
+  "useAccessKey":false,
+  "ddb_url":"http://ddb-svc.stage.svc.cluster.local:8000",
+  "dss_url":"http://sotiinsights.cloudapp.net:8023",
+  "dssback_url":"http://sotiinsights.cloudapp.net:8024",
+  "dad_url":"http://sotiinsights.cloudapp.net:8025",
+  "dadback_url":"http://sotiinsights.cloudapp.net:8026",
+  "oda_url":"http://oda-svc.stage.svc.cluster.local:8000",
+  "cdl_url":"http://cdl-svc.stage.svc.cluster.local:8020",
+  "dos_url":"http://sotiinsights.cloudapp.net:5000",
+  "dosback_url":"http://sotiinsights.cloudapp.net:5001",
+  "ida_url":"http://ida-svc.stage.svc.cluster.local:8027",
+  "kafka_url":"zookeeper.stage.svc.cluster.local:2181",
+  "mongodb_url" : "mongodb://cust-mongodb.stage.svc.cluster.local:5494",
+  "dps_url": "http://dps-svc.stage.svc.cluster.local:8022",
+  "tmmback_url": "http://tmmb-svc.stage.svc.cluster.local:8029"
+}
