@@ -25,12 +25,12 @@ export class LogController {
      * Post a unit of data to be stored in the cloud analytics database
      */
 
-    @Response<ResponseModel>('200', 'Data Stored')
+    @Response<ResponseModel>('200', 'OK')
     @Response<ErrorResponseModel>('400', 'Missing Token')
-    @Response<ErrorResponseModel>('400', 'Token verification Failed')
+    @Response<ErrorResponseModel>('401', 'Token verification Failed')
     @Response<ErrorResponseModel>('500', 'Internal Server Error. Please contact SOTI Support')
     @Response<ErrorResponseModel>('400', 'Content-Type incorrect. Content-type must be Application/JSON')
-    @Response<ErrorResponseModel>('400', 'Wrong Input Model')
+    @Response<ErrorResponseModel>('406', 'Wrong Input Model')
     @Post('log')
     @Example<any>({
         headers: {
