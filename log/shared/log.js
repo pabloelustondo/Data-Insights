@@ -18,22 +18,24 @@ var logconfig_1 = require("./logconfig");
  *
  */
 function log(logMessage) {
-    var message = __assign({}, logMessage, { timeStamp: new Date().getTime() });
+    var timeStamp = new Date().getTime();
+    var message = __assign({}, logMessage, { "timeStamp": timeStamp.toString() });
     var url = logconfig_1.default.url;
     axios_1.default.post(url, message)
         .then(function (response) {
-        return (true);
+        console.log(response.data);
     })
         .catch(function (error) {
-        return (false);
+        console.log(error);
     });
+    return timeStamp;
 }
 exports.log = log;
 /**
 *
 * Interpolates the message with the given parameters and returns result back.
-* @example message: "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}",
-* params: { speed: "quick", fox: { color: "brown" }, mammal: ["dog", "cat", "fox"] }
+* @example "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}",
+* "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] }
 *
 * @result 'The quick brown fox jumped over the lazy dog'
 * @param {logging} logMessage The message that would be interpolated.
