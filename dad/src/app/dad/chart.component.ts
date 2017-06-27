@@ -13,12 +13,6 @@ import { DadCrudComponent } from './crud.component';
 declare var d3, c3: any;
 
 export class DadChart extends DadElement {
-
-    constructor(){
-        super();
-        this.elementType = 'chart';
-    }
-
     type: string;
     width?: number;
     height?: number;
@@ -49,30 +43,25 @@ export class DadChart extends DadElement {
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" dropdownMenu>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onEdit('')">Edit</div></button>
-                           <button class="dropdown-item" style="cursor:pointer;"> <div>Select a Data Set</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRawData()">See raw fact data</div></button>
                            <button class="dropdown-item" style="cursor:pointer;"> <div (click)="onRefresh()">Refresh</div></button>
                         </div>
                     </div>
                     <div>
-                        <h3 *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</h3>  
-                        
+                        <div *ngIf="!chart.reduction" style="color:black;">{{chart.name}}</div>  
                         <div style="color:black;">  
-                            
+                                     
                            <select *ngIf="chart.reduction" (change)="selectMetric($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:250px;" >
                                     <option style="color:black;" *ngFor="let met of chart.metrics; let i=index" value="{{i}}" [selected] = "met.name === chart.reduction.metric.name">{{met.name}}</option>
-                           </select> 
-                            
-                           <i *ngIf="chart.reduction">
-                                by                       
-                           </i>
+                           </select>  
+                           by                          
                            <select *ngIf="chart.reduction" (change)="selectDimension($event.target.value)" class="form-control" style="display: inline-block; color:black; font-weight: bold; max-width:150px;" >
                                     <option [id]="chart.id + '_dimension'" style="color:black;" *ngFor="let dim of chart.dimensions; let i=index" value="{{i}}" [selected] = "chart.reduction.dimension.name === dim.name" >{{dim.name}}</option>
                                     <option [id]="chart.id + '_newdimension'" style="color:black;" value="{{-1}}" >Add Dimension</option>
                            </select>
                            <br/>
-                           <i>filter by</i>                    
-                            
+                           <i>filter by</i>
+                    
                              <div *ngIf="chart.filters">
                                  <dadcrud [options]='chart.filters' [option]='chart.newFilter' (optionChanged)='optionChanged($event)'></dadcrud> <!--(optionChanged)='optionChanged($event)'-->
                              </div>
@@ -180,26 +169,68 @@ export class DadChartComponent implements OnInit {
     newAlertAttribute: string;
     newAlertName: string;
     intervalId: any;
-    connection: any;
 
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
                 private dadConfigsService: DadConfigService,
+                private chatService: ChatService,
                 private router: Router, private route: ActivatedRoute) {}
+
+
+                //SPIKE TIME SLIDER
+
+    updateMonitor(){
+        if (this.monitor) this.monitorOn();
+        else this.monitorOff();
+
+        this.message = this.messages[this.slider];
+    }
+
+    monitorOn(){
+        this.messages = [];
+        this.slider = 0;
+        this.connection = this.chatService.getMessages().subscribe(message => {
+            if (message.data){
+                message.data.forEach((data) =>{
+                    message.text = JSON.stringify(data).substr(0,80);
+                    this.messages.unshift(message);
+                    this.message = message;
+
+                    this.data = JSON.parse(JSON.stringify(data[0].data));
+                    this.datas.push(data);
+                    this.drawChart(this.chart, this.data);
+                });
+                while (this.messages.length > this.timeWindow){ this.messages.pop(); }
+             //   while (this.datas.length > this.timeWindow){ this.datas.pop(); }
+            }else {
+                this.messages.push({error:"record with no data"});
+            }
+        })
+    }
+
+    sliderChange(){
+        this.monitor = false;
+        this.monitorOff();
+        if (this.slider < this.datas.length){
+        this.message = this.messages[this.slider];
+        this.data = this.datas[this.slider][0].data;
+        this.drawChart(this.chart, this.data);
+        } else {
+            alert("slider otuside boundaries");
+        }
+    }
+
+    monitorOff() {
+        this.connection.unsubscribe();
+    }
+
+                //SPIKE TIME SLIDER
 
 
     optionChanged(v) {
         if(!this.chart.newFilter) {
             this.chart.newFilter = {};
         }
-        if(!this.chart.filters) {
-            this.chart.filters = [];
-        }
-        //
-        // if(!this.chart.reductions) {
-        //     this.chart.reductions = [];
-        // }
-
         if (this.chart.filters && this.chart.filters.length >=0){
             if(v >= 0) {
                 let newFilter = this.chart.filters[v];
@@ -214,7 +245,6 @@ export class DadChartComponent implements OnInit {
             let chartData = this.mapper.map(this.chart, this.data);
             this.mapData = chartData;
             this.changeChartData(chartData);
-            this.changeMapData();
         }
     }
 
@@ -271,15 +301,9 @@ export class DadChartComponent implements OnInit {
     realDataMonitoring() {
         if (this.chart.intervalRefreshOption === true) {
             let timeInterval = this.chart.intervalTime;
-            /*this.intervalId = setInterval(() => {
+            this.intervalId = setInterval(() => {
                 this.changeMapData();
             }, timeInterval);
-*/
-            this.dadChartDataService.getMessages(this.chart.postBody.from).subscribe(message => {
-                // parse the message and only refresh if it is for the selected data set
-                console.log(message);
-                this.data = message['vehicle'];
-            } );
         }
     }
 
@@ -342,18 +366,11 @@ export class DadChartComponent implements OnInit {
     }
 
     changeMapData() {
-             this.dadChartDataService.getElementData(this.chart).subscribe(
+            this.dadChartDataService.getElementData(this.chart).subscribe(
                 data => {
                     this.data = data;
                 }
             )
-
-        //TODO: replace nextBus with actual valie
-        this.dadChartDataService.getMessages('nextBus').subscribe(message => {
-            // parse the message and only refresh if it is for the selected data set
-            console.log(message);
-            return message;
-        } )
     }
 
     onEdit(message: string): void {
