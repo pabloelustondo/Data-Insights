@@ -37,6 +37,7 @@ Feature: Tenancy Management
       |domainid |code         |
       |test     |administrator|
     Then response code should be 200
+    Given I grab the access token from 'testToken'
     When I make GET request to endpoint "getDataSources"
     Then response code should be 200
 #
