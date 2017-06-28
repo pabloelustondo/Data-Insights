@@ -1,4 +1,5 @@
 {
+  "testingmode":true,
   "id":"dad",
   "name":"DAD Front End",
   "dependencies":["ddb","dss","oda"],
