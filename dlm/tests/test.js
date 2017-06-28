@@ -66,6 +66,7 @@ describe("Test external API service calls", function() {
     });
 
     describe("Call API with invalid api call", function() {
+
         it('calls Api Call service to Nextbus API', function (done){
             // there is a typo in the command filed. (There is an extra 's' in services)
             var req = {
@@ -80,7 +81,10 @@ describe("Test external API service calls", function() {
                     }
                 }
             };
+
+
             ApiCallService.send(req, function(err, result) {
+                console.log("res: " + result.data);
                 expect(result).to.not.be.undefined;
                 expect(result).to.not.have.property('createdAt');
                 expect(result).to.not.have.property('metadata');
@@ -115,10 +119,17 @@ describe("Test IDA API service calls", function() {
 
         });
         it('calls Api Call service to Nextbus API', function (done) {
-            var testData ={
-                body : {
-                'testObj': 'testValue'
+
+            var newBody =  {
+                metadata : {
+                    "dataSetId" : "nextBus"
                 },
+                data : {
+                    "test" : "test Jeff"
+                }
+            };
+            var testData ={
+                body : newBody,
                 'expiringToken': jwtToken3
 
             };
@@ -156,28 +167,32 @@ describe("Test IDA API service calls", function() {
             var testData = {
                 'expiringToken' : jwtToekn2,
                 body : {
-                    'vehicle': [
-                        {
-                            'id': '9128',
-                            'lon': '-79.451569',
-                            'routeTag': '36',
-                            'predictable': 'true',
-                            'dirTag': '36_1_36A',
-                            'heading': '254',
-                            'lat': '43.772282',
-                            'secsSinceReport': '8'
-                        },
-                        {
-                            'id': '9102',
-                            'lon': '-79.4153819',
-                            'routeTag': '36',
-                            'predictable': 'true',
-                            'dirTag': '36_0_36A',
-                            'heading': '355',
-                            'lat': '43.781567',
-                            'secsSinceReport': '6'
-                        }
-                    ]
+                    metadata:{
+                        "dataSetId" : "nextBus"
+                    },
+                 data:{
+                     'vehicle': [
+                     {
+                         'id': '9128',
+                         'lon': '-79.451569',
+                         'routeTag': '36',
+                         'predictable': 'true',
+                         'dirTag': '36_1_36A',
+                         'heading': '254',
+                         'lat': '43.772282',
+                         'secsSinceReport': '8'
+                     },
+                     {
+                         'id': '9102',
+                         'lon': '-79.4153819',
+                         'routeTag': '36',
+                         'predictable': 'true',
+                         'dirTag': '36_0_36A',
+                         'heading': '355',
+                         'lat': '43.781567',
+                         'secsSinceReport': '6'
+                     }
+                 ]}
                 }
             };
             IdaCallService.makeIdaCall(testData, function(err, result) {

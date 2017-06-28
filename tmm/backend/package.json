@@ -11,6 +11,7 @@
     "express": "4.13.3",
     "helmet": "^3.4.1",
     "jasmine-node": "^1.14.5",
+    "kafka-node": "^1.6.2",
     "mongodb": "2.0.46",
     "request": "^2.65.0",
     "request-promise": "^4.2.0",
@@ -21,6 +22,6 @@
     "debugwin": "npm run getConfigs & node %NODE_DEBUG_OPTION% server.js",
     "debugmac": "npm run getConfigs & node $NODE_DEBUG_OPTION server.js",
     "test": "./node_modules/.bin/jasmine-node testing/spec/spec.js",
-    "getConfigs": "cp-cli ./globalconfig_kube.json ./globalconfig.json"
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
   }
 }

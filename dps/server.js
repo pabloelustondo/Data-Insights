@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var bodyParser = require("body-parser");
 var express = require("express");
 var path = require("path");
@@ -11,15 +10,15 @@ var helmet = require("helmet");
 var _ = require('lodash');
 var config = require('./config.json');
 var appconfig = require('./appconfig.json');
-var rp = require("request-promise");
+var rp = require('request-promise');
 var kafka = require('kafka-node');
 var ConsumerGroup = kafka.ConsumerGroup;
 var app = express();
 var mongodb = require('mongodb').MongoClient;
-var rawDataLakeService_1 = require("./services/rawDataLakeService");
-var databaseService_1 = require("./services/databaseService");
-var projection_1 = require("./services/projection");
-var dataService_1 = require("./services/dataService");
+var rawDataLakeService_1 = require('./services/rawDataLakeService');
+var databaseService_1 = require('./services/databaseService');
+var projection_1 = require('./services/projection');
+var dataService_1 = require('./services/dataService');
 var globalconfig = require('./globalconfig.json');
 var path = require('path');
 var cors = require('cors');
@@ -92,7 +91,14 @@ app.post('/data/request', function (req, res) {
 function publishTransactionLog(idaMetadata, clientMetadata, clientData) {
     var tenantId = idaMetadata.tenantId;
     var dataSourceId = idaMetadata.dataSourceId;
-    rawDataLakeService_1.uploadRawData(tenantId, dataSourceId, clientData).then(function (awsResponse) {
+    var data = {
+        idaMetadata: idaMetadata,
+        clientData: {
+            metadata: clientMetadata,
+            data: clientData
+        }
+    };
+    rawDataLakeService_1.uploadRawData(tenantId, dataSourceId, data).then(function (awsResponse) {
         console.log(awsResponse);
     }, function (error) {
         console.log(error);
@@ -135,8 +141,7 @@ function publishCleanedDataToKafka(topic, tenantId, dataSetId, data) {
                     dataSetId: dataSetId,
                     data: data
                 })
-            }
-        ];
+            }];
         producer.send(payloads, function (err, data) {
             console.log(data);
         });
