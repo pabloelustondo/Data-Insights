@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Soti.MCDP.Database;
+using Soti.MCDP.Database.Model;
+using Soti.MCDP.Logger.Model;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Newtonsoft.Json;
-using Soti.MCDP.Database;
-using Soti.MCDP.Database.Model;
+
+// NOTE: For that code to work, you need install System.IdentityModel.Tokens.Jwt package from NuGet (the link includes the latest stable version)
+// Link: https://www.nuget.org/packages/System.IdentityModel.Tokens.Jwt/4.0.2.206221351
 
 namespace Soti.MCDP.DataProcess
 {
@@ -35,13 +39,17 @@ namespace Soti.MCDP.DataProcess
         /// <summary>
         ///     get Unput Data Adapter (Ida) URL.
         /// </summary>
-        private readonly string _idaHandShakeUrl;
+        private readonly string _idaEndpoint;
 
         /// <summary>
         ///     get Unput Data Adapter (Ida) URL.
         /// </summary>
-        private readonly string _idaUrl;
+        private readonly string _idaHandShakeEndpoint;
 
+        /// <summary>
+        ///     get ida Token name in JWT
+        /// </summary>
+        private readonly string _idaTokenName;
         /// <summary>
         ///     get JWT Token Path.
         /// </summary>
@@ -76,6 +84,10 @@ namespace Soti.MCDP.DataProcess
         private int _numberOfConsecutiveDbFailures;
 
         private int _numberOfConsecutiveIdaFailures;
+
+        private Uri _idaHandShakeUrl;
+
+        private Uri _idaUrl;
 
         /// <summary>
         ///     get Expired JWT Token from IDA.
@@ -115,8 +127,11 @@ namespace Soti.MCDP.DataProcess
                     Convert.ToInt32(ConfigurationManager.AppSettings["DBRetryAfterFailureDelay"]);
                 _maxIdaRetryAfterFailureDelay =
                     Convert.ToInt32(ConfigurationManager.AppSettings["IDARetryAfterFailureDelay"]);
-                _idaUrl = ConfigurationManager.AppSettings["IdaUrl"];
-                _idaHandShakeUrl = ConfigurationManager.AppSettings["idaHandShakeUrl"];
+
+                //Endpoint signature
+                _idaEndpoint = ConfigurationManager.AppSettings["idaEndpoint"];
+                _idaHandShakeEndpoint = ConfigurationManager.AppSettings["idaHandShakeEndpoint"];
+                _idaTokenName = ConfigurationManager.AppSettings["idaTokenName"];
 
                 _jwtTokenPath = Path.Combine(Directory.GetCurrentDirectory(),
                     ConfigurationManager.AppSettings["JWTTokenName"]);
@@ -125,13 +140,13 @@ namespace Soti.MCDP.DataProcess
                 _supportedDataTablePath = Path.Combine(Directory.GetCurrentDirectory(),
                     ConfigurationManager.AppSettings["SupportedDataTable"]);
                 _batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["batchSize"]);
-                //LOADING DATABASE PROVIDER
-                Logger.Log(LogSeverity.Info, "BatchSize: " + _batchSize);
+                
+
                 Init();
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -141,16 +156,26 @@ namespace Soti.MCDP.DataProcess
         public void Init()
         {
             try
-            {
-                Logger.Log(LogSeverity.Info, "JWTTokenPath: " + _jwtTokenPath);
-                Logger.Log(LogSeverity.Info, "DataTrackerPath: " + _dataTrackerPath);
-
+            {               
                 if (File.Exists(_jwtTokenPath))
                 {
                     _jwtToken = File.ReadAllText(_jwtTokenPath);
-                    Logger.Log(LogSeverity.Info, "JWTToken: " + _jwtToken);
-                    _expiredJwtToken = HandShakeToIda(_jwtToken);
-                    Logger.Log(LogSeverity.Info, "ExpiredJWTToken: " + _expiredJwtToken);
+                   
+                    //URL validation
+                    if (Uri.TryCreate(DecodedJwtToken(_jwtToken), UriKind.Absolute, out Uri uriResult)
+                            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+                    {
+                        _idaUrl = new Uri(uriResult, _idaEndpoint);
+
+                        _idaHandShakeUrl = new Uri(uriResult, _idaHandShakeEndpoint); 
+
+                        _expiredJwtToken = HandShakeToIda(_jwtToken);
+                    }
+                    else
+                    {
+                        Logger.Logger.Log(LogSeverity.Error, "Invalid IDA Url: " + uriResult);
+                    }
+
                 }
 
                 ExtractDataTracker();
@@ -160,7 +185,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -225,7 +250,7 @@ namespace Soti.MCDP.DataProcess
                     {
                         var count = _deviceStatIntProvider.CheckDeviceStatIntSize();
                         // write to log the success of the operation
-                        Logger.Log(LogSeverity.Info, count + " of DeviceStatInt wait for send.");
+                        Logger.Logger.Log(LogSeverity.Info, count + " of DeviceStatInt wait for send.");
 
                         
                         var idaData = _deviceStatIntProvider.RetrieveDeviceStatIntData(_batchSize);
@@ -241,7 +266,7 @@ namespace Soti.MCDP.DataProcess
                                 // this shouuld go somewhere else later... 
 
                                 // write to log the success of the operation
-                                Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: "
+                                Logger.Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: "
                                     + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte."
                                     + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
                             }
@@ -250,7 +275,7 @@ namespace Soti.MCDP.DataProcess
                                 // this expcetion is due to problems when sending data to input data adapter
                                 _numberOfConsecutiveIdaFailures += 1;
                                 _deviceStatIntProvider.ConfirmStatusData(false);
-                                Logger.Log(LogSeverity.Error, " communicating with input data adapter: " + ex);
+                                Logger.Logger.Log(LogSeverity.Error, " communicating with input data adapter: " + ex);
                             }
                     }
                     catch (Exception eDb)
@@ -258,7 +283,7 @@ namespace Soti.MCDP.DataProcess
                         // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                         _numberOfConsecutiveDbFailures += 1;
 
-                        Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
+                        Logger.Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
                     }
                 }
                 //we only call the database is the number of failures of any type is less than the permitted.
@@ -268,7 +293,7 @@ namespace Soti.MCDP.DataProcess
                     {
                         var count = _deviceStatApplicationProvider.CheckDeviceStatApplicationSize();
                         // write to log the success of the operation
-                        Logger.Log(LogSeverity.Info, count + " of DeviceStatApplication wait for send.");
+                        Logger.Logger.Log(LogSeverity.Info, count + " of DeviceStatApplication wait for send.");
 
 
                         var idaData = _deviceStatApplicationProvider.RetrieveDeviceStatApplicationData(_batchSize);
@@ -284,7 +309,7 @@ namespace Soti.MCDP.DataProcess
                                 // this shouuld go somewhere else later... 
 
                                 // write to log the success of the operation
-                                Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: " 
+                                Logger.Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: " 
                                     + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte." 
                                     + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
                             }
@@ -294,7 +319,7 @@ namespace Soti.MCDP.DataProcess
                                 _numberOfConsecutiveIdaFailures += 1;
                                 _deviceStatApplicationProvider.ConfirmStatusData(false);
                               
-                                Logger.Log(LogSeverity.Error," communicating with input data adapter: " + ex);
+                                Logger.Logger.Log(LogSeverity.Error," communicating with input data adapter: " + ex);
                             }
                     }
                     catch (Exception eDb)
@@ -302,7 +327,7 @@ namespace Soti.MCDP.DataProcess
                         // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                         _numberOfConsecutiveDbFailures += 1;
 
-                        Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
+                        Logger.Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
                     }
                 }
             }
@@ -327,7 +352,7 @@ namespace Soti.MCDP.DataProcess
                     _dBSkippedAfterFailure = 0;
                     _idaSkippedAfterFailure = 0;
                 }
-                Logger.Log(LogSeverity.Info, " Skipping Cycling due to reach maximum retry and failure count.");
+                Logger.Logger.Log(LogSeverity.Info, " Skipping Cycling due to reach maximum retry and failure count.");
             }
 
             _processing = false; // this will enable other attempts to process to go ahead.
@@ -343,7 +368,7 @@ namespace Soti.MCDP.DataProcess
             var json = new StringBuilder();
             json.Append("{\"metadata\": { \"dataSetId\": \"");
             json.Append(tableName);
-            json.Append("\", \"projections\": []},");
+            json.Append("\"},");
             json.Append("\"data\": {");
             json.Append(ida4Data);
             json.Append("}};");
@@ -356,8 +381,8 @@ namespace Soti.MCDP.DataProcess
                 {
                     //client.Headers["x-api-key"] = "blah";
                     client.Headers["x-access-token"] = _expiredJwtToken;
-                    client.Headers["TableName"] = tableName;
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
+
                     ServicePointManager.ServerCertificateValidationCallback +=
                         (sender, certificate, chain, sslPolicyErrors) => true;
 
@@ -369,7 +394,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -389,7 +414,6 @@ namespace Soti.MCDP.DataProcess
                 {
                     //client.Headers["x-api-key"] = "blah";
                     client.Headers["x-access-token"] = token;
-
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     ServicePointManager.ServerCertificateValidationCallback +=
                         (sender, certificate, chain, sslPolicyErrors) => true;
@@ -399,8 +423,29 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
+            return result.session_token;
+        }
+
+        /// <summary>
+        ///     This method is the one that actually send data to the input data adapter
+        /// </summary>
+        /// <param name="token"></param>
+        private string DecodedJwtToken(string token)
+        {
+            dynamic result = string.Empty;
+
+            try
+            {
+                var jwtToken = new JwtSecurityToken(token);
+                return jwtToken.Claims.First(c => c.Type == _idaTokenName).Value;
+            }
+            catch (Exception ex)
+            {
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+            }
+
             return result.session_token;
         }
     }

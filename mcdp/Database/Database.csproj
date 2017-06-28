@@ -52,15 +52,19 @@
     <Compile Include="DeviceStatIntProvider.cs" />
     <Compile Include="IDeviceStatApplicationProvider.cs" />
     <Compile Include="IDeviceStatIntProvider.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="Model\DeviceStatApplication.cs" />
     <Compile Include="Model\DeviceStatInt.cs" />
     <Compile Include="Model\DeviceSyncStatus.cs" />
-    <Compile Include="Model\LogSeverity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCDP\Logger\Logger.csproj">
+      <Project>{7be4ad5a-c0cb-495c-a5f6-d733ea010d2f}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,7 +4,7 @@
 // MVID: 58F23204-ECB2-43C4-9846-23C9C9926FA1
 // Assembly location: D:\BI_May\BI_May08\mcdp\Installer\Installer Files\Database.dll
 
-namespace Soti.MCDP.Database.Model
+namespace Soti.MCDP.Logger.Model
 {
     public static class LogSeverity
     {
