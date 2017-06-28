@@ -92,7 +92,11 @@ app.post('/data/request', function (req, res) {
 function publishTransactionLog(idaMetadata, clientMetadata, clientData) {
     var tenantId = idaMetadata.tenantId;
     var dataSourceId = idaMetadata.dataSourceId;
-    rawDataLakeService_1.uploadRawData(tenantId, dataSourceId, clientData).then(function (awsResponse) {
+    var data = {
+        clientMetadata: clientMetadata,
+        clientData: clientData
+    };
+    rawDataLakeService_1.uploadRawData(tenantId, dataSourceId, data).then(function (awsResponse) {
         console.log(awsResponse);
     }, function (error) {
         console.log(error);

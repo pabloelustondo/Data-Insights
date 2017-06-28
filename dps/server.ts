@@ -135,7 +135,11 @@ function publishTransactionLog (idaMetadata: any, clientMetadata: any, clientDat
 
     let tenantId = idaMetadata.tenantId;
     let dataSourceId = idaMetadata.dataSourceId;
-    uploadRawData(tenantId, dataSourceId, clientData).then(function (awsResponse: any) {
+    let data = {
+        clientMetadata: clientMetadata,
+        clientData : clientData
+    };
+    uploadRawData(tenantId, dataSourceId, data).then(function (awsResponse: any) {
             console.log(awsResponse);
         }, function (error: any) {
             console.log(error);
