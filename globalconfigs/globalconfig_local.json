@@ -14,9 +14,10 @@
   "ida_url":"http://localhost:8027",
   "tmm_url":"http://localhost:8028",
   "tmmback_url":"http://localhost:8029",
+  "tmmback_url":"http://localhost:8029",
   "dps_url":"http://localhost:8002",
   "sml_url":"http://localhost:8031",
   "log_url":"http://localhost:8032",
   "kafka_url":"localhost:2181",
-  "mongodb_url" : "mongodb://localhost:27017/soti"
+  "mongodb_url" : "mongodb://localhost:27017"
 }

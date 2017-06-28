@@ -4,10 +4,11 @@
   "description": "socket.io server",
   "scripts":{
     "start": "node server.js",
-    "startdmac": "node $NODE_DEBUG_OPTION server.js"
+    "startdmac": "node $NODE_DEBUG_OPTION server.js",
+    "startdwin": "node %NODE_DEBUG_OPTION% server.js"
   },
   "dependencies": {
-    "express": "^4.13.4",
-    "socket.io": "^1.4.6"
+    "express": "^4.13.4",  "socket.io": "^1.4.6"
+
   }
 }

@@ -7,6 +7,7 @@ var ManageApiConfigurations = require ('./ManageApiConfigurations');
 var request = require('request');
 var config = require('./../appconfig.json');
 
+
 ApiCallService = {
     send: function(req,  next){
         request({
@@ -26,18 +27,35 @@ ApiCallService = {
                         return new Error('data source not found');
                     }
 
+                    //validate body
+                    //and reformat into newBody
+                    var newBody;
+                    try{
+                        var parseBody = JSON.parse(JSON.stringify(body));
+
+                        if(parseBody && typeof parseBody === "object"){
+                            newBody =  {
+                                metadata : {
+                                    "dataSetId" : dataSource.dataSetId
+                                },
+                                data : parseBody
+                            };
+                        }
+                    }catch (e){
+                        console.log("invalid data format");
+                    }
+
+
                     if (dataSource) {
                         // received the data source so let's create a request
                         var idaRequest = {
                             expiringToken: dataSource.expiringToken,
-                            body: body
+                            body: newBody
                         };
                         // make the request
                         IdaCallService.makeIdaCall(idaRequest, next);
-
                     }
-                }
-                );
+                });
             }
         });
     },
@@ -48,6 +66,5 @@ ApiCallService = {
     }
 
 };
-
 
 module.exports = ApiCallService;
