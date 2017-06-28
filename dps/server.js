@@ -93,8 +93,11 @@ function publishTransactionLog(idaMetadata, clientMetadata, clientData) {
     var tenantId = idaMetadata.tenantId;
     var dataSourceId = idaMetadata.dataSourceId;
     var data = {
-        clientMetadata: clientMetadata,
-        clientData: clientData
+        idaMetadata: idaMetadata,
+        clientData: {
+            metadata: clientMetadata,
+            data: clientData
+        }
     };
     rawDataLakeService_1.uploadRawData(tenantId, dataSourceId, data).then(function (awsResponse) {
         console.log(awsResponse);
