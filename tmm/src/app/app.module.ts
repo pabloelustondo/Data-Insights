@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 import { smlTenantMetadataEditor } from './components/layout/smlTenantMetadataEditor/smlTenantMetadataEditor.component';
 import { smlDataSourceEditor } from './smlDataSourceEditor/smlDataSourceEditor';
 import { JsonEditorComponent } from 'ng2-jsoneditor';
-import {TmmConfigService} from './components/layout/smlTenantMetadataEditor/tmmconfig.service';
+import { TmmConfigService } from './components/layout/smlTenantMetadataEditor/tmmconfig.service';
 import { RouterModule } from "@angular/router";
 import { InvalidResourceComponent } from './components/invalid-resource/invalid-resource.component';
+import { smlDataSourceOverview } from './components/smlDataSourceOverview/smlDataSourceOverview.component';
 
 @NgModule({
   declarations: [
@@ -16,17 +17,21 @@ import { InvalidResourceComponent } from './components/invalid-resource/invalid-
     smlTenantMetadataEditor,
     smlDataSourceEditor,
     JsonEditorComponent,
-    InvalidResourceComponent
+    InvalidResourceComponent,
+    smlDataSourceOverview
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot ([{
-      path: ':tenantId', component: smlTenantMetadataEditor
-    }, {
-      path: '**', component: InvalidResourceComponent
-    }])
+    RouterModule.forRoot ([
+      {
+        path: ':tenantId', component: smlTenantMetadataEditor
+      }, {
+        path: 'editDataSource/:tenantId', component: smlDataSourceOverview
+      }, {
+      path: '**', component: InvalidResourceComponent,
+      }])
   ],
   bootstrap: [AppComponent],
   providers: [TmmConfigService]
