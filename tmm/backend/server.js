@@ -153,6 +153,11 @@ app.post('/tenant/:tenantid', function(req,res){
     });
 });
 
+app.post('/tenant/dev/:tenantid', function (req,res) {
+  //TODO: push to DDB
+  console.log(req.body);
+  res.send(req.body);
+});
 
 app.delete('/tenant/:tenantid', function(req,res){
 

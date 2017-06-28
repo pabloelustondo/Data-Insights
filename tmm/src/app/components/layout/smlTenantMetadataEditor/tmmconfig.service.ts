@@ -52,4 +52,8 @@ export class TmmConfigService {
       return Promise.resolve(smlTenantMetadataSample);
     }
   }
+
+  public insertDataSourceByTenantId(tenantId, inputValues) {
+    return this.http.post(globalConfig['tmmback_url'] + '/tenant/dev/' + tenantId, inputValues).toPromise();
+  }
 }
