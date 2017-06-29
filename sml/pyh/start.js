@@ -29902,7 +29902,7 @@ var spawn = require('child_process').spawn,
 	"    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
 	"    data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
 	"    data.sort_index(level=1, inplace=True)\n"+
-            "    print(data.to_json(orient='records'))",
+            "    print(data.groupby(level=0, sort=False)['intvalue'].apply(list).to_json())",
     arg2 = "arg2",
     arg3 = "arg3",
     py    = spawn('python', ['compute_input.py', arg1, arg2, arg3] ),
@@ -29922,14 +29922,16 @@ py.stdout.on('end', function(){
         dataout2 = JSON.parse(dataout);
         console.log('NODE parsed the json');
         console.log('Will Show First Ten');
-		max=10
-		if(dataout2.length<10)
-			max = dataout2.length
-        for(var i=0; i<max; i++){
-            console.log("StatType: " + dataout2[i]["StatType"]);
+		max=100;
+		if(dataout2.length<100)
+			max = dataout2.length;
+		console.log(dataout2);
+        //for(var i=0; i<max; i++){
+			
+/*             console.log("StatType: " + dataout2[i]["StatType"]);
             console.log("_id: " + dataout2[i]["_id"]);
-            console.log("intvalue: " + dataout2[i]["intvalue"]);
-        }
+            console.log("intvalue: " + dataout2[i]["intvalue"]); */
+        //}
     } catch(e){
         console.log("ERRROR: Cannot parse exception:" + e);
     }
