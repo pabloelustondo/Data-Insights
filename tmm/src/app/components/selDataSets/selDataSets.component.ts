@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TmmConfigService } from "../layout/smlTenantMetadataEditor/tmmconfig.service";
 import {
   smlTenantMetadataEmpty,
@@ -26,7 +26,8 @@ export class selDataSetsComponent implements OnInit {
   index: number = 0;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private tmmConfigService: TmmConfigService ) { }
+              private tmmConfigService: TmmConfigService,
+              private router: Router) { }
 
   ngOnInit() {
     this.getTenantMetadata();
@@ -40,6 +41,10 @@ export class selDataSetsComponent implements OnInit {
     } else {
       this.enrollStatus = false;
     }
+  }
+
+  redirect() {
+    this.router.navigate(['/editDataSource/' + this.tenantMetadata.tenantId]);
   }
 
   getTenantMetadata() {
