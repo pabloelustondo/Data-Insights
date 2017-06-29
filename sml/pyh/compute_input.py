@@ -1,6 +1,7 @@
 ## compute_input.py
 
 import sys, json, numpy as np
+import pandas as pd
 
 #Read data from stdin
 def read_in(lines):
@@ -9,28 +10,32 @@ def read_in(lines):
 
 def main():
 
-    print("Running Python")
+    #print("Running Python")
 
-    print("This is the name of the script: ", sys.argv[0])
-    print("Number of arguments: ", len(sys.argv))
-    print("The arguments are: " , str(sys.argv))
+    #print("This is the name of the script: ", sys.argv[0])
+    #print("This is the name of the script: ", sys.argv[1])
+    #print("This is the name of the script: ", sys.argv[2])
+
+
+    code = sys.argv[1]
+    exec(code)
+
 
     #get our data as an array from read_in()
     #lines = [1,2,3,4]
 
+
+
     morelines = sys.stdin.readline();
-    print("THIS IS WhAT I GET "+morelines)
+
+
+
     jlist = json.loads(morelines)
-    #create a numpy array
-    print(jlist)
 
-    np_lines = np.array(jlist)
+    data = pd.DataFrame(jlist)
 
-    #use numpys sum method to find sum of all elements in the array
-    lines_sum = np.sum(np_lines)
+    f(data.to_json(orient='records'))
 
-    #return the sum to the output stream
-    print(lines_sum)
 
 #start process
 if __name__ == '__main__':
