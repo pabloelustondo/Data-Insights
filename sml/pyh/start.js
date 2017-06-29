@@ -29902,15 +29902,30 @@ var spawn = require('child_process').spawn,
     arg3 = "arg3",
     py    = spawn('python', ['compute_input.py', arg1, arg2, arg3] ),
     data = json,
-    dataString = '';
+    dataout = '';
+
+
+var dataout2;
 
 py.stdout.on('data', function(data){
-    console.log('NODE Got Data: ',data.toString());
-    dataString += data.toString();
+    dataout += data.toString();
 });
 
 py.stdout.on('end', function(){
-    console.log('NODE Got End',dataString);
+    console.log('NODE Got End');
+    try {
+        dataout2 = JSON.parse(dataout);
+        console.log('NODE parsed the json');
+        console.log('Will Show First Ten');
+        for(var i=0; i<10; i++){
+            console.log("devid: " + dataout2[i]["devid"]);
+            console.log("devid: " + dataout2[i]["time_stamp"]);
+            console.log("devid: " + dataout2[i]["intvalue"]);
+        }
+    } catch(e){
+        console.log("ERRROR: Cannot parse exception:" + e);
+    }
+
 });
 py.stdin.write(JSON.stringify(data));
 py.stdin.end();

@@ -34,7 +34,11 @@ def main():
 
     data = pd.DataFrame(jlist)
 
-    f(data.to_json(orient='records'))
+    datajson = data.to_json(orient='records')
+
+    dataout = json.loads(datajson)
+
+    print(datajson)
 
 
 #start process
