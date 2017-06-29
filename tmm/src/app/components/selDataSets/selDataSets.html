@@ -13,10 +13,10 @@
                 <a class="btn btn-primary btn-lg" role="button" routerLink="/editDataSource/{{tenantMetadata.tenantId}}">Show Data Sources</a>
                 <div *ngIf="enrollStatus">
                     <br>
-                    <p> Select Type: {{dataSourceType}}</p>
+                    <p> Select Type: {{ dataSourceType }}</p>
                     <tr>
                         <td>
-                            <select [(ngModel)]="dataSourceType">
+                            <select (change)="dataSourceTypeSelect(dataSourceType)" [(ngModel)]="dataSourceType">
                             <option selected disabled>Select Your Type</option>
                             <option style="color:black;" *ngFor="let option of options">{{option.option}}</option>
                             </select>
@@ -65,8 +65,7 @@
                         <table>
                             <tr>
                                 <td style="width: 200px"> <label>Data source label: </label>  </td>
-                                <td style="width: 300px"><input #agentLabel id="agentLabel" style="width:300px" placeholder="Enter preferred agent name. (Max 16 characters)"
-                                    type="string" maxlength="16"></td>
+                                <td style="width: 300px"><input #agentLabel id="agentLabel" style="width:300px" placeholder="Enter preferred agent name. (Max 16 characters)" type="string" maxlength="16"></td>
                             </tr>
                             <tr>
                                 <td> <button type="submit" class="btn btn-success" (click)="addSource()">Add Source</button></td>
@@ -81,7 +80,12 @@
             <div class="col">
                 <h3 id="listheader">List of Your Data Sets Definition</h3>
                 <div class="list-group" *ngFor="let dataSet of tenantMetadata.dataSets">
-                    <a id="listItemsChoose" class="list-group-item" (click)=editorOption(dataSet.id) [id]="dataSet.id">{{ dataSet.name }}</a>
+                    <label class="custom-control" [style.custom-radio]="!checkboxTrue" [style.custom-checkbox]="checkboxTrue" (click)=editorOption(dataSet.id)>
+                        <input *ngIf="checkboxTrue"  class="custom-control-input" type="checkbox" name="dataSet" value="dataSet.id">
+                        <input *ngIf="!checkboxTrue" class="custom-control-input" type="radio"   name="dataSet" value="dataSet.id">
+                        <span class="custom-control-indicator"></span>
+                        <a id="listItemsChoose" class="list-group-item"  [id]="dataSet.id">{{ dataSet.name }}</a>
+                    </label>
                 </div>
             </div>
             <div class="col">

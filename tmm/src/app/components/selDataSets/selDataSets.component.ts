@@ -18,7 +18,7 @@ export class selDataSetsComponent implements OnInit {
   enrollStatus: boolean;
   dataSourceType: DataSourceTypeOptions;
   options: any[] = [{'option': 'MCDP'}, {'option': 'API'}, {'option': 'Other...'}];
-
+  checkboxTrue: boolean = false;
 
   tenantMetadata: any = smlTenantMetadataSample;
   selectedOption: any ={};
@@ -35,7 +35,6 @@ export class selDataSetsComponent implements OnInit {
 
   showAddSource() {
     console.log('enter show add source');
-
     if (!this.enrollStatus) {
       this.enrollStatus = true;
     } else {
@@ -77,11 +76,11 @@ export class selDataSetsComponent implements OnInit {
   editorOption(id) {
     this.index = 0;
     let found = false;
+    
     this.tenantMetadata.dataSets.forEach(item => {
       if (item.id === id) {
         this.selectedOption = item;
         this.selectedOption['index'] = this.index;
-        console.log(this.index);
         found = true;
       }
       if (!found) {
@@ -152,6 +151,9 @@ export class selDataSetsComponent implements OnInit {
         }
       });
     });
+  }
 
+  dataSourceTypeSelect(dataType) {
+   this.checkboxTrue = (dataType == 'MCDP'); 
   }
 }
