@@ -1,4 +1,4 @@
-  
+
     <div class="container-fluid">
         <div class="row">
             <div class="col">
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col">
                 <a class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source</a>
-                <a class="btn btn-primary btn-lg" role="button" (click)="showDataSources()">Show Data Sources</a>
+                <a class="btn btn-primary btn-lg" role="button" routerLink="/editDataSource/{{tenantMetadata.tenantId}}">Show Data Sources</a>
                 <div *ngIf="enrollStatus">
                     <br>
                     <p> Select Type: {{dataSourceType}}</p>

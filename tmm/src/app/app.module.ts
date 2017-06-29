@@ -29,12 +29,12 @@ import {selDataSetsComponent} from "./components/selDataSets/selDataSets.compone
     RouterModule.forRoot ([
       {
         path: ':tenantId', component: smlTenantMetadataEditor
-      }, { 
+      }, {
         path: 'dev/:tenantId', component: selDataSetsComponent
       }, {
         path: 'editDataSource/:tenantId', component: smlDataSourceOverview
       },  {
-      path: '**', component: InvalidResourceComponent,
+        path: '**', component: InvalidResourceComponent,
       }])
   ],
   bootstrap: [AppComponent],
