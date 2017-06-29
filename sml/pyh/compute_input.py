@@ -22,7 +22,7 @@ def main():
 
 
     #get our data as an array from read_in()
-    #lines = [1,2,3,4]
+    lines = [1,2,3,4]
 
 
 
@@ -31,6 +31,7 @@ def main():
 
 
     jlist = json.loads(morelines)
+	
 
     data = pd.DataFrame(jlist)
 
@@ -38,7 +39,7 @@ def main():
 
     dataout = json.loads(datajson)
 
-    print(datajson)
+    f(data)
 
 
 #start process

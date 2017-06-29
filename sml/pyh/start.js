@@ -29896,8 +29896,13 @@ var json = [{
     }];
 
 var spawn = require('child_process').spawn,
-    arg1 = "def f(x):" +
-            "\n    print(x)   ",
+    arg1 = "def f(data):\n" +
+	"    cols = data.select_dtypes(['object'])\n"+
+	"    data[cols.columns] = cols.apply(lambda x: x.str.strip())\n"+
+	"    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
+	"    data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
+	"    data.sort_index(level=1, inplace=True)\n"+
+            "    print(data.to_json(orient='records'))",
     arg2 = "arg2",
     arg3 = "arg3",
     py    = spawn('python', ['compute_input.py', arg1, arg2, arg3] ),
@@ -29917,10 +29922,13 @@ py.stdout.on('end', function(){
         dataout2 = JSON.parse(dataout);
         console.log('NODE parsed the json');
         console.log('Will Show First Ten');
-        for(var i=0; i<10; i++){
-            console.log("devid: " + dataout2[i]["devid"]);
-            console.log("devid: " + dataout2[i]["time_stamp"]);
-            console.log("devid: " + dataout2[i]["intvalue"]);
+		max=10
+		if(dataout2.length<10)
+			max = dataout2.length
+        for(var i=0; i<max; i++){
+            console.log("StatType: " + dataout2[i]["StatType"]);
+            console.log("_id: " + dataout2[i]["_id"]);
+            console.log("intvalue: " + dataout2[i]["intvalue"]);
         }
     } catch(e){
         console.log("ERRROR: Cannot parse exception:" + e);
