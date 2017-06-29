@@ -9,8 +9,8 @@ import { JsonEditorComponent } from 'ng2-jsoneditor';
 import { TmmConfigService } from './components/layout/smlTenantMetadataEditor/tmmconfig.service';
 import { RouterModule } from "@angular/router";
 import { InvalidResourceComponent } from './components/invalid-resource/invalid-resource.component';
-//import { smlDataSourceOverview } from './smlDataSourceOverview/smlDataSourceOverview.component';
-import {selDataSetsComponent} from "app/components/selDataSets/selDataSets.component";
+import { smlDataSourceOverview } from './components/smlDataSourceOverview/smlDataSourceOverview.component';
+import {selDataSetsComponent} from "./components/selDataSets/selDataSets.component";
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import {selDataSetsComponent} from "app/components/selDataSets/selDataSets.compo
     smlDataSourceEditor,
     JsonEditorComponent,
     InvalidResourceComponent,
- //   smlDataSourceOverview,
+    smlDataSourceOverview,
     selDataSetsComponent
   ],
   imports: [
@@ -29,9 +29,11 @@ import {selDataSetsComponent} from "app/components/selDataSets/selDataSets.compo
     RouterModule.forRoot ([
       {
         path: ':tenantId', component: smlTenantMetadataEditor
-      }, {
+      }, { 
         path: 'dev/:tenantId', component: selDataSetsComponent
       }, {
+        path: 'editDataSource/:tenantId', component: smlDataSourceOverview
+      },  {
       path: '**', component: InvalidResourceComponent,
       }])
   ],
