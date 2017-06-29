@@ -1,11 +1,11 @@
 ﻿using Microsoft.Win32;
+using Soti.MCDP.Logger.Model;
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Soti.MCDP.Database.Model;
 
 namespace Soti.MCDP.Database
 {
@@ -97,7 +97,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
                 return "";
             }
         }
@@ -105,7 +105,7 @@ namespace Soti.MCDP.Database
         private static string LoadConnectionString(string path)
         {
             if (path == null)  
-                Logger.Log(LogSeverity.Error, " Error Load ConnectionString path is null ");
+                Logger.Logger.Log(LogSeverity.Error, " Error Load ConnectionString path is null ");
             try
             {
                 var config = GetConfiguration(path);
@@ -115,12 +115,12 @@ namespace Soti.MCDP.Database
                 if (settings != null)
                     return settings.ConnectionString;
                 
-                Logger.Log(LogSeverity.Error, "Database section does not have an associated file!");
+                Logger.Logger.Log(LogSeverity.Error, "Database section does not have an associated file!");
                 return "";
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
                 return "";
             }
         }
@@ -174,7 +174,7 @@ namespace Soti.MCDP.Database
             var logMessage = DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  =>  ";
 
             if (path == null)
-                Logger.Log(LogSeverity.Error, " Error Load ConnectionString path is null ");
+                Logger.Logger.Log(LogSeverity.Error, " Error Load ConnectionString path is null ");
 
             var config = GetConfiguration(path);
 
@@ -226,12 +226,12 @@ namespace Soti.MCDP.Database
                 config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 
                 if (!config.HasFile)
-                    Logger.Log(LogSeverity.Error, " DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
+                    Logger.Logger.Log(LogSeverity.Error, " DatabaseSection.GetConfiguration - Deployment Server and Management Service do not have config files!");
                 return config;
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
                 return null;
             }
         }     

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.IO;
 
-namespace Soti.MCDP.Database
+namespace Soti.MCDP.Logger
 {
     public static class Logger
     {

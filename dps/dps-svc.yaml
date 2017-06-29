@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dps-svc
-  namespace: demo
+  namespace: stage
   labels:
     app: dps-svc
 spec:
