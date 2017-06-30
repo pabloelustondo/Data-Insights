@@ -16,6 +16,13 @@ def main():
     #print("This is the name of the script: ", sys.argv[1])
     #print("This is the name of the script: ", sys.argv[2])
 
+    #parameters
+    #need to set parameters... will hardcode for now... btu this needs to come in another argument
+    #i think the idea is to create a string that will ge texecuted
+
+    start = ''
+    shift = 0
+    threshold = 10
 
     code = sys.argv[1]
     exec(code)

@@ -29908,7 +29908,19 @@ function pyTransformation(){
                 data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
                 data.set_index(['devid', 'time_stamp'], inplace=True) 
                 data.sort_index(level=1, inplace=True)
-                dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))                
+                dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))
+                threshold = 10
+                def check(line): 
+                    oldval = 100
+                    for i in line:
+                        if (i > oldval) | (i < threshold):
+                            return 1
+                            break
+                        else: 
+                            oldval = i
+                        return 0
+                discharged = dischargedGroup.apply(check)
+                        
                     `
 
         /*
