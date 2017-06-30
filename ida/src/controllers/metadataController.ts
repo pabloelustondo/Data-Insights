@@ -44,7 +44,7 @@ export class MetadataController {
         url: 'https://localhost:3010/metadata/:tenantId',
 
     })
-    public async Create(tenantId: string, @Request() express: express.Request): Promise<ResponseModel> {
+    public async Create(@Request() express: express.Request): Promise<ResponseModel> {
 
 
         let req = express;
@@ -85,10 +85,10 @@ export class MetadataController {
 
                 if (jwtDecodedToken) {
                     let promise = new Promise(function (resolve, reject) {
-                        let xqs = {tenantId: tenantId};
+                        let xqs = {tenantId: jwtDecodedToken.tenantid};
                         let server = require('../server');
                         let appConfig = server.appconfig;
-                        const xurl = appConfig['dps_url'] + '/getMetadata/' + tenantId;
+                        const xurl = appConfig['dps_url'] + '/getMetadata/' + jwtDecodedToken.tenantid;
 
                         const options: rp.OptionsWithUrl = {
                             headers: {
@@ -123,7 +123,7 @@ export class MetadataController {
                         const user: any = {
                             createdAt: new Date(),
                             metadata: mData,
-                            data: 'OK'
+                            data: serverResonse
                         };
                         resolve(user);
                     } else {

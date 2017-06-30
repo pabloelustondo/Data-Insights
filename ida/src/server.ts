@@ -1,5 +1,7 @@
 import './controllers/getAuthorizationToken';
 import './controllers/finalUploadEndpoint';
+import './controllers/metadataController';
+import './controllers/logController';
 
 import * as winston from 'winston';
 
