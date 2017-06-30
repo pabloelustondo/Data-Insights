@@ -10,20 +10,27 @@ import { TmmConfigService } from '../layout/smlTenantMetadataEditor/tmmconfig.se
         <h1 class="text-center"> Data Source for {{ tenantMetadata.tenantId }} </h1>
         <hr />
         <div *ngIf="editDataSourceForm">
+          <form #editedForm>
             <div class="row">
                 <div class="col-4">
                     <label> Name
-                        <input type="text" value="{{ editDataSourceObject.name }}">
+                        <input name="editedName" type="text" value="{{ editDataSourceObject.name }}">
                     </label>
                 </div>
                 <div class="col-4">
                     <label for> Type
-                        <input type="text" #editDataSourceObject.type value="{{ editDataSourceObject.type }}">
+                        <input name="editedType" type="text" #editDataSourceObject.type value="{{ editDataSourceObject.type }}">
                     </label>
                 </div> 
                 <div class="col-4">
                     <label> Active
-                        <select> 
+                      <select name="activeStatusSelection" id="statusSelection" [(ngModel)]="selectedStatus">
+                      <option *ngFor="let option of statusOptions"
+                              [value]="option" >
+                          {{option}}
+                        </option>
+                      </select>
+                        <select name="editedActive"> 
                             <option value="true" [selected]="editDataSourceObject.active == true"> True</option>
                             <option value="false" [selected]="editDataSourceObject.active == false">False</option>
                         </select>
@@ -32,11 +39,14 @@ import { TmmConfigService } from '../layout/smlTenantMetadataEditor/tmmconfig.se
             </div>
             <h2>Properties</h2>
             <div class="row">    
-                <div class="col-4" *ngFor="let prop of editDataSourceObject.properties">
+                <div name="editedProp" class="col-4" *ngFor="let prop of editDataSourceObject.properties">
                     <input type="text" value="{{ prop }}">                 
                 </div>
             </div>
             <button class="btn btn-primary" (click)="addNewProperty()">Add Another Property</button>
+            <button class="btn btn-primanry" (click)="saveEditedItem(editedForm)">Save</button>
+          </form>
+        
         <hr />
         </div>
         <div class="row">
@@ -95,11 +105,14 @@ export class smlDataSourceOverview implements OnInit {
     tenantMetadata: any =  smlTenantMetadataSample;
     editDataSourceObject: any;
     editDataSourceForm: boolean = false;
-
+    bools: any = [true, false];
+    statusOptions: string[] = ['enable', 'disable'];
+    selectedStatus: string;
     constructor(
         private activatedRoute: ActivatedRoute,
         private tmmConfigService: TmmConfigService) {
             this.getTenantMetadata();
+            this.selectedStatus = '';
     }
 
     ngOnInit() {
@@ -131,10 +144,19 @@ export class smlDataSourceOverview implements OnInit {
   EditDataSourceObject(dataSource) {
       this.editDataSourceObject = dataSource;
       this.editDataSourceForm = true;
-      console.log(dataSource);
   }
 
   addNewProperty() {
       this.editDataSourceObject.properties.push('');
   }
+
+  saveEditedItem(editedForm) {
+      console.log(editedForm.getElementsByTagName('input'));
+      console.log(this.selectedStatus);
+  }
+
+  callType(value) {
+    console.log(value);
+  }
 }
+
