@@ -29901,8 +29901,7 @@ function pyTransformation(){
 
         var spawn = require('child_process').spawn;
 
-
-        var arg1 = `def f(data):
+        var code =`
                 cols = data.select_dtypes(['object'])
                 data[cols.columns] = cols.apply(lambda x: x.str.strip())
                 data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
@@ -29922,6 +29921,8 @@ function pyTransformation(){
                 discharged = dischargedGroup.apply(check)
                         
                     `
+
+        var arg1 = "def f(data): \n    "+code;
 
         /*
 
