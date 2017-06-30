@@ -21,9 +21,15 @@ export class SmlElement {
 export class SmlDataSource extends SmlElement {
  type: string;
  active: boolean;
- properties: any[];
+ properties: SmlDataSourceProperty[];
  activationKey: string;
  status?: string;
+ dataSets? : string[];
+}
+
+export class SmlDataSourceProperty {
+  inputName: string;
+  inputValue: string;
 }
 
 export class SmlUsers extends SmlElement {

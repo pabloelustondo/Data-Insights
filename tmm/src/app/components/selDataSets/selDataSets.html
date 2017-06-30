@@ -43,15 +43,15 @@
                             <table>
                                 <tr>
                                     <td style="width: 200px"> <label>Data source Name: </label>  </td>
-                                    <td style="width: 300px"><input #nbname id="nextBusName" style="width:300px" placeholder="Enter preferred agent name"></td>
+                                    <td style="width: 300px"><input #nbname id="apiName" style="width:300px" placeholder="Enter preferred agent name"></td>
                                 </tr>
                                 <tr>
                                     <td style="width: 200px"> <label>Data source URL: </label>  </td>
-                                    <td style="width: 300px"><input #nburl id="nextBusURL" style="width:300px" placeholder="Enter agent URL" type="url"></td>
+                                    <td style="width: 300px"><input #nburl id="apiUrl" style="width:300px" placeholder="Enter agent URL" type="url"></td>
                                 </tr>
                                 <tr>
                                     <td style="width: 200px"> <label>Polling interval (seconds): </label>  </td>
-                                    <td style="width: 300px"><input type="number" #nbfrequency id="nextBusFrequency" style="width:300px" placeholder="Enter api polling in seconds"></td>
+                                    <td style="width: 300px"><input type="number" #nbfrequency id="apiFrequency" style="width:300px" placeholder="Enter api polling in seconds"></td>
                                 </tr>
                                 <tr>
                                     <td> <button class="btn btn-success" (click)="addSource(nbForm)">Add Source</button></td>
@@ -60,7 +60,7 @@
                         </form>
                     </div>
                     <div *ngIf="dataSourceType === 'Other...'">
-                        <div>Add new data source for tenant {{decodedJwt["tenantid"]}} </div>
+                        <div>Add new data source for tenant {{tenantId}} </div>
                         <form #otherForm (submit)="addSource(otherForm)">
                         <table>
                             <tr>

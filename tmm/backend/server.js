@@ -157,13 +157,11 @@ app.post('/tenant/:tenantid', function(req,res){
 
 app.post('/tenant/dev/:tenantid', function (req,res) {
   //TODO: push to DDB
+  var dataSource = req.body.dataSources[req.body.dataSources.length - 1]; // get the recently added data Source
 
-  var dataSourceType = req.body.dataSourceType;
-  var dataSourceData = req.body.data;
   console.log(req.body);
 
-  //var dataSource = req.body.dataSources[req.body.dataSources.length - 1]; // get the recently added data Source
-  var dataSource = req.body;
+  //var dataSource = req.body;
 
   var payloads = [{ topic: 'log', messages: `{"producer": "TMM", "message": "${req.params.tenantid}", "params": {"tenantId": "${req.params.tenantid}"}}`, partition: 0 }];
   console.log ( appconfig.dssback_url + "/activationKey/" + req.params.tenantid + "/" + dataSource.id);
@@ -190,7 +188,7 @@ app.post('/tenant/dev/:tenantid', function (req,res) {
 
         rp(ddbOptions).then (function (ddbResponse){
           if (ddbResponse) {
-            res.status(200).send('OK after calling DDB');
+            res.status(200).send(ddbResponse);
           }
         })
       })

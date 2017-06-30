@@ -128,10 +128,7 @@ export class smlDataSourceOverview implements OnInit {
             let response = JSON.parse(data._body);
 
             if (response.length != 0) {
-              this.tenantMetadata.tenantId = params['tenantId'];
-              this.tenantMetadata.dataSets = response[0].dataSets;
-              this.tenantMetadata.name = response[0].name;
-              // this.tenantMetadata = response[0];
+              this.tenantMetadata = response[0];
             }
           } catch (err) {
             console.log(err);
