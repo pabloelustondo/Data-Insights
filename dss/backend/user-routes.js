@@ -399,7 +399,10 @@ app.post('/registerDataSource', function (req, res) {
         res.status(err.status).send(err.message);
       }
       if (result) {
-        res.status(result.status).send(result.message);
+        var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "'+dataSource.tenantId+'", "message": "Registered Data Source: "'+JSON.stringify(dataSource)+', "Priority": "Info"}', partition: 0 }];
+        producer.send(payloads, function () {
+          res.status(result.status).send(result.message);
+        });
       }
     });
   }
@@ -566,26 +569,26 @@ app.post('/enrollments', function(req, res) {
                     tokenpayload.companyphone = req.body.companyPhone;
 
                     var token = createToken(tokenpayload);
-
-                    enrollments.push(
-                      {
-                        'accountId': req.body.accountid,
-                        'mcurl': req.body.mcurl,
-                        'tenantId': req.body.domainid,
-                        'domainId': req.body.domainid,
-                        'Status': 'new',
-                        "clientid": req.body.apikey,
-                        "clientsecret": encodedBase64ApiClientSecret,
-                        "companyName": req.body.companyName,
-                        "companyAddress": req.body.companyAddress,
-                        "companyPhone": req.body.companyPhone
-                      }
-                    );
+                    var tenantInfo = {
+                      'accountId': req.body.accountid,
+                      'mcurl': req.body.mcurl,
+                      'tenantId': req.body.domainid,
+                      'domainId': req.body.domainid,
+                      'Status': 'new',
+                      "clientid": req.body.apikey,
+                      "clientsecret": encodedBase64ApiClientSecret,
+                      "companyName": req.body.companyName,
+                      "companyAddress": req.body.companyAddress,
+                      "companyPhone": req.body.companyPhone
+                    };
+                    enrollments.push(tenantInfo);
 
                     sendEmail2(tokenpayload, token);
-
-                    res.status(200).send({
-                      id_token: token
+                    var payloads = [{ topic: 'log', messages: '{"Classifier": "Create_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "New tenant enrolled: '+JSON.stringify(tenantInfo)+'", "Priority": "Info"}', partition: 0 }];
+                    producer.send(payloads, function (err, data) {
+                      res.status(200).send({
+                        id_token: token
+                      });
                     });
                   }
                 });
@@ -730,7 +733,8 @@ app.get('/confirm', function(req, res){
 app.post('/deleteDataSource', function (req, res) {
 
   var token = req.headers['x-access-token'];
-
+  var tenantId = '';
+  var agentId = '';
   if(!token){
     return res.status(400).send ( ErrorMsg.login_failed_authentication);
   }
@@ -741,6 +745,7 @@ app.post('/deleteDataSource', function (req, res) {
           return res.status(400).send (ErrorMsg.token_verification_failed);
         }
         if (success) {
+          tenantId = success.tenantId;
 
           if (req.body.dataSourceType === 'NextBus') {
             NextBusHelper.deleteDataSource(req, function (err, result){
@@ -793,10 +798,11 @@ app.post('/deleteDataSource', function (req, res) {
                 console.log(response.statusCode, body);
 
                 if (response.statusCode === 200) {
-
-                  var body = JSON.parse(response.body);
-                  res.status(200).send(body);
-
+                  var payloads = [{ topic: 'log', messages: '{"Classifier": "Delete_Success","serverId": '+ process.pid.toString()+', "Producer": "'+tenantId+'", "message": "Tenant {'+tenantId+'} has reset credentials for agent '+req.body.agentid+'", "Priority": "Info"}', partition: 0 }];
+                  producer.send(payloads, function (err, data) {
+                    var body = JSON.parse(response.body);
+                    res.status(200).send(body);
+                  });
                 } else if (response.statusCode === 404) {
                   res.status(404).send('Error with query and data soruce');
                 }
