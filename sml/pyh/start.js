@@ -29895,56 +29895,76 @@ var json = [{
         "intvalue" : 100
     }];
 
-var spawn = require('child_process').spawn,
-    arg1 = "def f(data):\n" +
-	"    cols = data.select_dtypes(['object'])\n"+
-	"    data[cols.columns] = cols.apply(lambda x: x.str.strip())\n"+
-	"    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
-	"    data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
-	"    data.sort_index(level=1, inplace=True)\n"+
-        "    dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))\n"+
-        "    def check(line): \n" +
-        "        oldval = 100 \n" +
-        "        for i in line: \n"+
-        "            if (i > oldval) | (i < threshold): \n"+
-        "                return 1 \n"+
-        "                break \n"+
-        "            else: \n"+
-        "                oldval = i \n"+
-        "        return 0 \n";
+function pyTransformation(){
+    return new Promise(function(resolve, reject){
+
+
+        var spawn = require('child_process').spawn;
+
+
+        var arg1 = "def f(data):\n" +
+                "    cols = data.select_dtypes(['object'])\n"+
+                "    data[cols.columns] = cols.apply(lambda x: x.str.strip())\n"+
+                "    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
+                "    data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
+                "    data.sort_index(level=1, inplace=True)\n"+
+                "    dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))\n"+
+                "    def check(line): \n" +
+                "        oldval = 100 \n" +
+                "        for i in line: \n"+
+                "            if (i > oldval) | (i < threshold): \n"+
+                "                return 1 \n"+
+                "                break \n"+
+                "            else: \n"+
+                "                oldval = i \n"+
+                "        return 0 \n";
 
 //discharged = dischargedGroup.apply(check)
-    arg2 = "arg2",
-    arg3 = "arg3",
-    py    = spawn('python', ['compute_input.py', arg1, arg2, arg3] ),
-    data = json,
-    dataout = '';
+        var arg2 = "arg2";
+        var arg3 = "arg3";
+        var py = spawn('python', ['compute_input.py', arg1, arg2, arg3] );
+        var data = json;
+        var dataout = '';
+        var dataout2;
 
-var dataout2;
+        py.stdout.on('data', function(data){
+            dataout += data.toString();
+        });
 
-py.stdout.on('data', function(data){
-    dataout += data.toString();
-});
+        py.stdout.on('end', function(){
+            console.log('INSIDE PROMISE NODE Got End: ' + dataout);
 
-py.stdout.on('end', function(){
-    console.log('NODE Got End');
-    console.log(dataout);
-    try {
-        dataout2 = JSON.parse(dataout);
-        console.log('NODE parsed the json');
-        console.log('Will Show First Ten');
-		max=10
-		if(dataout2.length<10)
-			max = dataout2.length
-        for(var i=0; i<max; i++){
-            console.log("StatType: " + dataout2[i]["StatType"]);
-            console.log("_id: " + dataout2[i]["_id"]);
-            console.log("intvalue: " + dataout2[i]["intvalue"]);
-        }
-    } catch(e){
-        console.log("ERRROR: Cannot parse exception:" + e);
+            try {
+                dataout2 = JSON.parse(dataout);
+                resolve(dataout2);
+            } catch(e){
+                reject("cannot parse result   " + e);
+            }
+
+        });
+        py.stdin.write(JSON.stringify(data));
+        py.stdin.end();
+
+    });
+}
+
+
+pyTransformation().then(function(data){
+
+    console.log("AFTER PROMISE Finally Got Data");
+    console.log('NODE parsed the json');
+    console.log('Will Show First Ten');
+    max=10
+    if(data.length<10)
+        max = data.length
+    for(var i=0; i<max; i++){
+        console.log("StatType: " + data[i]["StatType"]);
+        console.log("_id: " + data[i]["_id"]);
+        console.log("intvalue: " + data[i]["intvalue"]);
     }
 
+}, function(error){
+
+    console.log("AFTER PROMISE ERRROR: " + error);
+
 });
-py.stdin.write(JSON.stringify(data));
-py.stdin.end();
