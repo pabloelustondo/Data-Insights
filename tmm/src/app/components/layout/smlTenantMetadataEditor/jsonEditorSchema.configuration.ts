@@ -6,8 +6,8 @@ import {SmlTenantMetadata, SmlDataSet} from '../../../../sml/sml';
 
 // this is the dataset schema that we need for JSON editor and crud component will use this too
 export const smlTenantMetadataSample: SmlTenantMetadata = {
-    id: 'Doga',  // id of the metadata
-    name: 'Data Source',
+    id: 'SMLTest',  // id of the metadata
+    name: 'SML Data Set',
     tenantId: 'testtenant-testuser',
     dataSets: [{
       id: '10-22-1',
@@ -34,15 +34,17 @@ export const smlTenantMetadataSample: SmlTenantMetadata = {
       type: 'TestMockData',
       active: true,
       activationKey: '',
-      properties: ['Test', 'Doga', 'Is', 'AWesome']
+      properties: ['Test', 'Doga', 'Is', 'AWesome'],
+      dataSets: ['']
     }, {
-        id: '10-23-1',
-        name: 'Test Data Set 02',
-        type: 'TestMockData',
-        active: true,
-        activationKey: '',
-        properties: ['Test', 'Ray', 'Is', 'Bae']}
-        ],
+      id: '10-23-1',
+      name: 'Test Data Set 02',
+      type: 'TestMockData',
+      active: true,
+      activationKey: '',
+      properties: ['Test', 'Ray', 'Is', 'Bae'],
+      dataSets: ['']
+    }],
     users: [{
       id: '10-24-1',
       name: 'Test Data Set 01',
@@ -62,7 +64,7 @@ export const smlTenantMetadataSample: SmlTenantMetadata = {
         method: 'GET',
         secure: 'x-access'
       }]
-    },
+      },
       {
         id: '10-25-02',
         name: 'idap Main Config 2',
@@ -71,7 +73,7 @@ export const smlTenantMetadataSample: SmlTenantMetadata = {
           method: 'POST',
           secure: 'y-access 4 pizza'
         }]
-      }],
+      }]
   };
 
 export const smlTenantEmptyMetadataSample: SmlTenantMetadata =

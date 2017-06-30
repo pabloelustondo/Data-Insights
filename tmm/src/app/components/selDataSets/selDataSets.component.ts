@@ -2,10 +2,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TmmConfigService } from "../layout/smlTenantMetadataEditor/tmmconfig.service";
+import { SmlDataSource } from '../../../sml/sml';
 import {
   smlTenantMetadataEmpty,
   smlTenantMetadataSample
 } from "../layout/smlTenantMetadataEditor/jsonEditorSchema.configuration";
+
+import * as uuid from 'node-uuid';
 export type DataSourceTypeOptions = 'MCDP' | 'API' | 'Other...';
 
 @Component({
@@ -19,6 +22,7 @@ export class selDataSetsComponent implements OnInit {
   dataSourceType: DataSourceTypeOptions;
   options: any[] = [{'option': 'MCDP'}, {'option': 'API'}, {'option': 'Other...'}];
   checkboxTrue: boolean = false;
+  checkedOption: any = []; 
 
   tenantMetadata: any = smlTenantMetadataSample;
   selectedOption: any ={};
@@ -56,9 +60,7 @@ export class selDataSetsComponent implements OnInit {
             let response = JSON.parse(data._body);
 
             if (response.length != 0) {
-              this.tenantMetadata.tenantId = params['tenantId'];
-              this.tenantMetadata.dataSets = response[0].dataSets;
-              this.tenantMetadata.name = response[0].name;
+              this.tenantMetadata = response[0];
             }
           } catch (err) {
             console.log(err);
@@ -77,6 +79,12 @@ export class selDataSetsComponent implements OnInit {
     this.index = 0;
     let found = false;
     
+    if (this.checkboxTrue) {
+      this.checkedOption.push(id); 
+    } else {
+      this.checkedOption = id;
+    }
+
     this.tenantMetadata.dataSets.forEach(item => {
       if (item.id === id) {
         this.selectedOption = item;
@@ -130,22 +138,31 @@ export class selDataSetsComponent implements OnInit {
 
       console.log(dataSourceForm);
       let inputs = dataSourceForm.getElementsByTagName('input');
-      let inputValues = [];
+
+      let dataSource: SmlDataSource = {
+        id: uuid.v4(),
+        name: this.dataSourceType, //TODO: replace with actual name when we need to  
+        active: false,
+        activationKey: '', 
+        type: this.dataSourceType, 
+        status: 'pending', //TODO: Replace with ENUM
+        dataSets: [], 
+        properties: []
+      }
+      
+      dataSource.dataSets = this.checkedOption;
 
       for (let ctr = 0;  ctr < inputs.length; ctr++) {
-        let inputInformation = {
+        let dsProperty = {
           inputName : inputs[ctr].id,
           inputValue :  inputs[ctr].value
-        };
-        inputValues.push(inputInformation);
+        }
+        dataSource.properties.push(dsProperty);
       }
 
-      var dataPack = {
-        dataSourceType: this.dataSourceType,
-        data: inputValues
-      }
+      this.tenantMetadata.dataSources.push(dataSource);
 
-      this.tmmConfigService.insertDataSourceByTenantId(tenantId, dataPack).then(data => {
+      this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
         if (data) {
           console.log(data);
         }

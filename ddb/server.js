@@ -207,13 +207,17 @@ router.get('/tenants', function(req,res){
 router.get('/tenants/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         var tenantid = req.body.tenantid;
-        db.collection('tenant').find({"tenantid":req.params.tenantid}).toArray(next);
+        db.collection('tenant').find({"tenantid":req.params.tenantid}, {
+                _id : 0
+            }).toArray(next);
     });
 });
 
 router.get('/tenant/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-        db.collection('tenant').find({"tenantId":req.params.tenantid}).toArray(next);
+        db.collection('tenant').find({"tenantId":req.params.tenantid}, {
+                _id : 0
+            }).toArray(next);
     });
 });
 
