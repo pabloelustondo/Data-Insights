@@ -59,8 +59,8 @@ import { TmmConfigService } from '../layout/smlTenantMetadataEditor/tmmconfig.se
                 <h3> Delete </h3>
             </div>
         </div>
-
-        <div class="row" *ngFor="let dataSource of tenantMetadata.dataSource">
+        <!-- this should be datasource instead of dataSources-->
+        <div class="row" *ngFor="let dataSource of tenantMetadata.dataSources">
             <div class="col">
                 {{ dataSource.name }}
             </div>
@@ -97,7 +97,7 @@ export class smlDataSourceOverview implements OnInit {
     editDataSourceForm: boolean = false;
 
     constructor(
-        private activatedRoute: ActivatedRoute, 
+        private activatedRoute: ActivatedRoute,
         private tmmConfigService: TmmConfigService) {
             this.getTenantMetadata();
     }

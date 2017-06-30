@@ -53,7 +53,7 @@ export class TmmConfigService {
     }
   }
 
-  public insertDataSourceByTenantId(tenantId, inputValues) {
-    return this.http.post(globalConfig['tmmback_url'] + '/tenant/dev/' + tenantId, inputValues).toPromise();
+  public insertDataSourceByTenantId(tenantId, data) {
+    return this.http.post(globalConfig['tmmback_url'] + '/tenant/dev/' + tenantId, data).toPromise();
   }
 }

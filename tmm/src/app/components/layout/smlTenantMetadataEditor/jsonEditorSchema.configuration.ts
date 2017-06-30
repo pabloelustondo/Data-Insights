@@ -1,13 +1,12 @@
 /**
  * Created by dister on 6/6/2017.
  */
-import {SmlTenantMetadata, SmlDataSet} from "../../../../sml/sml";
+import {SmlTenantMetadata, SmlDataSet} from '../../../../sml/sml';
 
 
-//this is the dataset schema that we need for JSON editor and crud component will use this too
-export const smlTenantMetadataSample: SmlTenantMetadata =
-  {
-    id: 'Doga',  //id of the metadata
+// this is the dataset schema that we need for JSON editor and crud component will use this too
+export const smlTenantMetadataSample: SmlTenantMetadata = {
+    id: 'Doga',  // id of the metadata
     name: 'Data Source',
     tenantId: 'testtenant-testuser',
     dataSets: [{
@@ -29,17 +28,19 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
       projections: [''],
       metadata: ['']
     }],
-    dataSource: [{
+    dataSources: [{
       id: '10-23-1',
       name: 'Test Data Set 01',
       type: 'TestMockData',
       active: true,
+      activationKey: '',
       properties: ['Test', 'Doga', 'Is', 'AWesome']
     }, {
         id: '10-23-1',
         name: 'Test Data Set 02',
         type: 'TestMockData',
         active: true,
+        activationKey: '',
         properties: ['Test', 'Ray', 'Is', 'Bae']}
         ],
     users: [{
@@ -75,17 +76,16 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
 
 export const smlTenantEmptyMetadataSample: SmlTenantMetadata =
   {
-    id: '',  //id of the metadata
+    id: '',  // id of the metadata
     name: '',
     tenantId: '',
     dataSets: [],
-    dataSource: [],
+    dataSources: [],
     users: [],
     idpInformation: [],
   };
 
-export const smlTenantMetadataEmpty: SmlDataSet =
-  {
+export const smlTenantMetadataEmpty: SmlDataSet = {
     id: '',
     name: '',
     from: [''],

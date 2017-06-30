@@ -7,5 +7,10 @@
   "https-cert-location" : "C:/63663247-localhost_3002.cert",
   "ddb-accessKey" : "C:/accessKey",
   "tempTokenExpiryTime" : 120000,
-  "agentPermTokenExpiryTime": 6000000
+  "agentPermTokenExpiryTime": 6000000,
+  "ida_get_token" : "",
+  "ida_post_data" : "",
+  "ida_post_log" : "",
+  "ida_get_metadata" : "",
+  "ida_version" : ""
 }
