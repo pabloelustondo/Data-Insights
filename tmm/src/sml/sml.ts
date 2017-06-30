@@ -24,7 +24,7 @@ export class SmlDataSource extends SmlElement {
  properties: SmlDataSourceProperty[];
  activationKey: string;
  status?: string;
- dataSets? : string[];
+ dataSets?: string[];
 }
 
 export class SmlDataSourceProperty {

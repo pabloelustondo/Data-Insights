@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { smlTenantMetadataSample, smlTenantMetadataEmpty } from '../layout/smlTenantMetadataEditor/jsonEditorSchema.configuration';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TmmConfigService } from '../layout/smlTenantMetadataEditor/tmmconfig.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'datasource-overview',
@@ -60,14 +61,18 @@ import { TmmConfigService } from '../layout/smlTenantMetadataEditor/tmmconfig.se
                 <h3> Active </h3>
             </div>
             <div class="col">
-                <h3> Properties </h3>
+                <h3> ID </h3>
             </div>
-            <div class="col">
+           
+              <div class="col">
                 <h3> Edit </h3>
             </div>
             <div class="col">
                 <h3> Delete </h3>
             </div>
+          <div class="col">
+            <h3> Download Credentials </h3>
+          </div>
         </div>
         <!-- this should be datasource instead of dataSources-->
         <div class="row" *ngFor="let dataSource of tenantMetadata.dataSources">
@@ -81,14 +86,17 @@ import { TmmConfigService } from '../layout/smlTenantMetadataEditor/tmmconfig.se
                 {{ (dataSource.active)? 'Active' : 'Not Active' }}
             </div>
             <div class="col">
-                {{ dataSource.properties }} 
+                {{ dataSource.id }} 
             </div> 
             <div class="col">
                 <button class="btn btn-outline-primary btn-block" (click)="EditDataSourceObject(dataSource)">Edit</button> 
             </div> 
             <div class="col">
-                <button class="btn btn-outline-danger btn-block" (click)="EditDataSourceObject(dataSource)">Delete</button> 
-            </div> 
+                <button class="btn btn-outline-danger btn-block" (click)="DeleteDataSourceObject(dataSource)">Delete</button> 
+            </div>
+          <div class="col">
+            <button class="btn btn-outline-danger btn-block" (click)="DownloadCredentials(dataSource)">Download Credentials</button>
+          </div>
         </div>
     </div>
   `,
@@ -141,6 +149,43 @@ export class smlDataSourceOverview implements OnInit {
   EditDataSourceObject(dataSource) {
       this.editDataSourceObject = dataSource;
       this.editDataSourceForm = true;
+  }
+  DeleteDataSourceObject(dataSource) {
+    this.editDataSourceObject = dataSource;
+    this.editDataSourceForm = true;
+  }
+
+  DownloadCredentials(dataSource) {
+    this.editDataSourceObject = dataSource;
+    this.editDataSourceForm = true;
+
+    const _agentId = dataSource.id;
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': ''
+    });
+    this.tmmConfigService.getDataSourceCredential(this.tenantMetadata.tenantId, dataSource).then(data => {
+      if (data) {
+        console.log(data);
+        const blob = new Blob([data], { type: 'text/csv' });
+        FileSaver.saveAs(blob, 'MCDP_Access.key');
+        // this.error = null;
+      }
+    });
+    /*
+    this.http.get( backendUrl + '/sourceCredentials/' + _agentId, { headers: headers })
+      .subscribe(
+        response => {
+          let response_body = response['_body'];
+          var blob = new Blob([response_body], { type: 'text/csv' });
+          FileSaver.saveAs(blob, 'MCDP_Access.key');
+          this.error = null;
+        },
+        error => {
+          this.error = error.text();
+          console.log(error.text());
+        }
+      );*/
   }
 
   addNewProperty() {
