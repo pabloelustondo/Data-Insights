@@ -1,19 +1,19 @@
 var express = require('express'),
     _       = require('lodash'),
     config  = require('./config'),
-    c  = global.appconfig,
+    appconfig  = global.appconfig,
     jwt     = require('jsonwebtoken');
 
 require('./error-messages.js');
 var querystring = require('querystring');
 var https = require('https');
 var uuid = require('node-uuid');
-
+var kafka = require('kafka-node');
 var request = require('request');
 var LocalStorage = require('node-localstorage').LocalStorage;
 var NextBusHelper = require ('./DataSourceHelpers/NextBusHelper');
 localStorage = new LocalStorage('./temp');
-
+var process = require('process');
 var app = module.exports = express.Router();
 
 var SOTITenant =
@@ -42,6 +42,11 @@ var TestTenant =
     companyphone: "111 111 1111"
   };
 
+var Producer = kafka.Producer, KeyedMessage = kafka.KeyedMessage, client = new kafka.Client(), producer = new Producer(client), km = new KeyedMessage('key', 'message');
+producer.on('ready', function () { });
+producer.on('error', function (err) {
+  console.log('error: ' + err);
+});
 
 var enrollments = [SOTITenant, TestTenant];
 
@@ -59,7 +64,13 @@ function readToken(token, callback) {  //Bearer
 }
 
 app.get('/api/enrollments', function(req, res){
-  res.status(200).send(enrollments);
+  var timeStamp = new Date().getTime();
+  //var message: logging = {"classifier":"Create_Success", "serverId": process.pid.toString(), "priority": "Critical", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } };
+  var payloads = [{ topic: 'log', messages: '{"Classifier": "Read_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS Backend", "message": "Getting all enrollments", "Priority": "Info"}', partition: 0 }];
+  producer.send(payloads, function (err, data) {
+    console.log("getting enrollments")
+    res.status(200).send(enrollments);
+  });
 });
 
 app.get('/enrollments2', function(req, res) {
@@ -99,11 +110,12 @@ app.post('/resetCredentials/:agentId', function (req, res) {
             console.log(response.statusCode, body);
 
             if (response.statusCode === 200){
-
-              res.status(200).send({
-                message: "Success fully reset"
+              var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "'+success.tenantId+'", "message": "Tenant {'+success.tenantId+'} has reset credentials for agent '+agentId+'", "Priority": "Info"}', partition: 0 }];
+              producer.send(payloads, function (err, data) {
+                res.status(200).send({
+                  message: "Success fully reset"
+                });
               });
-
             } else if (response.statusCode === 404) {
               res.status(404).send(ErrorMsg.token_verification_failed);
             }
