@@ -5,51 +5,49 @@ import pandas as pd
 
 #Read data from stdin
 def read_in(lines):
-    #lines = [1,2,3,4]
-    return json.loads(lines)
+	#lines = [1,2,3,4]
+	return json.loads(lines)
 
 def main():
 
-    #print("Running Python")
+	#print("Running Python")
 
-    #print("This is the name of the script: ", sys.argv[0])
-    #print("This is the name of the script: ", sys.argv[1])
-    #print("This is the name of the script: ", sys.argv[2])
+	#print("This is the name of the script: ", sys.argv[0])
+	#print("This is the name of the script: ", sys.argv[1])
+	#print("This is the name of the script: ", sys.argv[2])
 
-    #parameters
-    #need to set parameters... will hardcode for now... btu this needs to come in another argument
-    #i think the idea is to create a string that will ge texecuted
-
-    start = ''
-    shift = 0
-    threshold = 10
-
-    code = sys.argv[1]
-    exec(code)
+	#parameters
+	#need to set parameters... will hardcode for now... btu this needs to come in another argument
+	#i think the idea is to create a string that will ge texecuted
 
 
-    #get our data as an array from read_in()
-    lines = [1,2,3,4]
+	
+	code = sys.argv[1]
+	
+	exec(code)
 
 
-
-    morelines = sys.stdin.readline();
+	#get our data as an array from read_in()
+	lines = [1,2,3,4]
 
 
 
-    jlist = json.loads(morelines)
+	morelines = sys.stdin.readline();
+
+
+
+	jlist = json.loads(morelines)
 	
 
-    data = pd.DataFrame(jlist)
+	data = pd.DataFrame(jlist)
 
-    datajson = data.to_json(orient='records')
+	datajson = data.to_json(orient='records')
 
-    dataout = json.loads(datajson)
+	dataout = json.loads(datajson)
+	f(data)
 
-    f(data)
-
-    print(data.to_json(orient='records'))
+	print(data.to_json(orient='records'))
 
 #start process
 if __name__ == '__main__':
-    main()
+	main()
