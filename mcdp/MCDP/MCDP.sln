@@ -3,21 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCDP", "MCDP.csproj", "{DB2A46E0-30AF-4E3C-9863-33C680C01DAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP", "Soti.MCDP.csproj", "{DB2A46E0-30AF-4E3C-9863-33C680C01DAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McdpServiceTest", "..\McdpServiceTest\McdpServiceTest.csproj", "{2DAC7D33-BB61-40A9-A2B4-C436DF1455F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.ServiceTest", "..\McdpServiceTest\Soti.MCDP.ServiceTest.csproj", "{2DAC7D33-BB61-40A9-A2B4-C436DF1455F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "..\Database\Database.csproj", "{ECAAC8AB-1BF6-499D-A0D5-3915DD1EFE63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.Database", "..\Database\Soti.MCDP.Database.csproj", "{ECAAC8AB-1BF6-499D-A0D5-3915DD1EFE63}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelper", "..\TestHelper\TestHelper.csproj", "{E1135A95-274A-4BBF-A2F5-B532B3EF1360}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProcess", "..\DataProcess\DataProcess.csproj", "{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.DataProcess", "..\DataProcess\Soti.MCDP.DataProcess.csproj", "{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dacpac_Installer", "..\Dacpac_Installer\Dacpac_Installer.csproj", "{095D7996-DF16-44BD-B323-1D5C275085F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metadata", "..\Metadata\Metadata.csproj", "{CF6AC823-4ADD-48A9-87FC-08622BE17D09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.Metadata", "..\Metadata\Soti.MCDP.Metadata.csproj", "{CF6AC823-4ADD-48A9-87FC-08622BE17D09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{7BE4AD5A-C0CB-495C-A5F6-D733EA010D2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.Logger", "Logger\Soti.MCDP.Logger.csproj", "{7BE4AD5A-C0CB-495C-A5F6-D733EA010D2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.Scheduler", "..\Soti.Scheduler\Soti.Scheduler.csproj", "{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{7BE4AD5A-C0CB-495C-A5F6-D733EA010D2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BE4AD5A-C0CB-495C-A5F6-D733EA010D2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BE4AD5A-C0CB-495C-A5F6-D733EA010D2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
