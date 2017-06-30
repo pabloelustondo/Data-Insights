@@ -41,6 +41,7 @@ def main():
 
     f(data)
 
+    print(data.to_json(orient='records'))
 
 #start process
 if __name__ == '__main__':

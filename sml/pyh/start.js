@@ -29902,13 +29902,23 @@ var spawn = require('child_process').spawn,
 	"    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
 	"    data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
 	"    data.sort_index(level=1, inplace=True)\n"+
-            "    print(data.to_json(orient='records'))",
+        "    dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))\n"+
+        "    def check(line): \n" +
+        "        oldval = 100 \n" +
+        "        for i in line: \n"+
+        "            if (i > oldval) | (i < threshold): \n"+
+        "                return 1 \n"+
+        "                break \n"+
+        "            else: \n"+
+        "                oldval = i \n"+
+        "        return 0 \n";
+
+//discharged = dischargedGroup.apply(check)
     arg2 = "arg2",
     arg3 = "arg3",
     py    = spawn('python', ['compute_input.py', arg1, arg2, arg3] ),
     data = json,
     dataout = '';
-
 
 var dataout2;
 
@@ -29918,6 +29928,7 @@ py.stdout.on('data', function(data){
 
 py.stdout.on('end', function(){
     console.log('NODE Got End');
+    console.log(dataout);
     try {
         dataout2 = JSON.parse(dataout);
         console.log('NODE parsed the json');
