@@ -29902,22 +29902,38 @@ function pyTransformation(){
         var spawn = require('child_process').spawn;
 
 
-        var arg1 = "def f(data):\n" +
-                "    cols = data.select_dtypes(['object'])\n"+
-                "    data[cols.columns] = cols.apply(lambda x: x.str.strip())\n"+
-                "    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
-                "    data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
-                "    data.sort_index(level=1, inplace=True)\n"+
-                "    dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))\n"+
-                "    def check(line): \n" +
-                "        oldval = 100 \n" +
-                "        for i in line: \n"+
-                "            if (i > oldval) | (i < threshold): \n"+
-                "                return 1 \n"+
-                "                break \n"+
-                "            else: \n"+
-                "                oldval = i \n"+
-                "        return 0 \n";
+        var arg1 = `def f(data):
+                cols = data.select_dtypes(['object'])
+                data[cols.columns] = cols.apply(lambda x: x.str.strip())
+                data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
+                data.set_index(['devid', 'time_stamp'], inplace=True) 
+                data.sort_index(level=1, inplace=True)
+                dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))                
+                    `
+
+        /*
+
+         `
+         "    data[cols.columns] = cols.apply(lambda x: x.str.strip())\n"+
+         "    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
+         "    data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
+         "    data.sort_index(level=1, inplace=True)\n"+
+         "    dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))\n"+
+         "    def check(line): \n" +
+         "        oldval = 100 \n" +
+         "        for i in line: \n"+
+         "            if (i > oldval) | (i < threshold): \n"+
+         "                return 1 \n"+
+         "                break \n"+
+         "            else: \n"+
+         "                oldval = i \n"+
+         "        return 0 \n";
+
+
+
+
+         */
+
 
 //discharged = dischargedGroup.apply(check)
         var arg2 = "arg2";
