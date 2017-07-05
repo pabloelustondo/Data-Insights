@@ -131,42 +131,66 @@ export class selDataSetsComponent implements OnInit {
       }
     });
   }
+
+  validateDataProperties(dataSourceForm) {
+    let validationBoolean = false;
+    let regexTest; 
+        let input:any = dataSourceForm.getElementsByTagName('input');
+
+    switch (this.dataSourceType) {
+      case 'MCDP': 
+        // URL Regex Test
+        //regexTest = new RegExp('_(^|[\s.:;?\-\]<\(])(https?://[-\w;/?:@&=+$\|\_.!~*\|'()\[\]%#,☺]+[\w/#](\(\))?)(?=$|[\s',\|\(\).:;?\-\[\]>\)])_i')
+        //validationBoolean = regexTest.test(input.mcurl);
+        break;
+      case 'API' : 
+        break;
+      case 'Other...' : 
+        break;
+    }
+    return validationBoolean;
+  }
     //TODO: copy and paste, need to change
   addSource(dataSourceForm) {
-    this.activatedRoute.params.subscribe((params: Params) => {
-      let tenantId = params['tenantId'];
-      let inputs = dataSourceForm.getElementsByTagName('input');
-      console.log(inputs);
+    if (this.checkedOption.length == 0) {
+      alert('Please Select a DataSet Sucka!');
+      return;
+    } else {
+      this.activatedRoute.params.subscribe((params: Params) => {
+        let tenantId = params['tenantId'];
+        let inputs = dataSourceForm.getElementsByTagName('input');
+        console.log(inputs);
 
-      let dataSource: SmlDataSource = {
-        id: uuid.v4(),
-        name: this.dataSourceType, //TODO: replace with actual name when we need to
-        active: false,
-        activationKey: '',
-        type: this.dataSourceType,
-        status: 'pending', //TODO: Replace with ENUM
-        dataSets: [],
-        properties: []
-      }
-
-      dataSource.dataSets = this.checkedOption;
-
-      for (let ctr = 0;  ctr < inputs.length; ctr++) {
-        let dsProperty = {
-          inputName : inputs[ctr].id,
-          inputValue :  inputs[ctr].value
+        let dataSource: SmlDataSource = {
+          id: uuid.v4(),
+          name: this.dataSourceType, //TODO: replace with actual name when we need to
+          active: false,
+          activationKey: '',
+          type: this.dataSourceType,
+          status: 'pending', //TODO: Replace with ENUM
+          dataSets: [],
+          properties: []
         }
-        dataSource.properties.push(dsProperty);
-      }
 
-      this.tenantMetadata.dataSource.push(dataSource);
+        dataSource.dataSets = this.checkedOption;
 
-      this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
-        if (data) {
-          console.log(data);
+        for (let ctr = 0;  ctr < inputs.length; ctr++) {
+          let dsProperty = {
+            inputName : inputs[ctr].id,
+            inputValue :  inputs[ctr].value
+          }
+          dataSource.properties.push(dsProperty);
         }
+
+        this.tenantMetadata.dataSource.push(dataSource);
+
+        this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
+          if (data) {
+            alert('Save Succesful Sucka! <br />' + data);
+          }
+        });
       });
-    });
+    }
   }
 
   dataSourceTypeSelect(dataType) {
