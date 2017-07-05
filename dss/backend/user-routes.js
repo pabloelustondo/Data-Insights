@@ -408,8 +408,8 @@ app.post('/registerDataSource', function (req, res) {
         res.status(err.status).send(err.message);
       }
       if (result) {
-        var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "Registered Data Source: "'+JSON.stringify(dataSource)+', "Priority": "Info"}', partition: 0 }];
-        producer.send(payloads, function () {
+        var payloads = [{ topic: 'log', messages: '{"Classifier": "Create_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": '+JSON.stringify(dataSource)+', "Priority": "Info"}', partition: 0 }];
+        producer.send(payloads, function (err, data) {
           res.status(result.status).send(result.message);
         });
       }
@@ -813,7 +813,7 @@ app.post('/deleteDataSource', function (req, res) {
                     res.status(200).send(body);
                   });
                 } else if (response.statusCode === 404) {
-                  res.status(404).send('Error with query and data soruce');
+                  res.status(404).send('Error with query and data source');
                 }
                 else {
                   res.status(400).send('Error with token');
