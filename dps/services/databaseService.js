@@ -1,12 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var mongodb = require('mongodb').MongoClient;
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
 let globalConfig = require('../globalconfig.json');
 let sampletenants = require('../testing/sampleTenants.json');
 let _ = require('lodash');
-const rp = require("request-promise");
+const rp = require('request-promise');
 class DatabaseService {
     constructor(ddbUrl) {
         this.appConfig = globalConfig;

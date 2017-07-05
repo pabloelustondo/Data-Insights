@@ -1,6 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const rp = require("request-promise");
+const rp = require('request-promise');
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
 let globalConfig = require('../globalconfig.json');

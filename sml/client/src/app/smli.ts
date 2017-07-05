@@ -1,20 +1,50 @@
-import {SmlDataSet, SmlParameter, SmlFeature} from "./sml";
+import {SmlDataSet, SmlParameter, SmlTransformation} from "./sml";
 /**
  * Created by pabloelustondo on 2017-06-21.
  */
 
 export class SMLI {
 
-  calculateDataSet(datasetDef:SmlDataSet, inputDataSet:SmlDataSet, parameters:SmlParameter[]): SmlDataSet{
+
+  getDataSet(datasetDef:SmlDataSet, parameters:SmlParameter[]): Promise<SmlDataSet>{
+    //call a url api passing parameters in order to get an evaluated data set
+
+    return new Promise(function(resolve, reject){
+
+
+
+
+
+    });
+
+
+    }
+
+  }
+
+
+  calculateDataSet(datasetDef:SmlDataSet, parameters:SmlParameter[]): SmlDataSet{
+
+
+
+    this.
+
+
+    return result;
+
+  }
+
+
+  transformDataSet(datasetDef:SmlDataSet, inputDataSet:SmlDataSet, parameters:SmlParameter[]): SmlDataSet{
 
     let result = new SmlDataSet();
-
     result.data = inputDataSet.data;  //fpr now until we have filter..
 
-    datasetDef.features.forEach(f=>{
-      //ere we are going to process each feature (in order).
-      //this code is here for now but should go outside
-      this.addFeature(datasetDef, f,result.data);
+    datasetDef.transformations.forEach(trans=>{
+
+      if (trans.type = "AddRowFeature") this.addFeature(datasetDef, trans,result.data);
+      if (trans.type = "ProcessData") this.processData(datasetDef, trans,result.data);
+
     });
 
     return result;

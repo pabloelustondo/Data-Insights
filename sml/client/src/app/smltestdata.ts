@@ -36,6 +36,5 @@ export const smltestdata: SmlDataSet[] = [
       {devId:1, time:"2017-06-21T09:00:00", traffic:30, appname:"google"},
       {devId:2, time:"2017-06-21T09:00:00", traffic:40, appname:"yahoo"}
     ]
-
   }
 ];
