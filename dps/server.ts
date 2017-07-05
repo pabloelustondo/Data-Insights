@@ -23,11 +23,10 @@ import {uploadRawData, uploadModifiedData} from './services/rawDataLakeService';
 import {DatabaseService} from  './services/databaseService';
 import {DataProjections} from './services/projection';
 import {processRequest, getDbFromDataService} from './services/dataService';
-import message = SNS.message;
+// import message = SNS.message;
 
 var globalconfig = require('./globalconfig.json');
-var path = require('path');
-var cors = require('cors');
+
 
 globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
 //our app config will be the result of taking all global configurations and overwritting them with the local configurations
@@ -37,7 +36,7 @@ Object.keys(appconfig).forEach(function(key){
 globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
 
 appconfig = globalconfig;
-global.appconfig = appconfig;
+// global.appconfig = appconfig;
 
 console.log("configuration");
 console.log(appconfig);
@@ -117,7 +116,7 @@ app.post('/data/request', function(req,res) {
             let dataSource = _.find(tenant.dataSources, ['dataSourceId', req.body.idaMetadata.dataSourceId]);
             let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
             let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
-            let collectionName = dataSetId ;
+            let collectionName = dataSetId;
 
             DataProjections(req.body.clientData, projections).then(function (data) {
                 uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
@@ -240,7 +239,7 @@ app.get('/getMetadata/:tenantId', function (req, res) {
     let tenant = db.getTenant(tenantId);
     let dataSets = tenant.dataSets;
     res.status(200).send(dataSets);
-})
+});
 
 exports.app = app;
 
