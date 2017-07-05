@@ -135,15 +135,22 @@ export class selDataSetsComponent implements OnInit {
   validateDataProperties(dataSourceForm) {
     let validationBoolean = false;
     let regexTest; 
-        let input:any = dataSourceForm.getElementsByTagName('input');
+    let input:any = dataSourceForm.getElementsByTagName('input');
 
     switch (this.dataSourceType) {
       case 'MCDP': 
         // URL Regex Test
-        //regexTest = new RegExp('_(^|[\s.:;?\-\]<\(])(https?://[-\w;/?:@&=+$\|\_.!~*\|'()\[\]%#,☺]+[\w/#](\(\))?)(?=$|[\s',\|\(\).:;?\-\[\]>\)])_i')
-        //validationBoolean = regexTest.test(input.mcurl);
+        validationBoolean = /^(ftp|http|https):\/\/[^ "]+$/.test(input.mcurl.value);
         break;
       case 'API' : 
+        // URL Regex Test
+        // Name != '' Tests
+        // Polling Interval Tests
+        validationBoolean = ( 
+          /^(ftp|http|https):\/\/[^ "]+$/.test(input.apiUrl.value) &&
+          (input.apiName.value != undefined && input.apiName.value != '') && 
+          (input.apiFrequency.value != undefined && input.apiFrequency.value != 0)
+        ); 
         break;
       case 'Other...' : 
         break;
@@ -161,34 +168,41 @@ export class selDataSetsComponent implements OnInit {
         let inputs = dataSourceForm.getElementsByTagName('input');
         console.log(inputs);
 
-        let dataSource: SmlDataSource = {
-          id: uuid.v4(),
-          name: this.dataSourceType, //TODO: replace with actual name when we need to
-          active: false,
-          activationKey: '',
-          type: this.dataSourceType,
-          status: 'pending', //TODO: Replace with ENUM
-          dataSets: [],
-          properties: []
-        }
-
-        dataSource.dataSets = this.checkedOption;
-
-        for (let ctr = 0;  ctr < inputs.length; ctr++) {
-          let dsProperty = {
-            inputName : inputs[ctr].id,
-            inputValue :  inputs[ctr].value
+        // Validate Input Before Saving
+        if (!this.validateDataProperties(dataSourceForm)) {
+          alert('Invalid Paramaters Provided for Type: ' + this.dataSourceType);
+          return; 
+        } else {
+      
+          let dataSource: SmlDataSource = {
+            id: uuid.v4(),
+            name: this.dataSourceType, //TODO: replace with actual name when we need to
+            active: false,
+            activationKey: '',
+            type: this.dataSourceType,
+            status: 'pending', //TODO: Replace with ENUM
+            dataSets: [],
+            properties: []
           }
-          dataSource.properties.push(dsProperty);
-        }
 
-        this.tenantMetadata.dataSource.push(dataSource);
+          dataSource.dataSets = this.checkedOption;
 
-        this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
-          if (data) {
-            alert('Save Succesful Sucka! <br />' + data);
+          for (let ctr = 0;  ctr < inputs.length; ctr++) {
+            let dsProperty = {
+              inputName : inputs[ctr].id,
+              inputValue :  inputs[ctr].value
+            }
+            dataSource.properties.push(dsProperty);
           }
-        });
+
+          this.tenantMetadata.dataSource.push(dataSource);
+
+          this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
+            if (data) {
+              alert('Save Succesful Sucka! <br />' + data);
+            }
+          });
+        }
       });
     }
   }
