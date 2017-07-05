@@ -147,7 +147,7 @@ export class selDataSetsComponent implements OnInit {
         status: 'pending', //TODO: Replace with ENUM
         dataSets: [],
         properties: []
-      }
+      };
 
       dataSource.dataSets = this.checkedOption;
 

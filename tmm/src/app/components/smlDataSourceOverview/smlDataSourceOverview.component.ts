@@ -156,6 +156,8 @@ export class smlDataSourceOverview implements OnInit {
       this.editDataSourceObject = dataSource;
   //    this.editDataSourceForm = true;
       console.log("Resetting: " + this.editDataSourceObject.name);
+      this.tmmConfigService.resetDataSourceActivationKey(this.tenantMetadata.tenantId,
+        this.editDataSourceObject.id, this.tenantMetadata);
   }
 
   DownloadCredentials(dataSource) {

@@ -26,6 +26,10 @@ export class TmmConfigService {
     }
   }
 
+  deleteDataSourceByDataSourceId(tenantId, dataSourceId){
+    return this.http.delete(config.ddb_url + 'deleteDataSource');
+  }
+
   saveDataByTenantId(tenantid, tmtMetadata, callback) {
     if (config.ddb_url != "") {
       console.log(tmtMetadata);
@@ -54,7 +58,11 @@ export class TmmConfigService {
   }
 
   public insertDataSourceByTenantId(tenantId, data) {
-    return this.http.post(globalConfig['tmmback_url'] + '/tenant/dev/' + tenantId, data).toPromise();
+    return this.http.post(globalConfig['tmmback_url'] + '/tenant/dev/dataSource/' + tenantId, data).toPromise();
+  }
+
+  public resetDataSourceActivationKey(tenantId, dataSourceId, data) {
+    return this.http.put(globalConfig['tmmback_url'] + '/dataSource/' + tenantId + '/' + dataSourceId, data).toPromise();
   }
 
   public getDataSourceCredential(tenantId, dataSource) {

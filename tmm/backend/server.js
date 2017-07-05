@@ -16,6 +16,7 @@ var io = require('socket.io')(http);
 var kafka = require('kafka-node');
 var request = require('request');
 var uuid = require('node-uuid');
+var _ = require('underscore');
 
 var ConsumerGroup = kafka.ConsumerGroup;
 var topics = ['log1'];
@@ -129,6 +130,54 @@ app.get('/tenant/:tenantid', function(req,res){
   });
 });
 
+app.put('/dataSource/:tenantId/:dataSourceId', function (req, res) {
+
+  console.log("getting new activationKey: " +
+    appconfig.dssback_url + "/activationKey/" + req.params.tenantId + "/" + req.params.dataSourceId);
+
+  var options = {
+    uri:appconfig.dssback_url + "/activationKey/" + req.params.tenantId + "/" + req.params.dataSourceId,
+    method:"GET",
+    contentType:"application/json"
+  };
+  rp(options)
+    .then(function (data) {
+      req.body.dataSource.forEach(function(ds){
+        if(ds.id == req.params.dataSourceId){
+          ds.activationKey = JSON.parse(data).token;
+          console.log("new activationKey: " + ds.activationKey);
+        }
+        })
+
+      var ddbOptions = {
+        uri:appconfig.ddb_url + "/tenant/" + req.params.tenantId,
+        method:"PUT",
+        contentType:"application/json",
+        body: req.body,
+        json:true
+      };
+
+      console.log("posting to ddb:" + options.uri);
+      console.log(req.body.dataSource);
+
+      rp(ddbOptions).then (function (ddbResponse){
+        if (ddbResponse) {
+          res.status(200).send(ddbResponse);
+        }
+      })
+        .catch(function (err) {
+          console.log("BAD" + err);
+          res.send(err);
+        });
+
+    }).catch(function (err) {
+      console.log("BAD " + err);
+      res.send(err);
+    });
+
+
+});
+
 app.post('/tenant/:tenantid', function(req,res){
   var timeStamp = new Date().getTime();
   var payloads = [{ topic: 'log', messages: `{"producer": "TMM", "message": "${req.params.tenantid}", "params": {"tenantId": "${req.params.tenantid}"}}`, partition: 0 }];
@@ -159,7 +208,7 @@ app.post('/tenant/:tenantid', function(req,res){
   });
 });
 
-app.post('/tenant/dev/:tenantid', function (req,res) {
+app.post('/tenant/dev/dataSource/:tenantid/', function (req,res) {
   //TODO: push to DDB
   var dataSource = req.body.dataSource[req.body.dataSource.length - 1]; // get the recently added data Source
 
