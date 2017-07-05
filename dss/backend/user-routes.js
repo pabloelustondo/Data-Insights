@@ -16,6 +16,9 @@ localStorage = new LocalStorage('./temp');
 var process = require('process');
 var app = module.exports = express.Router();
 
+var idaInformation = config.idaInformation;
+idaInformation.url = appconfig.ida_url;
+
 var SOTITenant =
   {
     accountid: "soti",
@@ -172,9 +175,13 @@ app.get('/getAgentToken', function(req, res) {
 
               var body = JSON.parse(response.body);
               if (body.activationKey === _activationKey) {
+
+                idaInformation.url = appconfig.ida_url;
+
                 var new_token = jwt.sign({
                   agentid: body.agentId,
-                  tenantid: _tenantID
+                  tenantid: _tenantID,
+                  idaInformation: idaInformation
                 }, config.expiringSecret, {expiresIn: config.tempTokenExpiryTime});
                 console.log(new_token);
                 res.status(200).send({
@@ -239,7 +246,7 @@ app.get('/sourceCredentials/:agentId', function (req, res) {
               tokenpayload.tenantId =  success.tenantId;
               tokenpayload.agentId = agentId;
               tokenpayload.activationKey =  body[0].activationKey;
-
+              tokenpayload.idaInformation = idaInformation;
               var _token = createToken(tokenpayload);
 
               res.status(200).send(_token);
@@ -265,9 +272,11 @@ app.get('/sourceCredentials/:agentId', function (req, res) {
 
 function enrollDlmDataSource (dataSource, callback){
 
+
   var tempToken = jwt.sign({
     agentid: dataSource.agentId,
-    tenantid:  dataSource.tenantId
+    tenantid:  dataSource.tenantId,
+    idaInformation: idaInformation
   }, config.expiringSecret, {expiresIn: config.tempTokenExpiryTime});
   // map UI input to server input
   var data = {
