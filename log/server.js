@@ -1,11 +1,3 @@
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -245,29 +237,37 @@ function callDbAndAct(query) {
 consumerGroup.on('error', function (err) {
     console.log('error: ' + err);
 });
-consumerGroup.on('message', function (message) {
-    var data = JSON.parse(message.value);
-    if (!data.hasOwnProperty('timeStamp')) {
-        var timeStamp = new Date().getTime();
-        data = __assign({}, data, { "timeStamp": timeStamp.toString() });
+consumerGroup.on.apply(consumerGroup, ['message', function (message) {
+    try {
+        var data = JSON.parse(message.value);
+        if (!data.hasOwnProperty('timeStamp')) {
+            var timeStamp = new Date().getTime();
+            data = {};
+        }
     }
-    console.log('data = ' + JSON.stringify(data));
-    if (data.producer == "Tenant") {
-        callDbAndAct(function (db, next) {
-            db.collection('siloguser').insertOne(data, next);
-        });
-    }
-    if (data.producer == "MCDP") {
-        callDbAndAct(function (db, next) {
-            db.collection('silogagent').insertOne(data, next);
-        });
-    }
-    else {
-        callDbAndAct(function (db, next) {
-            db.collection('silogserver').insertOne(data, next);
-        });
-    }
-});
+    finally { }
+}].concat(data, { "timeStamp": timeStamp.toString() }));
+console.log('data = ' + JSON.stringify(data));
+if (data.producer == "Tenant") {
+    callDbAndAct(function (db, next) {
+        db.collection('siloguser').insertOne(data, next);
+    });
+}
+if (data.producer == "MCDP") {
+    callDbAndAct(function (db, next) {
+        db.collection('silogagent').insertOne(data, next);
+    });
+}
+else {
+    callDbAndAct(function (db, next) {
+        db.collection('silogserver').insertOne(data, next);
+    });
+}
+try { }
+catch (err) {
+    console.log(err + message.value);
+}
+;
 var Producer = kafka.Producer, KeyedMessage = kafka.KeyedMessage, client = new kafka.Client(), producer = new Producer(client), km = new KeyedMessage('key', 'message');
 producer.on('ready', function () { });
 producer.on('error', function (err) {
