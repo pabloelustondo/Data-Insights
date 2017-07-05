@@ -8,15 +8,15 @@ import * as rp from 'request-promise';
 import * as express from '@types/express';
 import {User} from '../models/user';
 import {ClientData} from '../models/clientData';
+import {RequestPromise} from "request-promise";
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
 let globalConfig = require('../globalconfig.json');
 let testResponses = require('../testing/testResponses.json');
 
-export function uploadRawData(tenantId: string, dataSourceId: string, clientData: ClientData) {
+export function uploadRawData(tenantId: string, dataSourceId: string, clientData: ClientData) : Promise<any>{
 
     if (appconfig.testingmode) {
-
         return new Promise( (resolve) => { resolve(testResponses.awsSampleResponse + tenantId) }) ;
     }
     else {
@@ -39,17 +39,20 @@ export function uploadRawData(tenantId: string, dataSourceId: string, clientData
             url: endpoint,
             body: body
         };
-        return rp(options);
+        return new Promise ( (resolve) => {
+            resolve (rp(options))
+        });
+
     }
 }
 
-export function uploadModifiedData(tenantId: string, collectionName: string, clientData: any) {
+export function uploadModifiedData(tenantId: string, collectionName: string, clientData: any) : Promise<any> {
 
     if (appconfig.testingMode) {
-        return {
+        return new Promise( (resolve) => { resolve({
             n : '1',
             ok : '1'
-        };
+        }) }) ;
     } else {
 
         let endpoint = globalConfig ['cdl_url'] + '/ds/' +tenantId + config['cdl_put_endpoint'];
@@ -71,7 +74,9 @@ export function uploadModifiedData(tenantId: string, collectionName: string, cli
             url: endpoint,
             body: body
         };
-        return rp(options);
+        return new Promise ( (resolve) => {
+            resolve (rp(options))
+        });
 
     }
 }
