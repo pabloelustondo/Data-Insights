@@ -140,7 +140,11 @@ export class selDataSetsComponent implements OnInit {
     switch (this.dataSourceType) {
       case 'MCDP': 
         // URL Regex Test
-        validationBoolean = /^(ftp|http|https):\/\/[^ "]+$/.test(input.mcurl.value);
+        // Name != '' Tests
+        validationBoolean = (
+          /^(ftp|http|https):\/\/[^ "]+$/.test(input.mcurl.value) && 
+          input.mName.value != undefined 
+        );
         break;
       case 'API' : 
         // URL Regex Test
