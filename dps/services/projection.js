@@ -1,11 +1,12 @@
 "use strict";
-var config = require('../config.json');
-var appconfig = require('../appconfig.json');
+Object.defineProperty(exports, "__esModule", { value: true });
+let config = require('../config.json');
+let appconfig = require('../appconfig.json');
 function DataProjections(data, projections) {
-    return new Promise(function (resolve, reject) {
-        var _data = {};
+    return new Promise((resolve, reject) => {
+        let _data = {};
         if (projections.length > 0 && projections[0] !== '') {
-            projections.forEach(function (item, index) {
+            projections.forEach((item, index) => {
                 _data[item] = data[item];
             });
         }

@@ -525,7 +525,7 @@ router.delete('/deleteDataSource', function(req,res){
     var _tenant = req.query.tenantId;
 
     var user = getUser(req);
-    mongodb.connect(dbUrl + "udb_" + user,function(err,db){
+    mongodb.connect(mongoInfo.uri + "udb_" + user,function(err,db){
         if (err) {
             console.log('err backing up object: ' + err);
         }

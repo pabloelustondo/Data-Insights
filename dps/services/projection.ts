@@ -24,5 +24,5 @@ export function DataProjections(data: any, projections: string[]) {
         }
         resolve(_data);
     })
-
 }
+
