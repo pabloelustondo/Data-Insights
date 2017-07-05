@@ -22,23 +22,23 @@ Number of test cases: {{testcases.length}}
 <br/>
 
 <h1>SMLDataset</h1> 
-<textarea rows="10" cols="80" [(ngModel)]="testcaseDatasetJSON"
-style="max-height:100px;min-height:100px; resize: none"></textarea>
+<textarea rows="200" cols="80" [(ngModel)]="testcaseDatasetJSON"
+style="max-height:300px;min-height:100px; resize: none"></textarea>
 <br/>
 
 <h1>External Parameters (using default if nothing here)</h1>
-<textarea rows="10" cols="80" [(ngModel)]="testcaseParametersJSON"
+<textarea rows="200" cols="80" [(ngModel)]="testcaseParametersJSON"
 style="max-height:100px;min-height:100px; resize: none"></textarea>
 <br/>
 
 <h1>InputData(set)</h1>
-<textarea rows="10" cols="80" [(ngModel)]="testcaseInputDataJSON"
-style="max-height:100px;min-height:100px; resize: none"></textarea>
+<textarea rows="3000" cols="80" [(ngModel)]="testcaseInputDataJSON"
+style="max-height:300px;min-height:100px; resize: none"></textarea>
 <br/>
 
 <h1>OutData(set)</h1>
-<textarea rows="10" cols="80" [(ngModel)]="testcaseOutputDataJSON"
-style="max-height:100px;min-height:100px; resize: none"></textarea>
+<textarea rows="3000" cols="80" [(ngModel)]="testcaseOutputDataJSON"
+style="max-height:300px;min-height:100px; resize: none"></textarea>
 <br/>
 </div>
 
@@ -54,9 +54,15 @@ export class ClientAppComponent implements OnInit {
   testcaseInputData:SmlDataSet;
   testcaseOutputDataJSON:string;
   testcases: SMLDataSetTestCase[] = smltestcases;
+  testdata: SmlDataSet[];
   smli: SMLI = new SMLI();
 
   ngOnInit() {
+    this.testdata = smltestdata;
+    this.testdata.push({
+      id:"devstats1",
+      data: devstats1
+    });
     this.testcaseId=0;
     this.testcase = this.testcases[this.testcaseId];
     this.changeTestCase();

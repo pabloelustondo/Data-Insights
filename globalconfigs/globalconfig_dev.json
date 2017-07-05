@@ -16,7 +16,8 @@
   "tmmback_url":"http://sotiinsights.cloudapp.net:8029",
   "dps_url":"http://sotiinsights.cloudapp.net:8022",
   "sml_url":"http://sotiinsights.cloudapp.net:8031",
-  "log_url":"http://sotiinsights.cloudapp.net:8032",
+  "smlback_url":"http://sotiinsights.cloudapp.net:8032",
+  "log_url":"http://sotiinsights.cloudapp.net:8033",
   "kafka_url":"localhost:2181",
   "mongodb_url" : "mongodb://localhost:27017"
 }
