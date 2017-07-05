@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 let config = require('../config.json');
 let appconfig = require('../appconfig.json');
 function DataProjections(data, projections) {
