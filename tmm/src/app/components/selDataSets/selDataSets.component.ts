@@ -141,8 +141,8 @@ export class selDataSetsComponent implements OnInit {
         // URL Regex Test
         // Name != '' Tests
         validationBoolean = (
-          /^(ftp|http|https):\/\/[^ "]+$/.test(input.mcurl.value) && 
-          input.mName.value != undefined 
+          /^(http|https):\/\/[^ "]+$/.test(input.mcurl.value) && 
+          (input.mName.value != undefined && input.mName.value != '')
         );
         break;
       case 'API' : 
@@ -150,12 +150,13 @@ export class selDataSetsComponent implements OnInit {
         // Name != '' Tests
         // Polling Interval Tests
         validationBoolean = ( 
-          /^(ftp|http|https):\/\/[^ "]+$/.test(input.apiUrl.value) &&
+          /^(http|https):\/\/[^ "]+$/.test(input.apiUrl.value) &&
           (input.apiName.value != undefined && input.apiName.value != '') && 
           (input.apiFrequency.value != undefined && input.apiFrequency.value != 0)
         ); 
         break;
       case 'Other...' : 
+        validationBoolean = true;
         break;
     }
     return validationBoolean;
@@ -163,7 +164,7 @@ export class selDataSetsComponent implements OnInit {
     //TODO: copy and paste, need to change
   addSource(dataSourceForm) {
     if (this.checkedOption.length == 0) {
-      alert('Please Select a DataSet Sucka!');
+      alert('Please Select a DataSet!');
       return;
     } else {
       this.activatedRoute.params.subscribe((params: Params) => {
@@ -202,7 +203,7 @@ export class selDataSetsComponent implements OnInit {
 
           this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
             if (data) {
-              alert('Save Succesful Sucka! <br />' + data);
+              alert('Save Succesful!');
             }
           });
         }

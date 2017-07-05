@@ -9,6 +9,7 @@ import * as FileSaver from 'file-saver';
   template: `
     <div class="container">
         <h1 class="text-center"> Data Source for {{ tenantMetadata.tenantId }} </h1>
+        <button class="btn btn-primary" role="button" routerLink="/dev/{{tenantMetadata.tenantId}}">Back</button>
         <hr />
         <div *ngIf="editDataSourceForm">
           <form #editedForm>

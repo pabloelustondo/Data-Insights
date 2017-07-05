@@ -9,8 +9,8 @@
         </div>
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source</button>
-                <button class="btn btn-primary btn-lg" role="button" routerLink="/editDataSource/{{tenantMetadata.tenantId}}">Show Data Sources</button>
+                <button class="btn btn-primary" role="button" (click)="showAddSource()">Enroll Data Source</button>
+                <button class="btn btn-primary" role="button" routerLink="/editDataSource/{{tenantMetadata.tenantId}}">Show Data Sources</button>
                 <div *ngIf="enrollStatus">
                     <br>
                     <p> Select Type: {{ dataSourceType }}</p>
