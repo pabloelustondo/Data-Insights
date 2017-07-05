@@ -113,7 +113,7 @@ app.post('/resetCredentials/:agentId', function (req, res) {
             console.log(response.statusCode, body);
 
             if (response.statusCode === 200){
-              var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "'+success.tenantId+'", "message": "Tenant {'+success.tenantId+'} has reset credentials for agent '+agentId+'", "Priority": "Info"}', partition: 0 }];
+              var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "Tenant {'+success.tenantId+'} has reset credentials for agent '+agentId+'", "Priority": "Info"}', partition: 0 }];
               producer.send(payloads, function (err, data) {
                 res.status(200).send({
                   message: "Success fully reset"
@@ -408,7 +408,7 @@ app.post('/registerDataSource', function (req, res) {
         res.status(err.status).send(err.message);
       }
       if (result) {
-        var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "'+dataSource.tenantId+'", "message": "Registered Data Source: "'+JSON.stringify(dataSource)+', "Priority": "Info"}', partition: 0 }];
+        var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "Registered Data Source: "'+JSON.stringify(dataSource)+', "Priority": "Info"}', partition: 0 }];
         producer.send(payloads, function () {
           res.status(result.status).send(result.message);
         });
@@ -807,7 +807,7 @@ app.post('/deleteDataSource', function (req, res) {
                 console.log(response.statusCode, body);
 
                 if (response.statusCode === 200) {
-                  var payloads = [{ topic: 'log', messages: '{"Classifier": "Delete_Success","serverId": '+ process.pid.toString()+', "Producer": "'+tenantId+'", "message": "Tenant {'+tenantId+'} has reset credentials for agent '+req.body.agentid+'", "Priority": "Info"}', partition: 0 }];
+                  var payloads = [{ topic: 'log', messages: '{"Classifier": "Delete_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "Tenant '+tenantId+' has reset credentials for agent '+req.body.agentid+'", "Priority": "Info"}', partition: 0 }];
                   producer.send(payloads, function (err, data) {
                     var body = JSON.parse(response.body);
                     res.status(200).send(body);
