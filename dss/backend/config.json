@@ -8,9 +8,12 @@
   "ddb-accessKey" : "C:/accessKey",
   "tempTokenExpiryTime" : 120000,
   "agentPermTokenExpiryTime": 6000000,
-  "ida_get_token" : "",
-  "ida_post_data" : "",
-  "ida_post_log" : "",
-  "ida_get_metadata" : "",
-  "ida_version" : ""
+  "idaInformation" : {
+    "url" : "",
+    "post_Data" : "/Data",
+    "get_Token" : "/Security/getAuthorizationToken",
+    "post_Log" : "/Data/log",
+    "api_Version" : "",
+    "get_Metadata" : "/Metadata"
+  }
 }

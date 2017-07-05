@@ -59,13 +59,12 @@ import * as FileSaver from 'file-saver';
             <div class="col">
                 <h3> ID </h3>
             </div>
-           
-              <div class="col">
-                <h3> Edit </h3>
-            </div>
             <div class="col">
                 <h3> Delete </h3>
             </div>
+          <div class="col">
+            <h3> Reset </h3>
+          </div>
           <div class="col">
             <h3> Download Credentials </h3>
           </div>
@@ -82,16 +81,16 @@ import * as FileSaver from 'file-saver';
                 {{ (dataSource.active)? 'Active' : 'Not Active' }}
             </div>
             <div class="col">
-                {{ dataSource.properties }} 
-            </div> 
-            <div class="col">
-                <button class="btn btn-outline-primary btn-block" (click)="EditDataSourceObject(dataSource)">Edit</button> 
+                {{ dataSource.id }} 
             </div> 
             <div class="col">
                 <button class="btn btn-outline-danger btn-block" (click)="DeleteDataSourceObject(dataSource)">Delete</button> 
             </div>
           <div class="col">
-            <button class="btn btn-outline-danger btn-block" (click)="DownloadCredentials(dataSource)">Download Credentials</button>
+            <button class="btn btn-outline-primary btn-block" (click)="ResetDataSourceObject(dataSource)">Reset</button>
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-primary btn-block" (click)="DownloadCredentials(dataSource)">Download Credentials</button>
           </div>
         </div>
     </div>
@@ -145,15 +144,24 @@ export class smlDataSourceOverview implements OnInit {
   EditDataSourceObject(dataSource) {
       this.editDataSourceObject = dataSource;
       this.editDataSourceForm = true;
+      console.log("Editing: " + this.editDataSourceObject.name);
   }
   DeleteDataSourceObject(dataSource) {
     this.editDataSourceObject = dataSource;
-    this.editDataSourceForm = true;
+   // this.editDataSourceForm = true;
+    console.log("Deleting: " + this.editDataSourceObject.name);
+  }
+
+  ResetDataSourceObject(dataSource){
+      this.editDataSourceObject = dataSource;
+  //    this.editDataSourceForm = true;
+      console.log("Resetting: " + this.editDataSourceObject.name);
   }
 
   DownloadCredentials(dataSource) {
     this.editDataSourceObject = dataSource;
-    this.editDataSourceForm = true;
+  //  this.editDataSourceForm = true;
+    console.log("Downloading: " + this.editDataSourceObject.name);
 
     const _agentId = dataSource.id;
     const headers = new Headers({

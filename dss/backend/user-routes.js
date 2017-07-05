@@ -1,20 +1,23 @@
 var express = require('express'),
     _       = require('lodash'),
     config  = require('./config'),
-    c  = global.appconfig,
+    appconfig  = global.appconfig,
     jwt     = require('jsonwebtoken');
 
 require('./error-messages.js');
 var querystring = require('querystring');
 var https = require('https');
 var uuid = require('node-uuid');
-
+var kafka = require('kafka-node');
 var request = require('request');
 var LocalStorage = require('node-localstorage').LocalStorage;
 var NextBusHelper = require ('./DataSourceHelpers/NextBusHelper');
 localStorage = new LocalStorage('./temp');
-
+var process = require('process');
 var app = module.exports = express.Router();
+
+var idaInformation = config.idaInformation;
+idaInformation.url = appconfig.ida_url;
 
 var SOTITenant =
   {
@@ -42,6 +45,11 @@ var TestTenant =
     companyphone: "111 111 1111"
   };
 
+var Producer = kafka.Producer, KeyedMessage = kafka.KeyedMessage, client = new kafka.Client(), producer = new Producer(client), km = new KeyedMessage('key', 'message');
+producer.on('ready', function () { });
+producer.on('error', function (err) {
+  console.log('error: ' + err);
+});
 
 var enrollments = [SOTITenant, TestTenant];
 
@@ -59,7 +67,9 @@ function readToken(token, callback) {  //Bearer
 }
 
 app.get('/api/enrollments', function(req, res){
-  res.status(200).send(enrollments);
+  var timeStamp = new Date().getTime();
+  //var message: logging = {"classifier":"Create_Success", "serverId": process.pid.toString(), "priority": "Critical", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } };
+  log_action('Read_Success', "Getting all enrollments", "Info", "", "", function(){ res.status(200).send(enrollments)});
 });
 
 app.get('/enrollments2', function(req, res) {
@@ -99,11 +109,11 @@ app.post('/resetCredentials/:agentId', function (req, res) {
             console.log(response.statusCode, body);
 
             if (response.statusCode === 200){
-
-              res.status(200).send({
-                message: "Success fully reset"
+              log_action("Update_Success", "Credentials reset for agent {{agentId}}" ,"Info", success.tenantId, '{ "agentId": '+agentId+'}', function (err, data) {
+                res.status(200).send({
+                  message: "Successfully reset"
+                });
               });
-
             } else if (response.statusCode === 404) {
               res.status(404).send(ErrorMsg.token_verification_failed);
             }
@@ -184,9 +194,13 @@ app.get('/getAgentToken', function(req, res) {
 
               var body = JSON.parse(response.body);
               if (body.activationKey === _activationKey) {
+
+                idaInformation.url = appconfig.ida_url;
+
                 var new_token = jwt.sign({
                   agentid: body.agentId,
-                  tenantid: _tenantID
+                  tenantid: _tenantID,
+                  idaInformation: idaInformation
                 }, config.expiringSecret, {expiresIn: config.tempTokenExpiryTime});
                 console.log(new_token);
                 res.status(200).send({
@@ -252,7 +266,7 @@ app.get('/sourceCredentials/:agentId', function (req, res) {
               tokenpayload.tenantId =  success.tenantId;
               tokenpayload.agentId = agentId;
               tokenpayload.activationKey =  body[0].activationKey;
-
+              tokenpayload.idaInformation = idaInformation;
               var _token = createToken(tokenpayload);
 
               res.status(200).send(_token);
@@ -278,9 +292,11 @@ app.get('/sourceCredentials/:agentId', function (req, res) {
 
 function enrollDlmDataSource (dataSource, callback){
 
+
   var tempToken = jwt.sign({
     agentid: dataSource.agentId,
-    tenantid:  dataSource.tenantId
+    tenantid:  dataSource.tenantId,
+    idaInformation: idaInformation
   }, config.expiringSecret, {expiresIn: config.tempTokenExpiryTime});
   // map UI input to server input
   var data = {
@@ -412,7 +428,9 @@ app.post('/registerDataSource', function (req, res) {
         res.status(err.status).send(err.message);
       }
       if (result) {
-        res.status(result.status).send(result.message);
+       log_action("Create_Success", "Data source created {{dataSource}}",  "INFO", req.body.tenantid,'{"dataSource" : '+JSON.stringify(dataSource)+'}',function (err, data) {
+          res.status(result.status).send(result.message);
+        });
       }
     });
   }
@@ -579,26 +597,26 @@ app.post('/enrollments', function(req, res) {
                     tokenpayload.companyphone = req.body.companyPhone;
 
                     var token = createToken(tokenpayload);
-
-                    enrollments.push(
-                      {
-                        'accountId': req.body.accountid,
-                        'mcurl': req.body.mcurl,
-                        'tenantId': req.body.domainid,
-                        'domainId': req.body.domainid,
-                        'Status': 'new',
-                        "clientid": req.body.apikey,
-                        "clientsecret": encodedBase64ApiClientSecret,
-                        "companyName": req.body.companyName,
-                        "companyAddress": req.body.companyAddress,
-                        "companyPhone": req.body.companyPhone
-                      }
-                    );
+                    var tenantInfo = {
+                      'accountId': req.body.accountid,
+                      'mcurl': req.body.mcurl,
+                      'tenantId': req.body.domainid,
+                      'domainId': req.body.domainid,
+                      'Status': 'new',
+                      "clientid": req.body.apikey,
+                      "clientsecret": encodedBase64ApiClientSecret,
+                      "companyName": req.body.companyName,
+                      "companyAddress": req.body.companyAddress,
+                      "companyPhone": req.body.companyPhone
+                    };
+                    enrollments.push(tenantInfo);
 
                     sendEmail2(tokenpayload, token);
-
-                    res.status(200).send({
-                      id_token: token
+                    var payloads = [{ topic: 'log', messages: '{"Classifier": "Create_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "New tenant enrolled: '+JSON.stringify(tenantInfo)+'", "Priority": "Info"}', partition: 0 }];
+                    log_action("Create_Success", "New tenant enrolled {{tenantInfo}}",  "INFO", tenantInfo.tenantId,'{"tenantInfo" : '+JSON.stringify(tenantInfo)+'}', function (err, data) {
+                      res.status(200).send({
+                        id_token: token
+                      });
                     });
                   }
                 });
@@ -743,7 +761,8 @@ app.get('/confirm', function(req, res){
 app.post('/deleteDataSource', function (req, res) {
 
   var token = req.headers['x-access-token'];
-
+  var tenantId = '';
+  var agentId = '';
   if(!token){
     return res.status(400).send ( ErrorMsg.login_failed_authentication);
   }
@@ -754,6 +773,7 @@ app.post('/deleteDataSource', function (req, res) {
           return res.status(400).send (ErrorMsg.token_verification_failed);
         }
         if (success) {
+          tenantId = success.tenantId;
 
           if (req.body.dataSourceType === 'NextBus') {
             NextBusHelper.deleteDataSource(req, function (err, result){
@@ -806,12 +826,13 @@ app.post('/deleteDataSource', function (req, res) {
                 console.log(response.statusCode, body);
 
                 if (response.statusCode === 200) {
-
-                  var body = JSON.parse(response.body);
-                  res.status(200).send(body);
-
+                  var payloads = [{ topic: 'log', messages: '{"Classifier": "Delete_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "Tenant '+tenantId+' has deleted agent '+req.body.agentid+'", "Priority": "Info"}', partition: 0 }];
+                  producer.send(payloads, function (err, data) {
+                    var body = JSON.parse(response.body);
+                    res.status(200).send(body);
+                  });
                 } else if (response.statusCode === 404) {
-                  res.status(404).send('Error with query and data soruce');
+                  res.status(404).send('Error with query and data source');
                 }
                 else {
                   res.status(400).send('Error with token');
@@ -1052,6 +1073,23 @@ function sendEmail(enrollment)
     console.dir(reply);
   });
 };
+
+function log_action(classifier, message, priority, tenantId, params, callback){
+  var messages = {
+  "Classifier" : classifier,
+  "serverId" : process.pid.toString(),
+  "Producer" : "DSS",
+  "message" : message,
+  "Priority" : priority,
+  "tenantId" : tenantId,
+  "params" : params
+  };
+  var payloads = [{ topic: 'log', messages: JSON.stringify(messages), partition: 0 }];
+  producer.send(payloads, function (err, data) {
+    console.log(JSON.stringify(payloads));
+    callback();
+  });
+}
 
 function sendEmail2(enrollment,token) {
 

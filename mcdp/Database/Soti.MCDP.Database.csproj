@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}</ProjectGuid>
+    <ProjectGuid>{ECAAC8AB-1BF6-499D-A0D5-3915DD1EFE63}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataProcess</RootNamespace>
-    <AssemblyName>DataProcess</AssemblyName>
+    <RootNamespace>Database</RootNamespace>
+    <AssemblyName>Database</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,21 +33,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.IdentityModel.Logging, Version=1.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\MCDP\packages\Microsoft.IdentityModel.Logging.1.1.4\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\MCDP\packages\Microsoft.IdentityModel.Tokens.5.1.4\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\MCDP\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\MCDP\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\MCDP\packages\System.IdentityModel.Tokens.Jwt.5.1.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,23 +47,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataProcessProvider.cs" />
-    <Compile Include="IDataProcessProvider.cs" />
+    <Compile Include="DatabaseSection.cs" />
+    <Compile Include="DeviceStatApplicationProvider.cs" />
+    <Compile Include="DeviceStatIntProvider.cs" />
+    <Compile Include="IDeviceStatApplicationProvider.cs" />
+    <Compile Include="IDeviceStatIntProvider.cs" />
+    <Compile Include="Model\DeviceStatApplication.cs" />
+    <Compile Include="Model\DeviceStatInt.cs" />
+    <Compile Include="Model\DeviceSyncStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Database\Database.csproj">
-      <Project>{ecaac8ab-1bf6-499d-a0d5-3915dd1efe63}</Project>
-      <Name>Database</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MCDP\Logger\Logger.csproj">
-      <Project>{7be4ad5a-c0cb-495c-a5f6-d733ea010d2f}</Project>
-      <Name>Logger</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <ProjectReference Include="..\MCDP\Logger\Soti.MCDP.Logger.csproj">
+      <Project>{7be4ad5a-c0cb-495c-a5f6-d733ea010d2f}</Project>
+      <Name>Soti.MCDP.Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
