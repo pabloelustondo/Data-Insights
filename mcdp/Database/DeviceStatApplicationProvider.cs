@@ -63,7 +63,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -184,12 +184,12 @@ namespace Soti.MCDP.Database
                     
                     result = JsonConvert.SerializeObject(idaData);
 
-                    Logger.Logger.Log(LogSeverity.Info, "Try to send " + idaData.Count + " of DeviceStatApplication");
+                    //Logger.Logger.Log(LogSeverity.Info, "Try to send " + idaData.Count + " of DeviceStatApplication");
                 }
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
@@ -261,7 +261,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
@@ -295,7 +295,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -331,7 +331,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -365,7 +365,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
     }

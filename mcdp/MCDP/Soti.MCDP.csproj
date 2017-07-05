@@ -111,6 +111,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConfigSet\Soti.MCDP.ConfigSet.csproj">
+      <Project>{153263fb-150c-48c2-b8cd-c519845c9f30}</Project>
+      <Name>Soti.MCDP.ConfigSet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Database\Soti.MCDP.Database.csproj">
       <Project>{ecaac8ab-1bf6-499d-a0d5-3915dd1efe63}</Project>
       <Name>Soti.MCDP.Database</Name>
@@ -118,6 +122,10 @@
     <ProjectReference Include="..\DataProcess\Soti.MCDP.DataProcess.csproj">
       <Project>{105a2bbf-f50b-4d34-aef9-f76ff7e723fc}</Project>
       <Name>Soti.MCDP.DataProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Metadata\Soti.MCDP.Metadata.csproj">
+      <Project>{cf6ac823-4add-48a9-87fc-08622be17d09}</Project>
+      <Name>Soti.MCDP.Metadata</Name>
     </ProjectReference>
     <ProjectReference Include="..\Soti.Scheduler\Soti.MCDP.Scheduler.csproj">
       <Project>{4c4e2db7-2e08-4865-9b74-b54e4479dc3c}</Project>

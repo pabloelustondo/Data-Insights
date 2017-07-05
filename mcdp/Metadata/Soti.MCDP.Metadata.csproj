@@ -7,10 +7,11 @@
     <ProjectGuid>{CF6AC823-4ADD-48A9-87FC-08622BE17D09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Metadata</RootNamespace>
-    <AssemblyName>Metadata</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Soti.MCDP.Metadata</RootNamespace>
+    <AssemblyName>Soti.MCDP.Metadata</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

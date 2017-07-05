@@ -6,6 +6,9 @@ using System.Timers;
 using Soti.MCDP.DataProcess;
 using Soti.MCDP.Scheduler;
 using Soti.MCDP.Scheduler.Model;
+using Soti.MCDP.ConfigSet;
+using Soti.MCDP.ConfigSet.Model;
+
 namespace Soti.MCDP
 {
     /// <summary>
@@ -27,6 +30,11 @@ namespace Soti.MCDP
         private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
         
         private Scheduler.Scheduler _scheduler;
+
+        /// <summary>
+        ///     List of Metadata
+        /// </summary>
+        private List<mcMetadata> _metadataList;
 
         public MCDP()
         {
@@ -63,16 +71,18 @@ namespace Soti.MCDP
             {
                 this._deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
 
-                this._scheduler = new Scheduler.Scheduler(_deviceSyncStausList);
+                this._metadataList = ConfigSet.ConfigSet.Instance.MetadataList;
+
+                this._scheduler = new Scheduler.Scheduler(_deviceSyncStausList, _metadataList);
 
                 Scheduler.Scheduler.LoadTasksIntoDataSet();
                 Scheduler.Scheduler.LoadTasksAssembly();
 
                 this._pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
 
-                //make default min value to 1 minutes
-                if (this._pollinginterval < 60000)
-                    this._pollinginterval = 60000;
+                //make default min value to 1 sec
+                if (this._pollinginterval < 1000)
+                    this._pollinginterval = 1000;
                 //LOADING Process PROVIDER
 
                 this._mcdpTimer = new Timer(this._pollinginterval)
