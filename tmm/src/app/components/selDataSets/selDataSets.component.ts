@@ -120,9 +120,8 @@ export class selDataSetsComponent implements OnInit {
     } else {
       this.tenantMetadata.dataSets.splice(parsed, 1);
     }
-    this.selectedOption.index = this.tenantMetadata.dataSets.length();
+    this.selectedOption.index = this.tenantMetadata.dataSets.length;
     this.selectedOption = this.emptyDataSet;
-
 
     this.tmmConfigService.deleteUserByTenantId( this.tenantMetadata.tenantId);
     this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata, (data) => {
@@ -131,42 +130,85 @@ export class selDataSetsComponent implements OnInit {
       }
     });
   }
+
+  validateDataProperties(dataSourceForm) {
+    let validationBoolean = false;
+    let regexTest;
+    let input:any = dataSourceForm.getElementsByTagName('input');
+
+    switch (this.dataSourceType) {
+      case 'MCDP':
+        // URL Regex Test
+        // Name != '' Tests
+        validationBoolean = (
+          /^(http|https):\/\/[^ "]+$/.test(input.mcurl.value) &&
+          (input.mName.value != undefined && input.mName.value != '')
+        );
+        break;
+      case 'API' :
+        // URL Regex Test
+        // Name != '' Tests
+        // Polling Interval Tests
+        validationBoolean = (
+          /^(http|https):\/\/[^ "]+$/.test(input.apiUrl.value) &&
+          (input.apiName.value != undefined && input.apiName.value != '') &&
+          (input.apiFrequency.value != undefined && input.apiFrequency.value != 0)
+        );
+        break;
+      case 'Other...' :
+        validationBoolean = true;
+        break;
+    }
+    return validationBoolean;
+  }
     //TODO: copy and paste, need to change
   addSource(dataSourceForm) {
-    this.activatedRoute.params.subscribe((params: Params) => {
-      let tenantId = params['tenantId'];
-      let inputs = dataSourceForm.getElementsByTagName('input');
-      console.log(inputs);
+    if (this.checkedOption.length == 0) {
+      alert('Please Select a DataSet!');
+      return;
+    } else {
+      this.activatedRoute.params.subscribe((params: Params) => {
+        let tenantId = params['tenantId'];
+        let inputs = dataSourceForm.getElementsByTagName('input');
+        console.log(inputs);
 
-      let dataSource: SmlDataSource = {
-        id: uuid.v4(),
-        name: this.dataSourceType, //TODO: replace with actual name when we need to
-        active: false,
-        activationKey: '',
-        type: this.dataSourceType,
-        status: 'pending', //TODO: Replace with ENUM
-        dataSets: [],
-        properties: []
-      };
+        // Validate Input Before Saving
+        if (!this.validateDataProperties(dataSourceForm)) {
+          alert('Invalid Paramaters Provided for Type: ' + this.dataSourceType);
+          return;
+        } else {
 
-      dataSource.dataSets = this.checkedOption;
+          let dataSource: SmlDataSource = {
+            id: uuid.v4(),
+            name: this.dataSourceType, //TODO: replace with actual name when we need to
+            active: false,
+            activationKey: '',
+            type: this.dataSourceType,
+            status: 'pending', //TODO: Replace with ENUM
+            dataSets: [],
+            properties: []
+          }
 
-      for (let ctr = 0;  ctr < inputs.length; ctr++) {
-        let dsProperty = {
-          inputName : inputs[ctr].id,
-          inputValue :  inputs[ctr].value
-        }
-        dataSource.properties.push(dsProperty);
-      }
+          dataSource.dataSets = this.checkedOption;
 
-      this.tenantMetadata.dataSource.push(dataSource);
+          for (let ctr = 0;  ctr < inputs.length; ctr++) {
+            let dsProperty = {
+              inputName : inputs[ctr].id,
+              inputValue :  inputs[ctr].value
+            }
+            dataSource.properties.push(dsProperty);
+          }
 
-      this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
-        if (data) {
-          console.log(data);
+          this.tenantMetadata.dataSource.push(dataSource);
+
+          this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
+            if (data) {
+              alert('Save Succesful!');
+            }
+          });
         }
       });
-    });
+    }
   }
 
   dataSourceTypeSelect(dataType) {

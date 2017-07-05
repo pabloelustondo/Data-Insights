@@ -9,8 +9,8 @@
         </div>
         <div class="row">
             <div class="col">
-                <a class="btn btn-primary btn-lg" role="button" (click)="showAddSource()">Enroll Data Source</a>
-                <a class="btn btn-primary btn-lg" role="button" routerLink="/editDataSource/{{tenantMetadata.tenantId}}">Show Data Sources</a>
+                <button class="btn btn-primary" role="button" (click)="showAddSource()">Enroll Data Source</button>
+                <button class="btn btn-primary" role="button" routerLink="/editDataSource/{{tenantMetadata.tenantId}}">Show Data Sources</button>
                 <div *ngIf="enrollStatus">
                     <br>
                     <p> Select Type: {{ dataSourceType }}</p>
@@ -26,8 +26,12 @@
                         <form #mcForm >
                         <table>
                             <tr>
+                                <td style="width: 200px"> <label>Data Source Name: </label>  </td>
+                                <td style="width: 300px"> <input #mName id="mName" style="width:300px" placeholder="Enter preferred agent name"></td>
+                            </tr>
+                            <tr>
                                 <td style="width: 200px"> <label>MobiControl Url: </label>  </td>
-                                <td style="width: 300px"><input #mcurl id="mcurl" style="width:300px" placeholder="Enter the mobi control url" type="url"></td>
+                                <td style="width: 300px"> <input #mcurl id="mcurl" style="width:300px" placeholder="Enter the mobi control url" type="url"></td>
                             </tr>
                             <tr>
                                 <td> <button type="submit" class="btn btn-success" (click)="addSource(mcForm)">Add Source</button></td>
@@ -42,16 +46,16 @@
                             the api does not return data in JSON format it will not be persisted.</i>
                             <table>
                                 <tr>
-                                    <td style="width: 200px"> <label>Data source Name: </label>  </td>
-                                    <td style="width: 300px"><input #nbname id="apiName" style="width:300px" placeholder="Enter preferred agent name"></td>
+                                    <td style="width: 200px"> <label>Data Source Name: </label>  </td>
+                                    <td style="width: 300px"> <input #apiName id="apiName" style="width:300px" placeholder="Enter preferred agent name"></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 200px"> <label>Data source URL: </label>  </td>
-                                    <td style="width: 300px"><input #nburl id="apiUrl" style="width:300px" placeholder="Enter agent URL" type="url"></td>
+                                    <td style="width: 200px"> <label>Data Source URL: </label>  </td>
+                                    <td style="width: 300px"> <input #apiUrl id="apiUrl" style="width:300px" placeholder="Enter agent URL" type="url"></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 200px"> <label>Polling interval (seconds): </label>  </td>
-                                    <td style="width: 300px"><input type="number" #nbfrequency id="apiFrequency" style="width:300px" placeholder="Enter api polling in seconds"></td>
+                                    <td style="width: 200px"> <label>Polling Interval in Seconds: </label>  </td>
+                                    <td style="width: 300px"> <input type="number" #apiFrequency id="apiFrequency" style="width:300px" placeholder="Enter api polling in seconds"></td>
                                 </tr>
                                 <tr>
                                     <td> <button class="btn btn-success" (click)="addSource(nbForm)">Add Source</button></td>
@@ -64,7 +68,7 @@
                         <form #otherForm>
                         <table>
                             <tr>
-                                <td style="width: 200px"> <label>Data source label: </label>  </td>
+                                <td style="width: 200px"> <label>Data Source Name: </label>  </td>
                                 <td style="width: 300px"><input #agentLabel id="agentLabel" style="width:300px" placeholder="Enter preferred agent name. (Max 16 characters)" type="string" maxlength="16"></td>
                             </tr>
                             <tr>

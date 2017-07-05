@@ -10,7 +10,8 @@ import { TmmConfigService } from './components/layout/smlTenantMetadataEditor/tm
 import { RouterModule } from "@angular/router";
 import { InvalidResourceComponent } from './components/invalid-resource/invalid-resource.component';
 import { smlDataSourceOverview } from './components/smlDataSourceOverview/smlDataSourceOverview.component';
-import {selDataSetsComponent} from "./components/selDataSets/selDataSets.component";
+import { selDataSetsComponent } from "./components/selDataSets/selDataSets.component";
+import { AuthGuard } from './authguard.guard';
 
 @NgModule({
   declarations: [
@@ -27,17 +28,19 @@ import {selDataSetsComponent} from "./components/selDataSets/selDataSets.compone
     FormsModule,
     HttpModule,
     RouterModule.forRoot ([
-      {
-        path: ':tenantId', component: smlTenantMetadataEditor
+      /*{
+        path: ':tenantId', component: smlTenantMetadataEditor, canActivate:[AuthGuard]
+      },*/ {
+        path: 'dev/:tenantId', component: selDataSetsComponent, canActivate:[AuthGuard]
       }, {
-        path: 'dev/:tenantId', component: selDataSetsComponent
-      }, {
-        path: 'editDataSource/:tenantId', component: smlDataSourceOverview
+        path: 'editDataSource/:tenantId', component: smlDataSourceOverview, canActivate:[AuthGuard]
       },  {
+        path: ':JWT/:tenantId', component: InvalidResourceComponent,
+      }, {
         path: '**', component: InvalidResourceComponent,
       }])
   ],
   bootstrap: [AppComponent],
-  providers: [TmmConfigService]
+  providers: [TmmConfigService, AuthGuard]
 })
 export class AppModule { }
