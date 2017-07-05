@@ -120,9 +120,8 @@ export class selDataSetsComponent implements OnInit {
     } else {
       this.tenantMetadata.dataSets.splice(parsed, 1);
     }
-    this.selectedOption.index = this.tenantMetadata.dataSets.length();
+    this.selectedOption.index = this.tenantMetadata.dataSets.length;
     this.selectedOption = this.emptyDataSet;
-
 
     this.tmmConfigService.deleteUserByTenantId( this.tenantMetadata.tenantId);
     this.tmmConfigService.saveDataByTenantId( this.tenantMetadata.tenantId, this.tenantMetadata, (data) => {
