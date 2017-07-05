@@ -147,10 +147,12 @@ export class smlDataSourceOverview implements OnInit {
       this.editDataSourceForm = true;
       console.log("Editing: " + this.editDataSourceObject.name);
   }
+
   DeleteDataSourceObject(dataSource) {
     this.editDataSourceObject = dataSource;
    // this.editDataSourceForm = true;
     console.log("Deleting: " + this.editDataSourceObject.name);
+    this.tmmConfigService.deleteDataSourceByDataSourceId(this.tenantMetadata.tenantId, this.editDataSourceObject.id);
   }
 
   ResetDataSourceObject(dataSource){

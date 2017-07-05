@@ -1,3 +1,4 @@
+import {getTestBed} from "@angular/core/testing";
 /**
  * Created by dister on 6/7/2017.
  */
@@ -26,8 +27,9 @@ export class TmmConfigService {
     }
   }
 
-  deleteDataSourceByDataSourceId(tenantId, dataSourceId){
-    return this.http.delete(config.ddb_url + 'deleteDataSource');
+  deleteDataSourceByDataSourceId(tenantId, dataSourceId) {
+    console.log(globalConfig['tmmback_url'] + '/deleteDataSource/' + tenantId + '/' + dataSourceId);
+    return this.http.delete(globalConfig['tmmback_url'] + '/deleteDataSource/' + tenantId + '/' + dataSourceId).toPromise();
   }
 
   saveDataByTenantId(tenantid, tmtMetadata, callback) {

@@ -151,7 +151,7 @@ app.put('/dataSource/:tenantId/:dataSourceId', function (req, res) {
 
       var ddbOptions = {
         uri:appconfig.ddb_url + "/tenant/" + req.params.tenantId,
-        method:"PUT",
+        method:"POST",
         contentType:"application/json",
         body: req.body,
         json:true
@@ -177,6 +177,26 @@ app.put('/dataSource/:tenantId/:dataSourceId', function (req, res) {
 
 
 });
+
+app.delete('/deleteDataSource/:tenantId/:dataSourceId',function (req,res) {
+    console.log(appconfig.ddb_url + "/" + req.params.tenantId + "/" + req.params.dataSourceId + "/deleteDataSource");
+
+    var options = {
+      uri:appconfig.ddb_url + "/" + req.params.tenantId + "/" + req.params.dataSourceId + "/deleteDataSource",
+      method:"DELETE",
+      contentType:"application/json",
+      json:true
+    };
+    rp(options)
+      .then(function (data) {
+        console.log("OK" + data)
+        res.send(data)
+      })
+      .catch(function (err) {
+        console.log("BAD" + err);
+        res.send(err);
+      });
+})
 
 app.post('/tenant/:tenantid', function(req,res){
   var timeStamp = new Date().getTime();

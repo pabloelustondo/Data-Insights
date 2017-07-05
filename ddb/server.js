@@ -571,6 +571,26 @@ router.delete('/deleteDataSource', function(req,res){
 
 });
 
+
+router.delete('/:tenantId/:dataSourceId/deleteDataSource',function (req,res) {
+    callDbAndRespond(req, res, function(req,res,db) {
+
+        db.collection('tenant').update(
+            {
+                tenantId: req.params.tenantId
+        },
+        {
+            $pull: {
+                dataSource:{
+                    id:req.params.dataSourceId
+                }
+            }
+        });
+        res.send("DataSource has been deleted")
+    });
+})
+
+
 //router.use(helmet());
 
 router.get('/router2', function (req, res) {
