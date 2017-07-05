@@ -459,7 +459,6 @@ app.get('/getDataSources', function(req, res) {
 
        }
      });
-
    }
    catch (e) {
      console.log(e);
@@ -587,7 +586,6 @@ app.post('/enrollments', function(req, res) {
                     enrollments.push(tenantInfo);
 
                     sendEmail2(tokenpayload, token);
-                    var payloads = [{ topic: 'log', messages: '{"Classifier": "Create_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "New tenant enrolled: '+JSON.stringify(tenantInfo)+'", "Priority": "Info"}', partition: 0 }];
                     log_action("Create_Success", "New tenant enrolled {{tenantInfo}}",  "INFO", tenantInfo.tenantId,'{"tenantInfo" : '+JSON.stringify(tenantInfo)+'}', function (err, data) {
                       res.status(200).send({
                         id_token: token
@@ -801,8 +799,7 @@ app.post('/deleteDataSource', function (req, res) {
                 console.log(response.statusCode, body);
 
                 if (response.statusCode === 200) {
-                  var payloads = [{ topic: 'log', messages: '{"Classifier": "Delete_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "Tenant '+tenantId+' has deleted agent '+req.body.agentid+'", "Priority": "Info"}', partition: 0 }];
-                  producer.send(payloads, function (err, data) {
+                  log_action("Delete_Success", "Data source deleted for {{agentId}}",  "INFO", _tenantID,'{"agentId" : '+req.body.agentid+'}', function (err, data) {
                     var body = JSON.parse(response.body);
                     res.status(200).send(body);
                   });
@@ -1060,8 +1057,8 @@ function log_action(classifier, message, priority, tenantId, params, callback){
   "params" : params
   };
   var payloads = [{ topic: 'log', messages: JSON.stringify(messages), partition: 0 }];
-  producer.send(payloads, function (err, data) {
-    console.log(JSON.stringify(payloads));
+  producer.send(payloads, function(err, data) {
+    //console.log(JSON.stringify(payloads));
     callback();
   });
 }
