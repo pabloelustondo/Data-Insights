@@ -69,11 +69,7 @@ function readToken(token, callback) {  //Bearer
 app.get('/api/enrollments', function(req, res){
   var timeStamp = new Date().getTime();
   //var message: logging = {"classifier":"Create_Success", "serverId": process.pid.toString(), "priority": "Critical", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } };
-  var payloads = [{ topic: 'log', messages: '{"Classifier": "Read_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS Backend", "message": "Getting all enrollments", "Priority": "Info"}', partition: 0 }];
-  producer.send(payloads, function (err, data) {
-    console.log("getting enrollments")
-    res.status(200).send(enrollments);
-  });
+  log_action('Read_Success', "Getting all enrollments", "Info", "", "", function(){ res.status(200).send(enrollments)});
 });
 
 app.get('/enrollments2', function(req, res) {
@@ -113,10 +109,9 @@ app.post('/resetCredentials/:agentId', function (req, res) {
             console.log(response.statusCode, body);
 
             if (response.statusCode === 200){
-              var payloads = [{ topic: 'log', messages: '{"Classifier": "Update_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "Tenant {'+success.tenantId+'} has reset credentials for agent '+agentId+'", "Priority": "Info"}', partition: 0 }];
-              producer.send(payloads, function (err, data) {
+              log_action("Update_Success", "Credentials reset for agent {{agentId}}" ,"Info", success.tenantId, '{ "agentId": '+agentId+'}', function (err, data) {
                 res.status(200).send({
-                  message: "Success fully reset"
+                  message: "Successfully reset"
                 });
               });
             } else if (response.statusCode === 404) {
@@ -408,8 +403,7 @@ app.post('/registerDataSource', function (req, res) {
         res.status(err.status).send(err.message);
       }
       if (result) {
-        var payloads = [{ topic: 'log', messages: '{"Classifier": "Create_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": '+JSON.stringify(dataSource)+', "Priority": "Info"}', partition: 0 }];
-        producer.send(payloads, function (err, data) {
+       log_action("Create_Success", "Data source created {{dataSource}}",  "INFO", req.body.tenantid,'{"dataSource" : '+JSON.stringify(dataSource)+'}',function (err, data) {
           res.status(result.status).send(result.message);
         });
       }
@@ -594,7 +588,7 @@ app.post('/enrollments', function(req, res) {
 
                     sendEmail2(tokenpayload, token);
                     var payloads = [{ topic: 'log', messages: '{"Classifier": "Create_Success","serverId": '+ process.pid.toString()+', "Producer": "DSS", "message": "New tenant enrolled: '+JSON.stringify(tenantInfo)+'", "Priority": "Info"}', partition: 0 }];
-                    producer.send(payloads, function (err, data) {
+                    log_action("Create_Success", "New tenant enrolled {{tenantInfo}}",  "INFO", tenantInfo.tenantId,'{"tenantInfo" : '+JSON.stringify(tenantInfo)+'}', function (err, data) {
                       res.status(200).send({
                         id_token: token
                       });
@@ -1054,6 +1048,23 @@ function sendEmail(enrollment)
     console.dir(reply);
   });
 };
+
+function log_action(classifier, message, priority, tenantId, params, callback){
+  var messages = {
+  "Classifier" : classifier,
+  "serverId" : process.pid.toString(),
+  "Producer" : "DSS",
+  "message" : message,
+  "Priority" : priority,
+  "tenantId" : tenantId,
+  "params" : params
+  };
+  var payloads = [{ topic: 'log', messages: JSON.stringify(messages), partition: 0 }];
+  producer.send(payloads, function (err, data) {
+    console.log(JSON.stringify(payloads));
+    callback();
+  });
+}
 
 function sendEmail2(enrollment,token) {
 
