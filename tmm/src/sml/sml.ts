@@ -8,7 +8,7 @@ export class SmlTenantMetadata {
   name: string;
   tenantId: string;
   dataSets: SmlDataSet[];
-  dataSources: SmlDataSource[];
+  dataSource: SmlDataSource[];
   users: SmlUsers[];
   idpInformation: SmlIdpInformation[];
 }

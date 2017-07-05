@@ -22,7 +22,7 @@ export class selDataSetsComponent implements OnInit {
   dataSourceType: DataSourceTypeOptions;
   options: any[] = [{'option': 'MCDP'}, {'option': 'API'}, {'option': 'Other...'}];
   checkboxTrue: boolean = false;
-  checkedOption: any = []; 
+  checkedOption: any = [];
 
   tenantMetadata: any = smlTenantMetadataSample;
   selectedOption: any ={};
@@ -78,9 +78,9 @@ export class selDataSetsComponent implements OnInit {
   editorOption(id) {
     this.index = 0;
     let found = false;
-    
+
     if (this.checkboxTrue) {
-      this.checkedOption.push(id); 
+      this.checkedOption.push(id);
     } else {
       this.checkedOption = id;
     }
@@ -135,21 +135,20 @@ export class selDataSetsComponent implements OnInit {
   addSource(dataSourceForm) {
     this.activatedRoute.params.subscribe((params: Params) => {
       let tenantId = params['tenantId'];
-
-      console.log(dataSourceForm);
       let inputs = dataSourceForm.getElementsByTagName('input');
+      console.log(inputs);
 
       let dataSource: SmlDataSource = {
         id: uuid.v4(),
-        name: this.dataSourceType, //TODO: replace with actual name when we need to  
+        name: this.dataSourceType, //TODO: replace with actual name when we need to
         active: false,
-        activationKey: '', 
-        type: this.dataSourceType, 
+        activationKey: '',
+        type: this.dataSourceType,
         status: 'pending', //TODO: Replace with ENUM
-        dataSets: [], 
+        dataSets: [],
         properties: []
       }
-      
+
       dataSource.dataSets = this.checkedOption;
 
       for (let ctr = 0;  ctr < inputs.length; ctr++) {
@@ -160,7 +159,7 @@ export class selDataSetsComponent implements OnInit {
         dataSource.properties.push(dsProperty);
       }
 
-      this.tenantMetadata.dataSources.push(dataSource);
+      this.tenantMetadata.dataSource.push(dataSource);
 
       this.tmmConfigService.insertDataSourceByTenantId(tenantId, this.tenantMetadata).then(data => {
         if (data) {
@@ -171,6 +170,6 @@ export class selDataSetsComponent implements OnInit {
   }
 
   dataSourceTypeSelect(dataType) {
-   this.checkboxTrue = (dataType == 'MCDP'); 
+   this.checkboxTrue = (dataType == 'MCDP');
   }
 }

@@ -15,32 +15,28 @@ import * as FileSaver from 'file-saver';
             <div class="row">
                 <div class="col-4">
                     <label> Name
-                        <input name="editedName" type="text" value="{{ editDataSourceObject.name }}">
+                        <input type="text" value="{{ editDataSourceObject.name }}">
                     </label>
                 </div>
                 <div class="col-4">
                     <label for> Type
-                        <input name="editedType" type="text" #editDataSourceObject.type value="{{ editDataSourceObject.type }}">
+                        <input type="text" #editDataSourceObject.type value="{{ editDataSourceObject.type }}">
                     </label>
                 </div> 
                 <div class="col-4">
                     <label> Active
                       <select name="activeStatusSelection" id="statusSelection" [(ngModel)]="selectedStatus">
-                      <option *ngFor="let option of statusOptions"
+                      <option *ngFor="let option of bools"
                               [value]="option" >
                           {{option}}
                         </option>
                       </select>
-                        <select name="editedActive"> 
-                            <option value="true" [selected]="editDataSourceObject.active == true"> True</option>
-                            <option value="false" [selected]="editDataSourceObject.active == false">False</option>
-                        </select>
                     </label>
                 </div>
             </div>
             <h2>Properties</h2>
             <div class="row">    
-                <div name="editedProp" class="col-4" *ngFor="let prop of editDataSourceObject.properties">
+                <div class="col-4" *ngFor="let prop of editDataSourceObject.properties">
                     <input type="text" value="{{ prop }}">                 
                 </div>
             </div>
@@ -75,7 +71,7 @@ import * as FileSaver from 'file-saver';
           </div>
         </div>
         <!-- this should be datasource instead of dataSources-->
-        <div class="row" *ngFor="let dataSource of tenantMetadata.dataSources">
+        <div class="row" *ngFor="let dataSource of tenantMetadata.dataSource">
             <div class="col">
                 {{ dataSource.name }}
             </div>
@@ -86,7 +82,7 @@ import * as FileSaver from 'file-saver';
                 {{ (dataSource.active)? 'Active' : 'Not Active' }}
             </div>
             <div class="col">
-                {{ dataSource.id }} 
+                {{ dataSource.properties }} 
             </div> 
             <div class="col">
                 <button class="btn btn-outline-primary btn-block" (click)="EditDataSourceObject(dataSource)">Edit</button> 
@@ -115,12 +111,12 @@ export class smlDataSourceOverview implements OnInit {
     editDataSourceForm: boolean = false;
     bools: any = [true, false];
     statusOptions: string[] = ['enable', 'disable'];
-    selectedStatus: string;
+    selectedStatus: boolean;
     constructor(
         private activatedRoute: ActivatedRoute,
         private tmmConfigService: TmmConfigService) {
             this.getTenantMetadata();
-            this.selectedStatus = '';
+            this.selectedStatus = true;
     }
 
     ngOnInit() {
@@ -195,10 +191,7 @@ export class smlDataSourceOverview implements OnInit {
   saveEditedItem(editedForm) {
       console.log(editedForm.getElementsByTagName('input'));
       console.log(this.selectedStatus);
-  }
 
-  callType(value) {
-    console.log(value);
-  }
+    }
 }
 

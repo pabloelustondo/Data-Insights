@@ -23,14 +23,14 @@
                         </td>
                     </tr>
                     <div *ngIf="dataSourceType === 'MCDP'">
-                        <form #mcForm (submit)="addSource(mcForm)">
+                        <form #mcForm >
                         <table>
                             <tr>
                                 <td style="width: 200px"> <label>MobiControl Url: </label>  </td>
                                 <td style="width: 300px"><input #mcurl id="mcurl" style="width:300px" placeholder="Enter the mobi control url" type="url"></td>
                             </tr>
                             <tr>
-                                <td> <button type="submit" class="btn btn-success">Add Source</button></td>
+                                <td> <button type="submit" class="btn btn-success" (click)="addSource(mcForm)">Add Source</button></td>
                             </tr>
                         </table>
                         </form>
@@ -61,14 +61,14 @@
                     </div>
                     <div *ngIf="dataSourceType === 'Other...'">
                         <div>Add new data source for tenant {{tenantId}} </div>
-                        <form #otherForm (submit)="addSource(otherForm)">
+                        <form #otherForm>
                         <table>
                             <tr>
                                 <td style="width: 200px"> <label>Data source label: </label>  </td>
                                 <td style="width: 300px"><input #agentLabel id="agentLabel" style="width:300px" placeholder="Enter preferred agent name. (Max 16 characters)" type="string" maxlength="16"></td>
                             </tr>
                             <tr>
-                                <td> <button type="submit" class="btn btn-success" (click)="addSource()">Add Source</button></td>
+                                <td> <button type="submit" class="btn btn-success" (click)="addSource(otherForm)">Add Source</button></td>
                             </tr>
                         </table>
                         </form>

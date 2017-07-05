@@ -28,7 +28,7 @@ export const smlTenantMetadataSample: SmlTenantMetadata = {
     projections: [''],
     metadata: ['']
   }],
-  dataSources: [{
+  dataSource: [{
     id: '10-23-1',
     name: 'Test Data Set 01',
     type: 'MCDP',
@@ -55,10 +55,7 @@ export const smlTenantMetadataSample: SmlTenantMetadata = {
         'inputName' : 'Api Name',
         'inputValue' : 'my custom api'
       },
-      {
-        'inputName' : 'interval',
-        'inputValue' : '30'
-      }],
+    ],
     dataSets: ['']
   }],
   users: [{
@@ -98,7 +95,7 @@ export const smlTenantEmptyMetadataSample: SmlTenantMetadata =
     name: '',
     tenantId: '',
     dataSets: [],
-    dataSources: [],
+    dataSource: [],
     users: [],
     idpInformation: [],
   };
