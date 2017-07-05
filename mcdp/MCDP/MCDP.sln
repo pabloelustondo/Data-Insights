@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.ServiceTest", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.Database", "..\Database\Soti.MCDP.Database.csproj", "{ECAAC8AB-1BF6-499D-A0D5-3915DD1EFE63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHelper", "..\TestHelper\TestHelper.csproj", "{E1135A95-274A-4BBF-A2F5-B532B3EF1360}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.TestHelper", "..\TestHelper\Soti.MCDP.TestHelper.csproj", "{E1135A95-274A-4BBF-A2F5-B532B3EF1360}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.DataProcess", "..\DataProcess\Soti.MCDP.DataProcess.csproj", "{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}"
 EndProject
@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.Metadata", "..\Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.Logger", "Logger\Soti.MCDP.Logger.csproj", "{7BE4AD5A-C0CB-495C-A5F6-D733EA010D2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.Scheduler", "..\Soti.Scheduler\Soti.Scheduler.csproj", "{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soti.MCDP.Scheduler", "..\Soti.Scheduler\Soti.MCDP.Scheduler.csproj", "{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -119,9 +119,9 @@
       <Project>{105a2bbf-f50b-4d34-aef9-f76ff7e723fc}</Project>
       <Name>Soti.MCDP.DataProcess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Soti.Scheduler\Soti.Scheduler.csproj">
+    <ProjectReference Include="..\Soti.Scheduler\Soti.MCDP.Scheduler.csproj">
       <Project>{4c4e2db7-2e08-4865-9b74-b54e4479dc3c}</Project>
-      <Name>Soti.Scheduler</Name>
+      <Name>Soti.MCDP.Scheduler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

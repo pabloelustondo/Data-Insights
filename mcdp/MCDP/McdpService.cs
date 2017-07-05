@@ -70,11 +70,10 @@ namespace Soti.MCDP
 
                 this._pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
 
-                //make default min value to 1 second
+                //make default min value to 1 minutes
                 if (this._pollinginterval < 60000)
                     this._pollinginterval = 60000;
                 //LOADING Process PROVIDER
-                //_dataProcessProvider = new DataProcessProvider(_deviceStatApplicationProvider, _deviceStatIntProvider, _deviceSyncStausList);
 
                 this._mcdpTimer = new Timer(this._pollinginterval)
                 {
