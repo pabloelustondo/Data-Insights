@@ -289,30 +289,36 @@ consumerGroup.on('error', function(err) {
 });
 
 consumerGroup.on('message', function (message) {
-    let data = // {producer: "MCDP", params: {"tenantId": "someid"}};
-    JSON.parse(message.value);
+    try{
+        let data = // {producer: "MCDP", params: {"tenantId": "someid"}};
 
-    if (!data.hasOwnProperty('timeStamp')) {
-        var timeStamp = new Date().getTime();
-        data = {...data, ...{"timeStamp": timeStamp.toString()}};
+            JSON.parse(message.value);
+
+        if (!data.hasOwnProperty('timeStamp')) {
+            var timeStamp = new Date().getTime();
+            data = {...data, ...{"timeStamp": timeStamp.toString()}};
+        }
+
+        console.log('data = ' + JSON.stringify(data));
+        if (data.producer == "Tenant") {
+            callDbAndAct(function (db, next) {
+                db.collection('siloguser').insertOne(data, next);
+            });
+        }
+        if (data.producer == "MCDP") {
+            callDbAndAct(function (db, next) {
+                db.collection('silogagent').insertOne(data, next);
+            });
+        }
+        else {
+            callDbAndAct(function (db, next) {
+                db.collection('silogserver').insertOne(data, next);
+            });
+        }
+    }catch(err){
+        console.log(err+ message.value);
     }
 
-    console.log('data = ' + JSON.stringify(data));
-    if (data.producer == "Tenant") {
-        callDbAndAct(function (db, next) {
-            db.collection('siloguser').insertOne(data, next);
-        });
-    }
-    if (data.producer == "MCDP") {
-        callDbAndAct(function (db, next) {
-            db.collection('silogagent').insertOne(data, next);
-        });
-    }
-    else {
-        callDbAndAct(function (db, next) {
-            db.collection('silogserver').insertOne(data, next);
-        });
-    }
 });
 
 let Producer = kafka.Producer,

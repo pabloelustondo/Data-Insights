@@ -11,66 +11,6 @@ import * as express from "express";
 
 
 
-let dataSets = [
-    {
-        id : '12345',
-        dataSources: [
-            {
-                dataSource: 'test',
-                filter : {}
-            },
-            {
-                dataSource: 'test2',
-                filter : {}
-            }
-        ],
-        filter : {},
-        merge : 'field1',
-        definition : {} //what the output data contains
-    },
-    {
-        id : '21345',
-        dataSources : [
-            {
-                dataSource: 'test'
-            },
-            {
-                dataSource: 'customDataSetId.TestuniqueId12345456'
-            }
-        ]
-    },
-    {
-       id: 'ttc',
-        dataSources: [
-            {
-                dataSource: 'ttcMaps',
-                projection : 'data.vehicle'
-            },
-            {
-                dataSource: 'customDeviceInfo',
-                filter : {
-                    id : '$data',
-                    key: 'Name',
-                    value: 'VehicleID'
-                },
-                projection : 'data'
-            }
-
-        ],
-        merge : 'data'
-    },
-    {
-        id: 'test12345',
-        dataSources: [
-        {
-            dataSource: 'test',
-
-        }
-        ],
-        filter : {}
-    }
-];
-
 export function getDbFromDataService (){
     let server = require('../server');
     let app = server.app;
@@ -87,6 +27,82 @@ export function filter(data: any, property: any, value: any) {
 
 export function findElement (data: any, element: any) {
     return (data[element]) ? data[element] : null;
+}
+
+export function callCdlForData (aggregate: any, dataSetId: any, tenantId) : Promise<any> {
+
+    let p = new Promise( function (resolve,reject) {
+        resolve ('');
+    });
+
+    return p;
+}
+
+export function secretProcess(tenantId: string, dataSetId: string,  _dataSets: any) {
+
+    // find data set definition
+    let dataSetDefinition = _.find(_dataSets, { id : dataSetId} );
+
+    // collect data from required data sets if necessary
+    let sourceDataSets = dataSetDefinition.from;
+
+    // ensure that it's not an empty array and the first element is not blank
+    if (sourceDataSets.length > 0 && sourceDataSets[0] !== '') {
+        // call a function to deal with that data source
+         for (let ds in sourceDataSets) {
+            secretProcess(tenantId, sourceDataSets[ds], _dataSets);
+         }
+    }
+
+    // build the query
+    let aggregation = [];
+
+    if (dataSetDefinition.projection) {
+        aggregation.push ({
+            $project: dataSetDefinition.projection
+        });
+    }
+
+    if (dataSetDefinition.filter) {
+        aggregation.push ({
+            $filter: dataSetDefinition.filter
+        });
+
+    }
+
+    let sourceData = [];
+
+    let data;
+    mergeData(sourceData[0], sourceData[1], '');
+    if(dataSetDefinition.merge){
+        data = getDataFromCDL(tenantId, dataSetId, aggregation).then( function () {
+           let mergedDataSet = mergeData(sourceData[0], sourceData[1], '');
+           return mergedDataSet;
+        });
+        return data;
+    }else{
+        data = getDataFromCDL(tenantId, dataSetId, aggregation);
+        return data;
+    }
+    // call CDL to get the data and return the data;
+
+}
+
+function mergeData (sourceOne: any, sourceTwo: any, key: string) : Promise<any> {
+    let merge = new Promise ( function (resolve, reject) {
+
+        resolve( _.map(sourceOne, function(item) {
+            return _.merge(item,  _.find(sourceTwo, { 'Value' : parseInt(item.id) }));
+        }));
+
+    });
+
+    return merge;
+
+}
+
+function getDataFromCDL(tenantId: string, collectionName: string, query: any) : Promise<any> {
+    return null;
 }
 
 export function processRequest (metadata: any, _dataSets: any, res) {
@@ -114,7 +130,6 @@ export function processRequest (metadata: any, _dataSets: any, res) {
             {
                 $project : {
                     '_id' : 0,
-                    'data' : 1
                 }
             }];
         if (filter) {
@@ -152,17 +167,22 @@ export function processRequest (metadata: any, _dataSets: any, res) {
                 var responseObj = {};
 
                 if (ds) {
-                    let projected = _.get(body[0], ds.projections[0]);
-                    // let sample = projected[ds.projection];
-                    responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    if (ds.projections.length > 0) {
+                        responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    } else {
+                        responseObj[ds.id] = body;
+                    }
                     responseData.push(responseObj);
                 } else {
 
                     let ds = _.find(allDataSets,{id : queryId});
-                    let projected = _.get(body[0], ds.projections[0]);
-                    // let sample = projected[ds.projection];
-                    responseObj[ds.id] = _.get(body[0], ds.projections[0]);
-                    responseData.push(responseObj);
+                    if (ds.projections) {
+                        responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                        responseData.push(responseObj);
+                    } else {
+                        responseObj[ds.id] = body;
+                        responseData.push(responseObj);
+                    }
                 }
             }
             callback();
@@ -174,10 +194,10 @@ export function processRequest (metadata: any, _dataSets: any, res) {
             console.log(err);
         } else {
 
+        let a1 = _.find(responseData, dataSet.from[0]);
+        let a2 = _.find(responseData, dataSet.from[1]);
         if (dataSet.merge) {
 
-            let a1 = _.find(responseData, dataSet.from[0]);
-            let a2 = _.find(responseData, dataSet.from[1]);
 
             if (a1 && a2){
                 let a = a1[dataSet.from[0]];
@@ -194,11 +214,35 @@ export function processRequest (metadata: any, _dataSets: any, res) {
                else {
                    res.status(204).send('No data found');
                }
-            } else {
+            }
+        else {
+             if (dataSet.crossJoin) {
+                 if (a1 && a2) {
+                     let a = a1[dataSet.from[0]];
+                     let b = a2[dataSet.from[1]];
+                     var result = _.forEach(a, function (value, key) {
+                         console.log('bus = ' + key);
+                         // console.log ('element = ' + JSON.stringify(buses[key]));
+                         var image = _.forEach(a, function (value, key) {
+                             console.log('image = ' + key);
+                         });
+                         var obj = a[key];
+                         obj['images'] = b;
+
+                         return obj;
+                     });
+                     res.status(200).send({
+                         timeStamp: new Date().toISOString(),
+                         result: result
+                     });
+                 }
+             }
+             else {
                  res.status(200).send({
-                     timeStamp : new Date().toISOString(),
+                     timeStamp: new Date().toISOString(),
                      result: responseData
                  });
+             }
 
             }
         }

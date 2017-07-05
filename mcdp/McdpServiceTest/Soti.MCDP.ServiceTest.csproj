@@ -68,13 +68,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Database\Database.csproj">
+    <ProjectReference Include="..\Database\Soti.MCDP.Database.csproj">
       <Project>{ecaac8ab-1bf6-499d-a0d5-3915dd1efe63}</Project>
-      <Name>Database</Name>
+      <Name>Soti.MCDP.Database</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestHelper\TestHelper.csproj">
+    <ProjectReference Include="..\TestHelper\Soti.MCDP.TestHelper.csproj">
       <Project>{e1135a95-274a-4bbf-a2f5-b532b3ef1360}</Project>
-      <Name>TestHelper</Name>
+      <Name>Soti.MCDP.TestHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
