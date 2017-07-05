@@ -13,7 +13,7 @@ using Soti.MCDP.Scheduler.Model;
 
 namespace Soti.MCDP.Scheduler
 {
-    public class Scheduler
+    public class Scheduler : ITask
     { 
         private static ManualResetEvent doneEvent;
         private static string configPath = string.Empty;
@@ -113,6 +113,10 @@ namespace Soti.MCDP.Scheduler
                 throw;
             }
         }
+        public void RunTask()
+        {
+
+        }
         private static void DoTask(object o)
         {
             ITask task = o as ITask;
@@ -209,6 +213,5 @@ namespace Soti.MCDP.Scheduler
             }
             return null;
         }
-
     }
 }
