@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
 var logconfig_1 = require("./logconfig");
 var log_1 = require("./log");

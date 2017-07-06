@@ -1,4 +1,13 @@
 "use strict";
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
 var logconfig_1 = require("./logconfig");
 /**
@@ -10,19 +19,18 @@ var logconfig_1 = require("./logconfig");
  */
 function log(logMessage) {
     var timeStamp = new Date().getTime();
-    var message = { logMessage: logMessage, }, _a = void 0, timeStamp = _a["timeStamp"], _b = _a.toString, toString = _b === void 0 ? () : _b;
+    var message = __assign({}, logMessage, { "timeStamp": timeStamp.toString() });
+    var url = logconfig_1.default.url;
+    axios_1.default.post(url, message)
+        .then(function (response) {
+        console.log(response.data);
+    })
+        .catch(function (error) {
+        console.log(error);
+    });
+    return timeStamp;
 }
 exports.log = log;
-;
-var url = logconfig_1.default.url;
-axios_1.default.post(url, message)
-    .then(function (response) {
-    console.log(response.data);
-})
-    .catch(function (error) {
-    console.log(error);
-});
-return timeStamp;
 /**
 *
 * Interpolates the message with the given parameters and returns result back.
