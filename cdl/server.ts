@@ -121,7 +121,7 @@ app.post('/ds/:tenantid/putdata', function(req,res){
         var collectionName = reqBody.dsId;
 
         //check parameters
-        db.collection(collectionName).insertOne(data, next);
+        db.collection(collectionName).insertOne(data , next);
     });
 });
 

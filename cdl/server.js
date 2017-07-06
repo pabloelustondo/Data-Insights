@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var bodyParser = require("body-parser");
 var express = require("express");
 var path = require("path");
@@ -171,6 +172,39 @@ app.delete('/ds/:tenantid/:dsid', function (req, res) {
         var dsid = req.params.dsid;
         //check parameters
         db.collection(dsid).drop(next);
+    });
+});
+// placess an image resource with type for a given tenant.
+// the user must specify the imageName, imageType and encoded image
+app.post('/image/:tenantid', function (req, res) {
+    callDbAndRespond(req, res, function (req, res, db, next) {
+        var reqBody = req.body;
+        var tenantId = req.params.tenantid;
+        var type = reqBody.type;
+        var name = reqBody.name;
+        var imageData = type + reqBody.encodedString;
+        var data = {
+            timeStamp: (new Date()).toISOString(),
+            name: name,
+            data: imageData
+        };
+        var collectionName = appconfig['imageCollection'];
+        //check parameters
+        db.collection(collectionName).insertOne(data, next);
+    });
+});
+// gets an image resource for a specific tenant with a given
+// image name
+app.get('/image/:tenantid/:imageName', function (req, res) {
+    callDbAndRespond(req, res, function (req, res, db, next) {
+        var imageName = req.params.imageName;
+        var collectionName = appconfig['imageCollection'];
+        callDbAndRespond(req, res, function (req, res, db, next) {
+            db.collection(collectionName).find({ name: imageName }, {
+                data: 1,
+                _id: 0
+            }).toArray(next);
+        });
     });
 });
 // Gets the n most recent data points from the ds .... I think this is goint to be removed
