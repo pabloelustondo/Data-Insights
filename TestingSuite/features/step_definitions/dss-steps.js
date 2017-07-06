@@ -22,6 +22,7 @@ Cucumber.defineSupportCode(function(context) {
     var validToken = '';
     var oldauthorizationToken = '';
     var url = '';
+    var timeStamp = new Date().getTime();;
     //some necessary evil for things that cannot be retrieved through the API
    /* var mobiUrl = "https://cad099.corpss.soti.net/";
     var downAgentId = "31940960-70f1-4d92-aedd-a148f19c8757";
@@ -43,7 +44,7 @@ Cucumber.defineSupportCode(function(context) {
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      Step Definitions
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    Given('I create new user named {stringInDoubleQuotes} with the following data:', function (stringInDoubleQuotes, table, callback) {
+    Given('I create new user with the following data', function (table, callback) {
         resetOptions('/enrollments');
         options.form = table.hashes()[0];
         callback();
@@ -119,9 +120,6 @@ Cucumber.defineSupportCode(function(context) {
     Given('I POST with enrollment data for {stringInDoubleQuotes}', function(stringInDoubleQuotes, callback){
         resetOptions('/enrollments');
         resetFormOldValues(stringInDoubleQuotes);
-        //options.baseUrl = 'https://dev2012r2-sk.sotidev.com:3003/#/';
-        //console.log(options);
-        //console.log(options);
         Request.post(options, function (error, response, body) {
             responseData = body;
             responseCode = response.statusCode;
@@ -164,7 +162,7 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then(/^The response\'s id_token should be valid$/, function (callback) {
-        if(responseData["id_token"]) {
+        if(responseData.includes("id_token")) {
             callback();
         } else {
             console.error('Token was not found in response: ' + JSON.stringify(responseData));
@@ -212,16 +210,16 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
     });
-    Given('I wipe the user {stringInDoubleQuotes} from DDB', function (stringInDoubleQuotes, callback) {
+    Given('I delete all user information for {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         // Write code here that turns the phrase above into concrete actions
         var ddb_url = globalconfig.ddb_url;
         if(ddb_url == "" || ddb_url == undefined) throw new Error('ddb url not in global config file');
         url = ddb_url
-        resetOptions("/tenant/"+stringInDoubleQuotes);
+        resetOptions("tenant/"+stringInDoubleQuotes);
         Request.delete(options, function (error, response, body) {
             responseData = body;
             responseCode = response.statusCode;
-            if(responseCode!=200 && responsedata.ok != 1){
+            if(!responseData.includes("Not Found") && responseCode!=200 && responseData.ok != 1){
                 console.error('Could not delete: '+ responseData);
             }
             callback();
@@ -229,7 +227,14 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given('I set request for test_user', function (table, callback) {
+    Then(/^a new log should have been created$/, function(table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var logInfo = table.hashes()[0];
+        //call ddb for latest log
+        callback(null, 'pending');
+    });
+
+    Given('I set post request for registering data source', function (table, callback) {
         //options.headers["x-access-token"] = stringInDoubleQuotes;
         options.form = table.hashes()[0];
         options.uri = url;
@@ -259,7 +264,7 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });*/
 
-    When('I POST with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+    When('I POST to endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
 
         options.uri = url+'/'+stringInDoubleQuotes;
         Request.post(options, function (error, response, body) {
@@ -311,7 +316,7 @@ Cucumber.defineSupportCode(function(context) {
         });
     });*/
 
-    When('I GET with endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
+    When('I make GET request to endpoint {stringInDoubleQuotes}', function (stringInDoubleQuotes, callback) {
         resetOptions(stringInDoubleQuotes);
         options.headers['x-access-token'] = xaccesskey;
         Request.get(options, function (error, response, body) {

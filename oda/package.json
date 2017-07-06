@@ -17,7 +17,7 @@
     "uninstall-windows-service": "winser -r",
     "dev-test-watch": "mocha-typescript-watch",
     "test": "tsc -p . ",
-    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
+    "getConfigs": "cp-cli ./globalconfig_kube.json ./globalconfig.json"
   },
   "author": "pablo.elustondo@soti.net",
   "license": "MIT",
@@ -55,7 +55,7 @@
     "ncp": "2.0.0",
     "rimraf": "2.5.2",
     "tslint": "3.11.0",
-    "typescript": "2.1.4",
+    "typescript": "2.3.4",
     "mocha": "3.2.0",
     "describe": "1.2.0",
     "chai-http": "3.0.0",

@@ -16,6 +16,8 @@ export class DadUser {
 
 export type DadElementType = "chart" | "widget" | "table" | "page";
 
+export type DadUIElement = DadChart | DadWidget | DadTable;
+
 export class DadElement {
   id: string;
   elementType?: DadElementType;
@@ -32,6 +34,7 @@ export class DadElement {
   lat?: string;
   parameterMappers?:any[];
   endpoint?: string;
+  widget?: DadWidget;
   metrics?: DadMetric[];
   dimensions?: DadDimension[];
   tableId?: string;
@@ -52,6 +55,7 @@ export class DadElement {
   intervalRefreshOption?: boolean = false;
   readExpression?: any;
   alertExpression?: string;
+  postBody?: any;
 }
 
 export class DadDateRange{

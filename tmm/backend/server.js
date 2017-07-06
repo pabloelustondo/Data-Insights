@@ -13,6 +13,37 @@ var path = require('path');
 var rp = require('request-promise');
 var cors = require('cors');
 var io = require('socket.io')(http);
+var kafka = require('kafka-node');
+
+var ConsumerGroup = kafka.ConsumerGroup;
+var topics = ['log1'];
+var consumerGroupOptions = {
+    host: '127.0.0.1:2181',
+    zk: undefined,
+    batch: undefined,
+    ssl: false,
+    groupId: 'ExampleTestGroup',
+    sessionTimeout: 15000,
+    // An array of partition assignment protocols ordered by preference.
+    // 'roundrobin' or 'range' string for built ins (see below to pass in custom assignment protocol)
+    protocol: ['roundrobin'],
+    // Offsets to use for new groups other options could be 'earliest' or 'none' (none will emit an error if no offsets were saved)
+    // equivalent to Java client's auto.offset.reset
+    fromOffset: 'earliest',
+    // how to recover from OutOfRangeOffset error (where save offset is past server retention) accepts same value as fromOffset
+    outOfRangeOffset: 'earliest',
+    migrateHLC: false,
+    migrateRolling: true
+};
+
+// Kafka Logging
+var Producer = kafka.Producer, KeyedMessage = kafka.KeyedMessage, client = new kafka.Client(), producer = new Producer(client), km = new KeyedMessage('key', 'message');
+producer.on('ready', function () { });
+producer.on('error', function (err) {
+    console.log('error: ' + err);
+});
+
+
 
 globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
 //our app config will be the result of taking all global configurations and overwritting them with the local configurations
@@ -75,6 +106,9 @@ app.get('/status', function(req,res){
 });
 
 app.get('/tenant/:tenantid', function(req,res){
+    var timeStamp = new Date().getTime();
+    var payloads = [{ topic: 'log', messages: `{"producer": "TMM", "message": "${req.params.tenantid}", "params": {"tenantId": "${req.params.tenantid}"}}`, partition: 0 }];
+    producer.send(payloads, function (err, data) {
 
     var options = {
         uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
@@ -89,10 +123,17 @@ app.get('/tenant/:tenantid', function(req,res){
         .catch(function (err) {
             console.log("BAD" + err);
            res.send(err);
-        });
+       });
+    });
 });
 
 app.post('/tenant/:tenantid', function(req,res){
+    var timeStamp = new Date().getTime();
+    var payloads = [{ topic: 'log', messages: `{"producer": "TMM", "message": "${req.params.tenantid}", "params": {"tenantId": "${req.params.tenantid}"}}`, partition: 0 }];
+
+
+  producer.send(payloads, function (err, data) {
+
     var options = {
         uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
         method:"POST",
@@ -109,27 +150,14 @@ app.post('/tenant/:tenantid', function(req,res){
             console.log("BAD" + err);
             res.send(err);
         });
+    });
 });
 
 
 app.delete('/tenant/:tenantid', function(req,res){
-  var options = {
-    uri:appconfig.ddb_url + "/tenant/" + req.params.tenantid,
-    method:"DELETE",
-    contentType:"application/json",
-    body: req.body,
-    json:true
-  };
-  rp(options)
-    .then(function (data) {
-      console.log("OK" + data)
-      res.send(data)
-    })
-    .catch(function (err) {
-      console.log("BAD" + err);
-      res.send(err);
-    });
+
 });
+
 
 
 if (config.useSSL) {

@@ -52,9 +52,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Database\Database.csproj">
+    <ProjectReference Include="..\Database\Soti.MCDP.Database.csproj">
       <Project>{ecaac8ab-1bf6-499d-a0d5-3915dd1efe63}</Project>
-      <Name>Database</Name>
+      <Name>Soti.MCDP.Database</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -23,11 +23,10 @@ import {uploadRawData, uploadModifiedData} from './services/rawDataLakeService';
 import {DatabaseService} from  './services/databaseService';
 import {DataProjections} from './services/projection';
 import {processRequest, getDbFromDataService} from './services/dataService';
-import message = SNS.message;
+// import message = SNS.message;
 
 var globalconfig = require('./globalconfig.json');
-var path = require('path');
-var cors = require('cors');
+
 
 globalconfig.hostname = "localhost";  //this can be overwritten by app config if necessary
 //our app config will be the result of taking all global configurations and overwritting them with the local configurations
@@ -37,7 +36,7 @@ Object.keys(appconfig).forEach(function(key){
 globalconfig.port = globalconfig[globalconfig.id+"_url"].split(":")[2];
 
 appconfig = globalconfig;
-global.appconfig = appconfig;
+// global.appconfig = appconfig;
 
 console.log("configuration");
 console.log(appconfig);
@@ -117,7 +116,7 @@ app.post('/data/request', function(req,res) {
             let dataSource = _.find(tenant.dataSources, ['dataSourceId', req.body.idaMetadata.dataSourceId]);
             let projections = (!clientMetadata.projections) ? dataSource.metadata.projections : clientMetadata.projections;
             let dataSetId = (!clientMetadata.dataSetId) ? dataSource.metadata.dataSetId : clientMetadata.dataSetId;
-            let collectionName = dataSetId ;
+            let collectionName = dataSetId;
 
             DataProjections(req.body.clientData, projections).then(function (data) {
                 uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
@@ -135,7 +134,14 @@ function publishTransactionLog (idaMetadata: any, clientMetadata: any, clientDat
 
     let tenantId = idaMetadata.tenantId;
     let dataSourceId = idaMetadata.dataSourceId;
-    uploadRawData(tenantId, dataSourceId, clientData).then(function (awsResponse: any) {
+    let data = {
+        idaMetadata: idaMetadata,
+        clientData: {
+            metadata: clientMetadata,
+            data : clientData
+        }
+    };
+    uploadRawData(tenantId, dataSourceId, data).then(function (awsResponse: any) {
             console.log(awsResponse);
         }, function (error: any) {
             console.log(error);
@@ -209,14 +215,18 @@ app.post('/data/outGoingRequest', function(req, res) {
 
     let db = app.get('db');
     let tenant = db.getTenant(metadata.tenantId);
-    let dataSets = tenant['dataSets'];
-    let dataSet = _.find(dataSets, {id : metadata.dataSetId});
-    if (tenant && dataSet) {
-        processRequest(metadata, dataSets, res);
+    if (!tenant) {
+        res.status(404).send('Tenant not found');
     } else {
-        res.status(400).send ({
-            message: 'No combination of tenant and dataSet found.'
-        })
+        let dataSets = tenant['dataSets'];
+        let dataSet = _.find(dataSets, {id: metadata.dataSetId});
+        if (dataSet) {
+            processRequest(metadata, dataSets, res);
+        } else {
+            res.status(400).send({
+                message: 'No combination of tenant and dataSet found.'
+            })
+        }
     }
 
 
@@ -229,7 +239,7 @@ app.get('/getMetadata/:tenantId', function (req, res) {
     let tenant = db.getTenant(tenantId);
     let dataSets = tenant.dataSets;
     res.status(200).send(dataSets);
-})
+});
 
 exports.app = app;
 
@@ -258,7 +268,7 @@ if (config.useSSL) {
             json: true,
             method: 'get',
             headers: headersOptions,
-            url: appconfig['ddb_url'] + '/tenants',
+            url: globalconfig['ddb_url'] + '/tenants',
         };
         rp(options).then(function (data) {
             db.populateTenants(data);
@@ -307,7 +317,7 @@ if (config.useSSL) {
                     let clientData = data.clientData;
                     let clientMetadata = data.clientMetadata;
 
-                    console.log('json = ' + JSON.stringify(data));
+                   // console.log('json = ' + JSON.stringify(data));
                     publishTransactionLog( idaMetadata, clientMetadata, clientData);
                     processCleanedData( idaMetadata, clientMetadata, clientData);
 
@@ -330,7 +340,7 @@ if (config.useSSL) {
                 json: true,
                 method: 'get',
                 headers: headersOptions,
-                url: appconfig['ddb_url'] + '/tenants',
+                url: globalconfig['ddb_url'] + '/tenants',
             };
             rp(options).then(function (data) {
                 db.populateTenants(data);

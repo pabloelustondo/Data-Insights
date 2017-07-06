@@ -5,6 +5,7 @@ import {DadElement} from "./dadmodels";
 import {Router, ActivatedRoute} from "@angular/router";
 import {config} from "./appconfig";
 import { DadConfigService } from './dadconfig.service';
+import { ChatService } from './chat.service';
 import {DadFilter} from "./filter";
 import {Observable} from "rxjs";
 import {DadMap2} from './map2.component';
@@ -26,10 +27,11 @@ export class DadChart extends DadElement {
     action?: String;
     widgetClickChart?: boolean = false;
     drillchart?: any;
+    timeSlider?:any;
 }
 @Component({
     selector: 'dadchart',
-    providers: [DadElementDataService, DadConfigService],
+    providers: [DadElementDataService, DadConfigService, ChatService],
     template: `
 <div class="dadChart">
     <div *ngIf="!chart.mini && !chart.embeddedChart" [ngClass]="chartClass()">  
@@ -121,7 +123,28 @@ export class DadChart extends DadElement {
         <div *ngIf="chart.embeddedChart"  style="text-align:left; width:auto;" [id]="chart.id"></div>
         <div *ngIf="_data && chart.type==='map'" > <dadmap [map]="chart" [data]="_data"></dadmap></div>
         <!--<div *ngIf="_data && chart.type==='map2'" > <dadmap2 [map]="chart" [data]="_data"></dadmap2></div>-->
+  
+        <!--  TIME SLIDER SPIKE  -->
          
+  <div *ngIf="this.chart.timeSlider">
+  <h1>DataView</h1>
+  Monitor ON: <input [(ngModel)]="monitor"  (change)="updateMonitor()" type="checkbox">
+  
+  <input [(ngModel)]="slider" id="test" type="range" (change)="sliderChange()"/>
+  
+  <h2 *ngIf="messages">{{messages.length}} - {{slider}}</h2>
+  <h2 *ngIf="message">Current: {{message.text}}</h2>
+ 
+  
+  <div *ngIf="messages" style="border:solid">
+  <table>
+    <tr *ngFor="let message of messages">
+      <td>{{message.t}}</td>
+      <td>{{message.text}}</td>
+      </tr>
+   </table>
+  </div>
+</div>
         
 </div>
     `
@@ -170,10 +193,74 @@ export class DadChartComponent implements OnInit {
     newAlertName: string;
     intervalId: any;
 
+    /// SPIKE
+
+    monitor:boolean = false;
+    messages:any[] = [];
+    datas:any[] = [];
+    connection;
+    message:any;
+    config:any;
+    slider = 0;
+    timeWindow:100;
+
+    ///
+
     constructor(private cdr: ChangeDetectorRef,
                 private dadChartDataService: DadElementDataService,
                 private dadConfigsService: DadConfigService,
-                private router: Router, private route: ActivatedRoute,) {}
+                private chatService: ChatService,
+                private router: Router, private route: ActivatedRoute) {}
+
+
+                //SPIKE TIME SLIDER
+
+    updateMonitor(){
+        if (this.monitor) this.monitorOn();
+        else this.monitorOff();
+
+        this.message = this.messages[this.slider];
+    }
+
+    monitorOn(){
+        this.messages = [];
+        this.slider = 0;
+        this.connection = this.chatService.getMessages().subscribe(message => {
+            if (message.data){
+                message.data.forEach((data) =>{
+                    message.text = JSON.stringify(data).substr(0,80);
+                    this.messages.unshift(message);
+                    this.message = message;
+
+                    this.data = JSON.parse(JSON.stringify(data[0].data));
+                    this.datas.push(data);
+                    this.drawChart(this.chart, this.data);
+                });
+                while (this.messages.length > this.timeWindow){ this.messages.pop(); }
+             //   while (this.datas.length > this.timeWindow){ this.datas.pop(); }
+            }else {
+                this.messages.push({error:"record with no data"});
+            }
+        })
+    }
+
+    sliderChange(){
+        this.monitor = false;
+        this.monitorOff();
+        if (this.slider < this.datas.length){
+        this.message = this.messages[this.slider];
+        this.data = this.datas[this.slider][0].data;
+        this.drawChart(this.chart, this.data);
+        } else {
+            alert("slider otuside boundaries");
+        }
+    }
+
+    monitorOff() {
+        this.connection.unsubscribe();
+    }
+
+                //SPIKE TIME SLIDER
 
 
     optionChanged(v) {
@@ -263,6 +350,8 @@ export class DadChartComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        //this.chart.timeSlider = true; // you can use this trick when using the timeslider
 
         this.miniChartWidth = this.chart.width;
         this.miniChartHeight = this.chart.height;

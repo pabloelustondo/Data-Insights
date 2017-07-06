@@ -1,0 +1,6 @@
+{
+  "id":"smlback",
+  "name":"SML Backend",
+  "dependencies":[],
+  "secret"  : "1234"
+}

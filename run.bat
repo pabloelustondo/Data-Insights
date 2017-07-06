@@ -8,7 +8,7 @@ SET installdir= %cd%
 cd %installdir%
 
 echo "starting kafka zoo"
-start cmd.exe /k  "%kafkadir%\bin\windows\zookeeper-server-start.bat %kafkadir%\config\zookeeper.properties"
+start cmd.exe /k  "zkserver"
 
 echo "starting kafka"
 start cmd.exe /k  "%kafkadir%\bin\windows\kafka-server-start.bat %kafkadir%\config\server.properties"
@@ -54,3 +54,9 @@ start cmd.exe /k "cd %installdir%\tmm & call npm run start"
 
 echo "starting tmm backend"
 start cmd.exe /k "cd %installdir%\tmm\backend & call npm run start"
+
+echo "starting sml"
+start cmd.exe /k "cd %installdir%\sml\client & call npm run start"
+
+echo "starting log"
+start cmd.exe /k "cd %installdir%\log & call npm run start"

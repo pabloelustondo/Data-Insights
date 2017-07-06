@@ -1,78 +1,17 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var request = require("request");
-/**
- * Created by vdave on 5/17/2017.
- */
-var _ = require('lodash');
-var async = require('async');
-var config = require('../config.json');
-var dataSets = [
-    {
-        id: '12345',
-        dataSources: [
-            {
-                dataSource: 'test',
-                filter: {}
-            },
-            {
-                dataSource: 'test2',
-                filter: {}
-            }
-        ],
-        filter: {},
-        merge: 'field1',
-        definition: {} //what the output data contains
-    },
-    {
-        id: '21345',
-        dataSources: [
-            {
-                dataSource: 'test'
-            },
-            {
-                dataSource: 'customDataSetId.TestuniqueId12345456'
-            }
-        ]
-    },
-    {
-        id: 'ttc',
-        dataSources: [
-            {
-                dataSource: 'ttcMaps',
-                projection: 'data.vehicle'
-            },
-            {
-                dataSource: 'customDeviceInfo',
-                filter: {
-                    id: '$data',
-                    key: 'Name',
-                    value: 'VehicleID'
-                },
-                projection: 'data'
-            }
-        ],
-        merge: 'data'
-    },
-    {
-        id: 'test12345',
-        dataSources: [
-            {
-                dataSource: 'test',
-            }
-        ],
-        filter: {}
-    }
-];
+const request = require("request");
+let _ = require('lodash');
+let async = require('async');
+let config = require('../config.json');
 function getDbFromDataService() {
-    var server = require('../server');
-    var app = server.app;
-    var db = app.get('db');
+    let server = require('../server');
+    let app = server.app;
+    let db = app.get('db');
     return app.get('db');
 }
 exports.getDbFromDataService = getDbFromDataService;
 function filter(data, property, value) {
-    var filteredArray = data.filter(function (o) {
+    let filteredArray = data.filter(function (o) {
         return o[property] === value;
     });
     return filteredArray;
@@ -82,30 +21,80 @@ function findElement(data, element) {
     return (data[element]) ? data[element] : null;
 }
 exports.findElement = findElement;
+function callCdlForData(aggregate, dataSetId, tenantId) {
+    let p = new Promise(function (resolve, reject) {
+        resolve('');
+    });
+    return p;
+}
+exports.callCdlForData = callCdlForData;
+function secretProcess(tenantId, dataSetId, _dataSets) {
+    let dataSetDefinition = _.find(_dataSets, { id: dataSetId });
+    let sourceDataSets = dataSetDefinition.from;
+    if (sourceDataSets.length > 0 && sourceDataSets[0] !== '') {
+        for (let ds in sourceDataSets) {
+            secretProcess(tenantId, sourceDataSets[ds], _dataSets);
+        }
+    }
+    let aggregation = [];
+    if (dataSetDefinition.projection) {
+        aggregation.push({
+            $project: dataSetDefinition.projection
+        });
+    }
+    if (dataSetDefinition.filter) {
+        aggregation.push({
+            $filter: dataSetDefinition.filter
+        });
+    }
+    let sourceData = [];
+    let data;
+    mergeData(sourceData[0], sourceData[1], '');
+    if (dataSetDefinition.merge) {
+        data = getDataFromCDL(tenantId, dataSetId, aggregation).then(function () {
+            let mergedDataSet = mergeData(sourceData[0], sourceData[1], '');
+            return mergedDataSet;
+        });
+        return data;
+    }
+    else {
+        data = getDataFromCDL(tenantId, dataSetId, aggregation);
+        return data;
+    }
+}
+exports.secretProcess = secretProcess;
+function mergeData(sourceOne, sourceTwo, key) {
+    let merge = new Promise(function (resolve, reject) {
+        resolve(_.map(sourceOne, function (item) {
+            return _.merge(item, _.find(sourceTwo, { 'Value': parseInt(item.id) }));
+        }));
+    });
+    return merge;
+}
+function getDataFromCDL(tenantId, collectionName, query) {
+    return null;
+}
 function processRequest(metadata, _dataSets, res) {
-    var queryId = metadata.dataSetId;
-    // get dataSetFrom all available dataSets
-    var dataSet = _.find(_dataSets, { id: queryId });
-    var dataSources = dataSet['from'];
-    var responseData = [];
+    let queryId = metadata.dataSetId;
+    let dataSet = _.find(_dataSets, { id: queryId });
+    let dataSources = dataSet['from'];
+    let responseData = [];
     async.each(dataSources, function (dsId, callback) {
         console.log(dsId);
-        var db = getDbFromDataService();
-        var tenant = db.getTenant(metadata.tenantId);
-        var allDataSets = tenant.dataSets;
-        var ds = _.find(allDataSets, { id: dsId });
-        var filter = (ds.filter !== "") ? ds.filter : undefined;
-        var aggregate = [{
-                $match: {}
-            },
+        let db = getDbFromDataService();
+        let tenant = db.getTenant(metadata.tenantId);
+        let allDataSets = tenant.dataSets;
+        let ds = _.find(allDataSets, { id: dsId });
+        let filter = (ds && ds.filter !== "") ? ds.filter : undefined;
+        let aggregate = [{
+                $match: {} },
             {
                 $project: {
                     '_id': 0,
-                    'data': 1
                 }
             }];
         if (filter) {
-            var project = {
+            let project = {
                 $project: {
                     '_id': 0,
                     'data': {
@@ -124,19 +113,35 @@ function processRequest(metadata, _dataSets, res) {
             url: 'http://localhost:8020/ds/' + metadata.tenantId + '/getdata/query',
             method: 'POST',
             body: {
-                'collectionName': ds.id,
+                'collectionName': (ds) ? ds.id : queryId,
                 'aggregation': aggregate
             },
             json: true
         };
         function responseCallback(err, response, body) {
-            if (!err && response.statusCode == 200) {
+            if (!err && response.statusCode == 200 && body) {
                 var info = JSON.stringify(body);
                 var responseObj = {};
-                var projected = _.get(body[0], ds.projections[0]);
-                // let sample = projected[ds.projection];
-                responseObj[ds.id] = _.get(body[0], ds.projections[0]);
-                responseData.push(responseObj);
+                if (ds) {
+                    if (ds.projections.length > 0) {
+                        responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                    }
+                    else {
+                        responseObj[ds.id] = body;
+                    }
+                    responseData.push(responseObj);
+                }
+                else {
+                    let ds = _.find(allDataSets, { id: queryId });
+                    if (ds.projections) {
+                        responseObj[ds.id] = _.get(body[0], ds.projections[0]);
+                        responseData.push(responseObj);
+                    }
+                    else {
+                        responseObj[ds.id] = body;
+                        responseData.push(responseObj);
+                    }
+                }
             }
             callback();
         }
@@ -146,14 +151,14 @@ function processRequest(metadata, _dataSets, res) {
             console.log(err);
         }
         else {
+            let a1 = _.find(responseData, dataSet.from[0]);
+            let a2 = _.find(responseData, dataSet.from[1]);
             if (dataSet.merge) {
-                var a1 = _.find(responseData, dataSet.from[0]);
-                var a2 = _.find(responseData, dataSet.from[1]);
                 if (a1 && a2) {
-                    var a = a1[dataSet.from[0]];
-                    var b_1 = a2[dataSet.from[1]];
-                    var merge = _.map(a, function (item) {
-                        return _.merge(item, _.find(b_1, { 'Value': parseInt(item.id) }));
+                    let a = a1[dataSet.from[0]];
+                    let b = a2[dataSet.from[1]];
+                    let merge = _.map(a, function (item) {
+                        return _.merge(item, _.find(b, { 'Value': parseInt(item.id) }));
                     });
                     res.status(200).send({
                         timeStamp: new Date().toISOString(),
@@ -165,10 +170,31 @@ function processRequest(metadata, _dataSets, res) {
                 }
             }
             else {
-                res.status(200).send({
-                    timeStamp: new Date().toISOString(),
-                    result: responseData
-                });
+                if (dataSet.crossJoin) {
+                    if (a1 && a2) {
+                        let a = a1[dataSet.from[0]];
+                        let b = a2[dataSet.from[1]];
+                        var result = _.forEach(a, function (value, key) {
+                            console.log('bus = ' + key);
+                            var image = _.forEach(a, function (value, key) {
+                                console.log('image = ' + key);
+                            });
+                            var obj = a[key];
+                            obj['images'] = b;
+                            return obj;
+                        });
+                        res.status(200).send({
+                            timeStamp: new Date().toISOString(),
+                            result: result
+                        });
+                    }
+                }
+                else {
+                    res.status(200).send({
+                        timeStamp: new Date().toISOString(),
+                        result: responseData
+                    });
+                }
             }
         }
     });
@@ -180,3 +206,4 @@ function getDataFromDb(dataSource) {
         dataSource: dataSource
     };
 }
+//# sourceMappingURL=dataService.js.map

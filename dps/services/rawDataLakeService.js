@@ -1,63 +1,66 @@
 "use strict";
-/**
- * Created by vdave on 5/8/2017.
- */
-Object.defineProperty(exports, "__esModule", { value: true });
-var rp = require("request-promise");
-var config = require('../config.json');
-var appconfig = require('../appconfig.json');
-var globalConfig = require('../globalconfig.json');
-var testResponses = require('../testing/testResponses.json');
+const rp = require('request-promise');
+let config = require('../config.json');
+let appconfig = require('../appconfig.json');
+let globalConfig = require('../globalconfig.json');
+let testResponses = require('../testing/testResponses.json');
 function uploadRawData(tenantId, dataSourceId, clientData) {
     if (appconfig.testingmode) {
-        return new Promise(function (resolve) { resolve(testResponses.awsSampleResponse + tenantId); });
+        return new Promise((resolve) => { resolve(testResponses.awsSampleResponse + tenantId); });
     }
     else {
-        var endpoint = globalConfig['cdl_url'] + '/transactionLog/' + tenantId + '/data';
-        var headerOptions = {
+        let endpoint = globalConfig['cdl_url'] + '/transactionLog/' + tenantId + '/data';
+        const headerOptions = {
             'x-access-token': config['access_token']
         };
-        var body = {
+        let body = {
             tenantId: tenantId,
             dataSourceId: dataSourceId,
             clientData: clientData
         };
-        var options = {
+        const options = {
             json: true,
             method: 'POST',
             headers: headerOptions,
             url: endpoint,
             body: body
         };
-        return rp(options);
+        return new Promise((resolve) => {
+            resolve(rp(options));
+        });
     }
 }
 exports.uploadRawData = uploadRawData;
 function uploadModifiedData(tenantId, collectionName, clientData) {
     if (appconfig.testingMode) {
-        return {
-            n: '1',
-            ok: '1'
-        };
+        return new Promise((resolve) => {
+            resolve({
+                n: '1',
+                ok: '1'
+            });
+        });
     }
     else {
-        var endpoint = globalConfig['cdl_url'] + '/ds/' + tenantId + config['cdl_put_endpoint'];
-        var headerOptions = {
+        let endpoint = globalConfig['cdl_url'] + '/ds/' + tenantId + config['cdl_put_endpoint'];
+        const headerOptions = {
             'x-access-token': config['access_token']
         };
-        var body = {
+        let body = {
             tenantId: tenantId,
             dsId: collectionName,
             data: clientData
         };
-        var options = {
+        const options = {
             json: true,
             method: 'POST',
             headers: headerOptions,
             url: endpoint,
             body: body
         };
-        return rp(options);
+        return new Promise((resolve) => {
+            resolve(rp(options));
+        });
     }
 }
 exports.uploadModifiedData = uploadModifiedData;
+//# sourceMappingURL=rawDataLakeService.js.map

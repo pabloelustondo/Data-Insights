@@ -23,11 +23,11 @@ export class UploadDataSetController {
      */
 
     @Response<ResponseModel>('200', 'Data Stored')
-    @Response<ErrorResponseModel>('400', 'Missing Token')
-    @Response<ErrorResponseModel>('400', 'Token verification Failed')
+    @Response<ErrorResponseModel>('401', 'Missing Token')
+    @Response<ErrorResponseModel>('401', 'Token verification Failed')
     @Response<ErrorResponseModel>('500', 'Internal Server Error. Please contact SOTI Support')
     @Response<ErrorResponseModel>('400', 'Content-Type incorrect. Content-type must be Application/JSON')
-    @Response<ErrorResponseModel>('400', 'Wrong Input Model')
+    @Response<ErrorResponseModel>('406', 'Wrong Input Model')
     @Post('')
     @Example<any>({
         headers: {
@@ -38,8 +38,7 @@ export class UploadDataSetController {
         url: 'https://localhost:3010/data',
         data: {
             metadata: {
-                dataSetId : 'myCustomDataSetId',
-                projections : ['device', 'application']
+                dataSetId : 'myCustomDataSetId'
             },
             data : {
                 device : {
@@ -110,7 +109,7 @@ export class UploadDataSetController {
 
                 return Promise.reject({
                     message: 'Content-Type incorrect. Body must be json type',
-                    status: '400'
+                    status: '406'
                 });
 
             }
@@ -120,7 +119,7 @@ export class UploadDataSetController {
 
                 return Promise.reject({
                     message: 'Wrong input model',
-                    status: '400'
+                    status: '406'
                 });
             }
 
@@ -130,7 +129,10 @@ export class UploadDataSetController {
                         resolve(jwt.verify(token, config['expiring-secret']));
                     } catch (err) {
                         console.log('could not verify token');
-                        reject(err);
+                        reject( {
+                            message: err.message,
+                            statusCode: 401
+                        });
                     }
                 });
                 return promise;
@@ -181,14 +183,28 @@ export class UploadDataSetController {
                                 producer.send(transactionLogPayloads, function (err: any, data: any) {
                                     console.log(data);
                                     // return Promise.resolve(data);
+                                    if (err) {
+                                        reject ({
+                                            message : err.message,
+                                            statusCode : 500
+                                        });
+                                    }
                                     resolve(data);
                                 });
                             });
                             producer.on('error', function (error: any) {
                                 console.log(error);
+                                reject ({
+                                    message : error.message,
+                                    statusCode : 500
+                                });
                             });
                         } catch (e) {
                             console.log('IDA could not communicate with kafka producer');
+                            reject ({
+                                message : 'IDA could not communicate with Queue producer',
+                                statusCode : 500
+                            });
                         }
                     });
 
@@ -197,7 +213,7 @@ export class UploadDataSetController {
                 } else {
                     return new Promise (function (resolve, reject) {
                         reject({
-                            statusCode : 404,
+                            statusCode : 401,
                             message : 'Invalid token'
                         });
                     });
@@ -216,7 +232,10 @@ export class UploadDataSetController {
                         };
                         resolve(user);
                     } else {
-                        reject('Error with backend Service');
+                        reject( {
+                            message : 'Error with backend Service',
+                            statusCode : 504
+                        });
                     }
                 });
                 return promise;
@@ -228,7 +247,7 @@ export class UploadDataSetController {
                 return Promise.reject(
                     {
                         message: err.message,
-                        status: '400'
+                        status:  err.statusCode
                     }
                 );
             });

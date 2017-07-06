@@ -1,0 +1,23 @@
+{
+  "testingmode":false,
+  "useSSL":false,
+  "useAccessKey":false,
+  "ddb_url":"http://cad059.corp.soti.net:8000",
+  "dss_url":"http://cad059.corp.soti.net:8023",
+  "dssback_url":"http://cad059.corp.soti.net:8024",
+  "dad_url":"http://cad059.corp.soti.net:8025",
+  "dadback_url":"http://cad059.corp.soti.net:8026",
+  "oda_url":"http://cad059.corp.soti.net:8022",
+  "cdl_url":"http://cad059.corp.soti.net:8020",
+  "dos_url":"http://cad059.corp.soti.net:5000",
+  "dosback_url":"http://cad059.corp.soti.net:5001",
+  "ida_url":"http://cad059.corp.soti.net:8027",
+  "tmm_url":"http://cad059.corp.soti.net:8028",
+  "tmmback_url":"http://cad059.corp.soti.net:8029",
+  "dps_url":"http://cad059.corp.soti.net:8022",
+  "sml_url":"http://cad059.corp.soti.net:8031",
+  "smlback_url":"http://cad059.corp.soti.net:8032",
+  "log_url":"http://cad059.corp.soti.net:8033",
+  "kafka_url":"localhost:2181",
+  "mongodb_url" : "mongodb://localhost:27017"
+}

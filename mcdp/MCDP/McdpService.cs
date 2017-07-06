@@ -4,8 +4,10 @@ using System.Configuration;
 using System.ServiceProcess;
 using System.Timers;
 using Soti.MCDP.DataProcess;
-using Soti.MCDP.Database;
-using Soti.MCDP.Database.Model;
+using Soti.MCDP.Scheduler;
+using Soti.MCDP.Scheduler.Model;
+using Soti.MCDP.ConfigSet;
+using Soti.MCDP.ConfigSet.Model;
 
 namespace Soti.MCDP
 {
@@ -23,14 +25,16 @@ namespace Soti.MCDP
         // this timer is used to schedule the calls to the database according to the polling interval.
         private Timer _mcdpTimer = null;
 
-        private DataProcessProvider _dataProcessProvider = null;
+        private readonly DataProcessProvider _dataProcessProvider = null;
 
         private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
+        
+        private Scheduler.Scheduler _scheduler;
 
-        private IDeviceStatApplicationProvider _deviceStatApplicationProvider;
-
-        private IDeviceStatIntProvider _deviceStatIntProvider;
-
+        /// <summary>
+        ///     List of Metadata
+        /// </summary>
+        private List<mcMetadata> _metadataList;
 
         public MCDP()
         {
@@ -63,26 +67,36 @@ namespace Soti.MCDP
         /// </summary>
         private void InitPollService()
         {
-            this._deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
-            this._deviceStatApplicationProvider = new DeviceStatApplicationProvider(_deviceSyncStausList);
-            this._deviceStatIntProvider = new DeviceStatIntProvider(_deviceSyncStausList);
-
-            this._pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
-
-            //make default min value to 1 second
-            if (this._pollinginterval < 1000)
-                this._pollinginterval = 1000;
-            //LOADING Process PROVIDER
-            _dataProcessProvider = new DataProcessProvider(_deviceStatApplicationProvider, _deviceStatIntProvider, _deviceSyncStausList);
-
-            this._mcdpTimer = new Timer(this._pollinginterval)
+            try
             {
-                Enabled = true,
-                AutoReset = true
-            };
-            this._mcdpTimer.Elapsed += McdpTimerProcess;
-            this._mcdpTimer.Start();
+                this._deviceSyncStausList = new Dictionary<string, DeviceSyncStatus>();
 
+                this._metadataList = ConfigSet.ConfigSet.Instance.MetadataList;
+
+                this._scheduler = new Scheduler.Scheduler(_deviceSyncStausList, _metadataList);
+
+                Scheduler.Scheduler.LoadTasksIntoDataSet();
+                Scheduler.Scheduler.LoadTasksAssembly();
+
+                this._pollinginterval = Convert.ToDouble(ConfigurationManager.AppSettings["pollinginterval"]);
+
+                //make default min value to 1 sec
+                if (this._pollinginterval < 1000)
+                    this._pollinginterval = 1000;
+                //LOADING Process PROVIDER
+
+                this._mcdpTimer = new Timer(this._pollinginterval)
+                {
+                    Enabled = true,
+                    AutoReset = true
+                };
+                this._mcdpTimer.Elapsed += Scheduler.Scheduler.RunTasks;
+                this._mcdpTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         /// <summary>
@@ -90,7 +104,14 @@ namespace Soti.MCDP
         /// </summary>
         private void StopPollService()
         {
-            this._mcdpTimer.Dispose();
+            try
+            {
+                Scheduler.Scheduler.UpdateTasksConfigonDisk();
+            }
+            catch (Exception ex)
+            {
+            }
+            //this._mcdpTimer.Dispose();
         }
 
         /// <summary>

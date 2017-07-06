@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dps-svc
+  namespace: stage
+  labels:
+    app: dps-svc
+spec:
+  selector:
+    app: dps
+  ports:
+  - name: 
+    port: 8022
+    protocol: TCP
+  type: ClusterIP

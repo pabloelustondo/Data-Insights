@@ -1,0 +1,21 @@
+{
+  "testingmode":  false,
+  "useSSL":       false,
+  "useAccessKey": false,
+  "ddb_url":      "http://ddb-svc.stage.svc.cluster.local:8000",
+  "dss_url":      "http://sotiinsights.cloudapp.net:8023",
+  "dssback_url":  "http://aa8c00257568811e7a174123ab8f20a4-1735560421.us-east-1.elb.amazonaws.com:8024",
+  "dad_url":      "http://sotiinsights.cloudapp.net:8025",
+  "dadback_url":  "http://a7dba9a4655f411e7a174123ab8f20a4-962535783.us-east-1.elb.amazonaws.com:8026",
+  "oda_url":      "http://oda-svc.stage.svc.cluster.local:8000",
+  "cdl_url":      "http://cdl-svc.stage.svc.cluster.local:8020",
+  "dos_url":      "http://sotiinsights.cloudapp.net:5000",
+  "dosback_url":  "http://af8032de955f511e7a174123ab8f20a4-2131375518.us-east-1.elb.amazonaws.com:5001",
+  "ida_url":      "http://a0e0d7918568911e7a174123ab8f20a4-2130181058.us-east-1.elb.amazonaws.com:8027 ",
+  "tmm_url":      "http://afe6c6aed568a11e7a174123ab8f20a4-1864712298.us-east-1.elb.amazonaws.com:8029",
+  "tmmback_url":  "http://afe6c6aed568a11e7a174123ab8f20a4-1864712298.us-east-1.elb.amazonaws.com:8029",
+  "log_url":      "http://log-svc.stage.scv.cluster.local:8032",
+  "kafka_url":    "zookeeper.stage.svc.cluster.local:2181",
+  "mongodb_url":  "mongodb://cust-mongo-mongodb-replicaset.stage.svc.cluster.local:27017",
+  "dps_url":      "http://dps-svc.stage.svc.cluster.local:8022"
+}

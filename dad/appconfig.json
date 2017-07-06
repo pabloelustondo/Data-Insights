@@ -1,7 +1,7 @@
 {
+  "testingmode":true,
   "id":"dad",
-  "name":"DAD Backend",
+  "name":"DAD Front End",
   "dependencies":["ddb","dss","oda"],
-  "secret"  : "1234",
-  "oda_url":""
+  "secret"  : "1234"
 }

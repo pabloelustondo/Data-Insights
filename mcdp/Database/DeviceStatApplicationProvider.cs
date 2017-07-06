@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Soti.MCDP.Database.Model;
+using Soti.MCDP.Logger.Model;
 
 namespace Soti.MCDP.Database
 {
@@ -62,7 +63,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -183,12 +184,12 @@ namespace Soti.MCDP.Database
                     
                     result = JsonConvert.SerializeObject(idaData);
 
-                    Logger.Log(LogSeverity.Info, "Try to send " + idaData.Count + " of DeviceStatApplication");
+                    //Logger.Logger.Log(LogSeverity.Info, "Try to send " + idaData.Count + " of DeviceStatApplication");
                 }
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
@@ -260,7 +261,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
@@ -294,7 +295,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -330,7 +331,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -364,7 +365,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
     }

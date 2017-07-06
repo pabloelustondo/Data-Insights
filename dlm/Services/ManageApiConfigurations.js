@@ -33,7 +33,10 @@ ManageApiConfigurations = {
             url : data.url,
             interval : data.interval,
             permToken : data.permToken,
-            expiringToken : data.expiringToken
+            expiringToken : data.expiringToken,
+
+            //TODO: introduce data.dataSetId
+            dataSetId: "nextBusId" + data.url
         };
 
         var localConfig = _.find(localConfigs, {

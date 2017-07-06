@@ -1,15 +1,11 @@
 "use strict";
-/**
- * Created by vdave on 5/10/2017.
- */
-Object.defineProperty(exports, "__esModule", { value: true });
-var config = require('../config.json');
-var appconfig = require('../appconfig.json');
+let config = require('../config.json');
+let appconfig = require('../appconfig.json');
 function DataProjections(data, projections) {
-    return new Promise(function (resolve, reject) {
-        var _data = {};
+    return new Promise((resolve, reject) => {
+        let _data = {};
         if (projections.length > 0 && projections[0] !== '') {
-            projections.forEach(function (item, index) {
+            projections.forEach((item, index) => {
                 _data[item] = data[item];
             });
         }
@@ -20,3 +16,4 @@ function DataProjections(data, projections) {
     });
 }
 exports.DataProjections = DataProjections;
+//# sourceMappingURL=projection.js.map

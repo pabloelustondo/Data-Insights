@@ -103,6 +103,7 @@ export class DadParametersComponent implements OnInit {
 
     mapParameters2model():void{
         //this action will map UI parameters into model parameters back
+        if(!this.element.parameters){return;}
         let parameters = this.element.parameters[0];   //maybe we need to stop having a list?
         if(!this.element.uiparameters){
             return;
@@ -140,6 +141,7 @@ export class DadParametersComponent implements OnInit {
 
     mapParameters2ui():void{
         //this action will map model parameters into UI parameters
+        if(!this.element.parameters){return;}
         let parameters = this.element.parameters[0];   //maybe we need to stop having a list?
         if(!this.element.uiparameters){
             return;

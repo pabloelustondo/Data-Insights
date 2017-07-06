@@ -38,6 +38,7 @@ describe("Test external API service calls", function() {
             });
 
         });
+
         it('calls Api Call service to Nextbus API', function (done){
 
             var req = {
@@ -52,11 +53,15 @@ describe("Test external API service calls", function() {
                     }
                 }
             };
+
+
             /* var req = {
              url:  'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=ttc&r=32&t=1488819607',
              method: 'GET'
              };*/
+
             ApiCallService.send(req, function(err, result) {
+                console.log("result: " + result);
                 expect(result).to.not.be.undefined;
                 expect(result).to.have.property('createdAt');
                 expect(result).to.have.property('metadata');
@@ -81,7 +86,11 @@ describe("Test external API service calls", function() {
                     }
                 }
             };
+
+
+
             ApiCallService.send(req, function(err, result) {
+                console.log("res: " + result);
                 expect(result).to.not.be.undefined;
                 expect(result).to.not.have.property('createdAt');
                 expect(result).to.not.have.property('metadata');

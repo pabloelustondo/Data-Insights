@@ -6,29 +6,36 @@ Feature: DSS API Tests
     Given I create a login session as "test"
       |domainid |code         |
       |test     |administrator|
-    Given I set request for test_user
+    Given I set post request for registering data source
       | tenantid        |  dataSourceType | agentid    | data                                      |
-      | test_user		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
-    When  I POST with endpoint "registerDataSource"
+      | test		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
+    When  I POST to endpoint "registerDataSource"
     Then response code should be 200
+    Then a new log should have been created
+      | Classifier          |  Producer | message                            |tenantId  |
+      | Create_Success		|  DSS      | Data source created {{dataSource}} | test     |
 
   Scenario: As an administrator I want to enroll a new tenant
-    #  Given I delete previous test information
+    Given I delete all user information for "test1"
+    Then response code should be 200
     Given I grab 'dssback' url from config file
-    Given I create new user named "test1" with the following data:
+    Given I create new user with the following data
       | accountid           |  apikey                          | clientsecret | domainid            | mcurl                                     |password|username          |
       | external_user		|  244cc44394ba4efd8fe38297ee8213d3| 1            | test1               | https://cad099.corp.soti.net/MobiControl  |1       |administrator     |
-    When I POST with endpoint "enrollments"
+    When I POST to endpoint "enrollments"
     Then The HTTP Code should be 200
     Then The response's id_token should be valid
     Then I store the response token in a file 'InUserToken'
+    Then a new log should have been created
+      | Classifier          |  Producer | message                             |tenantId  |
+      | Create_Success		|  DSS      | Tenant enrolled {{tenantInfo}}      |test1     |
 
   Scenario: As an administrator I want to try to enroll with an existing tenant
     Given I grab 'dssback' url from config file
-    Given I create new user named "test1" with the following data:
+    Given I create new user with the following data
       | accountid           |  apikey                          | clientsecret | domainid               | mcurl                                     |password|username          |
       | external_user		|  244cc44394ba4efd8fe38297ee8213d3| 1            | test1               | https://cad099.corp.soti.net/MobiControl  |1       |administrator     |
-    When I POST with endpoint "enrollments"
+    When I POST to endpoint "enrollments"
     Then The HTTP Code should be 200
     Then The response should contain 'Tenant ID already enrolled'
 

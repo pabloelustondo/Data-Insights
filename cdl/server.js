@@ -228,7 +228,7 @@ if (config['mongodb-config-location']) {
     mongoInfo = { uri: mongoDbCreds.uri };
 }
 function tenantDbUri(req) {
-    return mongoInfo.uri + "/cdl_" + req.params.tenantid;
+    return mongoInfo.uri + "/cdl_" + req.params.tenantid + '?replicaSet=rs0&connectTimeoutMS=300000';
 }
 function callDbAndRespond(req, res, query) {
     //this function opens a connection to the tenant db and calls the specific query.

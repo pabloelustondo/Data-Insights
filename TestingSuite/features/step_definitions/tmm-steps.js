@@ -69,24 +69,19 @@ Cucumber.defineSupportCode(function(context) {
             name: 'Data Source',
             tenantId: variable,
             dataSets: [{
-            id: '10-22-1',
-            name: 'Test Data Set 01',
-            from: ['Doga Ister'],
-            persist: true,
-            filter: ['/&AS/'],
-            merge: ['09-21-31$F'],
-            projections: [''],
-            metadata: ['']
-        }, {
-            id: '101',
-            name: 'Test Data Set 02',
-            from: ['Ray Gervais'],
-            persist: true,
-            filter: ['/&asdasdasda/'],
-            merge: ['09-1231-31$F'],
-            projections: [''],
-            metadata: ['']
-        }],
+                "id": "nextBus",
+                "name": "nextBus",
+                "from": [
+                    "nextBus"
+                ],
+                "persist": true,
+                "filter": "",
+                "merge": "",
+                "projections": "",
+                "metadata": [
+                    "data"
+                ]
+            }],
             dataSource: [{
             id: '10-23-1',
             name: 'Test Data Set 01',
@@ -219,8 +214,8 @@ Cucumber.defineSupportCode(function(context) {
     });
 
     Then('the response body should be an array with at least 1 Tenant Metadata Object with the correct tenantid', function (callback) {
-
-        if (responseData == undefined || responseData.length ==0 ||responseData[0].tenantId != tenantId) {
+        var resString = JSON.stringify(responseData);
+        if (responseData == undefined || responseData.length ==0 ||!resString.includes(tenantId)) {
             throw new Error("Did not receive list of tenant metadata objects. "+ responseData);
         }
         callback();

@@ -1,22 +1,11 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "sourceMap": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "outDir": "./dist"
-  },
-  "exclude": [
-    "node_modules"
-  ],
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "files": [
-    "typings/tsd.d.ts",
-    "src/server.ts",
-    "src/services/*.ts"
-  ]
+    "sourceMap": true
+  }
 }

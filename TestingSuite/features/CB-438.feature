@@ -7,17 +7,18 @@ Background:
   Simple consumer should be able to subscribe/consume the data
 
   Scenario: As an admininstrator I want to GET a list of existing topics
+    Given I grab the xaccesskey for ODA from 'testTemporaryToken'
     Given I grab ODA url from globalconfig.json
-    And I grab the xaccesskey for ODA from 'testTemporaryToken'
-    When I GET topics
+    When I GET topics for "test"
     Then response code is :200
-    Then response body should be error-free
+    Then response body must be error-free
 
-  Scenario: As an admininstrator I want to subscribe to a topic
-    Given I set valid request for posting to ~/query
-      |dataSetId|from       |
-      |string   |vehicleInfo|
+  Scenario: As an administrator I want to subscribe to a topic
+    Given I grab the xaccesskey for ODA from 'testTemporaryToken'
     And I grab ODA url from globalconfig.json
+    Then I set valid request for posting to ~/query
+      |dataSetId|from       |
+      |10-22-1  |nextBus       |
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed
