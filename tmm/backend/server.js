@@ -179,7 +179,7 @@ app.put('/dataSource/:tenantId/:dataSourceId', function (req, res) {
 });
 
 app.delete('/deleteDataSource/:tenantId/:dataSourceId',function (req,res) {
-    console.log(appconfig.ddb_url + "/" + req.params.tenantId + "/" + req.params.dataSourceId + "/deleteDataSource");
+    console.log(appconfig.ddb_url + "/deleteDataSource");
 
     var options = {
       uri:appconfig.ddb_url + "/" + req.params.tenantId + "/" + req.params.dataSourceId + "/deleteDataSource",

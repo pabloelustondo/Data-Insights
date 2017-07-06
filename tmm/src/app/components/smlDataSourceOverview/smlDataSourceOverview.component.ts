@@ -96,13 +96,6 @@ import * as FileSaver from 'file-saver';
         </div>
     </div>
   `,
-
-  /*      id: '10-23-1',
-      name: 'Test Data Set 01',
-      type: 'TestMockData',
-      active: true,
-      properties: ['Test', 'Doga', 'Is', 'AWesome'] */
-
   styleUrls: ['./smlDataSourceOverview.component.css']
 })
 export class smlDataSourceOverview implements OnInit {
@@ -125,7 +118,6 @@ export class smlDataSourceOverview implements OnInit {
     getTenantMetadata() {
     this.activatedRoute.params.subscribe((params: Params) => {
       this.tenantMetadata.tenantId = params['tenantId'];
-
       this.tmmConfigService.getTenantMetadata(this.tenantMetadata.tenantId).then(data => {
         if (data && data._body) {
           try {
@@ -153,7 +145,8 @@ export class smlDataSourceOverview implements OnInit {
     if (confirm('Are you sure you want to delete: ' + dataSource.name)){
       console.log("Deleting: " + this.editDataSourceObject.name);
       this.tmmConfigService.deleteDataSourceByDataSourceId(this.tenantMetadata.tenantId, this.editDataSourceObject.id).then(data => {
-        if(data) {
+        if(data && data.status == 200) {
+          console.log(data);
           this.getTenantMetadata()
         } else {
           alert('Error Deleting ' + dataSource.name)
@@ -167,7 +160,8 @@ export class smlDataSourceOverview implements OnInit {
     if (confirm('Are you sure you want to reset: ' + dataSource.name)){
       console.log("Resetting: " + this.editDataSourceObject.name);
       this.tmmConfigService.resetDataSourceActivationKey(this.tenantMetadata.tenantId, this.editDataSourceObject.id, this.tenantMetadata).then(data => {
-        if(data) {
+        if(data && data.status == 200) {
+          console.log(data);
           this.getTenantMetadata()
         } else {
           alert('Error Resetting ' + dataSource.name)
@@ -178,36 +172,13 @@ export class smlDataSourceOverview implements OnInit {
 
   DownloadCredentials(dataSource) {
     this.editDataSourceObject = dataSource;
-  //  this.editDataSourceForm = true;
     console.log("Downloading: " + this.editDataSourceObject.name);
 
-    const _agentId = dataSource.id;
-    const headers = new Headers({
-      'Content-Type': 'application/json',
-      'x-access-token': ''
-    });
-    this.tmmConfigService.getDataSourceCredential(this.tenantMetadata.tenantId, dataSource).then(data => {
-      if (data) {
-        console.log(data);
-        const blob = new Blob([data], { type: 'text/csv' });
-        FileSaver.saveAs(blob, 'MCDP_Access.key');
-        // this.error = null;
-      }
-    });
-    /*
-    this.http.get( backendUrl + '/sourceCredentials/' + _agentId, { headers: headers })
-      .subscribe(
-        response => {
-          let response_body = response['_body'];
-          var blob = new Blob([response_body], { type: 'text/csv' });
-          FileSaver.saveAs(blob, 'MCDP_Access.key');
-          this.error = null;
-        },
-        error => {
-          this.error = error.text();
-          console.log(error.text());
-        }
-      );*/
+    let data = this.tmmConfigService.getDataSourceCredential(this.tenantMetadata.tenantId, dataSource);
+    if (data) {
+      const blob = new Blob([data], { type: 'text/csv' });
+      FileSaver.saveAs(blob, 'MCDP_Access.key');
+    }
   }
 
   addNewProperty() {
@@ -217,7 +188,6 @@ export class smlDataSourceOverview implements OnInit {
   saveEditedItem(editedForm) {
       console.log(editedForm.getElementsByTagName('input'));
       console.log(this.selectedStatus);
-
     }
 }
 

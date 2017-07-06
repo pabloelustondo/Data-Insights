@@ -68,9 +68,7 @@ export class TmmConfigService {
   }
 
   public getDataSourceCredential(tenantId, dataSource) {
-    return new Promise (function (resolve, reject) {
-      resolve ('lalalalala ' + dataSource.id);
-    });
+    return dataSource.activationKey; 
     // return this.http.get(globalConfig['tmmback_url'] + '/tenant/dev/' + tenantId + '/dataSourceToken/' + dataSource.id).toPromise();
   }
 }
