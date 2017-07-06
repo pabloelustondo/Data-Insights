@@ -11,7 +11,7 @@ Feature: DSS API Tests
       | test		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
     When  I POST to endpoint "registerDataSource"
     Then response code should be 200
-    Then the database should contain a new log
+    Then a new log should have been created
       | Classifier          |  Producer | message                            |tenantId  |
       | Create_Success		|  DSS      | Data source created {{dataSource}} | test     |
 
@@ -26,7 +26,7 @@ Feature: DSS API Tests
     Then The HTTP Code should be 200
     Then The response's id_token should be valid
     Then I store the response token in a file 'InUserToken'
-    Then the database should contain a new log
+    Then a new log should have been created
       | Classifier          |  Producer | message                             |tenantId  |
       | Create_Success		|  DSS      | Tenant enrolled {{tenantInfo}}      |test1     |
 

@@ -3,7 +3,7 @@ Feature: Enrollment
   #Enrollment
 
   Scenario: As an administrator I want to enroll
-  #  Given I delete previous test information
+    Given I delete all user information for "test1"
     Given I grab 'dssback' url from config file
     Given I create new user with the following data
       | accountid           |  apikey                                  | clientsecret | domainid               | mcurl                                      |password|username          |
