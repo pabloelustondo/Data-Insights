@@ -41,5 +41,6 @@ export class SmlDataSet extends SmlElement{
   merge?: any;
   projections?: any;
   metadata: any[];
+  crossJoin: boolean;
 }
 

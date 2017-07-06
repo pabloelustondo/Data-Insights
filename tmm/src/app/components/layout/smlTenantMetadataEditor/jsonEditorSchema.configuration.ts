@@ -18,7 +18,8 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
       filter: ['/&AS/'],
       merge: ['09-21-31$F'],
       projections: [''],
-      metadata: ['']
+      metadata: [''],
+      crossJoin: false
     }, {
       id: '101',
       name: 'Test Data Set 02',
@@ -27,7 +28,8 @@ export const smlTenantMetadataSample: SmlTenantMetadata =
       filter: ['/&asdasdasda/'],
       merge: ['09-1231-31$F'],
       projections: [''],
-      metadata: ['']
+      metadata: [''],
+      crossJoin: false
     }],
     dataSource: [{
       id: '10-23-1',
@@ -93,7 +95,8 @@ export const smlTenantMetadataEmpty: SmlDataSet =
     filter: '',
     merge: '',
     projections: '',
-    metadata: ['']
+    metadata: [''],
+    crossJoin: false
   };
 
 
