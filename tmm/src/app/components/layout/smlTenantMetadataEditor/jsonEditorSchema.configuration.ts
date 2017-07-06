@@ -41,7 +41,7 @@ export const smlTenantMetadataSample: SmlTenantMetadata = {
       }],
     dataSets: ['']
   }, {
-    id: '10-23-1',
+    id: '10-23-2',
     name: 'Test Data Set 02',
     type: 'API',
     active: true,

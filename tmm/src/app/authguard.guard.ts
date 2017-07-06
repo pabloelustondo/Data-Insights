@@ -5,14 +5,14 @@ import { config } from "../../appconfig";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  token: any; 
+  token: any;
 
   constructor(private router: Router) {}
   canActivate() {
     if (tokenNotExpired()) {
       return true;
     } else {
-      var authurl = config.ddb_url + "/#/login?url=" + window.location.href;
+      var authurl = config.dss_url + "/#/login?url=" + window.location.href;
       window.location.href=authurl;
       return false;
     }
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
   }
 
   deleteToken() {
-    this.token = null; 
+    this.token = null;
     localStorage.clear();
     return true;
   }

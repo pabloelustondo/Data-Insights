@@ -12,6 +12,8 @@ import { InvalidResourceComponent } from './components/invalid-resource/invalid-
 import { smlDataSourceOverview } from './components/smlDataSourceOverview/smlDataSourceOverview.component';
 import { smlDataSourceCreator } from "./components/smlDataSourceCreator/smlDataSourceCreator.component";
 import { AuthGuard } from './authguard.guard';
+import {ImageUploadModule} from "angular2-image-upload";
+import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { AuthGuard } from './authguard.guard';
     JsonEditorComponent,
     InvalidResourceComponent,
     smlDataSourceOverview,
-    smlDataSourceCreator
+    smlDataSourceCreator,
+    ImageUploaderComponent
   ],
   imports: [
     BrowserModule,
@@ -37,8 +40,11 @@ import { AuthGuard } from './authguard.guard';
       },  {
         path: ':JWT/:tenantId', component: InvalidResourceComponent,
       }, {
+        path: 'image', component: ImageUploaderComponent
+      }, {
         path: '**', component: InvalidResourceComponent,
-      }])
+      } ]),
+    ImageUploadModule.forRoot()
   ],
   bootstrap: [AppComponent],
   providers: [TmmConfigService, AuthGuard]

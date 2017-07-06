@@ -162,7 +162,7 @@ export class smlDataSourceOverview implements OnInit {
       this.tmmConfigService.resetDataSourceActivationKey(this.tenantMetadata.tenantId, this.editDataSourceObject.id, this.tenantMetadata).then(data => {
         if(data && data.status == 200) {
           console.log(data);
-          this.getTenantMetadata()
+          this.getTenantMetadata();
         } else {
           alert('Error Resetting ' + dataSource.name)
         }
