@@ -99,7 +99,11 @@ app.get('/datasets', function(req,res){
 });
 
 app.post('/getdata', function(req,res){
-    fs.readFile("testdata/devstats1.json",'utf8', function(err, file){
+    //rememeber this endpoint is pretty much a mock
+    let datasetid = req.body.id;
+    console.log('get data was called with this datasetid: ' + datasetid);
+    console.log('get data was called with this body: ' + JSON.stringify(req.body));
+    fs.readFile("testdata/" + datasetid + ".json",'utf8', function(err, file){
         console.log("logdata");
         res.send(file);
     })
@@ -107,8 +111,8 @@ app.post('/getdata', function(req,res){
 
 app.post('/smlquery', function(req,res){
     //not implemented yet
-    let ds = new Sml.SmlDataSet();
-    console.log("slmquery called 2");
+    console.log("slmquery called with body" + JSON.stringify(req.body));
+    let ds = req.body;
         smlInterpreter.getDataSet(ds,[]).then(
             (result) => {
                 console.log("slmquery called - come back from interpreter");

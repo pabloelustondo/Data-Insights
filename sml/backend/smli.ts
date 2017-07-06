@@ -27,12 +27,14 @@ export class SMLI {
 
       var options = {
         uri: url,
-        method: 'POST'
+        method: 'POST',
+        body: {id:"devstats2"},
+        json:true
       };
-      console.log("calling rp with ");
+      console.log("calling rp with " + JSON.stringify(options));
 
       rp(options).then((result)=>{
-        console.log("rp goet back with " + result);
+        console.log("rp goet back with results.length" + result.length);
         resolve(result);
       });
 

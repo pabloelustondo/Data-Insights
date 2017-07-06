@@ -7,10 +7,11 @@
     <ProjectGuid>{7BE4AD5A-C0CB-495C-A5F6-D733EA010D2F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Logger</RootNamespace>
-    <AssemblyName>Logger</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Soti.MCDP.Logger</RootNamespace>
+    <AssemblyName>Soti.MCDP.Logger</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

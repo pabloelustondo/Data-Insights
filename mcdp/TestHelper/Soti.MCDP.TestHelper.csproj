@@ -7,8 +7,8 @@
     <ProjectGuid>{E1135A95-274A-4BBF-A2F5-B532B3EF1360}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestHelper</RootNamespace>
-    <AssemblyName>TestHelper</AssemblyName>
+    <RootNamespace>Soti.MCDP.TestHelper</RootNamespace>
+    <AssemblyName>Soti.MCDP.TestHelper</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
