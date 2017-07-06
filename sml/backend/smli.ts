@@ -34,18 +34,29 @@ export class SMLI {
       console.log("calling rp with " + JSON.stringify(options));
 
       rp(options).then((result)=>{
-        console.log("rp goet back with results.length" + result.length);
-        resolve(result);
-      });
+         console.log("rp goet back with results.length" + result.length);
+         resolve(result);
+      }, (error) => {console.log("rp got error" + error);
+         reject(error);}
+      );
 
     });
     }
 
   calculateDataSet(datasetDef:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-  return new Promise(function(resolve, reject){
+    console.log("calculte DataSet Callded");
+    let url = this.dataSetProviderlurl;
 
-
-
+    return new Promise((resolve, reject) => {
+      console.log("calling getdataset indide calculate");
+      this.getDataSet(datasetDef, parameters).then(
+          (data) => {
+            resolve(data);
+          },
+          (error) => {
+            reject(error);
+          }
+      )
     });
   }
 

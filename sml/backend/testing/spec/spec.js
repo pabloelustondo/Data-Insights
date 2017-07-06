@@ -50,7 +50,7 @@ describe("DAD Backend", function() {
 */
     describe("POST /smlquery", function() {
         it("executes an ad-hoc TRIVIAL (only ID) query defined by a SML dataset a returns it with (test) data", function(done) {
-            var smlquery = {from:[ {id:"devstats2"} ]};
+            var smlquery = {id:"devstats2"};
             $.ajax({
                 url: "/smlquery",
                 type:"POST",
