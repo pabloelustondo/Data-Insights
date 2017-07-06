@@ -7,8 +7,8 @@
     <ProjectGuid>{ECAAC8AB-1BF6-499D-A0D5-3915DD1EFE63}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Database</RootNamespace>
-    <AssemblyName>Database</AssemblyName>
+    <RootNamespace>Soti.MCDP.Database</RootNamespace>
+    <AssemblyName>Soti.MCDP.Database</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

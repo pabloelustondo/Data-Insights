@@ -34,11 +34,27 @@ export class SmlIdpInformation extends SmlElement{
   configurations: any[];
 }
 
+export type SmlCodingLanguage = "JS" | "Python" | "SMLX";
+export type SmlTransformationType = "AddRowFeature" | ";
 
-export class SmlFeature{
+export class SmlRowFeature extends SmlElement{
   name: string;
   func: string;  //for now pure javascript code
+
 }
+
+export class SmlDataProcess  extends  SmlElement{
+  lang?: SmlCodingLanguage
+  code: string
+}
+
+export class SmlTransformation {
+  type: SmlTransformationType;
+  lang?: SmlCodingLanguage;
+  script?: string;
+
+}
+
 
 export type SmlParameterType = "Percent" | "Number" | "String" | "Date" | "DateTime" | "Duration";
 
@@ -61,7 +77,8 @@ export class SmlDataSet extends SmlElement{
   inHistory?: number; //how many historical/time window records I need to calculate a row of output
   persist?: boolean; //thi flag is to let DPS know that this dataset needs to be saved in DB
   filter?: any; //this is first filter that is applied to the rows of the data. Is the first thing applied.
-  features?: SmlFeature[]; //once the data is filtered we can add derived value to enrich the input data set.
+  transformations?: SmlTransformation[]; //once the data is filtered we can add derived value to enrich the input data set.
+  features?: SmlRowFeature[]; //once the data is filtered we can add derived value to enrich the input data set.
   projections?: any; //this object let us filter out columns as opposed to rows.
   // .here we just discard columns.
   merge?: any; //the idea here is to

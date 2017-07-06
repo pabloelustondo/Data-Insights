@@ -8,7 +8,7 @@ SET installdir= %cd%
 cd %installdir%
 
 echo "starting kafka zoo"
-start cmd.exe /k  "%kafkadir%\bin\windows\zookeeper-server-start.bat %kafkadir%\config\zookeeper.properties"
+start cmd.exe /k  "zkserver"
 
 echo "starting kafka"
 start cmd.exe /k  "%kafkadir%\bin\windows\kafka-server-start.bat %kafkadir%\config\server.properties"

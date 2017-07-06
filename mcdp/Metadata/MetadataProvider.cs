@@ -77,7 +77,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -214,7 +214,7 @@ namespace Soti.MCDP.Database
 
                         result = DataTableToJsonWithJsonNet(dt);
 
-                        Logger.Logger.Log(LogSeverity.Info, "Try to send " + dt.Rows.Count);
+                        //Logger.Logger.Log(LogSeverity.Info, "Try to send " + dt.Rows.Count);
                     }
                 }
                 if (_tableName == "") return result;
@@ -239,12 +239,12 @@ namespace Soti.MCDP.Database
 
                         result = DataTableToJsonWithJsonNet(dt);
 
-                        Logger.Logger.Log(LogSeverity.Info, "Try to send " + dt.Rows.Count);
+                        //Logger.Logger.Log(LogSeverity.Info, "Try to send " + dt.Rows.Count);
                 }
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
@@ -324,7 +324,7 @@ namespace Soti.MCDP.Database
                 }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
             finally
             {
@@ -359,7 +359,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -395,7 +395,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -429,7 +429,7 @@ namespace Soti.MCDP.Database
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 

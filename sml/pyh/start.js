@@ -29927,7 +29927,8 @@ function pyTransformation(){
 				discharged = discharged[discharged['intvalue'] > 0]
 				discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
 				discharged['StartDate'] = start
-				discharged['EndDate'] = end		
+				discharged['EndDate'] = end
+				print(discharged.to_json(orient='records'))
 					`
 
 		var arg1 = "def f(data): \n	"+code;
@@ -29971,7 +29972,7 @@ function pyTransformation(){
 		});
 
 		py.stdout.on('end', function(){
-			console.log('INSIDE PROMISE NODE Got End: ' + dataout);
+			//console.log('INSIDE PROMISE NODE Got End: ' + dataout);
 
 			try {
 				dataout2 = JSON.parse(dataout);
@@ -29992,14 +29993,15 @@ pyTransformation().then(function(data){
 
 	console.log("AFTER PROMISE Finally Got Data");
 	console.log('NODE parsed the json');
-	console.log('Will Show First Ten');
+	//console.log('Will Show First Ten');
 	max=10
 	if(data.length<10)
 		max = data.length
 	for(var i=0; i<max; i++){
-		console.log("StatType: " + data[i]["StatType"]);
-		console.log("_id: " + data[i]["_id"]);
-		console.log("intvalue: " + data[i]["intvalue"]);
+		console.log(data[i]);
+		//console.log("StatType: " + data[i]["StatType"]);
+		//console.log("_id: " + data[i]["_id"]);
+		//console.log("intvalue: " + data[i]["intvalue"]);
 	}
 
 }, function(error){

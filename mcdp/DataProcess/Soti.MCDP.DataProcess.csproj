@@ -7,8 +7,8 @@
     <ProjectGuid>{105A2BBF-F50B-4D34-AEF9-F76FF7E723FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataProcess</RootNamespace>
-    <AssemblyName>DataProcess</AssemblyName>
+    <RootNamespace>Soti.MCDP.DataProcess</RootNamespace>
+    <AssemblyName>Soti.MCDP.DataProcess</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
