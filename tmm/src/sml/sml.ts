@@ -1,10 +1,10 @@
-0/**
+/**
  * Created by dister on 6/1/2017.
  */
 
 export class SmlTenantMetadata {
 
-  id: string;  //id of the metadata
+  id: string;  // id of the metadata
   name: string;
   tenantId: string;
   dataSets: SmlDataSet[];
@@ -13,18 +13,26 @@ export class SmlTenantMetadata {
   idpInformation: SmlIdpInformation[];
 }
 
-export class SmlElement{
+export class SmlElement {
   id: string;
   name: string;
 }
 
-export class SmlDataSource extends SmlElement{
+export class SmlDataSource extends SmlElement {
  type: string;
  active: boolean;
- properties: any[];
+ properties: SmlDataSourceProperty[];
+ activationKey: string;
+ status?: string;
+ dataSets?: string[];
 }
 
-export class SmlUsers extends SmlElement{
+export class SmlDataSourceProperty {
+  inputName: string;
+  inputValue: string;
+}
+
+export class SmlUsers extends SmlElement {
   permissions: string[];
   status: string;
 }

@@ -207,13 +207,17 @@ router.get('/tenants', function(req,res){
 router.get('/tenants/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
         var tenantid = req.body.tenantid;
-        db.collection('tenant').find({"tenantid":req.params.tenantid}).toArray(next);
+        db.collection('tenant').find({"tenantid":req.params.tenantid}, {
+                _id : 0
+            }).toArray(next);
     });
 });
 
 router.get('/tenant/:tenantid', function(req,res){
     callDbAndRespond(req,res, function(req,res,db, next){
-        db.collection('tenant').find({"tenantId":req.params.tenantid}).toArray(next);
+        db.collection('tenant').find({"tenantId":req.params.tenantid}, {
+                _id : 0
+            }).toArray(next);
     });
 });
 
@@ -525,7 +529,7 @@ router.delete('/deleteDataSource', function(req,res){
     var _tenant = req.query.tenantId;
 
     var user = getUser(req);
-    mongodb.connect(mongoInfo.uri + "udb_" + user,function(err,db){
+    mongodb.connect(dbUrl + "udb_" + user,function(err,db){
         if (err) {
             console.log('err backing up object: ' + err);
         }
@@ -566,6 +570,26 @@ router.delete('/deleteDataSource', function(req,res){
     });
 
 });
+
+
+router.delete('/:tenantId/:dataSourceId/deleteDataSource',function (req,res) {
+    callDbAndRespond(req, res, function(req,res,db) {
+
+        db.collection('tenant').update(
+            {
+                tenantId: req.params.tenantId
+        },
+        {
+            $pull: {
+                dataSource:{
+                    id:req.params.dataSourceId
+                }
+            }
+        });
+        res.send("DataSource has been deleted")
+    });
+})
+
 
 //router.use(helmet());
 
