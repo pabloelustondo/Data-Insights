@@ -46,7 +46,7 @@ def main():
 	dataout = json.loads(datajson)
 	f(data)
 
-	print(data.to_json(orient='records'))
+	#print(data.to_json(orient='records'))
 
 #start process
 if __name__ == '__main__':

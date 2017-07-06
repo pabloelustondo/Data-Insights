@@ -67,7 +67,6 @@ function readToken(token, callback) {  //Bearer
 }
 
 app.get('/api/enrollments', function(req, res){
-  var timeStamp = new Date().getTime();
   //var message: logging = {"classifier":"Create_Success", "serverId": process.pid.toString(), "priority": "Critical", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } };
   log_action('Read_Success', "Getting all enrollments", "Info", "", "", function(){ res.status(200).send(enrollments)});
 });
@@ -393,7 +392,9 @@ app.post('/registerDataSource', function (req, res) {
           res.status(err.status).send(err.message);
         }
         if (result) {
-          res.status(result.status).send(result.message);
+          log_action("Create_Success", "Data source created {{dataSource}}",  "INFO", req.body.tenantid,'{"dataSource" : '+JSON.stringify(dataSource)+'}',function (err, data) {
+            res.status(result.status).send(result.message);
+          });
         }
       });
   }
@@ -1047,6 +1048,7 @@ function sendEmail(enrollment)
 };
 
 function log_action(classifier, message, priority, tenantId, params, callback){
+  var timeStamp = new Date().getTime();
   var messages = {
   "Classifier" : classifier,
   "serverId" : process.pid.toString(),
@@ -1054,8 +1056,10 @@ function log_action(classifier, message, priority, tenantId, params, callback){
   "message" : message,
   "Priority" : priority,
   "tenantId" : tenantId,
-  "params" : params
+  "params" : params,
+  "timeStamp" : timeStamp
   };
+
   var payloads = [{ topic: 'log', messages: JSON.stringify(messages), partition: 0 }];
   producer.send(payloads, function(err, data) {
     //console.log(JSON.stringify(payloads));
