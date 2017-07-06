@@ -150,17 +150,30 @@ export class smlDataSourceOverview implements OnInit {
 
   DeleteDataSourceObject(dataSource) {
     this.editDataSourceObject = dataSource;
-   // this.editDataSourceForm = true;
-    console.log("Deleting: " + this.editDataSourceObject.name);
-    this.tmmConfigService.deleteDataSourceByDataSourceId(this.tenantMetadata.tenantId, this.editDataSourceObject.id);
+    if (confirm('Are you sure you want to delete: ' + dataSource.name)){
+      console.log("Deleting: " + this.editDataSourceObject.name);
+      this.tmmConfigService.deleteDataSourceByDataSourceId(this.tenantMetadata.tenantId, this.editDataSourceObject.id).then(data => {
+        if(data) {
+          this.getTenantMetadata()
+        } else {
+          alert('Error Deleting ' + dataSource.name)
+        }
+      });
+    }
   }
 
   ResetDataSourceObject(dataSource){
-      this.editDataSourceObject = dataSource;
-  //    this.editDataSourceForm = true;
+    this.editDataSourceObject = dataSource;
+    if (confirm('Are you sure you want to reset: ' + dataSource.name)){
       console.log("Resetting: " + this.editDataSourceObject.name);
-      this.tmmConfigService.resetDataSourceActivationKey(this.tenantMetadata.tenantId,
-        this.editDataSourceObject.id, this.tenantMetadata);
+      this.tmmConfigService.resetDataSourceActivationKey(this.tenantMetadata.tenantId, this.editDataSourceObject.id, this.tenantMetadata).then(data => {
+        if(data) {
+          this.getTenantMetadata()
+        } else {
+          alert('Error Resetting ' + dataSource.name)
+        }
+      });
+    }
   }
 
   DownloadCredentials(dataSource) {
