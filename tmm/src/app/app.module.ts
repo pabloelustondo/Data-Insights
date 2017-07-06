@@ -10,7 +10,7 @@ import { TmmConfigService } from './components/layout/smlTenantMetadataEditor/tm
 import { RouterModule } from "@angular/router";
 import { InvalidResourceComponent } from './components/invalid-resource/invalid-resource.component';
 import { smlDataSourceOverview } from './components/smlDataSourceOverview/smlDataSourceOverview.component';
-import { selDataSetsComponent } from "./components/selDataSets/selDataSets.component";
+import { smlDataSourceCreator } from "./components/smlDataSourceCreator/smlDataSourceCreator.component";
 import { AuthGuard } from './authguard.guard';
 
 @NgModule({
@@ -21,7 +21,7 @@ import { AuthGuard } from './authguard.guard';
     JsonEditorComponent,
     InvalidResourceComponent,
     smlDataSourceOverview,
-    selDataSetsComponent
+    smlDataSourceCreator
   ],
   imports: [
     BrowserModule,
@@ -31,7 +31,7 @@ import { AuthGuard } from './authguard.guard';
       /*{
         path: ':tenantId', component: smlTenantMetadataEditor, canActivate:[AuthGuard]
       },*/ {
-        path: 'dev/:tenantId', component: selDataSetsComponent, canActivate:[AuthGuard]
+        path: 'dev/:tenantId', component: smlDataSourceCreator, canActivate:[AuthGuard]
       }, {
         path: 'editDataSource/:tenantId', component: smlDataSourceOverview, canActivate:[AuthGuard]
       },  {

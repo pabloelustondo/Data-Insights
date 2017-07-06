@@ -7,8 +7,8 @@ import * as FileSaver from 'file-saver';
 @Component({
   selector: 'datasource-overview',
   template: `
-    <div class="container">
-        <h1 class="text-center"> Data Source for {{ tenantMetadata.tenantId }} </h1>
+    <div class="container-fluid">
+        <h2 class="text-center"> Data Sources for {{ tenantMetadata.tenantId }} </h2>
         <button class="btn btn-primary" role="button" routerLink="/dev/{{tenantMetadata.tenantId}}">Back</button>
         <hr />
         <div *ngIf="editDataSourceForm">

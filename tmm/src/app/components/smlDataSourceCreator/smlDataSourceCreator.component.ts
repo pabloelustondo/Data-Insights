@@ -13,11 +13,11 @@ export type DataSourceTypeOptions = 'MCDP' | 'API' | 'Other...';
 
 @Component({
   selector: 'selDataSets',
-  styleUrls: ['./selDataSets.component.css'],
-  templateUrl: 'selDataSets.html'
+  styleUrls: ['./smlDataSourceCreator.css'],
+  templateUrl: 'smlDataSourceCreator.html'
 })
 
-export class selDataSetsComponent implements OnInit {
+export class smlDataSourceCreator implements OnInit {
   enrollStatus: boolean;
   dataSourceType: DataSourceTypeOptions;
   options: any[] = [{'option': 'MCDP'}, {'option': 'API'}, {'option': 'Other...'}];

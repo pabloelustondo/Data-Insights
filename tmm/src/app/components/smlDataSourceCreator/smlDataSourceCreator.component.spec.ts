@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { selDataSetsComponent } from './selDataSets.component';
+import { smlDataSourceCreator } from './smlDataSourceCreator.component';
 
 describe('selDataSetsComponent', () => {
-  let component: selDataSetsComponent;
-  let fixture: ComponentFixture<selDataSetsComponent>;
+  let component: smlDataSourceCreator;
+  let fixture: ComponentFixture<smlDataSourceCreator>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ selDataSetsComponent ]
+      declarations: [ smlDataSourceCreator ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(selDataSetsComponent);
+    fixture = TestBed.createComponent(smlDataSourceCreator);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
