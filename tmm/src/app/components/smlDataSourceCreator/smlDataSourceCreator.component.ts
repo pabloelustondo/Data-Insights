@@ -177,10 +177,9 @@ export class smlDataSourceCreator implements OnInit {
           alert('Invalid Paramaters Provided for Type: ' + this.dataSourceType);
           return;
         } else {
-
           let dataSource: SmlDataSource = {
             id: uuid.v4(),
-            name: this.dataSourceType, //TODO: replace with actual name when we need to
+            name: inputs[0].value,
             active: false,
             activationKey: '',
             type: this.dataSourceType,
