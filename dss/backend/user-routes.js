@@ -1081,8 +1081,7 @@ function log_action(classifier, message, priority, tenantId, params, callback){
   "message" : message,
   "Priority" : priority,
   "tenantId" : tenantId,
-  "params" : params,
-  "timeStamp" : timeStamp
+  "params" : params
   };
 
   var payloads = [{ topic: 'log', messages: JSON.stringify(messages), partition: 0 }];

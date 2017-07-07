@@ -3,7 +3,6 @@
  */
 import {SmlTenantMetadata, SmlDataSet} from '../../../../sml/sml';
 
-
 // this is the dataset schema that we need for JSON editor and crud component will use this too
 export const smlTenantMetadataSample: SmlTenantMetadata = {
   id: 'SMLTest',  // id of the metadata
@@ -100,15 +99,18 @@ export const smlTenantEmptyMetadataSample: SmlTenantMetadata =
     idpInformation: [],
   };
 
-export const smlTenantMetadataEmpty: SmlDataSet = {
-  id: '',
-  name: '',
-  from: [''],
-  persist: true,
-  filter: '',
-  merge: '',
-  projections: '',
-  metadata: ['']
-};
+export const smlTenantMetadataEmpty: SmlDataSet =
+  {
+    id: '',
+    name: '',
+    from: [''],
+    persist: true,
+    filter: '',
+    merge: '',
+    projections: '',
+    metadata: [''],
+    crossJoin: false
+  };
+
 
 
