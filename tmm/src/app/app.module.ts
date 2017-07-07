@@ -39,6 +39,9 @@ import { ImageUploaderComponent } from './image-uploader/image-uploader.componen
         path: 'editDataSource/:tenantId', component: smlDataSourceOverview, canActivate:[AuthGuard]
       },  {
         path: ':JWT/:tenantId', component: InvalidResourceComponent,
+      },
+      {
+        path: ':tenantId', component: smlTenantMetadataEditor,
       }, {
         path: 'image', component: ImageUploaderComponent
       }, {
