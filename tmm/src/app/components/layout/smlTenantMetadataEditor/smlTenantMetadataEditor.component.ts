@@ -100,7 +100,6 @@ export class smlTenantMetadataEditor implements OnInit {  //name will be sml ten
 
     newTenantMetadata.dataSets[updatedItem.index] =  updatedItem;
     delete newTenantMetadata.dataSets[updatedItem.index].index;
-    
     this.tmmConfigService.saveDataByTenantId(this.tenantMetadata.tenantId, newTenantMetadata, data => {
       if (data) {
         this.getTenantMetadata();

@@ -1,3 +1,4 @@
+import {getTestBed} from "@angular/core/testing";
 /**
  * Created by dister on 6/7/2017.
  */
@@ -26,6 +27,11 @@ export class TmmConfigService {
     }
   }
 
+  deleteDataSourceByDataSourceId(tenantId, dataSourceId) {
+    console.log(globalConfig['tmmback_url'] + '/deleteDataSource/' + tenantId + '/' + dataSourceId);
+    return this.http.delete(globalConfig['tmmback_url'] + '/deleteDataSource/' + tenantId + '/' + dataSourceId).toPromise();
+  }
+
   saveDataByTenantId(tenantid, tmtMetadata, callback) {
     if (config.ddb_url != "") {
       console.log(tmtMetadata);
@@ -51,5 +57,18 @@ export class TmmConfigService {
     }else {
       return Promise.resolve(smlTenantMetadataSample);
     }
+  }
+
+  public insertDataSourceByTenantId(tenantId, data) {
+    return this.http.post(globalConfig['tmmback_url'] + '/tenant/dev/dataSource/' + tenantId, data).toPromise();
+  }
+
+  public resetDataSourceActivationKey(tenantId, dataSourceId, data) {
+    return this.http.put(globalConfig['tmmback_url'] + '/dataSource/' + tenantId + '/' + dataSourceId, data).toPromise();
+  }
+
+  public getDataSourceCredential(tenantId, dataSource) {
+    return dataSource.activationKey; 
+    // return this.http.get(globalConfig['tmmback_url'] + '/tenant/dev/' + tenantId + '/dataSourceToken/' + dataSource.id).toPromise();
   }
 }

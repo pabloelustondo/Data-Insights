@@ -146,7 +146,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -173,7 +173,7 @@ namespace Soti.MCDP.DataProcess
                     }
                     else
                     {
-                        Logger.Logger.Log(LogSeverity.Error, "Invalid IDA Url: " + uriResult);
+                        //Logger.Logger.Log(LogSeverity.Error, "Invalid IDA Url: " + uriResult);
                     }
 
                 }
@@ -185,7 +185,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+               // Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -250,7 +250,7 @@ namespace Soti.MCDP.DataProcess
                     {
                         var count = _deviceStatIntProvider.CheckDeviceStatIntSize();
                         // write to log the success of the operation
-                        Logger.Logger.Log(LogSeverity.Info, count + " of DeviceStatInt wait for send.");
+                        //Logger.Logger.Log(LogSeverity.Info, count + " of DeviceStatInt wait for send.");
 
                         
                         var idaData = _deviceStatIntProvider.RetrieveDeviceStatIntData(_batchSize);
@@ -266,16 +266,16 @@ namespace Soti.MCDP.DataProcess
                                 // this shouuld go somewhere else later... 
 
                                 // write to log the success of the operation
-                                Logger.Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: "
-                                    + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte."
-                                    + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
+                                //Logger.Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: "
+                                //    + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte."
+                                //    + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
                             }
                             catch (Exception ex)
                             {
                                 // this expcetion is due to problems when sending data to input data adapter
                                 _numberOfConsecutiveIdaFailures += 1;
                                 _deviceStatIntProvider.ConfirmStatusData(false);
-                                Logger.Logger.Log(LogSeverity.Error, " communicating with input data adapter: " + ex);
+                                //Logger.Logger.Log(LogSeverity.Error, " communicating with input data adapter: " + ex);
                             }
                     }
                     catch (Exception eDb)
@@ -283,7 +283,7 @@ namespace Soti.MCDP.DataProcess
                         // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                         _numberOfConsecutiveDbFailures += 1;
 
-                        Logger.Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
+                        //Logger.Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
                     }
                 }
                 //we only call the database is the number of failures of any type is less than the permitted.
@@ -293,7 +293,7 @@ namespace Soti.MCDP.DataProcess
                     {
                         var count = _deviceStatApplicationProvider.CheckDeviceStatApplicationSize();
                         // write to log the success of the operation
-                        Logger.Logger.Log(LogSeverity.Info, count + " of DeviceStatApplication wait for send.");
+                        //Logger.Logger.Log(LogSeverity.Info, count + " of DeviceStatApplication wait for send.");
 
 
                         var idaData = _deviceStatApplicationProvider.RetrieveDeviceStatApplicationData(_batchSize);
@@ -309,9 +309,9 @@ namespace Soti.MCDP.DataProcess
                                 // this shouuld go somewhere else later... 
 
                                 // write to log the success of the operation
-                                Logger.Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: " 
-                                    + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte." 
-                                    + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
+                                //Logger.Logger.Log(LogSeverity.Info, "DeviceStatInt new data has been sent. Total Size: " 
+                                //    + ASCIIEncoding.ASCII.GetByteCount(idaData) / 1024 + "kilobyte." 
+                                //    + " Total Time: " + watch.ElapsedMilliseconds / 1000 + "sec");
                             }
                             catch (Exception ex)
                             {
@@ -319,7 +319,7 @@ namespace Soti.MCDP.DataProcess
                                 _numberOfConsecutiveIdaFailures += 1;
                                 _deviceStatApplicationProvider.ConfirmStatusData(false);
                               
-                                Logger.Logger.Log(LogSeverity.Error," communicating with input data adapter: " + ex);
+                                //Logger.Logger.Log(LogSeverity.Error," communicating with input data adapter: " + ex);
                             }
                     }
                     catch (Exception eDb)
@@ -327,7 +327,7 @@ namespace Soti.MCDP.DataProcess
                         // we assume this exception is due to DB reasons as this is the only code that may rise exception at this point
                         _numberOfConsecutiveDbFailures += 1;
 
-                        Logger.Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
+                        //Logger.Logger.Log(LogSeverity.Error, " Error reading database:" + eDb);
                     }
                 }
             }
@@ -352,7 +352,7 @@ namespace Soti.MCDP.DataProcess
                     _dBSkippedAfterFailure = 0;
                     _idaSkippedAfterFailure = 0;
                 }
-                Logger.Logger.Log(LogSeverity.Info, " Skipping Cycling due to reach maximum retry and failure count.");
+                //Logger.Logger.Log(LogSeverity.Info, " Skipping Cycling due to reach maximum retry and failure count.");
             }
 
             _processing = false; // this will enable other attempts to process to go ahead.
@@ -394,7 +394,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
         }
 
@@ -423,7 +423,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
             return result.session_token;
         }
@@ -443,7 +443,7 @@ namespace Soti.MCDP.DataProcess
             }
             catch (Exception ex)
             {
-                Logger.Logger.Log(LogSeverity.Error, ex.ToString());
+                //Logger.Logger.Log(LogSeverity.Error, ex.ToString());
             }
 
             return result.session_token;

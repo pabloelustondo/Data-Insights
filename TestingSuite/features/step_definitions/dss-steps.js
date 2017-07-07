@@ -22,6 +22,7 @@ Cucumber.defineSupportCode(function(context) {
     var validToken = '';
     var oldauthorizationToken = '';
     var url = '';
+    var timeStamp = new Date().getTime();;
     //some necessary evil for things that cannot be retrieved through the API
    /* var mobiUrl = "https://cad099.corpss.soti.net/";
     var downAgentId = "31940960-70f1-4d92-aedd-a148f19c8757";
@@ -119,9 +120,6 @@ Cucumber.defineSupportCode(function(context) {
     Given('I POST with enrollment data for {stringInDoubleQuotes}', function(stringInDoubleQuotes, callback){
         resetOptions('/enrollments');
         resetFormOldValues(stringInDoubleQuotes);
-        //options.baseUrl = 'https://dev2012r2-sk.sotidev.com:3003/#/';
-        //console.log(options);
-        //console.log(options);
         Request.post(options, function (error, response, body) {
             responseData = body;
             responseCode = response.statusCode;
@@ -227,6 +225,13 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         });
         callback();
+    });
+
+    Then(/^a new log should have been created$/, function(table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var logInfo = table.hashes()[0];
+        //call ddb for latest log
+        callback(null, 'pending');
     });
 
     Given('I set post request for registering data source', function (table, callback) {

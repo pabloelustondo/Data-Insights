@@ -7,10 +7,11 @@
     <ProjectGuid>{4C4E2DB7-2E08-4865-9B74-B54E4479DC3C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Soti.Scheduler</RootNamespace>
-    <AssemblyName>Soti.Scheduler</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Soti.MCDP.Scheduler</RootNamespace>
+    <AssemblyName>Soti.MCDP.Scheduler</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +47,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scheduler.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ConfigSet\Soti.MCDP.ConfigSet.csproj">
+      <Project>{153263fb-150c-48c2-b8cd-c519845c9f30}</Project>
+      <Name>Soti.MCDP.ConfigSet</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

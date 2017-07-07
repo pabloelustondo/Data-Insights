@@ -9,7 +9,9 @@ using System.Reflection;
 using System.Threading;
 using System.Timers;
 using System.Xml;
+using Soti.MCDP.ConfigSet.Model;
 using Soti.MCDP.Scheduler.Model;
+
 
 namespace Soti.MCDP.Scheduler
 {
@@ -29,14 +31,21 @@ namespace Soti.MCDP.Scheduler
         /// <summary>
         /// Device Sync Staus List
         /// </summary>
-        private Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
-        public Scheduler(Dictionary<string, DeviceSyncStatus> deviceSyncStausList)
+        private readonly Dictionary<string, DeviceSyncStatus> _deviceSyncStausList;
+
+        /// <summary>
+        /// MC MetaDatas
+        /// </summary>
+        private readonly List<mcMetadata> _mcMetadatas;
+
+        public Scheduler(Dictionary<string, DeviceSyncStatus> deviceSyncStausList, List<mcMetadata> mcMetadatas)
         {
             if (!EventLog.SourceExists("MailScheduler"))
                 EventLog.CreateEventSource("MailScheduler", "Application");
             eventLog1 = new EventLog("Application", Environment.MachineName, "MailScheduler");
 
             this._deviceSyncStausList = deviceSyncStausList;
+            this._mcMetadatas = mcMetadatas;
         }
         public static void LoadTasksIntoDataSet()
         {

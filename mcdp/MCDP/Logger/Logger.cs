@@ -6,8 +6,12 @@ using Soti.MCDP.Logger.Model;
 
 namespace Soti.MCDP.Logger
 {
-    public static class Logger
+    public class Logger
     {
+        public Logger()
+        {
+            
+        }
         public static string Log(string classifier, string priority, string message, Dictionary<string,string> param = null)
         {
             var logMsg = new StringBuilder("{\"Classifier\":" + classifier + "\"");

@@ -11,9 +11,13 @@ Feature: DSS API Tests
       | test		|  MobiControl    | asdas      | {inputName: "mcurl",inputValue: mobiUrl}  |
     When  I POST to endpoint "registerDataSource"
     Then response code should be 200
+    Then a new log should have been created
+      | Classifier          |  Producer | message                            |tenantId  |
+      | Create_Success		|  DSS      | Data source created {{dataSource}} | test     |
 
   Scenario: As an administrator I want to enroll a new tenant
     Given I delete all user information for "test1"
+    Then response code should be 200
     Given I grab 'dssback' url from config file
     Given I create new user with the following data
       | accountid           |  apikey                          | clientsecret | domainid            | mcurl                                     |password|username          |
@@ -22,6 +26,9 @@ Feature: DSS API Tests
     Then The HTTP Code should be 200
     Then The response's id_token should be valid
     Then I store the response token in a file 'InUserToken'
+    Then a new log should have been created
+      | Classifier          |  Producer | message                             |tenantId  |
+      | Create_Success		|  DSS      | Tenant enrolled {{tenantInfo}}      |test1     |
 
   Scenario: As an administrator I want to try to enroll with an existing tenant
     Given I grab 'dssback' url from config file

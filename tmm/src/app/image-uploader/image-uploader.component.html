@@ -1,0 +1,11 @@
+<p>
+  <image-upload
+    [max]="2"
+    [buttonCaption]="'Select Your dogs!'"
+    [dropBoxMessage]="'Drop your images here!'"
+    [extensions]="['jpg','png','gif']"
+    (onFileUploadFinish)="imageUploaded($event)"
+    (onRemove)="imageRemoved($event)"
+    (isPending)="disableSendButton($event)"
+  ></image-upload>
+</p>

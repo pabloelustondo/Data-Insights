@@ -67,7 +67,6 @@ function readToken(token, callback) {  //Bearer
 }
 
 app.get('/api/enrollments', function(req, res){
-  var timeStamp = new Date().getTime();
   //var message: logging = {"classifier":"Create_Success", "serverId": process.pid.toString(), "priority": "Critical", "producer": "DDB", "message": "The {{speed}} {{fox.color}} {{mammal[2]}} jumped over the lazy {{mammal[0]}}", "params": { "speed": "quick", "fox": { "color": "brown" }, "mammal": ["dog", "cat", "fox"] } };
   log_action('Read_Success', "Getting all enrollments", "Info", "", "", function(){ res.status(200).send(enrollments)});
 });
@@ -132,7 +131,31 @@ app.post('/resetCredentials/:agentId', function (req, res) {
     }
 });
 
+//
 
+app.get('/activationKey/:tenantId/:dataSourceId', function (req, res) {
+
+
+  var payload = {
+    tenantId : req.params.tenantId,
+    dataSourceId : req.params.dataSourceId,
+    ida : {
+      url : appconfig['ida_url'],
+      get_token : config['ida_get_token'],
+      post_data : config['ida_post_data'],
+      post_log : config['ida_post_log'],
+      get_metadata : config['ida_get_metadata'],
+      api_version :  config['api_version']
+    }
+  };
+  var t = jwt.sign(payload, config['secret'], {expiresIn: config.agentPermTokenExpiryTime});
+  console.log(t);
+  res.status(200).send({
+    token : t
+  });
+});
+
+/*
 app.get('/getAgentToken', function(req, res) {
   var _header = req.headers;
   var token = _header['x-access-token'];
@@ -204,6 +227,7 @@ app.get('/getAgentToken', function(req, res) {
     return res.status(400).send (ErrorMsg.token_verification_failed);
   }
 });
+*/
 
 app.get('/sourceCredentials/:agentId', function (req, res) {
   var _header = req.headers;
@@ -393,7 +417,9 @@ app.post('/registerDataSource', function (req, res) {
           res.status(err.status).send(err.message);
         }
         if (result) {
-          res.status(result.status).send(result.message);
+          log_action("Create_Success", "Data source created {{dataSource}}",  "INFO", req.body.tenantid,'{"dataSource" : '+JSON.stringify(dataSource)+'}',function (err, data) {
+            res.status(result.status).send(result.message);
+          });
         }
       });
   }
@@ -1047,6 +1073,7 @@ function sendEmail(enrollment)
 };
 
 function log_action(classifier, message, priority, tenantId, params, callback){
+  var timeStamp = new Date().getTime();
   var messages = {
   "Classifier" : classifier,
   "serverId" : process.pid.toString(),
@@ -1056,6 +1083,7 @@ function log_action(classifier, message, priority, tenantId, params, callback){
   "tenantId" : tenantId,
   "params" : params
   };
+
   var payloads = [{ topic: 'log', messages: JSON.stringify(messages), partition: 0 }];
   producer.send(payloads, function(err, data) {
     //console.log(JSON.stringify(payloads));
