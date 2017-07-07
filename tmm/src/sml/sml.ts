@@ -42,7 +42,7 @@ export class SmlIdpInformation extends SmlElement{
   configurations: any[];
 }
 
-export class SmlDataSet extends SmlElement{
+export class SmlDataSet extends SmlElement {
   from: string[]; //source from
   persist: boolean;
   filter?: any;
