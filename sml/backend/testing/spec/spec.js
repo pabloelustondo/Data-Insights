@@ -94,9 +94,44 @@ describe("DAD Backend", function() {
                     expect(data).toBeDefined();
 
                     try {
-                        expect(data.length).toBe(3);
-                        expect(data[0].StatType).toBe(-1);
-                        expect(data[0].intvalue).toBe(100);
+                        expect(data.length).toBe(8);
+                        var expected_result = [{ intvalue_x: 1,
+                            intvalue_y: [ 100 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' },
+                        { intvalue_x: 1,
+                            intvalue_y: [ 100 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' },
+                        { intvalue_x: 1,
+                            intvalue_y: [ 100 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' },
+                        { intvalue_x: 1,
+                            intvalue_y: [ 10 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' },
+                        { intvalue_x: 1,
+                            intvalue_y: [ 100 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' },
+                        { intvalue_x: 1,
+                            intvalue_y: [ 100 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' },
+                        { intvalue_x: 1,
+                            intvalue_y: [ 100 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' },
+                        { intvalue_x: 1,
+                            intvalue_y: [ 100 ],
+                            StartDate: '2016-08-22',
+                            EndDate: '2016-08-23' }];
+
+                        var datajson = JSON.stringify(data);
+                        var expectedjson = JSON.stringify(expected_result);
+                        expect(datajson).toEqual(expectedjson);
+
                     } catch(e){
                         fail("could not parse data");
                     }
