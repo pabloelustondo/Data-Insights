@@ -139,14 +139,7 @@ app.get('/activationKey/:tenantId/:dataSourceId', function (req, res) {
   var payload = {
     tenantId : req.params.tenantId,
     dataSourceId : req.params.dataSourceId,
-    ida : {
-      url : appconfig['ida_url'],
-      get_token : config['ida_get_token'],
-      post_data : config['ida_post_data'],
-      post_log : config['ida_post_log'],
-      get_metadata : config['ida_get_metadata'],
-      api_version :  config['api_version']
-    }
+    ida : config['idaInformation']
   };
   var t = jwt.sign(payload, config['secret'], {expiresIn: config.agentPermTokenExpiryTime});
   console.log(t);
@@ -155,7 +148,6 @@ app.get('/activationKey/:tenantId/:dataSourceId', function (req, res) {
   });
 });
 
-/*
 app.get('/getAgentToken', function(req, res) {
   var _header = req.headers;
   var token = _header['x-access-token'];
@@ -227,7 +219,7 @@ app.get('/getAgentToken', function(req, res) {
     return res.status(400).send (ErrorMsg.token_verification_failed);
   }
 });
-*/
+
 
 app.get('/sourceCredentials/:agentId', function (req, res) {
   var _header = req.headers;

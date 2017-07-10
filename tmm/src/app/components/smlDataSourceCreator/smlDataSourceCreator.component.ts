@@ -7,6 +7,7 @@ import {
   smlTenantMetadataEmpty,
   smlTenantMetadataSample
 } from "../layout/smlTenantMetadataEditor/jsonEditorSchema.configuration";
+import { AuthGuard } from '../../authguard.guard';
 
 import * as uuid from 'node-uuid';
 export type DataSourceTypeOptions = 'MCDP' | 'API' | 'Other...';
@@ -31,7 +32,8 @@ export class smlDataSourceCreator implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private tmmConfigService: TmmConfigService,
-              private router: Router) { }
+              private router: Router,
+              private authGuard: AuthGuard) { }
 
   ngOnInit() {
     this.getTenantMetadata();

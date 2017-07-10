@@ -101,18 +101,16 @@ export const smlTenantEmptyMetadataSample: SmlTenantMetadata =
     idpInformation: [],
   };
 
-export const smlTenantMetadataEmpty: SmlDataSet =
-  {
-    id: '',
-    name: '',
-    from: [''],
-    persist: true,
-    filter: '',
-    merge: '',
-    projections: '',
-    metadata: [''],
-    crossJoin: false
-  };
-
+export const smlTenantMetadataEmpty: SmlDataSet = {
+  id: '',
+  name: '',
+  from: [''],
+  persist: true,
+  filter: '',
+  merge: '',
+  projections: '',
+  metadata: [''],
+  crossJoin: false
+};
 
 
