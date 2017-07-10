@@ -92,14 +92,14 @@ Cucumber.defineSupportCode(function(context) {
 
         callback();
     });
-    Then("Kafka Consumer should receive some message without error", function (callback) {
+
+    Then("Kafka should receive some message under topic {stringInDoubleQuotes}", function (stringInDoubleQuotes,callback) {
         var kafka_url = globalconfig.kafka_url;
         kafka_url = kafka_url.replace("http://", "");
         var kafkaClient = new kafka.Client(kafka_url);
-
-        var payloads =  [{ topic: 'undefined_transactionLogs', partition: 0 }];
+        var payloads =  [{ topic: stringInDoubleQuotes, partition: 0 }];
         var options = {
-            autoCommit: false,
+            autoCommit: true,
             sessionTimeout: 4000
         };
 

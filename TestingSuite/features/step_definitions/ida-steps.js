@@ -21,7 +21,6 @@ Cucumber.defineSupportCode(function(context) {
     var authorizationToken = '';
     var responseCode = 0;
     var responseData = 0;
-    var idaPortNumber = 0;
     var url = '';
     var agentID = '';
     // Request Structure
@@ -100,7 +99,6 @@ Cucumber.defineSupportCode(function(context) {
     Then('I get the agentID of a data source', function (callback) {
         // Write code here that turns the phrase above into concrete actions
         if(responseData[0] == undefined || responseData[0].agentId == undefined){
-            console.log(responseData);
             console.error("data sources undefined");
         }
         agentID = responseData[0].agentId;
@@ -195,21 +193,26 @@ Cucumber.defineSupportCode(function(context) {
         callback();
     });
 
-    Given(/^I set up request for making post call to '(.*)'$/, function (variable, callback) {
+    Given('I set up request for making post call', function (table, callback) {
         // Write code here that turns the phrase above into concrete actions
+        var end_point = table.hashes()[0].post;
+        var sample_data = table.hashes()[0].data;
+        sample_data = sample_data;
+        sample_data = JSON.parse(sample_data);
         options.preambleCRLF = options.postambleCRLF = true;
-        options.uri = url+variable;
+        options.uri = url+ end_point;
         options.headers['x-access-token'] = xaccessToken;
         options.headers['content-type'] = 'application/json';
         options.method = "POST";
-        options.body = {
+        /*options.body = {
             'metadata': {
                 'dataSetId' : 'idaSampleId2',
                 'projections': '[]' },
             'data': {
                 'sensorId' : '123',
                 'sensorValue' : '45648946'}
-        };
+        };*/
+        options.body = sample_data;
         callback();
     });
 

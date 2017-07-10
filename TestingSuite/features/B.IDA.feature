@@ -37,7 +37,9 @@ Feature: IDA API Tests
   Scenario: As an administrator I want to make a POST request to IDA using my temporary Authorization Token
     Given I grab the xaccesskey from 'testTemporaryToken'
     And I grab 'ida' url from the config file
-    And I set up request for making post call to '/data'
+    And I set up request for making post call
+      |post |data|
+      |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": "[]"	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}} |
     When I make a POST call
     Then response code must be 200
     And response body should be a valid IDA-POST response
@@ -45,16 +47,22 @@ Feature: IDA API Tests
   Scenario: As an administrator I want to make a POST request to IDA using an invalid token
     Given I modify the xaccesskey to an invalid JWT
     And I grab 'ida' url from the config file
-    And I set up request for making post call to '/data'
+    And I set up request for making post call
+    |post |data|
+    |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": "[]"	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}}  |
     When I make a POST call
     Then response code must be 400
     And response body should be empty or contain error
 
+
   Scenario: As an administrator I want to validate that Kafka is receiving my posts to IDA
      Given grab IDA port number for kafka test
-     Given I set up request for making post call to '/data'
+    And I set up request for making post call
+      |post |data|
+      |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": "[]"	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}}|
      When I make a POST call to /data
-     Then Kafka Consumer should receive some message without error
+     Then Kafka should receive some message under topic "undefined_idaSampleId2"
+
 
 
 
