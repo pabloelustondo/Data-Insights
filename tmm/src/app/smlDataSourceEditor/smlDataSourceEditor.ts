@@ -59,7 +59,7 @@ export class smlDataSourceEditor implements OnInit {
   }
 
   saveCurrentItem() {
-    try{
+    try {
       const a = this.editor.get();
       this.dataSource = this.editor.get();
       a['index'] = this.index;

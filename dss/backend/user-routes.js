@@ -131,6 +131,22 @@ app.post('/resetCredentials/:agentId', function (req, res) {
     }
 });
 
+//
+
+app.get('/activationKey/:tenantId/:dataSourceId', function (req, res) {
+
+
+  var payload = {
+    tenantId : req.params.tenantId,
+    dataSourceId : req.params.dataSourceId,
+    ida : config['idaInformation']
+  };
+  var t = jwt.sign(payload, config['secret'], {expiresIn: config.agentPermTokenExpiryTime});
+  console.log(t);
+  res.status(200).send({
+    token : t
+  });
+});
 
 app.get('/getAgentToken', function(req, res) {
   var _header = req.headers;
@@ -203,6 +219,7 @@ app.get('/getAgentToken', function(req, res) {
     return res.status(400).send (ErrorMsg.token_verification_failed);
   }
 });
+
 
 app.get('/sourceCredentials/:agentId', function (req, res) {
   var _header = req.headers;

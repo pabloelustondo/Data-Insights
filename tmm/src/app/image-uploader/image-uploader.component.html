@@ -1,0 +1,27 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h3 class="text-center" id="tenantname">Tenant Name: {{tenantMetadata.name}}</h3>
+      <h4 class="text-center" id="tenantid">Tenant ID: {{tenantMetadata.tenantId}}</h4>
+      <hr/>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-6">
+      <image-upload
+        [max]="2"
+        [url]="'http://localhost:8020/image/TeeJay'"
+        [buttonCaption]="'Select Your Images!'"
+        [dropBoxMessage]="'Drop your images here!'"
+        [extensions]="['jpg','png','gif']"
+        (onFileUploadFinish)="imageUploaded($event)"
+        (onRemove)="imageRemoved($event)"
+        (isPending)="disableSendButton($event)"
+      ></image-upload>
+    </div>
+    <div class="col-6">
+      <h6>{{imageBase64}}</h6>
+    </div>
+  </div>
+</div>
