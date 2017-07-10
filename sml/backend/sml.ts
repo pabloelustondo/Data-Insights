@@ -45,14 +45,13 @@ export class SmlRowFeature extends SmlElement{
 
 export class SmlDataProcess  extends  SmlElement{
   lang?: SmlCodingLanguage
-  code: string
+  script?: string
 }
 
 export class SmlTransformation {
   type: SmlTransformationType;
   lang?: SmlCodingLanguage;
   script?: string;
-
 }
 
 

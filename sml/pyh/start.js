@@ -1,4 +1,77 @@
 //start.js
+var json2 = [{
+    "_id" : "5946fa7d0c56c36f2b2b32e8",
+    "devid" : "73E65B76064901080001-1860F2240600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 100
+}
+
+    ,
+    {
+        "_id" : "5946fa7d0c56c36f2b2b32e9",
+        "devid" : "73E65B76064901080002-1B9096690600											   ",
+        "time_stamp" : "2016-08-22 10:29:59.000000",
+        "StatType" : -1,
+        "intvalue" : 100
+    }
+
+    ,
+    {
+        "_id" : "5946fa7d0c56c36f2b2b32ea",
+        "devid" : "73E65B76064901080005-112074270600											   ",
+        "time_stamp" : "2016-08-22 10:29:59.000000",
+        "StatType" : -1,
+        "intvalue" : 100
+    }
+
+    ,
+    {
+        "_id" : "5946fa7d0c56c36f2b2b32eb",
+        "devid" : "73E65B76064901080006-12A0D4720600											   ",
+        "time_stamp" : "2016-08-22 10:29:59.000000",
+        "StatType" : -1,
+        "intvalue" : 10
+    }
+
+    ,
+    {
+        "_id" : "5946fa7d0c56c36f2b2b32ec",
+        "devid" : "73E65B76064901080006-18505C6F0600											   ",
+        "time_stamp" : "2016-08-22 10:29:59.000000",
+        "StatType" : -1,
+        "intvalue" : 100
+    }
+
+    ,
+    {
+        "_id" : "5946fa7d0c56c36f2b2b32ed",
+        "devid" : "73E65B76064901080007-04C0865C0600											   ",
+        "time_stamp" : "2016-08-22 10:29:59.000000",
+        "StatType" : -1,
+        "intvalue" : 100
+    }
+
+    ,
+    {
+        "_id" : "5946fa7d0c56c36f2b2b32ee",
+        "devid" : "73E65B76064901080007-09604E2A0600											   ",
+        "time_stamp" : "2016-08-22 10:29:59.000000",
+        "StatType" : -1,
+        "intvalue" : 100
+    }
+
+    ,
+    {
+        "_id" : "5946fa7d0c56c36f2b2b32ef",
+        "devid" : "73E65B76064901080007-1220A2610600											   ",
+        "time_stamp" : "2016-08-22 10:29:59.000000",
+        "StatType" : -1,
+        "intvalue" : 100
+    }];
+
+
+
 var json = [{
 	"_id" : "5946fa7d0c56c36f2b2b32e8",
 	"devid" : "73E65B76064901080001-1860F2240600											   ",
@@ -29963,7 +30036,7 @@ function pyTransformation(){
 		var start = '2016-08-22';
 		var end = '2016-08-23';
 		var py = spawn('python', ['compute_input.py', arg1, shift, threshold, start, end] );
-		var data = json;
+		var data = json2;
 		var dataout = '';
 		var dataout2;
 

@@ -47,10 +47,44 @@ describe("DAD Backend", function() {
         });
 
     });
-*/
+
     describe("POST /smlquery", function() {
         it("executes an ad-hoc TRIVIAL (only ID) query defined by a SML dataset a returns it with (test) data", function(done) {
             var smlquery = {id:"devstats2"};
+            $.ajax({
+                url: "/smlquery",
+                type:"POST",
+                data: JSON.stringify(smlquery),
+                contentType:"application/json",
+                success: function(data, textStatus, jqXHR) {
+                    expect(data).toBeDefined();
+
+                    try {
+                        expect(data.length).toBe(3);
+                        expect(data[0].StatType).toBe(-1);
+                        expect(data[0].intvalue).toBe(100);
+                    } catch(e){
+                        fail("could not parse data");
+                    }
+                    done();},
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                }
+            });
+        });
+
+    });
+
+ */
+    describe("POST /smlquery", function() {
+        it("executes an ad-hoc SIMPLE SML dataset with a python transformation a returns it with (test) data", function(done) {
+            var smlquery = {
+                id:"devstats2",
+                transformations:[{
+                    type: "ProcessDataSet",
+                    lang: "Python",
+                    script:"print(Hi)"
+                }]};
             $.ajax({
                 url: "/smlquery",
                 type:"POST",

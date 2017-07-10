@@ -2,6 +2,78 @@ import * as Sml from "./sml";
 import * as rp from 'request-promise';
 import * as P from 'es6-promise';
 
+var json2 = [{
+  "_id" : "5946fa7d0c56c36f2b2b32e8",
+  "devid" : "73E65B76064901080001-1860F2240600											   ",
+  "time_stamp" : "2016-08-22 10:29:59.000000",
+  "StatType" : -1,
+  "intvalue" : 100
+}
+
+  ,
+  {
+    "_id" : "5946fa7d0c56c36f2b2b32e9",
+    "devid" : "73E65B76064901080002-1B9096690600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 100
+  }
+
+  ,
+  {
+    "_id" : "5946fa7d0c56c36f2b2b32ea",
+    "devid" : "73E65B76064901080005-112074270600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 100
+  }
+
+  ,
+  {
+    "_id" : "5946fa7d0c56c36f2b2b32eb",
+    "devid" : "73E65B76064901080006-12A0D4720600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 10
+  }
+
+  ,
+  {
+    "_id" : "5946fa7d0c56c36f2b2b32ec",
+    "devid" : "73E65B76064901080006-18505C6F0600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 100
+  }
+
+  ,
+  {
+    "_id" : "5946fa7d0c56c36f2b2b32ed",
+    "devid" : "73E65B76064901080007-04C0865C0600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 100
+  }
+
+  ,
+  {
+    "_id" : "5946fa7d0c56c36f2b2b32ee",
+    "devid" : "73E65B76064901080007-09604E2A0600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 100
+  }
+
+  ,
+  {
+    "_id" : "5946fa7d0c56c36f2b2b32ef",
+    "devid" : "73E65B76064901080007-1220A2610600											   ",
+    "time_stamp" : "2016-08-22 10:29:59.000000",
+    "StatType" : -1,
+    "intvalue" : 100
+  }];
+
+
 /**
  * Created by pabloelustondo on 2017-06-21.
  */
@@ -17,7 +89,41 @@ export class SMLI {
     this.dataSetProviderlurl = dataSetProviderlurl;
   }
 
-  getDataSet(datasetDef:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
+  calculateDataSet(dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
+    console.log("calculte DataSet Callded");
+    let url = this.dataSetProviderlurl;
+
+    return new Promise((resolve, reject) => {
+      console.log("calling getdataset indide calculate");
+      this.getDataSet(dataset, parameters).then(
+          (d) => {
+            let data = <Sml.SmlDataSet>d;
+            //ok, here we have the data and we need to transform if we have transformations defined
+            if (dataset.transformations){
+              console.log("Number of transformations to apply" + dataset.transformations.length)
+              this.transformDataSet(dataset.transformations, data, parameters).then(
+                  (data) => {
+                    console.log("INSIDE TRANSFORM DATA SET INSIDE CALCUALTE DATA SET" + JSON.stringify(data[0]))
+                    resolve(data);
+                  },
+                  (error) => {console.log("error processing data process" + process + " error: " + error);
+                    reject(error);}
+              )
+
+            } else {
+              console.log("NO transformations to apply" + dataset.transformations);
+              resolve(data);
+            }
+
+          },
+          (error) => {
+            reject(error);
+          }
+      )
+    });
+  }
+
+  getDataSet(dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
     //call a url api passing parameters in order to get an evaluated data set from a dataset endpoint.
     //we will need somehow to differenciate types of queries...for now let assume something likje CDL
     console.log("getDataSet Callded");
@@ -28,60 +134,72 @@ export class SMLI {
       var options = {
         uri: url,
         method: 'POST',
-        body: {id:"devstats2"},
+        body: {id:"devstats1"},
         json:true
       };
       console.log("calling rp with " + JSON.stringify(options));
 
       rp(options).then((result)=>{
-         console.log("rp goet back with results.length" + result.length);
-         resolve(result);
-      }, (error) => {console.log("rp got error" + error);
-         reject(error);}
+            console.log("rp goet back with results.length" + result.length);
+            resolve(result);
+          }, (error) => {console.log("rp got error" + error);
+            reject(error);}
       );
 
     });
-    }
+  }
 
-  calculateDataSet(datasetDef:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-    console.log("calculte DataSet Callded");
-    let url = this.dataSetProviderlurl;
-
+  transformDataSet(transformations: Sml.SmlTransformation[], dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
     return new Promise((resolve, reject) => {
-      console.log("calling getdataset indide calculate");
-      this.getDataSet(datasetDef, parameters).then(
+
+      console.log("transform Data Set called  ");
+      if (!transformations) resolve(dataset);
+
+      console.log("transform Data Set number of transformations " + transformations.length);
+      console.log("transform Data Set type of first transformation " + transformations[0].type);
+
+      var trans = transformations[0]; //for now...will take care of rest in a bit
+
+      console.log("trans type " + trans.type);
+
+      if (trans.type === "ProcessDataSet"){
+        console.log("transform data set - Ready to apply process data set ");
+        this.processData(<Sml.SmlDataProcess>trans, dataset, parameters).then(
+            (data) => {
+              console.log("INSIDE TRANSFORM DATA SET for real!!");
+              resolve(data);
+            },
+            (error) => {console.log("error processing data process: " + error);
+              reject(error);}
+            )
+
+      } else {
+        console.log("INSIDE TRANSFORM DATA SET for real!! in ELSE");
+        resolve(dataset);
+      }
+
+
+    });
+
+  }
+
+  processData(process:Sml.SmlDataProcess, dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
+    return new Promise((resolve, reject)  => {
+
+      console.log("PROCESS DATA: " + process.script);
+
+      this.pyTransformation(process.script, dataset, parameters).then(
           (data) => {
+            console.log("PROCESS DATA NICE ");
             resolve(data);
           },
-          (error) => {
-            reject(error);
+          (err) => {
+            console.log("PROCESS DATA ERRR " + err);
+            reject(err);
           }
-      )
-    });
-  }
+      );
 
 
-  transformDataSet(datasetDef:Sml.SmlDataSet, inputDataSet:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-    return new Promise(function(resolve, reject){
-
-      let result = new Sml.SmlDataSet();
-      result.data = inputDataSet.data;  //fpr now until we have filter..
-
-      datasetDef.transformations.forEach(trans => {
-        //   if (trans.type = "AddRowFeature") this.addRowFeature(datasetDef, (Sml.SmlRowFeature)trans,result.data);
-        if (typeof trans === "SmlDataProcess") this.processData(datasetDef, <Sml.SmlDataProcess><Object> trans)
-            .then(function(resultDataSet:Sml.SmlDataSet) {
-              result.data = resultDataSet.data;
-              resolve(result);
-            });
-
-      })
-    });
-
-  }
-
-  processData(def:Sml.SmlDataSet, process:Sml.SmlDataProcess): Promise<Sml.SmlDataSet>{
-    return new Promise(function(resolve, reject){
 
 
     });
@@ -130,5 +248,98 @@ export class SMLI {
     });
 
   }
+
+  pyTransformation(code:string, dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]):Promise<Sml.SmlDataSet>{
+      return new Promise(function(resolve, reject){
+
+
+        var spawn = require('child_process').spawn;
+
+        var code =`
+				threshold = sys.argv[3]
+				shift = sys.argv[2]
+				start = sys.argv[4]
+				end = sys.argv[5]				
+				cols = data.select_dtypes(['object'])
+				data[cols.columns] = cols.apply(lambda x: x.str.strip())
+				data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
+				data.set_index(['devid', 'time_stamp'], inplace=True) 
+				data.sort_index(level=1, inplace=True)
+				dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))
+				def check(line): 
+					oldval = 100
+					for i in line:
+						if (i > oldval) | (i < threshold):
+							return 1
+							break
+						else: 
+							oldval = i
+						return 0
+				discharged = dischargedGroup.apply(check)
+				dischargedGroup = pd.DataFrame(dischargedGroup)
+				discharged = pd.DataFrame(discharged)
+				discharged = discharged[discharged['intvalue'] > 0]
+				discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
+				discharged['StartDate'] = start
+				discharged['EndDate'] = end
+				print(discharged.to_json(orient='records'))
+					`
+
+        var arg1 = "def f(data): \n	"+code;
+
+        /*
+
+         `
+         "	data[cols.columns] = cols.apply(lambda x: x.str.strip())\n"+
+         "	data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
+         "	data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
+         "	data.sort_index(level=1, inplace=True)\n"+
+         "	dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))\n"+
+         "	def check(line): \n" +
+         "		oldval = 100 \n" +
+         "		for i in line: \n"+
+         "			if (i > oldval) | (i < threshold): \n"+
+         "				return 1 \n"+
+         "				break \n"+
+         "			else: \n"+
+         "				oldval = i \n"+
+         "		return 0 \n";
+
+
+
+
+         */
+
+
+//discharged = dischargedGroup.apply(check)
+        var shift = 0;
+        var threshold = 10;
+        var start = '2016-08-22';
+        var end = '2016-08-23';
+        var py = spawn('python', ['compute_input.py', arg1, shift, threshold, start, end] );
+        var data = json2;
+        var dataout = '';
+        var dataout2;
+
+        py.stdout.on('data', function(data){
+          dataout += data.toString();
+        });
+
+        py.stdout.on('end', function(){
+          //console.log('INSIDE PROMISE NODE Got End: ' + dataout);
+
+          try {
+            dataout2 = JSON.parse(dataout);
+            resolve(dataout2);
+          } catch(e){
+            reject("cannot parse result   " + e);
+          }
+
+        });
+        py.stdin.write(JSON.stringify(data));
+        py.stdin.end();
+
+      });
+    }
 
 }
