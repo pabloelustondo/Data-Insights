@@ -65,14 +65,21 @@ export class SmlParameter{
   value: any;
 }
 
-export class SmlStream{
+export class SmlStreamType{
+  stream: boolean;   // when this (kind of redundante) boolean is true, this datasets will report events about its changes.
+  frecuency?: number;
+  timeWindow?: number;
+}
+
+export class SmlHistoryType{
+  stored: true; // when this (kind of redundante) boolean is true, this datasets will be stored in data lake
   frecuency?: number;
   timeWindow?: number;
 }
 
 
 export class SmlFilter{
-
+  stored: boolean;
 
 }
 
@@ -102,13 +109,45 @@ export class SmlReduction{
 
 }
 
-export class SmlDataSet extends SmlElement{
-  //public
+//struguling with good names
+export class SmlExecuteType {
+  where: "client" | "dps" | "cdl";
+  when: "userevent" | "dataevent";
+}
 
-  data?:any[]; //for now...missing time series for a sec
+export class SmlDataPoint{
+  timeStamp: string; //date in string format
+  data: any[];
+}
+
+export class SmlDataAttribute{
+// her is where we explain to the outside world how the returning data shape is
+}
+
+export class SmlDataSet extends SmlElement{   //Element adds id & name
+
+  //IMPORTANT GENERAL COMMENT: Most attributes in this type are optional,
+  // that most normally mneans that we will assuming some default value for it.
+
+  //private = not enforced for now
+
+  from?: SmlDataSet[];  // data sources here give us data, events and definitions
+  extend?: SmlDataSet[];   // data sources here give us data, events and definitions
+  filter?: SmlFilter;
+  transformations?: SmlTransformation[];
+
+  //public basic
+
+  data?:SmlDataPoint[]; //for now...missing time series for a sec
+  dataAttributes?: SmlDataAttribute[];
   parameters?: SmlParameter[];
-  stream?: SmlStream;
-  persistanceType?: SmlStorageType;
+  streamType?: SmlStreamType;
+  historyType?: SmlHistoryType;
+  executeType?: SmlExecuteType;
+
+
+  //public extra
+
   features?: SmlRowFeature[];
   projections?: SmlProjection[];
   dimensions?: SmlDimension[];
@@ -116,11 +155,7 @@ export class SmlDataSet extends SmlElement{
   alerts?: SmlAlert[];
   reductions?: SmlReduction[];
 
-  //private = not enforced for now
 
-  from?: string[];
-  filter?: any;
-  transformations?: SmlTransformation[];
 
 }
 

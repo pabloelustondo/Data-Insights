@@ -79,12 +79,41 @@ describe("DAD Backend", function() {
     describe("POST /smlquery", function() {
         it("executes an ad-hoc SIMPLE SML dataset with a python transformation a returns it with (test) data", function(done) {
             var smlquery = {
-                id:"devstats2",
+                id:'devices_not_lasted_shift',
+                from: [{id:"devstats2"}],
                 transformations:[{
                     type: "ProcessDataSet",
                     lang: "Python",
-                    script:"print(Hi)"
-                }]};
+                    script: `
+				threshold = sys.argv[3]
+				shift = sys.argv[2]
+				start = sys.argv[4]
+				end = sys.argv[5]				
+				cols = data.select_dtypes(['object'])
+				data[cols.columns] = cols.apply(lambda x: x.str.strip())
+				data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
+				data.set_index(['devid', 'time_stamp'], inplace=True) 
+				data.sort_index(level=1, inplace=True)
+				dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))
+				def check(line): 
+					oldval = 100
+					for i in line:
+						if (i > oldval) | (i < threshold):
+							return 1
+							break
+						else: 
+							oldval = i
+						return 0
+				discharged = dischargedGroup.apply(check)
+				dischargedGroup = pd.DataFrame(dischargedGroup)
+				discharged = pd.DataFrame(discharged)
+				discharged = discharged[discharged['intvalue'] > 0]
+				discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
+				discharged['StartDate'] = start
+				discharged['EndDate'] = end
+				print(discharged.to_json(orient='records'))
+					`
+        }]};
             $.ajax({
                 url: "/smlquery",
                 type:"POST",

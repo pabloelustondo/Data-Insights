@@ -4,6 +4,7 @@ Instructions to get , install, run and sort of monitor the whole thing:
 
 make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka, make sure you have the JAVA_HOME)
 we assume mongodb installed in C:\mongodb and kafka in c:\kafka. (if not please modify folder in 'run' script.
+node.js is normalyl installed in c:\nodejs
 (mongo db needs a data folder c:/data/db.. follow instructions)
 Now, run the following commands in your command prompt:
 

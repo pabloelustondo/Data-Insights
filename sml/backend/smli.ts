@@ -90,12 +90,15 @@ export class SMLI {
   }
 
   calculateDataSet(dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-    console.log("calculte DataSet Callded");
-    let url = this.dataSetProviderlurl;
 
     return new Promise((resolve, reject) => {
-      console.log("calling getdataset indide calculate");
-      this.getDataSet(dataset, parameters).then(
+
+      //first, we need to get the data from the input data sets on the from
+      //for now I will assume there is one and will use this on only.
+
+      let inputdataset = dataset.from[0];
+
+      this.getDataSet(inputdataset, parameters).then(
           (d) => {
             let data = <Sml.SmlDataSet>d;
             //ok, here we have the data and we need to transform if we have transformations defined
@@ -252,66 +255,15 @@ export class SMLI {
   pyTransformation(code:string, dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]):Promise<Sml.SmlDataSet>{
       return new Promise(function(resolve, reject){
 
+        var parameters = `            threshold = sys.argv[3]
+                shift = sys.argv[2]
+                start = sys.argv[4]
+                end = sys.argv[5]`;
 
         var spawn = require('child_process').spawn;
+        var arg1 = "def f(data): \n	"+ code;
 
-        var code =`
-				threshold = sys.argv[3]
-				shift = sys.argv[2]
-				start = sys.argv[4]
-				end = sys.argv[5]				
-				cols = data.select_dtypes(['object'])
-				data[cols.columns] = cols.apply(lambda x: x.str.strip())
-				data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
-				data.set_index(['devid', 'time_stamp'], inplace=True) 
-				data.sort_index(level=1, inplace=True)
-				dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))
-				def check(line): 
-					oldval = 100
-					for i in line:
-						if (i > oldval) | (i < threshold):
-							return 1
-							break
-						else: 
-							oldval = i
-						return 0
-				discharged = dischargedGroup.apply(check)
-				dischargedGroup = pd.DataFrame(dischargedGroup)
-				discharged = pd.DataFrame(discharged)
-				discharged = discharged[discharged['intvalue'] > 0]
-				discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
-				discharged['StartDate'] = start
-				discharged['EndDate'] = end
-				print(discharged.to_json(orient='records'))
-					`
-
-        var arg1 = "def f(data): \n	"+code;
-
-        /*
-
-         `
-         "	data[cols.columns] = cols.apply(lambda x: x.str.strip())\n"+
-         "	data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')\n"+
-         "	data.set_index(['devid', 'time_stamp'], inplace=True)\n"+
-         "	data.sort_index(level=1, inplace=True)\n"+
-         "	dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))\n"+
-         "	def check(line): \n" +
-         "		oldval = 100 \n" +
-         "		for i in line: \n"+
-         "			if (i > oldval) | (i < threshold): \n"+
-         "				return 1 \n"+
-         "				break \n"+
-         "			else: \n"+
-         "				oldval = i \n"+
-         "		return 0 \n";
-
-
-
-
-         */
-
-
-//discharged = dischargedGroup.apply(check)
+        console.log('CODE:' + arg1);
         var shift = 0;
         var threshold = 10;
         var start = '2016-08-22';
