@@ -255,7 +255,8 @@ export class SMLI {
   pyTransformation(code:string, dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]):Promise<Sml.SmlDataSet>{
       return new Promise(function(resolve, reject){
 
-        var parameters = `            threshold = sys.argv[3]
+        var parameters = `            
+                threshold = sys.argv[3]
                 shift = sys.argv[2]
                 start = sys.argv[4]
                 end = sys.argv[5]`;
