@@ -255,12 +255,6 @@ export class SMLI {
   pyTransformation(code:string, dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]):Promise<Sml.SmlDataSet>{
       return new Promise(function(resolve, reject){
 
-        var parameters = `            
-                threshold = sys.argv[3]
-                shift = sys.argv[2]
-                start = sys.argv[4]
-                end = sys.argv[5]`;
-
         var spawn = require('child_process').spawn;
         var arg1 = "def f(data): \n	"+ code;
 
@@ -269,7 +263,10 @@ export class SMLI {
         var threshold = 10;
         var start = '2016-08-22';
         var end = '2016-08-23';
-        var py = spawn('python', ['compute_input.py', arg1, shift, threshold, start, end] );
+        var json = JSON.stringify( {name:'pablo', age:52});
+        var params = ['compute_input.py', arg1, shift, threshold, start];
+        params.push(end);
+        var py = spawn('python', params );
         var data = json2;
         var dataout = '';
         var dataout2;

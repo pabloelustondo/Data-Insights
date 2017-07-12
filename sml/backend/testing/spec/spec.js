@@ -81,6 +81,13 @@ describe("DAD Backend", function() {
             var smlquery = {
                 id:'devices_not_lasted_shift',
                 from: [{id:"devstats2"}],
+                parameters:[
+                    {
+                    name: 'end',
+                    type: 'string',  //for now pure javascript code
+                    value: '2016-08-23'
+                    }
+                ],
                 transformations:[{
                     type: "ProcessDataSet",
                     lang: "Python",
