@@ -118,7 +118,7 @@ describe("DAD Backend", function() {
 				discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
 				discharged['StartDate'] = start
 				discharged['EndDate'] = end
-				print(discharged.to_json(orient='records'))
+				return discharged
 					`
         }]};
             $.ajax({
