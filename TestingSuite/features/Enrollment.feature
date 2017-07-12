@@ -12,7 +12,7 @@ Feature: Enrollment
     Then The HTTP Code should be 200
     Then The response's id_token should be valid
 
-Scenario: As an administrator I want to verify my enrollment
+  Scenario: As an administrator I want to verify my enrollment
     Given I grab 'dssback' url from config file
     Given I create a login session as "test"
       |domainid |code         |

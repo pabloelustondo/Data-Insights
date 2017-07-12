@@ -10,8 +10,6 @@ DSS should be responsible only for data sources management and the future featur
 
   Scenario: As an administrator, I want to create a new data set
     Given I create a new Tenant Metadata Object for tenant test_user
-    |id   |name       |from             |persist  |filter |merge  |projections  |metadata |
-    |123  |testDataSet|[testDataSource] |true     |[]     |[]     |[]           |[]       |
     And I grab tmm backend url from the config file
     Then I setup request for posting to tmm backend
     When I POST to "/tenant/test_user"
@@ -20,8 +18,6 @@ DSS should be responsible only for data sources management and the future featur
 
   Scenario: As an administrator, I want to create a new data set
     Given I create a new Tenant Metadata Object for tenant test
-      |id   |name       |from             |persist  |filter |merge  |projections  |metadata |
-      |123  |nextBus    |[nextBus] |true     |[]     |[]     |[]           |[]       |
     And I grab tmm backend url from the config file
     Then I setup request for posting to tmm backend
     When I POST to "/tenant/test"

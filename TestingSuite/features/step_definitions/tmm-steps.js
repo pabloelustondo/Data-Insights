@@ -4,8 +4,7 @@
 "use strict";
 
 var Cucumber = require("cucumber")
-    , Request = require("request");
-
+    , Request = require("request"), uuid = require("node-uuid");
 // will work with all https requests will all libraries (i.e. request.js)
 
 Cucumber.defineSupportCode(function(context) {
@@ -61,70 +60,82 @@ Cucumber.defineSupportCode(function(context) {
         }
     });
 
-    Given(/^I create a new Tenant Metadata Object for tenant (.*)$/, function (variable, table, callback) {
+    When(/^I define a new data source for (.*)$/, function(variable, table, callback){
+        var input = table.hashes()[0];
+        var datasource = {
+            "id" : uuid.v4(),
+            "name" : input.name,
+            "type" : table.type,
+            "active" : true,
+            "activationKey" : "",
+            "properties" : [
+            {
+                "inputName" : "Url",
+                "inputValue" : "http://cad109.soti.net/mc/api"
+            }
+        ],
+            "dataSets" : JSON.parse(input.dataSets)
+        };
+        tenant_data.dataSource.push(datasource);
+        callback();
+    });
+
+    Given(/^I create a new Tenant Metadata Object for tenant (.*)$/, function (variable, callback) {
         // Write code here that turns the phrase above into concrete action
         tenantId = variable;
-        tenant_data = {
-            id: 'Doga',  //id of the metadata
-            name: 'Data Source',
-            tenantId: variable,
-            dataSets: [{
-                "id": "nextBus",
-                "name": "nextBus",
-                "from": [
-                    "nextBus"
-                ],
-                "persist": true,
-                "filter": "",
-                "merge": "",
-                "projections": "",
-                "metadata": [
-                    "data"
-                ]
-            }],
-            dataSource: [{
-            id: '10-23-1',
-            name: 'Test Data Set 01',
-            type: 'TestMockData',
-            active: true,
-            properties: ['Test', 'Doga', 'Is', 'AWesome']
-        }, {
-            id: '10-23-1',
-            name: 'Test Data Set 02',
-            type: 'TestMockData',
-            active: true,
-            properties: ['Test', 'Ray', 'Is', 'Bae']}
-        ],
-            users: [{
-            id: '10-24-1',
-            name: 'Test Data Set 01',
-            permissions: ['Write', 'Read', 'Execute'],
-            status: 'Admin'
-        }, {
-            id: '32-1',
-            name: 'Test Data Set 02',
-            permissions: ['Write', 'Read'],
-            status: 'User'
-        }],
-            idpInformation: [{
-            id: '10-25-02',
-            name: 'idap Main Config',
-            endpoint: 'localhost:1023/endPointFTW',
-            configurations: [{
-                method: 'GET',
-                secure: 'x-access'
-            }]
-        },
+        tenant_data = /* 1 */
             {
-                id: '10-25-02',
-                name: 'idap Main Config 2',
-                endpoint: 'localhost:1023/endPointFTW',
-                configurations: [{
-                    method: 'POST',
-                    secure: 'y-access 4 pizza'
-                }]
-            }]
-    };
+                "id" : "SMLTest",
+                "name" : "SML Data Set",
+                "tenantId" : variable,
+                "dataSets" : [],
+                "dataSource" : [],
+                "users" : [
+                    {
+                        "id" : "10-24-1",
+                        "name" : "Test Data Set 01",
+                        "permissions" : [
+                            "Write",
+                            "Read",
+                            "Execute"
+                        ],
+                        "status" : "Admin"
+                    },
+                    {
+                        "id" : "32-1",
+                        "name" : "Test Data Set 02",
+                        "permissions" : [
+                            "Write",
+                            "Read"
+                        ],
+                        "status" : "User"
+                    }
+                ],
+                "idpInformation" : [
+                    {
+                        "id" : "10-25-02",
+                        "name" : "idap Main Config",
+                        "endpoint" : "localhost:1023/endPointFTW",
+                        "configurations" : [
+                            {
+                                "method" : "GET",
+                                "secure" : "x-access"
+                            }
+                        ]
+                    },
+                    {
+                        "id" : "10-25-02",
+                        "name" : "idap Main Config 2",
+                        "endpoint" : "localhost:1023/endPointFTW",
+                        "configurations" : [
+                            {
+                                "method" : "POST",
+                                "secure" : "y-access 4 pizza"
+                            }
+                        ]
+                    }
+                ]
+            };
         callback();
     });
 
@@ -132,7 +143,6 @@ Cucumber.defineSupportCode(function(context) {
         // Write code here that turns the phrase above into concrete actions
         options.body = tenant_data;
         options.body.tenantId = tenantId;
-
         callback();
     });
 
