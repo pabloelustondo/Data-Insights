@@ -24,9 +24,16 @@ export class SmlDataSource extends SmlElement{
  properties: any[];
 }
 
+export class SmlSubscription {
+  datasetid:"string",
+  filter: SmlFilter,  //to filter out some notifications
+  deliveryType: "email" | "text" | "mail" | "phonecall"
+}
+
 export class SmlUsers extends SmlElement{
   permissions: string[];
   status: string;
+  subscriptions: SmlSubcription[];
 }
 
 export class SmlIdpInformation extends SmlElement{
