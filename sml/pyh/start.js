@@ -30001,7 +30001,7 @@ function pyTransformation(){
 				discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
 				discharged['StartDate'] = start
 				discharged['EndDate'] = end
-				print(discharged.to_json(orient='records'))
+				data = discharged
 					`
 
 		var arg1 = "def f(data): \n	"+code;
