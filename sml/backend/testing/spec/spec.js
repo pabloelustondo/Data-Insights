@@ -83,9 +83,24 @@ describe("DAD Backend", function() {
                 from: [{id:"devstats2"}],
                 parameters:[
                     {
-                    name: 'end',
-                    type: 'string',  //for now pure javascript code
-                    value: '2016-08-23'
+                        name: 'shift',
+                        type: 'number',  //for now pure javascript code
+                        value: 0
+                    },
+                    {
+                        name: 'threshold',
+                        type: 'number',  //for now pure javascript code
+                        value: 10
+                    },
+                    {
+                        name: 'start',
+                        type: 'string',  //for now pure javascript code
+                        value: '2016-08-22'
+                    },
+                    {
+                        name: 'end',
+                        type: 'string',  //for now pure javascript code
+                        value: '2016-08-23'
                     }
                 ],
                 transformations:[{
