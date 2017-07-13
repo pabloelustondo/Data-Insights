@@ -185,7 +185,13 @@ export class SMLI { //interpreter for SML
       return new Promise(function(resolve, reject){
 
         var spawn = require('child_process').spawn;
-        var arg1 = "def f(data): \n	"+ code;
+        //trying to add arguments using a prefix
+        /*
+
+         start = '2016-08-22'
+         end = '2016-08-23'
+         */
+        var arg1 = "def f(data):\n    threshold = 10\n    shift = 0" + code;
 
         console.log('CODE:' + arg1);
         var shift = 0;
