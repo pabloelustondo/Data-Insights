@@ -1,0 +1,6 @@
+{
+  "id" : "mcw",
+  "name" : "MCW",
+  "secret"  : "1234",
+  "dependencies" : ["mongodb"]
+}
