@@ -148,7 +148,9 @@ export class SMLI { //interpreter for SML
          start = '2016-08-22'
          end = '2016-08-23'
          */
-        var arg1 = "def f(data):\n    threshold = 10\n    shift = 0" + code;
+        let ps = datasetq.parameters;
+        let pyparameters = "    " + ps[1].name + " = "+ ps[1].value +"\n    "+ ps[2].name +" = '"+ ps[2].value +"'\n    end = '2016-08-23'\n    shift = 0";
+        var arg1 = "def f(data):\n" + pyparameters + code;
 
         console.log('CODE:' + arg1);
         var shift = 0;
