@@ -92,35 +92,36 @@ describe("DAD Backend", function() {
                     type: "ProcessDataSet",
                     lang: "Python",
                     script: `
-				threshold = sys.argv[3]
-				shift = sys.argv[2]
-				start = sys.argv[4]
-				end = sys.argv[5]				
-				cols = data.select_dtypes(['object'])
-				data[cols.columns] = cols.apply(lambda x: x.str.strip())
-				data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
-				data.set_index(['devid', 'time_stamp'], inplace=True) 
-				data.sort_index(level=1, inplace=True)
-				dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))
-				def check(line): 
-					oldval = 100
-					for i in line:
-						if (i > oldval) | (i < threshold):
-							return 1
-							break
-						else: 
-							oldval = i
-						return 0
-				discharged = dischargedGroup.apply(check)
-				dischargedGroup = pd.DataFrame(dischargedGroup)
-				discharged = pd.DataFrame(discharged)
-				discharged = discharged[discharged['intvalue'] > 0]
-				discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
-				discharged['StartDate'] = start
-				discharged['EndDate'] = end
-				return discharged
+    threshold = 10
+    shift = 0
+    start = '2016-08-22'
+    end = '2016-08-23'
+    cols = data.select_dtypes(['object'])
+    data[cols.columns] = cols.apply(lambda x: x.str.strip())
+    data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
+    data.set_index(['devid', 'time_stamp'], inplace=True) 
+    data.sort_index(level=1, inplace=True)
+    dischargedGroup = (data.groupby(level=0, sort=False)['intvalue'].apply(list))
+    def check(line): 
+        oldval = 100
+        for i in line:
+            if (i > oldval) | (i < threshold):
+                return 1
+                break
+            else: 
+                oldval = i
+        return 0
+    discharged = dischargedGroup.apply(check)
+    dischargedGroup = pd.DataFrame(dischargedGroup)
+    discharged = pd.DataFrame(discharged)
+    discharged = discharged[discharged['intvalue'] > 0]
+    discharged = pd.merge(discharged, dischargedGroup, left_index=True, right_index=True)
+    discharged['StartDate'] = start
+    discharged['EndDate'] = end
+    return discharged
 					`
         }]};
+            var expected_result = [{"intvalue_x":1,"intvalue_y":[22,21,20,19,19,18,17,17,16,15,14,13,11,11,9,9],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[100,100,100,100,100,100,100,100,100,100,100,100,100,100,98,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[14,12,11,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[10,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[29,30,27,26,24,23,22,20,19,18,17,15,13,11,11,11],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[12,12,10,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[18,17,17,16,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[17,15,13,11,10,10,9,8],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[10,10,9,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[10,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[57,55,52,46,39,33,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[16,15,14,12,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[11,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[11,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[8,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[18,17,16,14,12,11,10,10,10,9],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[17,14,12,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[12,10,7],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[11,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[12,10,100,100,100,100,100,100,100,100,100,100,100,100,100,96],"StartDate":"2016-08-22","EndDate":"2016-08-23"}];
             $.ajax({
                 url: "/smlquery",
                 type:"POST",
@@ -130,40 +131,7 @@ describe("DAD Backend", function() {
                     expect(data).toBeDefined();
 
                     try {
-                        expect(data.length).toBe(8);
-                        var expected_result = [{ intvalue_x: 1,
-                            intvalue_y: [ 100 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' },
-                        { intvalue_x: 1,
-                            intvalue_y: [ 100 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' },
-                        { intvalue_x: 1,
-                            intvalue_y: [ 100 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' },
-                        { intvalue_x: 1,
-                            intvalue_y: [ 10 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' },
-                        { intvalue_x: 1,
-                            intvalue_y: [ 100 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' },
-                        { intvalue_x: 1,
-                            intvalue_y: [ 100 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' },
-                        { intvalue_x: 1,
-                            intvalue_y: [ 100 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' },
-                        { intvalue_x: 1,
-                            intvalue_y: [ 100 ],
-                            StartDate: '2016-08-22',
-                            EndDate: '2016-08-23' }];
-
+                        expect(data.length).toBe(expected_result.length);
                         var datajson = JSON.stringify(data);
                         var expectedjson = JSON.stringify(expected_result);
                         expect(datajson).toEqual(expectedjson);

@@ -2,88 +2,17 @@ import * as Sml from "./sml";
 import * as rp from 'request-promise';
 import * as P from 'es6-promise';
 
-var json2 = [{
-  "_id" : "5946fa7d0c56c36f2b2b32e8",
-  "devid" : "73E65B76064901080001-1860F2240600											   ",
-  "time_stamp" : "2016-08-22 10:29:59.000000",
-  "StatType" : -1,
-  "intvalue" : 100
-}
-
-  ,
-  {
-    "_id" : "5946fa7d0c56c36f2b2b32e9",
-    "devid" : "73E65B76064901080002-1B9096690600											   ",
-    "time_stamp" : "2016-08-22 10:29:59.000000",
-    "StatType" : -1,
-    "intvalue" : 100
-  }
-
-  ,
-  {
-    "_id" : "5946fa7d0c56c36f2b2b32ea",
-    "devid" : "73E65B76064901080005-112074270600											   ",
-    "time_stamp" : "2016-08-22 10:29:59.000000",
-    "StatType" : -1,
-    "intvalue" : 100
-  }
-
-  ,
-  {
-    "_id" : "5946fa7d0c56c36f2b2b32eb",
-    "devid" : "73E65B76064901080006-12A0D4720600											   ",
-    "time_stamp" : "2016-08-22 10:29:59.000000",
-    "StatType" : -1,
-    "intvalue" : 10
-  }
-
-  ,
-  {
-    "_id" : "5946fa7d0c56c36f2b2b32ec",
-    "devid" : "73E65B76064901080006-18505C6F0600											   ",
-    "time_stamp" : "2016-08-22 10:29:59.000000",
-    "StatType" : -1,
-    "intvalue" : 100
-  }
-
-  ,
-  {
-    "_id" : "5946fa7d0c56c36f2b2b32ed",
-    "devid" : "73E65B76064901080007-04C0865C0600											   ",
-    "time_stamp" : "2016-08-22 10:29:59.000000",
-    "StatType" : -1,
-    "intvalue" : 100
-  }
-
-  ,
-  {
-    "_id" : "5946fa7d0c56c36f2b2b32ee",
-    "devid" : "73E65B76064901080007-09604E2A0600											   ",
-    "time_stamp" : "2016-08-22 10:29:59.000000",
-    "StatType" : -1,
-    "intvalue" : 100
-  }
-
-  ,
-  {
-    "_id" : "5946fa7d0c56c36f2b2b32ef",
-    "devid" : "73E65B76064901080007-1220A2610600											   ",
-    "time_stamp" : "2016-08-22 10:29:59.000000",
-    "StatType" : -1,
-    "intvalue" : 100
-  }];
-
-
 /**
  * Created by pabloelustondo on 2017-06-21.
  */
 
-export class SMLI {
-  //This is an abstract class that is supposed to be subclassed
-  //However, it should work pretty much as is in node.js/ DPS.
-  //Some functions will not be available on client side.
+export class SMLI { //interpreter for SML
 
-  dataSetProviderlurl:string;   //when using in DPS this is CDL..from client is ODA
+  //SMLI will resolve dataset by executing specificed processes and reading input data from corresponding SOTI DAS services
+  //during testing mocks are provided
+
+ // dasConfig =
+  dataSetProviderlurl:string;  //for now will change this to config
 
   constructor(dataSetProviderlurl:string){
     this.dataSetProviderlurl = dataSetProviderlurl;
@@ -101,7 +30,7 @@ export class SMLI {
       this.getDataSet(inputdataset, parameters).then(
           (d) => {
             let data = <Sml.SmlDataSet>d;
-            //ok, here we have the data and we need to transform if we have transformations defined
+
             if (dataset.transformations){
               console.log("Number of transformations to apply" + dataset.transformations.length)
               this.transformDataSet(dataset.transformations, data, parameters).then(
@@ -211,7 +140,7 @@ export class SMLI {
   addRowFeature(def:Sml.SmlDataSet, feature:Sml.SmlRowFeature, data:any[]) {
     return new Promise(function(resolve, reject){
 
-      let ss = feature.func;
+      let ss = feature.script;
 
       //here we add values from parameters
       def.parameters.forEach( function(param){
@@ -256,7 +185,7 @@ export class SMLI {
       return new Promise(function(resolve, reject){
 
         var spawn = require('child_process').spawn;
-        var arg1 = "def f(data): \n	"+ code;
+        var arg1 = "def f(data, shift, threshold, start, end): \n	"+ code;
 
         console.log('CODE:' + arg1);
         var shift = 0;
@@ -264,10 +193,10 @@ export class SMLI {
         var start = '2016-08-22';
         var end = '2016-08-23';
         var json = JSON.stringify( {name:'pablo', age:52});
-        var params = ['compute_input.py', arg1, shift, threshold, start];
-        params.push(end);
+        var params = ['compute_input.py', arg1, shift, threshold, start, end];
+   //     params.push(end);
         var py = spawn('python', params );
-        var data = json2;
+        var data = dataset;
         var dataout = '';
         var dataout2;
 
