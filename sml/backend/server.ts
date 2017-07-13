@@ -7,8 +7,8 @@ import * as  path from 'path';
 import * as rp from 'request-promise';
 import * as  cors from 'cors';
 import * as sio from 'socket.io';
-import * as Sml from './sml'
-import * as Smli from './smli'
+import * as Sml from './sml';
+import * as Smli from './smli';
 //
 
 let io = sio(http);
@@ -113,7 +113,7 @@ app.post('/smlquery', function(req,res){
     //not implemented yet
     console.log("slmquery called with body" + JSON.stringify(req.body));
     let ds = req.body;
-        smlInterpreter.calculateDataSet(ds,[]).then(
+        smlInterpreter.calculateDataSet(ds).then(
             (result) => {
                 console.log("slmquery called - come back from interpreter");
             res.send(result);

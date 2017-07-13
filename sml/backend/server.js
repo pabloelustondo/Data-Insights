@@ -1,0 +1,114 @@
+"use strict";
+var express = require('express');
+var https = require('https');
+var http = require('http');
+var fs = require('fs');
+var bodyParser = require('body-parser');
+var path = require('path');
+var cors = require('cors');
+var sio = require('socket.io');
+var Smli = require('./smli');
+//
+var io = sio(http);
+var config = require('./config.json');
+var appconfig = require('./appconfig.json');
+var globalconfig = require('./globalconfig.json');
+var app = express();
+var router = express.Router();
+globalconfig.hostname = "localhost"; //this can be overwritten by app config if necessary
+//our app config will be the result of taking all global configurations and overwritting them with the local configurations
+Object.keys(appconfig).forEach(function (key) {
+    globalconfig[key] = appconfig[key];
+});
+globalconfig.port = globalconfig[globalconfig.id + "_url"].split(":")[2];
+appconfig = globalconfig;
+console.log("configuration");
+console.log(appconfig);
+var dataSetProviderlurl = 'http://localhost:' + appconfig.port + '/getdata';
+//this is simulating the source of our input data... that can be CDL for DPS and ODA for DAD...etc
+var smlInterpreter = new Smli.SMLI(dataSetProviderlurl);
+io.on('connection', function (socket) {
+    console.log('a user connected');
+    socket.on('disconnect', function () {
+        console.log('user disconnected');
+    });
+});
+io.on('connection', function (socket) {
+    socket.on('chat message', function (msg) {
+        console.log('message: ' + msg);
+    });
+});
+io.on('connection', function (socket) {
+    socket.on('chat message', function (msg) {
+        io.emit('chat message', msg);
+    });
+});
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(cors());
+app.use('/testing', express.static(path.join(__dirname + '/testing')));
+app.get('/test', function (req, res) {
+    res.sendFile(path.join(__dirname + '/testing/spec/SpecRunner.html'));
+});
+app.get('/chat', function (req, res) {
+    res.sendFile(path.join(__dirname + '/index.html'));
+});
+app.get('/', function (req, res) {
+    res.send("SML Backend");
+});
+app.get('/status', function (req, res) {
+    if (req.query["secret"] !== appconfig.secret)
+        res.send("wrong key");
+    var report = {};
+    Object.keys(appconfig).forEach(function (key) {
+        if (key !== "secret") {
+            if (req.query[key]) {
+                appconfig[key] = req.query[key];
+            }
+            report[key] = appconfig[key];
+        }
+    });
+    return res.send(report);
+});
+app.get('/datasets', function (req, res) {
+    fs.readdir("testdata", function (err, files) {
+        res.send(JSON.stringify(files));
+    });
+});
+app.post('/getdata', function (req, res) {
+    //rememeber this endpoint is pretty much a mock
+    var datasetid = req.body.id;
+    console.log('get data was called with this datasetid: ' + datasetid);
+    console.log('get data was called with this body: ' + JSON.stringify(req.body));
+    fs.readFile("testdata/" + datasetid + ".json", 'utf8', function (err, file) {
+        console.log("logdata");
+        res.send(file);
+    });
+});
+app.post('/smlquery', function (req, res) {
+    //not implemented yet
+    console.log("slmquery called with body" + JSON.stringify(req.body));
+    var ds = req.body;
+    smlInterpreter.calculateDataSet(ds).then(function (result) {
+        console.log("slmquery called - come back from interpreter");
+        res.send(result);
+    }, function (err) {
+        console.log("slmquery called - come back NOT from interpreter" + err);
+        res.status(400).send(err);
+    });
+});
+if (config.useSSL) {
+    var httpsOptions = {
+        key: fs.readFileSync(config['https-key-location']),
+        cert: fs.readFileSync(config['https-cert-location'])
+    };
+    var httpsServer = https.createServer(httpsOptions, app);
+    httpsServer.listen(appconfig.port, function () {
+        console.log('Starting https server.. https://localhost:' + appconfig.port + '/test');
+    });
+}
+else {
+    var httpServer = http.createServer(app);
+    httpServer.listen(appconfig.port, function () {
+        console.log('Starting http server.. http://localhost:' + appconfig.port + '/test');
+    });
+}
