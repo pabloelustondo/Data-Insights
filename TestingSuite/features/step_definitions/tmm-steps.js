@@ -4,7 +4,7 @@
 "use strict";
 
 var Cucumber = require("cucumber")
-    , Request = require("request"), uuid = require("node-uuid");
+    , Request = require("request");
 // will work with all https requests will all libraries (i.e. request.js)
 
 Cucumber.defineSupportCode(function(context) {

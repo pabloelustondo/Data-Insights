@@ -2,13 +2,11 @@
 
 const Cucumber = require('cucumber');
 const Request = require('request');
-const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
 const jwt = require('jsonwebtoken');
 const globalconfig = require(process.cwd()+'\\globalconfig_test.json');
 const config = require('..\\..\\ida_config.json');
 
-require('https').globalAgent.options.ca = RootCas;
 
 Cucumber.defineSupportCode(function(context) {
     var Given = context.Given;

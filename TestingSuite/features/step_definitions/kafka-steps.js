@@ -5,7 +5,6 @@
 
 const Cucumber = require('cucumber');
 const Request = require('request');
-const RootCas = require('ssl-root-cas/latest').create();
 const FS = require('fs');
 const kafka = require('kafka-node');
 const jwt  = require('jsonwebtoken');
