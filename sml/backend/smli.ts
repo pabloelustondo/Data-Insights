@@ -149,7 +149,13 @@ export class SMLI { //interpreter for SML
          end = '2016-08-23'
          */
         let ps = datasetq.parameters;
-        let pyparameters = "    " + ps[1].name + " = "+ ps[1].value +"\n    "+ ps[2].name +" = '"+ ps[2].value +"'\n    end = '2016-08-23'\n    shift = 0";
+        let pyparameters = "";
+
+        pyparameters += "    " + ps[1].name + " = "+ ps[1].value +"\n";
+
+
+
+      //  let pyparameters = "    " + ps[1].name + " = "+ ps[1].value +"\n    "+ ps[2].name +" = '"+ ps[2].value +"'\n    end = '2016-08-23'\n    shift = 0";
         var arg1 = "def f(data):\n" + pyparameters + code;
 
         console.log('CODE:' + arg1);
