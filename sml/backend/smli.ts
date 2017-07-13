@@ -1,6 +1,7 @@
 import * as Sml from "./sml";
 import * as rp from 'request-promise';
 import * as P from 'es6-promise';
+import * as _ from 'lodash';
 
 /**
  * Created by pabloelustondo on 2017-06-21.
@@ -18,35 +19,25 @@ export class SMLI { //interpreter for SML
     this.dataSetProviderlurl = dataSetProviderlurl;
   }
 
-  calculateDataSet(dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-
+  calculateDataSet(datasetq:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
     return new Promise((resolve, reject) => {
 
-      //first, we need to get the data from the input data sets on the from
-      //for now I will assume there is one and will use this on only.
-
-      let inputdataset = dataset.from[0];
-
-      this.getDataSet(inputdataset, parameters).then(
+      let indatasetq = datasetq.from[0]; //for now..
+      this.inheritParameters(indatasetq.parameters, datasetq.parameters);
+      this.getDataSet(indatasetq).then(
           (d) => {
-            let data = <Sml.SmlDataSet>d;
-
-            if (dataset.transformations){
-              console.log("Number of transformations to apply" + dataset.transformations.length)
-              this.transformDataSet(dataset.transformations, data, parameters).then(
+            let indataset = <Sml.SmlDataSet>d;
+            if (datasetq.transformations){
+              this.transformDataSet(datasetq, indataset).then(
                   (data) => {
-                    console.log("INSIDE TRANSFORM DATA SET INSIDE CALCUALTE DATA SET" + JSON.stringify(data[0]))
                     resolve(data);
                   },
-                  (error) => {console.log("error processing data process" + process + " error: " + error);
+                  (error) => {
                     reject(error);}
               )
-
             } else {
-              console.log("NO transformations to apply" + dataset.transformations);
-              resolve(data);
+              resolve(indataset);
             }
-
           },
           (error) => {
             reject(error);
@@ -55,85 +46,51 @@ export class SMLI { //interpreter for SML
     });
   }
 
-  getDataSet(dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-    //call a url api passing parameters in order to get an evaluated data set from a dataset endpoint.
-    //we will need somehow to differenciate types of queries...for now let assume something likje CDL
-    console.log("getDataSet Callded");
+  getDataSet(dataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
     let url = this.dataSetProviderlurl;
     return new Promise(function(resolve, reject){
-      console.log("inside promise url: " + url);
-
       var options = {
         uri: url,
         method: 'POST',
         body: {id:"devstats1"},
         json:true
       };
-      console.log("calling rp with " + JSON.stringify(options));
-
       rp(options).then((result)=>{
-            console.log("rp goet back with results.length" + result.length);
             resolve(result);
           }, (error) => {console.log("rp got error" + error);
             reject(error);}
       );
-
     });
   }
 
-  transformDataSet(transformations: Sml.SmlTransformation[], dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
+  transformDataSet(datasetq: Sml.SmlDataSet, indataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
     return new Promise((resolve, reject) => {
-
-      console.log("transform Data Set called  ");
-      if (!transformations) resolve(dataset);
-
-      console.log("transform Data Set number of transformations " + transformations.length);
-      console.log("transform Data Set type of first transformation " + transformations[0].type);
-
-      var trans = transformations[0]; //for now...will take care of rest in a bit
-
-      console.log("trans type " + trans.type);
-
+      if (!datasetq.transformations) resolve(indataset);
+      var trans = datasetq.transformations[0]; //for now...will take care of rest in a bit
       if (trans.type === "ProcessDataSet"){
-        console.log("transform data set - Ready to apply process data set ");
-        this.processData(<Sml.SmlDataProcess>trans, dataset, parameters).then(
+        this.processData(<Sml.SmlDataProcess>trans, datasetq, indataset).then(
             (data) => {
-              console.log("INSIDE TRANSFORM DATA SET for real!!");
               resolve(data);
             },
-            (error) => {console.log("error processing data process: " + error);
+            (error) => {
               reject(error);}
             )
-
       } else {
-        console.log("INSIDE TRANSFORM DATA SET for real!! in ELSE");
-        resolve(dataset);
+        resolve(indataset);
       }
-
-
     });
-
   }
 
-  processData(process:Sml.SmlDataProcess, dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
+  processData(process:Sml.SmlDataProcess, datasetq:Sml.SmlDataSet, indataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
     return new Promise((resolve, reject)  => {
-
-      console.log("PROCESS DATA: " + process.script);
-
-      this.pyTransformation(process.script, dataset, parameters).then(
+      this.pyTransformation(process.script, datasetq, indataset).then(
           (data) => {
-            console.log("PROCESS DATA NICE ");
             resolve(data);
           },
           (err) => {
-            console.log("PROCESS DATA ERRR " + err);
             reject(err);
           }
       );
-
-
-
-
     });
   }
 
@@ -181,7 +138,7 @@ export class SMLI { //interpreter for SML
 
   }
 
-  pyTransformation(code:string, dataset:Sml.SmlDataSet, parameters:Sml.SmlParameter[]):Promise<Sml.SmlDataSet>{
+  pyTransformation(code:string, datasetq:Sml.SmlDataSet,  indataset:Sml.SmlDataSet):Promise<Sml.SmlDataSet>{
       return new Promise(function(resolve, reject){
 
         var spawn = require('child_process').spawn;
@@ -202,7 +159,7 @@ export class SMLI { //interpreter for SML
         var params = ['compute_input.py', arg1, shift, threshold, start, end];
    //     params.push(end);
         var py = spawn('python', params );
-        var data = dataset;
+        var data = indataset;
         var dataout = '';
         var dataout2;
 
@@ -226,5 +183,19 @@ export class SMLI { //interpreter for SML
 
       });
     }
+
+  inheritParameters(specificParameters:Sml.SmlParameter[], generalParameters:Sml.SmlParameter[]):Sml.SmlParameter[]{
+
+  generalParameters.forEach(function(gparam){
+    if (!_.find(specificParameters, function(sparam){ sparam.name == gparam.name})){
+      if (!specificParameters) specificParameters = [];
+      specificParameters.push(gparam);
+    }
+  });
+
+  return specificParameters;
+
+  }
+
 
 }
