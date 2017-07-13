@@ -1,0 +1,295 @@
+{
+  "tenants": [
+    {
+      "tenantId": "varun_test",
+      "tenantInformation" : {
+        "name" : "Joe",
+        "address" : "1 Sample street",
+        "phoneNumber" : "1-800-008-8001",
+        "email": "email@corp.net",
+        "clientId" : "0000000",
+        "clientSecret" : "1234567890",
+        "companyAddress" : "1 XYZ street, MajorCity, Ca",
+        "companyName" : "The Best Corp",
+        "companyPhone" : "1-800-123-4567",
+        "userIdentityProvider" : {
+          "name" : "MobiControl IDP",
+          "destination" : "http://localhost:7897"
+        }
+      },
+      "dataSources" : [
+        {
+          "dataSourceId" : "uniqueId12345",
+          "dataSourceType": "MCDP",
+          "dataSourceProperties" : [
+            {
+              "name" : "url",
+              "value" : "https://localhost:9000"
+            },
+            {
+              "name" : "description",
+              "value" : "this is a test mcdp data source."
+            }
+          ],
+          "metadata" : {
+            "dataSetId" : "varun_test_mc_no_projections",
+            "projections" : []
+          }
+        },
+        {
+          "dataSourceId" : "12345678901234567890",
+          "dataSourceType": "API",
+          "dataSourceProperties" : [
+            {
+              "name" : "url",
+              "value" : "https://localhost:9000"
+            },
+            {
+              "name" : "description",
+              "value" : "this is a test api data source."
+            }
+          ],
+          "metadata" : {
+            "dataSetId" : "varun_test_customdata_two_projections",
+            "projections" : ["created", "nestedData"]
+          }
+        }
+      ],
+      "dataSets": [
+        {
+            "id" : "varun_test_customdata_two_projections",
+            "filter" : {},
+            "merge" : "field1",
+            "from" : []
+
+        },
+        {
+          "id" : "ttcMaps",
+          "filter" : {},
+          "projections" : "data.vehicle",
+          "from" : []
+        },
+        {
+          "id" : "customDeviceInfo",
+          "filter" : {
+            "id" : "$data",
+            "key" : "Name",
+            "value" : "VehicleID"
+          },
+          "projections" : "data",
+          "from" : []
+
+        },
+        {
+          "id" : "ttc",
+          "filter" : {},
+          "merge" : "data",
+          "from" : ["ttcMaps", "customDeviceInfo"]
+        }
+      ],
+      "streams" : [],
+      "dataLakeInformation" : "http://localhost:8000/varun_test/data"
+    },
+    {
+      "tenantId": "varun_test_2",
+      "tenantInformation" : {
+        "name" : "Joe",
+        "address" : "1 Sample street",
+        "phoneNumber" : "1-800-008-8001",
+        "email": "email@corp.net",
+        "clientId" : "0000000",
+        "clientSecret" : "1234567890",
+        "companyAddress" : "1 XYZ street, MajorCity, Ca",
+        "companyName" : "The Best Corp",
+        "companyPhone" : "1-800-123-4567",
+        "userIdentityProvider" : {
+          "name" : "MobiControl IDP",
+          "destination" : "http://localhost:7897"
+        }
+      },
+      "dataSources" : [
+        {
+          "dataSourceId" : "uniqueId99912345",
+          "dataSourceType": "MCDP",
+          "dataSourceProperties" : [
+            {
+              "name" : "url",
+              "value" : "https://localhost:9000"
+            },
+            {
+              "name" : "description",
+              "value" : "this is a test mcdp data source."
+            }
+          ],
+          "metadata" : {
+            "dataSetId" : "varun_test_mc_one_projections",
+            "projections" : []
+          }
+        }
+      ],
+      "streams" : [],
+      "dataLakeInformation" : "http://localhost:8000/varun_test_2/data"
+    },
+    {
+      "tenantId": "varun_test_3",
+      "tenantInformation" : {
+        "name" : "Joe",
+        "address" : "1 Sample street",
+        "phoneNumber" : "1-800-008-8001",
+        "email": "email@corp.net",
+        "clientId" : "0000000",
+        "clientSecret" : "1234567890",
+        "companyAddress" : "1 XYZ street, MajorCity, Ca",
+        "companyName" : "The Best Corp",
+        "companyPhone" : "1-800-123-4567",
+        "userIdentityProvider" : {
+          "name" : "MobiControl IDP",
+          "destination" : "http://localhost:7897"
+        }
+      },
+      "dataSources" : [
+        {
+          "dataSourceId" : "uniqueId12345456",
+          "dataSourceType": "API",
+          "dataSourceProperties" : [
+            {
+              "name" : "url",
+              "value" : "https://localhost:9000"
+            },
+            {
+              "name" : "description",
+              "value" : "this is a test api data source."
+            }
+          ],
+          "metadata" : {
+            "dataSetId" : "varun_test_mc_no_projections",
+            "projections" : ["vehicle"]
+          }
+        }
+      ],
+      "streams" : [],
+      "dataLakeInformation" : "http://localhost:8000/varun_test_3/data"
+    },
+    {
+      "tenantId": "test",
+      "tenantInformation" : {
+        "name" : "Joe",
+        "address" : "1 Sample street",
+        "phoneNumber" : "1-800-008-8001",
+        "email": "email@corp.net",
+        "clientId" : "0000000",
+        "clientSecret" : "1234567890",
+        "companyAddress" : "1 XYZ street, MajorCity, Ca",
+        "companyName" : "The Best Corp",
+        "companyPhone" : "1-800-123-4567",
+        "userIdentityProvider" : {
+          "name" : "MobiControl IDP",
+          "destination" : "http://localhost:7897"
+        }
+      },
+      "dataSources" : [
+        {
+          "dataSourceId" : "TestuniqueId12345456",
+          "dataSourceType": "API",
+          "dataSourceProperties" : [
+            {
+              "name" : "url",
+              "value" : "https://localhost:9000"
+            },
+            {
+              "name" : "description",
+              "value" : "this is a test api data source."
+            }
+          ],
+          "metadata" : {
+            "dataSetId" : "ttcMaps",
+            "projections" : ["vehicle"]
+          }
+        }
+      ],
+      "dataSets": [
+        {
+          "id" : "12345",
+          "dataSources": [
+            {
+              "dataSource": "test",
+              "filter" : {}
+            },
+            {
+              "dataSource": "test2",
+              "filter" : {}
+            }
+          ],
+          "filter" : {},
+          "merge" : "field1",
+          "definition" : {}
+        },
+        {
+          "id" : "21345",
+          "dataSources" : [
+            {
+              "dataSource" : "test"
+            },
+            {
+              "dataSource": "customDataSetId.TestuniqueId12345456"
+            }
+          ]
+        },
+        {
+          "id": "ttc",
+          "dataSources": [
+            {
+              "dataSource" : "ttcMaps",
+              "projection" : "data.vehicle"
+            },
+            {
+              "dataSource" : "customDeviceInfo",
+              "filter" : {
+                "id" : "$data",
+                "key": "Name",
+                "value": "VehicleID"
+              },
+              "projection" : "data"
+            }
+
+          ],
+          "merge" : "data"
+        },
+        {
+          "id": "rawMaps",
+          "dataSources": [
+            {
+              "dataSource" : "ttcMaps",
+              "projection" : "data.vehicle"
+            }
+          ]
+        },
+        {
+          "id": "customDevice",
+          "dataSources": [
+            {
+              "dataSource" : "customDeviceInfo",
+              "projection" : "data",
+              "filter" : {
+                "id" : "$data",
+                "key": "Name",
+                "value": "VehicleID"
+              }
+            }
+          ]
+        },
+        {
+          "id": "test12345",
+          "dataSources": [
+            {
+              "dataSource": "test"
+            }
+          ],
+          "filter" : {}
+        }
+      ],
+      "streams" : [],
+      "dataLakeInformation" : "http://localhost:8000/test/data"
+    }
+  ]
+}
