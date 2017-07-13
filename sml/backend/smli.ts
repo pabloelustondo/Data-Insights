@@ -151,8 +151,14 @@ export class SMLI { //interpreter for SML
         let ps = datasetq.parameters;
         let pyparameters = "";
 
-        pyparameters += "    " + ps[1].name + " = "+ ps[1].value +"\n";
-
+        ps.forEach(function(p){
+          if (p.type == "number"){
+            pyparameters += "    " + p.name + " = "+ p.value +"\n";
+          }
+          if (p.type == "string"){
+            pyparameters += "    " + p.name + " = '"+ p.value +"'\n";
+          }
+        });
 
 
       //  let pyparameters = "    " + ps[1].name + " = "+ ps[1].value +"\n    "+ ps[2].name +" = '"+ ps[2].value +"'\n    end = '2016-08-23'\n    shift = 0";

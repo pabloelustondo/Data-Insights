@@ -107,10 +107,6 @@ describe("DAD Backend", function() {
                     type: "ProcessDataSet",
                     lang: "Python",
                     script: `
-    threshold = 10
-    shift = 0
-    start = '2016-08-22'
-    end = '2016-08-23'
     cols = data.select_dtypes(['object'])
     data[cols.columns] = cols.apply(lambda x: x.str.strip())
     data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')

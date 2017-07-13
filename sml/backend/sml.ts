@@ -84,9 +84,9 @@ export class SmlTransformation {
 }
 
 
-export type SmlParameterType = "Percent" | "Number" | "String" | "Date" | "DateTime" | "Duration";
+export type SmlParameterType = "percent" | "number" | "string" | "date" | "datetime" | "duration";
 
-export type SmlStorageType = "File" | "Collection";
+export type SmlStorageType = "file" | "collection";
 
 export class SmlParameter{
   name: string;
