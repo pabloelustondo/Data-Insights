@@ -1,85 +1,103 @@
 import * as Sml from "./sml";
 import * as rp from 'request-promise';
 import * as P from 'es6-promise';
+import * as _ from 'lodash';
 
 /**
  * Created by pabloelustondo on 2017-06-21.
  */
 
-export class SMLI {
-  //This is an abstract class that is supposed to be subclassed
-  //However, it should work pretty much as is in node.js/ DPS.
-  //Some functions will not be available on client side.
+export class SMLI { //interpreter for SML
 
-  dataSetProviderlurl:string;   //when using in DPS this is CDL..from client is ODA
+  //SMLI will resolve dataset by executing specificed processes and reading input data from corresponding SOTI DAS services
+  //during testing mocks are provided
+
+ // dasConfig =
+  dataSetProviderlurl:string;  //for now will change this to config
 
   constructor(dataSetProviderlurl:string){
     this.dataSetProviderlurl = dataSetProviderlurl;
   }
 
-  getDataSet(datasetDef:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-    //call a url api passing parameters in order to get an evaluated data set from a dataset endpoint.
-    //we will need somehow to differenciate types of queries...for now let assume something likje CDL
-    console.log("getDataSet Callded");
+  calculateDataSet(datasetq:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
+    return new Promise((resolve, reject) => {
+
+      let indatasetq = datasetq.from[0]; //for now..
+      this.inheritParameters(indatasetq.parameters, datasetq.parameters);
+      this.getDataSet(indatasetq).then(
+          (d) => {
+            let indataset = <Sml.SmlDataSet>d;
+            if (datasetq.transformations){
+              this.transformDataSet(datasetq, indataset).then(
+                  (data) => {
+                    resolve(data);
+                  },
+                  (error) => {
+                    reject(error);}
+              )
+            } else {
+              resolve(indataset);
+            }
+          },
+          (error) => {
+            reject(error);
+          }
+      )
+    });
+  }
+
+  getDataSet(dataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
     let url = this.dataSetProviderlurl;
     return new Promise(function(resolve, reject){
-      console.log("inside promise url: " + url);
-
       var options = {
         uri: url,
         method: 'POST',
-        body: {id:"devstats2"},
+        body: {id:"devstats1"},
         json:true
       };
-      console.log("calling rp with " + JSON.stringify(options));
-
       rp(options).then((result)=>{
-        console.log("rp goet back with results.length" + result.length);
-        resolve(result);
-      });
-
-    });
-    }
-
-  calculateDataSet(datasetDef:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-  return new Promise(function(resolve, reject){
-
-
-
+            resolve(result);
+          }, (error) => {console.log("rp got error" + error);
+            reject(error);}
+      );
     });
   }
 
-
-  transformDataSet(datasetDef:Sml.SmlDataSet, inputDataSet:Sml.SmlDataSet, parameters:Sml.SmlParameter[]): Promise<Sml.SmlDataSet>{
-    return new Promise(function(resolve, reject){
-
-      let result = new Sml.SmlDataSet();
-      result.data = inputDataSet.data;  //fpr now until we have filter..
-
-      datasetDef.transformations.forEach(trans => {
-        //   if (trans.type = "AddRowFeature") this.addRowFeature(datasetDef, (Sml.SmlRowFeature)trans,result.data);
-        if (typeof trans === "SmlDataProcess") this.processData(datasetDef, <Sml.SmlDataProcess><Object> trans)
-            .then(function(resultDataSet:Sml.SmlDataSet) {
-              result.data = resultDataSet.data;
-              resolve(result);
-            });
-
-      })
+  transformDataSet(datasetq: Sml.SmlDataSet, indataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
+    return new Promise((resolve, reject) => {
+      if (!datasetq.transformations) resolve(indataset);
+      var trans = datasetq.transformations[0]; //for now...will take care of rest in a bit
+      if (trans.type === "ProcessDataSet"){
+        this.processData(<Sml.SmlDataProcess>trans, datasetq, indataset).then(
+            (data) => {
+              resolve(data);
+            },
+            (error) => {
+              reject(error);}
+            )
+      } else {
+        resolve(indataset);
+      }
     });
-
   }
 
-  processData(def:Sml.SmlDataSet, process:Sml.SmlDataProcess): Promise<Sml.SmlDataSet>{
-    return new Promise(function(resolve, reject){
-
-
+  processData(process:Sml.SmlDataProcess, datasetq:Sml.SmlDataSet, indataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
+    return new Promise((resolve, reject)  => {
+      this.pyTransformation(process.script, datasetq, indataset).then(
+          (data) => {
+            resolve(data);
+          },
+          (err) => {
+            reject(err);
+          }
+      );
     });
   }
 
   addRowFeature(def:Sml.SmlDataSet, feature:Sml.SmlRowFeature, data:any[]) {
     return new Promise(function(resolve, reject){
 
-      let ss = feature.func;
+      let ss = feature.script;
 
       //here we add values from parameters
       def.parameters.forEach( function(param){
@@ -119,5 +137,79 @@ export class SMLI {
     });
 
   }
+
+  pyTransformation(code:string, datasetq:Sml.SmlDataSet,  indataset:Sml.SmlDataSet):Promise<Sml.SmlDataSet>{
+      return new Promise(function(resolve, reject){
+
+        var spawn = require('child_process').spawn;
+        //trying to add arguments using a prefix
+        /*
+
+         start = '2016-08-22'
+         end = '2016-08-23'
+         */
+        let ps = datasetq.parameters;
+        let pyparameters = "";
+
+        ps.forEach(function(p){
+          if (p.type == "number"){
+            pyparameters += "    " + p.name + " = "+ p.value +"\n";
+          }
+          if (p.type == "string"){
+            pyparameters += "    " + p.name + " = '"+ p.value +"'\n";
+          }
+        });
+
+
+      //  let pyparameters = "    " + ps[1].name + " = "+ ps[1].value +"\n    "+ ps[2].name +" = '"+ ps[2].value +"'\n    end = '2016-08-23'\n    shift = 0";
+        var arg1 = "def f(data):\n" + pyparameters + code;
+
+        console.log('CODE:' + arg1);
+        var shift = 0;
+        var threshold = 10;
+        var start = '2016-08-22';
+        var end = '2016-08-23';
+        var json = JSON.stringify( {name:'pablo', age:52});
+        var params = ['compute_input.py', arg1, shift, threshold, start, end];
+   //     params.push(end);
+        var py = spawn('python', params );
+        var data = indataset;
+        var dataout = '';
+        var dataout2;
+
+        py.stdout.on('data', function(data){
+          dataout += data.toString();
+        });
+
+        py.stdout.on('end', function(){
+          //console.log('INSIDE PROMISE NODE Got End: ' + dataout);
+
+          try {
+            dataout2 = JSON.parse(dataout);
+            resolve(dataout2);
+          } catch(e){
+            reject("cannot parse result   " + e);
+          }
+
+        });
+        py.stdin.write(JSON.stringify(data));
+        py.stdin.end();
+
+      });
+    }
+
+  inheritParameters(specificParameters:Sml.SmlParameter[], generalParameters:Sml.SmlParameter[]):Sml.SmlParameter[]{
+
+  generalParameters.forEach(function(gparam){
+    if (!_.find(specificParameters, function(sparam){ sparam.name == gparam.name})){
+      if (!specificParameters) specificParameters = [];
+      specificParameters.push(gparam);
+    }
+  });
+
+  return specificParameters;
+
+  }
+
 
 }

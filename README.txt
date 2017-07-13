@@ -1,9 +1,10 @@
-Welcome to SOTI Insights
+﻿Welcome to SOTI Insights
 
 Instructions to get , install, run and sort of monitor the whole thing:
 
 make sure you have the LATEST versions of : GIT, NODE.JS, MONGODB, KAFKA (you need Java for kafka, make sure you have the JAVA_HOME)
 we assume mongodb installed in C:\mongodb and kafka in c:\kafka. (if not please modify folder in 'run' script.
+node.js is normalyl installed in c:\nodejs
 (mongo db needs a data folder c:/data/db.. follow instructions)
 Now, run the following commands in your command prompt:
 
@@ -22,6 +23,10 @@ To login to the dashboard use the tenant “test”. You will see a mock IDP scr
 WARNING: we still have ports in package.json in UIs.dad, dss, tmm.
 Until we fix this please make sure they are consistent.
 
+RUNNING BDD TESTS:
+All services must be running locally for the BDDs to work, check http://localhost:5000 to make sure.
+Navigate to \testingsuite and double click genReport.bat
+Once the script has finished running, open the html report under \test\report to see test results details.
 
 
 LONG STORY

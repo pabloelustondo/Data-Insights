@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var bodyParser = require("body-parser");
 var express = require("express");
 var path = require("path");
@@ -228,7 +227,7 @@ if (config['mongodb-config-location']) {
     mongoInfo = { uri: mongoDbCreds.uri };
 }
 function tenantDbUri(req) {
-    return mongoInfo.uri + "/cdl_" + req.params.tenantid + '?replicaSet=rs0&connectTimeoutMS=300000';
+    return mongoInfo.uri + "/cdl_" + req.params.tenantid;
 }
 function callDbAndRespond(req, res, query) {
     //this function opens a connection to the tenant db and calls the specific query.
