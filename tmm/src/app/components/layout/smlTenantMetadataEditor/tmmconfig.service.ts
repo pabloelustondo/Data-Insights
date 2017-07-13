@@ -68,7 +68,12 @@ export class TmmConfigService {
   }
 
   public getDataSourceCredential(tenantId, dataSource) {
-    return dataSource.activationKey; 
+    return dataSource.activationKey;
     // return this.http.get(globalConfig['tmmback_url'] + '/tenant/dev/' + tenantId + '/dataSourceToken/' + dataSource.id).toPromise();
   }
+
+  public insertImageByTenantId(tenantId, data) {
+    return this.http.post(globalConfig['cdl_url'] + '/image/' + tenantId, data).toPromise();
+  }
+
 }

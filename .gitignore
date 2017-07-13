@@ -1,6 +1,7 @@
 .idea/
 */node_modules/
 */node_modules/*
+*/backend/node_modules/
 */node_modules/.staging
 */dist
 */ida/src/routes.ts
