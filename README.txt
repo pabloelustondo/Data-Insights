@@ -1,4 +1,4 @@
-Welcome to SOTI Insights
+﻿Welcome to SOTI Insights
 
 Instructions to get , install, run and sort of monitor the whole thing:
 
@@ -22,6 +22,10 @@ To login to the dashboard use the tenant “test”. You will see a mock IDP scr
 WARNING: we still have ports in package.json in UIs.dad, dss, tmm.
 Until we fix this please make sure they are consistent.
 
+RUNNING BDD TESTS:
+All services must be running locally for the BDDs to work, check http://localhost:5000 to make sure.
+Navigate to \testingsuite and double click genReport.bat
+Once the script has finished running, open the html report under \test\report to see test results details.
 
 
 LONG STORY
