@@ -17,7 +17,7 @@
     "uninstall-windows-service": "winser -r",
     "dev-test-watch": "mocha-typescript-watch",
     "test": "tsc -p . ",
-    "getConfigs": "cp-cli ./globalconfig_kube.json ./globalconfig.json"
+    "getConfigs": "cp-cli ../globalconfig.json ./globalconfig.json"
   },
   "author": "pablo.elustondo@soti.net",
   "license": "MIT",
