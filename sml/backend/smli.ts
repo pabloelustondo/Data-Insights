@@ -185,7 +185,7 @@ export class SMLI { //interpreter for SML
       return new Promise(function(resolve, reject){
 
         var spawn = require('child_process').spawn;
-        var arg1 = "def f(data, shift, threshold, start, end): \n	"+ code;
+        var arg1 = "def f(data): \n	"+ code;
 
         console.log('CODE:' + arg1);
         var shift = 0;
