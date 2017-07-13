@@ -7,7 +7,7 @@
     "setup": "npm install jsonwebtoken && npm install kafka-node && npm install -g cucumber && npm install",
     "featuretest": "./node_modules/.bin/cucumberjs -f pretty features/CB-437.feature features/CB-438.feature features/CB-425.feature features/CB-505.feature",
     "everything": "./node_modules/.bin/cucumberjs -f pretty features/DSS.feature features/TenancyManagement.feature features/Enrollment.feature features/IDA.feature features/CB-437.feature features/CB-438.feature features/CB-425.feature features/CB-505.feature features/ODA.feature",
-    "Components": "./node_modules/.bin/cucumberjs -f pretty features/ODA.feature",
+    "Components": "./node_modules/.bin/cucumberjs -f pretty features/CB-552.feature",
     "report": "genReports"
   },
   "author": "",
@@ -21,6 +21,7 @@
     "request": "^2.81.0"
   },
   "dependencies": {
-    "mongoose": "^4.11.1"
+    "mongoose": "^4.11.1",
+    "uuid": "^3.1.0"
   }
 }

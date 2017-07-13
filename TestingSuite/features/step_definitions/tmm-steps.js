@@ -4,7 +4,7 @@
 "use strict";
 
 var Cucumber = require("cucumber")
-    , Request = require("request");
+    , Request = require("request"), uuid = require("uuid");
 // will work with all https requests will all libraries (i.e. request.js)
 
 Cucumber.defineSupportCode(function(context) {
@@ -18,7 +18,7 @@ Cucumber.defineSupportCode(function(context) {
     const globalconfig = require(process.cwd() + "\\globalconfig_test.json");
     var tenantId = '';
     var url = "";
-
+    var dataSetName = '';
     // Configure Client
     var options = {
         "method": "",
@@ -59,7 +59,13 @@ Cucumber.defineSupportCode(function(context) {
             callback();
         }
     });
-
+    When(/^I define a new data set for (.*)$/, function (variable,table, callback) {
+        // Write code here that turns the phrase above into concrete actions
+        var dataset =table.hashes()[0];
+        dataSetName = dataset.id;
+        tenant_data.dataSets.push(dataset);
+        callback();
+    });
     When(/^I define a new data source for (.*)$/, function(variable, table, callback){
         var input = table.hashes()[0];
         var datasource = {
@@ -74,7 +80,7 @@ Cucumber.defineSupportCode(function(context) {
                 "inputValue" : "http://cad109.soti.net/mc/api"
             }
         ],
-            "dataSets" : JSON.parse(input.dataSets)
+            "dataSets" : [dataSetName]
         };
         tenant_data.dataSource.push(datasource);
         callback();
@@ -83,9 +89,8 @@ Cucumber.defineSupportCode(function(context) {
     Given(/^I create a new Tenant Metadata Object for tenant (.*)$/, function (variable, callback) {
         // Write code here that turns the phrase above into concrete action
         tenantId = variable;
-        tenant_data = /* 1 */
-            {
-                "id" : "SMLTest",
+        tenant_data =
+            {   "id" : "SMLTest",
                 "name" : "SML Data Set",
                 "tenantId" : variable,
                 "dataSets" : [],

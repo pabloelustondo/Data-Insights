@@ -5,30 +5,30 @@ Feature: TMM service
 
     Scenario: Creating a MCDP data source without a dataset definition
       Given I grab tmm backend url from the config file
-      Given I create a new Tenant Metadata Object for tenant 'newTenant'
-      When I define a new data source for 'newTenant'
+      Given I create a new Tenant Metadata Object for tenant test
+      When I define a new data source for test
       |name            |url                                                  |type| dataSets  |
       |BatteryCharge   | https://cad145.corp.soti.net/MobiControl/oauth/logon|MCDP|    []     |
       When I setup request for posting to tmm backend
-      And I POST to "/tenant/dev/dataSource/newTenant"
+      And I POST to "/tenant/dev/dataSource/test"
       Then The response code needs to be '400'
 
     Scenario: Creating a MCDP data source with a dataset definition
       Given I grab tmm backend url from the config file
-      Given I create a new Tenant Metadata Object for tenant 'newTenant'
-      Given I define a new dataset for this tenant
-        |id       |name       |from             |persist  |filter |merge  |projections  |metadata |
-        |TestSet  |testDataSet|[testDataSource] |true     |[]     |[]     |[]           |[]       |
-      When I define a new data source for this tenant
+      Given I create a new Tenant Metadata Object for tenant test
+      When I define a new data set for test
+        |id       |name       |from             |persist  |filter |merge  |projections  |metadata | index|
+        |TestSet  |testDataSet|[BatteryCharge] |true     |[]     |[]     |[]           |[]       |0     |
+      When I define a new data source for test
         |name            |url                                                  |type| dataSets  |
-        |BatteryCharge   | https://cad145.corp.soti.net/MobiControl/oauth/logon|MCDP| [TestSet]     |
+        |BatteryCharge   | https://cad145.corp.soti.net/MobiControl/oauth/logon|MCDP|    []     |
       When I setup request for posting to tmm backend
-      And I POST to "/tenant/dev/dataSource/"
+      And I POST to "/tenant/dev/dataSource/test"
       Then The response code needs to be '200'
 
     Scenario: Creating a MCDP data source with multiple dataset definitions
       Given I grab tmm backend url from the config file
-      Given I create a new Tenant Metadata Object for tenant 'newTenant'
+      Given I create a new Tenant Metadata Object for tenant test
       Given I define a new dataset for this tenant
         |id       |name       |from             |persist  |filter |merge  |projections  |metadata |
         |TestSet  |testDataSet|[testDataSource] |true     |[]     |[]     |[]           |[]       |
