@@ -16,13 +16,13 @@ DSS should be responsible only for data sources management and the future featur
     Then The response code needs to be '200'
     And The response body should contain an array of valid meta data objects
 
-  Scenario: As an administrator, I want to create a new data set
-    Given I create a new Tenant Metadata Object for tenant test
-    And I grab tmm backend url from the config file
-    Then I setup request for posting to tmm backend
-    When I POST to "/tenant/test"
-    Then The response code needs to be '200'
-    And The response body should contain an array of valid meta data objects
+#  Scenario: As an administrator, I want to create a new data set
+#    Given I create a new Tenant Metadata Object for tenant test
+#    And I grab tmm backend url from the config file
+#    Then I setup request for posting to tmm backend
+#    When I POST to "/tenant/test"
+#    Then The response code needs to be '200'
+#    And The response body should contain an array of valid meta data objects
 
 #  Scenario: As an administrator, I want to create a duplicate data set
 #    Given I create a new Tenant Metadata Object for tenant test_user

@@ -9,7 +9,7 @@ based on given data set metadata definition we should be able to return merged d
     And I grab ODA url from globalconfig.json
     Then I set valid request for posting to ~/query
       |dataSetId|from       |
-      |TestSet | BatteryCharge        |
+      |TestSet | BatteryCharge   |
     And I make a POST call to ~/query
     Then response code is :200
     #Further validation is needed
