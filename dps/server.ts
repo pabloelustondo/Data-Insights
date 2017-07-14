@@ -144,7 +144,7 @@ function publishTransactionLog (idaMetadata: any, clientMetadata: any, clientDat
     uploadRawData(tenantId, dataSourceId, data).then(function (awsResponse: any) {
             console.log(awsResponse);
         }, function (error: any) {
-            console.log(error);
+            console.log('upload Raw Data: ' + error.message);
         }
     );
 }
@@ -163,7 +163,6 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
         let projections = dataSet.projections; //get the projections
         console.log('projections \t ' + JSON.stringify(projections));
         let dataSetId = dataSet.id; //get the id
-
         let collectionName = dataSetId;
 
         DataProjections(clientData, projections).then(function (data) {
@@ -172,7 +171,7 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
             uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
                 console.log('Final response' + JSON.stringify(response));
             }, function (error) {
-                console.log(error);
+                console.log(error.message);
             });
 
             // make it ready for consumption right away
@@ -184,7 +183,7 @@ function processCleanedData(idaMetadata: any, clientMetadata: any, clientData: a
     }
 }
 
-function publishCleanedDataToKafka (topic: string, tenantId: string, dataSetId: string,  data: string) {
+function publishCleanedDataToKafka (topic: string, tenantId: string, dataSetId: string,  data: any) {
     let kafkaClient = new kafka.Client(globalconfig['kafka_url']);
     let producer = new kafka.Producer(kafkaClient);
     producer.on('ready', function (message: any) {
@@ -285,9 +284,7 @@ if (config.useSSL) {
             let dataSets = db.getAllDataSets();
             let topics = ['undefined_transactionLogs'];
             let consumerGroupOptions = {
-                host: '127.0.0.1:2181',
-                zk : undefined,   // put client zk settings if you need them (see Client)
-                batch: undefined, // put client batch settings if you need them (see Client)
+                host: globalconfig['kafka_url'],
                 ssl: false, // optional (defaults to false) or tls options hash
                 groupId: 'ExampleTestGroup',
                 sessionTimeout: 15000,
@@ -300,14 +297,12 @@ if (config.useSSL) {
                 fromOffset: 'earliest', // default
 
                 // how to recover from OutOfRangeOffset error (where save offset is past server retention) accepts same value as fromOffset
-                outOfRangeOffset: 'earliest', // default
-                migrateHLC: false,    // for details please see Migration section below
-                migrateRolling: true
+                outOfRangeOffset: 'earliest'
             };
 
-            let consumerGroup = new ConsumerGroup(consumerGroupOptions , 'undefined_transactionLogs');
+            let consumerGroup = new ConsumerGroup(Object.assign({id: 'consumer1'},consumerGroupOptions) , topics);
             consumerGroup.on('error', function(err) {
-                console.log('error' + err);
+                console.log('error' + err.message);
             });
             consumerGroup.on('message', function (message) {
                 try {

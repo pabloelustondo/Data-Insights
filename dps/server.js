@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const bodyParser = require("body-parser");
 const express = require("express");
 const path = require("path");
@@ -10,15 +11,15 @@ const helmet = require("helmet");
 let _ = require('lodash');
 let config = require('./config.json');
 let appconfig = require('./appconfig.json');
-const rp = require('request-promise');
+const rp = require("request-promise");
 let kafka = require('kafka-node');
 let ConsumerGroup = kafka.ConsumerGroup;
 let app = express();
 var mongodb = require('mongodb').MongoClient;
-const rawDataLakeService_1 = require('./services/rawDataLakeService');
-const databaseService_1 = require('./services/databaseService');
-const projection_1 = require('./services/projection');
-const dataService_1 = require('./services/dataService');
+const rawDataLakeService_1 = require("./services/rawDataLakeService");
+const databaseService_1 = require("./services/databaseService");
+const projection_1 = require("./services/projection");
+const dataService_1 = require("./services/dataService");
 var globalconfig = require('./globalconfig.json');
 globalconfig.hostname = "localhost";
 Object.keys(appconfig).forEach(function (key) {
@@ -98,7 +99,7 @@ function publishTransactionLog(idaMetadata, clientMetadata, clientData) {
     rawDataLakeService_1.uploadRawData(tenantId, dataSourceId, data).then(function (awsResponse) {
         console.log(awsResponse);
     }, function (error) {
-        console.log(error);
+        console.log('upload Raw Data: ' + error.message);
     });
 }
 function processCleanedData(idaMetadata, clientMetadata, clientData) {
@@ -116,7 +117,7 @@ function processCleanedData(idaMetadata, clientMetadata, clientData) {
             rawDataLakeService_1.uploadModifiedData(tenant.tenantId, collectionName, data).then(function (response) {
                 console.log('Final response' + JSON.stringify(response));
             }, function (error) {
-                console.log(error);
+                console.log(error.message);
             });
             publishCleanedDataToKafka('undefined_cleanedData', tenant.tenantId, dataSetId, data);
         });
@@ -138,7 +139,8 @@ function publishCleanedDataToKafka(topic, tenantId, dataSetId, data) {
                     dataSetId: dataSetId,
                     data: data
                 })
-            }];
+            }
+        ];
         producer.send(payloads, function (err, data) {
             console.log(data);
         });
@@ -210,21 +212,17 @@ else {
             let dataSets = db.getAllDataSets();
             let topics = ['undefined_transactionLogs'];
             let consumerGroupOptions = {
-                host: '127.0.0.1:2181',
-                zk: undefined,
-                batch: undefined,
+                host: globalconfig['kafka_url'],
                 ssl: false,
                 groupId: 'ExampleTestGroup',
                 sessionTimeout: 15000,
                 protocol: ['roundrobin'],
                 fromOffset: 'earliest',
-                outOfRangeOffset: 'earliest',
-                migrateHLC: false,
-                migrateRolling: true
+                outOfRangeOffset: 'earliest'
             };
-            let consumerGroup = new ConsumerGroup(consumerGroupOptions, 'undefined_transactionLogs');
+            let consumerGroup = new ConsumerGroup(Object.assign({ id: 'consumer1' }, consumerGroupOptions), topics);
             consumerGroup.on('error', function (err) {
-                console.log('error' + err);
+                console.log('error' + err.message);
             });
             consumerGroup.on('message', function (message) {
                 try {
