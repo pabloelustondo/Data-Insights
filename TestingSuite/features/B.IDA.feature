@@ -39,7 +39,7 @@ Feature: IDA API Tests
     And I grab 'ida' url from the config file
     And I set up request for making post call
       |post |data|
-      |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": "[]"	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}} |
+      |/data|{	"metadata": {	"dataSetId": "TestSet",	"projections": []	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}} |
     When I make a POST call
     Then response code must be 200
     And response body should be a valid IDA-POST response
@@ -49,7 +49,7 @@ Feature: IDA API Tests
     And I grab 'ida' url from the config file
     And I set up request for making post call
     |post |data|
-    |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": "[]"	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}}  |
+    |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": []	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}}  |
     When I make a POST call
     Then response code must be 400
     And response body should be empty or contain error
@@ -59,7 +59,7 @@ Feature: IDA API Tests
      Given grab IDA port number for kafka test
     And I set up request for making post call
       |post |data|
-      |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": "[]"	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}}|
+      |/data|{	"metadata": {	"dataSetId": "idaSampleId2",	"projections": []	},	"data": {		"sensorId": "123",	"sensorValue": "45648946"	}}|
      When I make a POST call to /data
      Then Kafka should receive some message under topic "undefined_idaSampleId2"
 
