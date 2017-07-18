@@ -1,22 +1,33 @@
 import * as Sml from "./sml";
 import * as rp from 'request-promise';
-import * as P from 'es6-promise';
+import {Promise} from 'es6-promise';
 import * as _ from 'lodash';
 
-/**
- * Created by pabloelustondo on 2017-06-21.
- */
+
+/*
+* Created by Pablo Elustondo  Jun 2017
+* SML VERSION 1.0
+*/
+export class SmliContext {
+  //a cache of datasets that are needed for internal computations...
+  //if this is empty, get data will new data otherwise will sue the one in cache
+  dataSets: Sml.SmlDataSet[];
+
+  // this url will be used by client if not data set if found in cache
+  dataSetProviderlurl:string;
+  getDataSet(id:string): Sml.SmlDataSet {
+    let ds = _.find(this.dataSets, function(ds) { ds.id === id });
+    return ds;
+  }
+}
+
 
 export class SMLI { //interpreter for SML
 
-  //SMLI will resolve dataset by executing specificed processes and reading input data from corresponding SOTI DAS services
-  //during testing mocks are provided
+  context: SmliContext;
 
- // dasConfig =
-  dataSetProviderlurl:string;  //for now will change this to config
-
-  constructor(dataSetProviderlurl:string){
-    this.dataSetProviderlurl = dataSetProviderlurl;
+  constructor(context: SmliContext){
+    this.context = context;
   }
 
   calculateDataSet(datasetq:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
@@ -47,19 +58,28 @@ export class SMLI { //interpreter for SML
   }
 
   getDataSet(dataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
-    let url = this.dataSetProviderlurl;
+
+    let datasetid = dataset.id;
+    let ds = this.context.getDataSet(dataset.id);
+    let url = this.context.dataSetProviderlurl;
+
     return new Promise(function(resolve, reject){
-      var options = {
-        uri: url,
-        method: 'POST',
-        body: {id:"devstats1"},
-        json:true
-      };
-      rp(options).then((result)=>{
-            resolve(result);
-          }, (error) => {console.log("rp got error" + error);
-            reject(error);}
-      );
+      if (ds) {
+        resolve(ds);}
+      else {
+          // if we do not find the data in the context we try to find it lling the data url
+          var options = {
+            uri: url,
+            method: 'POST',
+            body: {id:datasetid},
+            json:true
+          };
+          rp(options).then((result)=>{
+                resolve(result);
+              }, (error) => {console.log("rp got error" + error);
+                reject(error);}
+          );
+      }
     });
   }
 
@@ -67,8 +87,8 @@ export class SMLI { //interpreter for SML
     return new Promise((resolve, reject) => {
       if (!datasetq.transformations) resolve(indataset);
       var trans = datasetq.transformations[0]; //for now...will take care of rest in a bit
-      if (trans.type === "ProcessDataSet"){
-        this.processData(<Sml.SmlDataProcess>trans, datasetq, indataset).then(
+      if (trans.type == "ProcessDataSet"){
+        this.processData(<Sml.SmlDataProcess>trans.def, datasetq, indataset).then(
             (data) => {
               resolve(data);
             },
@@ -81,9 +101,9 @@ export class SMLI { //interpreter for SML
     });
   }
 
-  processData(process:Sml.SmlDataProcess, datasetq:Sml.SmlDataSet, indataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
+  processData(trans:Sml.SmlDataProcess, datasetq:Sml.SmlDataSet, indataset:Sml.SmlDataSet): Promise<Sml.SmlDataSet>{
     return new Promise((resolve, reject)  => {
-      this.pyTransformation(process.script, datasetq, indataset).then(
+      this.pyTransformation(trans.script , datasetq, indataset).then(
           (data) => {
             resolve(data);
           },
@@ -94,7 +114,7 @@ export class SMLI { //interpreter for SML
     });
   }
 
-  addRowFeature(def:Sml.SmlDataSet, feature:Sml.SmlRowFeature, data:any[]) {
+  addRowFeature(def:Sml.SmlDataSet, feature:Sml.SmlRowBasedFeature, data:any[]) {
     return new Promise(function(resolve, reject){
 
       let ss = feature.script;

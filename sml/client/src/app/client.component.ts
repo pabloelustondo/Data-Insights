@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { SmlDataSet } from "./sml";
+import { SmlDataSet } from "../../../common/sml";
 import {smltestcases, SMLDataSetTestCase} from "./smltestcases";
 import {smltestdata} from "./smltestdata";
-import {SMLI} from "./smli";
+import {SMLI} from "../../../common/smli";
+
 
 @Component({
   selector: 'client-app',
@@ -55,14 +56,10 @@ export class ClientAppComponent implements OnInit {
   testcaseOutputDataJSON:string;
   testcases: SMLDataSetTestCase[] = smltestcases;
   testdata: SmlDataSet[];
-  smli: SMLI = new SMLI();
+  smli: SMLI = new SMLI("http://http://localhost:8032/");  //FOR NOW!!!
 
   ngOnInit() {
     this.testdata = smltestdata;
-    this.testdata.push({
-      id:"devstats1",
-      data: devstats1
-    });
     this.testcaseId=0;
     this.testcase = this.testcases[this.testcaseId];
     this.changeTestCase();
@@ -73,9 +70,17 @@ export class ClientAppComponent implements OnInit {
     this.testcaseDatasetJSON = this.stringify(this.testcase.dataset);
     this.testcaseParametersJSON = this.stringify(this.testcase.parameters);
 
-    this.testcaseInputData = this.smli.getDataSet(smltestdata, this.testcase.dataset.from[0]);
-    this.testcaseInputDataJSON = this.stringify(this.testcaseInputData);
-    this.runTest();
+    //mhhh.... I think I need to reverse the test case idea... data set first...then input then ourput then maybe chart
+    this.smli.getDataSet(this.testcase.dataset.from[0]).then(
+      (inputDataSet) =>
+      {
+        this.testcaseInputData;
+        this.testcaseInputDataJSON = this.stringify(this.testcaseInputData);
+        this.runTest();
+      }
+    );
+
+
   }
 
   stringify(s){
@@ -93,6 +98,9 @@ export class ClientAppComponent implements OnInit {
     if (this.testcaseInputDataJSON) this.testcaseInputData = this.parse(this.testcaseInputDataJSON);
 
     this.testcaseOutput = this.smli.calculateDataSet(this.testcase.dataset, this.testcaseInputData, this.testcase.parameters);
+
+    this.testcaseOutput = this.smli.calculateDataSet(this.testcase.dataset);
+
     this.testcaseOutputDataJSON = this.stringify(this.testcaseOutput.data);
 
   }

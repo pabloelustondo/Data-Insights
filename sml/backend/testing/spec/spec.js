@@ -77,10 +77,10 @@ describe("DAD Backend", function() {
 
  */
     describe("POST /smlquery", function() {
-        it("executes an ad-hoc SIMPLE SML dataset with a python transformation a returns it with (test) data", function(done) {
+        it("calculates the set of devices that did not last the shift using a python based transformation", function(done) {
             var smlquery = {
                 id:'devices_not_lasted_shift',
-                from: [{id:"devstats2"}],
+                from: [{id:"devstats1"}],
                 parameters:[
                     {
                         name: 'shift',
@@ -105,8 +105,9 @@ describe("DAD Backend", function() {
                 ],
                 transformations:[{
                     type: "ProcessDataSet",
-                    lang: "Python",
-                    script: `
+                    def:{
+                        lang: "Python",
+                        script: `
     cols = data.select_dtypes(['object'])
     data[cols.columns] = cols.apply(lambda x: x.str.strip())
     data['time_stamp'] = pd.to_datetime(data['time_stamp'], format='%Y-%m-%d %H:%M:%S')
@@ -131,6 +132,8 @@ describe("DAD Backend", function() {
     discharged['EndDate'] = end
     return discharged
 					`
+                    }
+
         }]};
             var expected_result = [{"intvalue_x":1,"intvalue_y":[22,21,20,19,19,18,17,17,16,15,14,13,11,11,9,9],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[100,100,100,100,100,100,100,100,100,100,100,100,100,100,98,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[14,12,11,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[10,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[29,30,27,26,24,23,22,20,19,18,17,15,13,11,11,11],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[12,12,10,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[18,17,17,16,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[17,15,13,11,10,10,9,8],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[10,10,9,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[10,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[57,55,52,46,39,33,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[16,15,14,12,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[11,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[11,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[8,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[18,17,16,14,12,11,10,10,10,9],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[17,14,12,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[12,10,7],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[11,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"StartDate":"2016-08-22","EndDate":"2016-08-23"},{"intvalue_x":1,"intvalue_y":[12,10,100,100,100,100,100,100,100,100,100,100,100,100,100,96],"StartDate":"2016-08-22","EndDate":"2016-08-23"}];
             $.ajax({

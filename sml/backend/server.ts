@@ -7,9 +7,8 @@ import * as  path from 'path';
 import * as rp from 'request-promise';
 import * as  cors from 'cors';
 import * as sio from 'socket.io';
-import * as Sml from './sml';
-import * as Smli from './smli';
-//
+import * as Sml from '../common/sml';
+import * as Smli from '../common/smli';
 
 let io = sio(http);
 
@@ -39,7 +38,9 @@ console.log(appconfig);
 let dataSetProviderlurl ='http://localhost:' + appconfig.port + '/getdata';
 //this is simulating the source of our input data... that can be CDL for DPS and ODA for DAD...etc
 
-let smlInterpreter = new Smli.SMLI(dataSetProviderlurl);
+let smliContext = new Smli.SmliContext();
+smliContext.dataSetProviderlurl = dataSetProviderlurl;
+let smlInterpreter = new Smli.SMLI(smliContext);
 
 
 io.on('connection', function(socket){

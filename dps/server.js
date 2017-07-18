@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const bodyParser = require("body-parser");
 const express = require("express");
 const path = require("path");
@@ -11,15 +10,15 @@ const helmet = require("helmet");
 let _ = require('lodash');
 let config = require('./config.json');
 let appconfig = require('./appconfig.json');
-const rp = require("request-promise");
+const rp = require('request-promise');
 let kafka = require('kafka-node');
 let ConsumerGroup = kafka.ConsumerGroup;
 let app = express();
 var mongodb = require('mongodb').MongoClient;
-const rawDataLakeService_1 = require("./services/rawDataLakeService");
-const databaseService_1 = require("./services/databaseService");
-const projection_1 = require("./services/projection");
-const dataService_1 = require("./services/dataService");
+const rawDataLakeService_1 = require('./services/rawDataLakeService');
+const databaseService_1 = require('./services/databaseService');
+const projection_1 = require('./services/projection');
+const dataService_1 = require('./services/dataService');
 var globalconfig = require('./globalconfig.json');
 globalconfig.hostname = "localhost";
 Object.keys(appconfig).forEach(function (key) {
@@ -139,8 +138,7 @@ function publishCleanedDataToKafka(topic, tenantId, dataSetId, data) {
                     dataSetId: dataSetId,
                     data: data
                 })
-            }
-        ];
+            }];
         producer.send(payloads, function (err, data) {
             console.log(data);
         });

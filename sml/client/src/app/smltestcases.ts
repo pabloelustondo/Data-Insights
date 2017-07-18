@@ -1,4 +1,4 @@
-import { SmlDataSet, SmlParameter } from "./sml";
+import { SmlDataSet, SmlParameter } from "../../../common/sml";
 
 export class SMLDataSetTestCase {
   dataset: SmlDataSet;
@@ -11,7 +11,7 @@ export const smltestcases: SMLDataSetTestCase[] = [
   {
     dataset:{
         id:"DevicesNotLastedShift_JS_FunctionTrue",
-        from:["datasample1"],
+        from:[{id:"datasample1"}],
         parameters:[
          { name:"threshold",
            type:"Percent",
@@ -19,14 +19,15 @@ export const smltestcases: SMLDataSetTestCase[] = [
          }
         ],
         transformations:[
-          {addRowFeature: {name:"DeviceNotLasted", func:"true" }}
+          { type: "AddRowBasedFeature",
+            def: {name:"DeviceNotLasted", func:"true" }}
         ]
     }
   },
   {
     dataset:{
       id:"DevicesNotLastedShift_JS_FunctionThreshold",
-      from:["datasample1"],
+      from:[{id:"datasample1"}],
       parameters:[
         { name:"threshold",
           type:"Percent",
@@ -34,7 +35,8 @@ export const smltestcases: SMLDataSetTestCase[] = [
         }
       ],
       transformations:[
-        {addRowFeature: {name:"DeviceNotLasted", func:"battery < threshold" }}
+        { type: "AddRowBasedFeature",
+          def: {name:"DeviceNotLasted", func:"battery < threshold" }}
       ]
     }
   }

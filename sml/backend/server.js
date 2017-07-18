@@ -7,8 +7,7 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var cors = require('cors');
 var sio = require('socket.io');
-var Smli = require('./smli');
-//
+var Smli = require('../common/smli');
 var io = sio(http);
 var config = require('./config.json');
 var appconfig = require('./appconfig.json');
@@ -26,7 +25,9 @@ console.log("configuration");
 console.log(appconfig);
 var dataSetProviderlurl = 'http://localhost:' + appconfig.port + '/getdata';
 //this is simulating the source of our input data... that can be CDL for DPS and ODA for DAD...etc
-var smlInterpreter = new Smli.SMLI(dataSetProviderlurl);
+var smliContext = new Smli.SmliContext();
+smliContext.dataSetProviderlurl = dataSetProviderlurl;
+var smlInterpreter = new Smli.SMLI(smliContext);
 io.on('connection', function (socket) {
     console.log('a user connected');
     socket.on('disconnect', function () {

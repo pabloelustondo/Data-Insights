@@ -1,5 +1,6 @@
 /**
- * Created by dister on 6/1/2017.
+ * Created by Pablo Elustondo  Jun 2017
+ * SML VERSION 1.0
  */
 
 export class SmlTenantMetadata {
@@ -60,10 +61,6 @@ export class SmlIdpInformation {
 
 export type SmlCodingLanguage = "JS" | "Python" | "SMLX";
 
-export type SmlTransformationType = "AddRowFeature" | "ProcessDataSet";
-
-
-
 export class SmlScript {
     id?: string;
     name?: string;
@@ -73,15 +70,15 @@ export class SmlScript {
 
 export class SmlDataProcess  extends  SmlScript{
 }
-export class SmlRowFeature extends  SmlScript {
+export class SmlRowBasedFeature extends  SmlScript {
 
 }
 
-
-export class SmlTransformation {
-  type: SmlTransformationType;
-  process?: SmlScript;
-}
+export type SmlTransformation =
+            {   type: "AddRowBasedFeature",
+                def: SmlRowBasedFeature} |
+            {   type: "ProcessDataSet",
+                def: SmlDataProcess} ;
 
 
 export type SmlParameterType = "percent" | "number" | "string" | "date" | "datetime" | "duration";
@@ -195,7 +192,7 @@ export class SmlDataSet{   //Element adds id & name
 
     //public extra
 
-    features?: SmlRowFeature[];
+    features?: SmlRowBasedFeature[];
     dimensions?: SmlDimension[];
     metrics?: SmlMetric[];
     alerts?: SmlAlert[];

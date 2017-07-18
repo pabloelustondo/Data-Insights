@@ -35,7 +35,7 @@ export class SmlIdpInformation extends SmlElement{
 }
 
 export type SmlCodingLanguage = "JS" | "Python" | "SMLX";
-export type SmlTransformationType = "AddRowFeature" | ";
+export type SmlTransformationType = "AddRowFeature";
 
 export class SmlRowFeature extends SmlElement{
   name: string;
