@@ -1,4 +1,4 @@
-﻿Welcome to SOTI Insights
+Data Insights
 
 Instructions to get , install, run and sort of monitor the whole thing:
 
